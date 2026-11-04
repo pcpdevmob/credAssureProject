@@ -1,0 +1,39 @@
+# legal_basis: L1-L6 per docs/DATA_RESOURCES.md (data/corpus/audit.py fails without it).
+# Copy to manifest.yaml and extend to 320–380 public docs. IDs match docs/RESOURCES.md.
+# Raw files are gitignored. Confirm effective dates on each page before freezing.
+version: 1
+documents:
+  - {doc_id: R-RBI-02, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Reserve Bank of India (Commercial Banks – Responsible Business Conduct) Directions, 2025",
+     publisher: "Reserve Bank of India", effective_from: "2025-11-28", superseded_by: null,
+     source_url: "https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13140"}
+  - {doc_id: R-RBI-03, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Reserve Bank of India (Commercial Banks – Interest Rates on Advances) Directions, 2025",
+     publisher: "Reserve Bank of India", effective_from: "2025-11-28", superseded_by: null,
+     source_url: "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13149"}
+  - {doc_id: R-RBI-04, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Master Direction - Lending to Micro, Small & Medium Enterprises (MSME) Sector",
+     publisher: "Reserve Bank of India", effective_from: "2026-02-09", superseded_by: null,
+     source_url: "https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11060"}
+  - {doc_id: R-RBI-05, tag: rbi_faq, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "RBI FAQs - Micro, Small and Medium Enterprises", publisher: "Reserve Bank of India",
+     effective_from: "2025-07-29", superseded_by: null,
+     source_url: "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84"}
+  - {doc_id: R-MSME-02, tag: msme_gov, collection: public, jurisdiction: IN, legal_basis: L2, format: pdf,
+     title: "Notification S.O. 1364(E) - revised MSME classification", publisher: "Ministry of MSME",
+     effective_from: "2025-04-01", superseded_by: null,
+     source_url: "https://egazette.gov.in/writeReadData/2025/261838.pdf"}
+  - {doc_id: R-MSME-03, tag: msme_gov, collection: public, jurisdiction: IN, legal_basis: L2, format: pdf,
+     title: "Notification S.O. 2119(E) - MSME classification (2020)", publisher: "Ministry of MSME",
+     effective_from: "2020-07-01", superseded_by: R-MSME-02,
+     source_url: "https://dcmsme.gov.in/State-Gov/Notification_%20S%20O%202119.pdf"}
+  - {doc_id: R-CG-01, tag: cgtmse, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "CGTMSE Annual Guarantee Fee structure (CGS-I)", publisher: "CGTMSE",
+     effective_from: "2025-04-01", superseded_by: null, source_url: "https://cgtmse.in/Home/VS/47"}
+  - {doc_id: R-CG-02, tag: cgtmse, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "CGTMSE AGF basis for facilities sanctioned on/after 1 April 2025", publisher: "CGTMSE",
+     effective_from: "2025-04-01", superseded_by: null, source_url: "https://cgtmse.in/Home/VS/101"}
+  - {doc_id: R-BANK-03, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: pdf,
+     title: "Bandhan Bank Schedule of Charges - SME and Corporate Loans", publisher: "Bandhan Bank",
+     effective_from: "2026-01-16", superseded_by: null,
+     source_url: "https://bandhan.bank.in/sites/default/files/2026-01/Schedule-of-Charges-SME-and-Corporate-Loans-16012026.pdf"}
