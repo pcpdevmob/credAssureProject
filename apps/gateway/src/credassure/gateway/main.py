@@ -7,8 +7,23 @@ from collections.abc import Awaitable, Callable
 
 from fastapi import APIRouter, FastAPI, Request, Response
 
+from credassure.agents.copilot.api.router import router as copilot_router
+from credassure.agents.critic.api.router import router as critic_router
+from credassure.agents.lendwise.api.router import router as lendwise_router
+from credassure.agents.onboarding.api.router import router as onboarding_router
+from credassure.agents.supervisor.api.router import router as supervisor_router
+from credassure.agents.working_capital.api.router import router as working_capital_router
 from credassure.gateway.settings import Settings, get_settings
 from credassure.observability.log import configure_logging, log_context
+
+_AGENT_ROUTERS = (
+    ("supervisor", supervisor_router),
+    ("onboarding", onboarding_router),
+    ("working-capital", working_capital_router),
+    ("lendwise", lendwise_router),
+    ("critic", critic_router),
+    ("copilot", copilot_router),
+)
 
 health = APIRouter(prefix="/v1/health", tags=["health"])
 
@@ -36,6 +51,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return response
 
     app.include_router(health)
+    for name, agent_router in _AGENT_ROUTERS:
+        app.include_router(agent_router, prefix=f"/v1/agents/{name}")
     return app
 
 

@@ -1,0 +1,86 @@
+# ADR 0005 boundaries. `make check` runs `lint-imports`.
+# Boundary 4 (apps/web imports only the API client) is TypeScript, checked in tests/test_boundaries.py.
+
+[importlinter]
+root_packages =
+    credassure
+include_external_packages = True
+
+[importlinter:contract:agents-independent]
+name = Agents do not import each other
+type = independence
+modules =
+    credassure.agents.supervisor
+    credassure.agents.onboarding
+    credassure.agents.working_capital
+    credassure.agents.lendwise
+    credassure.agents.critic
+    credassure.agents.copilot
+
+[importlinter:contract:packages-not-agents]
+name = Packages do not import agents or the gateway
+type = forbidden
+source_modules =
+    credassure.core
+    credassure.engines
+    credassure.ledger
+    credassure.llm
+    credassure.observability
+    credassure.reports
+    credassure.retrieval
+    credassure.security
+    credassure.tools
+    credassure.lender_sim
+    credassure.evaluation
+forbidden_modules =
+    credassure.agents
+    credassure.gateway
+
+[importlinter:contract:agents-via-supervisor]
+name = Agent API modules do not import another agent's internals
+type = independence
+modules =
+    credassure.agents.supervisor.api
+    credassure.agents.onboarding.api
+    credassure.agents.working_capital.api
+    credassure.agents.lendwise.api
+    credassure.agents.critic.api
+    credassure.agents.copilot.api
+
+[importlinter:contract:ledger-writes]
+name = Only the ledger package imports the write module
+type = forbidden
+source_modules =
+    credassure.agents
+    credassure.core
+    credassure.engines
+    credassure.llm
+    credassure.observability
+    credassure.reports
+    credassure.retrieval
+    credassure.security
+    credassure.tools
+    credassure.lender_sim
+    credassure.evaluation
+    credassure.gateway
+forbidden_modules =
+    credassure.ledger.writes
+
+[importlinter:contract:openai]
+name = Only the llm package imports the OpenAI SDK
+type = forbidden
+source_modules =
+    credassure.agents
+    credassure.core
+    credassure.engines
+    credassure.ledger
+    credassure.observability
+    credassure.reports
+    credassure.retrieval
+    credassure.security
+    credassure.tools
+    credassure.lender_sim
+    credassure.evaluation
+    credassure.gateway
+forbidden_modules =
+    openai

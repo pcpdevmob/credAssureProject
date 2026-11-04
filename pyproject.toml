@@ -18,6 +18,7 @@ dev = [
     "bandit>=1.8",
     "pip-audit>=2.7",
     "pre-commit>=4",
+    "import-linter>=2.1",
     "numpy-financial>=1.0",  # evaluation/gold only, never imported by packages/engines
 ]
 
@@ -25,8 +26,26 @@ dev = [
 package = false
 
 [tool.uv.workspace]
-# Phase 0b (/scaffold-repo) adds agents/*, the remaining packages/* and evaluation.
-members = ["apps/gateway", "packages/observability"]
+members = [
+    "apps/gateway",
+    "agents/supervisor",
+    "agents/onboarding",
+    "agents/working-capital",
+    "agents/lendwise",
+    "agents/critic",
+    "agents/copilot",
+    "packages/core",
+    "packages/engines",
+    "packages/ledger",
+    "packages/llm",
+    "packages/observability",
+    "packages/reports",
+    "packages/retrieval",
+    "packages/security",
+    "packages/tools",
+    "packages/lender-sim",
+    "evaluation",
+]
 
 [tool.uv.sources]
 credassure-gateway = { workspace = true }
@@ -51,12 +70,31 @@ strict = true
 python_version = "3.12"
 explicit_package_bases = true
 namespace_packages = true
-mypy_path = ["apps/gateway/src", "packages/observability/src"]
+mypy_path = [
+    "apps/gateway/src",
+    "agents/supervisor/src",
+    "agents/onboarding/src",
+    "agents/working-capital/src",
+    "agents/lendwise/src",
+    "agents/critic/src",
+    "agents/copilot/src",
+    "packages/core/src",
+    "packages/engines/src",
+    "packages/ledger/src",
+    "packages/llm/src",
+    "packages/observability/src",
+    "packages/reports/src",
+    "packages/retrieval/src",
+    "packages/security/src",
+    "packages/tools/src",
+    "packages/lender-sim/src",
+    "evaluation/src",
+]
 plugins = ["pydantic.mypy"]
 
 [tool.pytest.ini_options]
 addopts = "--import-mode=importlib"
-testpaths = ["apps/gateway/tests", "packages/observability/tests"]
+testpaths = ["apps", "agents", "packages", "evaluation", "tests"]
 markers = ["slow: excluded from make check-fast"]
 
 [tool.bandit]

@@ -1,10 +1,12 @@
 .DEFAULT_GOAL := help
-PY_SRC := apps/gateway/src packages/observability/src
+PY_SRC := apps/gateway/src $(wildcard agents/*/src) \
+	$(filter-out packages/api-client/src,$(wildcard packages/*/src)) evaluation/src
 COMPOSE := docker compose -f deploy/compose/compose.yaml
+PNPM := $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo "npx --yes pnpm@9.15.0")
 
-.PHONY: help install check check-fast test run-api run-ui data ingest eval baseline openapi demo-reset \
-        audit compose-dev compose-test compose-demo langfuse-env-check langfuse-up langfuse-down \
-        ollama-pull
+.PHONY: help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
+        demo-reset up down audit compose-dev compose-test compose-demo langfuse-env-check \
+        langfuse-up langfuse-down ollama-pull backup restore
 
 help:  ## List targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -18,6 +20,7 @@ check:  ## ruff, ruff format, mypy --strict, pytest, bandit
 	uv run mypy --strict $(PY_SRC)
 	uv run pytest -q
 	uv run bandit -q -c pyproject.toml -r $(PY_SRC)
+	uv run lint-imports
 
 check-fast:  ## ruff + fast tests (used by the Claude stop hook)
 	uv run ruff check .
@@ -47,6 +50,21 @@ run-api:  ## FastAPI on :8000 (docs at /docs)
 openapi:  ## Export openapi.json (ADR 0004)
 	uv run python -m credassure.gateway.openapi
 
+client: openapi  ## Generate the TypeScript API client from openapi.json
+	$(PNPM) --filter @credassure/api-client generate
+
+up: langfuse-env-check  ## Gateway, web, Ollama and Langfuse (dev profile)
+	$(COMPOSE) --profile dev --profile langfuse up --build
+
+down:  ## Stop the dev stack
+	$(COMPOSE) --profile dev --profile langfuse down
+
+backup:  ## Database backup (Phase 12)
+	deploy/scripts/backup.sh
+
+restore:  ## Database restore (Phase 12)
+	deploy/scripts/restore.sh
+
 LANGFUSE_ENV := deploy/env/langfuse.env
 
 langfuse-env-check:
@@ -68,8 +86,8 @@ langfuse-up: langfuse-env-check  ## Self-hosted Langfuse only (ADR 0016)
 langfuse-down:
 	$(COMPOSE) --profile langfuse down
 
-run-ui:  ## React web app (apps/web, UI phase U0)
-	@echo "run-ui: apps/web is built in UI phase U0 (CLAUDE_CODE_UI_PROMPT.md)"; exit 1
+run-ui:  ## Vite dev server for the React stub
+	$(PNPM) --filter @credassure/web dev
 
 data:  ## Seeded synthetic data -> data/frozen/v1 (Phase 2)
 	@echo "data: not implemented until Phase 2"; exit 1
@@ -84,4 +102,4 @@ baseline:  ## Prompt baselines S1-S3 (Phase 3)
 	@echo "baseline: not implemented until Phase 3"; exit 1
 
 demo-reset:  ## Reset demo data and replay cache (Phase 12)
-	@echo "demo-reset: not implemented until Phase 12"; exit 1
+	deploy/scripts/demo-reset.sh

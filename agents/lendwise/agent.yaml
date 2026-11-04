@@ -1,0 +1,7 @@
+name: lendwise
+version: "0.1.0"
+owner: "Pritish"
+requirement_ids: [LW-01]
+tools: []
+readable_data: []
+gate: "set by code; placeholder until the agent phase"

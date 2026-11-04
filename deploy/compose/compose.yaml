@@ -35,6 +35,14 @@ services:
       retries: 10
       start_period: 15s
 
+  web:
+    profiles: [dev, demo]
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.web
+    ports: ["127.0.0.1:5173:8080"]
+    restart: unless-stopped
+
   gateway-dev:
     <<: *gateway
     profiles: [dev]

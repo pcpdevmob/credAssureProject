@@ -1,7 +1,7 @@
 # CredAssure — Progress (Claude Code reads this first and updates it last)
 
 ## Current phase
-Phase 0 — done (2026-11-05). Next: Phase 0b monorepo scaffold (`/scaffold-repo`), then Phase 1.
+Phase 0b — done (2026-11-05). Next: Phase 1, which needs a go. After Phase 1, approve freezing `AgentResult` (including `agent_version`) and the `tenant_id` decision before anything is frozen at G1.
 
 ## Gates
 - [ ] G1 (end Week 1): test set + 40 retrieval queries frozen; synthetic data v1; baseline S1–S3; AgentResult frozen; endpoint limits confirmed
@@ -15,7 +15,7 @@ Phase 0 — done (2026-11-05). Next: Phase 0b monorepo scaffold (`/scaffold-repo
 |---|---|---|---|---|
 | Kit gaps | done | — | phase-0 | R-ID crosswalk, S18–S24, D3/D5/D6 plants, 53-doc manifest, ADR index, ADR 0016 |
 | 0 Scaffold | done | NFR-07, NFR-09, APR-03 (config) | phase-0 | 29 tests; make check + make audit green; security-reviewer and brd-conformance MUST findings fixed |
-| 0b Monorepo | todo | ADR-0005 | | adds agents/*, remaining packages/*, evaluation, docs/<section> moves |
+| 0b Monorepo | done | ADR-0005; #46 ports skeleton; #53 import-linter | phase-0b | 52 tests; make check green. security-reviewer and brd-conformance: no MUST. #27, breaking-diff half of #28, and #29 stay later phases |
 | UI U0–U6 | todo | UI-01..09 | | React lane |
 
 ## Open questions (owner, date)
@@ -33,6 +33,7 @@ Phase 0 — done (2026-11-05). Next: Phase 0b monorepo scaffold (`/scaffold-repo
 - `.claude/hooks/*.py` have uncommitted ruff line-wrap changes (no behaviour change) from the first format run; keep or
   restore by hand (`git restore` is blocked by the bash guard).
 - `docs/source/170MD.pdf` is an untracked third-party RBI PDF; not committed (BRD §10, L4). Delete or gitignore it.
+- `make up` is wired (gateway, web, Ollama, Langfuse; no Chroma server, ADR 0001). It was not started: `deploy/env/langfuse.env` is absent. `docker compose config` for the dev+langfuse profiles lists those services.
 - BRD NFR-09 text should be amended to match ADR 0016 in the next BRD revision.
 
 ## Settled defaults (ADRs 0012–0017)
@@ -42,8 +43,8 @@ Phase 0 — done (2026-11-05). Next: Phase 0b monorepo scaffold (`/scaffold-repo
 - Local dev and demo model: Ollama `llama3.1:8b` plus `nomic-embed-text`, context 8192 (ADR 0017). Graded eval stays on the course endpoint.
 
 ## Decisions pending (human)
-- Add agent_version to AgentResult before G1 (scope #25) — needs ADR 0017+
-- tenant_id on case tables in Week 1 (scope #27) — `TENANT_ID` setting and log field already exist
+- Add agent_version to AgentResult before G1 (scope #25) — needs ADR 0018 or later (0017 is the Ollama decision). The placeholder field is already on AgentResult and is not frozen
+- tenant_id on case tables (scope #27, phase 5) — `TENANT_ID` setting, log field, and an unfrozen AgentResult field already exist. No case tables yet
 - Permitted cut order if Week 3 slips (each needs an ADR): scope #35, #41, #38, #37
 
 ## Decisions
@@ -56,3 +57,5 @@ Phase 0 — done (2026-11-05). Next: Phase 0b monorepo scaffold (`/scaffold-repo
 - #42 Ownership and review (CODEOWNERS with placeholders, PR template, CONTRIBUTING.md)
 - #43 Architecture records (C4 in ARCHITECTURE.md, ADR index, ADR 0002 STRIDE + OWASP LLM Top 10 register)
 - #44 Environment profiles (deploy/compose dev/test/demo/langfuse; deploy/env templates)
+- #46 Ports skeleton only (`LLMPort`, `ToolPort`, `LedgerPort`, `RetrievalPort`, `ClockPort` in packages/core). Adapters stay with the agent phases
+- #53 Import-linter slice (five contracts in `make check` / CI, plus the web `fetch` pytest). Eval E18 stays in phases 10 and 12

@@ -4,6 +4,12 @@ version = "0.1.0"
 description = "FastAPI composition root: the only public API (ADR 0005)"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "credassure-agent-critic",
+    "credassure-agent-copilot",
+    "credassure-agent-lendwise",
+    "credassure-agent-onboarding",
+    "credassure-agent-supervisor",
+    "credassure-agent-working-capital",
     "credassure-observability",
     "fastapi>=0.115",
     "uvicorn[standard]>=0.32",
@@ -28,6 +34,12 @@ dependencies = [
 rerank = ["sentence-transformers>=3.3"]
 
 [tool.uv.sources]
+credassure-agent-critic = { workspace = true }
+credassure-agent-copilot = { workspace = true }
+credassure-agent-lendwise = { workspace = true }
+credassure-agent-onboarding = { workspace = true }
+credassure-agent-supervisor = { workspace = true }
+credassure-agent-working-capital = { workspace = true }
 credassure-observability = { workspace = true }
 
 [build-system]

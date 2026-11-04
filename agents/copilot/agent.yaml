@@ -1,0 +1,7 @@
+name: copilot
+version: "0.1.0"
+owner: "[Name 6]"
+requirement_ids: [CP-01]
+tools: []
+readable_data: []
+gate: "set by code; placeholder until the agent phase"
