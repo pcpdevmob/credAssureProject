@@ -22,3 +22,4 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | [0014](0014-judge.md) | Automated judge | Accepted | 11 | 11 |
 | [0015](0015-demo-mode.md) | Demo mode | Accepted | 12 | 17 |
 | [0016](0016-langfuse-self-hosted.md) | Langfuse self-hosted in Compose (amends BRD NFR-09) | Accepted | 0 | 44 |
+| [0017](0017-local-ollama.md) | Local default model: Ollama, Llama 3.1 8B | Accepted | 0, 6 | — |

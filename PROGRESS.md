@@ -19,7 +19,7 @@ Phase 0 — done (2026-11-05). Next: Phase 0b monorepo scaffold (`/scaffold-repo
 | UI U0–U6 | todo | UI-01..09 | | React lane |
 
 ## Open questions (owner, date)
-- Endpoint context window, JSON/guided-decoding support, token quota (confirm day 2)
+- Course endpoint context window, JSON/guided-decoding support, token quota (confirm day 2). Local Ollama is settled: `llama3.1:8b`, context 8192, guided JSON off until Phase 6 probes it (ADR 0017).
 - Owner names for [Name 1]…[Name 6] and UI lead; replace `@credassure-owner-*` placeholders in `.github/CODEOWNERS`
 - Before G1 (from the 5 Nov web check, docs/DATA_RESOURCES.md "Verification status"):
   - GST heading 9971 rate after Notification 15/2025-CT(R) — confirm 18% on loan fees (D7)
@@ -35,10 +35,11 @@ Phase 0 — done (2026-11-05). Next: Phase 0b monorepo scaffold (`/scaffold-repo
 - `docs/source/170MD.pdf` is an untracked third-party RBI PDF; not committed (BRD §10, L4). Delete or gitignore it.
 - BRD NFR-09 text should be amended to match ADR 0016 in the next BRD revision.
 
-## Settled defaults (ADRs 0012–0016)
+## Settled defaults (ADRs 0012–0017)
 - APR nominal, proven by RBI Annex B reproduction (17.07% on exact EMI ₹969.73; rounded ₹970 gives 17.10% and fails)
 - Reranker none unless mentor approves · Judge J1 calibrated, kappa ≥ 0.7 else human scoring · Live demo with replay + video fallback · Boundary rule hold
 - Langfuse self-hosted in Compose (ADR 0016, approved by owner 2026-11-05)
+- Local dev and demo model: Ollama `llama3.1:8b` plus `nomic-embed-text`, context 8192 (ADR 0017). Graded eval stays on the course endpoint.
 
 ## Decisions pending (human)
 - Add agent_version to AgentResult before G1 (scope #25) — needs ADR 0017+

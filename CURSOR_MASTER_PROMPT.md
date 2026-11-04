@@ -23,8 +23,11 @@ running only on a hosted ≤8B OpenAI-compatible chat endpoint plus an embedding
 - Synthetic data only. PII is redacted before model calls, logging and tracing.
 
 ## Environment (from `.env`, see `.env.example`)
+Local dev and demo default to Ollama (`llama3.1:8b`, embeddings `nomic-embed-text`, ADR 0017).
+The values below are the course-endpoint switch used for graded eval; `.env.example` already
+fills the local defaults.
 ```
-LLM_BASE_URL=            # course OpenAI-compatible endpoint
+LLM_BASE_URL=            # course OpenAI-compatible endpoint, or http://localhost:11434/v1
 LLM_API_KEY=
 LLM_MODEL=               # ≤8B instruct model name from the course
 LLM_CONTEXT_TOKENS=8192  # confirm on day 2; prompts must fit

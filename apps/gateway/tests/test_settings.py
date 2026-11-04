@@ -95,15 +95,20 @@ def test_NFR07_validation_errors_do_not_echo_secret_values() -> None:
     assert "short-secret-value" not in str(err.value)
 
 
+def _replace_line(text: str, key: str, value: str) -> str:
+    lines = [f"{key}={value}" if line.startswith(f"{key}=") else line for line in text.splitlines()]
+    return "\n".join(lines) + "\n"
+
+
 def test_env_example_loads_with_required_values_filled(tmp_path: Path) -> None:
     template = (REPO_ROOT / ".env.example").read_text(encoding="utf-8")
+    filled = _replace_line(template, "JWT_SECRET", GOOD_SECRET)
+    filled = _replace_line(filled, "LLM_BASE_URL", "https://llm.example.test/v1")
     env_file = tmp_path / ".env"
-    env_file.write_text(
-        template.replace("JWT_SECRET=", f"JWT_SECRET={GOOD_SECRET}").replace(
-            "LLM_BASE_URL=", "LLM_BASE_URL=https://llm.example.test/v1"
-        ),
-        encoding="utf-8",
-    )
+    env_file.write_text(filled, encoding="utf-8")
     s = Settings(_env_file=env_file)
+    assert s.llm_base_url == "https://llm.example.test/v1"
+    assert s.llm_model == "llama3.1:8b"
+    assert s.embed_model == "nomic-embed-text"
     assert s.ablation is None
     assert s.boundary_rule == "hold"

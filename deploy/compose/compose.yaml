@@ -1,6 +1,7 @@
 # Environment profiles (scope #44): dev, test (LLM disabled, no tracing; FakeLLM in Phase 6),
 # demo (replay in Phase 12, ADR 0015);
-# langfuse (self-hosted tracing, ADR 0016). Run from the repo root via the Makefile targets.
+# langfuse (self-hosted tracing, ADR 0016). Ollama (ADR 0017) is on dev and demo only.
+# Run from the repo root via the Makefile targets.
 name: credassure
 
 include:
@@ -14,11 +15,33 @@ x-gateway: &gateway
   volumes: [credassure_data:/app/var]
   restart: unless-stopped
 
+x-ollama-env: &ollama-env
+  LLM_BASE_URL: http://ollama:11434/v1
+  EMBED_BASE_URL: http://ollama:11434/v1
+
 services:
+  ollama:
+    image: ollama/ollama
+    profiles: [dev, demo]
+    restart: unless-stopped
+    ports: ["127.0.0.1:11434:11434"]
+    volumes: [ollama_models:/root/.ollama]
+    environment:
+      OLLAMA_CONTEXT_LENGTH: "8192"
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
   gateway-dev:
     <<: *gateway
     profiles: [dev]
     env_file: [../../.env]
+    environment: *ollama-env
+    depends_on:
+      ollama: {condition: service_healthy}
 
   gateway-test:
     <<: *gateway
@@ -29,6 +52,10 @@ services:
     <<: *gateway
     profiles: [demo]
     env_file: [../env/demo.env]
+    environment: *ollama-env
+    depends_on:
+      ollama: {condition: service_healthy}
 
 volumes:
   credassure_data:
+  ollama_models:

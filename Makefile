@@ -3,7 +3,8 @@ PY_SRC := apps/gateway/src packages/observability/src
 COMPOSE := docker compose -f deploy/compose/compose.yaml
 
 .PHONY: help install check check-fast test run-api run-ui data ingest eval baseline openapi demo-reset \
-        audit compose-dev compose-test compose-demo langfuse-env-check langfuse-up langfuse-down
+        audit compose-dev compose-test compose-demo langfuse-env-check langfuse-up langfuse-down \
+        ollama-pull
 
 help:  ## List targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -27,6 +28,18 @@ test:  ## Full test suite with coverage
 
 audit:  ## Dependency vulnerability audit
 	uv run pip-audit --skip-editable
+
+ollama-pull:  ## Download llama3.1:8b and nomic-embed-text (ADR 0017; not part of make check)
+	@if $(COMPOSE) --profile dev ps --status running --services 2>/dev/null | grep -qx ollama; then \
+		$(COMPOSE) --profile dev exec ollama ollama pull llama3.1:8b; \
+		$(COMPOSE) --profile dev exec ollama ollama pull nomic-embed-text; \
+	elif command -v ollama >/dev/null 2>&1; then \
+		ollama pull llama3.1:8b; \
+		ollama pull nomic-embed-text; \
+	else \
+		echo "No Ollama found. Install it and run 'OLLAMA_CONTEXT_LENGTH=8192 ollama serve', or start 'make compose-dev'."; \
+		exit 1; \
+	fi
 
 run-api:  ## FastAPI on :8000 (docs at /docs)
 	uv run uvicorn credassure.gateway.main:app --factory --reload --port 8000

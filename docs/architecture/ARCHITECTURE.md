@@ -343,8 +343,9 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0014 | Automated judge J1, calibrated; human scoring if kappa < 0.7 | Accepted |
 | 0015 | Demo: live, with replay profile and recorded video fallback | Accepted |
 | 0016 | Langfuse self-hosted in Compose (amends BRD NFR-09) | Accepted |
+| 0017 | Local default model: Ollama, Llama 3.1 8B (course endpoint stays the graded path) | Accepted |
 
-Full index with phase and scope numbers: `docs/adr/README.md`. The `agent_version` contract change (scope #25) needs its own ADR, numbered 0017 or later.
+Full index with phase and scope numbers: `docs/adr/README.md`. The `agent_version` contract change (scope #25) needs its own ADR, numbered 0018 or later.
 
 ## 10. Quality requirements — scenarios
 | ID | Characteristic | Stimulus | Response | Measure |
