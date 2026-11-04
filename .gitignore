@@ -1,0 +1,43 @@
+# Secrets (NFR-07). Only the *.example templates are committed.
+.env
+.env.*
+!.env.example
+deploy/env/*.env
+
+*.pem
+*.key
+var/
+
+# Databases and indexes
+*.db
+*.db-wal
+*.db-shm
+chroma/
+
+# Corpus raw and extracted text are never committed (BRD §10, L3/L4)
+data/corpus/raw/
+data/corpus/text/
+data/corpus/manifest.lock.yaml
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.coverage
+coverage.xml
+htmlcov/
+dist/
+build/
+*.egg-info/
+.cache/
+
+# JS (apps/web)
+node_modules/
+
+# Tooling state
+.claude/.stop_retries
+.DS_Store

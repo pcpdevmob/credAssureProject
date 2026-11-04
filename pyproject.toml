@@ -1,0 +1,63 @@
+[project]
+name = "credassure"
+version = "0.1.0"
+description = "CredAssure monorepo root (uv workspace, ADR 0005)"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "credassure-gateway",
+    "credassure-observability",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-cov>=5",
+    "hypothesis>=6",
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "bandit>=1.8",
+    "pip-audit>=2.7",
+    "pre-commit>=4",
+    "numpy-financial>=1.0",  # evaluation/gold only, never imported by packages/engines
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+# Phase 0b (/scaffold-repo) adds agents/*, the remaining packages/* and evaluation.
+members = ["apps/gateway", "packages/observability"]
+
+[tool.uv.sources]
+credassure-gateway = { workspace = true }
+credassure-observability = { workspace = true }
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["docs", "prompts", ".claude"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF", "N"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["credassure"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = ["S101", "S105", "S106", "N802"]
+
+[tool.mypy]
+strict = true
+python_version = "3.12"
+explicit_package_bases = true
+namespace_packages = true
+mypy_path = ["apps/gateway/src", "packages/observability/src"]
+plugins = ["pydantic.mypy"]
+
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"
+testpaths = ["apps/gateway/tests", "packages/observability/tests"]
+markers = ["slow: excluded from make check-fast"]
+
+[tool.bandit]
+exclude_dirs = ["tests"]

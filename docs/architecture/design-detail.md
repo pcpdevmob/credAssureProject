@@ -36,7 +36,7 @@ Implements `docs/BRD.md` v3.1. Where this file and the BRD disagree, the BRD win
 │ audit (hash      │ │ trainings,    │ │ FTS5 BM25     │ │                    │
 │ chain), approvals│ │ acks          │ │               │ │                    │
 └──────────────────┘ └───────────────┘ └───────────────┘ └────────────────────┘
-External: ≤8B chat endpoint · embeddings endpoint · Langfuse Cloud
+External: ≤8B chat endpoint · embeddings endpoint · Langfuse (self-hosted in Compose, ADR 0016)
 ```
 
 ### Repository layout
@@ -202,7 +202,7 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
 #### 2.4.4 LendWise Agent — Gate 3 Lender Comparison (owner: Pritish)
 (Unchanged pipeline — see 2.4.7 for full step detail.)
 - **Writes:** per offer `lw.<offer_id>.v<n>.{amount_received,total_repayment,total_cost,apr,flags,rank}`.
-- **Blockers:** `LW_OFFER_INVALID`, `LW_MISSING_MATERIAL_TERM`, `LW_INSTALMENT_MISMATCH`, `LW_HIDDEN_CHARGE`, `LW_NOT_AFFORDABLE`, `LW_LATE_OR_SHORT`, `LW_RATE_MAY_RESET` (flag), `LW_FEWER_THAN_TWO_ELIGIBLE`.
+- **Blockers:** `LW_OFFER_INVALID`, `LW_MISSING_MATERIAL_TERM`, `LW_INSTALMENT_MISMATCH`, `LW_HIDDEN_CHARGE`, `LW_NOT_AFFORDABLE`, `LW_LATE_OR_SHORT`, `LW_RATE_MAY_RESET` (flag), `LW_BENCHMARK_NOT_EXTERNAL` (warning: MSE floating rate not linked to an external benchmark, RESOURCES D6), `LW_CGTMSE_INELIGIBLE` (warning: guarantee fee on a medium enterprise, D3), `LW_FEWER_THAN_TWO_ELIGIBLE`.
 - **Gate (code):** ≥2 comparable AND affordable offers → GO.
 - **Tests:** offers 15/15; negotiation safety 5/5.
 

@@ -1,0 +1,86 @@
+# Self-hosted Langfuse (ADR 0016), adapted from the official docker-compose.yml
+# (https://langfuse.com/self-hosting/deployment/docker-compose). Secrets come only from
+# deploy/env/langfuse.env (gitignored; template deploy/env/langfuse.env.example). Images are
+# pinned by digest in Phase 12 (scope #41). Every published port binds to 127.0.0.1.
+x-langfuse-common: &langfuse-common
+  restart: unless-stopped
+  profiles: [langfuse]
+  env_file: [../env/langfuse.env]
+  depends_on:
+    langfuse-postgres: {condition: service_healthy}
+    langfuse-minio: {condition: service_healthy}
+    langfuse-redis: {condition: service_healthy}
+    langfuse-clickhouse: {condition: service_healthy}
+
+services:
+  langfuse-worker:
+    <<: *langfuse-common
+    image: docker.langfuse.com/langfuse/langfuse-worker:4
+
+  langfuse-web:
+    <<: *langfuse-common
+    image: docker.langfuse.com/langfuse/langfuse:4
+    ports: ["127.0.0.1:3000:3000"]
+
+  langfuse-clickhouse:
+    image: docker.io/clickhouse/clickhouse-server:26.3.62.3
+    restart: unless-stopped
+    profiles: [langfuse]
+    user: "101:101"
+    env_file: [../env/langfuse.env]
+    volumes:
+      - langfuse_clickhouse_data:/var/lib/clickhouse
+      - langfuse_clickhouse_logs:/var/log/clickhouse-server
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  langfuse-minio:
+    image: cgr.dev/chainguard/minio
+    restart: unless-stopped
+    profiles: [langfuse]
+    env_file: [../env/langfuse.env]
+    entrypoint: sh
+    command: -c 'mkdir -p /data/langfuse && minio server --address ":9000" --console-address ":9001" /data'
+    ports: ["127.0.0.1:9090:9000"]
+    volumes: [langfuse_minio_data:/data]
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
+  langfuse-redis:
+    image: docker.io/redis:7
+    restart: unless-stopped
+    profiles: [langfuse]
+    env_file: [../env/langfuse.env]
+    command: ["sh", "-c", "exec redis-server --requirepass \"$$REDIS_AUTH\" --maxmemory-policy noeviction"]
+    volumes: [langfuse_redis_data:/data]
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_AUTH\" ping"]
+      interval: 3s
+      timeout: 10s
+      retries: 10
+
+  langfuse-postgres:
+    image: docker.io/postgres:17
+    restart: unless-stopped
+    profiles: [langfuse]
+    env_file: [../env/langfuse.env]
+    environment: {TZ: UTC, PGTZ: UTC}
+    volumes: [langfuse_postgres_data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  langfuse_postgres_data:
+  langfuse_clickhouse_data:
+  langfuse_clickhouse_logs:
+  langfuse_minio_data:
+  langfuse_redis_data:

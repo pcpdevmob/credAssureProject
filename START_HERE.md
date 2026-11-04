@@ -33,7 +33,7 @@ Companion documents (shareable, same content in long form):
 
 ## 3. Human prerequisites (before running anything)
 - [ ] Course chat endpoint URL, model name, API key, embeddings endpoint — put in `.env` after Phase 0 creates `.env.example`
-- [ ] Langfuse: self-hosted in Compose (no account needed); set keys after first start
+- [ ] Langfuse: self-hosted in Compose (ADR 0016, no account needed): copy `deploy/env/langfuse.env.example` to `deploy/env/langfuse.env`, replace every CHANGEME, `make langfuse-up`, then put the project keys in `.env`
 - [ ] Python 3.12, uv, Docker Engine + Compose, Claude Code installed
 - [ ] Team owners named in `docs/BUILD_SCOPE.md` / `CONTRIBUTIONS.md` ([Name 1]…[Name 6])
 - [ ] Mentor informed of the defaults in ADRs 0013–0015 (reranker, judge, demo); none blocks the build

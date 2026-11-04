@@ -1,0 +1,12 @@
+# S22 reference_rates (docs/DATA_SPEC.md §8.5). Values are strings and are parsed as Decimal.
+# Read by data/generators and evaluation/gold only; engines get rates through settings.
+version: 1
+retrieved_on: "2026-11-05"
+as_of_date: "2026-11-15"
+rates:
+  - {id: repo, value_pct: "5.50", effective_from: "2026-10-07", source_doc_id: R-RATE-02-REPO,
+     note: "MPC 5-7 Oct 2026, up from 5.25; next MPC 2-4 Dec 2026 (after AS_OF_DATE)"}
+  - {id: sbi_eblr, value_pct: "8.15", effective_from: "2026-10-15", source_doc_id: R-RATE-02-SBI,
+     note: "repo 5.50 + 2.65 spread; borrower rate adds credit-risk and business-strategy premia"}
+  - {id: bob_brllr, value_pct: "8.15", effective_from: "2026-10-08", source_doc_id: R-RATE-02-BOB,
+     note: "repo 5.50 + 2.65 mark-up"}

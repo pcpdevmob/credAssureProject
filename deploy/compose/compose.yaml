@@ -1,0 +1,34 @@
+# Environment profiles (scope #44): dev, test (LLM disabled, no tracing; FakeLLM in Phase 6),
+# demo (replay in Phase 12, ADR 0015);
+# langfuse (self-hosted tracing, ADR 0016). Run from the repo root via the Makefile targets.
+name: credassure
+
+include:
+  - langfuse.yaml
+
+x-gateway: &gateway
+  build:
+    context: ../..
+    dockerfile: deploy/docker/Dockerfile.gateway
+  ports: ["127.0.0.1:8000:8000"]
+  volumes: [credassure_data:/app/var]
+  restart: unless-stopped
+
+services:
+  gateway-dev:
+    <<: *gateway
+    profiles: [dev]
+    env_file: [../../.env]
+
+  gateway-test:
+    <<: *gateway
+    profiles: [test]
+    env_file: [../env/test.env.example]
+
+  gateway-demo:
+    <<: *gateway
+    profiles: [demo]
+    env_file: [../env/demo.env]
+
+volumes:
+  credassure_data:

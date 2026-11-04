@@ -1,0 +1,95 @@
+"""Application settings, validated at startup (scope #30, NFR-07 fail closed).
+
+Every variable in `.env.example` maps to one field here. Outside `APP_ENV=test`, a missing
+`JWT_SECRET` (or `LLM_BASE_URL` while `LLM_ENABLED=true`) stops startup. Feature flags default
+OFF; stretch items stay behind `FEATURE_STRETCH` (BRD §4.2).
+"""
+
+from __future__ import annotations
+
+from datetime import date
+from decimal import Decimal
+from functools import lru_cache
+from typing import Literal, Self
+
+from pydantic import Field, SecretStr, field_validator, model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+MIN_JWT_SECRET_LENGTH = 32
+
+
+class Settings(BaseSettings):
+    """All runtime configuration. Field names are the lower-case env variable names."""
+
+    model_config = SettingsConfigDict(
+        env_file=".env", extra="ignore", frozen=True, hide_input_in_errors=True
+    )
+
+    app_env: Literal["dev", "test", "demo"] = "dev"
+    log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
+    tenant_id: str = "default"
+
+    llm_base_url: str | None = None
+    llm_api_key: SecretStr | None = None
+    llm_model: str | None = None
+    llm_context_tokens: int = Field(default=8192, gt=0)
+    llm_supports_guided_json: bool = False
+    llm_enabled: bool = True
+    embed_base_url: str | None = None
+    embed_model: str | None = None
+    reranker: Literal["none", "local_cross_encoder", "llm_pointwise"] = "none"
+    reranker_model: str = "BAAI/bge-reranker-base"
+
+    tracing_enabled: bool = True
+    langfuse_host: str = "http://localhost:3000"
+    langfuse_public_key: SecretStr | None = None
+    langfuse_secret_key: SecretStr | None = None
+
+    jwt_secret: SecretStr | None = None
+    jwt_expiry_minutes: int = Field(default=30, gt=0, le=30)
+    ui_origins: str = "http://localhost:5173"
+
+    gst_rate: Decimal = Decimal("0.18")
+    apr_convention: Literal["nominal", "effective"] = "nominal"
+    boundary_rule: Literal["hold", "director", "vp"] = "hold"
+    approval_threshold_paise: int = Field(default=1_500_000_000, gt=0)
+    forecast_weeks: int = Field(default=26, gt=0)
+    agent_max_steps: int = Field(default=10, gt=0, le=10)
+    token_cap_per_stage: int = Field(default=6000, gt=0)
+    as_of_date: date = date(2026, 11, 15)
+    credassure_seed: int = 20261026
+
+    feature_stretch: bool = False
+    planner_mode: Literal["fixed", "llm_proposes"] = "fixed"
+    ablation: Literal["A1", "A2", "A3", "A4", "A5"] | None = None
+
+    @field_validator("ablation", mode="before")
+    @classmethod
+    def _empty_ablation_is_off(cls, value: object) -> object:
+        return None if value == "" else value
+
+    @model_validator(mode="after")
+    def _fail_closed(self) -> Self:
+        if self.app_env == "test":
+            return self
+        problems: list[str] = []
+        secret = self.jwt_secret.get_secret_value() if self.jwt_secret else ""
+        if not secret:
+            problems.append("JWT_SECRET is required")
+        elif len(secret) < MIN_JWT_SECRET_LENGTH:
+            problems.append(f"JWT_SECRET must be at least {MIN_JWT_SECRET_LENGTH} characters")
+        if self.llm_enabled and not self.llm_base_url:
+            problems.append("LLM_BASE_URL is required when LLM_ENABLED=true")
+        if problems:
+            raise ValueError("; ".join(problems))
+        return self
+
+    @property
+    def ui_origin_list(self) -> list[str]:
+        return [o.strip() for o in self.ui_origins.split(",") if o.strip()]
+
+
+@lru_cache(maxsize=1)
+def get_settings() -> Settings:
+    """Load settings once per process from the environment and `.env`."""
+    return Settings()

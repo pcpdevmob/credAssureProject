@@ -1,0 +1,22 @@
+# Ownership per docs/REPO_STRUCTURE.md (scope #42). Replace the @placeholder handles with real
+# Git host usernames before enabling branch protection. Shared packages need two reviewers.
+*                               @credassure-owner-name1
+/agents/supervisor/             @credassure-owner-name1
+/apps/gateway/                  @credassure-owner-name1
+/deploy/                        @credassure-owner-name1
+/agents/onboarding/             @credassure-owner-name2
+/evaluation/testset/            @credassure-owner-name2
+/agents/working-capital/        @credassure-owner-name3
+/agents/lendwise/               @credassure-owner-pritish
+/packages/lender-sim/           @credassure-owner-pritish
+/packages/engines/              @credassure-owner-name3 @credassure-owner-pritish
+/agents/critic/                 @credassure-owner-name5
+/packages/observability/        @credassure-owner-name5 @credassure-owner-name1
+/evaluation/ablations/          @credassure-owner-name5
+/agents/copilot/                @credassure-owner-name6
+/packages/retrieval/            @credassure-owner-name6 @credassure-owner-name1
+/data/corpus/                   @credassure-owner-name6
+/apps/web/                      @credassure-owner-uilead
+/packages/api-client/           @credassure-owner-uilead
+/packages/core/                 @credassure-owner-name1 @credassure-owner-pritish
+/packages/security/             @credassure-owner-name1 @credassure-owner-name5

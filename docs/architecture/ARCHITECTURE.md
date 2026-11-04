@@ -279,7 +279,7 @@ in a new major version. Contract tests per route plus schema-based fuzzing (Sche
 | Transport and web | TLS outside local dev; CORS allowlist; CSP and security headers on the web app; no tokens in localStorage |
 | Data | Synthetic only; PII redaction before model, storage, logs and traces; HR store read-only |
 | Supply chain | Locked dependencies, pip-audit, pnpm audit, bandit, SBOM, pinned image digests, licence check |
-| Threat model | STRIDE in `docs/security/threat-model.md`; risks mapped to OWASP Top 10 for LLM Applications |
+| Threat model | STRIDE and OWASP LLM Top 10 (2025) risk register in `docs/adr/0002-threat-model.md` (moves to `docs/security/threat-model.md` in Phase 0b) |
 
 ### 8.6 AI-specific concepts
 | Concern | Approach |
@@ -342,6 +342,9 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0013 | Reranker: none by default; local cross-encoder if mentor approves | Accepted |
 | 0014 | Automated judge J1, calibrated; human scoring if kappa < 0.7 | Accepted |
 | 0015 | Demo: live, with replay profile and recorded video fallback | Accepted |
+| 0016 | Langfuse self-hosted in Compose (amends BRD NFR-09) | Accepted |
+
+Full index with phase and scope numbers: `docs/adr/README.md`. The `agent_version` contract change (scope #25) needs its own ADR, numbered 0017 or later.
 
 ## 10. Quality requirements — scenarios
 | ID | Characteristic | Stimulus | Response | Measure |

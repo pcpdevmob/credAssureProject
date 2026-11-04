@@ -3,6 +3,10 @@
 Status legend: **✅ verified** = URL opened/seen in search on 3 Nov 2026 · **⚠️ verify** = known source, exact URL must be confirmed before adding to `data/corpus/manifest.yaml`.
 Indian banks are migrating to `.bank.in` domains (e.g. `sbi.bank.in`, `bandhan.bank.in`) and RBI is moving to `website.rbi.org.in` / `rbi.org.in/en/web/rbi/...`; old URLs may redirect. Always record the URL you actually downloaded from plus its SHA-256.
 
+Identifier note (5 Nov 2026): the R-IDs here are canonical; `docs/DATA_RESOURCES.md` maps P-numbers to them, adds new IDs
+(R-RBI-01, -11, -12, -13, R-MSME-04..06, R-BANK-06..16, R-RATE-02, R-CAL-01, R-SIDBI-*, R-DATA-*, R-US-*) and replaces every
+⚠️ verify below with the URL confirmed in the 5 Nov 2026 web check. Where this file still says ⚠️, DATA_RESOURCES.md wins.
+
 All company, employee, lender and offer data stays **synthetic** (BRD §10). Real sources below serve two purposes only: (1) the copilot's retrieval corpus, and (2) realistic parameter ranges for the seeded generators. Every parameter range taken from a real source is recorded in the generator file header with the source ID from this document.
 
 ---
@@ -17,7 +21,7 @@ All company, employee, lender and offer data stays **synthetic** (BRD §10). Rea
 | D4 | MSE classification limits revised w.e.f. 1 Apr 2025: Micro ₹2.5 cr / ₹10 cr, Small ₹25 cr / ₹100 cr, Medium ₹125 cr / ₹500 cr (investment / turnover). | R-MSME-02 | Generator draws MSME profiles inside the Small band. |
 | D5 | Payments to micro/small suppliers beyond the MSMED Act s.15 limit (max 45 days) are deductible only on actual payment — s.43B(h) of the 1961 Act, now s.37(2)(g) of the Income-tax Act 2025. | R-TAX-01 | Payables to `msme_supplier=true` must have due dates ≤ 45 days in synthetic data; WC validator flags violations as a data-quality warning (not a gate). Copilot gold answers cite s.37(2)(g). |
 | D6 | Loans to Micro and Small Enterprises with floating rates are linked to an external benchmark (since 1 Oct 2019). | R-RBI-05 | Floating-rate synthetic offers use `benchmark="EBLR"`; an MCLR-linked MSE floating offer becomes a planted anomaly. |
-| D7 | GST is 18% on loan processing / credit-granting fees, while interest is exempt. | R-GST-01, R-GST-02 | Keep `GST_RATE=0.18` on fees only; never on interest. Whether GST applies to a CGTMSE fee passed on to the borrower is **unconfirmed** — make it a per-offer flag `gst_applicable` and test both. |
+| D7 | GST is 18% on loan processing / credit-granting fees, while interest is exempt. | R-GST-01, R-GST-02 | Keep `GST_RATE=0.18` on fees only; never on interest. Whether GST applies to a CGTMSE fee passed on to the borrower is **unconfirmed** — make it a per-offer flag `gst_applicable` and test both. **Recheck:** 11/2017 was amended by 15/2025-CT(R) (eff 22 Sep 2025); confirm heading 9971 is still 18% before G1. |
 | D8 | RBI issued a TReDS Master Direction on 23 Jun 2026. | R-RBI-08 | Copilot explains TReDS from this document (not priced — BRD §4.3). |
 
 ---
@@ -138,7 +142,7 @@ If public docs fall short of 320, the `rbi_circulars_hist` and `cgtmse` collecti
 | M-02 | Course embeddings endpoint | Dense retrieval | provided by course |
 | M-03 | `BAAI/bge-reranker-base` (local cross-encoder) | KR-03 reranker if mentor allows local models (Q7); fallback `llm_pointwise` | ⚠️ verify model card on Hugging Face |
 | T-05 | Chroma; SQLite FTS5 (`bm25()`); `sentence-transformers` | Retrieval | package names ✅ |
-| T-06 | Langfuse Python SDK (Cloud) | Tracing with mask function | ⚠️ verify SDK major version |
+| T-06 | Langfuse Python SDK (v5 current on PyPI) + self-hosted server via Docker Compose (ADR 0016, https://langfuse.com/self-hosting/deployment/docker-compose) | Tracing with mask function | ✅ 5 Nov 2026 |
 | T-07 | FastAPI, Pydantic v2, SQLAlchemy 2, Alembic, Streamlit, PyJWT, argon2-cffi, slowapi, tenacity, Jinja2 | App stack | package names ✅ |
 | T-08 | pytest, hypothesis, numpy-financial (eval gold only), ruff, mypy, bandit, pip-audit, gitleaks | Quality and security | package names ✅ |
 | T-09 | `mcp` Python SDK (FastMCP), stdio | Optional read-only dev MCP server (stretch) | ⚠️ verify |

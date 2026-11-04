@@ -80,7 +80,8 @@ credassure/
 │   └── api-client/               # TypeScript client generated from openapi.json (pnpm package)
 │
 ├── data/
-│   ├── generators/               # seeded synthetic data (S01–S17)
+│   ├── generators/               # seeded synthetic data (S01–S24)
+│   ├── reference/                # S22 parameter tables (AGF slabs, GST, reference rates)
 │   ├── frozen/v1/                # frozen at G1 (hash manifest, FROZEN marker)
 │   └── corpus/                   # manifest.yaml, download.py, audit.py (raw/text gitignored)
 │

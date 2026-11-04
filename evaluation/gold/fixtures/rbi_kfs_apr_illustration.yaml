@@ -1,0 +1,24 @@
+# S21 (docs/DATA_SPEC.md §8.4; ADR 0012). Transcription 1 of 2: needs a second independent team
+# transcription from the RBI PDF before G1. Money values are strings (exact).
+version: 1
+status: draft_transcription_1
+source_doc_ids: [R-RBI-12, R-RBI-02, R-RBI-13]
+source_location: "RBI/2024-25/18 Annex B; RBC Directions 2025 para 348(3)(i)"
+inputs:
+  sanctioned_amount: "20000"
+  tenure_months: 24
+  repayment: {frequency: monthly, method: emi, first_repayment_days_after_sanction: 30}
+  annual_rate_pct: "15"
+  rate_type: fixed
+  fees_total: "400"          # 240 to the lender + 160 third-party charges collected by the lender
+  net_disbursed: "19600"
+  instalment_exact: "969.73"
+  instalment_displayed: "970"
+published:
+  total_interest: "3274"
+  total_repayable: "23274"
+  apr_pct: "17.07"
+expected:
+  convention: nominal
+  apr_pct_tolerance_pp: "0.01"
+  note: "Nominal IRR on the exact EMI gives 17.07; the rounded EMI gives 17.10 (fails); effective gives 18.47."
