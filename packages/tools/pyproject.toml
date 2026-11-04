@@ -1,11 +1,15 @@
 [project]
 name = "credassure-tools"
 version = "0.1.0"
-description = "Tool registry and the data-access matrix. Empty until Phase 1."
+description = "Tool registry and the data-access matrix (scope #24)."
 requires-python = ">=3.12,<3.13"
 dependencies = [
-
+    "credassure-core",
+    "pyyaml>=6.0",
 ]
+
+[tool.uv.sources]
+credassure-core = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

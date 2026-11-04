@@ -8,6 +8,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+from credassure.core.blockers import BlockerCode
 from credassure.core.enums import AgentName, Decision, Stage
 
 
@@ -18,7 +19,7 @@ class EvidenceRef(BaseModel):
 
 
 class Blocker(BaseModel):
-    code: str
+    code: BlockerCode
     message: str
     field: str | None = None
     next_action: str | None = None

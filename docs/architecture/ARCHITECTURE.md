@@ -332,11 +332,11 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0003 | Reconcile 4-week execution guide with BRD | Accepted |
 | 0004 | UI deferred; API-first | Accepted (updated by 0005) |
 | 0005 | Monorepo; one project per agent with own API router; React web app | Accepted |
-| 0006 | Hexagonal agents: ports in core, adapters in packages | Proposed |
+| 0006 | Hexagonal agents: ports in core, adapters in packages | Accepted (adapters in Phase 8) |
 | 0007 | Asynchronous stage jobs with 202 + SSE progress | Proposed |
 | 0008 | Model resilience: timeouts, retries, circuit breaker, fallbacks | Proposed |
-| 0009 | Excluded multi-agent patterns (no agent-to-agent messaging, no inter-agent bus, no cross-case memory, no dynamic spawning) | Proposed |
-| 0010 | Rounding policy | Proposed |
+| 0009 | Excluded multi-agent patterns (no agent-to-agent messaging, no inter-agent bus, no cross-case memory, no dynamic spawning) | Accepted |
+| 0010 | Rounding policy | Accepted |
 | 0011 | Repayment date → week mapping | Proposed |
 | 0012 | APR annualisation: nominal, proven by RBI Annex B reproduction test | Accepted |
 | 0013 | Reranker: none by default; local cross-encoder if mentor approves | Accepted |
@@ -344,8 +344,9 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0015 | Demo: live, with replay profile and recorded video fallback | Accepted |
 | 0016 | Langfuse self-hosted in Compose (amends BRD NFR-09) | Accepted |
 | 0017 | Local default model: Ollama, Llama 3.1 8B (course endpoint stays the graded path) | Accepted |
+| 0018 | AgentResult contract, including agent_version and tenant_id | Proposed (not frozen) |
 
-Full index with phase and scope numbers: `docs/adr/README.md`. The `agent_version` contract change (scope #25) needs its own ADR, numbered 0018 or later.
+Full index with phase and scope numbers: `docs/adr/README.md`. ADR 0018 stays Proposed until the owner accepts the freeze.
 
 ## 10. Quality requirements — scenarios
 | ID | Characteristic | Stimulus | Response | Measure |

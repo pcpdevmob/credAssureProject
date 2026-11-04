@@ -1,1 +1,5 @@
-"""Tool registry and the data-access matrix. Empty until Phase 1."""
+"""Tool allowlist. Tools themselves arrive with the agents that own them."""
+
+from credassure.tools.registry import TOOL_NAMES, RegistryError, authorize
+
+__all__ = ["TOOL_NAMES", "RegistryError", "authorize"]

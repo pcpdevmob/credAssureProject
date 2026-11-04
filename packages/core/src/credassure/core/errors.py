@@ -1,0 +1,14 @@
+"""Stable API error codes (scope #32). Routes keep their current HTTP status."""
+
+from enum import StrEnum
+
+
+class ApiErrorCode(StrEnum):
+    NOT_IMPLEMENTED = "NOT_IMPLEMENTED"
+    VALIDATION_FAILED = "VALIDATION_FAILED"
+    UNAUTHENTICATED = "UNAUTHENTICATED"
+    FORBIDDEN = "FORBIDDEN"
+    NOT_FOUND = "NOT_FOUND"
+    TOOL_NOT_ALLOWED = "TOOL_NOT_ALLOWED"
+    COLLECTION_NOT_ALLOWED = "COLLECTION_NOT_ALLOWED"
+    CASE_REQUIRED = "CASE_REQUIRED"

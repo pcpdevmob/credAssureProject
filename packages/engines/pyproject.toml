@@ -1,11 +1,14 @@
 [project]
 name = "credassure-engines"
 version = "0.1.0"
-description = "Pure calculations. Empty until Phase 4."
+description = "Pure calculations. Normaliser (VER-01); cash-flow and loan cost arrive in Phase 4."
 requires-python = ">=3.12,<3.13"
 dependencies = [
-
+    "credassure-core",
 ]
+
+[tool.uv.sources]
+credassure-core = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

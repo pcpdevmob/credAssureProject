@@ -1,0 +1,55 @@
+# Agent registry and data-access matrix (scope #24, design-detail §2.3).
+# Thirteen tools. An agent may call only the tools listed under its name.
+# search_knowledge also names the collections that agent may read.
+# same_case_collections require a case_id (KFS never crosses cases).
+schema_version: "1.0"
+tools:
+  get_hr_profile:
+    allow:
+      onboarding: {}
+  evaluate_onboarding_rules:
+    allow:
+      onboarding: {}
+  validate_case_files:
+    allow:
+      working_capital: {}
+  compute_cash_table:
+    allow:
+      working_capital: {}
+  compute_recommendation:
+    allow:
+      working_capital: {}
+  audit_offer:
+    allow:
+      lendwise: {}
+  price_offer:
+    allow:
+      lendwise: {}
+  check_affordability:
+    allow:
+      lendwise: {}
+  rank_offers:
+    allow:
+      lendwise: {}
+  lender_send_template:
+    allow:
+      lendwise: {}
+  search_knowledge:
+    allow:
+      onboarding:
+        collections: [policy]
+      lendwise:
+        collections: [kfs]
+        same_case_collections: [kfs]
+      critic:
+        collections: [public, policy, faq, kfs]
+        same_case_collections: [kfs]
+      copilot:
+        collections: [public, policy, faq, kfs]
+        same_case_collections: [kfs]
+  verify_claims:
+    allow:
+      critic: {}
+  route_proposal:
+    allow:
+      supervisor: {}

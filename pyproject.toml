@@ -19,6 +19,7 @@ dev = [
     "pip-audit>=2.7",
     "pre-commit>=4",
     "import-linter>=2.1",
+    "types-pyyaml>=6",
     "numpy-financial>=1.0",  # evaluation/gold only, never imported by packages/engines
 ]
 

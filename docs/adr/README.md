@@ -11,11 +11,11 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | [0003](0003-execution-guide-reconciliation.md) | Execution guide reconciliation | Accepted | — | — |
 | [0004](0004-ui-deferred-api-first.md) | UI deferred; API-first | Accepted (updated by 0005) | — | — |
 | [0005](0005-monorepo-structure.md) | Monorepo structure | Accepted | 0b | — |
-| 0006 | Hexagonal agents: ports and adapters | Reserved | 1, 8 | 46 |
+| [0006](0006-hexagonal-agents.md) | Hexagonal agents: ports and adapters | Accepted (adapters in Phase 8) | 1, 8 | 46 |
 | 0007 | Async stage jobs, SSE progress, Idempotency-Key | Reserved | 8 | 47 |
 | 0008 | Model resilience: circuit breaker, retries, timeouts | Reserved | 6 | 48, 23 |
-| 0009 | Excluded multi-agent patterns (no agent-to-agent messaging, no inter-agent bus, no cross-case memory, no dynamic spawning) | Reserved | 1 | 26 |
-| 0010 | Rounding policy (exact in engines, lakh round-up, display rounding) | Reserved | 1 | 8 |
+| [0009](0009-excluded-multi-agent-patterns.md) | Excluded multi-agent patterns (no agent-to-agent messaging, no inter-agent bus, no cross-case memory, no dynamic spawning) | Accepted | 1 | 26 |
+| [0010](0010-rounding-policy.md) | Rounding policy (exact in engines, lakh round-up, display rounding) | Accepted | 1 | 8 |
 | 0011 | Repayment date to week mapping (calendar, holidays) | Reserved | 4 | 7 |
 | [0012](0012-apr-convention.md) | APR annualisation convention | Accepted | 4 | — |
 | [0013](0013-reranker.md) | Reranker | Accepted | 7 | — |
@@ -23,3 +23,4 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | [0015](0015-demo-mode.md) | Demo mode | Accepted | 12 | 17 |
 | [0016](0016-langfuse-self-hosted.md) | Langfuse self-hosted in Compose (amends BRD NFR-09) | Accepted | 0 | 44 |
 | [0017](0017-local-ollama.md) | Local default model: Ollama, Llama 3.1 8B | Accepted | 0, 6 | — |
+| [0018](0018-agent-result-contract.md) | AgentResult contract, including agent_version | Proposed (not frozen) | 1 | 25 |
