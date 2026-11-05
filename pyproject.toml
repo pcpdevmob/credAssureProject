@@ -70,6 +70,7 @@ known-first-party = ["credassure"]
 "data/generators/src/credassure/datagen/kfs.py" = ["E501"]
 "data/generators/src/credassure/datagen/policies.py" = ["E501"]
 "data/generators/src/credassure/datagen/harvest.py" = ["E501"]
+"data/generators/src/credassure/datagen/dates.py" = ["E501"]
 
 [tool.mypy]
 strict = true

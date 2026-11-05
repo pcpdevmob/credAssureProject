@@ -8,12 +8,15 @@ import httpx
 
 from credassure.datagen.corpus import Gate
 from credassure.datagen.harvest import (
-    assign,
+    assign_owners,
     ensure_slots,
     harvest,
     links,
     manual_markdown,
+    prepare_hosts,
+    record_hosts,
     report,
+    status_screen,
 )
 
 INDEX = """
@@ -115,21 +118,32 @@ def test_ADR0019_state_slots_cycle_through_jurisdictions() -> None:
     ]
 
 
-def test_ADR0019_six_owner_sections_are_balanced_and_keep_small_hosts_whole(
+def test_ADR0019_owners_start_with_priority_tier_and_stay_stable(
     entry: Callable[..., dict[str, Any]],
 ) -> None:
     items = (
-        [entry(doc_id=f"R{i}", source_url="https://rbi.org.in/x") for i in range(60)]
-        + [entry(doc_id=f"C{i}", source_url="https://cgtmse.in/x") for i in range(12)]
-        + [entry(doc_id=f"S{i}", source_url="https://sci.gov.in/x") for i in range(6)]
+        [entry(doc_id=f"R{i:02d}", source=1, source_url="https://rbi.org.in/x") for i in range(30)]
+        + [
+            entry(doc_id=f"J{i:02d}", source=15, source_url="https://sci.gov.in/x")
+            for i in range(12)
+        ]
+        + [
+            entry(doc_id=f"G{i:02d}", source=8, source_url="https://egazette.gov.in/x")
+            for i in range(6)
+        ]
     )
-    sections = assign(items)
-    sizes = sorted(len(s) for s in sections)
-    assert len(sections) == 6 and sum(sizes) == 78 and sizes[-1] - sizes[0] <= 13
-    owners_of_sci = [
-        i for i, s in enumerate(sections) if any(d["doc_id"].startswith("S") for d in s)
-    ]
-    assert len(owners_of_sci) == 1
+    lock: dict[str, dict[str, Any]] = {}
+    assign_owners(items, lock)
+    owners = {lock[d["doc_id"]]["owner"] for d in items}
+    assert len(owners) == 6
+    for owner in owners:  # every owner holds tier-1 (RBI) work
+        assert any(lock[d["doc_id"]]["owner"] == owner for d in items if d["source"] == 1)
+    before = {k: v["owner"] for k, v in lock.items()}
+    sizes = {o: sum(1 for v in before.values() if v == o) for o in owners}
+    extra = entry(doc_id="R99", source=1, source_url="https://rbi.org.in/x")
+    assign_owners([*items, extra], lock)
+    assert all(lock[k]["owner"] == v for k, v in before.items())  # stable
+    assert sizes[lock["R99"]["owner"]] == min(sizes.values())  # lightest owner gets new work
 
 
 def test_ADR0019_manual_markdown_lists_pending_not_available(
@@ -146,6 +160,7 @@ def test_ADR0019_manual_markdown_lists_pending_not_available(
     text = manual_markdown(manifest, lock)
     assert "| B |" in text and "| A |" not in text
     assert "## [Name 6]" in text and "Rejected" in text
+    assert "Placeholder-selection rules" in text and "20 MB" in text
 
 
 def test_G2_report_counts_only_ok_with_extracted_text(
@@ -192,3 +207,64 @@ def test_KR01_harvested_documents_replace_unfilled_slots() -> None:
     assert harvest(_sources(), manifest, lock, _gate(_ok)) == 2
     titles = sorted(d["title"] for d in manifest["documents"])
     assert len(titles) == 3 and titles.count("PENDING") == 1
+
+
+def test_ADR0019_retry_once_after_24h_then_permanent() -> None:
+    from datetime import UTC, datetime, timedelta
+
+    hits: list[str] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        hits.append(request.url.path)
+        if request.url.path == "/robots.txt":
+            return httpx.Response(200, text="")
+        return httpx.Response(502)
+
+    def run(now: datetime, lock: dict[str, dict[str, Any]]) -> None:
+        gate = _gate(handler)
+        due = prepare_hosts(lock, gate, now)
+        gate.get("https://www.ncgtc.in/a")
+        record_hosts(lock, gate, due, now)
+
+    t0 = datetime(2026, 11, 5, 12, tzinfo=UTC)
+    lock: dict[str, dict[str, Any]] = {}
+    run(t0, lock)
+    record = lock["host:www.ncgtc.in"]
+    assert record["reason"] == "http_502" and record["retry_after"] == "2026-11-06T12:00:00+00:00"
+    hits.clear()
+    run(t0 + timedelta(hours=23), lock)
+    assert hits == []  # before the window: no request
+    run(t0 + timedelta(hours=25), lock)
+    assert "/a" in hits and record["retry_outcome"] == "failed: http_502"
+    hits.clear()
+    run(t0 + timedelta(days=3), lock)
+    assert hits == []  # retried once: never again
+
+
+def test_ADR0019_403_and_redirect_loops_are_never_retried() -> None:
+    from datetime import UTC, datetime
+
+    gate = _gate(lambda r: httpx.Response(200, text=""))
+    gate.blocked |= {
+        "msme.gov.in": "http_403",
+        "udyamregistration.gov.in": "error: TooManyRedirects",
+    }
+    lock: dict[str, dict[str, Any]] = {}
+    record_hosts(lock, gate, frozenset(), datetime(2026, 11, 5, tzinfo=UTC))
+    assert lock["host:msme.gov.in"]["retry_outcome"] == "not retried (permanent)"
+    assert "retry_after" not in lock["host:udyamregistration.gov.in"]
+
+
+def test_G2_status_screen_shows_progress_sources_and_owners(
+    tmp_path: Path, entry: Callable[..., dict[str, Any]]
+) -> None:
+    (tmp_path / "A.txt").write_text("x", encoding="utf-8")
+    manifest = {"documents": [entry(doc_id="A"), entry(doc_id="B"), entry(doc_id="C")]}
+    lock = {
+        "A": {"status": "ok"},
+        "B": {"status": "pending_manual", "owner": "[Name 2]"},
+        "C": {"status": "needs_date"},
+    }
+    screen = status_screen(_sources(), manifest, lock, tmp_path)
+    assert screen.splitlines()[0].startswith("Real available 1/500 [")
+    assert "needs date 1" in screen and "[Name 2]" in screen

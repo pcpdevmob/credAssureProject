@@ -291,12 +291,13 @@ documents:
   format: html
   title: Udyam Registration - Important to know
   publisher: Ministry of MSME
-  effective_from: null
+  effective_from: '2021-03-05'
   superseded_by: null
   source_url: https://www.udyamregistration.gov.in/Important.aspx
   source: 7
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-TAX-01
   tag: income_tax
   collection: public
@@ -459,12 +460,13 @@ documents:
   format: html
   title: Union Bank of India - Fees and Services
   publisher: Union Bank of India
-  effective_from: null
+  effective_from: '2025-04-01'
   superseded_by: null
   source_url: https://www.unionbankofindia.bank.in/en/common/fees-and-services
   source: 13
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-BANK-10
   tag: bank_charges
   collection: public
@@ -515,12 +517,13 @@ documents:
   format: html
   title: Kotak Mahindra Bank - Business Loan Fees and Charges
   publisher: Kotak Mahindra Bank
-  effective_from: null
+  effective_from: '2026-09-30'
   superseded_by: null
   source_url: https://www.kotak.bank.in/en/business/loans/business-loan/fees-and-charges.html
   source: 13
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-BANK-14
   tag: bank_charges
   collection: public
@@ -599,12 +602,13 @@ documents:
   format: html
   title: SIDBI - Working Capital FAQ
   publisher: SIDBI
-  effective_from: null
+  effective_from: '2026-10-07'
   superseded_by: null
   source_url: https://www.sidbi.in/working-capital
   source: 11
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-SIDBI-02
   tag: sidbi
   collection: public
@@ -613,12 +617,13 @@ documents:
   format: html
   title: SIDBI - Project Funding FAQ
   publisher: SIDBI
-  effective_from: null
+  effective_from: '2026-10-07'
   superseded_by: null
   source_url: https://www.sidbi.in/project-funding
   source: 11
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-SIDBI-03
   tag: sidbi
   collection: public
@@ -627,12 +632,13 @@ documents:
   format: html
   title: SIDBI - Machinery Loan FAQ
   publisher: SIDBI
-  effective_from: null
+  effective_from: '2026-10-07'
   superseded_by: null
   source_url: https://www.sidbi.in/machinery-loan
   source: 11
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-SIDBI-04
   tag: sidbi
   collection: public
@@ -641,12 +647,13 @@ documents:
   format: html
   title: SIDBI - CGTMSE
   publisher: SIDBI
-  effective_from: null
+  effective_from: '2026-10-07'
   superseded_by: null
   source_url: https://www.sidbi.in/cgtmse
   source: 11
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-SIDBI-05
   tag: sidbi
   collection: public
@@ -655,12 +662,13 @@ documents:
   format: html
   title: SIDBI - TReDS
   publisher: SIDBI
-  effective_from: null
+  effective_from: '2026-10-07'
   superseded_by: null
   source_url: https://www.sidbi.in/treds
   source: 11
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-DATA-01
   tag: msme_gov
   collection: public
@@ -753,12 +761,13 @@ documents:
   format: html
   title: Lending and Deposit Rates of Scheduled Commercial Banks (September 2026 release)
   publisher: Reserve Bank of India
-  effective_from: null
+  effective_from: '2026-09-30'
   superseded_by: null
   source_url: https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63702
   source: 3
   applies_to: all
   method: manual
+  date_source: extracted
 - doc_id: R-RATE-01-A
   tag: rbi_md
   collection: public
@@ -767,12 +776,13 @@ documents:
   format: html
   title: Lending and Deposit Rates of Scheduled Commercial Banks (earlier release, prid 63481)
   publisher: Reserve Bank of India
-  effective_from: null
+  effective_from: '2026-08-31'
   superseded_by: null
   source_url: https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63481
   source: 3
   applies_to: all
   method: manual
+  date_source: extracted
 - doc_id: R-RATE-01-B
   tag: rbi_md
   collection: public
@@ -781,12 +791,13 @@ documents:
   format: html
   title: Lending and Deposit Rates of Scheduled Commercial Banks (earlier release, prid 63049)
   publisher: Reserve Bank of India
-  effective_from: null
+  effective_from: '2026-06-30'
   superseded_by: null
   source_url: https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63049
   source: 3
   applies_to: all
   method: manual
+  date_source: extracted
 - doc_id: R-RATE-01-C
   tag: rbi_md
   collection: public
@@ -795,12 +806,13 @@ documents:
   format: html
   title: Lending and Deposit Rates of Scheduled Commercial Banks (earlier release, prid 62471)
   publisher: Reserve Bank of India
-  effective_from: null
+  effective_from: '2026-03-30'
   superseded_by: null
   source_url: https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=62471
   source: 3
   applies_to: all
   method: manual
+  date_source: extracted
 - doc_id: R-CG-03
   tag: cgtmse
   collection: public
@@ -809,12 +821,13 @@ documents:
   format: html
   title: CGTMSE circulars (index)
   publisher: CGTMSE
-  effective_from: null
+  effective_from: '2026-06-15'
   superseded_by: null
   source_url: https://www.cgtmse.in/Circulars
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-04
   tag: cgtmse
   collection: public
@@ -1019,12 +1032,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-02-10'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1772467706992_Circular%20258%20-%20TPG%20definition.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-009
   tag: r-cg-c
   collection: public
@@ -1033,12 +1047,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-01-23'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1772467742052_Circular%20257%20-%20CGS%20for%20Export%20credit.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-010
   tag: r-cg-c
   collection: public
@@ -1117,12 +1132,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-06-15'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1782398519918_Hindi%20Circular%20-%20TReDS-150626.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-016
   tag: r-cg-c
   collection: public
@@ -1131,12 +1147,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-06-15'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1782398570934_%E0%A4%B9%E0%A4%BF%E0%A4%A8%E0%A5%8D%E0%A4%A6%E0%A5%80%20Addendum%20to%20MCC%20Circular-%20Modification%20in%20claim%20settlement.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-001
   tag: r-gst-c
   collection: public
@@ -1145,12 +1162,13 @@ documents:
   format: pdf
   title: CEA report on Revenue Neutral Rates
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2015-12-04'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2024-02/cea-rpt-rnr.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-002
   tag: r-gst-c
   collection: public
@@ -1173,12 +1191,13 @@ documents:
   format: pdf
   title: 101st Constitutional Amendment Act, 2016
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2016-09-08'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2024-02/consti-amend-act.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-004
   tag: r-gst-c
   collection: public
@@ -1201,12 +1220,13 @@ documents:
   format: pdf
   title: Press Release Regarding Recommendations of the 57th Meeting of the GST Council
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2026-10-08'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2026-10/press_release.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-006
   tag: r-gst-c
   collection: public
@@ -1229,12 +1249,13 @@ documents:
   format: pdf
   title: GoM constituted on Compensation Cess
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2024-09-25'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2024-09/compensation_cess.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-008
   tag: r-gst-c
   collection: public
@@ -1243,12 +1264,13 @@ documents:
   format: pdf
   title: GoM constituted on Life and Health Insurance
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2024-09-15'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2024-09/om_gom_on_life_and_health_insurance_1.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-009
   tag: r-gst-c
   collection: public
@@ -1300,12 +1322,13 @@ documents:
   format: pdf
   title: Frequently Asked Questions (FAQs) on the decisions of the 56th GST Council held in New Delhi
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2025-09-03'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2025-09/faq_0.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-013
   tag: r-gst-c
   collection: public
@@ -1314,12 +1337,13 @@ documents:
   format: pdf
   title: Recommendations of the 56th Meeting of the GST Council held at New Delhi
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2025-09-03'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2025-09/press_release_press_information_bureau_0.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-014
   tag: r-gst-c
   collection: public
@@ -1328,12 +1352,13 @@ documents:
   format: pdf
   title: 81st Edition GSTC Newsletter December 2025
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2025-12-13'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2026-01/monthly_newsletter_december_2025_1_0.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-015
   tag: r-gst-c
   collection: public
@@ -1342,12 +1367,13 @@ documents:
   format: pdf
   title: 82nd Edition GSTC Newsletter January 2026
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2025-02-01'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2026-02/newsletter_january_issue_0.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-016
   tag: r-gst-c
   collection: public
@@ -1357,12 +1383,13 @@ documents:
   title: Appointment of Consultant (Grade-1) on contractual basis for a short period in the Goods and Services Tax Council
     Secretariat, New Delhi
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2026-02-10'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2026-02/vacancy_circular_0.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-017
   tag: r-gst-c
   collection: public
@@ -1387,12 +1414,13 @@ documents:
   title: Vacancy Circular to engage Consultant(Grade-1) on contractual basis in Goods and Service Tax Council Secretariat,
     New Delhi
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2026-08-11'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2026-08/vacancy-circular-and-procedure-guidelines-for-engangement_0.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-019
   tag: r-gst-c
   collection: public
@@ -1415,12 +1443,13 @@ documents:
   format: pdf
   title: Press Release Regarding Recommendations of the 57th Meeting of the GST Council
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2026-10-08'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2026-10/press_release_0.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-SIDBI-P-001
   tag: r-sidbi-p
   collection: public
@@ -1429,12 +1458,13 @@ documents:
   format: html
   title: Cluster Development Initiatives
   publisher: www.sidbi.in
-  effective_from: null
+  effective_from: '2026-10-07'
   superseded_by: null
   source_url: https://www.sidbi.in/en/msme-cluster-development-initiatives
   source: 11
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-SIDBI-P-002
   tag: r-sidbi-p
   collection: public
@@ -1443,12 +1473,13 @@ documents:
   format: html
   title: MSME Outlook Survey Report
   publisher: www.sidbi.in
-  effective_from: null
+  effective_from: '2026-10-07'
   superseded_by: null
   source_url: https://www.sidbi.in/en/msme-outlook-survey
   source: 11
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-SIDBI-P-003
   tag: r-sidbi-p
   collection: public
@@ -1457,12 +1488,13 @@ documents:
   format: html
   title: MSME Pulse
   publisher: www.sidbi.in
-  effective_from: null
+  effective_from: '2026-10-07'
   superseded_by: null
   source_url: https://www.sidbi.in/en/msme-pulse
   source: 11
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-SIDBI-P-004
   tag: r-sidbi-p
   collection: public
@@ -1485,12 +1517,13 @@ documents:
   format: pdf
   title: Union Budget Analysis 2026
   publisher: www.sidbi.in
-  effective_from: null
+  effective_from: '2026-02-01'
   superseded_by: null
   source_url: https://www.sidbi.in/uploads/Union_Budget_Analysis_2026.pdf
   source: 11
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-SIDBI-P-006
   tag: r-sidbi-p
   collection: public
@@ -1499,12 +1532,13 @@ documents:
   format: pdf
   title: Part-1
   publisher: www.sidbi.in
-  effective_from: null
+  effective_from: '1991-03-31'
   superseded_by: null
   source_url: https://www.sidbi.in/uploads/financialreport/SIDBI-Part-I-Eng-Single-page-view-Low.pdf
   source: 11
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-SIDBI-P-007
   tag: r-sidbi-p
   collection: public
@@ -1611,12 +1645,13 @@ documents:
   format: pdf
   title: CSR Policy
   publisher: www.m1xchange.com
-  effective_from: null
+  effective_from: '2025-03-20'
   superseded_by: null
   source_url: https://www.m1xchange.com/wp-content/uploads/2025/06/CSR-policy-V-1.0_20.03.2025.pdf
   source: 12
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-TREDS-006
   tag: r-treds
   collection: public
@@ -1625,12 +1660,13 @@ documents:
   format: pdf
   title: ISO 27001 Certification
   publisher: www.m1xchange.com
-  effective_from: null
+  effective_from: '2022-10-28'
   superseded_by: null
   source_url: https://www.m1xchange.com/wp-content/uploads/2025/10/bsi-Certficate.pdf
   source: 12
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-TREDS-007
   tag: r-treds
   collection: public
@@ -1737,12 +1773,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2026-04-01'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-05/Current-Account-Product-Variants-Schedule-of-Charges-and-Features.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: extracted
 - doc_id: R-BANK-S-006
   tag: r-bank-s
   collection: public
@@ -1919,12 +1956,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2025-07-02'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-charges-for-Business-Banking-Group-21082026.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: extracted
 - doc_id: R-BANK-S-019
   tag: r-bank-s
   collection: public
@@ -1933,12 +1971,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2024-06-29'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-08/Standard-Schedule-of-Charges-for-Savings-NR-Accounts-and-Debit-Cards.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: extracted
 - doc_id: R-RBI-MD-001
   tag: r-rbi-md
   collection: public
@@ -8331,12 +8370,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1741363456012_cgscl%20circular%20249%20upload%20final.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-185
   tag: r-cg-c
   collection: public
@@ -8345,12 +8385,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1741369414503_Trangender-1_246.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-186
   tag: r-cg-c
   collection: public
@@ -8359,12 +8400,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1741369591548_Circular%20for%20eligibility%20criteria.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-187
   tag: r-cg-c
   collection: public
@@ -8373,12 +8415,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1741369687793_Circular%20for%20modification%20in%20CGS%20I_final.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-188
   tag: r-cg-c
   collection: public
@@ -8387,12 +8430,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-03-18'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1742382157365_Circular%20No.%202502024-25%205cr%20to%2010%20cr.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-189
   tag: r-cg-c
   collection: public
@@ -8401,12 +8445,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-03-18'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1742382368090_Circular%20No.2512024-25%20reduction%20in%20AGF.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-190
   tag: r-cg-c
   collection: public
@@ -8415,12 +8460,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-04-01'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1743589132849_Reduction%20in%20AGF%20CGS%20III%20FINAL.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-191
   tag: r-cg-c
   collection: public
@@ -8443,12 +8489,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-03-18'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1747745049498_250%20Circular%20No.%202024-25%205cr%20to%2010%20cr.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-193
   tag: r-cg-c
   collection: public
@@ -8457,12 +8504,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1747745171550_Circular%20for%20eligibility%20criteria.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-194
   tag: r-cg-c
   collection: public
@@ -8471,12 +8519,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1747745390505_Circular%20for%20transgender%20final.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-195
   tag: r-cg-c
   collection: public
@@ -8541,12 +8590,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2024-01-01'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1704191499006_Circular-%20CGSCL%20Fee%20Structure.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-200
   tag: r-cg-c
   collection: public
@@ -8611,12 +8661,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2024-01-01'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1733935011521_Circular%20No.%20236%20-%20CGSCL%20Fee%20Structure.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-205
   tag: r-cg-c
   collection: public
@@ -8625,12 +8676,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2024-01-18'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1733935042510_Circular%20No.%20237_GCGS.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-206
   tag: r-cg-c
   collection: public
@@ -8639,12 +8691,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2024-02-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1733935074866_Circular%20No.%20238%202023-24_IME%20V2.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-207
   tag: r-cg-c
   collection: public
@@ -8653,12 +8706,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2024-03-06'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1733935106053_Circular%20No.%20239%20-%20OCGS%20circular.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-208
   tag: r-cg-c
   collection: public
@@ -8667,12 +8721,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2024-08-01'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1733935126975_Circular%20No.%20240%20-%20IME%20Circular%20Clarification.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-209
   tag: r-cg-c
   collection: public
@@ -8681,12 +8736,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2024-12-10'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1734171815262_Circular%20241-%20enhancement%20in%20extent%20of%20coverage%20for%20women%20entrepreneurs%5B90%5D.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-210
   tag: r-cg-c
   collection: public
@@ -8695,12 +8751,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2022-11-30'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1734171818388_hindi%20Circular%20241-%20enhancement%20in%20extent%20of%20coverage%20for%20women%20entrepreneurs.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-211
   tag: r-cg-c
   collection: public
@@ -8709,12 +8766,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1741353836549_Circular%20No.242.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-212
   tag: r-cg-c
   collection: public
@@ -8723,12 +8781,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2023-12-18'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1741354004731_Circular%20No%20-%20243.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-213
   tag: r-cg-c
   collection: public
@@ -8737,12 +8796,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1741358954826_Gujarat%20circular_final.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-214
   tag: r-cg-c
   collection: public
@@ -8751,12 +8811,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1741359008951_Mizoram%20Circular%20final.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-215
   tag: r-cg-c
   collection: public
@@ -8765,12 +8826,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1747745452907_Mizoram%20Circular%20final.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-216
   tag: r-cg-c
   collection: public
@@ -8779,12 +8841,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1747745520737_NBFC%20Circular%20No.%20243.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-217
   tag: r-cg-c
   collection: public
@@ -8793,12 +8856,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1747745549827_NBFC%20Circular%20No.242.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-218
   tag: r-cg-c
   collection: public
@@ -8807,12 +8871,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2023-05-19'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1684578860932_NBFC%20Circular%20No%20226.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-219
   tag: r-cg-c
   collection: public
@@ -8821,12 +8886,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2023-06-09'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1686328603047_Circular%20No.227%202023-24.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-220
   tag: r-cg-c
   collection: public
@@ -8835,12 +8901,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2023-06-22'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1687436660393_FINAL%20CIRCULAR_228.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-221
   tag: r-cg-c
   collection: public
@@ -8849,12 +8916,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2023-08-25'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1693235486130_Circular%20no.%20229%20-%20UAM%20Mandatory.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-222
   tag: r-cg-c
   collection: public
@@ -8975,12 +9043,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2023-08-25'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1733934854576_Circular%20no.%20229%20-%20UAM%20Mandatory.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-231
   tag: r-cg-c
   collection: public
@@ -9045,12 +9114,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2023-01-06'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1673044027617_Circular%20no.%20217%20-%20Agniveer.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-236
   tag: r-cg-c
   collection: public
@@ -9059,12 +9129,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2023-02-01'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1675275782886_Circular%20no.%20218%20-%20Outstanding%20Clarification%20(003).pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-237
   tag: r-cg-c
   collection: public
@@ -9073,12 +9144,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2022-09-08'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1680097385416_Revised%20Circular_219.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-238
   tag: r-cg-c
   collection: public
@@ -9087,12 +9159,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2023-03-31'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1680282460228_Circular%20no.%20222%20-%20Increase%20in%20the%20threshold%20for%20Waiver%20of%20Legal%20Action_REVISED.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-239
   tag: r-cg-c
   collection: public
@@ -9101,12 +9174,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2023-03-31'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1680774247788_Circular%20No.%20220_Increase%20in%20ceiling%20of%20Coverage_REV.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-240
   tag: r-cg-c
   collection: public
@@ -9115,12 +9189,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2023-03-31'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1680774258496_Circular%20No.%20223_Fee%20revision%20under%20Co-lending_REV.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-241
   tag: r-cg-c
   collection: public
@@ -9129,12 +9204,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2023-03-31'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1680774271189_Circular%20No.%20221_Reduction%20in%20AGF_REV.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-242
   tag: r-cg-c
   collection: public
@@ -9283,12 +9359,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2023-04-11'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1715764860533_Circular%20No.225%202023-24_rev.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-253
   tag: r-cg-c
   collection: public
@@ -9297,12 +9374,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2023-04-11'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1733934781434_Circular%20No.%20225%202023-24.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-254
   tag: r-cg-c
   collection: public
@@ -9311,12 +9389,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2022-03-09'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1666115840408_Circular%20no.%20206%20-%20URN%20Mandatory.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-255
   tag: r-cg-c
   collection: public
@@ -9395,12 +9474,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2023-01-01'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1672424179117_Manipur%20Credit%20Guarantee%20Scheme%20(MCGS).pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-261
   tag: r-cg-c
   collection: public
@@ -9591,12 +9671,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2022-02-25'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1645813400842_196.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-275
   tag: r-cg-c
   collection: public
@@ -9605,12 +9686,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2022-03-07'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1646671238480_Circular%20198%20for%20Extention%20in%20the%20CGSSD%20timeline.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-276
   tag: r-cg-c
   collection: public
@@ -9619,12 +9701,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2020-08-06'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1647038585241_Circular%20no.%20199%20-%20Udyog%20Aadhaar_updated.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-277
   tag: r-cg-c
   collection: public
@@ -9675,12 +9758,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2022-06-06'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1654625838148_Circular%20no.%20202%20-%20CGS%20PMS-%20Revision%20in%20Scheme%20Guidelines%20and%20Extension%20of%20the%20Lending%20period_Final.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-281
   tag: r-cg-c
   collection: public
@@ -9857,12 +9941,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2021-10-08'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1633870635262_Circular%20no.%20187%20-%20Allowing%20submission%20of%20application%20anytime-%20Final.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-294
   tag: r-cg-c
   collection: public
@@ -9871,12 +9956,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2021-10-08'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1633958523782_Circular%20no.%20186%20-%20Increase%20in%20the%20threshold%20for%20Waiver%20of%20Legal%20Action_Final.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-295
   tag: r-cg-c
   collection: public
@@ -9885,12 +9971,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2015-02-24'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1637604934484_Circular%20No%20188%20for%20audit%20certificate.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-296
   tag: r-cg-c
   collection: public
@@ -9899,12 +9986,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2021-11-18'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1637667604994_Circular%20no.%20189%20-%20Eligibility%20of%20FPO%20under%20CGTMSE%20_final.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-297
   tag: r-cg-c
   collection: public
@@ -9913,12 +10001,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2022-01-03'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1642598376662_REV_Circular%20no.%20191%20-%20Clarification%20on%20Hybrid%20Model%20Rev.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-298
   tag: r-cg-c
   collection: public
@@ -9927,12 +10016,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2022-01-03'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1642612435346_REV_%20Circular%20no.%20190%20-%20Clarification%20on%20charging%20of%20fee%20for%20WC.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-299
   tag: r-cg-c
   collection: public
@@ -9941,12 +10031,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2022-01-19'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1642612481924_Circular%20no.%20192%20-%20Clarification%20in%20respect%20of%20updation%20of%20Outsatanding%20Amt%20for%20WC%20accounts.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-300
   tag: r-cg-c
   collection: public
@@ -9955,12 +10046,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2022-01-20'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1642682792079_CGTMSE%20Circular%20193-%20Inspection%20of%20CGTMSE%20covered%20accounts.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-301
   tag: r-cg-c
   collection: public
@@ -9969,12 +10061,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2019-09-18'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1643911676896_Circular%20no.%20194%20-%20Inclusion%20of%20NSUCB%20StCB%20and%20DCCB%20(002).pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-302
   tag: r-cg-c
   collection: public
@@ -10081,12 +10174,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2021-04-05'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1617634975175_Final%20Circular%20177%20for%20Extention%20in%20the%20CGSSD%20timeline.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-310
   tag: r-cg-c
   collection: public
@@ -10095,12 +10189,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2021-04-15'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1618584605767_Circular%20no.%20178%20-%20Online%20Payment%20Process%20of%20Tenure%20Fee..pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-311
   tag: r-cg-c
   collection: public
@@ -10109,12 +10204,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2021-04-27'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1619599695825_Circular%20no.%20179%20-%20CGS%20PMS-%20Process%20Modification.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-312
   tag: r-cg-c
   collection: public
@@ -10123,12 +10219,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2021-05-07'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1620413560709_Circular%20No%20180.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-313
   tag: r-cg-c
   collection: public
@@ -10137,12 +10234,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2021-06-08'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1623258664602_Circular%20no.%20-181%20NBFC%20%20%20.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-314
   tag: r-cg-c
   collection: public
@@ -10151,12 +10249,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2021-08-20'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1629474678077_Circular%20No.%20182.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-315
   tag: r-cg-c
   collection: public
@@ -10165,12 +10264,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2021-09-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1631630126368_Circular%20no.%20183%20-%20Credit%20Guarantee%20Scheme%20for%20PM%20SVANidhi%20%E2%80%93%20Credit%20Guarantee%20Extension%20on%20Second%20Tranche.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-316
   tag: r-cg-c
   collection: public
@@ -10193,12 +10293,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2021-10-08'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1633958508527_Circular%20no.%20185%20-%20RRBs-%20Eligibility%20Criteria%20and%20Retail%20Allowed_Final.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-318
   tag: r-cg-c
   collection: public
@@ -10207,12 +10308,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2020-07-03'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610534595121_Circular_No.171.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-319
   tag: r-cg-c
   collection: public
@@ -10221,12 +10323,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2020-07-02'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610534699710_Circular_No.172_Operational_Guidelines.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-320
   tag: r-cg-c
   collection: public
@@ -10235,12 +10338,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2020-08-18'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610534781274_Circular_No.173.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-321
   tag: r-cg-c
   collection: public
@@ -10263,12 +10367,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2020-12-29'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610534948807_Circular_No.175.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-323
   tag: r-cg-c
   collection: public
@@ -10333,12 +10438,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2020-07-22'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1622574052028_Circular_No.172.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-328
   tag: r-cg-c
   collection: public
@@ -10347,12 +10453,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2019-07-01'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610534102398_Circular_No.164.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-329
   tag: r-cg-c
   collection: public
@@ -10361,12 +10468,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2019-09-18'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610534202513_Circular_No.165.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-330
   tag: r-cg-c
   collection: public
@@ -10375,12 +10483,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2019-12-06'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610534253007_Circular_No.166.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-331
   tag: r-cg-c
   collection: public
@@ -10403,12 +10512,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2020-03-18'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610534382924_Circular_No.168.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-333
   tag: r-cg-c
   collection: public
@@ -10431,12 +10541,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2020-04-30'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610534541687_Subdebt_Scheme_Guidilines.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-335
   tag: r-cg-c
   collection: public
@@ -10459,12 +10570,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2021-03-31'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1633541021116_FAQs_on_Sub-Debt_Scheme.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-337
   tag: r-cg-c
   collection: public
@@ -10487,12 +10599,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2018-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610533305390_Circular_No.154.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-339
   tag: r-cg-c
   collection: public
@@ -10543,12 +10656,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2017-12-19'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610533717054_Circular_No.158.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-343
   tag: r-cg-c
   collection: public
@@ -10557,12 +10671,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2018-11-13'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610533801534_Circular_No.159.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-344
   tag: r-cg-c
   collection: public
@@ -10571,12 +10686,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2018-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610533864599_Circular_No.160.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-345
   tag: r-cg-c
   collection: public
@@ -10585,12 +10701,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2019-01-15'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610533907624_Circular_No.161.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-346
   tag: r-cg-c
   collection: public
@@ -10627,12 +10744,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2012-10-10'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1528139983318_Circular%20145-%202017-18%20-%20Modifications%20in%20the%20guidelines%20for%20lodgment%20of%20claim.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-349
   tag: r-cg-c
   collection: public
@@ -10641,12 +10759,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2017-12-08'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1528140003890_Circular%20146%20-%202017-18%20%E2%80%93%20Udyog%20Aadhaar%20Number%20Mandatory%20for%20Guarantee%20coverage.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-350
   tag: r-cg-c
   collection: public
@@ -10655,12 +10774,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2018-03-21'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1528140026231_Circular%20147-%202017-18%20%E2%80%93%20Coverage%20of%20unsecured%20loan%20for%20NBFCs.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-089
   tag: r-cg-c
   collection: public
@@ -10669,12 +10789,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2018-03-22'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1528140049145_Circular%20148-%202017-18%20%E2%80%93%20Refund%20of%20Annual%20Guarantee%20Fee.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-090
   tag: r-cg-c
   collection: public
@@ -10683,12 +10804,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2018-06-07'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1528733504995_Circular%20149%20-2018%E2%80%9319-%20Tenure%20for%20working%20capital%20facility%20-%20Modification%20in%20CGS.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-091
   tag: r-cg-c
   collection: public
@@ -10711,12 +10833,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2018-06-11'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1529006104582_Circular%20No142B%20Clarification%20on%20charge%20on%20securities.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-093
   tag: r-cg-c
   collection: public
@@ -10725,12 +10848,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2018-07-12'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610466843809_Circular_No.151.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-094
   tag: r-cg-c
   collection: public
@@ -10739,12 +10863,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2018-07-12'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610533088323_Circular_No.152.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-095
   tag: r-cg-c
   collection: public
@@ -10753,12 +10878,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2018-08-07'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610533188934_Circular_No.153.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-096
   tag: r-cg-c
   collection: public
@@ -10767,12 +10893,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2009-01-07'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1528139638540_Circular%20138-%202017-18-%20Introduction%20of%20payout%20cap%20on%20claim%20settlement.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-097
   tag: r-cg-c
   collection: public
@@ -10781,12 +10908,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2018-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1528139664447_Circular%20139-%202017-18%20-Charging%20of%20Annual%20Guarantee%20Fee%20(AGF)%20on%20Outstanding%20Amount.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-098
   tag: r-cg-c
   collection: public
@@ -10795,12 +10923,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2013-12-16'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1528139700599_Circular%20140-%202017-18%20-Increase%20in%20the%20extent%20of%20guarantee%20coverage%20for%20proposals%20above%20%E2%82%B950%20lakh.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-099
   tag: r-cg-c
   collection: public
@@ -10809,12 +10938,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2016-01-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1528139726822_Circular%20141-%202017-18%20%E2%80%93%20Coverage%20of%20Retail%20Trade%20under%20Credit%20Guarantee%20Scheme.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-100
   tag: r-cg-c
   collection: public
@@ -10823,12 +10953,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2012-10-10'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1528139948904_Circular%20144%20-2017-18-%20Waiver%20of%20Initiation%20of%20Legal%20Action%20in%20respect%20of%20smaller%20loans.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-101
   tag: r-cg-c
   collection: public
@@ -10851,12 +10982,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2018-02-28'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1529081281665_Circular%20142-%202017-18%20%E2%80%93%20Partial%20Collateral%20Security%20under%20Credit%20Guarantee%20Scheme.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-103
   tag: r-cg-c
   collection: public
@@ -10893,12 +11025,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2018-03-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1633603014526_Circular_No.143.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-106
   tag: r-cg-c
   collection: public
@@ -10949,12 +11082,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2017-12-08'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1528139508123_Circular%20134%20-%202017-18%20-%20Aadhaar%20Number%20in%20Guarantee%20Application%20Form.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-110
   tag: r-cg-c
   collection: public
@@ -10977,12 +11111,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2016-04-01'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1528139593377_Circular%20136-%202017-18%20-%20Regarding%20Search%20Facility%20using%20ITPAN.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-112
   tag: r-cg-c
   collection: public
@@ -10991,12 +11126,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2017-01-25'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1528139615207_Circular%20137-%202017-18%20-%20Regarding%20Coverage%20of%20unsecured%20loans%20for%20NBFCs..pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-113
   tag: r-cg-c
   collection: public
@@ -11019,12 +11155,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2017-07-21'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1633520465349_131.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-115
   tag: r-cg-c
   collection: public
@@ -11145,12 +11282,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2017-04-24'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1633521341307_127_Eng.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-124
   tag: r-cg-c
   collection: public
@@ -11159,12 +11297,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2017-04-12'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1633521651962_Circular%20No126.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-125
   tag: r-cg-c
   collection: public
@@ -11173,12 +11312,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2017-04-12'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1633522151279_125.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-126
   tag: r-cg-c
   collection: public
@@ -11719,12 +11859,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2015-02-24'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1633522797530_Follow%20up%20of%20recovery%20after%20settlement%20of%20CGTMSE%20claim.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-072
   tag: r-cg-c
   collection: public
@@ -12069,12 +12210,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2011-08-30'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1632012994086_Office-converted.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-169
   tag: r-cg-c
   collection: public
@@ -12083,12 +12225,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2010-07-30'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1632013281045_Office-converted%20(1).pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-170
   tag: r-cg-c
   collection: public
@@ -12097,12 +12240,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2010-06-01'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1633523125349_Updation%20of%20Member%20Address.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-171
   tag: r-cg-c
   collection: public
@@ -12111,12 +12255,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2010-07-30'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1633523366154_60.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-172
   tag: r-cg-c
   collection: public
@@ -12125,12 +12270,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2010-06-03'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1633523748459_Updation%20and%20Deadline%20for%20NPA%20declaration.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-173
   tag: r-cg-c
   collection: public
@@ -12279,12 +12425,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2009-09-29'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1633523913712_Change%20in%20office%20timings.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-351
   tag: r-cg-c
   collection: public

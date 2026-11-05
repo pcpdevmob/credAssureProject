@@ -6,7 +6,7 @@ COMPOSE := docker compose -f deploy/compose/compose.yaml
 PNPM := $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo "npx --yes pnpm@9.15.0")
 
 .PHONY: help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
-        demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report compose-dev compose-test compose-demo langfuse-env-check \
+        demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore
 
 help:  ## List targets
@@ -110,6 +110,12 @@ corpus-verify:  ## Check local raw files against the lock-file SHA-256 (team dri
 
 corpus-manual:  ## Regenerate MANUAL_DOWNLOADS.md (six owner sections)
 	uv run python -m credassure.datagen.harvest manual
+
+corpus-dates:  ## Extract effective dates for available docs; write DATE_REVIEW.md (10% human sample)
+	uv run python -m credassure.datagen.harvest dates
+
+corpus-status:  ## One screen: real available vs 500, by source and by owner, rejected count
+	uv run python -m credassure.datagen.harvest status
 
 corpus-report:  ## Real corpus table: planned, available, manual pending, distance to 500
 	uv run python -m credassure.datagen.harvest report

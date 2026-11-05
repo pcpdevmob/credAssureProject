@@ -53,14 +53,19 @@ OK = {"ok", "ok_manual"}
 PENDING = "PENDING"
 MAX_DOCUMENTS = 2_000
 USER_AGENT = "CredAssure-capstone-corpus/0.1 (academic research; throttled 1 req/s)"
-BLOCK_STATUS = {403, 418, 429, 444}
+BLOCK_STATUS = {403, 418, 429, 444}  # permanent: never retried
+RETRY_STATUS = {502, 503, 504}  # transient: one retry no sooner than 24 h (ADR 0019)
+MAX_RAW_BYTES = 20 * 1024 * 1024
 CHALLENGE = ("captcha", "cf-chl", "access denied", "request unsuccessful", "are you a robot")
 MIN_PDF_TEXT = 200  # fewer characters means a scan with page numbers only, not a text layer
 EXTENSIONS = {".pdf": "pdf", ".html": "html", ".htm": "html"}
 
 
 def audit(
-    manifest: dict[str, Any], tracked: list[str], synthetic: int = 0
+    manifest: dict[str, Any],
+    tracked: list[str],
+    synthetic: int = 0,
+    lock: dict[str, dict[str, Any]] | None = None,
 ) -> tuple[list[str], list[str]]:
     """Return (errors, warnings). Any error fails ``make corpus-audit``."""
     errors: list[str] = []
@@ -77,7 +82,12 @@ def audit(
         if "effective_from" not in d:
             errors.append(f"{doc_id}: missing effective_from key")
         elif d["effective_from"] is None:
-            warnings.append(f"{doc_id}: effective_from unknown, confirm on the page")
+            if lock is not None and lock.get(doc_id, {}).get("status") in OK:
+                errors.append(
+                    f"{doc_id}: available but effective_from is missing (make corpus-dates)"
+                )
+            else:
+                warnings.append(f"{doc_id}: effective_from unknown, confirm on the page")
         if d.get("legal_basis") and d["legal_basis"] not in BASES:
             errors.append(f"{doc_id}: legal_basis {d['legal_basis']} is not L1-L4")
         if d.get("jurisdiction") and not JURISDICTION.match(str(d["jurisdiction"])):
@@ -145,6 +155,7 @@ class Gate:
         self.sleep = sleep
         self.robots: dict[str, RobotFileParser] = {}
         self.blocked: dict[str, str] = {}
+        self.fetched: dict[str, int] = {}
 
     def _robots(self, url: str) -> RobotFileParser | str:
         parts = urlsplit(url)
@@ -184,7 +195,7 @@ class Gate:
         except httpx.HTTPError as exc:  # connection, TLS or timeout: stop the host, never retry
             self.blocked[host] = f"error: {type(exc).__name__}"
             return f"host_blocked: {self.blocked[host]}"
-        if response.status_code in BLOCK_STATUS:
+        if response.status_code in BLOCK_STATUS | RETRY_STATUS:
             self.blocked[host] = f"http_{response.status_code}"
             return f"host_blocked: {self.blocked[host]}"
         if "html" in response.headers.get("content-type", "text/html"):
@@ -192,7 +203,16 @@ class Gate:
             if any(marker in head for marker in CHALLENGE):
                 self.blocked[host] = "bot_challenge"
                 return "host_blocked: bot_challenge"
+        self.fetched[host] = self.fetched.get(host, 0) + 1
         return response
+
+
+def retryable(reason: str) -> bool:
+    """502/503/504 and connection or timeout errors get one retry; redirects and blocks never."""
+    reason = reason.removeprefix("host_blocked: ")
+    if reason.startswith("http_"):
+        return int(reason[5:]) in RETRY_STATUS
+    return reason.startswith("error:") and "TooManyRedirects" not in reason
 
 
 def _store(
@@ -222,12 +242,19 @@ def download(
     gate: Gate,
     today: date,
     save: Callable[[], None] = lambda: None,
+    retry_hosts: frozenset[str] = frozenset(),
 ) -> None:
     """Fetch every script entry still ``pending``. Updates ``lock`` in place, saving after each."""
     for d in docs:
         doc_id = d["doc_id"]
         current = lock.get(doc_id, {})
-        if current.get("status") not in (None, "pending"):
+        status = current.get("status")
+        due = (
+            status is not None
+            and retryable(status)
+            and urlsplit(d["source_url"]).hostname in retry_hosts
+        )
+        if status not in (None, "pending") and not due:
             continue
         base = {
             "source_url": d["source_url"],
@@ -276,7 +303,17 @@ def import_raw(
                 "in manifest.yaml first"
             )
             continue
+        if path.stat().st_size > MAX_RAW_BYTES:
+            errors.append(f"{path.name}: larger than 20 MB; pick a smaller document")
+            continue
         body = path.read_bytes()
+        digest = hashlib.sha256(body).hexdigest()
+        twin = next(
+            (k for k, v in lock.items() if k != path.stem and v.get("sha256") == digest), None
+        )
+        if twin is not None:
+            errors.append(f"{path.name}: duplicate of {twin}; pick a different document")
+            continue
         current = lock.get(path.stem, {})
         if (
             current.get("status") in OK
@@ -301,7 +338,7 @@ def verify(lock: dict[str, dict[str, Any]], raw: Path) -> tuple[list[str], list[
     """(identical, missing, mismatched) doc_ids for every lock entry that has a raw file hash."""
     identical, missing, mismatched = [], [], []
     for doc_id, record in sorted(lock.items()):
-        if record.get("status") not in OK or "raw_file" not in record:
+        if record.get("status") not in OK | {"needs_date"} or "raw_file" not in record:
             continue
         path = raw / record["raw_file"]
         if not path.exists():

@@ -28,8 +28,11 @@ def _gate(handler: Any, sleeps: list[float] | None = None, manual: set[str] | No
 
 
 def test_KR04_committed_manifest_passes_the_audit() -> None:
+    import json
+
     manifest = read_yaml(REPO / "data" / "corpus" / "manifest.yaml")
-    errors, _ = audit(manifest, [])
+    lock = json.loads((REPO / "data" / "corpus" / "manifest.lock.json").read_text(encoding="utf-8"))
+    errors, _ = audit(manifest, [], lock=lock)
     assert errors == []
     assert all(d["jurisdiction"].startswith("IN") for d in manifest["documents"])
 
@@ -217,3 +220,35 @@ def test_scope14_verify_reports_identical_missing_and_mismatched(tmp_path: Path)
         "D": {"status": "pending_manual"},
     }
     assert verify(lock, tmp_path) == (["A"], ["B"], ["C"])
+
+
+def test_KR04_available_document_without_a_date_is_an_audit_error(
+    entry: Callable[..., dict[str, Any]],
+) -> None:
+    docs = [entry(doc_id="A", effective_from=None), entry(doc_id="B", effective_from=None)]
+    lock = {"A": {"status": "ok"}, "B": {"status": "pending_manual"}}
+    errors, warnings = audit({"documents": docs}, [], lock=lock)
+    assert errors == ["A: available but effective_from is missing (make corpus-dates)"]
+    assert any(w.startswith("B:") for w in warnings)
+
+
+def test_scope14_import_refuses_oversize_and_duplicate_files(
+    tmp_path: Path, entry: Callable[..., dict[str, Any]], text_pdf: Callable[[str], bytes]
+) -> None:
+    import credassure.datagen.corpus as corpus
+
+    raw = tmp_path / "raw"
+    raw.mkdir()
+    body = text_pdf("Master Direction " * 20)
+    (raw / "R-X-002.pdf").write_bytes(body)
+    (raw / "R-X-003.pdf").write_bytes(b"x" * 64)
+    lock = {"R-X-001": {"status": "ok", "sha256": hashlib.sha256(body).hexdigest()}}
+    docs = [entry(doc_id=i, format="pdf") for i in ("R-X-001", "R-X-002", "R-X-003")]
+    limit = corpus.MAX_RAW_BYTES
+    corpus.MAX_RAW_BYTES = 32
+    try:
+        errors = import_raw(docs, lock, tmp_path, TODAY)
+    finally:
+        corpus.MAX_RAW_BYTES = limit
+    assert any("duplicate of R-X-001" in e for e in errors) or any("20 MB" in e for e in errors)
+    assert "R-X-002" not in lock and "R-X-003" not in lock

@@ -39,15 +39,27 @@ actually gets wrong: citing a rule that exists in India but does not apply to th
      `MANUAL_DOWNLOADS.md` are committed. `make corpus-verify` proves a teammate's raw folder matches the lock.
    - A document counts as *real available* only when its status is `ok` or `ok_manual` and its text is extracted.
 
-## Pending owner decision: 16 RBI documents fetched by script
-On 2026-11-05, before this ADR made RBI manual-only, the first corpus run fetched 16 RBI documents by script. That run
-honoured robots.txt, made at most one request per second and sent an honest User-Agent. The documents are R-RBI-02/03/04/05/06/08/08-DRAFT/10/12/13,
-R-RATE-01-*, R-RATE-02-REPO and R-CAL-01. They keep status `ok`, and each lock entry carries a `provenance` note.
-The owner chooses one of two options:
-- **Keep them:** this ADR then records the acceptance.
-- **Re-save by hand:** save each one in a browser and run `make corpus-import`, which makes them `ok_manual`.
+## Owner decision 2026-11-05: 16 script-fetched RBI documents are kept (closed)
+The first corpus run fetched 16 RBI documents by script on 2026-11-05, before this ADR made RBI manual-only. It honoured robots.txt, made at most one request per second and sent an honest User-Agent.
+- The documents are R-RBI-02/03/04/05/06/08/08-DRAFT/10/12/13, R-RATE-01-*, R-RATE-02-REPO and R-CAL-01.
+- The owner kept them. They carry `fetched_by: script_pre_adr0019` in the lock.
+- Every later RBI document is manual.
 
-Until the owner decides, they count as available.
+## Follow-up rules (owner, 2026-11-05)
+- **Dates:**
+  - An available document (`ok` or `ok_manual`) must have `effective_from`; the audit errors without it.
+  - `make corpus-dates` takes a candidate date from the first two pages: the letterhead first, then a labelled date, then a plain one. It reads Indian formats and Hindi month names, ignores page clocks, and sets `date_source: extracted`.
+  - It lists every extracted date in `DATE_REVIEW.md`, with a seeded 10% sample for a human check.
+  - A document with no date is `needs_date` and is not counted until a person dates it.
+- **One retry:**
+  - A host that failed with 502/503/504 or a connection error gets exactly one retry, no sooner than 24 hours later.
+  - It is recorded in the lock as `host:<name>` with `retry_after` and `retry_outcome`.
+  - 403/418/429/444, bot challenges, robots refusals and redirect loops are never retried.
+- **CGTMSE paging:** stays scripted. It submits the page's own HTML form field (`pageNo`).
+- **MANUAL_DOWNLOADS.md:**
+  - Each owner's section starts with the tier-1 sources: RBI Master Directions, RBI FAQs, rates and press releases, CGTMSE replacements (circulars from 2015 onward) and Parliament answers.
+  - Then come NCGTC, judgments, state policies, the Gazette and the rest.
+  - Owners are stable once assigned.
 
 ## How the BRD wording is still met
 KR-04 says no superseded or non-Indian rule is cited as current. With an Indian-only corpus there is no non-Indian
