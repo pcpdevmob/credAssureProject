@@ -6721,48 +6721,6 @@ documents:
   source: 10
   applies_to: all
   method: manual
-- doc_id: R-SIDBI-P-010
-  tag: r-sidbi-p
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sidbi.in/en/publication-and-reports
-  source: 11
-  applies_to: all
-  method: manual
-- doc_id: R-SIDBI-P-011
-  tag: r-sidbi-p
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sidbi.in/en/publication-and-reports
-  source: 11
-  applies_to: all
-  method: manual
-- doc_id: R-SIDBI-P-012
-  tag: r-sidbi-p
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sidbi.in/en/publication-and-reports
-  source: 11
-  applies_to: all
-  method: manual
 - doc_id: R-TREDS-010
   tag: r-treds
   collection: public
@@ -14820,59 +14778,417 @@ documents:
   source: 4
   applies_to: all
   method: manual
-- doc_id: R-CG-C-034
+- doc_id: R-CG-C-038
   tag: r-cg-c
   collection: public
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Credit Facilities & Parameters ऋण सुविधाएं और पैरामीटर
+  publisher: www.cgtmse.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.cgtmse.in/Circulars
+  source_url: https://www.cgtmse.in/Home/VS/96
   source: 4
   applies_to: all
-  method: manual
-- doc_id: R-CG-C-035
+  method: script
+- doc_id: R-CG-C-039
   tag: r-cg-c
   collection: public
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Primary Security vis-a-vis Collateral security/personal guarantee vis-à-vis third party guarantee प्राथमिक सुरक्षा
+    की तुलना में संपार्श्विक सुरक्षा/व्यक्तिगत गारंटी की तुलना में तीसरे पक्ष की गारंटी
+  publisher: www.cgtmse.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.cgtmse.in/
+  source_url: https://www.cgtmse.in/Home/VS/97
   source: 4
   applies_to: all
-  method: manual
-- doc_id: R-CG-C-036
+  method: script
+- doc_id: R-CG-C-040
   tag: r-cg-c
   collection: public
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  title: Annual Guarantee Fee (AGF) वार्षिक गारंटी शुल्क(AGF)
+  publisher: www.cgtmse.in
+  effective_from: '2025-03-18'
   superseded_by: null
-  source_url: https://www.cgtmse.in/Circulars
+  source_url: https://www.cgtmse.in/Home/VS/98
   source: 4
   applies_to: all
-  method: manual
-- doc_id: R-CG-C-037
+  method: script
+  date_source: extracted
+- doc_id: R-CG-C-041
   tag: r-cg-c
   collection: public
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Credit guarantee - extent of cover, invocation, claim etc. ऋण गारंटी – कवर की मात्रा,गारंटी लागू करना, दावा आदि
+  publisher: www.cgtmse.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.cgtmse.in/
+  source_url: https://www.cgtmse.in/Home/VS/99
   source: 4
   applies_to: all
-  method: manual
+  method: script
+- doc_id: R-GST-C-021
+  tag: r-gst-c
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: View
+  publisher: gstcouncil.gov.in
+  effective_from: '2022-10-01'
+  superseded_by: null
+  source_url: https://gstcouncil.gov.in/sites/default/files/Minutes/48-thminutes.pdf
+  source: 9
+  applies_to: all
+  method: script
+  date_source: wef
+- doc_id: R-SIDBI-P-013
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Tamil
+  publisher: www.sidbi.in
+  effective_from: null
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/1514SE_Tamil---MSME-PULSE-OCTOBER-2019_Edition-7.pdf
+  source: 11
+  applies_to: all
+  method: script
+- doc_id: R-SIDBI-P-014
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: English
+  publisher: www.sidbi.in
+  effective_from: '2019-10-18'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/2019-10-18-112430-ghmvy-report-msme-pulse-december-2018.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: url
+- doc_id: R-SIDBI-P-015
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: English
+  publisher: www.sidbi.in
+  effective_from: '2021-02-18'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/2021-02-18-193845-akmcn-MSME-Pulse-Edition-10-Oct-2020.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: url
+- doc_id: R-SIDBI-P-019
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: English
+  publisher: www.sidbi.in
+  effective_from: '2021-02-18'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/2021-02-18-194143-gkaq4-MSME-Pulse-Feb-2021.pdf
+  source: 11
+  applies_to: all
+  method: script
+- doc_id: R-SIDBI-P-020
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Tamil
+  publisher: www.sidbi.in
+  effective_from: '2020-06-30'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/APRIL-2020-tamil.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-021
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Tamil
+  publisher: www.sidbi.in
+  effective_from: null
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/Fin-results_30-06-23_Eng_compressed%20(1).pdf
+  source: 11
+  applies_to: all
+  method: script
+- doc_id: R-SIDBI-P-022
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Hindi
+  publisher: www.sidbi.in
+  effective_from: null
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/Hindi%20-%20MSME%20PULSE%20OCTOBER%202019_Edition%207.pdf
+  source: 11
+  applies_to: all
+  method: script
+- doc_id: R-SIDBI-P-023
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Hindi
+  publisher: www.sidbi.in
+  effective_from: '2020-05-15'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/Hindi_MSMEPluse_April2020_1.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-024
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Hindi
+  publisher: www.sidbi.in
+  effective_from: '2020-04-24'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/January-2020-HINDI.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-025
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: English
+  publisher: www.sidbi.in
+  effective_from: '2026-02-09'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/M.S.M.E._Pulse_Revised_Report_8_X_8_September_2025.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-026
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Manipuri
+  publisher: www.sidbi.in
+  effective_from: '2021-04-20'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%202021%20Manipuri.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-027
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: English
+  publisher: www.sidbi.in
+  effective_from: '2024-02-28'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report%208%20X%208_Feb%202024_Revised%2028th%20Feb.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-028
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Tamil
+  publisher: www.sidbi.in
+  effective_from: '2022-09-27'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022%20-%20Tamil.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-029
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Malayalam
+  publisher: www.sidbi.in
+  effective_from: '2022-09-27'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022%20Malayalam.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-030
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Odia
+  publisher: www.sidbi.in
+  effective_from: '2022-11-12'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022-Odia.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-031
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Assamese
+  publisher: www.sidbi.in
+  effective_from: '2022-10-19'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Assamese.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-032
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Bengali
+  publisher: www.sidbi.in
+  effective_from: '2022-09-21'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Bengali%20Final.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-033
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Bodo
+  publisher: www.sidbi.in
+  effective_from: '2022-10-27'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Bodo.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-034
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Gujarati
+  publisher: www.sidbi.in
+  effective_from: '2022-11-10'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Gujarati.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-035
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Hindi
+  publisher: www.sidbi.in
+  effective_from: '2022-11-01'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Hindi.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-036
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Kannada
+  publisher: www.sidbi.in
+  effective_from: '2022-10-21'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Kannada.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-037
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Manipuri
+  publisher: www.sidbi.in
+  effective_from: '2022-09-21'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Manipuri.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-038
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Marathi
+  publisher: www.sidbi.in
+  effective_from: '2022-09-20'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Marathi%20final.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata

@@ -50,6 +50,7 @@ REQUIRED = (
     "method",
 )
 OK = {"ok", "ok_manual"}
+DROPPED = frozenset({"rejected_no_text", "skipped_pre_2015"})  # never counted, never manual work
 PENDING = "PENDING"
 MAX_DOCUMENTS = 2_000
 USER_AGENT = "CredAssure-capstone-corpus/0.1 (academic research; throttled 1 req/s)"
@@ -249,8 +250,12 @@ def download(
     today: date,
     save: Callable[[], None] = lambda: None,
     retry_hosts: frozenset[str] = frozenset(),
+    gate_date: Callable[[bytes, str, str], date | None] | None = None,
 ) -> None:
-    """Fetch every script entry still ``pending``. Updates ``lock`` in place, saving after each."""
+    """Fetch every script entry still ``pending``. Updates ``lock`` in place, saving after each.
+
+    An entry with ``date_gate`` (its index showed no year) is dated from the fetched bytes first; a
+    date before the gate is ``skipped_pre_2015`` and nothing is stored."""
     for d in docs:
         doc_id = d["doc_id"]
         current = lock.get(doc_id, {})
@@ -282,7 +287,22 @@ def download(
             }
         else:
             record = {**base, "final_url": str(response.url)}
-            lock[doc_id] = _store(doc_id, response.content, d["format"], out, record, "ok")
+            limit = current.get("date_gate")
+            day = (
+                gate_date(response.content, d["format"], d["source_url"])
+                if limit and gate_date
+                else None
+            )
+            if limit and day is not None and day < date.fromisoformat(limit):
+                lock[doc_id] = {
+                    **record,
+                    "status": "skipped_pre_2015",
+                    "date_gate": limit,
+                    "sha256": hashlib.sha256(response.content).hexdigest(),
+                    "reason": f"dated {day}, before {limit}",
+                }
+            else:
+                lock[doc_id] = _store(doc_id, response.content, d["format"], out, record, "ok")
         save()
 
 

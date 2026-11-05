@@ -1,6 +1,7 @@
 """ADR 0019: harvest index pages, top up manual slots, owner sections, report (no network)."""
 
 from collections.abc import Callable
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -291,3 +292,104 @@ def test_KR01_index_entry_can_carry_its_own_pattern() -> None:
     manifest: dict[str, Any] = {"documents": []}
     assert harvest(_sources(index_urls=[entry], target=5), manifest, {}, _gate(handler)) == 1
     assert manifest["documents"][0]["source_url"] == "https://www.cgtmse.in/Home/VS/47"
+
+
+CGTMSE_ROWS = """<table>
+<tr><td>1</td><td>Circular No.262/2026-27</td><td>2026</td><td>15/06/2026</td>
+<td><a href="/Default/ViewFile/?id=9_C262.pdf&amp;path=Circular">View</a></td></tr>
+<tr><td>2</td><td>Circular No.139/2017-18</td><td>2018</td><td>28/02/2018</td>
+<td><a href="/Default/ViewFile/?id=8_C139.pdf&amp;path=Circular">View</a></td></tr>
+<tr><td>3</td><td>Circular No.12/2009-10</td><td>2009</td><td>01/07/2009</td>
+<td><a href="/Default/ViewFile/?id=7_C12.pdf&amp;path=Circular">View</a></td></tr>
+</table><a href="/Default/ViewFile/?id=6_Undated.pdf&amp;path=Circular">Undated circular</a>"""
+
+
+def test_KR01_visible_year_from_date_fy_or_plain_year() -> None:
+    from credassure.datagen.harvest import visible_year
+
+    assert visible_year("Circular No.262/2026-27 ... 15/06/2026") == 2026
+    assert visible_year("Circular No. 139/2017-18 View") == 2017
+    assert visible_year("Annual report 2014") == 2014
+    assert visible_year("View") is None
+
+
+def test_KR01_cgtmse_min_date_skips_old_rows_orders_newest_and_gates_undated() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, text="" if request.url.path == "/robots.txt" else CGTMSE_ROWS)
+
+    manifest: dict[str, Any] = {"documents": []}
+    lock: dict[str, dict[str, Any]] = {}
+    assert harvest(_sources(min_date="2015-01-01"), manifest, lock, _gate(handler)) == 3
+    urls = [d["source_url"].split("_", 1)[1].split(".")[0] for d in manifest["documents"]]
+    assert urls == ["C262", "C139", "Undated"]  # 2009 skipped; newest first; undated last
+    assert "date_gate" not in lock["R-CG-C-001"]
+    assert lock["R-CG-C-003"]["date_gate"] == "2015-01-01"
+    assert "Circular No.262/2026-27" in manifest["documents"][0]["title"]  # title from the row
+
+
+def test_KR01_download_date_gate_skips_pre_2015_without_storing(
+    tmp_path: Path, entry: Callable[..., dict[str, Any]]
+) -> None:
+    from credassure.datagen.corpus import download
+    from credassure.datagen.harvest import gate_date
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/robots.txt":
+            return httpx.Response(200, text="")
+        return httpx.Response(200, text="<p>Circular dated 12.03.2012 on guarantee fees</p>")
+
+    docs = [entry(doc_id="R-CG-C-009", source_url="https://www.cgtmse.in/old")]
+    lock: dict[str, dict[str, Any]] = {
+        "R-CG-C-009": {"status": "pending", "date_gate": "2015-01-01"}
+    }
+    download(docs, lock, tmp_path, _gate(handler), date(2026, 11, 5), gate_date=gate_date)
+    assert lock["R-CG-C-009"]["status"] == "skipped_pre_2015"
+    assert not (tmp_path / "raw").exists()
+    manifest = {"documents": docs}
+    assert ensure_slots(_sources(target=1), manifest, lock) == 1  # replaced by a manual 2015+ slot
+
+
+def test_KR01_follow_reads_edition_pages_then_their_pdfs() -> None:
+    pdf = "/head/uploads/msmepluse_documents/"
+    pages = {
+        "/en/msme-pulse": '<a href="/en/msme-pulse-edition/July-2026">Jul</a>'
+        '<a href="/en/msme-pulse-all-edition">All</a>',
+        "/en/msme-pulse-all-edition": '<a href="/en/msme-pulse-edition/March-2024">Mar</a>',
+        "/en/msme-pulse-edition/July-2026": f'<a href="{pdf}Pulse_July_2026.pdf">PDF</a>',
+        "/en/msme-pulse-edition/March-2024": f'<a href="{pdf}Pulse_March_2024.pdf">PDF</a>',
+    }
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, text=pages.get(request.url.path, ""))
+
+    entry = {
+        "url": "https://www.sidbi.in/en/msme-pulse",
+        "pattern": r"/head/uploads/msmepluse_documents/[^\"]+\.pdf",
+        "follow": r"/en/msme-pulse-(?:edition/[A-Za-z]+-\d{4}|all-edition)",
+    }
+    manifest: dict[str, Any] = {"documents": []}
+    sources = _sources(id=11, prefix="R-SIDBI-P", index_urls=[entry], target=5)
+    assert harvest(sources, manifest, {}, _gate(handler)) == 2
+    assert all(d["source_url"].endswith(".pdf") for d in manifest["documents"])
+
+
+def test_KR01_rbi_html_rows_come_first_with_the_save_as_note(
+    entry: Callable[..., dict[str, Any]],
+) -> None:
+    docs = [
+        entry(doc_id="A-1", source=4, source_url="https://www.cgtmse.in/x"),
+        entry(
+            doc_id="Z-9",
+            source=3,
+            title="PENDING",
+            source_url="https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+        ),
+    ]
+    lock = {
+        "A-1": {"status": "pending_manual", "owner": "[Name 1]"},
+        "Z-9": {"status": "pending_manual", "owner": "[Name 1]"},
+    }
+    text = manual_markdown({"documents": docs}, lock)
+    section = text.split("## [Name 1]")[1]
+    assert section.index("Z-9") < section.index("A-1")
+    assert "raw/Z-9.html" in section and "Web page, HTML only" in section

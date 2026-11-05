@@ -47,6 +47,7 @@ sources:
     name: CGTMSE circulars, scheme guidelines, fee pages
     prefix: R-CG-C
     target: 180
+    min_date: "2015-01-01"   # owner: circulars from 2015 onward only (year from the table row; else checked on download)
     buffer: 20   # scheme/FAQ pages and scheme documents (2026-11-05 discovery of the cgtmse.in menus)
     basis: L4
     applies_to: all
@@ -149,7 +150,7 @@ sources:
     method: script
     index_urls:
       - "https://sidbi.in/en/publication-and-reports"
-      - {url: "https://sidbi.in/en/msme-pulse", pattern: '/en/msme-pulse-edition/[A-Za-z]+-\d{4}'}
+      - {url: "https://sidbi.in/en/msme-pulse", pattern: '/head/uploads/msmepluse_documents/[^"]+\.pdf', follow: '/en/msme-pulse-(?:edition/[A-Za-z]+-\d{4}|all-edition)'}
     link_pattern: '(?:/uploads/[^"]+\.pdf|/en/msme-[a-z-]+)'
     note: "DAKSHATA/SANKALP downloads are javascript: links, so manual"
   - id: 12

@@ -816,33 +816,53 @@
     "source_url": "https://www.cgtmse.in/",
     "status": "pending_manual"
   },
-  "R-CG-C-034": {
+  "R-CG-C-038": {
+    "bytes": 91155,
+    "final_url": "https://www.cgtmse.in/Home/VS/96",
     "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
+    "raw_file": "R-CG-C-038.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "794aaa1df618326d692af1ff82ad00eeed6566db31fb9c64ae79eb08606951df",
+    "source_url": "https://www.cgtmse.in/Home/VS/96",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "154f6832676b994b3d782278ddf04d2311e725c8c726be158c4a31207233cee3"
   },
-  "R-CG-C-035": {
+  "R-CG-C-039": {
+    "bytes": 84742,
+    "final_url": "https://www.cgtmse.in/Home/VS/97",
     "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/",
-    "status": "pending_manual"
+    "raw_file": "R-CG-C-039.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "82ef34faf794c9ba8ea739f66a1749de478c95d14facabcb798933cdf546e952",
+    "source_url": "https://www.cgtmse.in/Home/VS/97",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "06e5d8228c6da67c82debbbf02547c072e01cce836985fcfd9573f9da8aa0818"
   },
-  "R-CG-C-036": {
+  "R-CG-C-040": {
+    "bytes": 151835,
+    "date_evidence": "rcular No.251/2024-25 dated March 18, 2025. 3. Is An",
+    "final_url": "https://www.cgtmse.in/Home/VS/98",
     "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
+    "raw_file": "R-CG-C-040.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "b483fa3845600008c99cdc0a79e590848996d7b7356cc6df37a7bd748c9f5281",
+    "source_url": "https://www.cgtmse.in/Home/VS/98",
+    "status": "ok",
+    "text_sha256": "34f8ec0fd4c40ed7c872402c9c3b68a5f535b5a3aecc166b4d215dee3bf9f437"
   },
-  "R-CG-C-037": {
+  "R-CG-C-041": {
+    "bytes": 166366,
+    "final_url": "https://www.cgtmse.in/Home/VS/99",
     "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/",
-    "status": "pending_manual"
+    "raw_file": "R-CG-C-041.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "c8159983c0c6cff8eed9e0ab6e5327153a771814a8c9b0964765e913d86fcfb0",
+    "source_url": "https://www.cgtmse.in/Home/VS/99",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "ac74ebc1959f04087879185bda4ac5fdb97f1805fcaa2b4601be5bcd6e056fd3"
   },
   "R-CG-C-064": {
     "bytes": 136215,
@@ -5019,6 +5039,18 @@
     "status": "ok",
     "text_sha256": "99f63cd872b14d6480ce16205beed3272796a8833a6be05e7022e31d46d1a199"
   },
+  "R-GST-C-021": {
+    "bytes": 21238973,
+    "date_evidence": "een amended with effect from 01.10.2022",
+    "final_url": "https://gstcouncil.gov.in/sites/default/files/Minutes/48-thminutes.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-021.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "fb0e9f1daf226d7dcf3507a843d40a6da817be175ab8f50729613d40d6177ef8",
+    "source_url": "https://gstcouncil.gov.in/sites/default/files/Minutes/48-thminutes.pdf",
+    "status": "ok",
+    "text_sha256": "c5dda50a6aef622fdcab62c5f44565c19170e96e79e53611b34c500524c5b778"
+  },
   "R-GST-C-032": {
     "bytes": 1890878,
     "date_evidence": "1 GST – An Update (As on 1st June, 2019) 2 This",
@@ -9060,26 +9092,39 @@
     "status": "ok",
     "text_sha256": "ff805fefabee9861c4925d5ef3b3997e36c13e87ef63f782a06bf0388313cbab"
   },
-  "R-SIDBI-P-010": {
+  "R-SIDBI-P-013": {
+    "bytes": 6911434,
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/1514SE_Tamil---MSME-PULSE-OCTOBER-2019_Edition-7.pdf",
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://sidbi.in/en/publication-and-reports",
-    "status": "pending_manual"
+    "raw_file": "R-SIDBI-P-013.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "868728270a6622bc99d5346f4fe59a904239a3e701903774424720fbcee15cae",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/1514SE_Tamil---MSME-PULSE-OCTOBER-2019_Edition-7.pdf",
+    "status": "rejected_no_text"
   },
-  "R-SIDBI-P-011": {
+  "R-SIDBI-P-014": {
+    "bytes": 2790062,
+    "date_evidence": "url ymd: 2019-10-18",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/2019-10-18-112430-ghmvy-report-msme-pulse-december-2018.pdf",
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://sidbi.in/en/publication-and-reports",
-    "status": "pending_manual"
+    "raw_file": "R-SIDBI-P-014.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "2c2bfe27e5841ced4c58c2cf527bf494f6b77635c9eb73345a715b5e23ee3478",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/2019-10-18-112430-ghmvy-report-msme-pulse-december-2018.pdf",
+    "status": "ok",
+    "text_sha256": "5dec75d7627388bca86356eb8389d2a7bf636347b6bce387f65a37e5bb1476d1"
   },
-  "R-SIDBI-P-012": {
+  "R-SIDBI-P-015": {
+    "bytes": 1214374,
+    "date_evidence": "url ymd: 2021-02-18",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/2021-02-18-193845-akmcn-MSME-Pulse-Edition-10-Oct-2020.pdf",
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://sidbi.in/en/publication-and-reports",
-    "status": "pending_manual"
+    "raw_file": "R-SIDBI-P-015.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "f495a805cce121829ed62603b1c6efa5cc21da8824e303ff6329b18251b62adb",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/2021-02-18-193845-akmcn-MSME-Pulse-Edition-10-Oct-2020.pdf",
+    "status": "ok",
+    "text_sha256": "347d56990681ce8e51f4be7a1bff49866416d806b1aadbe4fc622332ddde9890"
   },
   "R-SIDBI-P-016": {
     "bytes": 115196,
@@ -9116,6 +9161,240 @@
     "status": "needs_date",
     "status_before_date": "ok",
     "text_sha256": "034efdbc2137a27ad859b5eb6ecb2e5eecf23d2d4940c91f16f5533853728925"
+  },
+  "R-SIDBI-P-019": {
+    "bytes": 3095192,
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/2021-02-18-194143-gkaq4-MSME-Pulse-Feb-2021.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-019.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "ec3869d551f0ba0f24e381230d92ab5608c8938a7fd8fc5e0fb743f590658907",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/2021-02-18-194143-gkaq4-MSME-Pulse-Feb-2021.pdf",
+    "status": "rejected_no_text"
+  },
+  "R-SIDBI-P-020": {
+    "bytes": 1811689,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/APRIL-2020-tamil.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-020.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "5587cb04f884ff941957dbd4a536747b04f3f330a0fcf237ea3e3f5e1c3792a6",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/APRIL-2020-tamil.pdf",
+    "status": "ok",
+    "text_sha256": "53d1bc5526d579dbc0ba1fa8817d1cb0715571014267745613a55f9f7ec728bd"
+  },
+  "R-SIDBI-P-021": {
+    "bytes": 1084265,
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/Fin-results_30-06-23_Eng_compressed%20(1).pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-021.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "556c6ef70c870e46e19144445081108d414df6c04a1e9c4bfff2d87420205606",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/Fin-results_30-06-23_Eng_compressed%20(1).pdf",
+    "status": "rejected_no_text"
+  },
+  "R-SIDBI-P-022": {
+    "bytes": 4150087,
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/Hindi%20-%20MSME%20PULSE%20OCTOBER%202019_Edition%207.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-022.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "7770c88194cbd9ba526fcec01da1e6d94dfe999c03a3fc6c85ca8363da2dd2e8",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/Hindi%20-%20MSME%20PULSE%20OCTOBER%202019_Edition%207.pdf",
+    "status": "rejected_no_text"
+  },
+  "R-SIDBI-P-023": {
+    "bytes": 1365192,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/Hindi_MSMEPluse_April2020_1.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-023.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "6b74234088b74e0cc23160cfd6759dcecb8a8041beedc0823250d3706257b000",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/Hindi_MSMEPluse_April2020_1.pdf",
+    "status": "ok",
+    "text_sha256": "63bfcbbdfe12df143d8ea964e8612894c5deb3a273a9fffdfe606a36dc179b88"
+  },
+  "R-SIDBI-P-024": {
+    "bytes": 2260278,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/January-2020-HINDI.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-024.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "10982c0a5a56f98bc54c2d5f919a1b9d21dce5fdeee6b313a0c7b5c18251ba1f",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/January-2020-HINDI.pdf",
+    "status": "ok",
+    "text_sha256": "5927122327403fbe7920fb62d67afdb4b3b000a3ab956045a729e0f38f5f3b47"
+  },
+  "R-SIDBI-P-025": {
+    "bytes": 11703392,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/M.S.M.E._Pulse_Revised_Report_8_X_8_September_2025.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-025.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "11853443edfb0cf4f7bd6332a540ec0a803f55e91a2d2f3516c1efcb0b029479",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/M.S.M.E._Pulse_Revised_Report_8_X_8_September_2025.pdf",
+    "status": "ok",
+    "text_sha256": "90b6f7f1a77676452bb3f3ed2eae300af80e9683606e465cc23299c875da3da3"
+  },
+  "R-SIDBI-P-026": {
+    "bytes": 1828059,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%202021%20Manipuri.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-026.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "0d653c95aec2f8a03a6e22be55f373a2bd81c75a934f6cbe0a73e75356f0946d",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%202021%20Manipuri.pdf",
+    "status": "ok",
+    "text_sha256": "ae9ac6213e4fbbda9e60100b9240ad741598b2156af227fb91c278821201ec43"
+  },
+  "R-SIDBI-P-027": {
+    "bytes": 8480714,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report%208%20X%208_Feb%202024_Revised%2028th%20Feb.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-027.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "76c2a02c1f3dce6136003a2baf16c0c205df3fc1fafae5f03864f0432dcd5437",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report%208%20X%208_Feb%202024_Revised%2028th%20Feb.pdf",
+    "status": "ok",
+    "text_sha256": "693ebe726c440c1b71affd482f8d53d02f221957b5e901c26890f8b7d8531ae5"
+  },
+  "R-SIDBI-P-028": {
+    "bytes": 1803477,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022%20-%20Tamil.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-028.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "72b3f4d00dff37c28f18055df15d77a4e01b29c76cffd0baafba95b8dc371945",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022%20-%20Tamil.pdf",
+    "status": "ok",
+    "text_sha256": "a7dbd9c01ebf40328916709fcfaf130d0a360404550b6cbec7544c78cac42235"
+  },
+  "R-SIDBI-P-029": {
+    "bytes": 2063503,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022%20Malayalam.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-029.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "c5f5ba3e1a6f51b5021489074a05c3bbef2f4a00e6f98959aeb7b69eb6c8f48c",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022%20Malayalam.pdf",
+    "status": "ok",
+    "text_sha256": "f79ff3d621aebab2b8e11f87e0832ed98ec8eabbb28a963230d0489c10a4189d"
+  },
+  "R-SIDBI-P-030": {
+    "bytes": 7010934,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022-Odia.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-030.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "ae8f9e2e01f02754e0ea203cc9ea0c572c393b91c58babfe2ee69b7fed8f4039",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022-Odia.pdf",
+    "status": "ok",
+    "text_sha256": "4c0c767f7d60e280e81e6cc1da1665b94444c7e5baa3a3ca112dcf322524f6a7"
+  },
+  "R-SIDBI-P-031": {
+    "bytes": 1637403,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Assamese.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-031.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "e9580d46fe4c1c865dc5e29233778564d08dcce2d4a28e0cd513604da5bd43f1",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Assamese.pdf",
+    "status": "ok",
+    "text_sha256": "8482f436e3ea5ab564ad480ec87781bdf17985c1ab629892a2b6d5a18ff6e42f"
+  },
+  "R-SIDBI-P-032": {
+    "bytes": 1498270,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Bengali%20Final.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-032.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "230f097a007c201a9aad3f49ca08ee372af562d30ca36db4b0531b0b0715ab32",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Bengali%20Final.pdf",
+    "status": "ok",
+    "text_sha256": "8a586d368524b9aba5050ce3c5b790882ae1df281392f36adcbd360b89f02814"
+  },
+  "R-SIDBI-P-033": {
+    "bytes": 1682710,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Bodo.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-033.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "9ae97cc9b0bc5f4ef2f549eb8699101b3eeee299ddb9feea3c0f3438a746b8bd",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Bodo.pdf",
+    "status": "ok",
+    "text_sha256": "36f7e7d492f1dd9b93f75f54c1824aa007761f5906570fc28ff0b08bc1535b7f"
+  },
+  "R-SIDBI-P-034": {
+    "bytes": 1565442,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Gujarati.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-034.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "df84cf3a504957f1a2b8818eea07649ce462d5fd47e2c2b533d06c26f3df25f4",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Gujarati.pdf",
+    "status": "ok",
+    "text_sha256": "c866bf92a837425bb8b820f85dca06e18d52d609d2da101aad14c6d3ce452396"
+  },
+  "R-SIDBI-P-035": {
+    "bytes": 1639711,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Hindi.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-035.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "b19ae2e2cbf32bc07a2a9fc9923c2413d5180c65c1d69684387be512ca28fbd1",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Hindi.pdf",
+    "status": "ok",
+    "text_sha256": "d6e0f9604b08ceec4f4e37872b32b89ff8a12cebb649e24afe267364da5d2e44"
+  },
+  "R-SIDBI-P-036": {
+    "bytes": 1577892,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Kannada.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-036.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "3b4ac9edff670f278ea1c43ad7ed4145ce3d8aed38442e3ee968c6ea8f62e55b",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Kannada.pdf",
+    "status": "ok",
+    "text_sha256": "1e43e50434aa85b50345e414b13cbce2aa1b2b3b509217ae3e2ecd2aedf1753b"
+  },
+  "R-SIDBI-P-037": {
+    "bytes": 1614014,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Manipuri.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-037.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "88526c2a2ced0ad07742a9f818ad312f4616b2c087df3abd25fca2f046410b99",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Manipuri.pdf",
+    "status": "ok",
+    "text_sha256": "cc277eade996c1017ac3c18c52d6f8081753ba680dcd450a94f93f11695fe373"
+  },
+  "R-SIDBI-P-038": {
+    "bytes": 1509447,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Marathi%20final.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-SIDBI-P-038.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "4c6a89a1ebe1654672d68c5cfb9ff3fc923b34fcace4c73d3608f956c7ca1a72",
+    "source_url": "https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Marathi%20final.pdf",
+    "status": "ok",
+    "text_sha256": "e759cb58eba67f4e302fd05efe6246149f06a085eba3ffba214f8e8f5a0a7846"
   },
   "R-STATE-001": {
     "legal_basis": "L4",

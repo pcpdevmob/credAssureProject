@@ -32,18 +32,20 @@ import yaml
 from .common import OUT, dumps_json, read_yaml, write_text
 from .corpus import (
     CORPUS,
+    DROPPED,
     OK,
     PENDING,
     USER_AGENT,
     Gate,
     audit,
     download,
+    extract_text,
     import_raw,
     retryable,
     tracked_files,
     verify,
 )
-from .dates import apply_dates, review_markdown
+from .dates import apply_dates, candidate_date, review_markdown, url_date
 
 MANIFEST = CORPUS / "manifest.yaml"
 LOCK = CORPUS / "manifest.lock.json"
@@ -59,7 +61,7 @@ HEADER = (
     "# Owners fill PENDING slots in place when they save a file to data/corpus/raw/ (see MANUAL_DOWNLOADS.md).\n"
     "# legal_basis L1-L4 only; jurisdiction IN or IN-XX; applies_to commercial_bank|nbfc|sfb|coop_bank|all.\n"
 )
-DONE = OK | {"rejected_no_text", "needs_date", "needs_review"}
+DONE = OK | DROPPED | {"needs_date", "needs_review"}
 # Priority tiers for owners (owner decision 6): T1 RBI Master Directions, RBI FAQs/rates/press releases,
 # CGTMSE replacements, Parliament answers; T2 NCGTC; T3 judgments; T4 state policies; T5 Gazette; T6 rest.
 TIER = {1: 1, 3: 1, 4: 1, 14: 1, 5: 2, 15: 3, 16: 4, 8: 5}
@@ -71,6 +73,8 @@ RULES = [
     "- Not already in the manifest (import rejects a file whose SHA-256 matches another document).",
     "- One file of at most 20 MB, with a text layer (scans are rejected; there is no OCR).",
     "- CGTMSE replacements: prefer text-layer circulars from 2015 onward.",
+    "- **RBI pages (rows marked HTML, listed first):** save the page in the browser as *Web page, HTML only* to",
+    "  `data/corpus/raw/<doc_id>.html`. Do not look for the PDF: HTML always has text, so it can never be rejected as a scan.",
     "- In `manifest.yaml` fill `title`, `source_url` (the document itself), `effective_from`, `applies_to` and `jurisdiction`",
     "  (and `superseded_by` for an RBI circular replaced by the 2025 consolidation).",
     "",
@@ -128,20 +132,42 @@ def _entry(
     }
 
 
-def links(page: str, base: str, pattern: str) -> list[tuple[str, str]]:
-    """(absolute URL, anchor text) for same-host links matching ``pattern``, sorted, unique."""
+FY = re.compile(r"\b((?:19|20)\d{2})\s*[-\u2013]\s*\d{2}\b")
+YEAR = re.compile(r"\b((?:19|20)\d{2})\b")
+TR_OPEN, TR_CLOSE = re.compile(r"<tr\b", re.I), re.compile(r"</tr>", re.I)
+
+
+def links(page: str, base: str, pattern: str, context: bool = False) -> list[tuple[str, str]]:
+    """(absolute URL, text) for same-host links matching ``pattern``, sorted, unique. With
+    ``context``, the text is the enclosing table row (a CGTMSE row shows its number, year and date)."""
     host = urlsplit(base).hostname
     seen: dict[str, str] = {}
-    for href, inner in LINK.findall(page):
-        href = html.unescape(href).strip()
+    for m in LINK.finditer(page):
+        href, inner = html.unescape(m.group(1)).strip(), m.group(2)
         if href.lower().startswith(("javascript:", "mailto:", "#")) or not re.search(pattern, href):
             continue
         url = urljoin(base, href).replace(" ", "%20")
         if urlsplit(url).hostname != host or urlsplit(url).scheme != "https":
             continue
-        text = " ".join(html.unescape(TAG.sub(" ", inner)).split())[:200]
+        if context:
+            opens = [t.start() for t in TR_OPEN.finditer(page, 0, m.start())]
+            close = TR_CLOSE.search(page, m.end())
+            if opens and close and not TR_CLOSE.search(page, opens[-1], m.start()):
+                inner = page[opens[-1] : close.end()]
+        text = " ".join(html.unescape(TAG.sub(" ", inner)).split())[:300]
         seen.setdefault(url, text or url.rsplit("/", 1)[-1])
     return sorted(seen.items())
+
+
+def visible_year(text: str) -> int | None:
+    """Year shown next to a link: a date, else a financial year (139/2017-18), else a plain year."""
+    if hit := candidate_date(text):
+        return hit[0].year
+    if m := FY.search(text):
+        return int(m.group(1))
+    if m := YEAR.search(text):
+        return int(m.group(1))
+    return None
 
 
 def harvest(
@@ -163,24 +189,37 @@ def harvest(
                 for d in docs
                 if d["source"] == source["id"]
                 and d["title"] != PENDING
-                and lock.get(d["doc_id"], {}).get("status") != "rejected_no_text"
+                and lock.get(d["doc_id"], {}).get("status") not in DROPPED
             )
         )
+        min_date = date.fromisoformat(source["min_date"]) if source.get("min_date") else None
         candidates: list[tuple[str, str]] = [
             (u, u.rsplit("/", 1)[-1] or u) for u in source.get("include_index", [])
         ]
+        fresh = 0
         for entry in source["index_urls"]:
             index, pattern, pager = _index(entry, source)
+            follow = entry.get("follow") if isinstance(entry, dict) else None
             forms: list[dict[str, str] | None] = [None]
             if pager:
                 forms += [{pager["field"]: str(n)} for n in range(2, pager["last"] + 1)]
             for form in forms:
-                if len(candidates) >= room + len(urls & {u for u, _ in candidates}):
+                if fresh >= room:
                     break
                 page = gate.get(index, form)
                 if isinstance(page, str) or page.status_code != 200:
                     break
-                candidates += links(page.text, str(page.url), pattern)
+                found = links(page.text, str(page.url), pattern, context=min_date is not None)
+                if follow:  # second level: index -> edition pages -> documents (sidbi.in)
+                    found += _follow(page, follow, pattern, gate)
+                for url, text in found:
+                    year = visible_year(text) if min_date else None
+                    if min_date and year is not None and year < min_date.year:
+                        continue  # visibly older than min_date: never harvested
+                    candidates.append((url, text))
+                    fresh += url not in urls
+        if min_date:  # newest first, so the buffer fills with recent circulars
+            candidates.sort(key=lambda c: -(visible_year(c[1]) or 0))
         for url, title in candidates:
             if room <= 0:
                 break
@@ -189,12 +228,32 @@ def harvest(
             doc_id = _next_id(source["prefix"], ids)
             docs.append(_entry(source, doc_id, url, title))
             lock[doc_id] = {"source_url": url, "legal_basis": source["basis"], "status": "pending"}
+            if (
+                min_date and visible_year(title) is None
+            ):  # no year shown: check the date on download
+                lock[doc_id]["date_gate"] = min_date.isoformat()
             ids.add(doc_id)
             urls.add(url)
             room -= 1
             added += 1
         _drop_surplus_slots(source, manifest, lock)
     return added
+
+
+def _follow(page: httpx.Response, follow: str, pattern: str, gate: Gate) -> list[tuple[str, str]]:
+    """Edition pages linked from ``page`` (and from an all-editions page it links), then their documents."""
+    queue = [u for u, _ in links(page.text, str(page.url), follow)]
+    seen, docs = set(queue), []
+    while queue:
+        sub = gate.get(queue.pop(0))
+        if isinstance(sub, str) or sub.status_code != 200:
+            continue
+        docs += links(sub.text, str(sub.url), pattern)
+        for u, _ in links(sub.text, str(sub.url), follow):
+            if u not in seen:
+                seen.add(u)
+                queue.append(u)
+    return docs
 
 
 def _index(
@@ -219,8 +278,7 @@ def _drop_surplus_slots(
     mine = [
         d
         for d in docs
-        if d["source"] == source["id"]
-        and lock.get(d["doc_id"], {}).get("status") != "rejected_no_text"
+        if d["source"] == source["id"] and lock.get(d["doc_id"], {}).get("status") not in DROPPED
     ]
     surplus = len(mine) - source["target"]
     slots = sorted(
@@ -243,7 +301,7 @@ def ensure_slots(
             d
             for d in docs
             if d["source"] == source["id"]
-            and lock.get(d["doc_id"], {}).get("status") != "rejected_no_text"
+            and lock.get(d["doc_id"], {}).get("status") not in DROPPED
         ]
         for k in range(len(live), source["target"]):
             doc_id = _next_id(source["prefix"], ids)
@@ -269,6 +327,20 @@ def _todo(manifest: dict[str, Any], lock: dict[str, dict[str, Any]]) -> list[dic
         for d in manifest["documents"]
         if lock.get(d["doc_id"], {}).get("status") not in DONE | {"pending"}
     ]
+
+
+RBI_HTML = re.compile(
+    r"(?:BS_ViewMasDirections|NotificationUser|FS_FAQs|BS_PressReleaseDisplay)", re.I
+)
+
+
+def rbi_html(doc: dict[str, Any]) -> bool:
+    """An RBI page owners save as HTML: those URL types, and Master Direction slots (source 1),
+    whose documents are BS_ViewMasDirections pages."""
+    host = urlsplit(doc["source_url"]).hostname or ""
+    return host.endswith("rbi.org.in") and (
+        bool(RBI_HTML.search(doc["source_url"])) or doc["source"] == 1
+    )
 
 
 def tier(doc: dict[str, Any]) -> int:
@@ -304,9 +376,7 @@ def manual_markdown(manifest: dict[str, Any], lock: dict[str, dict[str, Any]]) -
     items = _todo(manifest, lock)
     assign_owners(items, lock)
     rejected = [
-        d
-        for d in manifest["documents"]
-        if lock.get(d["doc_id"], {}).get("status") == "rejected_no_text"
+        d for d in manifest["documents"] if lock.get(d["doc_id"], {}).get("status") in DROPPED
     ]
     lines = [
         "# Corpus: documents to download by hand (ADR 0019)",
@@ -331,7 +401,7 @@ def manual_markdown(manifest: dict[str, Any], lock: dict[str, dict[str, Any]]) -
     for owner in OWNERS:
         section = sorted(
             (d for d in items if lock[d["doc_id"]]["owner"] == owner),
-            key=lambda d: (tier(d), d["doc_id"]),
+            key=lambda d: (not rbi_html(d), tier(d), d["doc_id"]),
         )
         hosts = sorted({urlsplit(d["source_url"]).hostname or "" for d in section})
         lines += [
@@ -343,11 +413,13 @@ def manual_markdown(manifest: dict[str, Any], lock: dict[str, dict[str, Any]]) -
         for d in section:
             record = lock.get(d["doc_id"], {})
             why = record.get("reason") or record.get("status", "pending")
+            if rbi_html(d):
+                why = "**HTML:** save as *Web page, HTML only*; do not look for the PDF"
             what = "pick from index" if d["title"] == PENDING else d["title"][:60].replace("|", "/")
             if d["source"] == 4 and d["title"] == PENDING:
                 what += " (text-layer circular from 2015 onward)"
             lines.append(
-                f"| T{tier(d)} | {d['doc_id']} | raw/{d['doc_id']}.{d['format']} | {d['source']}: {what} | {d['source_url']} | {why} |"
+                f"| T{tier(d)} | {d['doc_id']} | raw/{d['doc_id']}.{'html' if rbi_html(d) else d['format']} | {d['source']}: {what} | {d['source_url']} | {why} |"
             )
         lines.append("")
     if rejected:
@@ -355,6 +427,12 @@ def manual_markdown(manifest: dict[str, Any], lock: dict[str, dict[str, Any]]) -
         lines += [f"- {d['doc_id']}: {d['source_url']}" for d in rejected]
         lines.append("")
     return "\n".join(lines)
+
+
+def gate_date(body: bytes, fmt: str, url: str) -> date | None:
+    """Date for a download gate: page text first, then the URL."""
+    hit = candidate_date(extract_text(body, fmt)[:6000]) or url_date(url)
+    return hit[0] if hit else None
 
 
 def prepare_hosts(lock: dict[str, dict[str, Any]], gate: Gate, now: datetime) -> frozenset[str]:
@@ -413,7 +491,7 @@ def status_screen(
         return (
             avail,
             sum(x not in DONE for x in st),
-            st.count("rejected_no_text"),
+            sum(x in DROPPED for x in st),
             st.count("needs_date") + st.count("needs_review"),
         )
 
@@ -523,6 +601,7 @@ def main(argv: list[str] | None = None) -> int:
                     date.today(),
                     lambda: save(manifest, lock),
                     retry_hosts=due,
+                    gate_date=gate_date,
                 )
                 print(f"blocked hosts: {gate.blocked or 'none'}")
             record_hosts(lock, gate, due, now)
@@ -556,8 +635,8 @@ def main(argv: list[str] | None = None) -> int:
         statuses = [lock.get(d["doc_id"], {}).get("status") for d in manifest["documents"]]
         print(
             f"{len(statuses)} manifest entries: {sum(x in OK for x in statuses)} available, "
-            f"{statuses.count('rejected_no_text')} rejected (no text), "
-            f"{len(statuses) - sum(x in OK for x in statuses) - statuses.count('rejected_no_text')} pending; "
+            f"{sum(x in DROPPED for x in statuses)} dropped (scans, pre-2015), "
+            f"{len(statuses) - sum(x in OK for x in statuses) - sum(x in DROPPED for x in statuses)} pending; "
             f"{_synthetic()} synthetic; {len(errors)} errors, {len(warnings)} warnings"
         )
         return 1 if errors or (command == "import" and import_errors) else 0
