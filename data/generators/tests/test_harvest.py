@@ -267,4 +267,4 @@ def test_G2_status_screen_shows_progress_sources_and_owners(
     }
     screen = status_screen(_sources(), manifest, lock, tmp_path)
     assert screen.splitlines()[0].startswith("Real available 1/500 [")
-    assert "needs date 1" in screen and "[Name 2]" in screen
+    assert "needs date or review 1" in screen and "[Name 2]" in screen

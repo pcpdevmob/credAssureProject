@@ -67,9 +67,88 @@ def test_KR04_undated_document_leaves_available_until_a_human_dates_it(
     a, b = manifest["documents"]
     assert a["effective_from"] == "2024-06-05" and a["date_source"] == "extracted"
     assert lock["B"]["status"] == "needs_date"
-    b["effective_from"] = "2023-01-01"  # a person fills it in
-    assert apply_dates(manifest, lock, tmp_path) == (1, 0, 1)  # A re-extracted each run
+    b["effective_from"], b["date_source"] = "2023-01-01", "human"  # a person fills it in
+    assert apply_dates(manifest, lock, tmp_path) == (1, 0, 0)  # A is recomputed each run
     assert lock["B"]["status"] == "ok_manual" and b["date_source"] == "human"
+
+
+def test_KR04_fallback_chain_wef_url_and_retrieved_only_for_bank_charges(
+    tmp_path: Path, entry: Callable[..., dict[str, Any]]
+) -> None:
+    raw, text = tmp_path / "raw", tmp_path / "text"
+    raw.mkdir()
+    text.mkdir()
+    for doc_id in ("W", "U", "R", "X"):
+        (raw / f"{doc_id}.html").write_text("<p>Schedule of charges</p>", encoding="utf-8")
+    (text / "W.txt").write_text("x " * 3000 + "charges revised w.e.f. 01.04.2025", encoding="utf-8")
+    docs = [
+        entry(doc_id="W", effective_from=None),
+        entry(
+            doc_id="U",
+            effective_from=None,
+            source_url="https://bandhan.bank.in/sites/default/files/2026-08/SoC-21082026.pdf",
+        ),
+        entry(doc_id="R", effective_from=None, source=13),
+        entry(doc_id="X", effective_from=None, source=9),
+    ]
+    lock: dict[str, dict[str, Any]] = {
+        d["doc_id"]: {
+            "status": "ok",
+            "raw_file": f"{d['doc_id']}.html",
+            "retrieved_on": "2026-11-05",
+        }
+        for d in docs
+    }
+    apply_dates({"documents": docs}, lock, raw, text)
+    got = {d["doc_id"]: (d["effective_from"], d.get("date_source")) for d in docs}
+    assert got["W"] == ("2025-04-01", "wef")
+    assert got["U"] == ("2026-08-21", "url")  # DDMMYYYY in the file name beats the month folder
+    assert got["R"] == ("2026-11-05", "retrieved")
+    assert got["X"] == (None, None) and lock["X"]["status"] == "needs_date"  # not bank charges
+
+
+def test_KR04_url_month_folder_and_pdf_metadata(tmp_path: Path) -> None:
+    from pypdf import PdfWriter
+
+    from credassure.datagen.dates import pdf_metadata_date, url_date
+
+    hit = url_date("https://gstcouncil.gov.in/sites/default/files/2024-11/advisory.pdf")
+    assert hit is not None and hit[0] == date(2024, 11, 1) and "month folder" in hit[1]
+    assert url_date("https://www.cgtmse.in/ViewFile/?id=1767195870980_Circular.pdf") is None
+    writer = PdfWriter()
+    writer.add_blank_page(100, 100)
+    writer.add_metadata({"/CreationDate": "D:20250321103000+05'30'"})
+    path = tmp_path / "m.pdf"
+    with path.open("wb") as fh:
+        writer.write(fh)
+    meta = pdf_metadata_date(path)
+    assert meta is not None and meta[0] == date(2025, 3, 21)
+
+
+def test_KR04_implausible_dates_need_review_until_confirmed(
+    tmp_path: Path, entry: Callable[..., dict[str, Any]]
+) -> None:
+    (tmp_path / "A.html").write_text("<p>As on March 31 1985 figures</p>", encoding="utf-8")
+    (tmp_path / "B.html").write_text("<p>Circular dated 01.01.2027</p>", encoding="utf-8")
+    docs = [entry(doc_id="A", effective_from=None), entry(doc_id="B", effective_from=None)]
+    lock: dict[str, dict[str, Any]] = {k: {"status": "ok", "raw_file": f"{k}.html"} for k in "AB"}
+    assert apply_dates({"documents": docs}, lock, tmp_path) == (2, 0, 2)
+    assert lock["A"]["status"] == lock["B"]["status"] == "needs_review"
+    docs[1]["date_confirmed"] = True  # a person confirms the future w.e.f. date
+    apply_dates({"documents": docs}, lock, tmp_path)
+    assert lock["B"]["status"] == "ok" and lock["A"]["status"] == "needs_review"
+
+
+def test_KR04_existing_dates_get_a_date_source(
+    entry: Callable[..., dict[str, Any]], tmp_path: Path
+) -> None:
+    docs = [entry(doc_id="R-RBI-02"), entry(doc_id="R-X-001", status="x")]
+    lock: dict[str, dict[str, Any]] = {
+        "R-RBI-02": {"status": "ok"},
+        "R-X-001": {"status": "ok_manual"},
+    }
+    apply_dates({"documents": docs}, lock, tmp_path)
+    assert docs[0]["date_source"] == "curated" and docs[1]["date_source"] == "human"
 
 
 def test_KR04_review_sample_is_ten_percent_and_deterministic(

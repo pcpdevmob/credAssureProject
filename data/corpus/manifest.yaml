@@ -17,6 +17,7 @@ documents:
   source: 1
   applies_to: commercial_bank
   method: manual
+  date_source: curated
 - doc_id: R-RBI-03
   tag: rbi_md
   collection: public
@@ -31,6 +32,7 @@ documents:
   source: 1
   applies_to: commercial_bank
   method: manual
+  date_source: curated
 - doc_id: R-RBI-04
   tag: rbi_md
   collection: public
@@ -45,6 +47,7 @@ documents:
   source: 1
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-RBI-05
   tag: rbi_faq
   collection: public
@@ -59,6 +62,7 @@ documents:
   source: 3
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-MSME-02
   tag: msme_gov
   collection: public
@@ -101,6 +105,7 @@ documents:
   source: 4
   applies_to: all
   method: script
+  date_source: curated
 - doc_id: R-CG-02
   tag: cgtmse
   collection: public
@@ -115,6 +120,7 @@ documents:
   source: 4
   applies_to: all
   method: script
+  date_source: curated
 - doc_id: R-BANK-03
   tag: bank_charges
   collection: public
@@ -143,6 +149,7 @@ documents:
   source: 12
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-RBI-08-DRAFT
   tag: rbi_treds
   collection: public
@@ -157,6 +164,7 @@ documents:
   source: 2
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-RBI-10
   tag: rbi_md
   collection: public
@@ -171,6 +179,7 @@ documents:
   source: 1
   applies_to: commercial_bank
   method: manual
+  date_source: curated
 - doc_id: R-RBI-12
   tag: rbi_circulars_hist
   collection: public
@@ -185,6 +194,7 @@ documents:
   source: 2
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-RBI-13
   tag: rbi_md
   collection: public
@@ -199,6 +209,7 @@ documents:
   source: 1
   applies_to: nbfc
   method: manual
+  date_source: curated
 - doc_id: R-RATE-02-REPO
   tag: rbi_md
   collection: public
@@ -213,6 +224,7 @@ documents:
   source: 3
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-CAL-01
   tag: rbi_md
   collection: public
@@ -227,6 +239,7 @@ documents:
   source: 3
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-MSME-01
   tag: msme_gov
   collection: public
@@ -340,6 +353,7 @@ documents:
   source: 8
   applies_to: all
   method: script
+  date_source: curated
 - doc_id: R-GST-03
   tag: gst
   collection: public
@@ -368,6 +382,7 @@ documents:
   source: 8
   applies_to: all
   method: script
+  date_source: curated
 - doc_id: R-DPDP-01
   tag: dpdp_kyc
   collection: public
@@ -382,6 +397,7 @@ documents:
   source: 8
   applies_to: all
   method: script
+  date_source: curated
 - doc_id: R-DPDP-02
   tag: dpdp_kyc
   collection: public
@@ -410,6 +426,7 @@ documents:
   source: 8
   applies_to: all
   method: script
+  date_source: curated
 - doc_id: R-BANK-06
   tag: bank_charges
   collection: public
@@ -418,12 +435,13 @@ documents:
   format: html
   title: Bank of Baroda - Service Charges (MSME Annexure II)
   publisher: Bank of Baroda
-  effective_from: null
+  effective_from: '2019-06-20'
   superseded_by: null
   source_url: https://bankofbaroda.bank.in/interest-rate-and-service-charges/service-charges
   source: 13
   applies_to: all
   method: script
+  date_source: wef
 - doc_id: R-BANK-07
   tag: bank_charges
   collection: public
@@ -432,12 +450,13 @@ documents:
   format: html
   title: PNB - Credit Related Service Charges
   publisher: Punjab National Bank
-  effective_from: null
+  effective_from: '2026-03-01'
   superseded_by: null
   source_url: https://pnb.bank.in/Credit-Related-Service-Charges.html
   source: 13
   applies_to: all
   method: script
+  date_source: wef
 - doc_id: R-BANK-08
   tag: bank_charges
   collection: public
@@ -452,6 +471,7 @@ documents:
   source: 13
   applies_to: all
   method: script
+  date_source: curated
 - doc_id: R-BANK-09
   tag: bank_charges
   collection: public
@@ -481,6 +501,7 @@ documents:
   source: 13
   applies_to: all
   method: script
+  date_source: curated
 - doc_id: R-BANK-11
   tag: bank_charges
   collection: public
@@ -495,6 +516,7 @@ documents:
   source: 13
   applies_to: all
   method: script
+  date_source: curated
 - doc_id: R-BANK-12
   tag: bank_charges
   collection: public
@@ -503,12 +525,13 @@ documents:
   format: html
   title: Axis Bank - Fees and Charges
   publisher: Axis Bank
-  effective_from: null
+  effective_from: '2026-02-01'
   superseded_by: null
   source_url: https://www.axis.bank.in/fees-and-charges
   source: 13
   applies_to: all
   method: script
+  date_source: wef
 - doc_id: R-BANK-13
   tag: bank_charges
   collection: public
@@ -532,12 +555,13 @@ documents:
   format: html
   title: IDFC FIRST Bank - Business Loan Fees and Charges
   publisher: IDFC FIRST Bank
-  effective_from: null
+  effective_from: '2026-11-05'
   superseded_by: null
   source_url: https://www.idfcfirst.bank.in/business-banking/loans/business-loan/fees-and-charges
   source: 13
   applies_to: all
   method: script
+  date_source: retrieved
 - doc_id: R-BANK-15
   tag: bank_charges
   collection: public
@@ -546,12 +570,13 @@ documents:
   format: html
   title: Bajaj Finance - Business Loan Interest Rates and Charges
   publisher: Bajaj Finance
-  effective_from: null
+  effective_from: '2026-11-05'
   superseded_by: null
   source_url: https://www.bajajfinserv.in/business-loan-interest-rate-and-charges
   source: 13
   applies_to: nbfc
   method: script
+  date_source: retrieved
 - doc_id: R-BANK-16
   tag: bank_charges
   collection: public
@@ -560,12 +585,13 @@ documents:
   format: html
   title: Tata Capital - Business Loan Rates and Charges
   publisher: Tata Capital
-  effective_from: null
+  effective_from: '2026-11-05'
   superseded_by: null
   source_url: https://tatacapital.com/business-loan/rates-and-charges.html
   source: 13
   applies_to: nbfc
   method: script
+  date_source: retrieved
 - doc_id: R-RATE-02-SBI
   tag: bank_charges
   collection: public
@@ -580,6 +606,7 @@ documents:
   source: 13
   applies_to: all
   method: script
+  date_source: curated
 - doc_id: R-RATE-02-BOB
   tag: bank_charges
   collection: public
@@ -594,6 +621,7 @@ documents:
   source: 13
   applies_to: all
   method: script
+  date_source: curated
 - doc_id: R-SIDBI-01
   tag: sidbi
   collection: public
@@ -725,6 +753,7 @@ documents:
   source: 1
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-RBI-09
   tag: dpdp_kyc
   collection: public
@@ -836,12 +865,13 @@ documents:
   format: html
   title: SBI - CGTMSE (AGF payable upfront for year 1, then annually)
   publisher: State Bank of India
-  effective_from: null
+  effective_from: '2000-06-01'
   superseded_by: null
   source_url: https://sbi.bank.in/web/business/sme/sme-government-schemes/cgtmse
   source: 4
   applies_to: all
   method: script
+  date_source: wef
 - doc_id: R-CG-05
   tag: cgtmse
   collection: public
@@ -856,6 +886,7 @@ documents:
   source: 4
   applies_to: all
   method: script
+  date_source: curated
 - doc_id: R-BANK-01
   tag: bank_charges
   collection: public
@@ -870,6 +901,7 @@ documents:
   source: 13
   applies_to: all
   method: script
+  date_source: curated
 - doc_id: R-BANK-02
   tag: bank_charges
   collection: public
@@ -934,12 +966,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2030-03-31'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1767027747558_PM%20SVANidhi%20Scheme%20Guidelines%20-%2016.9.25(Annexure%20-I).pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-CG-C-002
   tag: r-cg-c
   collection: public
@@ -948,12 +981,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-09-16'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1767027845598_Loan%20Operational%20Guidelines%20-%2016.09.2025(Annexure%20-II).pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: url
 - doc_id: R-CG-C-003
   tag: r-cg-c
   collection: public
@@ -962,12 +996,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2025-09-16'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1767027921148_Credit%20Card%20Operational%20guidelines%20-%2016.9.25(Annexure%20-III).pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-CG-C-004
   tag: r-cg-c
   collection: public
@@ -1004,12 +1039,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-02-06'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1770397812214_Circular%20257%20-%20CGS%20for%20Export%20credit%20merged.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-CG-C-007
   tag: r-cg-c
   collection: public
@@ -1177,12 +1213,13 @@ documents:
   format: pdf
   title: Comments of the DoR on the First Discussion Paper on GST
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2010-01-01'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2024-02/comments-dor-1st-discn-paper-01012010.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: url
 - doc_id: R-GST-C-003
   tag: r-gst-c
   collection: public
@@ -1206,12 +1243,13 @@ documents:
   format: pdf
   title: First Discussion Paper on GST
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2010-04-01'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2024-02/first_discussion_paper_on_gst.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: wef
 - doc_id: R-GST-C-005
   tag: r-gst-c
   collection: public
@@ -1235,12 +1273,13 @@ documents:
   format: pdf
   title: Model All India Audit Manual
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2019-04-01'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2024-03/model-all-india-gst-audit-manual_final.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: wef
 - doc_id: R-GST-C-007
   tag: r-gst-c
   collection: public
@@ -1293,12 +1332,13 @@ documents:
   format: pdf
   title: Notice for the 56th GST Council Meeting to be held on 3rd and 4th September, 2025- reg
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2025-08-01'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2025-08/meeting_notice_56th_gst_council_meeting_0.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: url
 - doc_id: R-GST-C-011
   tag: r-gst-c
   collection: public
@@ -1308,12 +1348,13 @@ documents:
   title: Extension of date of submission for application till 11.10.2025 for appointment of the officers to the post of Under
     Secretary from the State quota
   publisher: gstcouncil.gov.in
-  effective_from: '2025-10-11'
+  effective_from: '2025-09-17'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2025-09/document-339.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-012
   tag: r-gst-c
   collection: public
@@ -1399,12 +1440,13 @@ documents:
   title: Appointment of Technical Member (State/UT) in the Goods and Services Tax Appellate Tribunal for the Union Territory
     of Jammu & Kashmir
   publisher: gstcouncil.gov.in
-  effective_from: null
+  effective_from: '2026-07-01'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2026-07/vacancy_circular_gstat_jk_0.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: url
 - doc_id: R-GST-C-018
   tag: r-gst-c
   collection: public
@@ -1429,12 +1471,13 @@ documents:
   format: pdf
   title: FAQs on recommendations of GST Council made in its 57th meeting on 08.10.2026.
   publisher: gstcouncil.gov.in
-  effective_from: '2026-10-08'
+  effective_from: '2026-10-01'
   superseded_by: null
   source_url: https://gstcouncil.gov.in/sites/default/files/2026-10/faqs_on_recommendations_made_in_57th_gst_council_meeting.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: url
 - doc_id: R-GST-C-020
   tag: r-gst-c
   collection: public
@@ -1509,6 +1552,7 @@ documents:
   source: 11
   applies_to: all
   method: script
+  date_source: url
 - doc_id: R-SIDBI-P-005
   tag: r-sidbi-p
   collection: public
@@ -1547,12 +1591,13 @@ documents:
   format: pdf
   title: Part-2
   publisher: www.sidbi.in
-  effective_from: null
+  effective_from: '2021-12-08'
   superseded_by: null
   source_url: https://www.sidbi.in/uploads/financialreport/SIDBI_AR_Part-II_Eng.pdf
   source: 11
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-SIDBI-P-008
   tag: r-sidbi-p
   collection: public
@@ -1561,12 +1606,13 @@ documents:
   format: pdf
   title: Part-1
   publisher: www.sidbi.in
-  effective_from: null
+  effective_from: '2020-11-17'
   superseded_by: null
   source_url: https://www.sidbi.in/uploads/financialreport/Sidbi-AR-Part-I-Eng.pdf
   source: 11
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-SIDBI-P-009
   tag: r-sidbi-p
   collection: public
@@ -1575,12 +1621,13 @@ documents:
   format: pdf
   title: Part-2
   publisher: www.sidbi.in
-  effective_from: null
+  effective_from: '2020-11-17'
   superseded_by: null
   source_url: https://www.sidbi.in/uploads/financialreport/Sidbi-AR-Part-II-Eng.pdf
   source: 11
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-TREDS-001
   tag: r-treds
   collection: public
@@ -1631,12 +1678,13 @@ documents:
   format: pdf
   title: https://www.m1xchange.com/wp-content/uploads/2025/05/KYC-Documents-Requirement-List-1.pdf
   publisher: www.m1xchange.com
-  effective_from: null
+  effective_from: '2025-05-01'
   superseded_by: null
   source_url: https://www.m1xchange.com/wp-content/uploads/2025/05/KYC-Documents-Requirement-List-1.pdf
   source: 12
   applies_to: all
   method: script
+  date_source: url
 - doc_id: R-TREDS-005
   tag: r-treds
   collection: public
@@ -1675,12 +1723,13 @@ documents:
   format: pdf
   title: Notice to Corporate Customers
   publisher: www.m1xchange.com
-  effective_from: null
+  effective_from: '2026-08-01'
   superseded_by: null
   source_url: https://www.m1xchange.com/wp-content/uploads/2026/08/M1xchange_Corporate_Communication_NACH_v4.pdf
   source: 12
   applies_to: all
   method: script
+  date_source: url
 - doc_id: R-TREDS-008
   tag: r-treds
   collection: public
@@ -1689,12 +1738,13 @@ documents:
   format: pdf
   title: Notice to Bankers & Member Banks
   publisher: www.m1xchange.com
-  effective_from: null
+  effective_from: '2026-08-01'
   superseded_by: null
   source_url: https://www.m1xchange.com/wp-content/uploads/2026/08/M1xchange_Financier_Communication_NACH_v7_Aug.pdf
   source: 12
   applies_to: all
   method: script
+  date_source: url
 - doc_id: R-TREDS-009
   tag: r-treds
   collection: public
@@ -1703,12 +1753,13 @@ documents:
   format: pdf
   title: Notice to MSME Customers
   publisher: www.m1xchange.com
-  effective_from: null
+  effective_from: '2026-08-01'
   superseded_by: null
   source_url: https://www.m1xchange.com/wp-content/uploads/2026/08/M1xchange_MSME_Seller_Communication_NACH_v3.pdf
   source: 12
   applies_to: all
   method: script
+  date_source: url
 - doc_id: R-BANK-S-001
   tag: r-bank-s
   collection: public
@@ -1717,12 +1768,13 @@ documents:
   format: html
   title: charges-for-loan-products
   publisher: indianbank.bank.in
-  effective_from: null
+  effective_from: '2026-11-05'
   superseded_by: null
   source_url: https://indianbank.bank.in/en/processing-fees/charges-for-loan-products
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: retrieved
 - doc_id: R-BANK-S-002
   tag: r-bank-s
   collection: public
@@ -1731,12 +1783,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2025-12-01'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2025-12/Biz-Elite-Current-Account-Schedule-of-Charges.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: url
 - doc_id: R-BANK-S-003
   tag: r-bank-s
   collection: public
@@ -1745,12 +1798,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2026-01-01'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-01/Schedule-of-Charges-for-CVCE.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: url
 - doc_id: R-BANK-S-004
   tag: r-bank-s
   collection: public
@@ -1759,12 +1813,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2026-04-01'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-04/Schedule-of-Charges-Bandhan-Super-Saver.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: url
 - doc_id: R-BANK-S-005
   tag: r-bank-s
   collection: public
@@ -1788,12 +1843,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2026-07-15'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-07/Car-Loan-Schedule-of-Charges-15072026.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: url
 - doc_id: R-BANK-S-007
   tag: r-bank-s
   collection: public
@@ -1802,12 +1858,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2026-07-01'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-07/Personal-Loan-Schedule-of-Charges-July-2026.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: url
 - doc_id: R-BANK-S-008
   tag: r-bank-s
   collection: public
@@ -1816,12 +1873,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2026-07-01'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-07/Salary-Account-Schedule-of-Charges.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: url
 - doc_id: R-BANK-S-009
   tag: r-bank-s
   collection: public
@@ -1830,12 +1888,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2026-07-01'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-07/Savings-Account-Product-Variants-Schedule-of-Charges-and-Features.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: url
 - doc_id: R-BANK-S-010
   tag: r-bank-s
   collection: public
@@ -1844,12 +1903,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2026-07-14'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-07/Schedule-of-Charges-Aspiring-Business-Loan-14072026.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: url
 - doc_id: R-BANK-S-011
   tag: r-bank-s
   collection: public
@@ -1858,12 +1918,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2026-07-01'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-07/Schedule-of-Charges-Two-Wheeler-Loan.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: url
 - doc_id: R-BANK-S-012
   tag: r-bank-s
   collection: public
@@ -1872,12 +1933,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2026-07-07'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-07/Schedule-of-Charges-for-Trade-Finance-07072026.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: url
 - doc_id: R-BANK-S-013
   tag: r-bank-s
   collection: public
@@ -1886,12 +1948,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2026-07-03'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-07/Schedule-of-Charges-of-Home-Loan-and-LAP-03072026.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: url
 - doc_id: R-BANK-S-014
   tag: r-bank-s
   collection: public
@@ -1900,12 +1963,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2026-08-01'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-Charges-Agri-Loan-01082026.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: url
 - doc_id: R-BANK-S-015
   tag: r-bank-s
   collection: public
@@ -1914,12 +1978,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2026-08-01'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-Charges-Bandhan-Commodity-Finance-01082026.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: url
 - doc_id: R-BANK-S-016
   tag: r-bank-s
   collection: public
@@ -1928,12 +1993,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2026-01-01'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-Charges-SME-and-Corporate-Loans-21082026.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: wef
 - doc_id: R-BANK-S-017
   tag: r-bank-s
   collection: public
@@ -1942,12 +2008,13 @@ documents:
   format: pdf
   title: click here
   publisher: bandhan.bank.in
-  effective_from: null
+  effective_from: '2026-08-01'
   superseded_by: null
   source_url: https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-Charges-Small-Loan-Against-Property.pdf
   source: 13
   applies_to: commercial_bank
   method: script
+  date_source: url
 - doc_id: R-BANK-S-018
   tag: r-bank-s
   collection: public
@@ -9058,12 +9125,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2024-12-11'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1733934927248_Circular%20No.%20230.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-CG-C-232
   tag: r-cg-c
   collection: public
@@ -9072,12 +9140,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2024-12-11'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1733934971517_Circular%20No.%20231%202023-24.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-CG-C-233
   tag: r-cg-c
   collection: public
@@ -9787,12 +9856,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2022-10-11'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1665508184793_Circular-205_Benefits%20to%20Agniveer.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-CG-C-283
   tag: r-cg-c
   collection: public
@@ -10160,12 +10230,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2021-04-01'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1617300602504_Circular%20no.%20176%20-%20NBFC.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-CG-C-309
   tag: r-cg-c
   collection: public
@@ -10353,12 +10424,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2020-10-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610534893423_Circular_No.174_Annuxure-I.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-CG-C-322
   tag: r-cg-c
   collection: public
@@ -10382,12 +10454,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2020-10-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1622571364238_Circular_No.174_Annexure-II.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-CG-C-324
   tag: r-cg-c
   collection: public
@@ -10396,12 +10469,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2020-07-22'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1622571622885_Circular_No.172_FAQ.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-CG-C-325
   tag: r-cg-c
   collection: public
@@ -10424,12 +10498,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2020-10-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1622573864948_Circular_No.174.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-CG-C-327
   tag: r-cg-c
   collection: public
@@ -10527,12 +10602,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2020-04-24'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1610534437312_Circular_No.169.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-CG-C-334
   tag: r-cg-c
   collection: public
@@ -11011,12 +11087,13 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2019-04-04'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1632012426981_Circular_No.140A.pdf&path=Circular
   source: 4
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-CG-C-105
   tag: r-cg-c
   collection: public

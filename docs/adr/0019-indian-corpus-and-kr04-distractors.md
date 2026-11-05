@@ -61,6 +61,19 @@ The first corpus run fetched 16 RBI documents by script on 2026-11-05, before th
   - Then come NCGTC, judgments, state policies, the Gazette and the rest.
   - Owners are stable once assigned.
 
+## Date sources and plausibility (owner, 2026-11-05)
+- **`date_source`:** every available document has one:
+  - `curated`: a hand-curated manifest entry;
+  - `human`: entered by a person, never recomputed;
+  - `extracted`: page text — letterhead, then a labelled date, then the first plain date;
+  - `wef`: "w.e.f." / "effective from" anywhere in the text;
+  - `url`: a date in the URL or file name, where an upload folder `/YYYY-MM/` means day 1 of that month;
+  - `pdf_metadata`: CreationDate, else ModDate;
+  - `retrieved`: the retrieval date. Allowed only for bank and NBFC charge schedules (source 13), where it means *current as of* that date.
+- **Order:** the chain runs in the order above (after `curated` and `human`). A document with no date from any of them is `needs_date`.
+- **Plausibility:** a date before 1990-01-01 or after AS_OF_DATE is `needs_review` and does not count. A person confirms it with `date_confirmed: true`, or corrects it and sets `date_source: human`.
+- **Checking:** a seeded 10% per `date_source` is flagged for a human check in `DATE_REVIEW.md`.
+
 ## How the BRD wording is still met
 KR-04 says no superseded or non-Indian rule is cited as current. With an Indian-only corpus there is no non-Indian
 document to cite. The test of the same behaviour, a filter that rejects a rule which is not in force for this case, moves

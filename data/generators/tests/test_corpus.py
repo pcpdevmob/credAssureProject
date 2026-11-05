@@ -252,3 +252,8 @@ def test_scope14_import_refuses_oversize_and_duplicate_files(
         corpus.MAX_RAW_BYTES = limit
     assert any("duplicate of R-X-001" in e for e in errors) or any("20 MB" in e for e in errors)
     assert "R-X-002" not in lock and "R-X-003" not in lock
+
+
+def test_KR04_available_document_needs_a_date_source(entry: Callable[..., dict[str, Any]]) -> None:
+    errors, _ = audit({"documents": [entry(doc_id="A")]}, [], lock={"A": {"status": "ok"}})
+    assert errors == ["A: available but date_source is missing (make corpus-dates)"]

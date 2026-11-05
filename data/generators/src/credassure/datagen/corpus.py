@@ -88,6 +88,12 @@ def audit(
                 )
             else:
                 warnings.append(f"{doc_id}: effective_from unknown, confirm on the page")
+        elif (
+            lock is not None
+            and lock.get(doc_id, {}).get("status") in OK
+            and not d.get("date_source")
+        ):
+            errors.append(f"{doc_id}: available but date_source is missing (make corpus-dates)")
         if d.get("legal_basis") and d["legal_basis"] not in BASES:
             errors.append(f"{doc_id}: legal_basis {d['legal_basis']} is not L1-L4")
         if d.get("jurisdiction") and not JURISDICTION.match(str(d["jurisdiction"])):

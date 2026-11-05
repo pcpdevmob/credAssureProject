@@ -59,7 +59,7 @@ HEADER = (
     "# Owners fill PENDING slots in place when they save a file to data/corpus/raw/ (see MANUAL_DOWNLOADS.md).\n"
     "# legal_basis L1-L4 only; jurisdiction IN or IN-XX; applies_to commercial_bank|nbfc|sfb|coop_bank|all.\n"
 )
-DONE = OK | {"rejected_no_text", "needs_date"}
+DONE = OK | {"rejected_no_text", "needs_date", "needs_review"}
 # Priority tiers for owners (owner decision 6): T1 RBI Master Directions, RBI FAQs/rates/press releases,
 # CGTMSE replacements, Parliament answers; T2 NCGTC; T3 judgments; T4 state policies; T5 Gazette; T6 rest.
 TIER = {1: 1, 3: 1, 4: 1, 14: 1, 5: 2, 15: 3, 16: 4, 8: 5}
@@ -393,7 +393,7 @@ def status_screen(
             avail,
             sum(x not in DONE for x in st),
             st.count("rejected_no_text"),
-            st.count("needs_date"),
+            st.count("needs_date") + st.count("needs_review"),
         )
 
     docs = manifest["documents"]
@@ -401,7 +401,7 @@ def status_screen(
     bar = "#" * min(50, avail // 10) + "." * max(0, 50 - avail // 10)
     lines = [
         f"Real available {avail}/500 [{bar}] {max(0, 500 - avail)} to go",
-        f"Pending {pending} | rejected (no text) {rejected} | needs date {undated}",
+        f"Pending {pending} | rejected (no text) {rejected} | needs date or review {undated}",
         "",
         f"{'src':>3} {'avail':>5} {'pend':>5} {'rej':>4} {'nodate':>6}  name",
     ]
@@ -515,10 +515,8 @@ def main(argv: list[str] | None = None) -> int:
             print(f"MISMATCH {doc_id}", file=sys.stderr)
         return 1 if bad or missing else 0  # a teammate must hold every file to prove the sync
     if command in {"download", "import", "dates"}:
-        extracted, undated, promoted = apply_dates(manifest, lock, CORPUS / "raw")
-        print(
-            f"dates: {extracted} extracted, {undated} need a date, {promoted} promoted after a human date"
-        )
+        chained, undated, review = apply_dates(manifest, lock, CORPUS / "raw", CORPUS / "text")
+        print(f"dates: {chained} dated by the chain, {undated} need a date, {review} need review")
         write_text(CORPUS / "DATE_REVIEW.md", review_markdown(manifest, lock))
     if command == "status":
         print(status_screen(sources, manifest, lock, CORPUS / "text"))
