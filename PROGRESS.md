@@ -62,7 +62,7 @@ owner      assigned imported pending
 ```
 - A document counts as available only if it has extracted text **and** an effective date.
   - 55 documents have text but no date (`needs_date`). They count once a person dates them; see `data/corpus/DATE_REVIEW.md`.
-  - Of the 120 extracted dates, a seeded 10% (12) are marked for a human check.
+  - Of the 147 extracted dates, a seeded 10% (15) are marked for a human check.
 - The 520 manual items are split across six owners in `data/corpus/MANUAL_DOWNLOADS.md`. Each section starts with tier 1.
 - **One retry is due on or after 2026-11-06 05:11 UTC:** NCGTC (502), MUDRA (connection error) and sbi.co.in (timeout). Run `make corpus-harvest` and `make corpus-download` then; the outcome is recorded in the lock.
 - msme.gov.in (403), Udyam (redirect loop) and RXIL (444) stay manual.
@@ -75,7 +75,7 @@ owner      assigned imported pending
   - The owners save the files, fill the PENDING slots in `manifest.yaml`, and run `make corpus-import`.
   - Deadline: before the G1 corpus freeze. G2 (≥500 indexed) is the hard stop.
   - **Closed (owner):** the 16 RBI documents fetched by script are kept (`fetched_by: script_pre_adr0019`).
-  - **Dates:** extracted for 120 documents; 55 need a person to date them (`needs_date`).
+  - **Dates:** extracted for 147 documents (15 sampled for a human check); 55 need a person to date them (`needs_date`).
   - 181 PDFs, mostly older CGTMSE circulars, are scans with no text layer (no OCR), so they were rejected and given replacement slots.
 - **Conventions Phase 3 gold and Phase 4 engines must match:** these are written in the generator headers, `cases.py` and `offers.py`.
   - Receivables count in their expected week.
