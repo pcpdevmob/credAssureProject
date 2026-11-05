@@ -4,7 +4,8 @@ Checks every doc_id in retrieval labels, KR-04 ``must_not_cite`` lists and regul
 - the doc_id exists in data/corpus/manifest.yaml (or is a synthetic POL-/FAQ-/KFS- file): else FAIL;
 - the document is available (lock status ok/ok_manual and extracted text present): else "awaiting corpus",
   which fails only with ``--strict`` (the G1 freeze);
-- for regulatory items, each gold key fact appears in the text of at least one available cited document: else FAIL.
+- for regulatory items whose cited documents are all available, each gold key fact appears in at least one
+  of them: else FAIL (while any is pending the item is only "awaiting corpus").
 
 ``make check`` runs it non-strict; ``freeze --write`` runs it strict and lists the items to replace.
 """
@@ -97,9 +98,9 @@ def check(
             )
         if row.get("category") != "regulatory" or not relevant:
             continue
-        have = [d for d in relevant if d in texts]
-        if not have:
-            continue  # nothing to read yet; already listed as awaiting
+        if any(d not in texts for d in relevant):
+            continue  # the fact may be in a pending document; checked once all are available
+        have = relevant
         for fact in gold.get("key_facts", []):
             if not any(_norm(fact) in text(d) for d in have):
                 report.failures.append(

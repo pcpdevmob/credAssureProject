@@ -1,7 +1,7 @@
 # CredAssure — Progress (Claude Code reads this first and updates it last)
 
 ## Current phase
-Phase 4 is done (2026-11-05). Next is Phase 5: database, fact ledger, hash-chained audit and auth. Still open:
+Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpus guard, baseline infra_error, freeze test). Next is Phase 5: database, fact ledger, hash-chained audit and auth (plan approved 2026-11-06). **After Phase 5, Phase 8 (walking skeleton) comes before Phase 6;** plan it in a fresh session. Still open:
 - **ADR 0018 freeze (human):** ADR 0018 (AgentResult, including `agent_version` and `tenant_id`) is Proposed and not frozen. Accept it before G1.
 - **Corpus shortfall (M1):** the corpus is short of the ≥400 real-document target. See open questions.
 
@@ -22,9 +22,30 @@ Phase 4 is done (2026-11-05). Next is Phase 5: database, fact ledger, hash-chain
 | 1 gap fix | done | VER-01, BRD §10 | phase-1-fix | Normaliser `find_all` (free-text scan with spans, `kind`), signed money/rates; RBI PDF untracked; REPO_STRUCTURE env templates point to deploy/env |
 | 2 Data | done | BR-01, BR-14, BRD §10, scope #14; S01–S06, S18–S20, S22 | phase-2 | 393 files in `data/frozen/v1`, byte-identical (SHA256SUMS + test). See note below |
 | Corpus | done (manual pending) | KR-01, KR-04, G2; ADR 0019 | data: Indian real corpus | 16 Indian sources, target 750. Harvest, download, import, verify, manual, report targets. 233 real available |
-| 3 Eval assets | done (baseline table pending) | BRD §12–13, KR-05, VER-02, scope #13; ADR 0021 | phase-3 | Independent gold (floats + numpy_financial, no engine import, contract-enforced) reproduces every design need, every PLANTS offer tag and RBI Annex B 17.07%. 100 items (25/10/15/15/5/6/8/8/3/5), 40 retrieval queries, 20 red-team prompts, 12 S24 bad citations, scorers (₹1 / 0.01 pp, BRD failure classes), freeze script with readiness gate, run record (#13), baselines S1–S3. money-auditor PASS (no MUST); brd-conformance: only pre-G1 corpus MUST |
+| 3 Eval assets | done (G1 items below) | BRD §12–13, KR-05, VER-02, scope #13; ADR 0021 | phase-3 | Independent gold (floats + numpy_financial, no engine import, contract-enforced) reproduces every design need, every PLANTS offer tag and RBI Annex B 17.07%. 100 items (25/10/15/15/5/6/8/8/3/5), 40 retrieval queries, 20 red-team prompts, 12 S24 bad citations, scorers (₹1 / 0.01 pp, BRD failure classes), freeze script with readiness gate, run record (#13), baselines S1–S3. money-auditor PASS (no MUST); brd-conformance: only pre-G1 corpus MUST |
 | 4 Engines | done | WC-01..06, LW-02..11/14, ONB-02/03, APR-01..03, BR-05/07/12; scope #1 (enum), #7; ADR 0011 | phase-4 | Pure Decimal engines. 15/15 cash-flow and 15/15 offer known answers match gold (worst APR 0.005 pp). RBI Annex B 17.07%. 20/20 onboarding profiles. 426 tests, engine coverage 98%. money-auditor PASS, brd-conformance PASS, no MUST. SHOULDs applied: IRR edge/bisection tests, `gst_rate` and `indicative` required (no silent defaults), strict Decimal in audit and negotiation, schedule terms material, fee compared in ₹, week<1 rows blocked, undrawn ≥ 0, routing rejects negatives, deterministic tie-break |
 | UI U0–U6 | todo | UI-01..09 | | React lane |
+
+## Phase 3 follow-ups (2026-11-06)
+- **Corpus guard** (`check_corpus_refs`, in `make check`): every cited doc_id must be in the manifest, and each regulatory key fact must appear in its cited text once all cited documents are available. Pending documents are reported as "awaiting corpus". Strict mode, used by `freeze --write`, fails and lists the items. Today: 0 failures, 34 items awaiting.
+  - The guard found **R-RBI-02 and R-RBI-10 captured as 2.6 KB RBI menu shells**. Both moved back to manual, with a note to save the PDF instead.
+- **Baseline:** a call that fails twice is scored `infra_error`, left out of accuracy and counted per strategy.
+  - Records carry endpoint, `context_length` (`EVAL_NUM_CTX`) and `run_kind`. Only a run on the course endpoint is `graded`.
+  - **The local Ollama runs `llama-server -c 4096`** (not the 8192 in ADR 0017) with context shift, so local results are `smoke_test` only. The local run is not committed.
+- **brd-conformance (re-review):** the corpus MUST is resolved by the guard. The new MUST, a freeze test that could never fail, is fixed: it now asserts `verify() == []` and a tamper test proves drift is detected.
+  - SHOULD, not done: retrieval labels are doc_id + `section_hint`, not `section_path` (DATA_SPEC §7). Add `section_path` before G1, or recall@5 is inflated at document level.
+  - SHOULD, by design: the `judge` scorer is a key-fact substring stub until J1 (scope #11, Phase 11).
+
+## G1 still needs (in this order, then `/freeze-g1`)
+- [ ] Corpus ≥500 real documents available (`make corpus-status`; today 286 after the two RBI shells were re-queued)
+- [ ] Every referenced document available: `uv run python -m credassure.evaluation.check_corpus_refs --strict` clean (34 items today), or replace those items or queries
+- [ ] `section_path` on the 40 retrieval labels (brd-conformance SHOULD)
+- [ ] Hand check by 2 people who don't own the agent: `evaluation/gold/hand_check.md`
+- [ ] Second independent transcription of the RBI Annex B APR illustration (S21)
+- [ ] Owner names for [Name 1]…[Name 6] and gold authors (no one writes gold for their own agent)
+- [ ] Graded baseline S1–S3 on the course endpoint (`EVAL_BASE_URL`, `EVAL_NUM_CTX` set to its context window)
+- [ ] ADR 0018 accepted (AgentResult freeze)
+- [ ] then `/freeze-g1`
 
 ## Phase 2 note
 - **Plants:** all at or above the DATA_SPEC minimums (PLANTS.md). An independent recompute in `data/generators/tests` checks every case's need, plus an LW-09 cash overlay of every offer.

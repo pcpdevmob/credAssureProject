@@ -117,8 +117,20 @@ def test_VER03_scorers_catch_acceptance_language_and_injection() -> None:
     )
 
 
-def test_G1_freeze_verify_is_clean_without_a_manifest() -> None:
-    assert freeze.verify() == [] or (REPO / "evaluation/FROZEN.sha256").exists()
+def test_G1_frozen_assets_have_not_changed() -> None:
+    assert freeze.verify() == []  # no manifest yet → []; after /freeze-g1 any drift fails here
+
+
+def test_G1_freeze_verify_detects_a_changed_asset(tmp_path: Path, monkeypatch: Any) -> None:
+    for asset in freeze.ASSETS:
+        (tmp_path / asset).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / asset).write_bytes(b"frozen\n")
+    monkeypatch.setattr(freeze, "REPO", tmp_path)
+    monkeypatch.setattr(freeze, "MANIFEST", tmp_path / "FROZEN.sha256")
+    freeze.MANIFEST.write_text(freeze.digests(), encoding="utf-8")
+    assert freeze.verify() == []
+    (tmp_path / freeze.ASSETS[0]).write_bytes(b"frozen!\n")
+    assert freeze.verify() == [freeze.ASSETS[0]]
 
 
 class GoldChat:
