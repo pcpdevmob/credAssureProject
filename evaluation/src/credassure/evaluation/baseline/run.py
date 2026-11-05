@@ -10,9 +10,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
-import yaml
-
-from ..gold.data import DATA, REPO
+from ..check_corpus_refs import known_doc_ids
+from ..gold.data import REPO
 from ..record import run_record
 from ..scorers import BRD_CLASS, score
 from .client import Chat, OpenAICompatible
@@ -20,14 +19,6 @@ from .strategies import PROMPTS, run
 
 RESULTS = REPO / "evaluation" / "baseline" / "results"
 ITEMS = REPO / "evaluation" / "testset" / "v1" / "items.jsonl"
-
-
-def known_doc_ids() -> set[str]:
-    manifest = yaml.safe_load(
-        (REPO / "data" / "corpus" / "manifest.yaml").read_text(encoding="utf-8")
-    )
-    ids = {d["doc_id"] for d in manifest["documents"]}
-    return ids | {p.stem for folder in ("kfs", "policies") for p in (DATA / folder).glob("*.md")}
 
 
 def evaluate(

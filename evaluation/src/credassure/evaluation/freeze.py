@@ -8,6 +8,7 @@ import argparse
 import hashlib
 import sys
 
+from . import check_corpus_refs
 from .gold.data import REPO
 
 ASSETS = (
@@ -37,25 +38,9 @@ def verify() -> list[str]:
 
 
 def readiness() -> list[str]:
-    """Items and queries whose relevant documents are none of them available yet (status ok/ok_manual, or a
-    synthetic POL-/KFS- document). G1 may not freeze while any remain: they could never be passed."""
-    import json
-
-    lock = json.loads((REPO / "data" / "corpus" / "manifest.lock.json").read_text(encoding="utf-8"))
-
-    def available(doc_id: str) -> bool:
-        return doc_id.startswith(("POL-", "FAQ-", "KFS-")) or lock.get(doc_id, {}).get(
-            "status"
-        ) in {"ok", "ok_manual"}
-
-    blocked = []
-    for path in ("evaluation/testset/v1/items.jsonl", "evaluation/retrieval/v1/queries.jsonl"):
-        for line in (REPO / path).read_text(encoding="utf-8").splitlines():
-            row = json.loads(line)
-            docs = row.get("gold", row).get("relevant_doc_ids", [])
-            if docs and not any(available(d) for d in docs):
-                blocked.append(f"{row['id']}: {', '.join(docs)}")
-    return blocked
+    """Items and queries G1 may not freeze with: unknown doc_ids, any cited document not yet available
+    (status ok/ok_manual with extracted text), or a regulatory key fact missing from its cited text."""
+    return check_corpus_refs.check(strict=True).failures
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -67,16 +52,14 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.write:
         if blocked := readiness():
-            print(
-                "Not ready to freeze: no relevant document available yet for", *blocked, sep="\n  "
-            )
+            print("Not ready to freeze; replace or wait for:", *blocked, sep="\n  ")
             return 1
         MANIFEST.write_text(digests(), encoding="utf-8", newline="\n")
         print(f"wrote {MANIFEST}")
         return 0
     if args.readiness:
         blocked = readiness()
-        print("\n".join(blocked) or "all items and queries have an available document")
+        print("\n".join(blocked) or "all cited documents are available and support their gold")
         return 1 if blocked else 0
     drift = verify()
     for path in drift:

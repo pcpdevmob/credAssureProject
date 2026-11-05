@@ -6034,11 +6034,14 @@
     "fetched_by": "script_pre_adr0019",
     "final_url": "https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13140",
     "legal_basis": "L4",
+    "owner": "[Name 1]",
     "raw_file": "R-RBI-02.html",
+    "reason": "EXCEPTION: this page's HTML is only the menu (2.6 KB). Delete raw/R-RBI-02.html, open the page in a browser, save the linked Direction PDF as raw/R-RBI-02.pdf",
     "retrieved_on": "2026-11-05",
     "sha256": "0a0628659b6fb043457fdd8b79b800655e6f112bfe35bb432e6a34a49bb9c4cb",
     "source_url": "https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13140",
-    "status": "ok",
+    "status": "pending_manual",
+    "status_before_review": "ok",
     "text_sha256": "bd1762aafc8366c4b16056822d4ddbf0e575e877dfd801f1d8e7f54f8395cb9b"
   },
   "R-RBI-03": {
@@ -6127,11 +6130,14 @@
     "fetched_by": "script_pre_adr0019",
     "final_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13156",
     "legal_basis": "L4",
+    "owner": "[Name 2]",
     "raw_file": "R-RBI-10.html",
+    "reason": "EXCEPTION: this page's HTML is only the menu (2.6 KB). Delete raw/R-RBI-10.html, open the page in a browser, save the linked Direction PDF as raw/R-RBI-10.pdf",
     "retrieved_on": "2026-11-05",
     "sha256": "89e4af406cb36eef47aee14e1884524109a91a9526094ef6c4622c27efc5f2b4",
     "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13156",
-    "status": "ok",
+    "status": "pending_manual",
+    "status_before_review": "ok",
     "text_sha256": "3ef641e0c5e2ad11fd31fad5cc5d6c93e3cc99d067d4f92de694c23945d45308"
   },
   "R-RBI-11": {

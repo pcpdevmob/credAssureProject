@@ -34,12 +34,13 @@ for that doc_id in `manifest.yaml`.
 - **Recipe 15 - Supreme Court and High Court judgments on the MSMED Act:** Start with the MSME Samadhaan list of Supreme Court judgments on delayed payment (https://samadhaan.msme.gov.in/OrderDocument.aspx) and save each linked judgment PDF as its own row. For more, use the Supreme Court judgment search (sci.gov.in, by free text 'MSMED Act' / 'Facilitation Council', years 2015-2026; a person may solve the CAPTCHA, a script may not) and save the official judgment PDF. Legal points only (ADR 0020).
 - **Recipe 16 - State MSME/industrial policies - Maharashtra (home) and other states (KR-04 distractors):** Maharashtra (home, IN-MH): the Industries Department site di.maharashtra.gov.in does not respond; find the Maharashtra Industrial Policy 2019 or current MSME policy on an official Maharashtra site (maharashtra.gov.in Government Resolutions, MIDC midc.maharashtra.gov.in) and save the PDF. Karnataka (IN-KA): save the Karnataka Industrial Policy PDF from the Karnataka Commerce and Industries department site. Set jurisdiction accordingly.
 
-**183 documents pending** across six owners.
+**185 documents pending** across six owners.
 
-## [Name 1]: 22 documents (dcmsme.gov.in, sansad.in, www.sci.gov.in)
+## [Name 1]: 23 documents (dcmsme.gov.in, rbi.org.in, sansad.in, www.sci.gov.in)
 
 | Tier | doc_id | Save as | Source | Link | Why manual |
 |---|---|---|---|---|---|
+| T1 | R-RBI-02 | raw/R-RBI-02.html | 1: Reserve Bank of India (Commercial Banks – Responsible Busine | https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13140 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. EXCEPTION: this page's HTML is only the menu (2.6 KB). Delete raw/R-RBI-02.html, open the page in a browser, save the linked Direction PDF as raw/R-RBI-02.pdf |
 | T1 | R-SANSAD-001 | raw/R-SANSAD-001.pdf or .html | 14: pick from index | https://sansad.in/ls/questions/questions-and-answers | **Recipe 14** (see Recipes above) |
 | T1 | R-SANSAD-002 | raw/R-SANSAD-002.pdf or .html | 14: pick from index | https://sansad.in/rs/questions/questions-and-answers | **Recipe 14** (see Recipes above) |
 | T1 | R-SANSAD-003 | raw/R-SANSAD-003.pdf or .html | 14: pick from index | https://sansad.in/ls/questions/questions-and-answers | **Recipe 14** (see Recipes above) |
@@ -63,11 +64,12 @@ for that doc_id in `manifest.yaml`.
 | T3 | R-JUD-011 | raw/R-JUD-011.pdf or .html | 15: pick from index | https://www.sci.gov.in/judgements-judgement-date/ | **Recipe 15** (see Recipes above) |
 | T5 | R-MSME-03 | raw/R-MSME-03.pdf | 8: Notification S.O. 2119(E) - MSME classification (2020) | https://dcmsme.gov.in/State-Gov/Notification_%20S%20O%202119.pdf | error: ConnectError |
 
-## [Name 2]: 22 documents (egazette.gov.in, www.rbi.org.in, www.sci.gov.in)
+## [Name 2]: 23 documents (egazette.gov.in, www.rbi.org.in, www.sci.gov.in)
 
 | Tier | doc_id | Save as | Source | Link | Why manual |
 |---|---|---|---|---|---|
 | T1 | R-RBI-09 | raw/R-RBI-09.html | 1: RBI Commercial Banks - Know Your Customer Directions, 2025 ( | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13141 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact Direction page (Commercial Banks – Know Your Customer Directions, 2025) |
+| T1 | R-RBI-10 | raw/R-RBI-10.html | 1: Reserve Bank of India (Commercial Banks – Credit Facilities) | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13156 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. EXCEPTION: this page's HTML is only the menu (2.6 KB). Delete raw/R-RBI-10.html, open the page in a browser, save the linked Direction PDF as raw/R-RBI-10.pdf |
 | T1 | R-RBI-FAQ-005 | raw/R-RBI-FAQ-005.html | 3: Lending and Deposit Rates of Scheduled Commercial Banks – Oc | https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=63894 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
 | T1 | R-RBI-FAQ-006 | raw/R-RBI-FAQ-006.html | 3: Lending and Deposit Rates of Scheduled Commercial Banks – No | https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF. RBI Press Releases archive: choose the year and month the November 2024 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url. |
 | T1 | R-RBI-FAQ-007 | raw/R-RBI-FAQ-007.html | 3: Lending and Deposit Rates of Scheduled Commercial Banks – De | https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF. RBI Press Releases archive: choose the year and month the December 2024 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url. |
@@ -273,7 +275,7 @@ under `hosts:`, `terms_url`, `terms_note` (does it allow automated access? any r
 | msme.up.gov.in | 1 | [Name 5] | unknown |
 | msmeonline.tn.gov.in | 1 | [Name 6] | unknown |
 | pnb.bank.in | 1 | [Name 4] | unknown |
-| rbi.org.in | 6 | [Name 5] | unknown |
+| rbi.org.in | 6 | [Name 1] | unknown |
 | sahamati.org.in | 1 | [Name 6] | unknown |
 | samadhaan.msme.gov.in | 3 | [Name 5] | unknown |
 | sansad.in | 25 | [Name 1] | unknown |

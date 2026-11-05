@@ -22,6 +22,7 @@ check:  ## ruff, ruff format, mypy --strict, pytest, bandit
 	uv run ruff format --check .
 	uv run mypy --strict $(PY_SRC)
 	uv run pytest -q
+	uv run python -m credassure.evaluation.check_corpus_refs
 	uv run bandit -q -c pyproject.toml -r $(PY_SRC)
 	uv run lint-imports
 

@@ -2,9 +2,16 @@
 
 import json
 from collections import Counter
+from pathlib import Path
 from typing import Any
 
-from credassure.evaluation import build_assets, build_testset, freeze, scorers
+from credassure.evaluation import (
+    build_assets,
+    build_testset,
+    check_corpus_refs,
+    freeze,
+    scorers,
+)
 from credassure.evaluation.baseline import run as baseline_run
 from credassure.evaluation.baseline.strategies import parse_json, run, user_prompt
 from credassure.evaluation.gold.data import REPO
@@ -175,3 +182,43 @@ def test_G1_readiness_lists_items_without_an_available_document() -> None:
     blocked = freeze.readiness()
     assert all(": " in b for b in blocked)  # reported, and --write refuses while any remain
     assert not any(b.startswith("T001:") for b in blocked)  # R-CG-02 is downloaded
+
+
+def test_KR04_corpus_guard_unknown_awaiting_key_fact_and_strict(tmp_path: Path) -> None:
+    (tmp_path / "text").mkdir()
+    (tmp_path / "syn" / "policies").mkdir(parents=True)
+    (tmp_path / "manifest.yaml").write_text(
+        "documents:\n- doc_id: A\n- doc_id: B\n- doc_id: C\n", encoding="utf-8"
+    )
+    (tmp_path / "lock.json").write_text(
+        json.dumps(
+            {"A": {"status": "ok"}, "B": {"status": "pending_manual"}, "C": {"status": "ok"}}
+        ),
+        encoding="utf-8",
+    )
+    (tmp_path / "text" / "A.txt").write_text("Fee on the  Guaranteed\namount.", encoding="utf-8")
+    corpus = check_corpus_refs.Corpus(
+        tmp_path / "manifest.yaml", tmp_path / "lock.json", tmp_path / "text", tmp_path / "syn"
+    )  # C is "ok" but has no extracted text, so it is not available
+    rows = [
+        {
+            "id": "T1",
+            "category": "regulatory",
+            "gold": {"relevant_doc_ids": ["A"], "key_facts": ["guaranteed amount"]},
+        },
+        {
+            "id": "T2",
+            "category": "regulatory",
+            "gold": {"relevant_doc_ids": ["A"], "key_facts": ["0.85"]},
+        },
+        {"id": "Q1", "relevant_doc_ids": ["A"], "must_not_cite": ["B", "C"]},
+        {"id": "Q2", "relevant_doc_ids": ["Z"]},
+    ]
+    report = check_corpus_refs.check(corpus, rows)
+    assert report.failures == [
+        "T2: key fact '0.85' not found in A",
+        "Q2: not in manifest: Z",
+    ]
+    assert report.awaiting == ["Q1: awaiting corpus: B, C"]
+    strict = check_corpus_refs.check(corpus, rows, strict=True)
+    assert "Q1: awaiting corpus: B, C" in strict.failures and not strict.awaiting
