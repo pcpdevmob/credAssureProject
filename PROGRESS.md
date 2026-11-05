@@ -47,6 +47,17 @@ Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpu
 - [ ] ADR 0018 accepted (AgentResult freeze)
 - [ ] then `/freeze-g1`
 
+## Phase 4 evidence (re-run 2026-11-06)
+- Cash flow **15/15** and offers **15/15** match independent gold (`test_WC03_WC06_funding_matches_gold_to_one_rupee`, `test_LW05_LW11_offers_match_gold`).
+- RBI Annex B APR: **17.07%**, PASS (`test_ADR0012_rbi_kfs_illustration_is_17_07`).
+- **8 Hypothesis property tests:** 4 engine tests (bridge sums with need a non-negative lakh multiple; APR ≥ nominal with fees; unaffordable or ineligible never first; routing monotonic) and 4 normaliser round-trips. 174 engine tests pass; engine coverage 98%.
+- money-auditor (Phase 4 review): **PASS**, no MUST.
+- `/eval E3`: **READY**, no MUST (money-auditor, 2026-11-06). 15/15 checks PASS: no float in engines; 3 cash-flow cases (CA-0001 ₹1.42 cr, CA-0010 boundary ₹1.50 cr, CA-0004 with mitigation ₹1.25 cr) and 3 offers (OF-01-A hidden charge 17.5575%, OF-02-B CGTMSE 14.8862%, OF-03-B floating 13.1317%) recomputed independently and matched to ₹1 / 0.0001 pp; GST on fees only; CGTMSE y1 on principal then outstanding; RATE_MAY_RESET; routing ±₹1 under all three rules; calendar; Annex B 17.0706%.
+  - SHOULD: rebuild the Annex B test from the S21 fixture and the engine's own EMI (today it hard-codes ₹969.73); ADR 0012 names a test file `test_apr_rbi_annex_b.py` that does not exist.
+  - SHOULD: mitigations from their own week in the affordability overlay (same as S7 below; owner decision, ADR 0021 + gold).
+  - SHOULD: optional `guarantee.guaranteed_amount` (CGTMSE coverage below 100% of principal).
+  - NIT: direct tests for no GST on interest and RATE_MAY_RESET on every floating offer; cover loancost.py:49,151-177 and calendar.py:16.
+
 ## Phase 2 note
 - **Plants:** all at or above the DATA_SPEC minimums (PLANTS.md). An independent recompute in `data/generators/tests` checks every case's need, plus an LW-09 cash overlay of every offer.
 - **Reviews:** money-auditor found one MUST: eligible offers were sized at the exact need, so they were unaffordable. Fixed: principal is now need + 10%, rounded up to ₹1 lakh. brd-conformance passed with M1 below.
