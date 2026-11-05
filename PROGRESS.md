@@ -1,7 +1,7 @@
 # CredAssure — Progress (Claude Code reads this first and updates it last)
 
 ## Current phase
-Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpus guard, baseline infra_error, freeze test). Next is Phase 5: database, fact ledger, hash-chained audit and auth (plan approved 2026-11-06). **After Phase 5, Phase 8 (walking skeleton) comes before Phase 6;** plan it in a fresh session. Still open:
+Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpus guard, baseline infra_error, freeze test). Phase 5 is done (2026-11-06). **Next is Phase 8 (walking skeleton), before Phase 6;** plan it in a fresh session. Still open:
 - **ADR 0018 freeze (human):** ADR 0018 (AgentResult, including `agent_version` and `tenant_id`) is Proposed and not frozen. Accept it before G1.
 - **Corpus shortfall (M1):** the corpus is short of the ≥400 real-document target. See open questions.
 
@@ -24,7 +24,27 @@ Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpu
 | Corpus | done (manual pending) | KR-01, KR-04, G2; ADR 0019 | data: Indian real corpus | 16 Indian sources, target 750. Harvest, download, import, verify, manual, report targets. 233 real available |
 | 3 Eval assets | done (G1 items below) | BRD §12–13, KR-05, VER-02, scope #13; ADR 0021 | phase-3 | Independent gold (floats + numpy_financial, no engine import, contract-enforced) reproduces every design need, every PLANTS offer tag and RBI Annex B 17.07%. 100 items (25/10/15/15/5/6/8/8/3/5), 40 retrieval queries, 20 red-team prompts, 12 S24 bad citations, scorers (₹1 / 0.01 pp, BRD failure classes), freeze script with readiness gate, run record (#13), baselines S1–S3. money-auditor PASS (no MUST); brd-conformance: only pre-G1 corpus MUST |
 | 4 Engines | done | WC-01..06, LW-02..11/14, ONB-02/03, APR-01..03, BR-05/07/12; scope #1 (enum), #7; ADR 0011 | phase-4 | Pure Decimal engines. 15/15 cash-flow and 15/15 offer known answers match gold (worst APR 0.005 pp). RBI Annex B 17.07%. 20/20 onboarding profiles. 426 tests, engine coverage 98%. money-auditor PASS, brd-conformance PASS, no MUST. SHOULDs applied: IRR edge/bisection tests, `gst_rate` and `indicative` required (no silent defaults), strict Decimal in audit and negotiation, schedule terms material, fee compared in ₹, week<1 rows blocked, undrawn ≥ 0, routing rejects negatives, deterministic tie-break |
+| 5 Ledger + auth | done | SUP-08, APR-04/05, ONB-05, NFR-07, OBJ-08, BR-05, BR-14; scope #22 #27 #29 #49 | phase-5 | `packages/ledger` (case.db + corpus.db models, Alembic up/down, append-only triggers, hash-chained audit, fact ledger, run lock, read-only hr.db, seed) and `packages/security/auth.py` (argon2id, JWT, case policy). 39 tests; 468 total. brd-conformance PHASE COMPLETE; security-reviewer 2 MUST fixed (decision only on AWAITING_APPROVAL/HELD and only by the routed role, at both layers). E10 (auth part, security-reviewer): 1 MUST fixed (re-routing could reopen an APPROVED or REJECTED case); after the fix 46/47 adversarial checks pass. The open one, tail truncation of the audit chain, is a SHOULD (see Phase 5 notes). Route checks are N/A until Phase 8 |
 | UI U0–U6 | todo | UI-01..09 | | React lane |
+
+## Phase 5 notes (2026-11-06)
+- **`make db`** migrates `var/case.db` and `var/corpus.db` and seeds 25 users from `data/frozen/v1/users/eval_users.yaml`.
+  It needs `SEED_PASSWORD` (12+ characters) or `SEED_PASSWORD_<USERNAME>` in the environment. Add both to `.env.example` (Claude may not edit it).
+- **Decisions:**
+  - Only a case in `AWAITING_APPROVAL` or `HELD` can be decided, and only by the routed role (HELD goes to the VP).
+  - The role is checked against the approver's user row, never taken from the caller.
+  - Self-approval is refused in both `security.auth.can_decide` and `ledger.writes.record_decision`.
+  - `writes.route_case` is what the Supervisor calls after the Critic GO (Phase 8).
+- **Every transaction is `BEGIN IMMEDIATE`** (ponytail): writers queue on the 5 s busy timeout. Watch it in the Phase 11 concurrency smoke test (#35).
+- **Deferred SHOULDs** (security-reviewer):
+  - **Audit anchor:** `verify_chain` catches edited, reordered or missing-middle rows. It cannot catch the newest rows being cut off, or a full re-hash by someone with file access. Record `(seq, hash)` checkpoints outside case.db (e.g. in the Langfuse trace or the eval record), or chain with HMAC and a key from env. Decide in Phase 8.
+  - **Approver comments (E10 SHOULD):** comments are stored and audited unredacted. Pass them through `security.pii.redact` once Phase 6 lands.
+  - **Run-lock takeover (E10 SHOULD):** a lock is taken over after 5 minutes even if its run is alive. Enforce the 5-minute stage timeout (#23), or refresh `acquired_at` during a run, before relying on takeover (Phase 6/8).
+  - **Case deletion (#39, Phase 10) vs append-only triggers:** write an ADR first. Either a tombstone with facts kept, or an audited migration-only purge. Never drop the triggers ad hoc.
+  - **Phase 8 gateway:**
+    - re-load the user (active, role) on each request, or keep tokens ≤15 min;
+    - on login, verify against a dummy hash when the username is unknown (timing);
+    - use `check_needs_rehash`.
 
 ## Phase 3 follow-ups (2026-11-06)
 - **Corpus guard** (`check_corpus_refs`, in `make check`): every cited doc_id must be in the manifest, and each regulatory key fact must appear in its cited text once all cited documents are available. Pending documents are reported as "awaiting corpus". Strict mode, used by `freeze --write`, fails and lists the items. Today: 0 failures, 34 items awaiting.
@@ -184,7 +204,6 @@ owner      assigned imported pending
 
 ## Decisions pending (human)
 - Accept ADR 0018 before G1 to freeze AgentResult, including `agent_version` (scope #25). The field is on the model. The stage-retry route stays in Phase 9
-- tenant_id on case tables (scope #27, phase 5) — `TENANT_ID` setting, log field, and an unfrozen AgentResult field already exist. No case tables yet. ADR 0018 does not decide this
 - Permitted cut order if Week 3 slips (each needs an ADR): scope #35, #41, #38, #37
 
 ## Decisions
@@ -209,3 +228,7 @@ owner      assigned imported pending
 - #32 Error catalogue (`ApiErrorCode`). HTTP behaviour of the 501 routes is unchanged
 - #7 Repayment date → week mapping (`engines/calendar.py`, ADR 0011)
 - #1 Ablation enum only (`AblationMode`); switch paths in Phases 8 and 11
+- #22 Concurrency, DB part (WAL, busy_timeout 5000, BEGIN IMMEDIATE, one run per case with stale takeover). The limiter part is Phase 6
+- #27 tenant_id on every case table; reads are scoped by tenant and case
+- #29 Alembic for case.db and corpus.db; upgrade, downgrade and upgrade again tested; seeds separate (`credassure.ledger.seed`)
+- #49 Fact or decision commits together with its audit event; row_version on cases (version_id_col) and approvals

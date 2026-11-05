@@ -608,6 +608,20 @@ provides-extras = ["rerank"]
 name = "credassure-ledger"
 version = "0.1.0"
 source = { editable = "packages/ledger" }
+dependencies = [
+    { name = "alembic" },
+    { name = "credassure-security" },
+    { name = "pyyaml" },
+    { name = "sqlalchemy" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "alembic", specifier = ">=1.14" },
+    { name = "credassure-security", editable = "packages/security" },
+    { name = "pyyaml", specifier = ">=6" },
+    { name = "sqlalchemy", specifier = ">=2.0" },
+]
 
 [[package]]
 name = "credassure-lender-sim"
@@ -644,6 +658,16 @@ source = { editable = "packages/retrieval" }
 name = "credassure-security"
 version = "0.1.0"
 source = { editable = "packages/security" }
+dependencies = [
+    { name = "argon2-cffi" },
+    { name = "pyjwt" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "argon2-cffi", specifier = ">=23.1" },
+    { name = "pyjwt", specifier = ">=2.10" },
+]
 
 [[package]]
 name = "credassure-tools"

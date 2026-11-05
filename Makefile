@@ -8,7 +8,7 @@ ENV_FILE := $(if $(wildcard .env),--env-file .env,)
 PNPM := $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo "npx --yes pnpm@9.15.0")
 
 .PHONY: testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
-        demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
+        db demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore
 
 help:  ## List targets
@@ -143,6 +143,11 @@ baseline:  ## Prompt baselines S1-S3 on the 100 items (EVAL_BASE_URL / EVAL_MODE
 testset:  ## Rebuild evaluation/testset/v1 and the retrieval/red-team/fixture assets (refuses once frozen)
 	uv run python -m credassure.evaluation.build_testset
 	uv run python -m credassure.evaluation.build_assets
+
+db:  ## Migrate var/case.db + var/corpus.db and seed users (needs SEED_PASSWORD; ADR 0005, scope #29)
+	uv run python -m credassure.ledger.migrate upgrade case var/case.db
+	uv run python -m credassure.ledger.migrate upgrade corpus var/corpus.db
+	uv run $(ENV_FILE) python -m credassure.ledger.seed var/case.db
 
 demo-reset:  ## Reset demo data and replay cache (Phase 12)
 	deploy/scripts/demo-reset.sh
