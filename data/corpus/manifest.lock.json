@@ -439,12 +439,17 @@
     "source_url": "https://bandhan.bank.in/rates-charges",
     "status": "pending_manual"
   },
-  "R-BANK-S-024": {
+  "R-BANK-S-025": {
+    "bytes": 259894,
+    "date_evidence": "url month folder: 2026-05",
+    "final_url": "https://bandhan.bank.in/sites/default/files/2026-05/SOC-NR-Account-Product-Variants.pdf",
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://bandhan.bank.in/rates-charges",
-    "status": "pending_manual"
+    "raw_file": "R-BANK-S-025.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "5ff91da8409370a0c3552a25887445e0957c7cdbd5c7ca0302b79a24f90004a6",
+    "source_url": "https://bandhan.bank.in/sites/default/files/2026-05/SOC-NR-Account-Product-Variants.pdf",
+    "status": "ok",
+    "text_sha256": "bf8a4a51e4f6b0b40aefdd787a2af973d899503bfe7e4cc6cc83bffe794c3c65"
   },
   "R-CAL-01": {
     "bytes": 73907,
@@ -696,7 +701,7 @@
     "legal_basis": "L4",
     "owner": "[Name 4]",
     "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
+    "source_url": "https://www.cgtmse.in/",
     "status": "pending_manual"
   },
   "R-CG-C-018": {
@@ -710,7 +715,7 @@
     "legal_basis": "L4",
     "owner": "[Name 4]",
     "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
+    "source_url": "https://www.cgtmse.in/",
     "status": "pending_manual"
   },
   "R-CG-C-020": {
@@ -724,7 +729,7 @@
     "legal_basis": "L4",
     "owner": "[Name 4]",
     "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
+    "source_url": "https://www.cgtmse.in/",
     "status": "pending_manual"
   },
   "R-CG-C-022": {
@@ -738,7 +743,7 @@
     "legal_basis": "L4",
     "owner": "[Name 4]",
     "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
+    "source_url": "https://www.cgtmse.in/",
     "status": "pending_manual"
   },
   "R-CG-C-024": {
@@ -752,7 +757,7 @@
     "legal_basis": "L4",
     "owner": "[Name 4]",
     "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
+    "source_url": "https://www.cgtmse.in/",
     "status": "pending_manual"
   },
   "R-CG-C-026": {
@@ -766,7 +771,7 @@
     "legal_basis": "L4",
     "owner": "[Name 4]",
     "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
+    "source_url": "https://www.cgtmse.in/",
     "status": "pending_manual"
   },
   "R-CG-C-028": {
@@ -780,7 +785,7 @@
     "legal_basis": "L4",
     "owner": "[Name 4]",
     "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
+    "source_url": "https://www.cgtmse.in/",
     "status": "pending_manual"
   },
   "R-CG-C-030": {
@@ -794,7 +799,7 @@
     "legal_basis": "L4",
     "owner": "[Name 4]",
     "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
+    "source_url": "https://www.cgtmse.in/",
     "status": "pending_manual"
   },
   "R-CG-C-032": {
@@ -808,7 +813,7 @@
     "legal_basis": "L4",
     "owner": "[Name 4]",
     "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
+    "source_url": "https://www.cgtmse.in/",
     "status": "pending_manual"
   },
   "R-CG-C-034": {
@@ -822,7 +827,7 @@
     "legal_basis": "L4",
     "owner": "[Name 4]",
     "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
+    "source_url": "https://www.cgtmse.in/",
     "status": "pending_manual"
   },
   "R-CG-C-036": {
@@ -836,190 +841,48 @@
     "legal_basis": "L4",
     "owner": "[Name 4]",
     "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
+    "source_url": "https://www.cgtmse.in/",
     "status": "pending_manual"
   },
-  "R-CG-C-038": {
+  "R-CG-C-064": {
+    "bytes": 136215,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124480148_Circular%2047%20-%20Withdrawal%20of%20LIC%20Coverage%20for%20Chief%20Promoters%20of%20Credit%20Guarantee%20Scheme%20guaranteed%20units.pdf&path=Circular",
     "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
+    "raw_file": "R-CG-C-064.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "205cf51d944d83fe1d595b323b4f53b4f72367ff9134caaf678f65cae23aa9a7",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124480148_Circular%2047%20-%20Withdrawal%20of%20LIC%20Coverage%20for%20Chief%20Promoters%20of%20Credit%20Guarantee%20Scheme%20guaranteed%20units.pdf&path=Circular",
+    "status": "rejected_no_text"
   },
-  "R-CG-C-039": {
+  "R-CG-C-065": {
+    "bytes": 329014,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124508771_Circular%2048%20-%20Credit%20Guarantee%20Scheme%20(CGS)%20-%20Modification%20in%20the%20procedure%20for%20Invocation%20of%20Guarantee%20and%20Preferment%20of%20Claim..pdf&path=Circular",
     "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
+    "raw_file": "R-CG-C-065.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "ab03f15a009b627ba5c329960bd3a0a21c3cc642876e152535ed93bf7e2944e4",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124508771_Circular%2048%20-%20Credit%20Guarantee%20Scheme%20(CGS)%20-%20Modification%20in%20the%20procedure%20for%20Invocation%20of%20Guarantee%20and%20Preferment%20of%20Claim..pdf&path=Circular",
+    "status": "rejected_no_text"
   },
-  "R-CG-C-040": {
+  "R-CG-C-066": {
+    "bytes": 761045,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124547886_Circular%2049%20-%20Credit%20Guarantee%20Scheme%20(CGS)%20-%20Payment%20of%20Guarantee%20Fee%20(GF)%20Annual%20Service%20Fee%20(ASF)%20-%20Clarification.pdf&path=Circular",
     "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
+    "raw_file": "R-CG-C-066.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "d847e0818c2835b3c0a3a2b04d1319b83ed9e306992d681fa6bfb0170d2ceaa9",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124547886_Circular%2049%20-%20Credit%20Guarantee%20Scheme%20(CGS)%20-%20Payment%20of%20Guarantee%20Fee%20(GF)%20Annual%20Service%20Fee%20(ASF)%20-%20Clarification.pdf&path=Circular",
+    "status": "rejected_no_text"
   },
-  "R-CG-C-041": {
+  "R-CG-C-067": {
+    "bytes": 459356,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528120974875_Circular%2030%20-%20Credit%20Guarantee%20Scheme%20-%20Changes%20in%20Guarantee%20fee%20structure%20-%20Procedure%20for%20remittance.pdf&path=Circular",
     "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-042": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-043": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-044": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-045": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-046": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-047": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-048": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-049": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-050": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-051": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-052": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-053": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-054": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-055": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-056": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-057": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-058": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-059": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-060": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-061": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-062": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-063": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
+    "raw_file": "R-CG-C-067.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "f717777598833a186cc737ee745ddbf1dbb034bd4fe20648cda44f45bea35324",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528120974875_Circular%2030%20-%20Credit%20Guarantee%20Scheme%20-%20Changes%20in%20Guarantee%20fee%20structure%20-%20Procedure%20for%20remittance.pdf&path=Circular",
+    "status": "rejected_no_text"
   },
   "R-CG-C-068": {
     "bytes": 452317,
@@ -4164,6 +4027,688 @@
     "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124455000_Circular%2046%20-%20Coverage%20of%20Units%20promoted%20by%20SC%20ST%20entrepreneurs%20under%20Credit%20Guarantee%20Scheme.pdf&path=Circular",
     "status": "rejected_no_text"
   },
+  "R-CG-C-358": {
+    "bytes": 559653,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528121020344_Circular%2031%20-%20Credit%20Guarantee%20Scheme%20-%20Changes%20in%20Guarantee%20fee%20structure.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-358.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "90d02eb2a69356f9dc4d303fd2cfdf517550d6f926c912f7cdae691cad9a6eaf",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528121020344_Circular%2031%20-%20Credit%20Guarantee%20Scheme%20-%20Changes%20in%20Guarantee%20fee%20structure.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-359": {
+    "bytes": 623411,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528121054688_Circular%2032%20-%20One%20time%20extension%20of%20time%20period%20for%20lodgment%20of%20application%20for%20guarantee%20cover%20under%20CGS.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-359.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "4edb9fa4a382d64c6625d27cf81b6770f7f4279b148b7a9b94ddf131a942c7c5",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528121054688_Circular%2032%20-%20One%20time%20extension%20of%20time%20period%20for%20lodgment%20of%20application%20for%20guarantee%20cover%20under%20CGS.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-360": {
+    "bytes": 1325088,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528123738935_Circular%2033%20-%20Life%20Insurance%20cover%20for%20Chief%20Promoter%20of%20units%20with%20guarantee%20cover%20under%20CGS.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-360.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "78a82864d5e432d57478e058ef18628a61abc8cf6d84aa0ebd43bf9f95768fda",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528123738935_Circular%2033%20-%20Life%20Insurance%20cover%20for%20Chief%20Promoter%20of%20units%20with%20guarantee%20cover%20under%20CGS.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-361": {
+    "bytes": 255754,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124068293_Circular%2034%20-%20One%20time%20extension%20of%20time%20period%20for%20lodgment%20of%20application%20for%20guarantee%20cover%20under%20CGS.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-361.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "3d17e461e9174b5a96fe37f793e763a5d652702fd29acac550551c104412da71",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124068293_Circular%2034%20-%20One%20time%20extension%20of%20time%20period%20for%20lodgment%20of%20application%20for%20guarantee%20cover%20under%20CGS.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-362": {
+    "bytes": 915925,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124100740_Circular%2035%20-%20Differential%20Pricing%20based%20on%20slab%20of%20Coverage.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-362.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "44f4fa9d94efd0694a7b64e2dbc3b0b5ef830c228fb9254b77304d3ca3127079",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124100740_Circular%2035%20-%20Differential%20Pricing%20based%20on%20slab%20of%20Coverage.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-363": {
+    "bytes": 1840808,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124133039_Circular%2036%20-%20Modifications%20in%20the%20Credit%20Guarantee%20Scheme.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-363.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "74ab180d1e489b25d7e7b1cf49d8573636cc1529d1e0c744ffd7b66ab73c8fed",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124133039_Circular%2036%20-%20Modifications%20in%20the%20Credit%20Guarantee%20Scheme.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-364": {
+    "bytes": 634498,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124185355_Circular%2037%20-%20Financial%20Sector%20Plan%20for%20the%20North%20Eastern%20Region-%20Modifications%20in%20the%20Credit%20Guarantee%20Scheme.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-364.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "214e60cd9736a4d5397bc4b80a001124c21eff77f77276b69285b359b24aeaf1",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124185355_Circular%2037%20-%20Financial%20Sector%20Plan%20for%20the%20North%20Eastern%20Region-%20Modifications%20in%20the%20Credit%20Guarantee%20Scheme.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-365": {
+    "bytes": 529507,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124206938_Circular%2038%20-%20Closure%20of%20Collecting%20Bank%20Accounts.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-365.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "b860fbcdfc24e2b61e4deda31678e08b6b8524db29674adffcc138b9b81a7d8a",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124206938_Circular%2038%20-%20Closure%20of%20Collecting%20Bank%20Accounts.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-366": {
+    "bytes": 245965,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124231094_Circular%2039%20-%20Modifications%20in%20the%20Credit%20Guarantee%20Scheme.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-366.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "2ccd068dc10322c8ea7ee440465fa72768f9fee1c8465ebbd9ea4af1a3294879",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528124231094_Circular%2039%20-%20Modifications%20in%20the%20Credit%20Guarantee%20Scheme.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-367": {
+    "bytes": 786801,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117801620_Circular%2019%20-%20Modifications%20Cancellation%20of%20Applications%20Lodged%20for%20Guarantee%20Cover.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-367.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "88851fb90c2f61e5d00c064932986e41e9e14571cbb1268318087424d02aeda0",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117801620_Circular%2019%20-%20Modifications%20Cancellation%20of%20Applications%20Lodged%20for%20Guarantee%20Cover.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-368": {
+    "bytes": 3938294,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117844598_Circular%2021%20-%20Modifications%20in%20the%20Credit%20Guarantee%20Fund%20Scheme%20for%20Small%20Industries%20(CGS).pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-368.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "f0d6624a2308073884e4a6a73a6a728c369166b74cf0fe72a26cdee403f2a647",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117844598_Circular%2021%20-%20Modifications%20in%20the%20Credit%20Guarantee%20Fund%20Scheme%20for%20Small%20Industries%20(CGS).pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-369": {
+    "bytes": 1406684,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117877418_Circular%2022%20-%20Credit%20Guarantee%20Scheme%20(CGS)%20-%20Switch%20over%20to%20new%20Organization-wide%20IT%20System.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-369.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "0c4fd85a50ba56655f28ead058cc652425696aca8d91c3ffd348ebaa0aeed788",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117877418_Circular%2022%20-%20Credit%20Guarantee%20Scheme%20(CGS)%20-%20Switch%20over%20to%20new%20Organization-wide%20IT%20System.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-370": {
+    "bytes": 988806,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117905119_Circular%2023%20-%20Modifications%20in%20the%20Credit%20Guarantee%20Fund%20Scheme%20for%20Small%20Industries%20(CGS).pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-370.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "56dd0a730ddb435872fe0ce777dc54c23b7e8d1a44b1aafd4c40291c30523a6c",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117905119_Circular%2023%20-%20Modifications%20in%20the%20Credit%20Guarantee%20Fund%20Scheme%20for%20Small%20Industries%20(CGS).pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-371": {
+    "bytes": 726746,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117934826_Circular%2024%20-%20Credit%20Guarantee%20Scheme%20(CGS)%20-%20New%20organization%20-%20wide%20IT%20System%20-%20Problems%20in%20Login.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-371.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "ecd0bd38abd61ac703fa795d798bede227b3f8ecc6007021af0f34a40795b61d",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117934826_Circular%2024%20-%20Credit%20Guarantee%20Scheme%20(CGS)%20-%20New%20organization%20-%20wide%20IT%20System%20-%20Problems%20in%20Login.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-372": {
+    "bytes": 403749,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117964510_Circular%2025%20-%20Eligibility%20of%20REGP%20Scheme%20of%20KVIC%20under%20Credit%20Guarantee%20Fund%20Scheme%20for%20Small%20Industries%20(CGFSI).pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-372.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "92d3696dab1b63f14cd87f5e9cc6198e27c3fd7f643ccd6446e6de9f755a6fc7",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117964510_Circular%2025%20-%20Eligibility%20of%20REGP%20Scheme%20of%20KVIC%20under%20Credit%20Guarantee%20Fund%20Scheme%20for%20Small%20Industries%20(CGFSI).pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-373": {
+    "bytes": 594311,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528120834549_Circular%2026%20-%20Credit%20Guarantee%20Scheme%20-%20Changes%20in%20Guarantee%20fee%20structure.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-373.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "278b6f69b7a9439df936783ae8e32dd39f0453cb5bfa9de5ca56a2af669a720d",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528120834549_Circular%2026%20-%20Credit%20Guarantee%20Scheme%20-%20Changes%20in%20Guarantee%20fee%20structure.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-374": {
+    "bytes": 540239,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528120868156_Circular%2027%20-%20Credit%20Guarantee%20Scheme%20-%20Changes%20in%20Guarantee%20fee%20structure.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-374.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "d7339325d11c297cd2664d60c91d0f278e732465a7f935c13bd4a06d8592cc20",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528120868156_Circular%2027%20-%20Credit%20Guarantee%20Scheme%20-%20Changes%20in%20Guarantee%20fee%20structure.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-375": {
+    "bytes": 628634,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528120902304_Circular%2028%20-%20Eligibility%20of%20credit%20facilities%20extended%20to%20Handicrafts%20artisans%20under%20Credit%20Guarantee%20Scheme%20(CGS)%20of%20CGTSI.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-375.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "97429a2b13b47f4b8656e8494d267e1d9b3a4f8c73e2dc4a938285297c5e77b3",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528120902304_Circular%2028%20-%20Eligibility%20of%20credit%20facilities%20extended%20to%20Handicrafts%20artisans%20under%20Credit%20Guarantee%20Scheme%20(CGS)%20of%20CGTSI.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-376": {
+    "bytes": 585842,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528120935040_Circular%2029%20-%20Eligibility%20of%20credit%20facilities%20to%20Agri-Clinics%20and%20Agri-Business%20Centres%20(ACABCs)%20under%20Credit%20Guarantee%20Scheme%20(CGS)%20of%20CGTSI.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-376.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "0417b33ac634f8c07412c6087064d0f82a986b22da878c4eab6d04b0e758d31c",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528120935040_Circular%2029%20-%20Eligibility%20of%20credit%20facilities%20to%20Agri-Clinics%20and%20Agri-Business%20Centres%20(ACABCs)%20under%20Credit%20Guarantee%20Scheme%20(CGS)%20of%20CGTSI.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-377": {
+    "bytes": 1211715,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117421451_Circular%209%20-%20Credit%20Guarantee%20Scheme%20-%20Lodgment%20of%20Applications%20by%20floppy.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-377.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "18a7301503ca09a7cccfd2507eea652d289ace7d21dd49d5ab9b1018040121f2",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117421451_Circular%209%20-%20Credit%20Guarantee%20Scheme%20-%20Lodgment%20of%20Applications%20by%20floppy.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-378": {
+    "bytes": 648959,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117449522_Circular%2010%20-%20Payment%20of%20Annual%20Service%20Fee%20On%20accounts%20guaranteed%20by%20CGTSI.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-378.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "a6efcca9e9d1f1ae29b55474640afa343f1c274d67ff6a4440f74e4d2619bdef",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117449522_Circular%2010%20-%20Payment%20of%20Annual%20Service%20Fee%20On%20accounts%20guaranteed%20by%20CGTSI.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-379": {
+    "bytes": 1483024,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117485770_Circular%2011%20-%20Credit%20Guarantee%20Fund%20Scheme%20for%20Small%20Industries%20(CGFSI)%20-%20Procedure.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-379.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "0c270ce653993197439896b88f1a121c1f367624ba4a60effe5ff7801ca49751",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117485770_Circular%2011%20-%20Credit%20Guarantee%20Fund%20Scheme%20for%20Small%20Industries%20(CGFSI)%20-%20Procedure.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-380": {
+    "bytes": 403601,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117514438_Circular%2012%20-%20Payment%20of%20ASF%20for%20FY%202003%20in%20respect%20of%20Guaranteed%20Accounts.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-380.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "305c4dbd306efdd918de150badc7cad2325ae9bc170042c8c454c73d31204d7f",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117514438_Circular%2012%20-%20Payment%20of%20ASF%20for%20FY%202003%20in%20respect%20of%20Guaranteed%20Accounts.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-381": {
+    "bytes": 415000,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117546977_Circular%2013%20-%20Credit%20Guarantee%20Fund%20Scheme%20for%20Small%20Industries%20(CGFSI).pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-381.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "a31ef8470bb89e33a024d1175740504d2f7e6ef9e29386f5dcdc2b5b4558e4b3",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117546977_Circular%2013%20-%20Credit%20Guarantee%20Fund%20Scheme%20for%20Small%20Industries%20(CGFSI).pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-382": {
+    "bytes": 338120,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117575442_Circular%2014%20-%20Credit%20Guarantee%20Scheme%20(CGFSI)%20-%20Clarifications.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-382.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "fadf04b64e2a8abffe04a12a03f6095ceba2b0e33442ad34c205428060e2d758",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117575442_Circular%2014%20-%20Credit%20Guarantee%20Scheme%20(CGFSI)%20-%20Clarifications.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-383": {
+    "bytes": 749152,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117600640_Circular%2015%20-%20Workshops%20Seminars%20on%20CGTSI%20Scheme.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-383.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "5e486c57bf5a586ac689a3d08b485646e1022f3107fe36307cc114c07bb230f3",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117600640_Circular%2015%20-%20Workshops%20Seminars%20on%20CGTSI%20Scheme.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-384": {
+    "bytes": 15,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117635552_Circular%2016%20-%20Credit%20Guarantee%20Fund%20Scheme%20for%20Small%20Industries%20(CGFSI)%20Invocation%20of%20Guarantee%20-%20Revised%20Claim%20Form%20for%20first%20instalment.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-384.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "28be26f5a52f3547dc0d89d3f4951a1322e94046288dfc307e1124d5f1fedcba",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117635552_Circular%2016%20-%20Credit%20Guarantee%20Fund%20Scheme%20for%20Small%20Industries%20(CGFSI)%20Invocation%20of%20Guarantee%20-%20Revised%20Claim%20Form%20for%20first%20instalment.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-385": {
+    "bytes": 727109,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117658619_Circular%2017%20-%20Communication%20is%20the%20Key.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-385.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "4478835fce19949f477687c62515eb9217e8a9f8a4bfa0bcdae7c235f4a998bb",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117658619_Circular%2017%20-%20Communication%20is%20the%20Key.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-386": {
+    "bytes": 632634,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117763525_Circular%2018%20-%20Thinclient%20Software%20-%20Modifications.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-386.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "05e03dc930a575cb8c04020846eb7cb16ee5f924bf26554c20a53317f7570488",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117763525_Circular%2018%20-%20Thinclient%20Software%20-%20Modifications.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-387": {
+    "bytes": 403639,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528116234576_Circular%201%20-%20Credit%20Guarantee%20Fund%20Scheme%20for%20Small%20Industries.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-387.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "fa2e404e5e851fc603cb96119dc72627cdf2d4969537ec2e58dcae8d0f9c1744",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528116234576_Circular%201%20-%20Credit%20Guarantee%20Fund%20Scheme%20for%20Small%20Industries.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-388": {
+    "bytes": 842968,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528116873474_Circular%202%20-%20Modifications%20in%20the%20Credit%20Guarantee%20Scheme.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-388.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "37b5db40ada54e8160755526220c6e1c21d66bd2cf74fc00c33e0bec07fdfcf8",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528116873474_Circular%202%20-%20Modifications%20in%20the%20Credit%20Guarantee%20Scheme.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-389": {
+    "bytes": 296595,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117215698_Circular%203%20-%20Credit%20Advice%20by%20Member%20Lending%20Institutions.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-389.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "905d321466722519db3fc7d1ab0e01d9b5665a498be5c6c1386f9e1bb90a1028",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117215698_Circular%203%20-%20Credit%20Advice%20by%20Member%20Lending%20Institutions.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-390": {
+    "bytes": 1142205,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117247176_Circular%204%20-%20Credit%20Guarantee%20Scheme%20-%20Modifications.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-390.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "600ce211aeef9a161f5934e3e31989cbf23e23c86478b9511b6f728d24caecc2",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117247176_Circular%204%20-%20Credit%20Guarantee%20Scheme%20-%20Modifications.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-391": {
+    "bytes": 273557,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117269279_Circular%205%20-%20CGFSI%20-%20Clarification%20Regarding%20IT%20PAN.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-391.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "8d574b850c08a1ca188dae61dc8eb6eecfc720bd108b0ecb2ee0c7e054dbdb7e",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117269279_Circular%205%20-%20CGFSI%20-%20Clarification%20Regarding%20IT%20PAN.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-392": {
+    "bytes": 374533,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117337826_Circular%206%20-%20Credit%20Guarantee%20Scheme%20(CGFSI)%20-%20Rephasement%20of%20guaranteed%20accounts.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-392.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "40e71e5a25f2516f8ed7a302de676b86040213c182b40901eeb99f1162332139",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117337826_Circular%206%20-%20Credit%20Guarantee%20Scheme%20(CGFSI)%20-%20Rephasement%20of%20guaranteed%20accounts.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-393": {
+    "bytes": 544989,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117366521_Circular%207%20-%20Interest%20on%20term%20loans%20of%20guaranteed%20accounts.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-393.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "6ebdd1f673e4b45e431b7c05ee08f2e00279c748b55683043cb6077941e44d19",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117366521_Circular%207%20-%20Interest%20on%20term%20loans%20of%20guaranteed%20accounts.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-394": {
+    "bytes": 633149,
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117391154_Circular%208%20-%20Credit%20Guarantee%20Scheme%20(CGFSI)%20-%20Minimum%20credit%20limit%20for%20Guarantee%20Cover.pdf&path=Circular",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-394.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "00dba4caa9484c68ef0a6113b5e1da5c8aad50e2bce51adebf802dd52946d648",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1528117391154_Circular%208%20-%20Credit%20Guarantee%20Scheme%20(CGFSI)%20-%20Minimum%20credit%20limit%20for%20Guarantee%20Cover.pdf&path=Circular",
+    "status": "rejected_no_text"
+  },
+  "R-CG-C-395": {
+    "bytes": 358529,
+    "date_evidence": "al Guidelines (Updated till October 13, 2020) I. I",
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1607434364745_Scheme%20Document%20-%20PM%20SVANidhi.pdf&path=Page",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-395.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "a491dd101c0c4e445eac3b7acd121cdd3c5568ff18463bf20efc1b615b96d08b",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1607434364745_Scheme%20Document%20-%20PM%20SVANidhi.pdf&path=Page",
+    "status": "ok",
+    "text_sha256": "987766109fad40e04d4a7452721661b8a77bff73b3e3010fc102ef26b401f7e6"
+  },
+  "R-CG-C-396": {
+    "bytes": 222070,
+    "date_evidence": "come into operations w.e.f. February 25, 2022 . The sam",
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1659539206433_Scheme%20Document_merged.pdf&path=Page",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-396.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "16d3136f491ef9573784deab9fb1f53cb3d73352a16e105957b5c3e817b03f98",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1659539206433_Scheme%20Document_merged.pdf&path=Page",
+    "status": "ok",
+    "text_sha256": "5833652ef902c6c34c8ff4e625ed390c9b4fb8ed42cd4a64b9d3f72c689b86cb"
+  },
+  "R-CG-C-397": {
+    "bytes": 219303,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1673693521864_Environmental%20and%20Social%20Policy.pdf&path=Page",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-397.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "457396dbb5d95f0dc8a8c4b1b7ba8a8d72bd4d571472c6e0bb9ebe756d383329",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1673693521864_Environmental%20and%20Social%20Policy.pdf&path=Page",
+    "status": "ok",
+    "text_sha256": "1000a7f6f56d3270c42fbf6b3a68dbdd087abbd2fcbc9e11957d686dcda8babc"
+  },
+  "R-CG-C-398": {
+    "bytes": 913144,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1673693563608_Environmental%20and%20Social%20Commitment%20Plan.pdf&path=Page",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-398.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "e75e791553c25309a35e5dfee7c6e599dd1d238a6549f26c34af739bcaa22dab",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1673693563608_Environmental%20and%20Social%20Commitment%20Plan.pdf&path=Page",
+    "status": "ok",
+    "text_sha256": "da42084337fb769d621f8fd32b10ffe02669cc96e93e1511e234e268ffacb9dd"
+  },
+  "R-CG-C-399": {
+    "bytes": 76288,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1707484689707_AML%20Training%20Policy.pdf&path=Page",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-399.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "7800ddfef568c7ad11119ac56cc506f6dde5536f31f153cd68bdd84951ad6f96",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1707484689707_AML%20Training%20Policy.pdf&path=Page",
+    "status": "ok",
+    "text_sha256": "0bc284c53ee296fa6bc5fc355bce73488a6d9bc752492259f3fb5a1c437a390f"
+  },
+  "R-CG-C-400": {
+    "bytes": 82843,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1707484760364_Anti-Bribery%20%20Anti-Corruption%20Policy.pdf&path=Page",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-400.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "138f23a87e3de4f4ca5d6017ada2f0e338bfb3016931f8af4336f990c130c27d",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1707484760364_Anti-Bribery%20%20Anti-Corruption%20Policy.pdf&path=Page",
+    "status": "ok",
+    "text_sha256": "ac7a87d440a43bfe40a9e43d1a3d88da34c83081ae6fc1f5e017d6ca65a5366a"
+  },
+  "R-CG-C-401": {
+    "bytes": 82763,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1707484884745_Fraud%20Management%20Policy.pdf&path=Page",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-401.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "3cabdc63f5fd0d1922aa6a0a2de46396dc4978c4081915583595f059c6f3c306",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1707484884745_Fraud%20Management%20Policy.pdf&path=Page",
+    "status": "ok",
+    "text_sha256": "082e5d1782476141efadaee5dabdd8a29aa9887d66c5fadbc6a4ab336c53ea5d"
+  },
+  "R-CG-C-402": {
+    "bytes": 177706,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1722941731455_AML%20Sanction%20Policy.pdf&path=Page",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-402.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "eca7a30682ab2c9d2e717559df95aa13f3ead0f60e97c235ac97b546e8ca3b49",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1722941731455_AML%20Sanction%20Policy.pdf&path=Page",
+    "status": "ok",
+    "text_sha256": "987d60d74c6de64c351fd96399c188af7ae9eadfc1852b808c104e9ca6077e64"
+  },
+  "R-CG-C-403": {
+    "bytes": 78366,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1722941755846_Procedure%20Document.pdf&path=Page",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-403.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "2a5d53935cced905a003d67fc84bca9a7680d981b49905033865709f277d8472",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1722941755846_Procedure%20Document.pdf&path=Page",
+    "status": "ok",
+    "text_sha256": "4e13c5a4c65f1309f26e8a0f1a4ae3bf9316503e80aa47ce1c591a6140d7e56d"
+  },
+  "R-CG-C-404": {
+    "bytes": 74272,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1725894145578_CGTMSE_Privacy%20Policy%20for%20website.pdf&path=Page",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-404.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "27a0742c1d6447bd33a618af1313fb9a929c504bb70a851fcc469fdb19c1647d",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1725894145578_CGTMSE_Privacy%20Policy%20for%20website.pdf&path=Page",
+    "status": "ok",
+    "text_sha256": "714151ddd4ac5700d33996922ff65562a00d8378d5d01be258a4c898d639a9c8"
+  },
+  "R-CG-C-405": {
+    "bytes": 480057,
+    "date_evidence": "heme had come into force from August 1, 2000 and had",
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1743176302611_CGTMSE%20-%20Scheme%20Document%20CGS%20I_updated%20as%20on%20Apr%201%202025.pdf&path=Page",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-405.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "ed286df99cb97b9ef434c8e22c2e0e79ced5b8432a3ead3f5216a2c1731634e1",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1743176302611_CGTMSE%20-%20Scheme%20Document%20CGS%20I_updated%20as%20on%20Apr%201%202025.pdf&path=Page",
+    "status": "ok",
+    "text_sha256": "ab62d0f52fc9abe48a74808c03ccb1d1d3754aa1fdf39c0fce626ce36bb8d797"
+  },
+  "R-CG-C-406": {
+    "bytes": 603932,
+    "date_evidence": "heme had come into force from August 1, 2000 and had",
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1743176302611_CGTMSE%20-%20Scheme%20Document%20CGS%20I_updated%20as%20on%20Apr%201%202026.pdf&path=Page",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-406.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "dee2269e5f07fd3eba76ad8cd585a4fb43408e8dadb92c88283d36e3bd4aeed4",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1743176302611_CGTMSE%20-%20Scheme%20Document%20CGS%20I_updated%20as%20on%20Apr%201%202026.pdf&path=Page",
+    "status": "ok",
+    "text_sha256": "c3a0b14e9542731298372aa7dc8be56d2c83fd68cc386b09bcd26e1ac674ef7e"
+  },
+  "R-CG-C-407": {
+    "bytes": 342339,
+    "date_evidence": "GS -II)” was launched w.e.f. January 25, 2017. Subseque",
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1744137228030_NBFC-%20CGS%20II%20Scheme%20Document.pdf&path=Page",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-407.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "5fa50767c53bc89555601bb8deb51399d3c0807129e798d9807dd48e8fe648a9",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1744137228030_NBFC-%20CGS%20II%20Scheme%20Document.pdf&path=Page",
+    "status": "ok",
+    "text_sha256": "5b4ad7c3ec7feb87dec8f1b48f8f4b70e0eb6f6627cb8da4aa3a6352ddf0d549"
+  },
+  "R-CG-C-408": {
+    "bytes": 262070,
+    "date_evidence": "pdf metadata CreationDate",
+    "final_url": "https://www.cgtmse.in/Default/ViewFile/?id=1754919522963_Availing%20Credit%20Guarantees%20through%20CGTMSE%20Your%20Path%20to%20Collateral-Free%20Loans.pdf&path=Page",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-408.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "5f4cfd709867b1c2e6b6376817c4930b8e1cf9fa04f0806ad5a05040240ad427",
+    "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1754919522963_Availing%20Credit%20Guarantees%20through%20CGTMSE%20Your%20Path%20to%20Collateral-Free%20Loans.pdf&path=Page",
+    "status": "ok",
+    "text_sha256": "32d75e306d8e6633be5435ae1156cc2457ac60f1de65e0b931c08f8ab891a954"
+  },
+  "R-CG-C-409": {
+    "bytes": 85408,
+    "final_url": "https://www.cgtmse.in/Home/VS/100",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-409.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "a50922bd91c5b9e80d840da3990acaf61a245a06866839656e120878a36e03a2",
+    "source_url": "https://www.cgtmse.in/Home/VS/100",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "c4c95c912287584818ebb90be3b543c629dacf5c82a4d914059166c1517cf9c4"
+  },
+  "R-CG-C-410": {
+    "bytes": 92217,
+    "final_url": "https://www.cgtmse.in/Home/VS/101",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-410.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "553e52469ed8cee376807a1cda31a4763dddec068ae02ffd9b7584303c67b3dc",
+    "source_url": "https://www.cgtmse.in/Home/VS/101",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "d9271f3a385eb61b9666ab1afb8e47b9196b57914c59c3282b23e0c78eabec1b"
+  },
+  "R-CG-C-411": {
+    "bytes": 90657,
+    "date_evidence": "n DD/MM/YYYY format. For e.g. 31st December 2007 is to be",
+    "final_url": "https://www.cgtmse.in/Home/VS/102",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-411.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "5c4130618e39515d83af4679c01a0d6495fbd269f2058bab83816a576e413c4d",
+    "source_url": "https://www.cgtmse.in/Home/VS/102",
+    "status": "ok",
+    "text_sha256": "44f7a9b68d894b598a9b047ee72e410a9e6d897fac9698cfc285bc5f78c25c05"
+  },
+  "R-CG-C-412": {
+    "bytes": 91086,
+    "date_evidence": "approved/ renewed on or after April 01, 2025 is given",
+    "final_url": "https://www.cgtmse.in/Home/VS/47",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-412.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "1cc373200677ad8de71afc83abd53269d03ff7acde4009ab551865a7b779e980",
+    "source_url": "https://www.cgtmse.in/Home/VS/47",
+    "status": "ok",
+    "text_sha256": "2d685de4dba04e9a1d5d7a3998a1f9f01f3f1545231e137c07dc001e9b3c6dd1"
+  },
+  "R-CG-C-413": {
+    "bytes": 72915,
+    "final_url": "https://www.cgtmse.in/Home/VS/50",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-413.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "b3b97629cc569f8c213d83f263dc687342bf9b22cc7c5acc4c4fd8e34b2b4acc",
+    "source_url": "https://www.cgtmse.in/Home/VS/50",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "76e9bdb859f125b385648a186fcfcd333e7b5cd1f2c34d680d0cea8d7f6fe0ab"
+  },
+  "R-CG-C-414": {
+    "bytes": 71632,
+    "final_url": "https://www.cgtmse.in/Home/VS/55",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-414.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "e67be4d95d95f2a139b9205773f3abc4772c3d7bf4a03f78cdba3ccc684b8078",
+    "source_url": "https://www.cgtmse.in/Home/VS/55",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "7e8da8c65d8974362a0f59ed6fcfad937990e743fe64e0afb5deb8fa6e477762"
+  },
+  "R-CG-C-415": {
+    "bytes": 73469,
+    "final_url": "https://www.cgtmse.in/Home/VS/56",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-415.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "d4b189fb4bbea7580a81ce533e2a06c516689df39d4fda1722bdf9b8dba20483",
+    "source_url": "https://www.cgtmse.in/Home/VS/56",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "b4ca9d6ccc97a87d4ad98aec7158998d99bb05921500636c3bee19381ab18a8c"
+  },
+  "R-CG-C-416": {
+    "bytes": 84814,
+    "final_url": "https://www.cgtmse.in/Home/VS/57",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-416.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "74b9a1ea68583bb8ba6ee17898e82b844231396c86735f747c20fcf3fec10ae6",
+    "source_url": "https://www.cgtmse.in/Home/VS/57",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "a27a68dbb20fd72bc244cf854084bac96098d4e42174c7ba56f88ef0323dcad7"
+  },
+  "R-CG-C-417": {
+    "bytes": 146079,
+    "final_url": "https://www.cgtmse.in/Home/VS/71",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-417.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "9f601f6b8ccb50a4df92fe164c7ae709585163dab1445b55007db7a0d13359bd",
+    "source_url": "https://www.cgtmse.in/Home/VS/71",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "dade6c98b73e91d5cba3dd0699b86baa43376d4eff2bc5215fdc4f5dd6da9c80"
+  },
+  "R-CG-C-418": {
+    "bytes": 72090,
+    "final_url": "https://www.cgtmse.in/Home/VS/72",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-418.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "f2352bd514f9855e55e47569fe871e8e69a81e0233ee69592e18c34d9a48416d",
+    "source_url": "https://www.cgtmse.in/Home/VS/72",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "dcca09942c2f105ee0f64111e03e5dacbd8b50853f2e47b8fddf075aefb3174f"
+  },
+  "R-CG-C-419": {
+    "bytes": 93903,
+    "final_url": "https://www.cgtmse.in/Home/VS/94",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-419.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "4ae1836d99d49353ca90ec745ee3cd17e482ba6f8bd3e14b34e606de7dada97e",
+    "source_url": "https://www.cgtmse.in/Home/VS/94",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "4917d71a379135a5079ab3ae0146bb6b2df9966fb04d9173263c0d66280a37b0"
+  },
+  "R-CG-C-420": {
+    "bytes": 91913,
+    "final_url": "https://www.cgtmse.in/Home/VS/95",
+    "legal_basis": "L4",
+    "raw_file": "R-CG-C-420.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "d9c5283eb4d6893636281c3e2e3ee647df6feb9f62e95daa485b2a44ef9d277f",
+    "source_url": "https://www.cgtmse.in/Home/VS/95",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "3790da21d97cd9f4d1f640d5fb60015721bcd6ee7421501b21abed39a07d6353"
+  },
   "R-DATA-01": {
     "legal_basis": "L1",
     "owner": "[Name 4]",
@@ -4474,82 +5019,763 @@
     "status": "ok",
     "text_sha256": "99f63cd872b14d6480ce16205beed3272796a8833a6be05e7022e31d46d1a199"
   },
-  "R-GST-C-021": {
+  "R-GST-C-032": {
+    "bytes": 1890878,
+    "date_evidence": "1 GST – An Update (As on 1st June, 2019) 2 This",
+    "final_url": "https://cbic-gst.gov.in/pdf/01062019-GST-An-Update.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-032.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "00c451fa8af44c79e4463e1e3ba4f58e3cf28bfee95801a0276bfb6883c56773",
+    "source_url": "https://cbic-gst.gov.in/pdf/01062019-GST-An-Update.pdf",
+    "status": "ok",
+    "text_sha256": "f0fb672ea5e210bb08c3b7718059078b13dc1f69453ab8800c9a278ba5511ecb"
+  },
+  "R-GST-C-033": {
+    "bytes": 3796267,
+    "date_evidence": "-Central Excise (N.T.) dated 31.12.2025. 2. As p",
+    "final_url": "https://cbic-gst.gov.in/pdf/ADVISORY_03-2026_CE_DECLARATION.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-033.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "71b69d5a57bc0fa2156853c15d47480abc59bfd929f5f36bd9fc78b557dbe4b3",
+    "source_url": "https://cbic-gst.gov.in/pdf/ADVISORY_03-2026_CE_DECLARATION.pdf",
+    "status": "ok",
+    "text_sha256": "5085c114fee0d6edf2e16cba6393a00fb5f028cc8a76833d215394b0b3d62266"
+  },
+  "R-GST-C-034": {
+    "bytes": 2512122,
+    "date_evidence": "ZU- CHENNAI Dated 10.02.2026 ADVISORY",
+    "final_url": "https://cbic-gst.gov.in/pdf/ADVISORY_05-2026_CE_PMT_01.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-034.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "5fc578784b429442ce62fe79eb095a48670556e6c7d9a6521ca20832b2647db1",
+    "source_url": "https://cbic-gst.gov.in/pdf/ADVISORY_05-2026_CE_PMT_01.pdf",
+    "status": "ok",
+    "text_sha256": "178c48439496f79fbde794b6b0bfcdf1cdc6528bb01200549df87bc98fde18d0"
+  },
+  "R-GST-C-035": {
+    "bytes": 7422971,
+    "date_evidence": "Cess) 2025 Act, notified on 16.12.2025 and being",
+    "final_url": "https://cbic-gst.gov.in/pdf/Advisory%20No.%2009_2026%20dated%20050626_HSNS.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-035.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "18734fc8b400e82be66979eaae11195680c3f8a9f718c71b5cc1e440278fa3bf",
+    "source_url": "https://cbic-gst.gov.in/pdf/Advisory%20No.%2009_2026%20dated%20050626_HSNS.pdf",
+    "status": "ok",
+    "text_sha256": "926c329ca34066d92f838de54d7ffb4bdbeac0bd6c96f55ce802918a45e45595"
+  },
+  "R-GST-C-036": {
+    "bytes": 7422971,
+    "date_evidence": "Cess) 2025 Act, notified on 16.12.2025 and being",
+    "final_url": "https://cbic-gst.gov.in/pdf/Advisory%20No.%2009_2026%20dated%20050626_HSNS_%20for%20filing%20Sealing_De%20sealing%20request.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-036.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "18734fc8b400e82be66979eaae11195680c3f8a9f718c71b5cc1e440278fa3bf",
+    "source_url": "https://cbic-gst.gov.in/pdf/Advisory%20No.%2009_2026%20dated%20050626_HSNS_%20for%20filing%20Sealing_De%20sealing%20request.pdf",
+    "status": "ok",
+    "text_sha256": "926c329ca34066d92f838de54d7ffb4bdbeac0bd6c96f55ce802918a45e45595"
+  },
+  "R-GST-C-037": {
+    "bytes": 3349619,
+    "date_evidence": "5-Central Excise (N.T.) dated 31.12.2025. 2. The",
+    "final_url": "https://cbic-gst.gov.in/pdf/Advisory%20No.%2010%20of%202026%20dated%2009.06.2026%20on%20filing%20procedure%20of%20CE%20INT%2001%20and%20CE_INT02.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-037.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "dc3aebfead4592bd1f29f6ea37642de5a12f3177559fc8a688fb0367d68e1710",
+    "source_url": "https://cbic-gst.gov.in/pdf/Advisory%20No.%2010%20of%202026%20dated%2009.06.2026%20on%20filing%20procedure%20of%20CE%20INT%2001%20and%20CE_INT02.pdf",
+    "status": "ok",
+    "text_sha256": "a45b5728d173c9dfeb9bb8392018416d1876546b41af2863fb19cca41b279fd8"
+  },
+  "R-GST-C-038": {
+    "bytes": 1611443,
+    "date_evidence": "the ACES-GST application from 21st June 2026 onwards.",
+    "final_url": "https://cbic-gst.gov.in/pdf/Advisory%20No.%2011of%202026%20on%202%20Factor%20Authentication.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-038.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "04fa09b6a74eed3b7dc7eb8f6c28537a7be2b056ea1fc2cec932e979c0742e79",
+    "source_url": "https://cbic-gst.gov.in/pdf/Advisory%20No.%2011of%202026%20on%202%20Factor%20Authentication.pdf",
+    "status": "ok",
+    "text_sha256": "033f8f47f613858fe96d0d8bd57b9d7852ecc30151eb53516de1628c54007ec0"
+  },
+  "R-GST-C-039": {
+    "bytes": 335108,
+    "date_evidence": "ENNAI-Part(1) Date: 29.01.2026 ADVISORY",
+    "final_url": "https://cbic-gst.gov.in/pdf/Advisory022026.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-039.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "8fbd6f62cbea30f839ebefbb29a593315df7dc5e3c0abd1de326dca6f3ff1aa0",
+    "source_url": "https://cbic-gst.gov.in/pdf/Advisory022026.pdf",
+    "status": "ok",
+    "text_sha256": "eca812f7572aa8ce871e79f8784d94c6f302ff266c01021fdfcb47d6272067bf"
+  },
+  "R-GST-C-040": {
+    "bytes": 4120956,
+    "date_evidence": "5-Central Excise (N.T.) dated 31.12.2025. 2. As p",
+    "final_url": "https://cbic-gst.gov.in/pdf/AdvisoryNo%2008%20of%202026_CE%20Declaration_Change%20_Addition_disposal%20of%20machines.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-040.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "37ed9e41fb748178c1680d6c8227624b7150be07d5e079c922a2ec5b5d06b4f8",
+    "source_url": "https://cbic-gst.gov.in/pdf/AdvisoryNo%2008%20of%202026_CE%20Declaration_Change%20_Addition_disposal%20of%20machines.pdf",
+    "status": "ok",
+    "text_sha256": "7968ebe32a8ed35c76807d702b46cb658031af614dd9d45f62f4554079ba8b62"
+  },
+  "R-GST-C-041": {
+    "bytes": 4771260,
+    "date_evidence": "d introduced with effect from 01.02.2026. 2. The H",
+    "final_url": "https://cbic-gst.gov.in/pdf/AdvisoryNo.%2007_2026HSNSAMENDMENT%20DECLARATION.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-041.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "10388b59325c423328eb694a7ac115ae87f3b8406727667878c107f466607bcc",
+    "source_url": "https://cbic-gst.gov.in/pdf/AdvisoryNo.%2007_2026HSNSAMENDMENT%20DECLARATION.pdf",
+    "status": "ok",
+    "text_sha256": "f0de63e11adeeba07a74b6638032a0dc6e48684f5d5767b0125b1b7efa685c93"
+  },
+  "R-GST-C-042": {
+    "bytes": 4739816,
+    "date_evidence": "Cess) Act, 2025 notified on 16.12.2025 and intro",
+    "final_url": "https://cbic-gst.gov.in/pdf/AdvisoryNo.06of2026dated12.03.26onfilingofHSNSReturns_RET-01.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-042.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "b0c427aad03fcabc8e27552dcb07100e3ed0d86cc42e6dccf74ce7e0f2998535",
+    "source_url": "https://cbic-gst.gov.in/pdf/AdvisoryNo.06of2026dated12.03.26onfilingofHSNSReturns_RET-01.pdf",
+    "status": "ok",
+    "text_sha256": "02b7d8945e3c6049f18f7d7634da7b726b5f7cb7267ade3c49f79006325dafaa"
+  },
+  "R-GST-C-043": {
+    "bytes": 89795,
+    "date_evidence": "ntral Excise New Delhi, the 1st July, 2024 G.S.R...",
+    "final_url": "https://cbic-gst.gov.in/pdf/CE-17-2024-Eng.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-043.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "017120bcca1177456e08c61c3f0b4980443c4a514601c6795df03b96f8e84d96",
+    "source_url": "https://cbic-gst.gov.in/pdf/CE-17-2024-Eng.pdf",
+    "status": "ok",
+    "text_sha256": "a9a0e37d1a9c03bad753f8f2b3be80b04c95f34314cfc165ed0feb265596cd91"
+  },
+  "R-GST-C-044": {
+    "bytes": 94856,
+    "date_evidence": "ुल् क नई ददल् ली, ददनांक 1 जुलाई, 2024 सा.का",
+    "final_url": "https://cbic-gst.gov.in/pdf/CE-17-2024-Hindi.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-044.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "1498bbae13756d0ee252abe7e8eac37d271089a3a129b36e0144619f29053560",
+    "source_url": "https://cbic-gst.gov.in/pdf/CE-17-2024-Hindi.pdf",
+    "status": "ok",
+    "text_sha256": "473f2f19365d94ba377e8d99db6c33868174a888df2cd65aa22380077ec31e3a"
+  },
+  "R-GST-C-045": {
+    "bytes": 157416,
+    "date_evidence": "NT) ACT, 2023 NO. 30 OF 2023 [18th August, 2023.] An Act",
+    "final_url": "https://cbic-gst.gov.in/pdf/CGST-Amendment-Act-2023.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-045.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "d6bb1672f11119ae64183808b425157a0db1672fb768a1916c022d3f9b7d631a",
+    "source_url": "https://cbic-gst.gov.in/pdf/CGST-Amendment-Act-2023.pdf",
+    "status": "ok",
+    "text_sha256": "286842789c473030f97a734e804d8ca95fbb435827c4cd8f6eb4986067d2bb15"
+  },
+  "R-GST-C-046": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/Circular-55thGSTC-Services.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-047": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/Circular-No-249-2025.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-048": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/Circular-No-250-2025.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-049": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/Circular-Services-Co-insurance-Re-insurance.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-050": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/Citizens_Charter_CBIC_GST.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-051": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/DuePayment.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-052": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/GST-Circular.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-053": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/Guidance-Note-for-Importers-Exporters-v2.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-054": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/HSNS%20ACT%20No%2035%20of%202025.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-055": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/HSNS_Advisory_Helpdesk_01-2026.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-056": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/HSNS_Declaration_filing_procedure.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-057": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/Helpdesk-Advisory-8-2025-29072025.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-058": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/IGST-Amendment-Act-2023.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-059": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/Introduction_of_2FA.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-060": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/NN-26-2024-Hindi.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-061": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/NN-26-2024_Eng.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-062": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/NN-29-Eng.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-063": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/NN-29-Hindi.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-064": {
+    "legal_basis": "L4",
+    "owner": "[Name 5]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/NN-30-2024-Eng.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-065": {
+    "legal_basis": "L4",
+    "owner": "[Name 5]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/NN-30-2024-Hindi.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-066": {
+    "legal_basis": "L4",
+    "owner": "[Name 5]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/NN-31-2024-Eng.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-067": {
+    "legal_basis": "L4",
+    "owner": "[Name 5]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/NN-31-2024-Hindiss.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-068": {
+    "legal_basis": "L4",
+    "owner": "[Name 5]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/Notification%20No%2001_2026%20-%20HSNS%20CESS.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-069": {
+    "legal_basis": "L4",
+    "owner": "[Name 5]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/Notification%20No%2002_2026%20-%20HSNS%20CESS.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-070": {
+    "legal_basis": "L4",
+    "owner": "[Name 5]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/Notification%20No%2003_2026%20-%20HSNS%20CESS.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-071": {
+    "legal_basis": "L4",
+    "owner": "[Name 5]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/Press-Release-54-GSTC-090924.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-072": {
+    "legal_basis": "L4",
+    "owner": "[Name 5]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/central-excise-6-24-eng.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-073": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/central-excise-6-24-hindi.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-074": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/central-excise-7-24-eng.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-075": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/central-excise-7-24-hindi.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-076": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/cir-cgst-246-03-2025.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-077": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/circular-229-23-2024-GST.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-078": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/circular-230.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-079": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/circular-231.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-080": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/circular-232.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-081": {
+    "legal_basis": "L4",
+    "owner": "[Name 4]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/circular-233.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-082": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://cbic-gst.gov.in/",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/circular-237-31-2024-GST.pdf",
     "status": "pending_manual"
   },
-  "R-GST-C-022": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://gstcouncil.gov.in/press-release",
-    "status": "pending_manual"
-  },
-  "R-GST-C-023": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://gstcouncil.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GST-C-024": {
+  "R-GST-C-083": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://cbic-gst.gov.in/",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/circular-238-32-2024-GST.pdf",
     "status": "pending_manual"
   },
-  "R-GST-C-025": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://gstcouncil.gov.in/press-release",
-    "status": "pending_manual"
-  },
-  "R-GST-C-026": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://gstcouncil.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GST-C-027": {
+  "R-GST-C-084": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://cbic-gst.gov.in/",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/circular-239-33-2024-GST.pdf",
     "status": "pending_manual"
   },
-  "R-GST-C-028": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://gstcouncil.gov.in/press-release",
-    "status": "pending_manual"
-  },
-  "R-GST-C-029": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://gstcouncil.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GST-C-030": {
+  "R-GST-C-085": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://cbic-gst.gov.in/",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/circular-services-228-22-2024-GST.pdf",
     "status": "pending_manual"
   },
-  "R-GST-C-031": {
+  "R-GST-C-086": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://cbic-gst.gov.in/",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/corrigendum-Circular-237-31-2024-GST.pdf",
     "status": "pending_manual"
+  },
+  "R-GST-C-087": {
+    "legal_basis": "L4",
+    "owner": "[Name 1]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/gst-ct-11-2025.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-088": {
+    "legal_basis": "L4",
+    "owner": "[Name 1]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/ins-gst-02-2025.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-089": {
+    "legal_basis": "L4",
+    "owner": "[Name 1]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/ins-gst-no-03-2025.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-090": {
+    "legal_basis": "L4",
+    "owner": "[Name 1]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/instruction-02-2024-GST-12082024.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-091": {
+    "legal_basis": "L4",
+    "owner": "[Name 6]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/letter-trade-associations-webmaster.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-092": {
+    "legal_basis": "L4",
+    "owner": "[Name 6]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/ovw-short.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-093": {
+    "legal_basis": "L4",
+    "owner": "[Name 6]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/procedure-locate-e-payment-challan.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-094": {
+    "legal_basis": "L4",
+    "owner": "[Name 6]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/public-notice-st-gst-last-date-eng.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-095": {
+    "legal_basis": "L4",
+    "owner": "[Name 6]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/public-notice-st-gst-last-date-hindi.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-096": {
+    "legal_basis": "L4",
+    "owner": "[Name 6]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/public-notice-st-new-address-eng.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-097": {
+    "legal_basis": "L4",
+    "owner": "[Name 6]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/public-notice-st-new-address-hindi.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-098": {
+    "legal_basis": "L4",
+    "owner": "[Name 6]",
+    "reason": "host_blocked: error: ReadTimeout",
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://cbic-gst.gov.in/pdf/sectoral-working-gp-contactdtls-14june2017.pdf",
+    "status": "pending_manual"
+  },
+  "R-GST-C-099": {
+    "bytes": 576553,
+    "final_url": "https://gstcouncil.gov.in/sites/default/files/2024-11/advisory.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-099.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "12bfdc73fd49d787464f058decd8cb7a204f3dfed28f9db8fe6d1104ec705308",
+    "source_url": "https://gstcouncil.gov.in/sites/default/files/2024-11/advisory.pdf",
+    "status": "rejected_no_text"
+  },
+  "R-GST-C-100": {
+    "bytes": 33944,
+    "date_evidence": "GovtofIndia/GSTC/2023 Date: 25-07-2024 Subject",
+    "final_url": "https://gstcouncil.gov.in/sites/default/files/2024-11/advisory_in_case_of_tobacco_products.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-100.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "08d61a10a4b79f4eb893d9369f6b219f3fda21af331bb52ff4220e5de1394324",
+    "source_url": "https://gstcouncil.gov.in/sites/default/files/2024-11/advisory_in_case_of_tobacco_products.pdf",
+    "status": "ok",
+    "text_sha256": "8d9ee2b147d49fd49858dd7ef92ace97ca75f612a5d288a1da37592483fd793a"
+  },
+  "R-GST-C-101": {
+    "bytes": 539769,
+    "date_evidence": "Circular No.01l2017 Dated: 20th September, 2017 All Chie",
+    "final_url": "https://gstcouncil.gov.in/sites/default/files/2024-11/document_1.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-101.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "b19ec3b66d01531315b4c992b70879f9510d7f57e969a098e59c866e830ee0f3",
+    "source_url": "https://gstcouncil.gov.in/sites/default/files/2024-11/document_1.pdf",
+    "status": "ok",
+    "text_sha256": "7b31f286d0b25f61c04c790b2e8de1ba86771835559f54faec70fcd03f6ca1df"
+  },
+  "R-GST-C-102": {
+    "bytes": 38635379,
+    "date_evidence": "GST Council Meeting 3rd and 4th September, 2025 Volume -",
+    "final_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/006b06de-0a53-4bc8-8007-f9c6f3130e37.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-102.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "b5cfe0fe42bc535ce9a415a30280c11e8d55153c02ce75e616c360c40de11106",
+    "source_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/006b06de-0a53-4bc8-8007-f9c6f3130e37.pdf",
+    "status": "ok",
+    "text_sha256": "cfae73ded665f83427d5923e9bde1fb40a0fc59100df492c60112a5ad0324bb2"
+  },
+  "R-GST-C-103": {
+    "bytes": 26610153,
+    "date_evidence": "h GST Council Meeting 28-29 June 2022 Volu",
+    "final_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/47-agenda.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-103.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "964e57e791529f454aaf2705061411ca847845d6ddfe726a394e6633203b3f3a",
+    "source_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/47-agenda.pdf",
+    "status": "ok",
+    "text_sha256": "8ffcb11883ffaa68329b7718a701661544aa1edd9dc54bcea506b5f419c5b08c"
+  },
+  "R-GST-C-104": {
+    "bytes": 36544363,
+    "date_evidence": "48th GST Council Meeting 17th December 2022 Volu",
+    "final_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/48-agenda.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-104.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "0db163c435c436581af98c1567c78153e043fa4b787ebe04fff0f5013fb792cd",
+    "source_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/48-agenda.pdf",
+    "status": "ok",
+    "text_sha256": "565ec7036ff5301d38f0c8b42243253a2ab4069327b4f926373a616f5ffb1df9"
+  },
+  "R-GST-C-105": {
+    "bytes": 27352242,
+    "date_evidence": "da for GST Council Meeting 18th February 2023",
+    "final_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/49-agenda_0.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-105.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "b05b7a5fc1ba5ccdbb1a82ac98d0a8079e64a9868b477811a8a4bde2ef72e7e4",
+    "source_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/49-agenda_0.pdf",
+    "status": "ok",
+    "text_sha256": "181406ffe3344cc090864242f033760158898ad5506d612d7ceb48f2751d6dbe"
+  },
+  "R-GST-C-106": {
+    "bytes": 60328184,
+    "date_evidence": "r 50th GST Council Meeting 11th July 2023 Volume",
+    "final_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/50-agenda.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-106.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "bbc54cafc72ecb1beb41ac5f0b39fa04ddd2a1a95da5722bd2c3bbf732575318",
+    "source_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/50-agenda.pdf",
+    "status": "ok",
+    "text_sha256": "bc8b52260d746d346c1cfc2db42ce9e912f618a04782b4f0c5665f4ec82c7c48"
+  },
+  "R-GST-C-107": {
+    "bytes": 360952,
+    "date_evidence": "51st GST Council Meeting 2nd August 2023",
+    "final_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/51.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-107.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "8a94b6a23ba09692c909be34d7f2deb2715d36ce59c26e9cb46539a311d2f611",
+    "source_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/51.pdf",
+    "status": "ok",
+    "text_sha256": "69ab1013326e213af815f76be491e0dc6f337735f4fef19a3782f654f6b0c653"
+  },
+  "R-GST-C-108": {
+    "bytes": 13335017,
+    "date_evidence": "r 52nd GST Council Meeting 07th October, 2023 Volume",
+    "final_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/52nd_gstcm.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-108.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "99bbc7438fd57e5da54db335d0253e4f9844cefdf13e8be941384af7572bd480",
+    "source_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/52nd_gstcm.pdf",
+    "status": "ok",
+    "text_sha256": "9a5a85eae8d233a261dfa193d25f51ac3e85556604bba1a1c3b37a25580cc3d3"
+  },
+  "R-GST-C-109": {
+    "bytes": 33495404,
+    "date_evidence": "r 53rd GST Council Meeting 22nd June, 2024 Volume -",
+    "final_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/53rd_gstcm_agenda.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-109.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "7b4cddb575c56119e2f894b345d5a9059b53617b38de46580a75fa52cd1b114f",
+    "source_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/53rd_gstcm_agenda.pdf",
+    "status": "ok",
+    "text_sha256": "f28390934ff802d24dfeb2449383da095ca83940f503e651d3adc6bf532b92d2"
+  },
+  "R-GST-C-110": {
+    "bytes": 36136157,
+    "date_evidence": "r 54th GST Council Meeting 09th September, 2024 Volume -",
+    "final_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/54_meeting_agenda_0.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-110.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "b2916ebd7720b56a1c3ce4eb62a3001e6aa142baae8fe7bda215e38ee68856cb",
+    "source_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/54_meeting_agenda_0.pdf",
+    "status": "ok",
+    "text_sha256": "0d42fd4f3bd592205358487768176b809bad5fd1ce473833aa5df6497caab60c"
+  },
+  "R-GST-C-111": {
+    "bytes": 23176240,
+    "date_evidence": "r 55th GST Council Meeting 21st December, 2024 Volume -",
+    "final_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/55th_meeting_agenda_compressed_1.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-111.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "33fd324042363b4692285c033984f445872d1a18d0e29eb75314e02f86dd9d6f",
+    "source_url": "https://gstcouncil.gov.in/sites/default/files/Agenda/55th_meeting_agenda_compressed_1.pdf",
+    "status": "ok",
+    "text_sha256": "c56ccf653641331fe8da2301477d00ff06d0240e1ab8239f98aefe896e05ed80"
+  },
+  "R-GST-C-112": {
+    "bytes": 26532771,
+    "date_evidence": "mended retrospectively w.e.f. 01.07.2017",
+    "final_url": "https://gstcouncil.gov.in/sites/default/files/Minutes/47_minutes_0_5.pdf",
+    "legal_basis": "L4",
+    "raw_file": "R-GST-C-112.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "e0d372b79502ff9131bd044b8d39675146438c80852d076908d170f082a8f1d2",
+    "source_url": "https://gstcouncil.gov.in/sites/default/files/Minutes/47_minutes_0_5.pdf",
+    "status": "ok",
+    "text_sha256": "85ab5e73c29aabeee146f112081faa26e613d5feb232647948f99f89175dba1e"
   },
   "R-GZ-001": {
     "legal_basis": "L2",
@@ -7855,26 +9081,41 @@
     "source_url": "https://sidbi.in/en/publication-and-reports",
     "status": "pending_manual"
   },
-  "R-SIDBI-P-013": {
+  "R-SIDBI-P-016": {
+    "bytes": 115196,
+    "final_url": "https://www.sidbi.in/en/msme-pulse-edition/December-2025",
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://sidbi.in/en/publication-and-reports",
-    "status": "pending_manual"
+    "raw_file": "R-SIDBI-P-016.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "f62c96268d6640f9818940fe28b4ae690c161bda3a2a93e675cd0956a1948ab2",
+    "source_url": "https://www.sidbi.in/en/msme-pulse-edition/December-2025",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "d943f2d654337200de0ca4eeba864bf5d7dcc1410b58bf17273f854b430a67ec"
   },
-  "R-SIDBI-P-014": {
+  "R-SIDBI-P-017": {
+    "bytes": 115218,
+    "final_url": "https://www.sidbi.in/en/msme-pulse-edition/July-2026",
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://sidbi.in/en/publication-and-reports",
-    "status": "pending_manual"
+    "raw_file": "R-SIDBI-P-017.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "9294198db289bb72435ffabdccf2b77af848e8dd6929c5105553862ba67ecea2",
+    "source_url": "https://www.sidbi.in/en/msme-pulse-edition/July-2026",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "1f68b812befd3cb9789b61bf6050b74aeec42fb1895239508df067b099627159"
   },
-  "R-SIDBI-P-015": {
+  "R-SIDBI-P-018": {
+    "bytes": 115288,
+    "final_url": "https://www.sidbi.in/en/msme-pulse-edition/September-2025",
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://sidbi.in/en/publication-and-reports",
-    "status": "pending_manual"
+    "raw_file": "R-SIDBI-P-018.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "c7524f0d9021634c8a8a0bf2ef5d24fd308d15b0ee63e1d34b7b80ac793a4715",
+    "source_url": "https://www.sidbi.in/en/msme-pulse-edition/September-2025",
+    "status": "needs_date",
+    "status_before_date": "ok",
+    "text_sha256": "034efdbc2137a27ad859b5eb6ecb2e5eecf23d2d4940c91f16f5533853728925"
   },
   "R-STATE-001": {
     "legal_basis": "L4",
@@ -8210,6 +9451,11 @@
     "reason": "beyond what the script could reach",
     "source_url": "https://www.m1xchange.com/faqs/",
     "status": "pending_manual"
+  },
+  "host:cbic-gst.gov.in": {
+    "first_failure": "2026-11-05T08:44:08+00:00",
+    "reason": "error: ReadTimeout",
+    "retry_after": "2026-11-06T08:44:08+00:00"
   },
   "host:msme.gov.in": {
     "first_failure": "2026-11-05T05:11:42+00:00",

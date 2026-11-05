@@ -5,7 +5,7 @@ file name -> PDF metadata -> retrieval date (bank charge schedules only, meaning
 A seeded 10% per date_source is marked yes in the Check column: open the document and confirm. If wrong, correct
 `effective_from` in `manifest.yaml` and set `date_source: human`. Human and curated dates are never recomputed.
 
-Dated: extracted 148, wef 7, url 24, pdf_metadata 15, retrieved 4. To check: 22. Needs review: 1. Needs a date: 6.
+Dated: extracted 181, wef 8, url 25, pdf_metadata 24, retrieved 4. To check: 27. Needs review: 1. Needs a date: 19.
 
 | doc_id | effective_from | date_source | Evidence | Source | Check |
 |---|---|---|---|---|---|
@@ -32,15 +32,16 @@ Dated: extracted 148, wef 7, url 24, pdf_metadata 15, retrieved 4. To check: 22.
 | R-BANK-S-013 | 2026-07-03 | url | url ddmmyyyy: 03072026 | https://bandhan.bank.in/sites/default/files/2026-07/Schedule-of-Charges-of-Home-Loan-and-LAP-03072026.pdf |  |
 | R-BANK-S-014 | 2026-08-01 | url | url ddmmyyyy: 01082026 | https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-Charges-Agri-Loan-01082026.pdf |  |
 | R-BANK-S-015 | 2026-08-01 | url | url ddmmyyyy: 01082026 | https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-Charges-Bandhan-Commodity-Finance-01082026.pdf |  |
-| R-BANK-S-016 | 2026-01-01 | wef | e amount being prepaid, w.e.f Jan 01, 2026 | https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-Charges-SME-and-Corporate-Loans-21082026.pdf | **yes** |
+| R-BANK-S-016 | 2026-01-01 | wef | e amount being prepaid, w.e.f Jan 01, 2026 | https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-Charges-SME-and-Corporate-Loans-21082026.pdf |  |
 | R-BANK-S-017 | 2026-08-01 | url | url month folder: 2026-08 | https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-Charges-Small-Loan-Against-Property.pdf | **yes** |
 | R-BANK-S-018 | 2025-07-02 | extracted | .38/ 01.01.001/2025-26 dated July 02, 2025, shall be | https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-charges-for-Business-Banking-Group-21082026.pdf |  |
 | R-BANK-S-019 | 2024-06-29 | extracted | on-Resident Deposits (w.e.f. June 29, 2024) Sched | https://bandhan.bank.in/sites/default/files/2026-08/Standard-Schedule-of-Charges-for-Savings-NR-Accounts-and-Debit-Cards.pdf | **yes** |
+| R-BANK-S-025 | 2026-05-01 | url | url month folder: 2026-05 | https://bandhan.bank.in/sites/default/files/2026-05/SOC-NR-Account-Product-Variants.pdf |  |
 | R-CG-03 | 2026-06-15 | extracted | it Guarantee Scheme 2026 CGS1 15/06/2026 View View | https://www.cgtmse.in/Circulars |  |
 | R-CG-04 | 2000-06-01 | wef | ible borrowers effective from June 1, 2000 | https://sbi.bank.in/web/business/sme/sme-government-schemes/cgtmse |  |
 | R-CG-C-002 | 2025-09-16 | url | url dmy: 16.09.2025 | https://www.cgtmse.in/Default/ViewFile/?id=1767027845598_Loan%20Operational%20Guidelines%20-%2016.09.2025(Annexure%20-II).pdf&path=Circular |  |
 | R-CG-C-003 | 2025-09-16 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1767027921148_Credit%20Card%20Operational%20guidelines%20-%2016.9.25(Annexure%20-III).pdf&path=Circular | **yes** |
-| R-CG-C-006 | 2026-02-06 | pdf_metadata | pdf metadata ModDate | https://www.cgtmse.in/Default/ViewFile/?id=1770397812214_Circular%20257%20-%20CGS%20for%20Export%20credit%20merged.pdf&path=Circular |  |
+| R-CG-C-006 | 2026-02-06 | pdf_metadata | pdf metadata ModDate | https://www.cgtmse.in/Default/ViewFile/?id=1770397812214_Circular%20257%20-%20CGS%20for%20Export%20credit%20merged.pdf&path=Circular | **yes** |
 | R-CG-C-008 | 2026-02-10 | extracted | फिविी 10, 2026 सीजीट | https://www.cgtmse.in/Default/ViewFile/?id=1772467706992_Circular%20258%20-%20TPG%20definition.pdf&path=Circular |  |
 | R-CG-C-009 | 2026-01-23 | extracted | 23 जनविी 2026 सीज | https://www.cgtmse.in/Default/ViewFile/?id=1772467742052_Circular%20257%20-%20CGS%20for%20Export%20credit.pdf&path=Circular |  |
 | R-CG-C-015 | 2026-06-15 | extracted | 15 जून 2026 सीजीटी | https://www.cgtmse.in/Default/ViewFile/?id=1782398519918_Hindi%20Circular%20-%20TReDS-150626.pdf&path=Circular |  |
@@ -122,7 +123,7 @@ Dated: extracted 148, wef 7, url 24, pdf_metadata 15, retrieved 4. To check: 22.
 | R-CG-C-280 | 2022-06-06 | extracted | SVANidhi June 06, 2022 All Le | https://www.cgtmse.in/Default/ViewFile/?id=1654625838148_Circular%20no.%20202%20-%20CGS%20PMS-%20Revision%20in%20Scheme%20Guidelines%20and%20Extension%20of%20the%20Lending%20period_Final.pdf&path=Circular |  |
 | R-CG-C-282 | 2022-10-11 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1665508184793_Circular-205_Benefits%20to%20Agniveer.pdf&path=Circular |  |
 | R-CG-C-293 | 2021-10-08 | extracted | October 08, 2021 All Memb | https://www.cgtmse.in/Default/ViewFile/?id=1633870635262_Circular%20no.%20187%20-%20Allowing%20submission%20of%20application%20anytime-%20Final.pdf&path=Circular |  |
-| R-CG-C-294 | 2021-10-08 | extracted | October 08, 2021 All Memb | https://www.cgtmse.in/Default/ViewFile/?id=1633958523782_Circular%20no.%20186%20-%20Increase%20in%20the%20threshold%20for%20Waiver%20of%20Legal%20Action_Final.pdf&path=Circular | **yes** |
+| R-CG-C-294 | 2021-10-08 | extracted | October 08, 2021 All Memb | https://www.cgtmse.in/Default/ViewFile/?id=1633958523782_Circular%20no.%20186%20-%20Increase%20in%20the%20threshold%20for%20Waiver%20of%20Legal%20Action_Final.pdf&path=Circular |  |
 | R-CG-C-295 | 2015-02-24 | extracted | ference No. 9443/claims dated February 24, 2015 requesti | https://www.cgtmse.in/Default/ViewFile/?id=1637604934484_Circular%20No%20188%20for%20audit%20certificate.pdf&path=Circular |  |
 | R-CG-C-296 | 2021-11-18 | extracted | November 18, 2021 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1637667604994_Circular%20no.%20189%20-%20Eligibility%20of%20FPO%20under%20CGTMSE%20_final.pdf&path=Circular |  |
 | R-CG-C-297 | 2022-01-03 | extracted | January 03, 2022 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1642598376662_REV_Circular%20no.%20191%20-%20Clarification%20on%20Hybrid%20Model%20Rev.pdf&path=Circular |  |
@@ -163,32 +164,75 @@ Dated: extracted 148, wef 7, url 24, pdf_metadata 15, retrieved 4. To check: 22.
 | R-CG-C-348 | 2012-10-10 | extracted | ircular No. 62/2012 -13 dated October 10, 2012 whereby, | https://www.cgtmse.in/Default/ViewFile/?id=1528139983318_Circular%20145-%202017-18%20-%20Modifications%20in%20the%20guidelines%20for%20lodgment%20of%20claim.pdf&path=Circular |  |
 | R-CG-C-349 | 2017-12-08 | extracted | to our Circular No. 134 dated December 08, 2017 advising | https://www.cgtmse.in/Default/ViewFile/?id=1528140003890_Circular%20146%20-%202017-18%20%E2%80%93%20Udyog%20Aadhaar%20Number%20Mandatory%20for%20Guarantee%20coverage.pdf&path=Circular |  |
 | R-CG-C-350 | 2018-03-21 | extracted | March 21, 2018 To all | https://www.cgtmse.in/Default/ViewFile/?id=1528140026231_Circular%20147-%202017-18%20%E2%80%93%20Coverage%20of%20unsecured%20loan%20for%20NBFCs.pdf&path=Circular | **yes** |
+| R-CG-C-395 | 2020-10-13 | extracted | al Guidelines (Updated till October 13, 2020) I. I | https://www.cgtmse.in/Default/ViewFile/?id=1607434364745_Scheme%20Document%20-%20PM%20SVANidhi.pdf&path=Page |  |
+| R-CG-C-396 | 2022-02-25 | extracted | come into operations w.e.f. February 25, 2022 . The sam | https://www.cgtmse.in/Default/ViewFile/?id=1659539206433_Scheme%20Document_merged.pdf&path=Page |  |
+| R-CG-C-397 | 2023-01-13 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1673693521864_Environmental%20and%20Social%20Policy.pdf&path=Page | **yes** |
+| R-CG-C-398 | 2023-01-13 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1673693563608_Environmental%20and%20Social%20Commitment%20Plan.pdf&path=Page |  |
+| R-CG-C-399 | 2024-02-08 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1707484689707_AML%20Training%20Policy.pdf&path=Page |  |
+| R-CG-C-400 | 2024-02-08 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1707484760364_Anti-Bribery%20%20Anti-Corruption%20Policy.pdf&path=Page |  |
+| R-CG-C-401 | 2024-02-08 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1707484884745_Fraud%20Management%20Policy.pdf&path=Page |  |
+| R-CG-C-402 | 2024-03-19 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1722941731455_AML%20Sanction%20Policy.pdf&path=Page |  |
+| R-CG-C-403 | 2024-03-19 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1722941755846_Procedure%20Document.pdf&path=Page |  |
+| R-CG-C-404 | 2024-08-29 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1725894145578_CGTMSE_Privacy%20Policy%20for%20website.pdf&path=Page |  |
+| R-CG-C-405 | 2000-08-01 | extracted | heme had come into force from August 1, 2000 and had | https://www.cgtmse.in/Default/ViewFile/?id=1743176302611_CGTMSE%20-%20Scheme%20Document%20CGS%20I_updated%20as%20on%20Apr%201%202025.pdf&path=Page |  |
+| R-CG-C-406 | 2000-08-01 | extracted | heme had come into force from August 1, 2000 and had | https://www.cgtmse.in/Default/ViewFile/?id=1743176302611_CGTMSE%20-%20Scheme%20Document%20CGS%20I_updated%20as%20on%20Apr%201%202026.pdf&path=Page |  |
+| R-CG-C-407 | 2017-01-25 | extracted | GS -II)” was launched w.e.f. January 25, 2017. Subseque | https://www.cgtmse.in/Default/ViewFile/?id=1744137228030_NBFC-%20CGS%20II%20Scheme%20Document.pdf&path=Page |  |
+| R-CG-C-408 | 2025-08-11 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1754919522963_Availing%20Credit%20Guarantees%20through%20CGTMSE%20Your%20Path%20to%20Collateral-Free%20Loans.pdf&path=Page |  |
+| R-CG-C-411 | 2007-12-31 | extracted | n DD/MM/YYYY format. For e.g. 31st December 2007 is to be | https://www.cgtmse.in/Home/VS/102 |  |
+| R-CG-C-412 | 2025-04-01 | extracted | approved/ renewed on or after April 01, 2025 is given | https://www.cgtmse.in/Home/VS/47 |  |
 | R-GST-C-001 | 2015-12-04 | extracted | Tax (GST) December 4, 2015 Co | https://gstcouncil.gov.in/sites/default/files/2024-02/cea-rpt-rnr.pdf |  |
 | R-GST-C-002 | 2010-01-01 | url | url ddmmyyyy: 01012010 | https://gstcouncil.gov.in/sites/default/files/2024-02/comments-dor-1st-discn-paper-01012010.pdf |  |
-| R-GST-C-003 | 2016-09-08 | extracted | FIRST AMENDMENT) ACT, 2016 [8th September, 2016.] An Act | https://gstcouncil.gov.in/sites/default/files/2024-02/consti-amend-act.pdf |  |
+| R-GST-C-003 | 2016-09-08 | extracted | FIRST AMENDMENT) ACT, 2016 [8th September, 2016.] An Act | https://gstcouncil.gov.in/sites/default/files/2024-02/consti-amend-act.pdf | **yes** |
 | R-GST-C-004 | 2010-04-01 | wef | e introduced with effect from April 1, 2010 | https://gstcouncil.gov.in/sites/default/files/2024-02/first_discussion_paper_on_gst.pdf |  |
 | R-GST-C-005 | 2026-10-08 | extracted | er up to ₹ 5 crore Posted On: 08 OCT 2026 7:03PM by | https://gstcouncil.gov.in/sites/default/files/2026-10/press_release.pdf |  |
-| R-GST-C-006 | 2019-04-01 | wef | as undergone a change w.e.f. 01.04.2019 | https://gstcouncil.gov.in/sites/default/files/2024-03/model-all-india-gst-audit-manual_final.pdf |  |
+| R-GST-C-006 | 2019-04-01 | wef | as undergone a change w.e.f. 01.04.2019 | https://gstcouncil.gov.in/sites/default/files/2024-03/model-all-india-gst-audit-manual_final.pdf | **yes** |
 | R-GST-C-007 | 2024-09-25 | extracted | September 25, 2024 | https://gstcouncil.gov.in/sites/default/files/2024-09/compensation_cess.pdf |  |
 | R-GST-C-008 | 2024-09-15 | extracted | STC/2024 15-09-2024 OFFICE | https://gstcouncil.gov.in/sites/default/files/2024-09/om_gom_on_life_and_health_insurance_1.pdf |  |
 | R-GST-C-010 | 2025-08-01 | url | url month folder: 2025-08 | https://gstcouncil.gov.in/sites/default/files/2025-08/meeting_notice_56th_gst_council_meeting_0.pdf |  |
 | R-GST-C-011 | 2025-09-17 | extracted | ught Circus, New Delhi-110001 17-09-2025 VACANCY C | https://gstcouncil.gov.in/sites/default/files/2025-09/document-339.pdf |  |
 | R-GST-C-012 | 2025-09-03 | extracted | held in New Delhi Posted On: 03 SEP 2025 11:28PM b | https://gstcouncil.gov.in/sites/default/files/2025-09/faq_0.pdf |  |
 | R-GST-C-013 | 2025-09-03 | extracted | New Delhi, today Posted On : 03 SEP 2025 10 : 39PM | https://gstcouncil.gov.in/sites/default/files/2025-09/press_release_press_information_bureau_0.pdf |  |
-| R-GST-C-014 | 2025-12-13 | extracted | T administrations was held on 13 December, 2025 at Bharat | https://gstcouncil.gov.in/sites/default/files/2026-01/monthly_newsletter_december_2025_1_0.pdf | **yes** |
+| R-GST-C-014 | 2025-12-13 | extracted | T administrations was held on 13 December, 2025 at Bharat | https://gstcouncil.gov.in/sites/default/files/2026-01/monthly_newsletter_december_2025_1_0.pdf |  |
 | R-GST-C-015 | 2025-02-01 | extracted | haraman, in the Parliament on 01.02.2025. The Budg | https://gstcouncil.gov.in/sites/default/files/2026-02/newsletter_january_issue_0.pdf |  |
 | R-GST-C-016 | 2026-02-10 | extracted | OODS AND SERVICBS TAX COUNCTL 10.02.2026 The GST C | https://gstcouncil.gov.in/sites/default/files/2026-02/vacancy_circular_0.pdf |  |
 | R-GST-C-017 | 2026-07-01 | url | url month folder: 2026-07 | https://gstcouncil.gov.in/sites/default/files/2026-07/vacancy_circular_gstat_jk_0.pdf |  |
 | R-GST-C-018 | 2026-08-11 | extracted | S AND SERVICES TAX COUNCIL 11-08-2026 The GST | https://gstcouncil.gov.in/sites/default/files/2026-08/vacancy-circular-and-procedure-guidelines-for-engangement_0.pdf |  |
 | R-GST-C-019 | 2026-10-01 | url | url month folder: 2026-10 | https://gstcouncil.gov.in/sites/default/files/2026-10/faqs_on_recommendations_made_in_57th_gst_council_meeting.pdf |  |
 | R-GST-C-020 | 2026-10-08 | extracted | er up to ₹ 5 crore Posted On: 08 OCT 2026 7:03PM by | https://gstcouncil.gov.in/sites/default/files/2026-10/press_release_0.pdf |  |
+| R-GST-C-032 | 2019-06-01 | extracted | 1 GST – An Update (As on 1st June, 2019) 2 This | https://cbic-gst.gov.in/pdf/01062019-GST-An-Update.pdf |  |
+| R-GST-C-033 | 2025-12-31 | extracted | -Central Excise (N.T.) dated 31.12.2025. 2. As p | https://cbic-gst.gov.in/pdf/ADVISORY_03-2026_CE_DECLARATION.pdf |  |
+| R-GST-C-034 | 2026-02-10 | extracted | ZU- CHENNAI Dated 10.02.2026 ADVISORY | https://cbic-gst.gov.in/pdf/ADVISORY_05-2026_CE_PMT_01.pdf |  |
+| R-GST-C-035 | 2025-12-16 | extracted | Cess) 2025 Act, notified on 16.12.2025 and being | https://cbic-gst.gov.in/pdf/Advisory%20No.%2009_2026%20dated%20050626_HSNS.pdf |  |
+| R-GST-C-036 | 2025-12-16 | extracted | Cess) 2025 Act, notified on 16.12.2025 and being | https://cbic-gst.gov.in/pdf/Advisory%20No.%2009_2026%20dated%20050626_HSNS_%20for%20filing%20Sealing_De%20sealing%20request.pdf |  |
+| R-GST-C-037 | 2025-12-31 | extracted | 5-Central Excise (N.T.) dated 31.12.2025. 2. The | https://cbic-gst.gov.in/pdf/Advisory%20No.%2010%20of%202026%20dated%2009.06.2026%20on%20filing%20procedure%20of%20CE%20INT%2001%20and%20CE_INT02.pdf |  |
+| R-GST-C-038 | 2026-06-21 | extracted | the ACES-GST application from 21st June 2026 onwards. | https://cbic-gst.gov.in/pdf/Advisory%20No.%2011of%202026%20on%202%20Factor%20Authentication.pdf |  |
+| R-GST-C-039 | 2026-01-29 | extracted | ENNAI-Part(1) Date: 29.01.2026 ADVISORY | https://cbic-gst.gov.in/pdf/Advisory022026.pdf |  |
+| R-GST-C-040 | 2025-12-31 | extracted | 5-Central Excise (N.T.) dated 31.12.2025. 2. As p | https://cbic-gst.gov.in/pdf/AdvisoryNo%2008%20of%202026_CE%20Declaration_Change%20_Addition_disposal%20of%20machines.pdf |  |
+| R-GST-C-041 | 2026-02-01 | extracted | d introduced with effect from 01.02.2026. 2. The H | https://cbic-gst.gov.in/pdf/AdvisoryNo.%2007_2026HSNSAMENDMENT%20DECLARATION.pdf |  |
+| R-GST-C-042 | 2025-12-16 | extracted | Cess) Act, 2025 notified on 16.12.2025 and intro | https://cbic-gst.gov.in/pdf/AdvisoryNo.06of2026dated12.03.26onfilingofHSNSReturns_RET-01.pdf |  |
+| R-GST-C-043 | 2024-07-01 | extracted | ntral Excise New Delhi, the 1st July, 2024 G.S.R... | https://cbic-gst.gov.in/pdf/CE-17-2024-Eng.pdf |  |
+| R-GST-C-044 | 2024-07-01 | extracted | ुल् क नई ददल् ली, ददनांक 1 जुलाई, 2024 सा.का | https://cbic-gst.gov.in/pdf/CE-17-2024-Hindi.pdf |  |
+| R-GST-C-045 | 2023-08-18 | extracted | NT) ACT, 2023 NO. 30 OF 2023 [18th August, 2023.] An Act | https://cbic-gst.gov.in/pdf/CGST-Amendment-Act-2023.pdf |  |
+| R-GST-C-100 | 2024-07-25 | extracted | GovtofIndia/GSTC/2023 Date: 25-07-2024 Subject | https://gstcouncil.gov.in/sites/default/files/2024-11/advisory_in_case_of_tobacco_products.pdf |  |
+| R-GST-C-101 | 2017-09-20 | extracted | Circular No.01l2017 Dated: 20th September, 2017 All Chie | https://gstcouncil.gov.in/sites/default/files/2024-11/document_1.pdf |  |
+| R-GST-C-102 | 2025-09-04 | extracted | GST Council Meeting 3rd and 4th September, 2025 Volume - | https://gstcouncil.gov.in/sites/default/files/Agenda/006b06de-0a53-4bc8-8007-f9c6f3130e37.pdf |  |
+| R-GST-C-103 | 2022-06-29 | extracted | h GST Council Meeting 28-29 June 2022 Volu | https://gstcouncil.gov.in/sites/default/files/Agenda/47-agenda.pdf |  |
+| R-GST-C-104 | 2022-12-17 | extracted | 48th GST Council Meeting 17th December 2022 Volu | https://gstcouncil.gov.in/sites/default/files/Agenda/48-agenda.pdf |  |
+| R-GST-C-105 | 2023-02-18 | extracted | da for GST Council Meeting 18th February 2023 | https://gstcouncil.gov.in/sites/default/files/Agenda/49-agenda_0.pdf |  |
+| R-GST-C-106 | 2023-07-11 | extracted | r 50th GST Council Meeting 11th July 2023 Volume | https://gstcouncil.gov.in/sites/default/files/Agenda/50-agenda.pdf |  |
+| R-GST-C-107 | 2023-08-02 | extracted | 51st GST Council Meeting 2nd August 2023 | https://gstcouncil.gov.in/sites/default/files/Agenda/51.pdf |  |
+| R-GST-C-108 | 2023-10-07 | extracted | r 52nd GST Council Meeting 07th October, 2023 Volume | https://gstcouncil.gov.in/sites/default/files/Agenda/52nd_gstcm.pdf |  |
+| R-GST-C-109 | 2024-06-22 | extracted | r 53rd GST Council Meeting 22nd June, 2024 Volume - | https://gstcouncil.gov.in/sites/default/files/Agenda/53rd_gstcm_agenda.pdf |  |
+| R-GST-C-110 | 2024-09-09 | extracted | r 54th GST Council Meeting 09th September, 2024 Volume - | https://gstcouncil.gov.in/sites/default/files/Agenda/54_meeting_agenda_0.pdf |  |
+| R-GST-C-111 | 2024-12-21 | extracted | r 55th GST Council Meeting 21st December, 2024 Volume - | https://gstcouncil.gov.in/sites/default/files/Agenda/55th_meeting_agenda_compressed_1.pdf |  |
+| R-GST-C-112 | 2017-07-01 | wef | mended retrospectively w.e.f. 01.07.2017 | https://gstcouncil.gov.in/sites/default/files/Minutes/47_minutes_0_5.pdf |  |
 | R-MSME-06 | 2021-03-05 | extracted | MSME vide S.O. 1055(E) dated 05th March 2021) is | https://www.udyamregistration.gov.in/Important.aspx |  |
 | R-RATE-01-2026-09 | 2026-09-30 | extracted | ss Releases ( 304 kb ) Date : Sep 30, 2026 Lending a | https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63702 |  |
 | R-RATE-01-A | 2026-08-31 | extracted | ss Releases ( 269 kb ) Date : Aug 31, 2026 Lending a | https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63481 |  |
-| R-RATE-01-B | 2026-06-30 | extracted | ss Releases ( 304 kb ) Date : Jun 30, 2026 Lending a | https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63049 |  |
+| R-RATE-01-B | 2026-06-30 | extracted | ss Releases ( 304 kb ) Date : Jun 30, 2026 Lending a | https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63049 | **yes** |
 | R-RATE-01-C | 2026-03-30 | extracted | ss Releases ( 271 kb ) Date : Mar 30, 2026 Lending a | https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=62471 |  |
-| R-SIDBI-01 | 2026-10-07 | extracted | rights reserved Last Updated: 07-10-2026 | https://www.sidbi.in/working-capital |  |
-| R-SIDBI-02 | 2026-10-07 | extracted | rights reserved Last Updated: 07-10-2026 | https://www.sidbi.in/project-funding |  |
+| R-SIDBI-01 | 2026-10-07 | extracted | rights reserved Last Updated: 07-10-2026 | https://www.sidbi.in/working-capital | **yes** |
+| R-SIDBI-02 | 2026-10-07 | extracted | rights reserved Last Updated: 07-10-2026 | https://www.sidbi.in/project-funding | **yes** |
 | R-SIDBI-03 | 2026-10-07 | extracted | rights reserved Last Updated: 07-10-2026 | https://www.sidbi.in/machinery-loan |  |
 | R-SIDBI-04 | 2026-10-07 | extracted | rights reserved Last Updated: 07-10-2026 | https://www.sidbi.in/cgtmse |  |
 | R-SIDBI-05 | 2026-10-07 | extracted | rights reserved Last Updated: 07-10-2026 | https://www.sidbi.in/treds |  |
@@ -197,15 +241,15 @@ Dated: extracted 148, wef 7, url 24, pdf_metadata 15, retrieved 4. To check: 22.
 | R-SIDBI-P-003 | 2026-10-07 | extracted | rights reserved Last Updated: 07-10-2026 | https://www.sidbi.in/en/msme-pulse |  |
 | R-SIDBI-P-004 | 2026-05-20 | url | url dmy: 20-05-2026 | https://www.sidbi.in/uploads/FD-Interest-Rate-20-05-2026.pdf |  |
 | R-SIDBI-P-005 | 2026-02-01 | extracted | ve Union Budget, presented on February 1, 2026, outlines | https://www.sidbi.in/uploads/Union_Budget_Analysis_2026.pdf |  |
-| R-SIDBI-P-006 | 1991-03-31 | extracted | ss at a glance (`crore) As on March 31 1991 2017 2018 | https://www.sidbi.in/uploads/financialreport/SIDBI-Part-I-Eng-Single-page-view-Low.pdf |  |
+| R-SIDBI-P-006 | 1991-03-31 | extracted | ss at a glance (`crore) As on March 31 1991 2017 2018 | https://www.sidbi.in/uploads/financialreport/SIDBI-Part-I-Eng-Single-page-view-Low.pdf | **yes** |
 | R-SIDBI-P-007 | 2021-12-08 | pdf_metadata | pdf metadata CreationDate | https://www.sidbi.in/uploads/financialreport/SIDBI_AR_Part-II_Eng.pdf |  |
 | R-SIDBI-P-008 | 2020-11-17 | pdf_metadata | pdf metadata CreationDate | https://www.sidbi.in/uploads/financialreport/Sidbi-AR-Part-I-Eng.pdf |  |
-| R-SIDBI-P-009 | 2020-11-17 | pdf_metadata | pdf metadata CreationDate | https://www.sidbi.in/uploads/financialreport/Sidbi-AR-Part-II-Eng.pdf | **yes** |
+| R-SIDBI-P-009 | 2020-11-17 | pdf_metadata | pdf metadata CreationDate | https://www.sidbi.in/uploads/financialreport/Sidbi-AR-Part-II-Eng.pdf |  |
 | R-TREDS-004 | 2025-05-01 | url | url month folder: 2025/05 | https://www.m1xchange.com/wp-content/uploads/2025/05/KYC-Documents-Requirement-List-1.pdf |  |
 | R-TREDS-005 | 2025-03-20 | extracted | by BOD Date of Establishment March 20, 2025 Version N | https://www.m1xchange.com/wp-content/uploads/2025/06/CSR-policy-V-1.0_20.03.2025.pdf |  |
-| R-TREDS-006 | 2022-10-28 | extracted | e Original Registration Date: 2022-10-28 Effective | https://www.m1xchange.com/wp-content/uploads/2025/10/bsi-Certficate.pdf |  |
-| R-TREDS-007 | 2026-08-01 | url | url month folder: 2026/08 | https://www.m1xchange.com/wp-content/uploads/2026/08/M1xchange_Corporate_Communication_NACH_v4.pdf |  |
-| R-TREDS-008 | 2026-08-01 | url | url month folder: 2026/08 | https://www.m1xchange.com/wp-content/uploads/2026/08/M1xchange_Financier_Communication_NACH_v7_Aug.pdf | **yes** |
+| R-TREDS-006 | 2022-10-28 | extracted | e Original Registration Date: 2022-10-28 Effective | https://www.m1xchange.com/wp-content/uploads/2025/10/bsi-Certficate.pdf | **yes** |
+| R-TREDS-007 | 2026-08-01 | url | url month folder: 2026/08 | https://www.m1xchange.com/wp-content/uploads/2026/08/M1xchange_Corporate_Communication_NACH_v4.pdf | **yes** |
+| R-TREDS-008 | 2026-08-01 | url | url month folder: 2026/08 | https://www.m1xchange.com/wp-content/uploads/2026/08/M1xchange_Financier_Communication_NACH_v7_Aug.pdf |  |
 | R-TREDS-009 | 2026-08-01 | url | url month folder: 2026/08 | https://www.m1xchange.com/wp-content/uploads/2026/08/M1xchange_MSME_Seller_Communication_NACH_v3.pdf |  |
 
 ## Needs review: date before 1990 or after AS_OF_DATE (not counted)
@@ -223,6 +267,19 @@ Fill `effective_from` and `date_source: human` in `manifest.yaml`, then run `mak
 - R-AA-01: https://sahamati.org.in/financial-information-user-fiu
 - R-CG-C-325: https://www.cgtmse.in/Default/ViewFile/?id=1622571716314_Circular_No.172_Undertaking-Format.docx&path=Circular
 - R-CG-C-337: https://www.cgtmse.in/Default/ViewFile/?id=1633542827969_Undertaking_Sub-debt_Scheme%20(1).docx&path=Circular
+- R-CG-C-409: https://www.cgtmse.in/Home/VS/100
+- R-CG-C-410: https://www.cgtmse.in/Home/VS/101
+- R-CG-C-413: https://www.cgtmse.in/Home/VS/50
+- R-CG-C-414: https://www.cgtmse.in/Home/VS/55
+- R-CG-C-415: https://www.cgtmse.in/Home/VS/56
+- R-CG-C-416: https://www.cgtmse.in/Home/VS/57
+- R-CG-C-417: https://www.cgtmse.in/Home/VS/71
+- R-CG-C-418: https://www.cgtmse.in/Home/VS/72
+- R-CG-C-419: https://www.cgtmse.in/Home/VS/94
+- R-CG-C-420: https://www.cgtmse.in/Home/VS/95
 - R-MSME-05: https://samadhaan.msme.gov.in/MyMsme/MSEFC/FAQ.aspx
+- R-SIDBI-P-016: https://www.sidbi.in/en/msme-pulse-edition/December-2025
+- R-SIDBI-P-017: https://www.sidbi.in/en/msme-pulse-edition/July-2026
+- R-SIDBI-P-018: https://www.sidbi.in/en/msme-pulse-edition/September-2025
 - R-TREDS-001: https://www.m1xchange.com/faqs/
 - R-TREDS-002: https://www.invoicemart.com/faq

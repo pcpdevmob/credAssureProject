@@ -155,20 +155,22 @@ def harvest(
     for source in sources["sources"]:
         if source["method"] != "script":
             continue
-        room = source["target"] - sum(
-            1
-            for d in docs
-            if d["source"] == source["id"]
-            and d["title"] != PENDING
-            and lock.get(d["doc_id"], {}).get("status") != "rejected_no_text"
+        room = (
+            source["target"]
+            + source.get("buffer", 0)
+            - sum(
+                1
+                for d in docs
+                if d["source"] == source["id"]
+                and d["title"] != PENDING
+                and lock.get(d["doc_id"], {}).get("status") != "rejected_no_text"
+            )
         )
         candidates: list[tuple[str, str]] = [
             (u, u.rsplit("/", 1)[-1] or u) for u in source.get("include_index", [])
         ]
-        pager = source.get(
-            "form_pages"
-        )  # the site's own HTML form pager, e.g. {field: pageNo, last: 29}
-        for index in source["index_urls"]:
+        for entry in source["index_urls"]:
+            index, pattern, pager = _index(entry, source)
             forms: list[dict[str, str] | None] = [None]
             if pager:
                 forms += [{pager["field"]: str(n)} for n in range(2, pager["last"] + 1)]
@@ -178,7 +180,7 @@ def harvest(
                 page = gate.get(index, form)
                 if isinstance(page, str) or page.status_code != 200:
                     break
-                candidates += links(page.text, str(page.url), source["link_pattern"])
+                candidates += links(page.text, str(page.url), pattern)
         for url, title in candidates:
             if room <= 0:
                 break
@@ -193,6 +195,20 @@ def harvest(
             added += 1
         _drop_surplus_slots(source, manifest, lock)
     return added
+
+
+def _index(
+    entry: str | dict[str, Any], source: dict[str, Any]
+) -> tuple[str, str, dict[str, Any] | None]:
+    """(url, link pattern, form pager). A plain URL uses the source's pattern and pager (e.g. the
+    site's own HTML form pager {field: pageNo, last: 29}); a {url, pattern, form_pages} entry overrides."""
+    if isinstance(entry, str):
+        return entry, source.get("link_pattern", ""), source.get("form_pages")
+    return (
+        entry["url"],
+        entry.get("pattern", source.get("link_pattern", "")),
+        entry.get("form_pages"),
+    )
 
 
 def _drop_surplus_slots(
@@ -231,7 +247,7 @@ def ensure_slots(
         ]
         for k in range(len(live), source["target"]):
             doc_id = _next_id(source["prefix"], ids)
-            index = source["index_urls"][k % len(source["index_urls"])]
+            index = _index(source["index_urls"][k % len(source["index_urls"])], source)[0]
             docs.append(_entry(source, doc_id, index, PENDING, slot_no=k))
             lock[doc_id] = {
                 "source_url": index,
@@ -247,7 +263,12 @@ def ensure_slots(
 
 
 def _todo(manifest: dict[str, Any], lock: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
-    return [d for d in manifest["documents"] if lock.get(d["doc_id"], {}).get("status") not in DONE]
+    """Manual work only: the script's own download queue (status ``pending``) is not listed."""
+    return [
+        d
+        for d in manifest["documents"]
+        if lock.get(d["doc_id"], {}).get("status") not in DONE | {"pending"}
+    ]
 
 
 def tier(doc: dict[str, Any]) -> int:
@@ -403,11 +424,12 @@ def status_screen(
         f"Real available {avail}/500 [{bar}] {max(0, 500 - avail)} to go",
         f"Pending {pending} | rejected (no text) {rejected} | needs date or review {undated}",
         "",
-        f"{'src':>3} {'avail':>5} {'pend':>5} {'rej':>4} {'nodate':>6}  name",
+        f"{'src':>3} {'tgt+buf':>7} {'avail':>5} {'pend':>5} {'rej':>4} {'nodate':>6}  name",
     ]
     for s in sources["sources"]:
         a, p, r, u = counts([d for d in docs if d["source"] == s["id"]])
-        lines.append(f"{s['id']:>3} {a:>5} {p:>5} {r:>4} {u:>6}  {s['name'][:52]}")
+        tb = f"{s['target']}+{s.get('buffer', 0)}"
+        lines.append(f"{s['id']:>3} {tb:>7} {a:>5} {p:>5} {r:>4} {u:>6}  {s['name'][:46]}")
     lines += ["", f"{'owner':<10} {'assigned':>8} {'imported':>8} {'pending':>7}"]
     for owner in OWNERS:
         mine = [d for d in docs if lock.get(d["doc_id"], {}).get("owner") == owner]

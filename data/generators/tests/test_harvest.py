@@ -161,6 +161,8 @@ def test_ADR0019_manual_markdown_lists_pending_not_available(
     assert "| B |" in text and "| A |" not in text
     assert "## [Name 6]" in text and "Rejected" in text
     assert "Placeholder-selection rules" in text and "20 MB" in text
+    queued = manual_markdown({"documents": [entry(doc_id="Q")]}, {"Q": {"status": "pending"}})
+    assert "| Q |" not in queued  # the script's download queue is not manual work
 
 
 def test_G2_report_counts_only_ok_with_extracted_text(
@@ -268,3 +270,24 @@ def test_G2_status_screen_shows_progress_sources_and_owners(
     screen = status_screen(_sources(), manifest, lock, tmp_path)
     assert screen.splitlines()[0].startswith("Real available 1/500 [")
     assert "needs date or review 1" in screen and "[Name 2]" in screen
+
+
+def test_KR01_buffer_harvests_past_target_without_manual_slots() -> None:
+    manifest: dict[str, Any] = {"documents": []}
+    lock: dict[str, dict[str, Any]] = {}
+    sources = _sources(target=1, buffer=1)
+    assert harvest(sources, manifest, lock, _gate(_ok)) == 2  # target 1 + buffer 1
+    assert ensure_slots(sources, manifest, lock) == 0
+    assert all(d["title"] != "PENDING" for d in manifest["documents"])
+
+
+def test_KR01_index_entry_can_carry_its_own_pattern() -> None:
+    page = '<a href="/Home/VS/47">Fee structure</a><a href="/Home/VS/19">Disclaimer</a>'
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, text="" if request.url.path == "/robots.txt" else page)
+
+    entry = {"url": "https://www.cgtmse.in/", "pattern": r"/Home/VS/(?:47|9[4-9])$"}
+    manifest: dict[str, Any] = {"documents": []}
+    assert harvest(_sources(index_urls=[entry], target=5), manifest, {}, _gate(handler)) == 1
+    assert manifest["documents"][0]["source_url"] == "https://www.cgtmse.in/Home/VS/47"
