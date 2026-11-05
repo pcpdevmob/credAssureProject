@@ -393,3 +393,89 @@ def test_KR01_rbi_html_rows_come_first_with_the_save_as_note(
     section = text.split("## [Name 1]")[1]
     assert section.index("Z-9") < section.index("A-1")
     assert "raw/Z-9.html" in section and "Web page, HTML only" in section
+
+
+def test_KR01_curate_fills_slots_then_appends_and_never_duplicates(
+    entry: Callable[..., dict[str, Any]],
+) -> None:
+    from credassure.datagen.harvest import curate
+
+    manifest: dict[str, Any] = {
+        "documents": [
+            entry(doc_id="R-CG-C-001", source=4, source_url="https://www.cgtmse.in/known"),
+            entry(
+                doc_id="R-CG-C-002",
+                source=4,
+                title="PENDING",
+                source_url="https://www.cgtmse.in/Circulars",
+            ),
+        ]
+    }
+    lock: dict[str, dict[str, Any]] = {
+        "R-CG-C-002": {"status": "pending_manual", "owner": "[Name 2]"}
+    }
+    items = [
+        {
+            "source": 4,
+            "kind": "exact",
+            "title": "Known",
+            "url": "https://cgtmse.in/known",
+            "applies_to": "all",
+            "jurisdiction": "IN",
+        },
+        {
+            "source": 4,
+            "kind": "exact",
+            "title": "Scheme doc",
+            "url": "https://www.cgtmse.in/a.pdf",
+            "applies_to": "all",
+            "jurisdiction": "IN",
+        },
+        {
+            "source": 4,
+            "kind": "recipe",
+            "title": "Named recipe",
+            "url": "https://www.cgtmse.in/Circulars",
+            "applies_to": "all",
+            "jurisdiction": "IN",
+            "recipe": "do X",
+        },
+    ]
+    assert (
+        curate(_sources(target=5), manifest, lock, items) == 2
+    )  # www-insensitive duplicate skipped
+    by_id = {d["doc_id"]: d for d in manifest["documents"]}
+    assert by_id["R-CG-C-002"]["title"] == "Scheme doc" and by_id["R-CG-C-002"]["format"] == "pdf"
+    assert lock["R-CG-C-002"]["owner"] == "[Name 2]"  # the slot keeps its owner
+    assert lock["R-CG-C-003"]["reason"] == "do X"
+    assert curate(_sources(target=5), manifest, lock, items) == 0
+
+
+def test_KR01_recipes_are_shown_and_slot_rows_point_to_them(
+    entry: Callable[..., dict[str, Any]],
+) -> None:
+    sources = _sources(id=14, manual_recipe="search sansad by subject")
+    docs = [
+        entry(
+            doc_id="R-SANSAD-001", source=14, title="PENDING", source_url="https://sansad.in/ls/q"
+        )
+    ]
+    lock = {"R-SANSAD-001": {"status": "pending_manual", "owner": "[Name 1]"}}
+    text = manual_markdown({"documents": docs}, lock, sources)
+    assert "**Recipe 14 - CGTMSE:** search sansad by subject" in text
+    assert "| R-SANSAD-001 |" in text and "**Recipe 14** (see Recipes above)" in text
+
+
+def test_KR01_committed_manual_list_has_no_home_page_rows() -> None:
+    import json
+
+    import yaml
+
+    from credassure.datagen.common import REPO
+    from credassure.datagen.harvest import home_page_rows
+
+    corpus = REPO / "data" / "corpus"
+    sources = yaml.safe_load((corpus / "sources.yaml").read_text(encoding="utf-8"))
+    manifest = yaml.safe_load((corpus / "manifest.yaml").read_text(encoding="utf-8"))
+    lock = json.loads((corpus / "manifest.lock.json").read_text(encoding="utf-8"))
+    assert home_page_rows(sources, manifest, lock) == []

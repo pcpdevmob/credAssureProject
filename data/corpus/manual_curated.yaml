@@ -1,0 +1,523 @@
+# Curated manual documents (ADR 0019/0020). Exact URLs were read once on official index pages on 2026-11-05;
+# documents are downloaded only by people. kind: exact = open the URL and save it; recipe = follow the recipe,
+# then put the document's own URL in manifest source_url. Applied by `make corpus-curate`.
+version: 1
+items:
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Commercial Banks – Miscellaneous) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13136
+  applies_to: commercial_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Commercial Banks – Forthcoming Instructions) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13137
+  applies_to: commercial_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Commercial Banks – Treatment of Wilful Defaulters and Large Defaulters) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13144
+  applies_to: commercial_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Commercial Banks – Resolution of Stressed Assets) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13145
+  applies_to: commercial_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Commercial Banks – Income Recognition, Asset Classification and Provisioning) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13146
+  applies_to: commercial_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Commercial Banks – Securitisation Transactions) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13150
+  applies_to: commercial_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Commercial Banks – Transfer and Distribution of Credit Risk) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13151
+  applies_to: commercial_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Commercial Banks – Concentration Risk Management) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13152
+  applies_to: commercial_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Commercial Banks – Credit Risk Management) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13153
+  applies_to: commercial_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Commercial Banks – Credit Information Reporting) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13154
+  applies_to: commercial_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Commercial Banks - Asset Classification, Provisioning and Income Recognition) Directions, 2026
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13400
+  applies_to: commercial_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Commercial Banks - Capital Charge for Credit Risk – Standardised Approach) Directions, 2026
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13399
+  applies_to: commercial_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Small Finance Banks – Miscellaneous) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13105
+  applies_to: sfb
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Small Finance Banks – Responsible Business Conduct) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13108
+  applies_to: sfb
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Small Finance Banks – Know Your Customer) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13109
+  applies_to: sfb
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Small Finance Banks – Treatment of Wilful Defaulters and Large Defaulters) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13112
+  applies_to: sfb
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Small Finance Banks – Resolution of Stressed Assets) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13113
+  applies_to: sfb
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Small Finance Banks – Income Recognition, Asset Classification and Provisioning) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13114
+  applies_to: sfb
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Small Finance Banks – Interest Rates on Advances) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13117
+  applies_to: sfb
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Small Finance Banks – Securitisation Transactions) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13118
+  applies_to: sfb
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Small Finance Banks – Transfer and Distribution of Credit Risk) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13119
+  applies_to: sfb
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Small Finance Banks – Concentration Risk Management) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13120
+  applies_to: sfb
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Small Finance Banks – Credit Risk Management) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13121
+  applies_to: sfb
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Small Finance Banks – Credit Information Reporting) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13122
+  applies_to: sfb
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Small Finance Banks – Credit Facilities) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13124
+  applies_to: sfb
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Urban Co-operative Banks – Miscellaneous) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13011
+  applies_to: coop_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Urban Co-operative Banks – Responsible Business Conduct) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13013
+  applies_to: coop_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Urban Co-operative Banks – Know Your Customer) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13014
+  applies_to: coop_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Urban Co-operative Banks – Treatment of Wilful Defaulters and Large Defaulters) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13017
+  applies_to: coop_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Urban Co-operative Banks – Resolution of Stressed Assets) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13018
+  applies_to: coop_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Urban Co-operative Banks – Income Recognition, Asset Classification and Provisioning) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13019
+  applies_to: coop_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Urban Co-operative Banks – Interest Rates on Advances) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13022
+  applies_to: coop_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Urban Co-operative Banks – Transfer and Distribution of Credit Risk) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13023
+  applies_to: coop_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Urban Co-operative Banks – Concentration Risk Management) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13024
+  applies_to: coop_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Urban Co-operative Banks – Credit Risk Management) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13025
+  applies_to: coop_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Urban Co-operative Banks – Credit Information Reporting) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13026
+  applies_to: coop_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Urban Co-operative Banks – Credit Facilities) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13028
+  applies_to: coop_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Rural Co-operative Banks – Miscellaneous) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13202
+  applies_to: coop_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Rural Co-operative Banks – Responsible Business Conduct) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12987
+  applies_to: coop_bank
+  jurisdiction: IN
+- source: 1
+  kind: exact
+  title: Reserve Bank of India (Rural Co-operative Banks – Know Your Customer) Directions, 2025
+  url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12988
+  applies_to: coop_bank
+  jurisdiction: IN
+- source: 3
+  kind: exact
+  title: RBI FAQs on Priority Sector Lending (PSL)
+  url: https://www.rbi.org.in/Scripts/FAQView.aspx?Id=87
+  applies_to: all
+  jurisdiction: IN
+- source: 3
+  kind: exact
+  title: RBI FAQs on Master Direction on KYC
+  url: https://www.rbi.org.in/Scripts/FAQView.aspx?Id=173
+  applies_to: commercial_bank
+  jurisdiction: IN
+- source: 3
+  kind: exact
+  title: 'RBI FAQs: Trade Receivables Discounting System (TReDS)'
+  url: https://www.rbi.org.in/Scripts/FAQView.aspx?Id=132
+  applies_to: all
+  jurisdiction: IN
+- source: 3
+  kind: exact
+  title: 'RBI FAQs: All you wanted to know about NBFCs'
+  url: https://www.rbi.org.in/Scripts/FAQView.aspx?Id=92
+  applies_to: nbfc
+  jurisdiction: IN
+- source: 3
+  kind: exact
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – October 2026
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=63894
+  applies_to: all
+  jurisdiction: IN
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – November 2024
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the November 2024 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – December 2024
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the December 2024 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – January 2025
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the January 2025 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – February 2025
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the February 2025 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – March 2025
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the March 2025 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – April 2025
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the April 2025 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – May 2025
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the May 2025 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – June 2025
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the June 2025 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – July 2025
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the July 2025 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – August 2025
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the August 2025 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – September 2025
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the September 2025 data was released (usually the last week of the following
+    month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – October 2025
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the October 2025 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – November 2025
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the November 2025 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – December 2025
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the December 2025 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – January 2026
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the January 2026 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – February 2026
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the February 2026 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – March 2026
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the March 2026 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – April 2026
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the April 2026 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – May 2026
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the May 2026 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – June 2026
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the June 2026 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – July 2026
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the July 2026 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 3
+  kind: recipe
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – August 2026
+  url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  applies_to: all
+  jurisdiction: IN
+  recipe: 'RBI Press Releases archive: choose the year and month the August 2026 data was released (usually the last week of the following month),
+    open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.'
+- source: 7
+  kind: exact
+  title: 'Udyam: Acceptance of Udyam Registration Certificate presented through DigiLocker (01/01/2025)'
+  url: https://udyamregistration.gov.in/docs/Acceptance_URC_Doucment_DigiLocker.pdf
+  applies_to: all
+  jurisdiction: IN
+- source: 8
+  kind: exact
+  title: Notification under MSMED Act 2006 extending non-tax benefits to MSMEs (18/10/2022)
+  url: https://udyamregistration.gov.in/docs/239737.pdf
+  applies_to: all
+  jurisdiction: IN
+- source: 7
+  kind: exact
+  title: RBI notification FIDD.MSME & NFS.BC.No.4/06.02.31/2020-21 on MSME classification (21/08/2020), Udyam copy
+  url: https://udyamregistration.gov.in/docs/RBI_NOTIFICATION_21082020.pdf
+  applies_to: all
+  jurisdiction: IN
+- source: 8
+  kind: exact
+  title: 'S.O. 1296(E): Udyam Registration Certificate for PSL benefits (20/03/2023)'
+  url: https://udyamregistration.gov.in/docs/SO1296.pdf
+  applies_to: all
+  jurisdiction: IN
+- source: 7
+  kind: exact
+  title: Udyam Registration benefits
+  url: https://udyamregistration.gov.in/docs/Benefits_of_UR.pdf
+  applies_to: all
+  jurisdiction: IN
+- source: 7
+  kind: exact
+  title: Legal framework for MSME classification (S.O. 1364(E) 2025 with S.O. 2119(E) 2020), Udyam copy
+  url: https://udyamregistration.gov.in/docs/261838_220191.pdf
+  applies_to: all
+  jurisdiction: IN
+- source: 12
+  kind: exact
+  title: M1xchange TReDS guideline
+  url: https://www.m1xchange.com/treds-guideline/
+  applies_to: all
+  jurisdiction: IN
+- source: 15
+  kind: exact
+  title: 'MSME Samadhaan: Supreme Court judgments related to delayed payment (list page)'
+  url: https://samadhaan.msme.gov.in/OrderDocument.aspx
+  applies_to: all
+  jurisdiction: IN
+- source: 16
+  kind: exact
+  title: Gujarat Industrial Policy 2026
+  url: https://ic.gujarat.gov.in/documents/Viksit-Gujarat-Industrial-Policy2026_new.pdf
+  applies_to: all
+  jurisdiction: IN-GJ
+- source: 16
+  kind: exact
+  title: Tamil Nadu MSME Policy Note
+  url: https://msmeonline.tn.gov.in/msme_policy_doc.php
+  applies_to: all
+  jurisdiction: IN-TN
+- source: 16
+  kind: exact
+  title: Uttar Pradesh MSME Promotion Policy and other policies
+  url: https://msme.up.gov.in/Home/Policies
+  applies_to: all
+  jurisdiction: IN-UP
+- source: 16
+  kind: exact
+  title: Telangana MSME Policy Booklet (English)
+  url: https://industries.telangana.gov.in/Library/MSME%20Policy%20Booklet%20English1.pdf
+  applies_to: all
+  jurisdiction: IN-TS

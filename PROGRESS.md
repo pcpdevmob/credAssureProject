@@ -83,6 +83,16 @@ owner      assigned imported pending
 - The commit titled "data: Indian real corpus ≥500" is reserved for when real available reaches 500 or more.
 
 ## Open questions (owner, date)
+- **Manual list rebuilt (2026-11-05):** `data/corpus/MANUAL_DOWNLOADS.md` has 183 rows, ~30 per owner.
+  - **Exact links:** 94 rows, built from `data/corpus/manual_curated.yaml`, which was compiled by reading official index pages once:
+    - 40 RBI Master Directions (Commercial Banks, plus SFB / co-op distractors);
+    - RBI FAQs; Udyam and Gazette notification PDFs; the MSMED Act (Samadhaan copy);
+    - four state policies; the Samadhaan judgments list.
+  - **Recipe rows:** 89, for monthly lending-rate releases, superseded RBI circulars, Sansad answers, judgments, and the MH/KA policies.
+  - **No bare home-page rows;** a test enforces this.
+  - **Targets rebalanced:** NCGTC and MUDRA are 0 (nothing reachable); msme.gov.in is 403; CGTMSE, Gazette, tax, banks and TReDS targets are set to what is actually held.
+  - **Held back:** 54 rows on hosts awaiting their 2026-11-06 one-time retry are left off the list until the retry result is recorded.
+  - **Reachable:** 288 available + 237 pending + 23 awaiting dates = 548 against the 500 target.
 - **Before the next corpus network run (incl. the scheduled 2026-11-06 retry run):**
   - Set `CORPUS_CONTACT_EMAIL` in `.env` to the team contact address. Harvest and download refuse to start without it (ADR 0020).
   - Add `CORPUS_CONTACT_EMAIL=` to `.env.example`; Claude's permissions block editing that file.

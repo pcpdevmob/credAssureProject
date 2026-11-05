@@ -11,33 +11,33 @@ One row per manifest entry, sorted by source then doc_id. The spreadsheet versio
 
 | # | Source | Planned | Buffer | Real available | Pending | Rejected | Needs date |
 |---|---|---|---|---|---|---|---|
-| 1 | RBI Master Directions (2025 consolidation) | 120 | 0 | 6 | 114 | 0 | 0 |
-| 2 | RBI circulars superseded by the 2025 consolidation (set superseded_by) | 60 | 0 | 2 | 58 | 0 | 0 |
-| 3 | RBI FAQs, lending-rate releases (24 months), MSME press releases, Bulletin/Annual Report chapters | 60 | 0 | 7 | 52 | 0 | 1 |
-| 4 | CGTMSE circulars, scheme guidelines, fee pages | 180 | 20 | 147 | 17 | 219 | 16 |
-| 5 | NCGTC schemes (ECLGS, CGFMU, CGSSI) guidelines and FAQs | 25 | 0 | 0 | 25 | 0 | 0 |
-| 6 | MUDRA / PMMY circulars and FAQs | 15 | 0 | 0 | 15 | 0 | 0 |
-| 7 | Ministry of MSME annual reports and scheme guidelines; Udyam and MSME Samadhaan FAQs | 40 | 0 | 1 | 38 | 0 | 1 |
-| 8 | Gazette notifications (MSME classification, GST rate/exemption, DPDP Rules, MCA MSME Form 1) | 40 | 0 | 4 | 36 | 0 | 0 |
+| 1 | RBI Master Directions (2025 consolidation) | 48 | 0 | 6 | 42 | 0 | 0 |
+| 2 | RBI circulars superseded by the 2025 consolidation (set superseded_by) | 40 | 0 | 2 | 38 | 0 | 0 |
+| 3 | RBI FAQs, lending-rate releases (24 months), MSME press releases, Bulletin/Annual Report chapters | 36 | 0 | 7 | 28 | 0 | 1 |
+| 4 | CGTMSE circulars, scheme guidelines, fee pages | 163 | 20 | 147 | 0 | 219 | 16 |
+| 5 | NCGTC schemes (ECLGS, CGFMU, CGSSI) guidelines and FAQs | 0 | 0 | 0 | 0 | 0 | 0 |
+| 6 | MUDRA / PMMY circulars and FAQs | 0 | 0 | 0 | 0 | 0 | 0 |
+| 7 | Ministry of MSME annual reports and scheme guidelines; Udyam and MSME Samadhaan FAQs | 9 | 0 | 1 | 7 | 0 | 1 |
+| 8 | Gazette notifications (MSME classification, GST rate/exemption, DPDP Rules, MCA MSME Form 1) | 10 | 0 | 4 | 6 | 0 | 0 |
 | 9 | CBIC GST circulars and FAQs on financial services; GST Council press releases | 30 | 70 | 47 | 53 | 2 | 0 |
-| 10 | CBDT on s.43B(h) and Income-tax Act 2025 s.37(2)(g); relevant Act chapters | 10 | 0 | 0 | 10 | 0 | 0 |
+| 10 | CBDT on s.43B(h) and Income-tax Act 2025 s.37(2)(g); relevant Act chapters | 3 | 0 | 0 | 3 | 0 | 0 |
 | 11 | SIDBI publications and MSME Pulse reports | 20 | 20 | 33 | 0 | 4 | 3 |
-| 12 | TReDS - RBI directions and platform FAQs/rulebooks (RXIL, M1xchange, Invoicemart) | 15 | 0 | 7 | 6 | 0 | 2 |
-| 13 | Bank and NBFC schedules of charges and sample KFS (~20 lenders, current and older) | 40 | 40 | 34 | 6 | 2 | 0 |
-| 14 | Lok Sabha / Rajya Sabha answers on MSME credit, CGTMSE, TReDS, delayed payments | 50 | 0 | 0 | 50 | 0 | 0 |
+| 12 | TReDS - RBI directions and platform FAQs/rulebooks (RXIL, M1xchange, Invoicemart) | 11 | 0 | 7 | 2 | 0 | 2 |
+| 13 | Bank and NBFC schedules of charges and sample KFS (~20 lenders, current and older) | 36 | 40 | 34 | 2 | 2 | 0 |
+| 14 | Lok Sabha / Rajya Sabha answers on MSME credit, CGTMSE, TReDS, delayed payments | 25 | 0 | 0 | 25 | 0 | 0 |
 | 15 | Supreme Court and High Court judgments on the MSMED Act | 25 | 0 | 0 | 25 | 0 | 0 |
-| 16 | State MSME/industrial policies - Maharashtra (home) and other states (KR-04 distractors) | 20 | 0 | 0 | 20 | 0 | 0 |
+| 16 | State MSME/industrial policies - Maharashtra (home) and other states (KR-04 distractors) | 6 | 0 | 0 | 6 | 0 | 0 |
 
 ## By owner
 
 | Owner | Assigned | Imported (ok_manual) | Pending |
 |---|---|---|---|
-| [Name 1] | 92 | 0 | 92 |
-| [Name 2] | 87 | 0 | 87 |
-| [Name 3] | 86 | 0 | 86 |
-| [Name 4] | 86 | 0 | 86 |
-| [Name 5] | 82 | 0 | 82 |
-| [Name 6] | 92 | 0 | 92 |
+| [Name 1] | 41 | 0 | 41 |
+| [Name 2] | 41 | 0 | 41 |
+| [Name 3] | 41 | 0 | 41 |
+| [Name 4] | 41 | 0 | 41 |
+| [Name 5] | 39 | 0 | 39 |
+| [Name 6] | 34 | 0 | 34 |
 
 ## Index
 
@@ -47,182 +47,90 @@ One row per manifest entry, sorted by source then doc_id. The spreadsheet versio
 | R-RBI-03 | Reserve Bank of India (Commercial Banks – Interest Rates on Advances) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13149) | All | Yes | ok |  | L4 | IN | commercial_bank | 2025-11-28 | curated |
 | R-RBI-04 | Master Direction - Lending to Micro, Small & Medium Enterprises (MSME) Sector | 1 | [link](https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11060) | All | Yes | ok |  | L4 | IN | all | 2026-02-09 | curated |
 | R-RBI-06 | RBI Priority Sector Lending - Targets and Classification Directions, 2025 (index) | 1 | [link](https://website.rbi.org.in/web/rbi/financial-inclusion-and-development/master-directions) | All | Yes | ok |  | L4 | IN | all | 2025-03-24 | curated |
-| R-RBI-09 | RBI Commercial Banks - Know Your Customer Directions, 2025 (notifications index) | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | commercial_bank | 2025-11-28 |  |
+| R-RBI-09 | RBI Commercial Banks - Know Your Customer Directions, 2025 (notifications index) | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13141) | All | Yes | pending | [Name 2] | L4 | IN | commercial_bank | 2025-11-28 |  |
 | R-RBI-10 | Reserve Bank of India (Commercial Banks – Credit Facilities) Directions, 2025 (RBI/DOR/2025-26/154) | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13156) | All | Yes | ok |  | L4 | IN | commercial_bank | 2025-11-28 | curated |
 | R-RBI-11 | Reserve Bank of India (Digital Lending) Directions, 2025 | 1 | [link](https://website.rbi.org.in/documents/d/rbi/directionsondigitallending) | All | Yes | pending | [Name 6] | L4 | IN | all | 2025-05-08 |  |
 | R-RBI-13 | Reserve Bank of India (NBFC – Responsible Business Conduct) Directions, 2025 | 1 | [link](https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=12942&Mode=0) | All | Yes | ok |  | L4 | IN | nbfc | 2025-11-28 | curated |
-| R-RBI-MD-001 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-002 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-003 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-004 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-005 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-006 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-007 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-008 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-009 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-010 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-011 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-012 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-013 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-014 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-015 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-016 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-017 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-018 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-019 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-020 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-021 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-022 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-023 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-024 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-025 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-026 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-027 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-028 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-029 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-030 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-031 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-032 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-033 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-034 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-035 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-036 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-037 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-038 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-039 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-040 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-041 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-042 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-043 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-044 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-RBI-MD-045 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-046 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-047 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-048 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-049 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-050 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-051 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-052 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-053 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-054 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-055 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-056 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-057 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-058 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-059 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-060 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-061 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-062 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-063 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-064 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-065 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-066 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-067 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-068 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-069 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-070 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-071 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-072 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-073 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-074 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-075 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-076 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-077 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-078 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-079 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-080 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-081 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-082 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-083 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-084 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-085 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-086 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-087 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-088 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-MD-089 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-090 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-091 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-092 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-093 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-094 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-095 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-096 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-097 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-098 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-099 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-100 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-101 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-102 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-103 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-104 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-105 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-106 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-107 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-108 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-109 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-110 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-111 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-MD-112 | PENDING | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx) | All | Yes | pending | [Name 6] | L4 | IN | all |  |  |
+| R-RBI-MD-001 | Reserve Bank of India (Commercial Banks – Miscellaneous) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13136) | All | Yes | pending | [Name 3] | L4 | IN | commercial_bank |  |  |
+| R-RBI-MD-002 | Reserve Bank of India (Commercial Banks – Forthcoming Instructions) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13137) | All | Yes | pending | [Name 3] | L4 | IN | commercial_bank |  |  |
+| R-RBI-MD-003 | Reserve Bank of India (Commercial Banks – Treatment of Wilful Defaulters and Large Defaulters) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13144) | All | Yes | pending | [Name 3] | L4 | IN | commercial_bank |  |  |
+| R-RBI-MD-004 | Reserve Bank of India (Commercial Banks – Resolution of Stressed Assets) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13145) | All | Yes | pending | [Name 3] | L4 | IN | commercial_bank |  |  |
+| R-RBI-MD-005 | Reserve Bank of India (Commercial Banks – Income Recognition, Asset Classification and Provisioning) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13146) | All | Yes | pending | [Name 4] | L4 | IN | commercial_bank |  |  |
+| R-RBI-MD-006 | Reserve Bank of India (Commercial Banks – Securitisation Transactions) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13150) | All | Yes | pending | [Name 4] | L4 | IN | commercial_bank |  |  |
+| R-RBI-MD-007 | Reserve Bank of India (Commercial Banks – Transfer and Distribution of Credit Risk) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13151) | All | Yes | pending | [Name 4] | L4 | IN | commercial_bank |  |  |
+| R-RBI-MD-008 | Reserve Bank of India (Commercial Banks – Concentration Risk Management) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13152) | All | Yes | pending | [Name 4] | L4 | IN | commercial_bank |  |  |
+| R-RBI-MD-009 | Reserve Bank of India (Commercial Banks – Credit Risk Management) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13153) | All | Yes | pending | [Name 4] | L4 | IN | commercial_bank |  |  |
+| R-RBI-MD-010 | Reserve Bank of India (Commercial Banks – Credit Information Reporting) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13154) | All | Yes | pending | [Name 4] | L4 | IN | commercial_bank |  |  |
+| R-RBI-MD-011 | Reserve Bank of India (Commercial Banks - Asset Classification, Provisioning and Income Recognition) Directions, 2026 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13400) | All | Yes | pending | [Name 4] | L4 | IN | commercial_bank |  |  |
+| R-RBI-MD-012 | Reserve Bank of India (Commercial Banks - Capital Charge for Credit Risk – Standardised Approach) Directions, 2026 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13399) | All | Yes | pending | [Name 4] | L4 | IN | commercial_bank |  |  |
+| R-RBI-MD-013 | Reserve Bank of India (Small Finance Banks – Miscellaneous) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13105) | All | Yes | pending | [Name 4] | L4 | IN | sfb |  |  |
+| R-RBI-MD-014 | Reserve Bank of India (Small Finance Banks – Responsible Business Conduct) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13108) | All | Yes | pending | [Name 4] | L4 | IN | sfb |  |  |
+| R-RBI-MD-015 | Reserve Bank of India (Small Finance Banks – Know Your Customer) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13109) | All | Yes | pending | [Name 4] | L4 | IN | sfb |  |  |
+| R-RBI-MD-016 | Reserve Bank of India (Small Finance Banks – Treatment of Wilful Defaulters and Large Defaulters) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13112) | All | Yes | pending | [Name 4] | L4 | IN | sfb |  |  |
+| R-RBI-MD-017 | Reserve Bank of India (Small Finance Banks – Resolution of Stressed Assets) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13113) | All | Yes | pending | [Name 4] | L4 | IN | sfb |  |  |
+| R-RBI-MD-018 | Reserve Bank of India (Small Finance Banks – Income Recognition, Asset Classification and Provisioning) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13114) | All | Yes | pending | [Name 4] | L4 | IN | sfb |  |  |
+| R-RBI-MD-019 | Reserve Bank of India (Small Finance Banks – Interest Rates on Advances) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13117) | All | Yes | pending | [Name 4] | L4 | IN | sfb |  |  |
+| R-RBI-MD-020 | Reserve Bank of India (Small Finance Banks – Securitisation Transactions) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13118) | All | Yes | pending | [Name 4] | L4 | IN | sfb |  |  |
+| R-RBI-MD-021 | Reserve Bank of India (Small Finance Banks – Transfer and Distribution of Credit Risk) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13119) | All | Yes | pending | [Name 5] | L4 | IN | sfb |  |  |
+| R-RBI-MD-022 | Reserve Bank of India (Small Finance Banks – Concentration Risk Management) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13120) | All | Yes | pending | [Name 5] | L4 | IN | sfb |  |  |
+| R-RBI-MD-023 | Reserve Bank of India (Small Finance Banks – Credit Risk Management) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13121) | All | Yes | pending | [Name 5] | L4 | IN | sfb |  |  |
+| R-RBI-MD-024 | Reserve Bank of India (Small Finance Banks – Credit Information Reporting) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13122) | All | Yes | pending | [Name 5] | L4 | IN | sfb |  |  |
+| R-RBI-MD-025 | Reserve Bank of India (Small Finance Banks – Credit Facilities) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13124) | All | Yes | pending | [Name 5] | L4 | IN | sfb |  |  |
+| R-RBI-MD-026 | Reserve Bank of India (Urban Co-operative Banks – Miscellaneous) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13011) | All | Yes | pending | [Name 5] | L4 | IN | coop_bank |  |  |
+| R-RBI-MD-027 | Reserve Bank of India (Urban Co-operative Banks – Responsible Business Conduct) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13013) | All | Yes | pending | [Name 5] | L4 | IN | coop_bank |  |  |
+| R-RBI-MD-028 | Reserve Bank of India (Urban Co-operative Banks – Know Your Customer) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13014) | All | Yes | pending | [Name 5] | L4 | IN | coop_bank |  |  |
+| R-RBI-MD-029 | Reserve Bank of India (Urban Co-operative Banks – Treatment of Wilful Defaulters and Large Defaulters) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13017) | All | Yes | pending | [Name 5] | L4 | IN | coop_bank |  |  |
+| R-RBI-MD-030 | Reserve Bank of India (Urban Co-operative Banks – Resolution of Stressed Assets) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13018) | All | Yes | pending | [Name 5] | L4 | IN | coop_bank |  |  |
+| R-RBI-MD-031 | Reserve Bank of India (Urban Co-operative Banks – Income Recognition, Asset Classification and Provisioning) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13019) | All | Yes | pending | [Name 5] | L4 | IN | coop_bank |  |  |
+| R-RBI-MD-032 | Reserve Bank of India (Urban Co-operative Banks – Interest Rates on Advances) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13022) | All | Yes | pending | [Name 5] | L4 | IN | coop_bank |  |  |
+| R-RBI-MD-033 | Reserve Bank of India (Urban Co-operative Banks – Transfer and Distribution of Credit Risk) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13023) | All | Yes | pending | [Name 5] | L4 | IN | coop_bank |  |  |
+| R-RBI-MD-034 | Reserve Bank of India (Urban Co-operative Banks – Concentration Risk Management) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13024) | All | Yes | pending | [Name 5] | L4 | IN | coop_bank |  |  |
+| R-RBI-MD-035 | Reserve Bank of India (Urban Co-operative Banks – Credit Risk Management) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13025) | All | Yes | pending | [Name 5] | L4 | IN | coop_bank |  |  |
+| R-RBI-MD-036 | Reserve Bank of India (Urban Co-operative Banks – Credit Information Reporting) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13026) | All | Yes | pending | [Name 5] | L4 | IN | coop_bank |  |  |
+| R-RBI-MD-037 | Reserve Bank of India (Urban Co-operative Banks – Credit Facilities) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13028) | All | Yes | pending | [Name 6] | L4 | IN | coop_bank |  |  |
+| R-RBI-MD-038 | Reserve Bank of India (Rural Co-operative Banks – Miscellaneous) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13202) | All | Yes | pending | [Name 6] | L4 | IN | coop_bank |  |  |
+| R-RBI-MD-039 | Reserve Bank of India (Rural Co-operative Banks – Responsible Business Conduct) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12987) | All | Yes | pending | [Name 6] | L4 | IN | coop_bank |  |  |
+| R-RBI-MD-040 | Reserve Bank of India (Rural Co-operative Banks – Know Your Customer) Directions, 2025 | 1 | [link](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12988) | All | Yes | pending | [Name 6] | L4 | IN | coop_bank |  |  |
 | R-RBI-08-DRAFT | Draft for Comments - RBI (TReDS) Directions, 2026 | 2 | [link](https://www.rbi.org.in/scripts/bs_viewcontent.aspx?Id=4976) | Copilot | Yes | ok |  | L4 | IN | all | 2026-04-08 | curated |
 | R-RBI-12 | Key Facts Statement (KFS) for Loans & Advances (RBI/2024-25/18) | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12663&Mode=0) | Copilot | Yes | ok |  | L4 | IN | all | 2024-04-15 | curated |
-| R-RBI-HIST-001 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-002 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-003 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-004 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-005 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-006 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-007 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-008 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-009 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-010 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-011 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-012 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-013 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-014 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-015 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-016 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-017 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-018 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-019 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-020 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-021 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-022 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-023 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-024 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-025 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-026 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-RBI-HIST-027 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-028 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-029 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-030 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-031 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-032 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-033 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-034 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-035 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-036 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-037 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-038 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-039 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-040 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-041 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-042 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-043 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-044 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-045 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-046 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-047 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-048 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-049 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-050 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-051 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-052 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-RBI-HIST-053 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-RBI-HIST-054 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-RBI-HIST-055 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-RBI-HIST-056 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-RBI-HIST-057 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-RBI-HIST-058 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-001 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-002 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-003 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-004 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-005 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-006 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-007 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-008 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-009 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-010 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-011 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-012 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-013 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-014 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-015 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-016 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-017 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-018 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-019 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-HIST-020 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-021 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-022 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-023 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-024 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-025 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-026 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-027 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-028 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-029 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-030 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-031 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-032 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-033 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-034 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-035 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-036 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-037 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
+| R-RBI-HIST-038 | PENDING | 2 | [link](https://www.rbi.org.in/Scripts/NotificationUser.aspx) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
 | R-AA-01 | Sahamati - Financial Information User (FIU) eligibility | 3 | [link](https://sahamati.org.in/financial-information-user-fiu) | LendWise, WC, Copilot | Partial | needs_date |  | L4 | IN | all |  |  |
 | R-CAL-01 | RBI holiday matrix (NI Act holidays), Mumbai | 3 | [link](https://www.rbi.org.in/scripts/HolidayMatrixDisplay.aspx?regoff=Mumbai) | LendWise, WC, Copilot | Yes | ok |  | L4 | IN | all | 2026-01-01 | curated |
 | R-RATE-01-2026-09 | Lending and Deposit Rates of Scheduled Commercial Banks (September 2026 release) | 3 | [link](https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63702) | LendWise, WC, Copilot | Yes | ok |  | L4 | IN | all | 2026-09-30 | extracted |
@@ -232,57 +140,33 @@ One row per manifest entry, sorted by source then doc_id. The spreadsheet versio
 | R-RATE-02-REPO | Monetary Policy Resolution, 7 Oct 2026 (repo rate 5.50%) | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=63742) | LendWise, WC, Copilot | Yes | ok |  | L4 | IN | all | 2026-10-07 | curated |
 | R-RBI-01 | RBI press release: 244 consolidated Master Directions (28 Nov 2025) | 3 | [link](https://website.rbi.org.in/documents/d/rbi/pr1588rbiconsolidatedmasterdirections-1-) | LendWise, WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all | 2025-11-28 |  |
 | R-RBI-05 | RBI FAQs - Micro, Small and Medium Enterprises | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | ok |  | L4 | IN | all | 2025-07-29 | curated |
-| R-RBI-FAQ-001 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-002 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-003 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-004 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-005 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-006 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-007 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-008 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-009 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-010 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-011 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-012 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-013 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-014 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-015 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-016 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-017 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-018 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-019 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-020 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-021 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-022 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-023 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-024 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-025 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-026 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-027 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-028 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-029 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-030 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-031 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-032 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-033 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-034 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-035 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-036 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-037 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-038 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-039 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-040 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-041 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-042 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-043 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-044 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 5] | L4 | IN | all |  |  |
-| R-RBI-FAQ-045 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-FAQ-046 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-FAQ-047 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-FAQ-048 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-FAQ-049 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-FAQ-050 | PENDING | 3 | [link](https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84) | LendWise, WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-RBI-FAQ-051 | PENDING | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
+| R-RBI-FAQ-001 | RBI FAQs on Priority Sector Lending (PSL) | 3 | [link](https://www.rbi.org.in/Scripts/FAQView.aspx?Id=87) | LendWise, WC, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
+| R-RBI-FAQ-002 | RBI FAQs on Master Direction on KYC | 3 | [link](https://www.rbi.org.in/Scripts/FAQView.aspx?Id=173) | LendWise, WC, Copilot | Yes | pending | [Name 2] | L4 | IN | commercial_bank |  |  |
+| R-RBI-FAQ-003 | RBI FAQs: Trade Receivables Discounting System (TReDS) | 3 | [link](https://www.rbi.org.in/Scripts/FAQView.aspx?Id=132) | LendWise, WC, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
+| R-RBI-FAQ-004 | RBI FAQs: All you wanted to know about NBFCs | 3 | [link](https://www.rbi.org.in/Scripts/FAQView.aspx?Id=92) | LendWise, WC, Copilot | Yes | pending | [Name 2] | L4 | IN | nbfc |  |  |
+| R-RBI-FAQ-005 | Lending and Deposit Rates of Scheduled Commercial Banks – October 2026 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=63894) | LendWise, WC, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
+| R-RBI-FAQ-006 | Lending and Deposit Rates of Scheduled Commercial Banks – November 2024 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
+| R-RBI-FAQ-007 | Lending and Deposit Rates of Scheduled Commercial Banks – December 2024 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
+| R-RBI-FAQ-008 | Lending and Deposit Rates of Scheduled Commercial Banks – January 2025 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
+| R-RBI-FAQ-009 | Lending and Deposit Rates of Scheduled Commercial Banks – February 2025 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
+| R-RBI-FAQ-010 | Lending and Deposit Rates of Scheduled Commercial Banks – March 2025 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
+| R-RBI-FAQ-011 | Lending and Deposit Rates of Scheduled Commercial Banks – April 2025 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
+| R-RBI-FAQ-012 | Lending and Deposit Rates of Scheduled Commercial Banks – May 2025 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
+| R-RBI-FAQ-013 | Lending and Deposit Rates of Scheduled Commercial Banks – June 2025 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
+| R-RBI-FAQ-014 | Lending and Deposit Rates of Scheduled Commercial Banks – July 2025 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
+| R-RBI-FAQ-015 | Lending and Deposit Rates of Scheduled Commercial Banks – August 2025 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
+| R-RBI-FAQ-016 | Lending and Deposit Rates of Scheduled Commercial Banks – September 2025 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-FAQ-017 | Lending and Deposit Rates of Scheduled Commercial Banks – October 2025 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-FAQ-018 | Lending and Deposit Rates of Scheduled Commercial Banks – November 2025 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-FAQ-019 | Lending and Deposit Rates of Scheduled Commercial Banks – December 2025 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-FAQ-020 | Lending and Deposit Rates of Scheduled Commercial Banks – January 2026 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-FAQ-021 | Lending and Deposit Rates of Scheduled Commercial Banks – February 2026 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-FAQ-022 | Lending and Deposit Rates of Scheduled Commercial Banks – March 2026 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-FAQ-023 | Lending and Deposit Rates of Scheduled Commercial Banks – April 2026 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-FAQ-024 | Lending and Deposit Rates of Scheduled Commercial Banks – May 2026 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-FAQ-025 | Lending and Deposit Rates of Scheduled Commercial Banks – June 2026 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-FAQ-026 | Lending and Deposit Rates of Scheduled Commercial Banks – July 2026 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
+| R-RBI-FAQ-027 | Lending and Deposit Rates of Scheduled Commercial Banks – August 2026 | 3 | [link](https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx) | LendWise, WC, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
 | R-CG-01 | CGTMSE Annual Guarantee Fee structure (CGS-I) | 4 | [link](https://cgtmse.in/Home/VS/47) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2025-04-01 | curated |
 | R-CG-02 | CGTMSE AGF basis for facilities sanctioned on/after 1 April 2025 | 4 | [link](https://cgtmse.in/Home/VS/101) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2025-04-01 | curated |
 | R-CG-03 | CGTMSE circulars (index) | 4 | [link](https://www.cgtmse.in/Circulars) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2026-06-15 | extracted |
@@ -304,23 +188,6 @@ One row per manifest entry, sorted by source then doc_id. The spreadsheet versio
 | R-CG-C-014 | View | 4 | [link](https://www.cgtmse.in/Default/ViewFile/?id=1781548514939_TReDS%20Cicular%20262.pdf&path=Circular) | LendWise, Copilot | No | rejected |  | L4 | IN | all |  |  |
 | R-CG-C-015 | View | 4 | [link](https://www.cgtmse.in/Default/ViewFile/?id=1782398519918_Hindi%20Circular%20-%20TReDS-150626.pdf&path=Circular) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2026-06-15 | extracted |
 | R-CG-C-016 | View | 4 | [link](https://www.cgtmse.in/Default/ViewFile/?id=1782398570934_%E0%A4%B9%E0%A4%BF%E0%A4%A8%E0%A5%8D%E0%A4%A6%E0%A5%80%20Addendum%20to%20MCC%20Circular-%20Modification%20in%20claim%20settlement.pdf&path=Circular) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2026-06-15 | extracted |
-| R-CG-C-017 | PENDING | 4 | [link](https://www.cgtmse.in/) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-018 | PENDING | 4 | [link](https://www.cgtmse.in/Circulars) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-019 | PENDING | 4 | [link](https://www.cgtmse.in/) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-020 | PENDING | 4 | [link](https://www.cgtmse.in/Circulars) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-021 | PENDING | 4 | [link](https://www.cgtmse.in/) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-022 | PENDING | 4 | [link](https://www.cgtmse.in/Circulars) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-023 | PENDING | 4 | [link](https://www.cgtmse.in/) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-024 | PENDING | 4 | [link](https://www.cgtmse.in/Circulars) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-025 | PENDING | 4 | [link](https://www.cgtmse.in/) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-026 | PENDING | 4 | [link](https://www.cgtmse.in/Circulars) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-027 | PENDING | 4 | [link](https://www.cgtmse.in/) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-028 | PENDING | 4 | [link](https://www.cgtmse.in/Circulars) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-029 | PENDING | 4 | [link](https://www.cgtmse.in/) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-030 | PENDING | 4 | [link](https://www.cgtmse.in/Circulars) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-031 | PENDING | 4 | [link](https://www.cgtmse.in/) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-032 | PENDING | 4 | [link](https://www.cgtmse.in/Circulars) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-CG-C-033 | PENDING | 4 | [link](https://www.cgtmse.in/) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
 | R-CG-C-038 | Credit Facilities & Parameters ऋण सुविधाएं और पैरामीटर | 4 | [link](https://www.cgtmse.in/Home/VS/96) | LendWise, Copilot | Partial | needs_date |  | L4 | IN | all |  |  |
 | R-CG-C-039 | Primary Security vis-a-vis Collateral security/personal guarantee vis-à-vis third party guarantee प्राथमिक सुरक्षा की तुलना में संपार्श्विक सुरक्षा/व्यक्तिगत गारंटी की तुलना में तीसरे पक्ष की गारंटी | 4 | [link](https://www.cgtmse.in/Home/VS/97) | LendWise, Copilot | Partial | needs_date |  | L4 | IN | all |  |  |
 | R-CG-C-040 | Annual Guarantee Fee (AGF) वार्षिक गारंटी शुल्क(AGF) | 4 | [link](https://www.cgtmse.in/Home/VS/98) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2025-03-18 | extracted |
@@ -682,125 +549,24 @@ One row per manifest entry, sorted by source then doc_id. The spreadsheet versio
 | R-CG-C-418 | List of Documents for registration पंजीकरण के लिए दस्तावेजों की सूची | 4 | [link](https://www.cgtmse.in/Home/VS/72) | LendWise, Copilot | Partial | needs_date |  | L4 | IN | all |  |  |
 | R-CG-C-419 | Member Lending Institutions - Eligibility, responsibility etc. सदस्य ऋणदात्री संस्थाएँ – पात्रता, उत्तरदायित्व आदि / | 4 | [link](https://www.cgtmse.in/Home/VS/94) | LendWise, Copilot | Partial | needs_date |  | L4 | IN | all |  |  |
 | R-CG-C-420 | Eligible Borrowers पात्र उधारकर्ता | 4 | [link](https://www.cgtmse.in/Home/VS/95) | LendWise, Copilot | Partial | needs_date |  | L4 | IN | all |  |  |
-| R-NCGTC-001 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-NCGTC-002 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-NCGTC-003 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-NCGTC-004 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-NCGTC-005 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-NCGTC-006 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-NCGTC-007 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-NCGTC-008 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-NCGTC-009 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-NCGTC-010 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-NCGTC-011 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-NCGTC-012 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-NCGTC-013 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-NCGTC-014 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-NCGTC-015 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 2] | L4 | IN | all |  |  |
-| R-NCGTC-016 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-NCGTC-017 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-NCGTC-018 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-NCGTC-019 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-NCGTC-020 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-NCGTC-021 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-NCGTC-022 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-NCGTC-023 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-NCGTC-024 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-NCGTC-025 | PENDING | 5 | [link](https://www.ncgtc.in/) | LendWise, Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-MUDRA-001 | PENDING | 6 | [link](https://www.mudra.org.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-MUDRA-002 | PENDING | 6 | [link](https://www.mudra.org.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-MUDRA-003 | PENDING | 6 | [link](https://www.mudra.org.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-MUDRA-004 | PENDING | 6 | [link](https://www.mudra.org.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-MUDRA-005 | PENDING | 6 | [link](https://www.mudra.org.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-MUDRA-006 | PENDING | 6 | [link](https://www.mudra.org.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-MUDRA-007 | PENDING | 6 | [link](https://www.mudra.org.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-MUDRA-008 | PENDING | 6 | [link](https://www.mudra.org.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-MUDRA-009 | PENDING | 6 | [link](https://www.mudra.org.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-MUDRA-010 | PENDING | 6 | [link](https://www.mudra.org.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-MUDRA-011 | PENDING | 6 | [link](https://www.mudra.org.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-MUDRA-012 | PENDING | 6 | [link](https://www.mudra.org.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-MUDRA-013 | PENDING | 6 | [link](https://www.mudra.org.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-MUDRA-014 | PENDING | 6 | [link](https://www.mudra.org.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-MUDRA-015 | PENDING | 6 | [link](https://www.mudra.org.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN | all |  |  |
-| R-DATA-01 | UDYAM Registration (MSME Registration) catalog | 7 | [link](https://www.data.gov.in/catalog/udyam-registration-msme-registration) | WC, Copilot | Partial | pending | [Name 4] | L1 | IN | all | 2026-09-03 |  |
-| R-DATA-02 | District-wise total MSME registered enterprises under Udyam | 7 | [link](https://www.data.gov.in/resource/district-wise-total-msme-registered-enterprises-under-udyam-registration-till-last-date) | WC, Copilot | Partial | pending | [Name 4] | L1 | IN | all | 2026-03-15 |  |
+| R-DATA-01 | UDYAM Registration (MSME Registration) catalog | 7 | [link](https://www.data.gov.in/catalog/udyam-registration-msme-registration) | WC, Copilot | Partial | pending | [Name 6] | L1 | IN | all | 2026-09-03 |  |
+| R-DATA-02 | District-wise total MSME registered enterprises under Udyam | 7 | [link](https://www.data.gov.in/resource/district-wise-total-msme-registered-enterprises-under-udyam-registration-till-last-date) | WC, Copilot | Partial | pending | [Name 6] | L1 | IN | all | 2026-03-15 |  |
 | R-MSME-04 | Udyam reverse-graduation circular, 24 Oct 2025 | 7 | [link](https://udyamregistration.gov.in/docs/Circular_reverse_24102025.pdf) | WC, Copilot | Partial | pending | [Name 6] | L2 | IN | all | 2025-10-24 |  |
 | R-MSME-05 | MSME Samadhaan - FAQ | 7 | [link](https://samadhaan.msme.gov.in/MyMsme/MSEFC/FAQ.aspx) | WC, Copilot | Partial | needs_date |  | L4 | IN | all |  |  |
 | R-MSME-06 | Udyam Registration - Important to know | 7 | [link](https://www.udyamregistration.gov.in/Important.aspx) | WC, Copilot | No | ok |  | L4 | IN | all | 2021-03-05 | extracted |
-| R-MSME-G-001 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-002 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-003 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-004 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-005 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-006 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-007 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-008 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-009 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-010 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-011 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-012 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-013 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-014 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-015 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-016 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-017 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-018 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-019 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-020 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-021 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-022 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-023 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-024 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-025 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-026 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-027 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-028 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-029 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-030 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-031 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-032 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-033 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-MSME-G-034 | PENDING | 7 | [link](https://udyamregistration.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-MSME-G-035 | PENDING | 7 | [link](https://msme.gov.in/) | WC, Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-MSME-G-001 | Udyam: Acceptance of Udyam Registration Certificate presented through DigiLocker (01/01/2025) | 7 | [link](https://udyamregistration.gov.in/docs/Acceptance_URC_Doucment_DigiLocker.pdf) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
+| R-MSME-G-002 | RBI notification FIDD.MSME & NFS.BC.No.4/06.02.31/2020-21 on MSME classification (21/08/2020), Udyam copy | 7 | [link](https://udyamregistration.gov.in/docs/RBI_NOTIFICATION_21082020.pdf) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
+| R-MSME-G-003 | Udyam Registration benefits | 7 | [link](https://udyamregistration.gov.in/docs/Benefits_of_UR.pdf) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
+| R-MSME-G-004 | Legal framework for MSME classification (S.O. 1364(E) 2025 with S.O. 2119(E) 2020), Udyam copy | 7 | [link](https://udyamregistration.gov.in/docs/261838_220191.pdf) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
 | R-DPDP-01 | Digital Personal Data Protection Act, 2023 | 8 | [link](https://www.meity.gov.in/static/uploads/2024/02/Digital-Personal-Data-Protection-Act-2023.pdf) | WC, LendWise, Onboarding | No | ok |  | L3 | IN | all | 2023-08-11 | curated |
-| R-DPDP-02 | Digital Personal Data Protection Rules, 2025 (G.S.R. 846(E)) | 8 | [link](https://egazette.gov.in/WriteReadData/2025/267650.pdf) | WC, LendWise, Onboarding | Yes | pending | [Name 1] | L2 | IN | all | 2025-11-13 |  |
+| R-DPDP-02 | Digital Personal Data Protection Rules, 2025 (G.S.R. 846(E)) | 8 | [link](https://egazette.gov.in/WriteReadData/2025/267650.pdf) | WC, LendWise, Onboarding | Yes | pending | [Name 2] | L2 | IN | all | 2025-11-13 |  |
 | R-DPDP-03 | DPDP (Removal of Difficulties) Order, S.O. 5458(E) | 8 | [link](https://www.meity.gov.in/static/uploads/2026/10/daf495a7b5798a3dfa72a944b51fc176.pdf) | WC, LendWise, Onboarding | No | ok |  | L2 | IN | all | 2026-10-05 | curated |
 | R-GST-01 | Notification No. 11/2017-Central Tax (Rate) | 8 | [link](https://cbic-gst.gov.in/hindi/pdf/central-tax-rate/Notification11-CGST.pdf) | WC, LendWise, Onboarding | No | ok |  | L2 | IN | all | 2017-07-01 | curated |
 | R-GST-02 | Notification No. 12/2017-Central Tax (Rate) - services exemptions | 8 | [link](https://cbic-gst.gov.in/hindi/pdf/central-tax-rate/Notification12-CGST.pdf) | WC, LendWise, Onboarding | No | ok |  | L2 | IN | all | 2017-07-01 | curated |
-| R-GST-03 | Notification No. 15/2025-Central Tax (Rate) amending 11/2017 | 8 | [link](https://egazette.gov.in/WriteReadData/2025/266220.pdf) | WC, LendWise, Onboarding | Yes | pending | [Name 1] | L2 | IN | all | 2025-09-22 |  |
-| R-GZ-001 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 1] | L2 | IN | all |  |  |
-| R-GZ-002 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 1] | L2 | IN | all |  |  |
-| R-GZ-003 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 1] | L2 | IN | all |  |  |
-| R-GZ-004 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 1] | L2 | IN | all |  |  |
-| R-GZ-005 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 2] | L2 | IN | all |  |  |
-| R-GZ-006 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 2] | L2 | IN | all |  |  |
-| R-GZ-007 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 2] | L2 | IN | all |  |  |
-| R-GZ-008 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 2] | L2 | IN | all |  |  |
-| R-GZ-009 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 2] | L2 | IN | all |  |  |
-| R-GZ-010 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 2] | L2 | IN | all |  |  |
-| R-GZ-011 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 3] | L2 | IN | all |  |  |
-| R-GZ-012 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 3] | L2 | IN | all |  |  |
-| R-GZ-013 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 3] | L2 | IN | all |  |  |
-| R-GZ-014 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 3] | L2 | IN | all |  |  |
-| R-GZ-015 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 3] | L2 | IN | all |  |  |
-| R-GZ-016 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 3] | L2 | IN | all |  |  |
-| R-GZ-017 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 4] | L2 | IN | all |  |  |
-| R-GZ-018 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 4] | L2 | IN | all |  |  |
-| R-GZ-019 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 4] | L2 | IN | all |  |  |
-| R-GZ-020 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 4] | L2 | IN | all |  |  |
-| R-GZ-021 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 4] | L2 | IN | all |  |  |
-| R-GZ-022 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 4] | L2 | IN | all |  |  |
-| R-GZ-023 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 5] | L2 | IN | all |  |  |
-| R-GZ-024 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 5] | L2 | IN | all |  |  |
-| R-GZ-025 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 5] | L2 | IN | all |  |  |
-| R-GZ-026 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 5] | L2 | IN | all |  |  |
-| R-GZ-027 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 5] | L2 | IN | all |  |  |
-| R-GZ-028 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 5] | L2 | IN | all |  |  |
-| R-GZ-029 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 6] | L2 | IN | all |  |  |
-| R-GZ-030 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 6] | L2 | IN | all |  |  |
-| R-GZ-031 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 6] | L2 | IN | all |  |  |
-| R-GZ-032 | PENDING | 8 | [link](https://egazette.gov.in/) | WC, LendWise, Onboarding | Yes | pending | [Name 6] | L2 | IN | all |  |  |
-| R-MSME-02 | Notification S.O. 1364(E) - revised MSME classification | 8 | [link](https://egazette.gov.in/writeReadData/2025/261838.pdf) | WC, LendWise, Onboarding | Yes | pending | [Name 6] | L2 | IN | all | 2025-04-01 |  |
+| R-GST-03 | Notification No. 15/2025-Central Tax (Rate) amending 11/2017 | 8 | [link](https://egazette.gov.in/WriteReadData/2025/266220.pdf) | WC, LendWise, Onboarding | Yes | pending | [Name 3] | L2 | IN | all | 2025-09-22 |  |
+| R-GZ-001 | Notification under MSMED Act 2006 extending non-tax benefits to MSMEs (18/10/2022) | 8 | [link](https://udyamregistration.gov.in/docs/239737.pdf) | WC, LendWise, Onboarding | Yes | pending | [Name 5] | L2 | IN | all |  |  |
+| R-GZ-002 | S.O. 1296(E): Udyam Registration Certificate for PSL benefits (20/03/2023) | 8 | [link](https://udyamregistration.gov.in/docs/SO1296.pdf) | WC, LendWise, Onboarding | Yes | pending | [Name 6] | L2 | IN | all |  |  |
+| R-MSME-02 | Notification S.O. 1364(E) - revised MSME classification | 8 | [link](https://egazette.gov.in/writeReadData/2025/261838.pdf) | WC, LendWise, Onboarding | Yes | pending | [Name 4] | L2 | IN | all | 2025-04-01 |  |
 | R-MSME-03 | Notification S.O. 2119(E) - MSME classification (2020) | 8 | [link](https://dcmsme.gov.in/State-Gov/Notification_%20S%20O%202119.pdf) | WC, LendWise, Onboarding | Partial | pending | [Name 1] | L2 | IN | all | 2020-07-01 |  |
 | R-GST-C-001 | CEA report on Revenue Neutral Rates | 9 | [link](https://gstcouncil.gov.in/sites/default/files/2024-02/cea-rpt-rnr.pdf) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2015-12-04 | extracted |
 | R-GST-C-002 | Comments of the DoR on the First Discussion Paper on GST | 9 | [link](https://gstcouncil.gov.in/sites/default/files/2024-02/comments-dor-1st-discn-paper-01012010.pdf) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2010-01-01 | url |
@@ -837,59 +603,59 @@ One row per manifest entry, sorted by source then doc_id. The spreadsheet versio
 | R-GST-C-043 | English | 9 | [link](https://cbic-gst.gov.in/pdf/CE-17-2024-Eng.pdf) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2024-07-01 | extracted |
 | R-GST-C-044 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/CE-17-2024-Hindi.pdf) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2024-07-01 | extracted |
 | R-GST-C-045 | CGST (Amendment) Act, 2023 | 9 | [link](https://cbic-gst.gov.in/pdf/CGST-Amendment-Act-2023.pdf) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2023-08-18 | extracted |
-| R-GST-C-046 | Clarifications regarding applicability of GST on certain services – reg. | 9 | [link](https://cbic-gst.gov.in/pdf/Circular-55thGSTC-Services.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-047 | Generation and quoting of Document Identification Number(DIN) on any communication issued by the officers of the Central Board of Indirect Taxes and Customs (CBIC) to tax payers and other concerned pe | 9 | [link](https://cbic-gst.gov.in/pdf/Circular-No-249-2025.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-048 | Reviewing authority, Revisional Authority and Appellate Authority in respect of orders passed by Common Adjudicating Authority (CAA) for show cause notices issued by DGGI -reg. | 9 | [link](https://cbic-gst.gov.in/pdf/Circular-No-250-2025.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-049 | Regularizing payment of GST on co-insurance premium apportioned by the lead insurer to the co-insurer and on ceding /re-insurance commission deducted from the reinsurance premium paid by the insurer t | 9 | [link](https://cbic-gst.gov.in/pdf/Circular-Services-Co-insurance-Re-insurance.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-050 | Citizen Charter | 9 | [link](https://cbic-gst.gov.in/pdf/Citizens_Charter_CBIC_GST.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-051 | Click here for Advisory. | 9 | [link](https://cbic-gst.gov.in/pdf/DuePayment.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-052 | Clarification regarding GST rates & classification (goods) based on the recommendations of the GST Council in its 55th meeting held on 21st December, 2024, at Jaisalmer -reg. | 9 | [link](https://cbic-gst.gov.in/pdf/GST-Circular.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-053 | Guidance Note for Importers and Exporters | 9 | [link](https://cbic-gst.gov.in/pdf/Guidance-Note-for-Importers-Exporters-v2.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-054 | HSNS ACT No 35 of 2025 | 9 | [link](https://cbic-gst.gov.in/pdf/HSNS%20ACT%20No%2035%20of%202025.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-055 | Click here for Advisory. | 9 | [link](https://cbic-gst.gov.in/pdf/HSNS_Advisory_Helpdesk_01-2026.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-056 | Click here for Advisory. | 9 | [link](https://cbic-gst.gov.in/pdf/HSNS_Declaration_filing_procedure.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-057 | Click here for Advisory. | 9 | [link](https://cbic-gst.gov.in/pdf/Helpdesk-Advisory-8-2025-29072025.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-058 | IGST (Amendment) Act, 2023 | 9 | [link](https://cbic-gst.gov.in/pdf/IGST-Amendment-Act-2023.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-059 | Please Click here for Advisory. | 9 | [link](https://cbic-gst.gov.in/pdf/Introduction_of_2FA.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-060 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/NN-26-2024-Hindi.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-061 | English | 9 | [link](https://cbic-gst.gov.in/pdf/NN-26-2024_Eng.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-062 | English | 9 | [link](https://cbic-gst.gov.in/pdf/NN-29-Eng.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-063 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/NN-29-Hindi.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-064 | English | 9 | [link](https://cbic-gst.gov.in/pdf/NN-30-2024-Eng.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
-| R-GST-C-065 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/NN-30-2024-Hindi.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
-| R-GST-C-066 | English | 9 | [link](https://cbic-gst.gov.in/pdf/NN-31-2024-Eng.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
-| R-GST-C-067 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/NN-31-2024-Hindiss.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
-| R-GST-C-068 | Notification No 01/2026 - HSNS CESS | 9 | [link](https://cbic-gst.gov.in/pdf/Notification%20No%2001_2026%20-%20HSNS%20CESS.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
-| R-GST-C-069 | Notification No 02/2026 - HSNS CESS | 9 | [link](https://cbic-gst.gov.in/pdf/Notification%20No%2002_2026%20-%20HSNS%20CESS.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
-| R-GST-C-070 | Notification No 03/2026 - HSNS CESS | 9 | [link](https://cbic-gst.gov.in/pdf/Notification%20No%2003_2026%20-%20HSNS%20CESS.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
-| R-GST-C-071 | Press Release of decisions of the 54th GST Council. | 9 | [link](https://cbic-gst.gov.in/pdf/Press-Release-54-GSTC-090924.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
-| R-GST-C-072 | English | 9 | [link](https://cbic-gst.gov.in/pdf/central-excise-6-24-eng.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
-| R-GST-C-073 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/central-excise-6-24-hindi.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-074 | English | 9 | [link](https://cbic-gst.gov.in/pdf/central-excise-7-24-eng.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-075 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/central-excise-7-24-hindi.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-076 | Clarification on applicability of late fee for delay in furnishing of FORM GSTR-9C- reg. | 9 | [link](https://cbic-gst.gov.in/pdf/cir-cgst-246-03-2025.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-077 | Clarification regarding GST rates & classification (goods) based on the recommendations of the GST Council in its 53rd meeting held on 22nd June, 2024, at New Delhi –reg. | 9 | [link](https://cbic-gst.gov.in/pdf/circular-229-23-2024-GST.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-078 | Clarification in respect of advertising services provided to foreign clients–reg. | 9 | [link](https://cbic-gst.gov.in/pdf/circular-230.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-079 | Clarification on availability of input tax credit in respect of demo vehicles-reg. | 9 | [link](https://cbic-gst.gov.in/pdf/circular-231.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-080 | Clarification on place of supply of data hosting services provided by service providers located in India to cloud computing service providers located outside India-reg. | 9 | [link](https://cbic-gst.gov.in/pdf/circular-232.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-081 | Clarification regarding regularization of refund of IGST availed in contravention of rule 96(10) of CGST Rules, 2017, in cases where the exporters had imported certain inputs without payment of integr | 9 | [link](https://cbic-gst.gov.in/pdf/circular-233.pdf) | LendWise, Copilot | Partial | pending | [Name 4] | L4 | IN | all |  |  |
-| R-GST-C-082 | Clarifying the issues regarding implementation of provisions of sub-section (5) and sub-section (6) in section 16 of CGST Act, 2017-reg. | 9 | [link](https://cbic-gst.gov.in/pdf/circular-237-31-2024-GST.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
-| R-GST-C-083 | Clarification of various doubts related to Section 128A of the CGST Act, 2017. | 9 | [link](https://cbic-gst.gov.in/pdf/circular-238-32-2024-GST.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
-| R-GST-C-084 | Amendment to Circular No. 31/05/2018-GST, dated 9th February, 2018 on 'Proper officer under sections 73 and 74 of the Central Goods and Services Tax Act, 2017 and under the Integrated Goods and Servic | 9 | [link](https://cbic-gst.gov.in/pdf/circular-239-33-2024-GST.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all | 2018-05-31 |  |
-| R-GST-C-085 | Clarifications regarding applicability of GST on certain services – reg. | 9 | [link](https://cbic-gst.gov.in/pdf/circular-services-228-22-2024-GST.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
-| R-GST-C-086 | Corrigendum to Circular No. 237/31/2024-GST dated 15th October, 2024 issued vide F. No. CBIC-20001/6/2024-GST-reg. | 9 | [link](https://cbic-gst.gov.in/pdf/corrigendum-Circular-237-31-2024-GST.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
-| R-GST-C-087 | Seeks to notify Central Goods and Services Tax (Second Amendment) Rules 2025 | 9 | [link](https://cbic-gst.gov.in/pdf/gst-ct-11-2025.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
-| R-GST-C-088 | Procedure to be followed in department appeal filed against interest and/or penalty only, related to Section 128A of the CGST Act, 2017 -regarding. | 9 | [link](https://cbic-gst.gov.in/pdf/ins-gst-02-2025.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
-| R-GST-C-089 | Instructions for processing of applications for GST registration - regarding. | 9 | [link](https://cbic-gst.gov.in/pdf/ins-gst-no-03-2025.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
-| R-GST-C-090 | Instruction No. 02/2024 -GST - Guidelines for Second special All-India Drive against fake registrations –reg. | 9 | [link](https://cbic-gst.gov.in/pdf/instruction-02-2024-GST-12082024.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
-| R-GST-C-091 | KIND ATTENTION: CENTRAL EXCISE TAXPAYERS: Request for Suggestions from Industry & Trade Associations for Budget 2024-25 regarding changes in direct and indirect taxes. | 9 | [link](https://cbic-gst.gov.in/pdf/letter-trade-associations-webmaster.pdf) | LendWise, Copilot | Partial | pending | [Name 6] | L4 | IN | all |  |  |
-| R-GST-C-092 | Short PPT | 9 | [link](https://cbic-gst.gov.in/pdf/ovw-short.pdf) | LendWise, Copilot | Partial | pending | [Name 6] | L4 | IN | all |  |  |
-| R-GST-C-093 | Latest Update - 6th February 2024 - alternate steps to locate e-Payment Challan under ICEGATE portal. | 9 | [link](https://cbic-gst.gov.in/pdf/procedure-locate-e-payment-challan.pdf) | LendWise, Copilot | Partial | pending | [Name 6] | L4 | IN | all |  |  |
-| R-GST-C-094 | GST migration(English) | 9 | [link](https://cbic-gst.gov.in/pdf/public-notice-st-gst-last-date-eng.pdf) | LendWise, Copilot | Partial | pending | [Name 6] | L4 | IN | all |  |  |
-| R-GST-C-095 | GST migration(Hindi) | 9 | [link](https://cbic-gst.gov.in/pdf/public-notice-st-gst-last-date-hindi.pdf) | LendWise, Copilot | Partial | pending | [Name 6] | L4 | IN | all |  |  |
-| R-GST-C-096 | Shifting of Office Address(English) | 9 | [link](https://cbic-gst.gov.in/pdf/public-notice-st-new-address-eng.pdf) | LendWise, Copilot | Partial | pending | [Name 6] | L4 | IN | all |  |  |
-| R-GST-C-097 | Shifting of Office Address(Hindi) | 9 | [link](https://cbic-gst.gov.in/pdf/public-notice-st-new-address-hindi.pdf) | LendWise, Copilot | Partial | pending | [Name 6] | L4 | IN | all |  |  |
-| R-GST-C-098 | Sectoral Groups on GST - Contact details (As on June 14, 2017) | 9 | [link](https://cbic-gst.gov.in/pdf/sectoral-working-gp-contactdtls-14june2017.pdf) | LendWise, Copilot | Partial | pending | [Name 6] | L4 | IN | all |  |  |
+| R-GST-C-046 | Clarifications regarding applicability of GST on certain services – reg. | 9 | [link](https://cbic-gst.gov.in/pdf/Circular-55thGSTC-Services.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-047 | Generation and quoting of Document Identification Number(DIN) on any communication issued by the officers of the Central Board of Indirect Taxes and Customs (CBIC) to tax payers and other concerned pe | 9 | [link](https://cbic-gst.gov.in/pdf/Circular-No-249-2025.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-048 | Reviewing authority, Revisional Authority and Appellate Authority in respect of orders passed by Common Adjudicating Authority (CAA) for show cause notices issued by DGGI -reg. | 9 | [link](https://cbic-gst.gov.in/pdf/Circular-No-250-2025.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-049 | Regularizing payment of GST on co-insurance premium apportioned by the lead insurer to the co-insurer and on ceding /re-insurance commission deducted from the reinsurance premium paid by the insurer t | 9 | [link](https://cbic-gst.gov.in/pdf/Circular-Services-Co-insurance-Re-insurance.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-050 | Citizen Charter | 9 | [link](https://cbic-gst.gov.in/pdf/Citizens_Charter_CBIC_GST.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-051 | Click here for Advisory. | 9 | [link](https://cbic-gst.gov.in/pdf/DuePayment.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-052 | Clarification regarding GST rates & classification (goods) based on the recommendations of the GST Council in its 55th meeting held on 21st December, 2024, at Jaisalmer -reg. | 9 | [link](https://cbic-gst.gov.in/pdf/GST-Circular.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-053 | Guidance Note for Importers and Exporters | 9 | [link](https://cbic-gst.gov.in/pdf/Guidance-Note-for-Importers-Exporters-v2.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-054 | HSNS ACT No 35 of 2025 | 9 | [link](https://cbic-gst.gov.in/pdf/HSNS%20ACT%20No%2035%20of%202025.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-055 | Click here for Advisory. | 9 | [link](https://cbic-gst.gov.in/pdf/HSNS_Advisory_Helpdesk_01-2026.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-056 | Click here for Advisory. | 9 | [link](https://cbic-gst.gov.in/pdf/HSNS_Declaration_filing_procedure.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-057 | Click here for Advisory. | 9 | [link](https://cbic-gst.gov.in/pdf/Helpdesk-Advisory-8-2025-29072025.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-058 | IGST (Amendment) Act, 2023 | 9 | [link](https://cbic-gst.gov.in/pdf/IGST-Amendment-Act-2023.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-059 | Please Click here for Advisory. | 9 | [link](https://cbic-gst.gov.in/pdf/Introduction_of_2FA.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-060 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/NN-26-2024-Hindi.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-061 | English | 9 | [link](https://cbic-gst.gov.in/pdf/NN-26-2024_Eng.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-062 | English | 9 | [link](https://cbic-gst.gov.in/pdf/NN-29-Eng.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-063 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/NN-29-Hindi.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-064 | English | 9 | [link](https://cbic-gst.gov.in/pdf/NN-30-2024-Eng.pdf) | LendWise, Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-GST-C-065 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/NN-30-2024-Hindi.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-066 | English | 9 | [link](https://cbic-gst.gov.in/pdf/NN-31-2024-Eng.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-067 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/NN-31-2024-Hindiss.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-068 | Notification No 01/2026 - HSNS CESS | 9 | [link](https://cbic-gst.gov.in/pdf/Notification%20No%2001_2026%20-%20HSNS%20CESS.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-069 | Notification No 02/2026 - HSNS CESS | 9 | [link](https://cbic-gst.gov.in/pdf/Notification%20No%2002_2026%20-%20HSNS%20CESS.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-070 | Notification No 03/2026 - HSNS CESS | 9 | [link](https://cbic-gst.gov.in/pdf/Notification%20No%2003_2026%20-%20HSNS%20CESS.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-071 | Press Release of decisions of the 54th GST Council. | 9 | [link](https://cbic-gst.gov.in/pdf/Press-Release-54-GSTC-090924.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-072 | English | 9 | [link](https://cbic-gst.gov.in/pdf/central-excise-6-24-eng.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-073 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/central-excise-6-24-hindi.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-074 | English | 9 | [link](https://cbic-gst.gov.in/pdf/central-excise-7-24-eng.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-075 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/central-excise-7-24-hindi.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-076 | Clarification on applicability of late fee for delay in furnishing of FORM GSTR-9C- reg. | 9 | [link](https://cbic-gst.gov.in/pdf/cir-cgst-246-03-2025.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-077 | Clarification regarding GST rates & classification (goods) based on the recommendations of the GST Council in its 53rd meeting held on 22nd June, 2024, at New Delhi –reg. | 9 | [link](https://cbic-gst.gov.in/pdf/circular-229-23-2024-GST.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-078 | Clarification in respect of advertising services provided to foreign clients–reg. | 9 | [link](https://cbic-gst.gov.in/pdf/circular-230.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-079 | Clarification on availability of input tax credit in respect of demo vehicles-reg. | 9 | [link](https://cbic-gst.gov.in/pdf/circular-231.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-080 | Clarification on place of supply of data hosting services provided by service providers located in India to cloud computing service providers located outside India-reg. | 9 | [link](https://cbic-gst.gov.in/pdf/circular-232.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-081 | Clarification regarding regularization of refund of IGST availed in contravention of rule 96(10) of CGST Rules, 2017, in cases where the exporters had imported certain inputs without payment of integr | 9 | [link](https://cbic-gst.gov.in/pdf/circular-233.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-082 | Clarifying the issues regarding implementation of provisions of sub-section (5) and sub-section (6) in section 16 of CGST Act, 2017-reg. | 9 | [link](https://cbic-gst.gov.in/pdf/circular-237-31-2024-GST.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-083 | Clarification of various doubts related to Section 128A of the CGST Act, 2017. | 9 | [link](https://cbic-gst.gov.in/pdf/circular-238-32-2024-GST.pdf) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
+| R-GST-C-084 | Amendment to Circular No. 31/05/2018-GST, dated 9th February, 2018 on 'Proper officer under sections 73 and 74 of the Central Goods and Services Tax Act, 2017 and under the Integrated Goods and Servic | 9 | [link](https://cbic-gst.gov.in/pdf/circular-239-33-2024-GST.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all | 2018-05-31 |  |
+| R-GST-C-085 | Clarifications regarding applicability of GST on certain services – reg. | 9 | [link](https://cbic-gst.gov.in/pdf/circular-services-228-22-2024-GST.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
+| R-GST-C-086 | Corrigendum to Circular No. 237/31/2024-GST dated 15th October, 2024 issued vide F. No. CBIC-20001/6/2024-GST-reg. | 9 | [link](https://cbic-gst.gov.in/pdf/corrigendum-Circular-237-31-2024-GST.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
+| R-GST-C-087 | Seeks to notify Central Goods and Services Tax (Second Amendment) Rules 2025 | 9 | [link](https://cbic-gst.gov.in/pdf/gst-ct-11-2025.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
+| R-GST-C-088 | Procedure to be followed in department appeal filed against interest and/or penalty only, related to Section 128A of the CGST Act, 2017 -regarding. | 9 | [link](https://cbic-gst.gov.in/pdf/ins-gst-02-2025.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
+| R-GST-C-089 | Instructions for processing of applications for GST registration - regarding. | 9 | [link](https://cbic-gst.gov.in/pdf/ins-gst-no-03-2025.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
+| R-GST-C-090 | Instruction No. 02/2024 -GST - Guidelines for Second special All-India Drive against fake registrations –reg. | 9 | [link](https://cbic-gst.gov.in/pdf/instruction-02-2024-GST-12082024.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
+| R-GST-C-091 | KIND ATTENTION: CENTRAL EXCISE TAXPAYERS: Request for Suggestions from Industry & Trade Associations for Budget 2024-25 regarding changes in direct and indirect taxes. | 9 | [link](https://cbic-gst.gov.in/pdf/letter-trade-associations-webmaster.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
+| R-GST-C-092 | Short PPT | 9 | [link](https://cbic-gst.gov.in/pdf/ovw-short.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
+| R-GST-C-093 | Latest Update - 6th February 2024 - alternate steps to locate e-Payment Challan under ICEGATE portal. | 9 | [link](https://cbic-gst.gov.in/pdf/procedure-locate-e-payment-challan.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
+| R-GST-C-094 | GST migration(English) | 9 | [link](https://cbic-gst.gov.in/pdf/public-notice-st-gst-last-date-eng.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
+| R-GST-C-095 | GST migration(Hindi) | 9 | [link](https://cbic-gst.gov.in/pdf/public-notice-st-gst-last-date-hindi.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
+| R-GST-C-096 | Shifting of Office Address(English) | 9 | [link](https://cbic-gst.gov.in/pdf/public-notice-st-new-address-eng.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
+| R-GST-C-097 | Shifting of Office Address(Hindi) | 9 | [link](https://cbic-gst.gov.in/pdf/public-notice-st-new-address-hindi.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
+| R-GST-C-098 | Sectoral Groups on GST - Contact details (As on June 14, 2017) | 9 | [link](https://cbic-gst.gov.in/pdf/sectoral-working-gp-contactdtls-14june2017.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
 | R-GST-C-099 | advisory.pdf | 9 | [link](https://gstcouncil.gov.in/sites/default/files/2024-11/advisory.pdf) | LendWise, Copilot | No | rejected |  | L4 | IN | all |  |  |
 | R-GST-C-100 | advisory_in_case_of_tobacco_products.pdf | 9 | [link](https://gstcouncil.gov.in/sites/default/files/2024-11/advisory_in_case_of_tobacco_products.pdf) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2024-07-25 | extracted |
 | R-GST-C-101 | document_1.pdf | 9 | [link](https://gstcouncil.gov.in/sites/default/files/2024-11/document_1.pdf) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2017-09-20 | extracted |
@@ -904,16 +670,9 @@ One row per manifest entry, sorted by source then doc_id. The spreadsheet versio
 | R-GST-C-110 | View | 9 | [link](https://gstcouncil.gov.in/sites/default/files/Agenda/54_meeting_agenda_0.pdf) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2024-09-09 | extracted |
 | R-GST-C-111 | View | 9 | [link](https://gstcouncil.gov.in/sites/default/files/Agenda/55th_meeting_agenda_compressed_1.pdf) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2024-12-21 | extracted |
 | R-GST-C-112 | View | 9 | [link](https://gstcouncil.gov.in/sites/default/files/Minutes/47_minutes_0_5.pdf) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2017-07-01 | wef |
-| R-MSME-01 | Micro, Small and Medium Enterprises Development Act, 2006 - section 15 | 10 | [link](https://www.indiacode.nic.in/show-data?actid=AC_CEN_46_77_00002_200627_1517807324919&orderno=15) | WC, Copilot | Yes | pending | [Name 5] | L3 | IN | all | 2006-10-02 |  |
-| R-MSME-01-S16 | Micro, Small and Medium Enterprises Development Act, 2006 - section 16 | 10 | [link](https://www.indiacode.nic.in/show-data?actid=AC_CEN_46_77_00002_200627_1517807324919&orderno=16) | WC, Copilot | Yes | pending | [Name 5] | L3 | IN | all | 2006-10-02 |  |
+| R-MSME-01 | Micro, Small and Medium Enterprises Development Act, 2006 (full text, Ministry of MSME / MSME Samadhaan copy) | 10 | [link](https://samadhaan.msme.gov.in/WriteReadData/DocumentFile/MSMED2006act.pdf) | WC, Copilot | Yes | pending | [Name 5] | L3 | IN | all | 2006-10-02 |  |
 | R-TAX-01 | Income-tax Act, 2025 (as amended by Finance Act 2026) - s.37(2)(g) | 10 | [link](https://www.incometaxindia.gov.in/documents/d/guest/income_tax_act_2025_as_amended_by_fa_act_2026-pdf) | WC, Copilot | Yes | pending | [Name 6] | L3 | IN | all | 2026-04-01 |  |
 | R-TAX-02 | Income-tax Act, 1961 - section 43B | 10 | [link](https://www.incometaxindia.gov.in/w/section-43b-40) | WC, Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-TAX-C-001 | PENDING | 10 | [link](https://www.incometaxindia.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L3 | IN | all |  |  |
-| R-TAX-C-002 | PENDING | 10 | [link](https://www.indiacode.nic.in/) | WC, Copilot | Yes | pending | [Name 5] | L3 | IN | all |  |  |
-| R-TAX-C-003 | PENDING | 10 | [link](https://www.incometaxindia.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L3 | IN | all |  |  |
-| R-TAX-C-004 | PENDING | 10 | [link](https://www.indiacode.nic.in/) | WC, Copilot | Yes | pending | [Name 5] | L3 | IN | all |  |  |
-| R-TAX-C-005 | PENDING | 10 | [link](https://www.incometaxindia.gov.in/) | WC, Copilot | Yes | pending | [Name 6] | L3 | IN | all |  |  |
-| R-TAX-C-006 | PENDING | 10 | [link](https://www.indiacode.nic.in/) | WC, Copilot | Yes | pending | [Name 5] | L3 | IN | all |  |  |
 | R-SIDBI-01 | SIDBI - Working Capital FAQ | 11 | [link](https://www.sidbi.in/working-capital) | WC, Copilot | No | ok |  | L4 | IN | all | 2026-10-07 | extracted |
 | R-SIDBI-02 | SIDBI - Project Funding FAQ | 11 | [link](https://www.sidbi.in/project-funding) | WC, Copilot | No | ok |  | L4 | IN | all | 2026-10-07 | extracted |
 | R-SIDBI-03 | SIDBI - Machinery Loan FAQ | 11 | [link](https://www.sidbi.in/machinery-loan) | WC, Copilot | No | ok |  | L4 | IN | all | 2026-10-07 | extracted |
@@ -957,21 +716,17 @@ One row per manifest entry, sorted by source then doc_id. The spreadsheet versio
 | R-RBI-08 | Reserve Bank of India (Trade Receivables Discounting System) Directions, 2026 (RBI/DPSS/2026-27/406) | 12 | [link](https://www.rbi.org.in/scripts/BS_ViewMasDirections.aspx?id=13526) | Copilot | Yes | ok |  | L4 | IN | all | 2026-06-23 | curated |
 | R-TREDS-001 | https://www.m1xchange.com/faqs/ | 12 | [link](https://www.m1xchange.com/faqs/) | Copilot | Partial | needs_date |  | L4 | IN | all |  |  |
 | R-TREDS-002 | faq | 12 | [link](https://www.invoicemart.com/faq) | Copilot | Partial | needs_date |  | L4 | IN | all |  |  |
-| R-TREDS-003 | Refund Policy | 12 | [link](https://www.m1xchange.com/wp-content/uploads/2024/05/M1-Refund-Policy.pdf) | Copilot | Partial | pending | [Name 1] | L4 | IN | all |  |  |
+| R-TREDS-003 | Refund Policy | 12 | [link](https://www.m1xchange.com/wp-content/uploads/2024/05/M1-Refund-Policy.pdf) | Copilot | Partial | pending | [Name 6] | L4 | IN | all |  |  |
 | R-TREDS-004 | https://www.m1xchange.com/wp-content/uploads/2025/05/KYC-Documents-Requirement-List-1.pdf | 12 | [link](https://www.m1xchange.com/wp-content/uploads/2025/05/KYC-Documents-Requirement-List-1.pdf) | Copilot | No | ok |  | L4 | IN | all | 2025-05-01 | url |
 | R-TREDS-005 | CSR Policy | 12 | [link](https://www.m1xchange.com/wp-content/uploads/2025/06/CSR-policy-V-1.0_20.03.2025.pdf) | Copilot | No | ok |  | L4 | IN | all | 2025-03-20 | extracted |
 | R-TREDS-006 | ISO 27001 Certification | 12 | [link](https://www.m1xchange.com/wp-content/uploads/2025/10/bsi-Certficate.pdf) | Copilot | No | ok |  | L4 | IN | all | 2022-10-28 | extracted |
 | R-TREDS-007 | Notice to Corporate Customers | 12 | [link](https://www.m1xchange.com/wp-content/uploads/2026/08/M1xchange_Corporate_Communication_NACH_v4.pdf) | Copilot | No | ok |  | L4 | IN | all | 2026-08-01 | url |
 | R-TREDS-008 | Notice to Bankers & Member Banks | 12 | [link](https://www.m1xchange.com/wp-content/uploads/2026/08/M1xchange_Financier_Communication_NACH_v7_Aug.pdf) | Copilot | No | ok |  | L4 | IN | all | 2026-08-01 | url |
 | R-TREDS-009 | Notice to MSME Customers | 12 | [link](https://www.m1xchange.com/wp-content/uploads/2026/08/M1xchange_MSME_Seller_Communication_NACH_v3.pdf) | Copilot | No | ok |  | L4 | IN | all | 2026-08-01 | url |
-| R-TREDS-010 | PENDING | 12 | [link](https://www.m1xchange.com/faqs/) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-TREDS-011 | PENDING | 12 | [link](https://www.rxil.in/) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-TREDS-012 | PENDING | 12 | [link](https://www.m1xchange.com/faqs/) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
-| R-TREDS-013 | PENDING | 12 | [link](https://www.rxil.in/) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-TREDS-014 | PENDING | 12 | [link](https://www.m1xchange.com/faqs/) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-TREDS-010 | M1xchange TReDS guideline | 12 | [link](https://www.m1xchange.com/treds-guideline/) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
 | R-BANK-01 | SBI Advances-related service charges w.e.f. 01.04.2019 | 13 | [link](https://sbi.co.in/documents/16012/76239/ADVANCES+RELATED+SERVICE+CHARGES+W.E.F.+01.04.2019+A.pdf) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2019-04-01 | curated |
-| R-BANK-02 | SBI SME Smart Score | 13 | [link](https://sbi.co.in/portal/web/sme/sme-smart-score) | LendWise, Copilot | Partial | pending | [Name 2] | L4 | IN | all |  |  |
-| R-BANK-03 | Bandhan Bank Schedule of Charges - SME and Corporate Loans | 13 | [link](https://bandhan.bank.in/sites/default/files/2026-01/Schedule-of-Charges-SME-and-Corporate-Loans-16012026.pdf) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all | 2026-01-16 |  |
+| R-BANK-02 | SBI SME Smart Score | 13 | [link](https://sbi.co.in/portal/web/sme/sme-smart-score) | LendWise, Copilot | Partial | pending | [Name 5] | L4 | IN | all |  |  |
+| R-BANK-03 | Bandhan Bank Schedule of Charges - SME and Corporate Loans | 13 | [link](https://bandhan.bank.in/sites/default/files/2026-01/Schedule-of-Charges-SME-and-Corporate-Loans-16012026.pdf) | LendWise, Copilot | Partial | pending | [Name 6] | L4 | IN | all | 2026-01-16 |  |
 | R-BANK-04 | Indian Bank - Service charges for MSME products (2018) | 13 | [link](https://indianbank.in/wp-content/uploads/2018/11/Service-Charge-for-MSME-Products-1.pdf) | LendWise, Copilot | No | rejected |  | L4 | IN | all | 2018-11-01 |  |
 | R-BANK-05 | Indian Bank - MSME service charges (2022) | 13 | [link](https://www.indianbank.in/wp-content/uploads/2022/04/MSME-Service-Charges.pdf) | LendWise, Copilot | No | rejected |  | L4 | IN | all | 2022-04-01 |  |
 | R-BANK-06 | Bank of Baroda - Service Charges (MSME Annexure II) | 13 | [link](https://bankofbaroda.bank.in/interest-rate-and-service-charges/service-charges) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2019-06-20 | wef |
@@ -1004,105 +759,62 @@ One row per manifest entry, sorted by source then doc_id. The spreadsheet versio
 | R-BANK-S-017 | click here | 13 | [link](https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-Charges-Small-Loan-Against-Property.pdf) | LendWise, Copilot | No | ok |  | L4 | IN | commercial_bank | 2026-08-01 | url |
 | R-BANK-S-018 | click here | 13 | [link](https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-charges-for-Business-Banking-Group-21082026.pdf) | LendWise, Copilot | No | ok |  | L4 | IN | commercial_bank | 2025-07-02 | extracted |
 | R-BANK-S-019 | click here | 13 | [link](https://bandhan.bank.in/sites/default/files/2026-08/Standard-Schedule-of-Charges-for-Savings-NR-Accounts-and-Debit-Cards.pdf) | LendWise, Copilot | No | ok |  | L4 | IN | commercial_bank | 2024-06-29 | extracted |
-| R-BANK-S-020 | PENDING | 13 | [link](https://bandhan.bank.in/rates-charges) | LendWise, Copilot | Yes | pending | [Name 5] | L4 | IN | commercial_bank |  |  |
-| R-BANK-S-021 | PENDING | 13 | [link](https://bandhan.bank.in/rates-charges) | LendWise, Copilot | Yes | pending | [Name 5] | L4 | IN | commercial_bank |  |  |
-| R-BANK-S-022 | PENDING | 13 | [link](https://bandhan.bank.in/rates-charges) | LendWise, Copilot | Yes | pending | [Name 5] | L4 | IN | commercial_bank |  |  |
-| R-BANK-S-023 | PENDING | 13 | [link](https://bandhan.bank.in/rates-charges) | LendWise, Copilot | Yes | pending | [Name 5] | L4 | IN | commercial_bank |  |  |
 | R-BANK-S-025 | click here | 13 | [link](https://bandhan.bank.in/sites/default/files/2026-05/SOC-NR-Account-Product-Variants.pdf) | LendWise, Copilot | No | ok |  | L4 | IN | commercial_bank | 2026-05-01 | url |
 | R-RATE-02-BOB | Bank of Baroda - Retail loan interest rates (BRLLR) | 13 | [link](https://bankofbaroda.bank.in/interest-rate-and-service-charges/retail-loans-interest-rates) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2026-10-08 | curated |
 | R-RATE-02-SBI | SBI External Benchmark based Lending Rate | 13 | [link](https://sbi.bank.in/web/interest-rates/external-benchmark-based-lending-rate) | LendWise, Copilot | No | ok |  | L4 | IN | all | 2026-10-15 | curated |
-| R-SANSAD-001 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-002 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-003 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-004 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-005 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-006 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-007 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-008 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-009 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-010 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-011 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-012 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-013 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-014 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-015 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-016 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-017 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-018 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-019 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-020 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-021 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-022 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-023 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-024 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-025 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-026 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-027 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-028 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-029 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-030 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-031 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-032 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-033 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-034 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-035 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-036 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-037 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-038 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-039 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-040 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-041 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-042 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-043 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-044 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 3] | L4 | IN | all |  |  |
-| R-SANSAD-045 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-SANSAD-046 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-SANSAD-047 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-SANSAD-048 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-SANSAD-049 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-SANSAD-050 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
-| R-JUD-001 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 5] | L2 | IN | all |  |  |
-| R-JUD-002 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 5] | L2 | IN | all |  |  |
-| R-JUD-003 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 5] | L2 | IN | all |  |  |
-| R-JUD-004 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 5] | L2 | IN | all |  |  |
-| R-JUD-005 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 5] | L2 | IN | all |  |  |
+| R-SANSAD-001 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-002 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-003 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-004 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-005 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-006 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-007 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-008 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-009 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-010 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-011 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-012 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-013 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-014 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-015 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-016 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 1] | L4 | IN | all |  |  |
+| R-SANSAD-017 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
+| R-SANSAD-018 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
+| R-SANSAD-019 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
+| R-SANSAD-020 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
+| R-SANSAD-021 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
+| R-SANSAD-022 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
+| R-SANSAD-023 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
+| R-SANSAD-024 | PENDING | 14 | [link](https://sansad.in/rs/questions/questions-and-answers) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
+| R-SANSAD-025 | PENDING | 14 | [link](https://sansad.in/ls/questions/questions-and-answers) | Copilot | Yes | pending | [Name 6] | L4 | IN | all |  |  |
+| R-JUD-001 | MSME Samadhaan: Supreme Court judgments related to delayed payment (list page) | 15 | [link](https://samadhaan.msme.gov.in/OrderDocument.aspx) | Copilot | Yes | pending | [Name 5] | L2 | IN | all |  |  |
+| R-JUD-002 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 6] | L2 | IN | all |  |  |
+| R-JUD-003 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 6] | L2 | IN | all |  |  |
+| R-JUD-004 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 6] | L2 | IN | all |  |  |
+| R-JUD-005 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 6] | L2 | IN | all |  |  |
 | R-JUD-006 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 6] | L2 | IN | all |  |  |
-| R-JUD-007 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 6] | L2 | IN | all |  |  |
-| R-JUD-008 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 6] | L2 | IN | all |  |  |
-| R-JUD-009 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 6] | L2 | IN | all |  |  |
-| R-JUD-010 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 6] | L2 | IN | all |  |  |
+| R-JUD-007 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 1] | L2 | IN | all |  |  |
+| R-JUD-008 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 1] | L2 | IN | all |  |  |
+| R-JUD-009 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 1] | L2 | IN | all |  |  |
+| R-JUD-010 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 1] | L2 | IN | all |  |  |
 | R-JUD-011 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 1] | L2 | IN | all |  |  |
-| R-JUD-012 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 1] | L2 | IN | all |  |  |
-| R-JUD-013 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 1] | L2 | IN | all |  |  |
-| R-JUD-014 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 1] | L2 | IN | all |  |  |
-| R-JUD-015 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 1] | L2 | IN | all |  |  |
+| R-JUD-012 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 2] | L2 | IN | all |  |  |
+| R-JUD-013 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 2] | L2 | IN | all |  |  |
+| R-JUD-014 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 2] | L2 | IN | all |  |  |
+| R-JUD-015 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 2] | L2 | IN | all |  |  |
 | R-JUD-016 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 2] | L2 | IN | all |  |  |
-| R-JUD-017 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 2] | L2 | IN | all |  |  |
-| R-JUD-018 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 2] | L2 | IN | all |  |  |
-| R-JUD-019 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 2] | L2 | IN | all |  |  |
-| R-JUD-020 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 2] | L2 | IN | all |  |  |
+| R-JUD-017 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 3] | L2 | IN | all |  |  |
+| R-JUD-018 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 3] | L2 | IN | all |  |  |
+| R-JUD-019 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 3] | L2 | IN | all |  |  |
+| R-JUD-020 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 3] | L2 | IN | all |  |  |
 | R-JUD-021 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 3] | L2 | IN | all |  |  |
-| R-JUD-022 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 3] | L2 | IN | all |  |  |
-| R-JUD-023 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 3] | L2 | IN | all |  |  |
-| R-JUD-024 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 3] | L2 | IN | all |  |  |
-| R-JUD-025 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 3] | L2 | IN | all |  |  |
-| R-STATE-001 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN-MH | all |  |  |
-| R-STATE-002 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN-MH | all |  |  |
-| R-STATE-003 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN-MH | all |  |  |
-| R-STATE-004 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN-MH | all |  |  |
+| R-JUD-022 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 4] | L2 | IN | all |  |  |
+| R-JUD-023 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 4] | L2 | IN | all |  |  |
+| R-JUD-024 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 4] | L2 | IN | all |  |  |
+| R-JUD-025 | PENDING | 15 | [link](https://www.sci.gov.in/judgements-judgement-date/) | Copilot | Yes | pending | [Name 4] | L2 | IN | all |  |  |
+| R-STATE-001 | Gujarat Industrial Policy 2026 | 16 | [link](https://ic.gujarat.gov.in/documents/Viksit-Gujarat-Industrial-Policy2026_new.pdf) | Copilot | Yes | pending | [Name 5] | L4 | IN-GJ | all |  |  |
+| R-STATE-002 | Tamil Nadu MSME Policy Note | 16 | [link](https://msmeonline.tn.gov.in/msme_policy_doc.php) | Copilot | Yes | pending | [Name 6] | L4 | IN-TN | all |  |  |
+| R-STATE-003 | Uttar Pradesh MSME Promotion Policy and other policies | 16 | [link](https://msme.up.gov.in/Home/Policies) | Copilot | Yes | pending | [Name 5] | L4 | IN-UP | all |  |  |
+| R-STATE-004 | Telangana MSME Policy Booklet (English) | 16 | [link](https://industries.telangana.gov.in/Library/MSME%20Policy%20Booklet%20English1.pdf) | Copilot | Yes | pending | [Name 4] | L4 | IN-TS | all |  |  |
 | R-STATE-005 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 5] | L4 | IN-MH | all |  |  |
 | R-STATE-006 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 5] | L4 | IN-GJ | all |  |  |
-| R-STATE-007 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 5] | L4 | IN-GJ | all |  |  |
-| R-STATE-008 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 5] | L4 | IN-GJ | all |  |  |
-| R-STATE-009 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN-KA | all |  |  |
-| R-STATE-010 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN-KA | all |  |  |
-| R-STATE-011 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN-KA | all |  |  |
-| R-STATE-012 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 4] | L4 | IN-TN | all |  |  |
-| R-STATE-013 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 5] | L4 | IN-TN | all |  |  |
-| R-STATE-014 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 5] | L4 | IN-TN | all |  |  |
-| R-STATE-015 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 5] | L4 | IN-UP | all |  |  |
-| R-STATE-016 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 5] | L4 | IN-UP | all |  |  |
-| R-STATE-017 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 6] | L4 | IN-UP | all |  |  |
-| R-STATE-018 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 6] | L4 | IN-TS | all |  |  |
-| R-STATE-019 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 6] | L4 | IN-TS | all |  |  |
-| R-STATE-020 | PENDING | 16 | [link](https://di.maharashtra.gov.in/) | Copilot | Yes | pending | [Name 6] | L4 | IN-TS | all |  |  |

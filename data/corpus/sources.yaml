@@ -16,7 +16,7 @@ sources:
   - id: 1
     name: RBI Master Directions (2025 consolidation)
     prefix: R-RBI-MD
-    target: 120
+    target: 48
     basis: L4
     applies_to: all          # per document: owner sets commercial_bank / nbfc / sfb / coop_bank when filling a slot
     jurisdiction: [IN]
@@ -25,8 +25,9 @@ sources:
     index_urls: ["https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx"]
   - id: 2
     name: RBI circulars superseded by the 2025 consolidation (set superseded_by)
+    manual_recipe: "RBI Notifications (https://www.rbi.org.in/Scripts/NotificationUser.aspx): use the year filter for 2015-2025 and open circulars on lending to MSMEs, Key Facts Statement, interest rates on advances / external benchmark, fair practices code, or loans and advances that the 28 Nov 2025 consolidation repealed (the new Master Direction lists them in its repeal annex). Save the circular page as Web page, HTML only; set superseded_by to the matching R-RBI Direction."
     prefix: R-RBI-HIST
-    target: 60
+    target: 40
     basis: L4
     applies_to: all
     jurisdiction: [IN]
@@ -36,7 +37,7 @@ sources:
   - id: 3
     name: RBI FAQs, lending-rate releases (24 months), MSME press releases, Bulletin/Annual Report chapters
     prefix: R-RBI-FAQ
-    target: 60
+    target: 36
     basis: L4
     applies_to: all
     jurisdiction: [IN]
@@ -46,7 +47,7 @@ sources:
   - id: 4
     name: CGTMSE circulars, scheme guidelines, fee pages
     prefix: R-CG-C
-    target: 180
+    target: 163
     min_date: "2015-01-01"   # owner: circulars from 2015 onward only (year from the table row; else checked on download)
     buffer: 20   # scheme/FAQ pages and scheme documents (2026-11-05 discovery of the cgtmse.in menus)
     basis: L4
@@ -63,7 +64,7 @@ sources:
   - id: 5
     name: NCGTC schemes (ECLGS, CGFMU, CGSSI) guidelines and FAQs
     prefix: R-NCGTC
-    target: 25
+    target: 0
     basis: L4
     applies_to: all
     jurisdiction: [IN]
@@ -75,7 +76,7 @@ sources:
   - id: 6
     name: MUDRA / PMMY circulars and FAQs
     prefix: R-MUDRA
-    target: 15
+    target: 0
     basis: L4
     applies_to: all
     jurisdiction: [IN]
@@ -87,19 +88,19 @@ sources:
   - id: 7
     name: Ministry of MSME annual reports and scheme guidelines; Udyam and MSME Samadhaan FAQs
     prefix: R-MSME-G
-    target: 40
+    target: 9
     basis: L4
     applies_to: all
     jurisdiction: [IN]
     agents: [WC, Copilot]
     method: script
-    index_urls: ["https://udyamregistration.gov.in/", "https://msme.gov.in/"]
+    index_urls: ["https://udyamregistration.gov.in/"]   # msme.gov.in returns 403 to scripts and readers (2026-11-05)
     link_pattern: '/docs/[^"]+\.pdf'
     note: "msme.gov.in 403 on 2026-11-05; Udyam homepage lists bulletins under /docs/"
   - id: 8
     name: Gazette notifications (MSME classification, GST rate/exemption, DPDP Rules, MCA MSME Form 1)
     prefix: R-GZ
-    target: 40
+    target: 10
     basis: L2
     applies_to: all
     jurisdiction: [IN]
@@ -131,7 +132,7 @@ sources:
   - id: 10
     name: CBDT on s.43B(h) and Income-tax Act 2025 s.37(2)(g); relevant Act chapters
     prefix: R-TAX-C
-    target: 10
+    target: 3
     basis: L3
     applies_to: all
     jurisdiction: [IN]
@@ -156,7 +157,7 @@ sources:
   - id: 12
     name: TReDS - RBI directions and platform FAQs/rulebooks (RXIL, M1xchange, Invoicemart)
     prefix: R-TREDS
-    target: 15
+    target: 11
     basis: L4
     applies_to: all
     jurisdiction: [IN]
@@ -169,7 +170,7 @@ sources:
   - id: 13
     name: Bank and NBFC schedules of charges and sample KFS (~20 lenders, current and older)
     prefix: R-BANK-S
-    target: 40
+    target: 36
     buffer: 40   # every schedule of charges listed on bandhan.bank.in; other lenders' pages were not reachable in plain HTML
     basis: L4
     applies_to: commercial_bank   # per lender type; NBFC/SFB/co-op entries set their own
@@ -181,8 +182,9 @@ sources:
     include_index: ["https://indianbank.bank.in/en/processing-fees/charges-for-loan-products"]
   - id: 14
     name: Lok Sabha / Rajya Sabha answers on MSME credit, CGTMSE, TReDS, delayed payments
+    manual_recipe: "sansad.in Questions and Answers (Lok Sabha: https://sansad.in/ls/questions/questions-and-answers ; Rajya Sabha: https://sansad.in/rs/questions/questions-and-answers): filter Ministry = Micro, Small and Medium Enterprises or Finance, sessions 2024-2026, and search the subject for MSME credit, CGTMSE, TReDS, delayed payment, Samadhaan or Udyam. Open each answer and save its PDF; one answer per row."
     prefix: R-SANSAD
-    target: 50
+    target: 25
     basis: L4
     applies_to: all
     jurisdiction: [IN]
@@ -192,6 +194,7 @@ sources:
     note: "sansad.in is a JavaScript app with no HTML listing, so manual"
   - id: 15
     name: Supreme Court and High Court judgments on the MSMED Act
+    manual_recipe: "Start with the MSME Samadhaan list of Supreme Court judgments on delayed payment (https://samadhaan.msme.gov.in/OrderDocument.aspx) and save each linked judgment PDF as its own row. For more, use the Supreme Court judgment search (sci.gov.in, by free text 'MSMED Act' / 'Facilitation Council', years 2015-2026; a person may solve the CAPTCHA, a script may not) and save the official judgment PDF. Legal points only (ADR 0020)."
     prefix: R-JUD
     target: 25
     basis: L2
@@ -202,8 +205,9 @@ sources:
     index_urls: ["https://www.sci.gov.in/judgements-judgement-date/"]
   - id: 16
     name: State MSME/industrial policies - Maharashtra (home) and other states (KR-04 distractors)
+    manual_recipe: "Maharashtra (home, IN-MH): the Industries Department site di.maharashtra.gov.in does not respond; find the Maharashtra Industrial Policy 2019 or current MSME policy on an official Maharashtra site (maharashtra.gov.in Government Resolutions, MIDC midc.maharashtra.gov.in) and save the PDF. Karnataka (IN-KA): save the Karnataka Industrial Policy PDF from the Karnataka Commerce and Industries department site. Set jurisdiction accordingly."
     prefix: R-STATE
-    target: 20
+    target: 6
     basis: L4
     applies_to: all
     jurisdiction: [IN-MH, IN-MH, IN-MH, IN-MH, IN-MH, IN-GJ, IN-GJ, IN-GJ, IN-KA, IN-KA, IN-KA, IN-TN, IN-TN, IN-TN, IN-UP, IN-UP, IN-UP, IN-TS, IN-TS, IN-TS]

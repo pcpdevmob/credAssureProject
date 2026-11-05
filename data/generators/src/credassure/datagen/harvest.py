@@ -270,6 +270,80 @@ def _index(
     )
 
 
+CURATED = CORPUS / "manual_curated.yaml"
+
+
+def _norm(url: str) -> str:
+    parts = urlsplit(url)
+    host = (parts.hostname or "").removeprefix("www.")
+    return f"{host}{parts.path}?{parts.query}".rstrip("?").lower()
+
+
+def curate(
+    sources: dict[str, Any],
+    manifest: dict[str, Any],
+    lock: dict[str, dict[str, Any]],
+    items: list[dict[str, Any]],
+) -> int:
+    """Turn curated documents (exact URL or named recipe) into manual entries: fill the source's
+    PENDING slots first, then append; never duplicate a URL or a title already in the manifest."""
+    docs = manifest["documents"]
+    by_id = {s["id"]: s for s in sources["sources"]}
+    ids = {d["doc_id"] for d in docs}
+    have = {_norm(d["source_url"]) for d in docs if d["title"] != PENDING}
+    titles = {d["title"] for d in docs}
+    added = 0
+    for item in items:
+        if item["title"] in titles or (item["kind"] == "exact" and _norm(item["url"]) in have):
+            continue
+        source = by_id[item["source"]]
+        slots = sorted(
+            (d for d in docs if d["source"] == source["id"] and d["title"] == PENDING),
+            key=lambda d: d["doc_id"],
+        )
+        if slots:
+            doc = slots[0]
+        else:
+            doc = _entry(source, _next_id(source["prefix"], ids), item["url"], PENDING)
+            docs.append(doc)
+            ids.add(doc["doc_id"])
+        doc.update(
+            title=item["title"],
+            source_url=item["url"],
+            applies_to=item["applies_to"],
+            jurisdiction=item["jurisdiction"],
+            method="manual",
+            effective_from=None,
+            format="pdf" if ".pdf" in item["url"].lower() else "html",
+            publisher=urlsplit(item["url"]).hostname or "",
+        )
+        record = lock.setdefault(doc["doc_id"], {})
+        record.update(
+            source_url=item["url"],
+            legal_basis=source["basis"],
+            status="pending_manual",
+            reason=item.get("recipe") or "exact document: open the link and save it",
+        )
+        have.add(_norm(item["url"]))
+        titles.add(item["title"])
+        added += 1
+    for source in sources["sources"]:
+        _drop_surplus_slots(source, manifest, lock)
+    return added
+
+
+def home_page_rows(
+    sources: dict[str, Any], manifest: dict[str, Any], lock: dict[str, dict[str, Any]]
+) -> list[str]:
+    """Manual rows that point at a bare home page without a recipe (must be empty)."""
+    recipes = {s["id"] for s in sources["sources"] if s.get("manual_recipe")}
+    return [
+        d["doc_id"]
+        for d in _todo(manifest, lock)
+        if urlsplit(d["source_url"]).path in {"", "/"} and d["source"] not in recipes
+    ]
+
+
 def _drop_surplus_slots(
     source: dict[str, Any], manifest: dict[str, Any], lock: dict[str, dict[str, Any]]
 ) -> None:
@@ -377,11 +451,18 @@ def hosts_missing_terms(manifest: dict[str, Any], lock: dict[str, dict[str, Any]
 
 
 def _todo(manifest: dict[str, Any], lock: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
-    """Manual work only: the script's own download queue (status ``pending``) is not listed."""
+    """Manual work only. Not listed: the script's own download queue (status ``pending``) and
+    documents on a host still waiting for its one-time retry (ADR 0020)."""
+    waiting = {
+        k[5:]
+        for k, v in lock.items()
+        if k.startswith("host:") and v.get("retry_after") and not v.get("retry_outcome")
+    }
     return [
         d
         for d in manifest["documents"]
         if lock.get(d["doc_id"], {}).get("status") not in DONE | {"pending"}
+        and urlsplit(d["source_url"]).hostname not in waiting
     ]
 
 
@@ -428,7 +509,13 @@ def assign_owners(items: list[dict[str, Any]], lock: dict[str, dict[str, Any]]) 
             load[owner] += len(chunk)
 
 
-def manual_markdown(manifest: dict[str, Any], lock: dict[str, dict[str, Any]]) -> str:
+GENERIC = {"", "manual source", "beyond what the script could reach"}
+
+
+def manual_markdown(
+    manifest: dict[str, Any], lock: dict[str, dict[str, Any]], sources: dict[str, Any] | None = None
+) -> str:
+    recipes = {s["id"]: s for s in (sources or {}).get("sources", []) if s.get("manual_recipe")}
     items = _todo(manifest, lock)
     assign_owners(items, lock)
     rejected = [
@@ -451,6 +538,23 @@ def manual_markdown(manifest: dict[str, Any], lock: dict[str, dict[str, Any]]) -
         "Tiers: T1 RBI Master Directions, RBI FAQs/rates/press releases, CGTMSE replacements, Parliament answers; "
         "T2 NCGTC; T3 judgments; T4 state policies; T5 Gazette; T6 others.",
         "",
+        *(
+            [
+                "## Recipes",
+                "",
+                "Rows marked **Recipe N** have no single link. Follow the recipe for source N, save the document as",
+                "`raw/<doc_id>.<pdf|html>`, and fill `title`, `source_url` (the document's own URL), `applies_to` and `jurisdiction`",
+                "for that doc_id in `manifest.yaml`.",
+                "",
+            ]
+            + [
+                f"- **Recipe {i} - {s['name']}:** {s['manual_recipe']}"
+                for i, s in sorted(recipes.items())
+            ]
+            + [""]
+            if recipes
+            else []
+        ),
         f"**{len(items)} documents pending** across six owners.",
         "",
     ]
@@ -469,7 +573,12 @@ def manual_markdown(manifest: dict[str, Any], lock: dict[str, dict[str, Any]]) -
         for d in section:
             record = lock.get(d["doc_id"], {})
             why = record.get("reason") or record.get("status", "pending")
-            if rbi_html(d):
+            if d["title"] == PENDING and d["source"] in recipes:
+                why = f"**Recipe {d['source']}** (see Recipes above)"
+            elif not rbi_html(d) and why in GENERIC | {"exact document: open the link and save it"}:
+                how = "save the PDF" if d["format"] == "pdf" else "save as *Web page, HTML only*"
+                why = f"exact document: open the link and {how}"
+            if rbi_html(d) and not (d["title"] == PENDING and d["source"] in recipes):
                 note = record.get("reason", "")
                 extra = (
                     ""
@@ -481,7 +590,7 @@ def manual_markdown(manifest: dict[str, Any], lock: dict[str, dict[str, Any]]) -
             if d["source"] == 4 and d["title"] == PENDING:
                 what += " (text-layer circular from 2015 onward)"
             lines.append(
-                f"| T{tier(d)} | {d['doc_id']} | raw/{d['doc_id']}.{'html' if rbi_html(d) else d['format']} | {d['source']}: {what} | {d['source_url']} | {why} |"
+                f"| T{tier(d)} | {d['doc_id']} | raw/{d['doc_id']}.{'pdf or .html' if d['title'] == PENDING and d['source'] in recipes else 'html' if rbi_html(d) else d['format']} | {d['source']}: {what} | {d['source_url']} | {why} |"
             )
         lines.append("")
     lines += hosts_missing_terms(manifest, lock)
@@ -640,6 +749,7 @@ def main(argv: list[str] | None = None) -> int:
             "dates",
             "status",
             "export",
+            "curate",
         ],
     )
     command = parser.parse_args(argv).command
@@ -682,6 +792,9 @@ def main(argv: list[str] | None = None) -> int:
         for doc_id in bad:
             print(f"MISMATCH {doc_id}", file=sys.stderr)
         return 1 if bad or missing else 0  # a teammate must hold every file to prove the sync
+    if command == "curate":
+        items = read_yaml(CURATED)["items"]
+        print(f"{curate(sources, manifest, lock, items)} curated documents placed")
     if command in {"download", "import", "dates"}:
         chained, undated, review = apply_dates(manifest, lock, CORPUS / "raw", CORPUS / "text")
         print(f"dates: {chained} dated by the chain, {undated} need a date, {review} need review")
@@ -694,10 +807,10 @@ def main(argv: list[str] | None = None) -> int:
             f"wrote CORPUS_INDEX.md and CORPUS_INDEX.xlsx: {result['available']}/500 real available"
         )
         return 0
-    if command in {"harvest", "download", "import", "manual", "dates"}:
+    if command in {"harvest", "download", "import", "manual", "dates", "curate"}:
         print(f"{ensure_slots(sources, manifest, lock)} manual slots added")
         ensure_hosts(manifest)
-        write_text(MANUAL, manual_markdown(manifest, lock))  # assigns owners into the lock
+        write_text(MANUAL, manual_markdown(manifest, lock, sources))  # assigns owners into the lock
         save(manifest, lock)
     if command in {"report", "harvest", "download", "import"}:
         print(report(sources, manifest, lock, CORPUS / "text"))

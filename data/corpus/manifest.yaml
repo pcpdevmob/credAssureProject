@@ -245,26 +245,12 @@ documents:
   collection: public
   jurisdiction: IN
   legal_basis: L3
-  format: html
-  title: Micro, Small and Medium Enterprises Development Act, 2006 - section 15
-  publisher: Legislative Department (India Code)
+  format: pdf
+  title: Micro, Small and Medium Enterprises Development Act, 2006 (full text, Ministry of MSME / MSME Samadhaan copy)
+  publisher: Ministry of MSME (MSME Samadhaan)
   effective_from: '2006-10-02'
   superseded_by: null
-  source_url: https://www.indiacode.nic.in/show-data?actid=AC_CEN_46_77_00002_200627_1517807324919&orderno=15
-  source: 10
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-01-S16
-  tag: msme_gov
-  collection: public
-  jurisdiction: IN
-  legal_basis: L3
-  format: html
-  title: Micro, Small and Medium Enterprises Development Act, 2006 - section 16
-  publisher: Legislative Department (India Code)
-  effective_from: '2006-10-02'
-  superseded_by: null
-  source_url: https://www.indiacode.nic.in/show-data?actid=AC_CEN_46_77_00002_200627_1517807324919&orderno=16
+  source_url: https://samadhaan.msme.gov.in/WriteReadData/DocumentFile/MSMED2006act.pdf
   source: 10
   applies_to: all
   method: manual
@@ -764,7 +750,7 @@ documents:
   publisher: Reserve Bank of India
   effective_from: '2025-11-28'
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13141
   source: 1
   applies_to: commercial_bank
   method: manual
@@ -2051,13 +2037,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Commercial Banks – Miscellaneous) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13136
   source: 1
-  applies_to: all
+  applies_to: commercial_bank
   method: manual
 - doc_id: R-RBI-MD-002
   tag: r-rbi-md
@@ -2065,13 +2051,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Commercial Banks – Forthcoming Instructions) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13137
   source: 1
-  applies_to: all
+  applies_to: commercial_bank
   method: manual
 - doc_id: R-RBI-MD-003
   tag: r-rbi-md
@@ -2079,13 +2065,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Commercial Banks – Treatment of Wilful Defaulters and Large Defaulters) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13144
   source: 1
-  applies_to: all
+  applies_to: commercial_bank
   method: manual
 - doc_id: R-RBI-MD-004
   tag: r-rbi-md
@@ -2093,13 +2079,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Commercial Banks – Resolution of Stressed Assets) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13145
   source: 1
-  applies_to: all
+  applies_to: commercial_bank
   method: manual
 - doc_id: R-RBI-MD-005
   tag: r-rbi-md
@@ -2107,13 +2093,14 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Commercial Banks – Income Recognition, Asset Classification and Provisioning) Directions,
+    2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13146
   source: 1
-  applies_to: all
+  applies_to: commercial_bank
   method: manual
 - doc_id: R-RBI-MD-006
   tag: r-rbi-md
@@ -2121,13 +2108,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Commercial Banks – Securitisation Transactions) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13150
   source: 1
-  applies_to: all
+  applies_to: commercial_bank
   method: manual
 - doc_id: R-RBI-MD-007
   tag: r-rbi-md
@@ -2135,13 +2122,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Commercial Banks – Transfer and Distribution of Credit Risk) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13151
   source: 1
-  applies_to: all
+  applies_to: commercial_bank
   method: manual
 - doc_id: R-RBI-MD-008
   tag: r-rbi-md
@@ -2149,13 +2136,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Commercial Banks – Concentration Risk Management) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13152
   source: 1
-  applies_to: all
+  applies_to: commercial_bank
   method: manual
 - doc_id: R-RBI-MD-009
   tag: r-rbi-md
@@ -2163,13 +2150,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Commercial Banks – Credit Risk Management) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13153
   source: 1
-  applies_to: all
+  applies_to: commercial_bank
   method: manual
 - doc_id: R-RBI-MD-010
   tag: r-rbi-md
@@ -2177,13 +2164,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Commercial Banks – Credit Information Reporting) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13154
   source: 1
-  applies_to: all
+  applies_to: commercial_bank
   method: manual
 - doc_id: R-RBI-MD-011
   tag: r-rbi-md
@@ -2191,13 +2178,14 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Commercial Banks - Asset Classification, Provisioning and Income Recognition) Directions,
+    2026
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13400
   source: 1
-  applies_to: all
+  applies_to: commercial_bank
   method: manual
 - doc_id: R-RBI-MD-012
   tag: r-rbi-md
@@ -2205,13 +2193,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Commercial Banks - Capital Charge for Credit Risk – Standardised Approach) Directions, 2026
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13399
   source: 1
-  applies_to: all
+  applies_to: commercial_bank
   method: manual
 - doc_id: R-RBI-MD-013
   tag: r-rbi-md
@@ -2219,13 +2207,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Small Finance Banks – Miscellaneous) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13105
   source: 1
-  applies_to: all
+  applies_to: sfb
   method: manual
 - doc_id: R-RBI-MD-014
   tag: r-rbi-md
@@ -2233,13 +2221,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Small Finance Banks – Responsible Business Conduct) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13108
   source: 1
-  applies_to: all
+  applies_to: sfb
   method: manual
 - doc_id: R-RBI-MD-015
   tag: r-rbi-md
@@ -2247,13 +2235,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Small Finance Banks – Know Your Customer) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13109
   source: 1
-  applies_to: all
+  applies_to: sfb
   method: manual
 - doc_id: R-RBI-MD-016
   tag: r-rbi-md
@@ -2261,13 +2249,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Small Finance Banks – Treatment of Wilful Defaulters and Large Defaulters) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13112
   source: 1
-  applies_to: all
+  applies_to: sfb
   method: manual
 - doc_id: R-RBI-MD-017
   tag: r-rbi-md
@@ -2275,13 +2263,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Small Finance Banks – Resolution of Stressed Assets) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13113
   source: 1
-  applies_to: all
+  applies_to: sfb
   method: manual
 - doc_id: R-RBI-MD-018
   tag: r-rbi-md
@@ -2289,13 +2277,14 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Small Finance Banks – Income Recognition, Asset Classification and Provisioning) Directions,
+    2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13114
   source: 1
-  applies_to: all
+  applies_to: sfb
   method: manual
 - doc_id: R-RBI-MD-019
   tag: r-rbi-md
@@ -2303,13 +2292,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Small Finance Banks – Interest Rates on Advances) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13117
   source: 1
-  applies_to: all
+  applies_to: sfb
   method: manual
 - doc_id: R-RBI-MD-020
   tag: r-rbi-md
@@ -2317,13 +2306,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Small Finance Banks – Securitisation Transactions) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13118
   source: 1
-  applies_to: all
+  applies_to: sfb
   method: manual
 - doc_id: R-RBI-MD-021
   tag: r-rbi-md
@@ -2331,13 +2320,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Small Finance Banks – Transfer and Distribution of Credit Risk) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13119
   source: 1
-  applies_to: all
+  applies_to: sfb
   method: manual
 - doc_id: R-RBI-MD-022
   tag: r-rbi-md
@@ -2345,13 +2334,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Small Finance Banks – Concentration Risk Management) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13120
   source: 1
-  applies_to: all
+  applies_to: sfb
   method: manual
 - doc_id: R-RBI-MD-023
   tag: r-rbi-md
@@ -2359,13 +2348,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Small Finance Banks – Credit Risk Management) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13121
   source: 1
-  applies_to: all
+  applies_to: sfb
   method: manual
 - doc_id: R-RBI-MD-024
   tag: r-rbi-md
@@ -2373,13 +2362,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Small Finance Banks – Credit Information Reporting) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13122
   source: 1
-  applies_to: all
+  applies_to: sfb
   method: manual
 - doc_id: R-RBI-MD-025
   tag: r-rbi-md
@@ -2387,13 +2376,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Small Finance Banks – Credit Facilities) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13124
   source: 1
-  applies_to: all
+  applies_to: sfb
   method: manual
 - doc_id: R-RBI-MD-026
   tag: r-rbi-md
@@ -2401,13 +2390,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Urban Co-operative Banks – Miscellaneous) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13011
   source: 1
-  applies_to: all
+  applies_to: coop_bank
   method: manual
 - doc_id: R-RBI-MD-027
   tag: r-rbi-md
@@ -2415,13 +2404,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Urban Co-operative Banks – Responsible Business Conduct) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13013
   source: 1
-  applies_to: all
+  applies_to: coop_bank
   method: manual
 - doc_id: R-RBI-MD-028
   tag: r-rbi-md
@@ -2429,13 +2418,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Urban Co-operative Banks – Know Your Customer) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13014
   source: 1
-  applies_to: all
+  applies_to: coop_bank
   method: manual
 - doc_id: R-RBI-MD-029
   tag: r-rbi-md
@@ -2443,13 +2432,14 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Urban Co-operative Banks – Treatment of Wilful Defaulters and Large Defaulters) Directions,
+    2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13017
   source: 1
-  applies_to: all
+  applies_to: coop_bank
   method: manual
 - doc_id: R-RBI-MD-030
   tag: r-rbi-md
@@ -2457,13 +2447,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Urban Co-operative Banks – Resolution of Stressed Assets) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13018
   source: 1
-  applies_to: all
+  applies_to: coop_bank
   method: manual
 - doc_id: R-RBI-MD-031
   tag: r-rbi-md
@@ -2471,13 +2461,14 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Urban Co-operative Banks – Income Recognition, Asset Classification and Provisioning) Directions,
+    2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13019
   source: 1
-  applies_to: all
+  applies_to: coop_bank
   method: manual
 - doc_id: R-RBI-MD-032
   tag: r-rbi-md
@@ -2485,13 +2476,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Urban Co-operative Banks – Interest Rates on Advances) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13022
   source: 1
-  applies_to: all
+  applies_to: coop_bank
   method: manual
 - doc_id: R-RBI-MD-033
   tag: r-rbi-md
@@ -2499,13 +2490,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Urban Co-operative Banks – Transfer and Distribution of Credit Risk) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13023
   source: 1
-  applies_to: all
+  applies_to: coop_bank
   method: manual
 - doc_id: R-RBI-MD-034
   tag: r-rbi-md
@@ -2513,13 +2504,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Urban Co-operative Banks – Concentration Risk Management) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13024
   source: 1
-  applies_to: all
+  applies_to: coop_bank
   method: manual
 - doc_id: R-RBI-MD-035
   tag: r-rbi-md
@@ -2527,13 +2518,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Urban Co-operative Banks – Credit Risk Management) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13025
   source: 1
-  applies_to: all
+  applies_to: coop_bank
   method: manual
 - doc_id: R-RBI-MD-036
   tag: r-rbi-md
@@ -2541,13 +2532,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Urban Co-operative Banks – Credit Information Reporting) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13026
   source: 1
-  applies_to: all
+  applies_to: coop_bank
   method: manual
 - doc_id: R-RBI-MD-037
   tag: r-rbi-md
@@ -2555,13 +2546,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Urban Co-operative Banks – Credit Facilities) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13028
   source: 1
-  applies_to: all
+  applies_to: coop_bank
   method: manual
 - doc_id: R-RBI-MD-038
   tag: r-rbi-md
@@ -2569,13 +2560,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Rural Co-operative Banks – Miscellaneous) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13202
   source: 1
-  applies_to: all
+  applies_to: coop_bank
   method: manual
 - doc_id: R-RBI-MD-039
   tag: r-rbi-md
@@ -2583,13 +2574,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Rural Co-operative Banks – Responsible Business Conduct) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12987
   source: 1
-  applies_to: all
+  applies_to: coop_bank
   method: manual
 - doc_id: R-RBI-MD-040
   tag: r-rbi-md
@@ -2597,1021 +2588,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Reserve Bank of India (Rural Co-operative Banks – Know Your Customer) Directions, 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12988
   source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-041
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-042
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-043
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-044
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-045
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-046
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-047
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-048
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-049
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-050
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-051
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-052
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-053
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-054
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-055
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-056
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-057
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-058
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-059
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-060
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-061
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-062
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-063
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-064
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-065
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-066
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-067
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-068
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-069
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-070
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-071
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-072
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-073
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-074
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-075
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-076
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-077
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-078
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-079
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-080
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-081
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-082
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-083
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-084
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-085
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-086
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-087
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-088
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-089
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-090
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-091
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-092
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-093
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-094
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-095
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-096
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-097
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-098
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-099
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-100
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-101
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-102
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-103
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-104
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-105
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-106
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-107
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-108
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-109
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-110
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-111
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-MD-112
-  tag: r-rbi-md
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx
-  source: 1
-  applies_to: all
+  applies_to: coop_bank
   method: manual
 - doc_id: R-RBI-HIST-001
   tag: r-rbi-hist
@@ -4145,297 +3128,17 @@ documents:
   source: 2
   applies_to: all
   method: manual
-- doc_id: R-RBI-HIST-039
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-040
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-041
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-042
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-043
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-044
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-045
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-046
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-047
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-048
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-049
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-050
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-051
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-052
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-053
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-054
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-055
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-056
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-057
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-HIST-058
-  tag: r-rbi-hist
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx
-  source: 2
-  applies_to: all
-  method: manual
 - doc_id: R-RBI-FAQ-001
   tag: r-rbi-faq
   collection: public
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: RBI FAQs on Priority Sector Lending (PSL)
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  source_url: https://www.rbi.org.in/Scripts/FAQView.aspx?Id=87
   source: 3
   applies_to: all
   method: manual
@@ -4445,13 +3148,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: RBI FAQs on Master Direction on KYC
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
+  source_url: https://www.rbi.org.in/Scripts/FAQView.aspx?Id=173
   source: 3
-  applies_to: all
+  applies_to: commercial_bank
   method: manual
 - doc_id: R-RBI-FAQ-003
   tag: r-rbi-faq
@@ -4459,11 +3162,11 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: 'RBI FAQs: Trade Receivables Discounting System (TReDS)'
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  source_url: https://www.rbi.org.in/Scripts/FAQView.aspx?Id=132
   source: 3
   applies_to: all
   method: manual
@@ -4473,13 +3176,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: 'RBI FAQs: All you wanted to know about NBFCs'
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
+  source_url: https://www.rbi.org.in/Scripts/FAQView.aspx?Id=92
   source: 3
-  applies_to: all
+  applies_to: nbfc
   method: manual
 - doc_id: R-RBI-FAQ-005
   tag: r-rbi-faq
@@ -4487,11 +3190,11 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – October 2026
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
+  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=63894
   source: 3
   applies_to: all
   method: manual
@@ -4501,11 +3204,11 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – November 2024
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
+  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
   source: 3
   applies_to: all
   method: manual
@@ -4515,8 +3218,8 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – December 2024
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
@@ -4529,11 +3232,11 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – January 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
+  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
   source: 3
   applies_to: all
   method: manual
@@ -4543,8 +3246,8 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – February 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
@@ -4557,11 +3260,11 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – March 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
+  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
   source: 3
   applies_to: all
   method: manual
@@ -4571,8 +3274,8 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – April 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
@@ -4585,11 +3288,11 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – May 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
+  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
   source: 3
   applies_to: all
   method: manual
@@ -4599,8 +3302,8 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – June 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
@@ -4613,11 +3316,11 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – July 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
+  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
   source: 3
   applies_to: all
   method: manual
@@ -4627,8 +3330,8 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – August 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
@@ -4641,11 +3344,11 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – September 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
+  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
   source: 3
   applies_to: all
   method: manual
@@ -4655,8 +3358,8 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – October 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
@@ -4669,11 +3372,11 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – November 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
+  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
   source: 3
   applies_to: all
   method: manual
@@ -4683,8 +3386,8 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – December 2025
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
@@ -4697,11 +3400,11 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – January 2026
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
+  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
   source: 3
   applies_to: all
   method: manual
@@ -4711,8 +3414,8 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – February 2026
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
@@ -4725,11 +3428,11 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – March 2026
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
+  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
   source: 3
   applies_to: all
   method: manual
@@ -4739,8 +3442,8 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – April 2026
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
@@ -4753,11 +3456,11 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – May 2026
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
+  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
   source: 3
   applies_to: all
   method: manual
@@ -4767,8 +3470,8 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – June 2026
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
@@ -4781,11 +3484,11 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – July 2026
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
+  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
   source: 3
   applies_to: all
   method: manual
@@ -4795,908 +3498,12 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Lending and Deposit Rates of Scheduled Commercial Banks – August 2026
+  publisher: www.rbi.org.in
   effective_from: null
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
   source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-028
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-029
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-030
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-031
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-032
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-033
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-034
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-035
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-036
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-037
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-038
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-039
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-040
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-041
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-042
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-043
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-044
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-045
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-046
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-047
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-048
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-049
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-050
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-051
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-001
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-002
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-003
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-004
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-005
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-006
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-007
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-008
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-009
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-010
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-011
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-012
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-013
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-014
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-015
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-016
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-017
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-018
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-019
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-020
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-021
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-022
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-023
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-024
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-NCGTC-025
-  tag: r-ncgtc
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.ncgtc.in/
-  source: 5
-  applies_to: all
-  method: manual
-- doc_id: R-MUDRA-001
-  tag: r-mudra
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.mudra.org.in/
-  source: 6
-  applies_to: all
-  method: manual
-- doc_id: R-MUDRA-002
-  tag: r-mudra
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.mudra.org.in/
-  source: 6
-  applies_to: all
-  method: manual
-- doc_id: R-MUDRA-003
-  tag: r-mudra
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.mudra.org.in/
-  source: 6
-  applies_to: all
-  method: manual
-- doc_id: R-MUDRA-004
-  tag: r-mudra
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.mudra.org.in/
-  source: 6
-  applies_to: all
-  method: manual
-- doc_id: R-MUDRA-005
-  tag: r-mudra
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.mudra.org.in/
-  source: 6
-  applies_to: all
-  method: manual
-- doc_id: R-MUDRA-006
-  tag: r-mudra
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.mudra.org.in/
-  source: 6
-  applies_to: all
-  method: manual
-- doc_id: R-MUDRA-007
-  tag: r-mudra
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.mudra.org.in/
-  source: 6
-  applies_to: all
-  method: manual
-- doc_id: R-MUDRA-008
-  tag: r-mudra
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.mudra.org.in/
-  source: 6
-  applies_to: all
-  method: manual
-- doc_id: R-MUDRA-009
-  tag: r-mudra
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.mudra.org.in/
-  source: 6
-  applies_to: all
-  method: manual
-- doc_id: R-MUDRA-010
-  tag: r-mudra
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.mudra.org.in/
-  source: 6
-  applies_to: all
-  method: manual
-- doc_id: R-MUDRA-011
-  tag: r-mudra
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.mudra.org.in/
-  source: 6
-  applies_to: all
-  method: manual
-- doc_id: R-MUDRA-012
-  tag: r-mudra
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.mudra.org.in/
-  source: 6
-  applies_to: all
-  method: manual
-- doc_id: R-MUDRA-013
-  tag: r-mudra
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.mudra.org.in/
-  source: 6
-  applies_to: all
-  method: manual
-- doc_id: R-MUDRA-014
-  tag: r-mudra
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.mudra.org.in/
-  source: 6
-  applies_to: all
-  method: manual
-- doc_id: R-MUDRA-015
-  tag: r-mudra
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.mudra.org.in/
-  source: 6
   applies_to: all
   method: manual
 - doc_id: R-MSME-G-001
@@ -5704,12 +3511,12 @@ documents:
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
+  format: pdf
+  title: 'Udyam: Acceptance of Udyam Registration Certificate presented through DigiLocker (01/01/2025)'
+  publisher: udyamregistration.gov.in
   effective_from: null
   superseded_by: null
-  source_url: https://msme.gov.in/
+  source_url: https://udyamregistration.gov.in/docs/Acceptance_URC_Doucment_DigiLocker.pdf
   source: 7
   applies_to: all
   method: manual
@@ -5718,12 +3525,12 @@ documents:
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
+  format: pdf
+  title: RBI notification FIDD.MSME & NFS.BC.No.4/06.02.31/2020-21 on MSME classification (21/08/2020), Udyam copy
+  publisher: udyamregistration.gov.in
   effective_from: null
   superseded_by: null
-  source_url: https://udyamregistration.gov.in/
+  source_url: https://udyamregistration.gov.in/docs/RBI_NOTIFICATION_21082020.pdf
   source: 7
   applies_to: all
   method: manual
@@ -5732,12 +3539,12 @@ documents:
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
+  format: pdf
+  title: Udyam Registration benefits
+  publisher: udyamregistration.gov.in
   effective_from: null
   superseded_by: null
-  source_url: https://msme.gov.in/
+  source_url: https://udyamregistration.gov.in/docs/Benefits_of_UR.pdf
   source: 7
   applies_to: all
   method: manual
@@ -5746,446 +3553,12 @@ documents:
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
+  format: pdf
+  title: Legal framework for MSME classification (S.O. 1364(E) 2025 with S.O. 2119(E) 2020), Udyam copy
+  publisher: udyamregistration.gov.in
   effective_from: null
   superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-005
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-006
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-007
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-008
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-009
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-010
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-011
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-012
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-013
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-014
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-015
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-016
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-017
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-018
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-019
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-020
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-021
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-022
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-023
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-024
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-025
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-026
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-027
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-028
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-029
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-030
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-031
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-032
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-033
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-034
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://udyamregistration.gov.in/
-  source: 7
-  applies_to: all
-  method: manual
-- doc_id: R-MSME-G-035
-  tag: r-msme-g
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://msme.gov.in/
+  source_url: https://udyamregistration.gov.in/docs/261838_220191.pdf
   source: 7
   applies_to: all
   method: manual
@@ -6194,12 +3567,12 @@ documents:
   collection: public
   jurisdiction: IN
   legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
+  format: pdf
+  title: Notification under MSMED Act 2006 extending non-tax benefits to MSMEs (18/10/2022)
+  publisher: udyamregistration.gov.in
   effective_from: null
   superseded_by: null
-  source_url: https://egazette.gov.in/
+  source_url: https://udyamregistration.gov.in/docs/239737.pdf
   source: 8
   applies_to: all
   method: manual
@@ -6208,517 +3581,13 @@ documents:
   collection: public
   jurisdiction: IN
   legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
+  format: pdf
+  title: 'S.O. 1296(E): Udyam Registration Certificate for PSL benefits (20/03/2023)'
+  publisher: udyamregistration.gov.in
   effective_from: null
   superseded_by: null
-  source_url: https://egazette.gov.in/
+  source_url: https://udyamregistration.gov.in/docs/SO1296.pdf
   source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-003
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-004
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-005
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-006
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-007
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-008
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-009
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-010
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-011
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-012
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-013
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-014
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-015
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-016
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-017
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-018
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-019
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-020
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-021
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-022
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-023
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-024
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-025
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-026
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-027
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-028
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-029
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-030
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-031
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-GZ-032
-  tag: r-gz
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://egazette.gov.in/
-  source: 8
-  applies_to: all
-  method: manual
-- doc_id: R-TAX-C-001
-  tag: r-tax-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L3
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.incometaxindia.gov.in/
-  source: 10
-  applies_to: all
-  method: manual
-- doc_id: R-TAX-C-002
-  tag: r-tax-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L3
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.indiacode.nic.in/
-  source: 10
-  applies_to: all
-  method: manual
-- doc_id: R-TAX-C-003
-  tag: r-tax-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L3
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.incometaxindia.gov.in/
-  source: 10
-  applies_to: all
-  method: manual
-- doc_id: R-TAX-C-004
-  tag: r-tax-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L3
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.indiacode.nic.in/
-  source: 10
-  applies_to: all
-  method: manual
-- doc_id: R-TAX-C-005
-  tag: r-tax-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L3
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.incometaxindia.gov.in/
-  source: 10
-  applies_to: all
-  method: manual
-- doc_id: R-TAX-C-006
-  tag: r-tax-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L3
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.indiacode.nic.in/
-  source: 10
   applies_to: all
   method: manual
 - doc_id: R-TREDS-010
@@ -6727,125 +3596,13 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: M1xchange TReDS guideline
+  publisher: www.m1xchange.com
   effective_from: null
   superseded_by: null
-  source_url: https://www.m1xchange.com/faqs/
+  source_url: https://www.m1xchange.com/treds-guideline/
   source: 12
   applies_to: all
-  method: manual
-- doc_id: R-TREDS-011
-  tag: r-treds
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rxil.in/
-  source: 12
-  applies_to: all
-  method: manual
-- doc_id: R-TREDS-012
-  tag: r-treds
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.m1xchange.com/faqs/
-  source: 12
-  applies_to: all
-  method: manual
-- doc_id: R-TREDS-013
-  tag: r-treds
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rxil.in/
-  source: 12
-  applies_to: all
-  method: manual
-- doc_id: R-TREDS-014
-  tag: r-treds
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.m1xchange.com/faqs/
-  source: 12
-  applies_to: all
-  method: manual
-- doc_id: R-BANK-S-020
-  tag: r-bank-s
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://bandhan.bank.in/rates-charges
-  source: 13
-  applies_to: commercial_bank
-  method: manual
-- doc_id: R-BANK-S-021
-  tag: r-bank-s
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://bandhan.bank.in/rates-charges
-  source: 13
-  applies_to: commercial_bank
-  method: manual
-- doc_id: R-BANK-S-022
-  tag: r-bank-s
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://bandhan.bank.in/rates-charges
-  source: 13
-  applies_to: commercial_bank
-  method: manual
-- doc_id: R-BANK-S-023
-  tag: r-bank-s
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://bandhan.bank.in/rates-charges
-  source: 13
-  applies_to: commercial_bank
   method: manual
 - doc_id: R-SANSAD-001
   tag: r-sansad
@@ -7197,367 +3954,17 @@ documents:
   source: 14
   applies_to: all
   method: manual
-- doc_id: R-SANSAD-026
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-027
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/ls/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-028
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-029
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/ls/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-030
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-031
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/ls/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-032
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-033
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/ls/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-034
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-035
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/ls/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-036
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-037
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/ls/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-038
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-039
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/ls/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-040
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-041
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/ls/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-042
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-043
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/ls/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-044
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-045
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/ls/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-046
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-047
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/ls/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-048
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-049
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/ls/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-050
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
 - doc_id: R-JUD-001
   tag: r-jud
   collection: public
   jurisdiction: IN
   legal_basis: L2
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: 'MSME Samadhaan: Supreme Court judgments related to delayed payment (list page)'
+  publisher: samadhaan.msme.gov.in
   effective_from: null
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://samadhaan.msme.gov.in/OrderDocument.aspx
   source: 15
   applies_to: all
   method: manual
@@ -7900,56 +4307,56 @@ documents:
 - doc_id: R-STATE-001
   tag: r-state
   collection: public
-  jurisdiction: IN-MH
+  jurisdiction: IN-GJ
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
+  format: pdf
+  title: Gujarat Industrial Policy 2026
+  publisher: ic.gujarat.gov.in
   effective_from: null
   superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
+  source_url: https://ic.gujarat.gov.in/documents/Viksit-Gujarat-Industrial-Policy2026_new.pdf
   source: 16
   applies_to: all
   method: manual
 - doc_id: R-STATE-002
   tag: r-state
   collection: public
-  jurisdiction: IN-MH
+  jurisdiction: IN-TN
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Tamil Nadu MSME Policy Note
+  publisher: msmeonline.tn.gov.in
   effective_from: null
   superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
+  source_url: https://msmeonline.tn.gov.in/msme_policy_doc.php
   source: 16
   applies_to: all
   method: manual
 - doc_id: R-STATE-003
   tag: r-state
   collection: public
-  jurisdiction: IN-MH
+  jurisdiction: IN-UP
   legal_basis: L4
   format: html
-  title: PENDING
-  publisher: PENDING
+  title: Uttar Pradesh MSME Promotion Policy and other policies
+  publisher: msme.up.gov.in
   effective_from: null
   superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
+  source_url: https://msme.up.gov.in/Home/Policies
   source: 16
   applies_to: all
   method: manual
 - doc_id: R-STATE-004
   tag: r-state
   collection: public
-  jurisdiction: IN-MH
+  jurisdiction: IN-TS
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
+  format: pdf
+  title: Telangana MSME Policy Booklet (English)
+  publisher: industries.telangana.gov.in
   effective_from: null
   superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
+  source_url: https://industries.telangana.gov.in/Library/MSME%20Policy%20Booklet%20English1.pdf
   source: 16
   applies_to: all
   method: manual
@@ -7971,202 +4378,6 @@ documents:
   tag: r-state
   collection: public
   jurisdiction: IN-GJ
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
-  source: 16
-  applies_to: all
-  method: manual
-- doc_id: R-STATE-007
-  tag: r-state
-  collection: public
-  jurisdiction: IN-GJ
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
-  source: 16
-  applies_to: all
-  method: manual
-- doc_id: R-STATE-008
-  tag: r-state
-  collection: public
-  jurisdiction: IN-GJ
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
-  source: 16
-  applies_to: all
-  method: manual
-- doc_id: R-STATE-009
-  tag: r-state
-  collection: public
-  jurisdiction: IN-KA
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
-  source: 16
-  applies_to: all
-  method: manual
-- doc_id: R-STATE-010
-  tag: r-state
-  collection: public
-  jurisdiction: IN-KA
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
-  source: 16
-  applies_to: all
-  method: manual
-- doc_id: R-STATE-011
-  tag: r-state
-  collection: public
-  jurisdiction: IN-KA
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
-  source: 16
-  applies_to: all
-  method: manual
-- doc_id: R-STATE-012
-  tag: r-state
-  collection: public
-  jurisdiction: IN-TN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
-  source: 16
-  applies_to: all
-  method: manual
-- doc_id: R-STATE-013
-  tag: r-state
-  collection: public
-  jurisdiction: IN-TN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
-  source: 16
-  applies_to: all
-  method: manual
-- doc_id: R-STATE-014
-  tag: r-state
-  collection: public
-  jurisdiction: IN-TN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
-  source: 16
-  applies_to: all
-  method: manual
-- doc_id: R-STATE-015
-  tag: r-state
-  collection: public
-  jurisdiction: IN-UP
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
-  source: 16
-  applies_to: all
-  method: manual
-- doc_id: R-STATE-016
-  tag: r-state
-  collection: public
-  jurisdiction: IN-UP
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
-  source: 16
-  applies_to: all
-  method: manual
-- doc_id: R-STATE-017
-  tag: r-state
-  collection: public
-  jurisdiction: IN-UP
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
-  source: 16
-  applies_to: all
-  method: manual
-- doc_id: R-STATE-018
-  tag: r-state
-  collection: public
-  jurisdiction: IN-TS
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
-  source: 16
-  applies_to: all
-  method: manual
-- doc_id: R-STATE-019
-  tag: r-state
-  collection: public
-  jurisdiction: IN-TS
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
-  source: 16
-  applies_to: all
-  method: manual
-- doc_id: R-STATE-020
-  tag: r-state
-  collection: public
-  jurisdiction: IN-TS
   legal_basis: L4
   format: html
   title: PENDING
@@ -14540,244 +10751,6 @@ documents:
   applies_to: commercial_bank
   method: script
   date_source: url
-- doc_id: R-CG-C-017
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-018
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/Circulars
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-019
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-020
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/Circulars
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-021
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-022
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/Circulars
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-023
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-024
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/Circulars
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-025
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-026
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/Circulars
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-027
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-028
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/Circulars
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-029
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-030
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/Circulars
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-031
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-032
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/Circulars
-  source: 4
-  applies_to: all
-  method: manual
-- doc_id: R-CG-C-033
-  tag: r-cg-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.cgtmse.in/
-  source: 4
-  applies_to: all
-  method: manual
 - doc_id: R-CG-C-038
   tag: r-cg-c
   collection: public
@@ -15225,6 +11198,10 @@ hosts:
     terms_url: null
     terms_note: null
     automated_access: unknown
+  ic.gujarat.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
   indianbank.bank.in:
     terms_url: null
     terms_note: null
@@ -15233,7 +11210,19 @@ hosts:
     terms_url: null
     terms_note: null
     automated_access: unknown
+  industries.telangana.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
   msme.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  msme.up.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  msmeonline.tn.gov.in:
     terms_url: null
     terms_note: null
     automated_access: unknown

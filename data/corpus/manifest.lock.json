@@ -24,14 +24,14 @@
   },
   "R-BANK-02": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 5]",
     "retrieved_on": "2026-11-05",
     "source_url": "https://sbi.co.in/portal/web/sme/sme-smart-score",
     "status": "error: ConnectTimeout"
   },
   "R-BANK-03": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
+    "owner": "[Name 6]",
     "retrieved_on": "2026-11-05",
     "source_url": "https://bandhan.bank.in/sites/default/files/2026-01/Schedule-of-Charges-SME-and-Corporate-Loans-16012026.pdf",
     "status": "http_404"
@@ -411,34 +411,6 @@
     "status": "ok",
     "text_sha256": "00ccc07b1c58e76316118da010e919c9b191f40a252cf373dd8c6df31ffa9c44"
   },
-  "R-BANK-S-020": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://bandhan.bank.in/rates-charges",
-    "status": "pending_manual"
-  },
-  "R-BANK-S-021": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://bandhan.bank.in/rates-charges",
-    "status": "pending_manual"
-  },
-  "R-BANK-S-022": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://bandhan.bank.in/rates-charges",
-    "status": "pending_manual"
-  },
-  "R-BANK-S-023": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://bandhan.bank.in/rates-charges",
-    "status": "pending_manual"
-  },
   "R-BANK-S-025": {
     "bytes": 259894,
     "date_evidence": "url month folder: 2026-05",
@@ -696,125 +668,6 @@
     "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1782398570934_%E0%A4%B9%E0%A4%BF%E0%A4%A8%E0%A5%8D%E0%A4%A6%E0%A5%80%20Addendum%20to%20MCC%20Circular-%20Modification%20in%20claim%20settlement.pdf&path=Circular",
     "status": "ok",
     "text_sha256": "31a4f418a5b07eec5e5837640fbd6bb2a7e13924cdf05c7e0f04d447ebc57429"
-  },
-  "R-CG-C-017": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/",
-    "status": "pending_manual"
-  },
-  "R-CG-C-018": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-019": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/",
-    "status": "pending_manual"
-  },
-  "R-CG-C-020": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-021": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/",
-    "status": "pending_manual"
-  },
-  "R-CG-C-022": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-023": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/",
-    "status": "pending_manual"
-  },
-  "R-CG-C-024": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-025": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/",
-    "status": "pending_manual"
-  },
-  "R-CG-C-026": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-027": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/",
-    "status": "pending_manual"
-  },
-  "R-CG-C-028": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-029": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/",
-    "status": "pending_manual"
-  },
-  "R-CG-C-030": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-031": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/",
-    "status": "pending_manual"
-  },
-  "R-CG-C-032": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "pending_manual"
-  },
-  "R-CG-C-033": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.cgtmse.in/",
-    "status": "pending_manual"
   },
   "R-CG-C-038": {
     "bytes": 91155,
@@ -4731,14 +4584,14 @@
   },
   "R-DATA-01": {
     "legal_basis": "L1",
-    "owner": "[Name 4]",
+    "owner": "[Name 6]",
     "retrieved_on": "2026-11-05",
     "source_url": "https://www.data.gov.in/catalog/udyam-registration-msme-registration",
     "status": "robots_disallowed"
   },
   "R-DATA-02": {
     "legal_basis": "L1",
-    "owner": "[Name 4]",
+    "owner": "[Name 6]",
     "retrieved_on": "2026-11-05",
     "source_url": "https://www.data.gov.in/resource/district-wise-total-msme-registered-enterprises-under-udyam-registration-till-last-date",
     "status": "robots_disallowed"
@@ -4756,7 +4609,7 @@
   },
   "R-DPDP-02": {
     "legal_basis": "L2",
-    "owner": "[Name 1]",
+    "owner": "[Name 2]",
     "retrieved_on": "2026-11-05",
     "source_url": "https://egazette.gov.in/WriteReadData/2025/267650.pdf",
     "status": "error: ConnectError"
@@ -4796,7 +4649,7 @@
   },
   "R-GST-03": {
     "legal_basis": "L2",
-    "owner": "[Name 1]",
+    "owner": "[Name 3]",
     "retrieved_on": "2026-11-05",
     "source_url": "https://egazette.gov.in/WriteReadData/2025/266220.pdf",
     "status": "error: ConnectError"
@@ -5221,7 +5074,7 @@
   },
   "R-GST-C-046": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/Circular-55thGSTC-Services.pdf",
@@ -5229,7 +5082,7 @@
   },
   "R-GST-C-047": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/Circular-No-249-2025.pdf",
@@ -5237,7 +5090,7 @@
   },
   "R-GST-C-048": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/Circular-No-250-2025.pdf",
@@ -5245,7 +5098,7 @@
   },
   "R-GST-C-049": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/Circular-Services-Co-insurance-Re-insurance.pdf",
@@ -5253,7 +5106,7 @@
   },
   "R-GST-C-050": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/Citizens_Charter_CBIC_GST.pdf",
@@ -5261,7 +5114,7 @@
   },
   "R-GST-C-051": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/DuePayment.pdf",
@@ -5269,7 +5122,7 @@
   },
   "R-GST-C-052": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/GST-Circular.pdf",
@@ -5277,7 +5130,7 @@
   },
   "R-GST-C-053": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/Guidance-Note-for-Importers-Exporters-v2.pdf",
@@ -5285,7 +5138,7 @@
   },
   "R-GST-C-054": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/HSNS%20ACT%20No%2035%20of%202025.pdf",
@@ -5293,7 +5146,7 @@
   },
   "R-GST-C-055": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/HSNS_Advisory_Helpdesk_01-2026.pdf",
@@ -5301,7 +5154,7 @@
   },
   "R-GST-C-056": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/HSNS_Declaration_filing_procedure.pdf",
@@ -5309,7 +5162,7 @@
   },
   "R-GST-C-057": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/Helpdesk-Advisory-8-2025-29072025.pdf",
@@ -5317,7 +5170,7 @@
   },
   "R-GST-C-058": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/IGST-Amendment-Act-2023.pdf",
@@ -5325,7 +5178,7 @@
   },
   "R-GST-C-059": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/Introduction_of_2FA.pdf",
@@ -5333,7 +5186,7 @@
   },
   "R-GST-C-060": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/NN-26-2024-Hindi.pdf",
@@ -5341,7 +5194,7 @@
   },
   "R-GST-C-061": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/NN-26-2024_Eng.pdf",
@@ -5349,7 +5202,7 @@
   },
   "R-GST-C-062": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/NN-29-Eng.pdf",
@@ -5357,7 +5210,7 @@
   },
   "R-GST-C-063": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/NN-29-Hindi.pdf",
@@ -5365,7 +5218,7 @@
   },
   "R-GST-C-064": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
+    "owner": "[Name 1]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/NN-30-2024-Eng.pdf",
@@ -5373,7 +5226,7 @@
   },
   "R-GST-C-065": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/NN-30-2024-Hindi.pdf",
@@ -5381,7 +5234,7 @@
   },
   "R-GST-C-066": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/NN-31-2024-Eng.pdf",
@@ -5389,7 +5242,7 @@
   },
   "R-GST-C-067": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/NN-31-2024-Hindiss.pdf",
@@ -5397,7 +5250,7 @@
   },
   "R-GST-C-068": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/Notification%20No%2001_2026%20-%20HSNS%20CESS.pdf",
@@ -5405,7 +5258,7 @@
   },
   "R-GST-C-069": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/Notification%20No%2002_2026%20-%20HSNS%20CESS.pdf",
@@ -5413,7 +5266,7 @@
   },
   "R-GST-C-070": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/Notification%20No%2003_2026%20-%20HSNS%20CESS.pdf",
@@ -5421,7 +5274,7 @@
   },
   "R-GST-C-071": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/Press-Release-54-GSTC-090924.pdf",
@@ -5429,7 +5282,7 @@
   },
   "R-GST-C-072": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/central-excise-6-24-eng.pdf",
@@ -5437,7 +5290,7 @@
   },
   "R-GST-C-073": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/central-excise-6-24-hindi.pdf",
@@ -5445,7 +5298,7 @@
   },
   "R-GST-C-074": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/central-excise-7-24-eng.pdf",
@@ -5453,7 +5306,7 @@
   },
   "R-GST-C-075": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/central-excise-7-24-hindi.pdf",
@@ -5461,7 +5314,7 @@
   },
   "R-GST-C-076": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/cir-cgst-246-03-2025.pdf",
@@ -5469,7 +5322,7 @@
   },
   "R-GST-C-077": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/circular-229-23-2024-GST.pdf",
@@ -5477,7 +5330,7 @@
   },
   "R-GST-C-078": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/circular-230.pdf",
@@ -5485,7 +5338,7 @@
   },
   "R-GST-C-079": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/circular-231.pdf",
@@ -5493,7 +5346,7 @@
   },
   "R-GST-C-080": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/circular-232.pdf",
@@ -5501,7 +5354,7 @@
   },
   "R-GST-C-081": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/circular-233.pdf",
@@ -5509,7 +5362,7 @@
   },
   "R-GST-C-082": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/circular-237-31-2024-GST.pdf",
@@ -5517,7 +5370,7 @@
   },
   "R-GST-C-083": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
+    "owner": "[Name 2]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/circular-238-32-2024-GST.pdf",
@@ -5525,7 +5378,7 @@
   },
   "R-GST-C-084": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
+    "owner": "[Name 5]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/circular-239-33-2024-GST.pdf",
@@ -5533,7 +5386,7 @@
   },
   "R-GST-C-085": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
+    "owner": "[Name 5]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/circular-services-228-22-2024-GST.pdf",
@@ -5541,7 +5394,7 @@
   },
   "R-GST-C-086": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
+    "owner": "[Name 5]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/corrigendum-Circular-237-31-2024-GST.pdf",
@@ -5549,7 +5402,7 @@
   },
   "R-GST-C-087": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
+    "owner": "[Name 5]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/gst-ct-11-2025.pdf",
@@ -5557,7 +5410,7 @@
   },
   "R-GST-C-088": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
+    "owner": "[Name 5]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/ins-gst-02-2025.pdf",
@@ -5565,7 +5418,7 @@
   },
   "R-GST-C-089": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
+    "owner": "[Name 5]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/ins-gst-no-03-2025.pdf",
@@ -5573,7 +5426,7 @@
   },
   "R-GST-C-090": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
+    "owner": "[Name 5]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/instruction-02-2024-GST-12082024.pdf",
@@ -5581,7 +5434,7 @@
   },
   "R-GST-C-091": {
     "legal_basis": "L4",
-    "owner": "[Name 6]",
+    "owner": "[Name 5]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/letter-trade-associations-webmaster.pdf",
@@ -5589,7 +5442,7 @@
   },
   "R-GST-C-092": {
     "legal_basis": "L4",
-    "owner": "[Name 6]",
+    "owner": "[Name 5]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/ovw-short.pdf",
@@ -5597,7 +5450,7 @@
   },
   "R-GST-C-093": {
     "legal_basis": "L4",
-    "owner": "[Name 6]",
+    "owner": "[Name 5]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/procedure-locate-e-payment-challan.pdf",
@@ -5605,7 +5458,7 @@
   },
   "R-GST-C-094": {
     "legal_basis": "L4",
-    "owner": "[Name 6]",
+    "owner": "[Name 5]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/public-notice-st-gst-last-date-eng.pdf",
@@ -5613,7 +5466,7 @@
   },
   "R-GST-C-095": {
     "legal_basis": "L4",
-    "owner": "[Name 6]",
+    "owner": "[Name 5]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/public-notice-st-gst-last-date-hindi.pdf",
@@ -5621,7 +5474,7 @@
   },
   "R-GST-C-096": {
     "legal_basis": "L4",
-    "owner": "[Name 6]",
+    "owner": "[Name 5]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/public-notice-st-new-address-eng.pdf",
@@ -5629,7 +5482,7 @@
   },
   "R-GST-C-097": {
     "legal_basis": "L4",
-    "owner": "[Name 6]",
+    "owner": "[Name 5]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/public-notice-st-new-address-hindi.pdf",
@@ -5637,7 +5490,7 @@
   },
   "R-GST-C-098": {
     "legal_basis": "L4",
-    "owner": "[Name 6]",
+    "owner": "[Name 5]",
     "reason": "host_blocked: error: ReadTimeout",
     "retrieved_on": "2026-11-05",
     "source_url": "https://cbic-gst.gov.in/pdf/sectoral-working-gp-contactdtls-14june2017.pdf",
@@ -5811,259 +5664,49 @@
   },
   "R-GZ-001": {
     "legal_basis": "L2",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://udyamregistration.gov.in/docs/239737.pdf",
     "status": "pending_manual"
   },
   "R-GZ-002": {
     "legal_basis": "L2",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-003": {
-    "legal_basis": "L2",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-004": {
-    "legal_basis": "L2",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-005": {
-    "legal_basis": "L2",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-006": {
-    "legal_basis": "L2",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-007": {
-    "legal_basis": "L2",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-008": {
-    "legal_basis": "L2",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-009": {
-    "legal_basis": "L2",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-010": {
-    "legal_basis": "L2",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-011": {
-    "legal_basis": "L2",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-012": {
-    "legal_basis": "L2",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-013": {
-    "legal_basis": "L2",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-014": {
-    "legal_basis": "L2",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-015": {
-    "legal_basis": "L2",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-016": {
-    "legal_basis": "L2",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-017": {
-    "legal_basis": "L2",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-018": {
-    "legal_basis": "L2",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-019": {
-    "legal_basis": "L2",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-020": {
-    "legal_basis": "L2",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-021": {
-    "legal_basis": "L2",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-022": {
-    "legal_basis": "L2",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-023": {
-    "legal_basis": "L2",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-024": {
-    "legal_basis": "L2",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-025": {
-    "legal_basis": "L2",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-026": {
-    "legal_basis": "L2",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-027": {
-    "legal_basis": "L2",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-028": {
-    "legal_basis": "L2",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-029": {
-    "legal_basis": "L2",
     "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-030": {
-    "legal_basis": "L2",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-031": {
-    "legal_basis": "L2",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-GZ-032": {
-    "legal_basis": "L2",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://egazette.gov.in/",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://udyamregistration.gov.in/docs/SO1296.pdf",
     "status": "pending_manual"
   },
   "R-JUD-001": {
     "legal_basis": "L2",
     "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://samadhaan.msme.gov.in/OrderDocument.aspx",
     "status": "pending_manual"
   },
   "R-JUD-002": {
     "legal_basis": "L2",
-    "owner": "[Name 5]",
+    "owner": "[Name 6]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
   },
   "R-JUD-003": {
     "legal_basis": "L2",
-    "owner": "[Name 5]",
+    "owner": "[Name 6]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
   },
   "R-JUD-004": {
     "legal_basis": "L2",
-    "owner": "[Name 5]",
+    "owner": "[Name 6]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
   },
   "R-JUD-005": {
     "legal_basis": "L2",
-    "owner": "[Name 5]",
+    "owner": "[Name 6]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
@@ -6077,28 +5720,28 @@
   },
   "R-JUD-007": {
     "legal_basis": "L2",
-    "owner": "[Name 6]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
   },
   "R-JUD-008": {
     "legal_basis": "L2",
-    "owner": "[Name 6]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
   },
   "R-JUD-009": {
     "legal_basis": "L2",
-    "owner": "[Name 6]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
   },
   "R-JUD-010": {
     "legal_basis": "L2",
-    "owner": "[Name 6]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
@@ -6112,28 +5755,28 @@
   },
   "R-JUD-012": {
     "legal_basis": "L2",
-    "owner": "[Name 1]",
+    "owner": "[Name 2]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
   },
   "R-JUD-013": {
     "legal_basis": "L2",
-    "owner": "[Name 1]",
+    "owner": "[Name 2]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
   },
   "R-JUD-014": {
     "legal_basis": "L2",
-    "owner": "[Name 1]",
+    "owner": "[Name 2]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
   },
   "R-JUD-015": {
     "legal_basis": "L2",
-    "owner": "[Name 1]",
+    "owner": "[Name 2]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
@@ -6147,28 +5790,28 @@
   },
   "R-JUD-017": {
     "legal_basis": "L2",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
   },
   "R-JUD-018": {
     "legal_basis": "L2",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
   },
   "R-JUD-019": {
     "legal_basis": "L2",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
   },
   "R-JUD-020": {
     "legal_basis": "L2",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
@@ -6182,28 +5825,28 @@
   },
   "R-JUD-022": {
     "legal_basis": "L2",
-    "owner": "[Name 3]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
   },
   "R-JUD-023": {
     "legal_basis": "L2",
-    "owner": "[Name 3]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
   },
   "R-JUD-024": {
     "legal_basis": "L2",
-    "owner": "[Name 3]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
   },
   "R-JUD-025": {
     "legal_basis": "L2",
-    "owner": "[Name 3]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
     "status": "pending_manual"
@@ -6211,20 +5854,14 @@
   "R-MSME-01": {
     "legal_basis": "L3",
     "owner": "[Name 5]",
+    "reason": "exact document: open the link and save the PDF (replaces the blank India Code section pages)",
     "retrieved_on": "2026-11-05",
-    "source_url": "https://www.indiacode.nic.in/show-data?actid=AC_CEN_46_77_00002_200627_1517807324919&orderno=15",
-    "status": "error: ReadTimeout"
-  },
-  "R-MSME-01-S16": {
-    "legal_basis": "L3",
-    "owner": "[Name 5]",
-    "retrieved_on": "2026-11-05",
-    "source_url": "https://www.indiacode.nic.in/show-data?actid=AC_CEN_46_77_00002_200627_1517807324919&orderno=16",
-    "status": "error: ReadTimeout"
+    "source_url": "https://samadhaan.msme.gov.in/WriteReadData/DocumentFile/MSMED2006act.pdf",
+    "status": "pending_manual"
   },
   "R-MSME-02": {
     "legal_basis": "L2",
-    "owner": "[Name 6]",
+    "owner": "[Name 4]",
     "retrieved_on": "2026-11-05",
     "source_url": "https://egazette.gov.in/writeReadData/2025/261838.pdf",
     "status": "error: ConnectError"
@@ -6269,527 +5906,30 @@
   },
   "R-MSME-G-001": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
+    "owner": "[Name 6]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://udyamregistration.gov.in/docs/Acceptance_URC_Doucment_DigiLocker.pdf",
     "status": "pending_manual"
   },
   "R-MSME-G-002": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://udyamregistration.gov.in/docs/RBI_NOTIFICATION_21082020.pdf",
     "status": "pending_manual"
   },
   "R-MSME-G-003": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
+    "owner": "[Name 6]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://udyamregistration.gov.in/docs/Benefits_of_UR.pdf",
     "status": "pending_manual"
   },
   "R-MSME-G-004": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-005": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-006": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-007": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-008": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-009": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-010": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-011": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-012": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-013": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-014": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-015": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-016": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-017": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-018": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-019": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-020": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-021": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-022": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-023": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-024": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-025": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-026": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-027": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-028": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-029": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-030": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-031": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-032": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-033": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-034": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://udyamregistration.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MSME-G-035": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://msme.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-MUDRA-001": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.mudra.org.in/",
-    "status": "pending_manual"
-  },
-  "R-MUDRA-002": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.mudra.org.in/",
-    "status": "pending_manual"
-  },
-  "R-MUDRA-003": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.mudra.org.in/",
-    "status": "pending_manual"
-  },
-  "R-MUDRA-004": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.mudra.org.in/",
-    "status": "pending_manual"
-  },
-  "R-MUDRA-005": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.mudra.org.in/",
-    "status": "pending_manual"
-  },
-  "R-MUDRA-006": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.mudra.org.in/",
-    "status": "pending_manual"
-  },
-  "R-MUDRA-007": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.mudra.org.in/",
-    "status": "pending_manual"
-  },
-  "R-MUDRA-008": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.mudra.org.in/",
-    "status": "pending_manual"
-  },
-  "R-MUDRA-009": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.mudra.org.in/",
-    "status": "pending_manual"
-  },
-  "R-MUDRA-010": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.mudra.org.in/",
-    "status": "pending_manual"
-  },
-  "R-MUDRA-011": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.mudra.org.in/",
-    "status": "pending_manual"
-  },
-  "R-MUDRA-012": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.mudra.org.in/",
-    "status": "pending_manual"
-  },
-  "R-MUDRA-013": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.mudra.org.in/",
-    "status": "pending_manual"
-  },
-  "R-MUDRA-014": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.mudra.org.in/",
-    "status": "pending_manual"
-  },
-  "R-MUDRA-015": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.mudra.org.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-001": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-002": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-003": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-004": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-005": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-006": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-007": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-008": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-009": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-010": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-011": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-012": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-013": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-014": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-015": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-016": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-017": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-018": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-019": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-020": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-021": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-022": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-023": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-024": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
-    "status": "pending_manual"
-  },
-  "R-NCGTC-025": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.ncgtc.in/",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://udyamregistration.gov.in/docs/261838_220191.pdf",
     "status": "pending_manual"
   },
   "R-RATE-01-2026-09": {
@@ -6943,6 +6083,7 @@
     "final_url": "https://www.rbi.org.in/",
     "legal_basis": "L4",
     "raw_file": "R-RBI-06.html",
+    "reason": "old portal link retired; on https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx open the Priority Sector Lending – Targets and Classification Directions, 2025, save as Web page, HTML only, and put its BS_ViewMasDirections URL in source_url",
     "retrieved_on": "2026-11-05",
     "sha256": "c02175d57179d84e63af0bedd8dfd8b45b2294eacb9a6948436d8594cf54118e",
     "source_url": "https://website.rbi.org.in/web/rbi/financial-inclusion-and-development/master-directions",
@@ -6975,10 +6116,10 @@
   },
   "R-RBI-09": {
     "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "old portal link retired; on the Master Directions list open 'Commercial Banks – Know Your Customer Directions, 2025' and save it as Web page, HTML only",
+    "owner": "[Name 2]",
+    "reason": "exact Direction page (Commercial Banks – Know Your Customer Directions, 2025)",
     "retrieved_on": "2026-11-05",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13141",
     "status": "http_418"
   },
   "R-RBI-10": {
@@ -7030,761 +6171,453 @@
   },
   "R-RBI-FAQ-001": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
+    "owner": "[Name 2]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/FAQView.aspx?Id=87",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-002": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+    "owner": "[Name 2]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/FAQView.aspx?Id=173",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-003": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
+    "owner": "[Name 2]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/FAQView.aspx?Id=132",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-004": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+    "owner": "[Name 2]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/FAQView.aspx?Id=92",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-005": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
+    "owner": "[Name 2]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=63894",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-006": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+    "owner": "[Name 2]",
+    "reason": "RBI Press Releases archive: choose the year and month the November 2024 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-007": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
+    "owner": "[Name 2]",
+    "reason": "RBI Press Releases archive: choose the year and month the December 2024 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
     "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-008": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+    "owner": "[Name 2]",
+    "reason": "RBI Press Releases archive: choose the year and month the January 2025 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-009": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
+    "owner": "[Name 2]",
+    "reason": "RBI Press Releases archive: choose the year and month the February 2025 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
     "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-010": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+    "owner": "[Name 2]",
+    "reason": "RBI Press Releases archive: choose the year and month the March 2025 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-011": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
+    "owner": "[Name 2]",
+    "reason": "RBI Press Releases archive: choose the year and month the April 2025 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
     "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-012": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+    "owner": "[Name 2]",
+    "reason": "RBI Press Releases archive: choose the year and month the May 2025 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-013": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
+    "owner": "[Name 2]",
+    "reason": "RBI Press Releases archive: choose the year and month the June 2025 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
     "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-014": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+    "owner": "[Name 2]",
+    "reason": "RBI Press Releases archive: choose the year and month the July 2025 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-015": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
+    "owner": "[Name 2]",
+    "reason": "RBI Press Releases archive: choose the year and month the August 2025 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
     "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-016": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+    "owner": "[Name 3]",
+    "reason": "RBI Press Releases archive: choose the year and month the September 2025 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-017": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
+    "owner": "[Name 3]",
+    "reason": "RBI Press Releases archive: choose the year and month the October 2025 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
     "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-018": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+    "owner": "[Name 3]",
+    "reason": "RBI Press Releases archive: choose the year and month the November 2025 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-019": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
+    "owner": "[Name 3]",
+    "reason": "RBI Press Releases archive: choose the year and month the December 2025 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
     "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-020": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+    "owner": "[Name 3]",
+    "reason": "RBI Press Releases archive: choose the year and month the January 2026 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-021": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
+    "owner": "[Name 3]",
+    "reason": "RBI Press Releases archive: choose the year and month the February 2026 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
     "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-022": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+    "owner": "[Name 3]",
+    "reason": "RBI Press Releases archive: choose the year and month the March 2026 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-023": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
+    "owner": "[Name 3]",
+    "reason": "RBI Press Releases archive: choose the year and month the April 2026 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
     "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-024": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+    "owner": "[Name 3]",
+    "reason": "RBI Press Releases archive: choose the year and month the May 2026 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-025": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
+    "owner": "[Name 3]",
+    "reason": "RBI Press Releases archive: choose the year and month the June 2026 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
     "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-026": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+    "owner": "[Name 3]",
+    "reason": "RBI Press Releases archive: choose the year and month the July 2026 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-FAQ-027": {
     "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-028": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-029": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-030": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-031": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-032": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-033": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-034": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-035": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-036": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-037": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-038": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-039": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-040": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-041": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-042": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-043": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-044": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-045": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-046": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-047": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-048": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-049": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-050": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
-    "status": "pending_manual"
-  },
-  "R-RBI-FAQ-051": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
+    "owner": "[Name 3]",
+    "reason": "RBI Press Releases archive: choose the year and month the August 2026 data was released (usually the last week of the following month), open the release with this exact title, save as Web page, HTML only, and put its prid URL in source_url.",
     "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-001": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-002": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-003": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-004": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-005": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-006": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-007": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-008": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-009": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-010": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-011": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-012": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-013": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-014": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-015": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-016": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-017": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-018": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-019": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 3]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-020": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-021": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-022": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-023": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-024": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-025": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-026": {
     "legal_basis": "L4",
-    "owner": "[Name 2]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-027": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-028": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-029": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-030": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-031": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-032": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-033": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-034": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-035": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-036": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-037": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 4]",
     "reason": "manual source",
     "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
     "status": "pending_manual"
   },
   "R-RBI-HIST-038": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-039": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-040": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-041": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-042": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-043": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-044": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-045": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-046": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-047": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-048": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-049": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-050": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-051": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-052": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-053": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-054": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-055": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-056": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-057": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-HIST-058": {
     "legal_basis": "L4",
     "owner": "[Name 4]",
     "reason": "manual source",
@@ -7793,1136 +6626,457 @@
   },
   "R-RBI-MD-001": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 3]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13136",
     "status": "pending_manual"
   },
   "R-RBI-MD-002": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 3]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13137",
     "status": "pending_manual"
   },
   "R-RBI-MD-003": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 3]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13144",
     "status": "pending_manual"
   },
   "R-RBI-MD-004": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 3]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13145",
     "status": "pending_manual"
   },
   "R-RBI-MD-005": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13146",
     "status": "pending_manual"
   },
   "R-RBI-MD-006": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13150",
     "status": "pending_manual"
   },
   "R-RBI-MD-007": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13151",
     "status": "pending_manual"
   },
   "R-RBI-MD-008": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13152",
     "status": "pending_manual"
   },
   "R-RBI-MD-009": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13153",
     "status": "pending_manual"
   },
   "R-RBI-MD-010": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13154",
     "status": "pending_manual"
   },
   "R-RBI-MD-011": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13400",
     "status": "pending_manual"
   },
   "R-RBI-MD-012": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13399",
     "status": "pending_manual"
   },
   "R-RBI-MD-013": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13105",
     "status": "pending_manual"
   },
   "R-RBI-MD-014": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13108",
     "status": "pending_manual"
   },
   "R-RBI-MD-015": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13109",
     "status": "pending_manual"
   },
   "R-RBI-MD-016": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13112",
     "status": "pending_manual"
   },
   "R-RBI-MD-017": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13113",
     "status": "pending_manual"
   },
   "R-RBI-MD-018": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13114",
     "status": "pending_manual"
   },
   "R-RBI-MD-019": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13117",
     "status": "pending_manual"
   },
   "R-RBI-MD-020": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 4]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13118",
     "status": "pending_manual"
   },
   "R-RBI-MD-021": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13119",
     "status": "pending_manual"
   },
   "R-RBI-MD-022": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13120",
     "status": "pending_manual"
   },
   "R-RBI-MD-023": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13121",
     "status": "pending_manual"
   },
   "R-RBI-MD-024": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13122",
     "status": "pending_manual"
   },
   "R-RBI-MD-025": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13124",
     "status": "pending_manual"
   },
   "R-RBI-MD-026": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13011",
     "status": "pending_manual"
   },
   "R-RBI-MD-027": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13013",
     "status": "pending_manual"
   },
   "R-RBI-MD-028": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13014",
     "status": "pending_manual"
   },
   "R-RBI-MD-029": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13017",
     "status": "pending_manual"
   },
   "R-RBI-MD-030": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13018",
     "status": "pending_manual"
   },
   "R-RBI-MD-031": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13019",
     "status": "pending_manual"
   },
   "R-RBI-MD-032": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13022",
     "status": "pending_manual"
   },
   "R-RBI-MD-033": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13023",
     "status": "pending_manual"
   },
   "R-RBI-MD-034": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13024",
     "status": "pending_manual"
   },
   "R-RBI-MD-035": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13025",
     "status": "pending_manual"
   },
   "R-RBI-MD-036": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13026",
     "status": "pending_manual"
   },
   "R-RBI-MD-037": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 6]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13028",
     "status": "pending_manual"
   },
   "R-RBI-MD-038": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 6]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13202",
     "status": "pending_manual"
   },
   "R-RBI-MD-039": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "owner": "[Name 6]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12987",
     "status": "pending_manual"
   },
   "R-RBI-MD-040": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-041": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-042": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-043": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-044": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-045": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-046": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-047": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-048": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-049": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-050": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-051": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-052": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-053": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-054": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-055": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-056": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-057": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-058": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-059": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-060": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-061": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-062": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-063": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-064": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-065": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-066": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-067": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-068": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-069": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-070": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-071": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-072": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-073": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-074": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-075": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-076": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-077": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-078": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-079": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-080": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-081": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-082": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-083": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-084": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-085": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-086": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-087": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-088": {
-    "legal_basis": "L4",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-089": {
-    "legal_basis": "L4",
     "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-090": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-091": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-092": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-093": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-094": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-095": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-096": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-097": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-098": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-099": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-100": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-101": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-102": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-103": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-104": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-105": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-106": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-107": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-108": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-109": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-110": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-111": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
-    "status": "pending_manual"
-  },
-  "R-RBI-MD-112": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12988",
     "status": "pending_manual"
   },
   "R-SANSAD-001": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/ls/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-002": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/rs/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-003": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/ls/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-004": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/rs/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-005": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/ls/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-006": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/rs/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-007": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/ls/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-008": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/rs/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-009": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/ls/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-010": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/rs/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-011": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/ls/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-012": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/rs/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-013": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/ls/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-014": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/rs/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-015": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/ls/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-016": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 1]",
     "reason": "manual source",
     "source_url": "https://sansad.in/rs/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-017": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 6]",
     "reason": "manual source",
     "source_url": "https://sansad.in/ls/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-018": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 6]",
     "reason": "manual source",
     "source_url": "https://sansad.in/rs/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-019": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 6]",
     "reason": "manual source",
     "source_url": "https://sansad.in/ls/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-020": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 6]",
     "reason": "manual source",
     "source_url": "https://sansad.in/rs/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-021": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 6]",
     "reason": "manual source",
     "source_url": "https://sansad.in/ls/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-022": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 6]",
     "reason": "manual source",
     "source_url": "https://sansad.in/rs/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-023": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 6]",
     "reason": "manual source",
     "source_url": "https://sansad.in/ls/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-024": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
+    "owner": "[Name 6]",
     "reason": "manual source",
     "source_url": "https://sansad.in/rs/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SANSAD-025": {
     "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/ls/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-026": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/rs/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-027": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/ls/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-028": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/rs/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-029": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/ls/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-030": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/rs/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-031": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/ls/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-032": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/rs/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-033": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/ls/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-034": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/rs/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-035": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/ls/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-036": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/rs/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-037": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/ls/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-038": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/rs/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-039": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/ls/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-040": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/rs/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-041": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/ls/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-042": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/rs/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-043": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/ls/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-044": {
-    "legal_basis": "L4",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/rs/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-045": {
-    "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
     "source_url": "https://sansad.in/ls/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-046": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/rs/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-047": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/ls/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-048": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/rs/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-049": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/ls/questions/questions-and-answers",
-    "status": "pending_manual"
-  },
-  "R-SANSAD-050": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://sansad.in/rs/questions/questions-and-answers",
     "status": "pending_manual"
   },
   "R-SIDBI-01": {
@@ -9399,30 +7553,30 @@
   },
   "R-STATE-001": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://ic.gujarat.gov.in/documents/Viksit-Gujarat-Industrial-Policy2026_new.pdf",
     "status": "pending_manual"
   },
   "R-STATE-002": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
+    "owner": "[Name 6]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://msmeonline.tn.gov.in/msme_policy_doc.php",
     "status": "pending_manual"
   },
   "R-STATE-003": {
     "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
+    "owner": "[Name 5]",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://msme.up.gov.in/Home/Policies",
     "status": "pending_manual"
   },
   "R-STATE-004": {
     "legal_basis": "L4",
     "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://industries.telangana.gov.in/Library/MSME%20Policy%20Booklet%20English1.pdf",
     "status": "pending_manual"
   },
   "R-STATE-005": {
@@ -9435,104 +7589,6 @@
   "R-STATE-006": {
     "legal_basis": "L4",
     "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-STATE-007": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-STATE-008": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-STATE-009": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-STATE-010": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-STATE-011": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-STATE-012": {
-    "legal_basis": "L4",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-STATE-013": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-STATE-014": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-STATE-015": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-STATE-016": {
-    "legal_basis": "L4",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-STATE-017": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-STATE-018": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-STATE-019": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://di.maharashtra.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-STATE-020": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
     "reason": "manual source",
     "source_url": "https://di.maharashtra.gov.in/",
     "status": "pending_manual"
@@ -9550,48 +7606,6 @@
     "retrieved_on": "2026-11-05",
     "source_url": "https://www.incometaxindia.gov.in/w/section-43b-40",
     "status": "http_403"
-  },
-  "R-TAX-C-001": {
-    "legal_basis": "L3",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.incometaxindia.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-TAX-C-002": {
-    "legal_basis": "L3",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.indiacode.nic.in/",
-    "status": "pending_manual"
-  },
-  "R-TAX-C-003": {
-    "legal_basis": "L3",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.incometaxindia.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-TAX-C-004": {
-    "legal_basis": "L3",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.indiacode.nic.in/",
-    "status": "pending_manual"
-  },
-  "R-TAX-C-005": {
-    "legal_basis": "L3",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.incometaxindia.gov.in/",
-    "status": "pending_manual"
-  },
-  "R-TAX-C-006": {
-    "legal_basis": "L3",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.indiacode.nic.in/",
-    "status": "pending_manual"
   },
   "R-TREDS-001": {
     "bytes": 313954,
@@ -9619,7 +7633,7 @@
   },
   "R-TREDS-003": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
+    "owner": "[Name 6]",
     "reason": "fix the URL or download by hand",
     "retrieved_on": "2026-11-05",
     "source_url": "https://www.m1xchange.com/wp-content/uploads/2024/05/M1-Refund-Policy.pdf",
@@ -9699,37 +7713,9 @@
   },
   "R-TREDS-010": {
     "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.m1xchange.com/faqs/",
-    "status": "pending_manual"
-  },
-  "R-TREDS-011": {
-    "legal_basis": "L4",
     "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.rxil.in/",
-    "status": "pending_manual"
-  },
-  "R-TREDS-012": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.m1xchange.com/faqs/",
-    "status": "pending_manual"
-  },
-  "R-TREDS-013": {
-    "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.rxil.in/",
-    "status": "pending_manual"
-  },
-  "R-TREDS-014": {
-    "legal_basis": "L4",
-    "owner": "[Name 1]",
-    "reason": "beyond what the script could reach",
-    "source_url": "https://www.m1xchange.com/faqs/",
+    "reason": "exact document: open the link and save it",
+    "source_url": "https://www.m1xchange.com/treds-guideline/",
     "status": "pending_manual"
   },
   "host:cbic-gst.gov.in": {
