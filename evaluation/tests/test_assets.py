@@ -10,9 +10,11 @@ from credassure.evaluation import (
     build_testset,
     check_corpus_refs,
     freeze,
+    record,
     scorers,
 )
 from credassure.evaluation.baseline import run as baseline_run
+from credassure.evaluation.baseline.client import InfraError
 from credassure.evaluation.baseline.strategies import parse_json, run, user_prompt
 from credassure.evaluation.gold.data import REPO
 
@@ -222,3 +224,37 @@ def test_KR04_corpus_guard_unknown_awaiting_key_fact_and_strict(tmp_path: Path) 
     assert report.awaiting == ["Q1: awaiting corpus: B, C"]
     strict = check_corpus_refs.check(corpus, rows, strict=True)
     assert "Q1: awaiting corpus: B, C" in strict.failures and not strict.awaiting
+
+
+class DownChat:
+    """Endpoint that fails twice on every call (what the client raises after its one retry)."""
+
+    model, endpoint = "llama3.1:8b", "http://localhost:11434/v1"
+
+    def complete(
+        self, messages: list[dict[str, str]], temperature: float, seed: int
+    ) -> tuple[str, int]:
+        raise InfraError("ReadTimeout")
+
+
+def test_BRD12_infra_errors_are_excluded_from_accuracy_and_counted(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    monkeypatch.delenv("EVAL_NUM_CTX", raising=False)
+    items = ITEMS[:2]
+    down = baseline_run.evaluate(
+        "s2", items, DownChat(), tmp_path
+    )  # any of 5 samples down → item down
+    up = baseline_run.evaluate("s1", items, GoldChat(items), tmp_path)
+    assert [r["failure_class"] for r in down] == ["infra_error", "infra_error"]
+    assert all(r["passed"] is None and r["run_kind"] == "smoke_test" for r in down)
+    record = json.loads((tmp_path / "record_s2.json").read_text(encoding="utf-8"))
+    assert record["context_length"] is None and record["run_kind"] == "smoke_test"
+    text = baseline_run.summary({"s1": up, "s2": down}, record)
+    assert "**2/2**" in text and "**0/0 (2 infra)**" in text and "| infra_error | | 0 | 2 |" in text
+
+
+def test_scope13_run_kind_only_course_endpoint_is_graded() -> None:
+    assert record.run_kind("https://course.example/v1", None) == "graded"
+    assert record.run_kind("http://localhost:11434/v1", 8192) == "local_provisional"
+    assert record.run_kind("http://127.0.0.1:11434/v1", None) == "smoke_test"

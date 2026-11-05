@@ -14,7 +14,7 @@ from ..check_corpus_refs import known_doc_ids
 from ..gold.data import REPO
 from ..record import run_record
 from ..scorers import BRD_CLASS, score
-from .client import Chat, OpenAICompatible
+from .client import Chat, InfraError, OpenAICompatible
 from .strategies import PROMPTS, run
 
 RESULTS = REPO / "evaluation" / "baseline" / "results"
@@ -25,9 +25,27 @@ def evaluate(
     strategy: str, items: list[dict[str, Any]], chat: Chat, out: Path
 ) -> list[dict[str, Any]]:
     known = known_doc_ids()
+    record = run_record(chat.model, chat.endpoint, PROMPTS, len(items), strategy)
+    meta = {k: record[k] for k in ("endpoint", "context_length", "run_kind")}
     results = []
     for item in items:
-        answer, tokens, raw = run(strategy, item, chat)
+        try:
+            answer, tokens, raw = run(strategy, item, chat)
+        except InfraError as exc:  # endpoint failed twice: not the model's answer, so not scored
+            results.append(
+                {
+                    "id": item["id"],
+                    "category": item["category"],
+                    "passed": None,
+                    "failure_class": "infra_error",
+                    "detail": str(exc),
+                    "tokens": 0,
+                    "answer": None,
+                    "raw_tail": "",
+                    **meta,
+                }
+            )
+            continue
         verdict = score(item, answer, known)
         results.append(
             {
@@ -39,6 +57,7 @@ def evaluate(
                 "tokens": tokens,
                 "answer": answer,
                 "raw_tail": raw[-400:],
+                **meta,
             }
         )
     out.mkdir(parents=True, exist_ok=True)
@@ -46,34 +65,60 @@ def evaluate(
         "".join(json.dumps(r, sort_keys=True, ensure_ascii=False) + "\n" for r in results),
         encoding="utf-8",
     )
-    record = run_record(chat.model, chat.endpoint, PROMPTS, len(items), strategy)
     (out / f"record_{strategy}.json").write_text(
         json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     return results
 
 
-def summary(by_strategy: dict[str, list[dict[str, Any]]]) -> str:
+def _scored(rs: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [r for r in rs if r["failure_class"] != "infra_error"]
+
+
+def _cell(rs: list[dict[str, Any]]) -> str:
+    scored = _scored(rs)
+    infra = len(rs) - len(scored)
+    return f"{sum(bool(r['passed']) for r in scored)}/{len(scored)}" + (
+        f" ({infra} infra)" if infra else ""
+    )
+
+
+def summary(by_strategy: dict[str, list[dict[str, Any]]], record: dict[str, Any]) -> str:
+    """Accuracy is passed / scored items; infra_error items (endpoint failed twice) are excluded and counted."""
+    first = next(iter(by_strategy.values()))
     categories = list(dict.fromkeys(r["category"] for rs in by_strategy.values() for r in rs))
-    head = "| Category | Items | " + " | ".join(s.upper() for s in by_strategy) + " |"
-    lines = ["# Baseline results (BRD §12)", "", head, "|" + "---|" * (len(by_strategy) + 2)]
+    kind = record["run_kind"]
+    lines = [
+        "# Baseline results (BRD §12)",
+        "",
+        f"Run kind: **{kind}**"
+        + (" (not graded: only the course-endpoint run is graded)" if kind != "graded" else "")
+        + f" · endpoint `{record['endpoint']}` · model `{record['model']}`"
+        + f" · context length {record['context_length'] or 'not set (Ollama default)'}",
+        "",
+        "Cells are passed/scored; items whose call failed twice are excluded and shown as infra.",
+        "",
+        "| Category | Items | " + " | ".join(s.upper() for s in by_strategy) + " |",
+        "|" + "---|" * (len(by_strategy) + 2),
+    ]
     for cat in categories:
-        cells = []
-        for rs in by_strategy.values():
-            mine = [r for r in rs if r["category"] == cat]
-            cells.append(f"{sum(r['passed'] for r in mine)}/{len(mine)}")
-        count = sum(1 for r in next(iter(by_strategy.values())) if r["category"] == cat)
+        cells = [_cell([r for r in rs if r["category"] == cat]) for rs in by_strategy.values()]
+        count = sum(1 for r in first if r["category"] == cat)
         lines.append(f"| {cat} | {count} | " + " | ".join(cells) + " |")
-    totals = [f"**{sum(r['passed'] for r in rs)}/{len(rs)}**" for rs in by_strategy.values()]
     lines += [
-        f"| **Total** | {len(next(iter(by_strategy.values())))} | " + " | ".join(totals) + " |",
+        f"| **Total** | {len(first)} | "
+        + " | ".join(f"**{_cell(rs)}**" for rs in by_strategy.values())
+        + " |",
+        "| infra_error | | "
+        + " | ".join(str(len(rs) - len(_scored(rs))) for rs in by_strategy.values())
+        + " |",
         "",
         "## Failure classes",
         "",
     ]
     for name, rs in by_strategy.items():
         brd = Counter(
-            BRD_CLASS.get(r["failure_class"], "tool_error") for r in rs if not r["passed"]
+            BRD_CLASS.get(r["failure_class"], "tool_error") for r in _scored(rs) if not r["passed"]
         )
         lines.append(
             f"- **{name.upper()}** (BRD §13 classes): "
@@ -106,8 +151,9 @@ def main(argv: list[str] | None = None) -> int:
     by_strategy: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for strategy in strategies:
         by_strategy[strategy] = evaluate(strategy, items, chat, RESULTS)
-        print(f"{strategy}: {sum(r['passed'] for r in by_strategy[strategy])}/{len(items)}")
-    (RESULTS / "summary.md").write_text(summary(by_strategy), encoding="utf-8")
+        print(f"{strategy}: {_cell(by_strategy[strategy])}")
+    record = run_record(chat.model, chat.endpoint, PROMPTS, len(items), "summary")
+    (RESULTS / "summary.md").write_text(summary(by_strategy, record), encoding="utf-8")
     print((RESULTS / "summary.md").read_text(encoding="utf-8"))
     return 0
 

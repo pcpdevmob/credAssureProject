@@ -1,6 +1,7 @@
 """Evaluation reproducibility record (scope #13): what produced a set of results.
 
-Every run writes record.json with the model and endpoint, prompt versions (SHA-256), the engine version
+Every run writes record.json with the model, endpoint, context length (EVAL_NUM_CTX) and run kind
+(graded / local_provisional / smoke_test), prompt versions (SHA-256), the engine version
 (last git commit touching packages/engines), the corpus hash (manifest + lock), the data hash (SHA256SUMS),
 the test-set hash, the seed, the item count and the UTC time.
 """
@@ -10,6 +11,7 @@ import os
 import subprocess  # nosec B404 - fixed argv only
 from datetime import UTC, datetime
 from typing import Any
+from urllib.parse import urlparse
 
 from .gold.data import REPO
 
@@ -32,13 +34,29 @@ def engine_version() -> str:
     return result.stdout.strip() or "unknown"
 
 
+LOCAL_HOSTS = {"localhost", "127.0.0.1", "::1", "host.docker.internal", "ollama"}
+
+
+def run_kind(endpoint: str, context_length: int | None) -> str:
+    """Only a run on the course endpoint is graded (BRD §12). A local run is provisional when the context
+    length was set explicitly (EVAL_NUM_CTX, matching OLLAMA_CONTEXT_LENGTH); otherwise a smoke test."""
+    host = urlparse(endpoint).hostname or ""
+    if host not in LOCAL_HOSTS:
+        return "graded"
+    return "local_provisional" if context_length else "smoke_test"
+
+
 def run_record(
     model: str, endpoint: str, prompts: dict[str, str], items: int, strategy: str
 ) -> dict[str, Any]:
+    num_ctx = os.environ.get("EVAL_NUM_CTX")
+    context_length = int(num_ctx) if num_ctx else None
     return {
         "strategy": strategy,
         "model": model,
         "endpoint": endpoint,
+        "context_length": context_length,
+        "run_kind": run_kind(endpoint, context_length),
         "prompt_versions": {
             name: hashlib.sha256(text.encode()).hexdigest()[:16]
             for name, text in sorted(prompts.items())

@@ -18,6 +18,10 @@ from ..gold.data import REPO
 CACHE = REPO / "evaluation" / "baseline" / "cache"
 
 
+class InfraError(RuntimeError):
+    """The endpoint failed twice (timeout or HTTP error). The item is scored infra_error, not a wrong answer."""
+
+
 class Chat(Protocol):
     model: str
     endpoint: str
@@ -58,13 +62,19 @@ class OpenAICompatible:
                 if os.environ.get("EVAL_API_KEY")
                 else {}
             )
-            response = httpx.post(
-                f"{self.endpoint}/chat/completions",
-                json=payload,
-                headers=headers,
-                timeout=self.timeout,
-            )
-            response.raise_for_status()
+            for attempt in range(2):  # one retry, then InfraError; failures are never cached
+                try:
+                    response = httpx.post(
+                        f"{self.endpoint}/chat/completions",
+                        json=payload,
+                        headers=headers,
+                        timeout=self.timeout,
+                    )
+                    response.raise_for_status()
+                    break
+                except httpx.HTTPError as exc:
+                    if attempt:
+                        raise InfraError(f"{type(exc).__name__}: {exc}") from exc
             data = response.json()
             CACHE.mkdir(parents=True, exist_ok=True)
             cached.write_text(json.dumps(data), encoding="utf-8")
