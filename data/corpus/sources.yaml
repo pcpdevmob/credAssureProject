@@ -1,7 +1,7 @@
 # Real Indian corpus sources (ADR 0019, docs/data/DATA_RESOURCES.md "Corpus sources"). Metadata only.
 # method: script = harvest index pages (robots.txt, 1 req/s, stop host on 403/429/418/challenge), rest manual.
 #         manual = never fetched by script; slots go to MANUAL_DOWNLOADS.md.
-# Index pages were read on 2026-11-05. Notes record what a reader saw (status, JS-only pager, block).
+# Index pages were read on 2026-11-05. Source 1 index moved to BS_ViewMasterDirections.aspx (old /web/rbi/.../master-directions 404s). Notes record what a reader saw (status, JS-only pager, block).
 version: 1
 manual_hosts:   # always manual (owner decision, ADR 0019)
   - rbi.org.in
@@ -22,7 +22,7 @@ sources:
     jurisdiction: [IN]
     agents: [All]
     method: manual
-    index_urls: ["https://rbi.org.in/web/rbi/notifications/master-directions"]
+    index_urls: ["https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx"]
   - id: 2
     name: RBI circulars superseded by the 2025 consolidation (set superseded_by)
     prefix: R-RBI-HIST

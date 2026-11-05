@@ -25,54 +25,54 @@ Tiers: T1 RBI Master Directions, RBI FAQs/rates/press releases, CGTMSE replaceme
 
 **525 documents pending** across six owners.
 
-## [Name 1]: 92 documents (cbic-gst.gov.in, dcmsme.gov.in, egazette.gov.in, msme.gov.in, rbi.org.in, www.m1xchange.com, www.ncgtc.in, www.sci.gov.in)
+## [Name 1]: 92 documents (cbic-gst.gov.in, dcmsme.gov.in, egazette.gov.in, msme.gov.in, www.m1xchange.com, www.ncgtc.in, www.rbi.org.in, www.sci.gov.in)
 
 | Tier | doc_id | Save as | Source | Link | Why manual |
 |---|---|---|---|---|---|
-| T1 | R-RBI-MD-001 | raw/R-RBI-MD-001.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-002 | raw/R-RBI-MD-002.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-003 | raw/R-RBI-MD-003.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-004 | raw/R-RBI-MD-004.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-005 | raw/R-RBI-MD-005.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-006 | raw/R-RBI-MD-006.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-007 | raw/R-RBI-MD-007.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-008 | raw/R-RBI-MD-008.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-009 | raw/R-RBI-MD-009.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-010 | raw/R-RBI-MD-010.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-011 | raw/R-RBI-MD-011.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-012 | raw/R-RBI-MD-012.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-013 | raw/R-RBI-MD-013.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-014 | raw/R-RBI-MD-014.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-015 | raw/R-RBI-MD-015.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-016 | raw/R-RBI-MD-016.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-017 | raw/R-RBI-MD-017.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-018 | raw/R-RBI-MD-018.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-019 | raw/R-RBI-MD-019.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-020 | raw/R-RBI-MD-020.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-021 | raw/R-RBI-MD-021.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-022 | raw/R-RBI-MD-022.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-023 | raw/R-RBI-MD-023.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-024 | raw/R-RBI-MD-024.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-025 | raw/R-RBI-MD-025.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-026 | raw/R-RBI-MD-026.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-027 | raw/R-RBI-MD-027.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-028 | raw/R-RBI-MD-028.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-029 | raw/R-RBI-MD-029.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-030 | raw/R-RBI-MD-030.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-031 | raw/R-RBI-MD-031.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-032 | raw/R-RBI-MD-032.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-033 | raw/R-RBI-MD-033.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-034 | raw/R-RBI-MD-034.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-035 | raw/R-RBI-MD-035.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-036 | raw/R-RBI-MD-036.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-037 | raw/R-RBI-MD-037.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-038 | raw/R-RBI-MD-038.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-039 | raw/R-RBI-MD-039.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-040 | raw/R-RBI-MD-040.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-041 | raw/R-RBI-MD-041.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-042 | raw/R-RBI-MD-042.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-043 | raw/R-RBI-MD-043.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-044 | raw/R-RBI-MD-044.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-001 | raw/R-RBI-MD-001.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-002 | raw/R-RBI-MD-002.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-003 | raw/R-RBI-MD-003.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-004 | raw/R-RBI-MD-004.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-005 | raw/R-RBI-MD-005.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-006 | raw/R-RBI-MD-006.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-007 | raw/R-RBI-MD-007.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-008 | raw/R-RBI-MD-008.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-009 | raw/R-RBI-MD-009.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-010 | raw/R-RBI-MD-010.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-011 | raw/R-RBI-MD-011.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-012 | raw/R-RBI-MD-012.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-013 | raw/R-RBI-MD-013.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-014 | raw/R-RBI-MD-014.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-015 | raw/R-RBI-MD-015.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-016 | raw/R-RBI-MD-016.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-017 | raw/R-RBI-MD-017.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-018 | raw/R-RBI-MD-018.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-019 | raw/R-RBI-MD-019.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-020 | raw/R-RBI-MD-020.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-021 | raw/R-RBI-MD-021.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-022 | raw/R-RBI-MD-022.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-023 | raw/R-RBI-MD-023.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-024 | raw/R-RBI-MD-024.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-025 | raw/R-RBI-MD-025.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-026 | raw/R-RBI-MD-026.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-027 | raw/R-RBI-MD-027.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-028 | raw/R-RBI-MD-028.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-029 | raw/R-RBI-MD-029.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-030 | raw/R-RBI-MD-030.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-031 | raw/R-RBI-MD-031.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-032 | raw/R-RBI-MD-032.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-033 | raw/R-RBI-MD-033.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-034 | raw/R-RBI-MD-034.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-035 | raw/R-RBI-MD-035.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-036 | raw/R-RBI-MD-036.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-037 | raw/R-RBI-MD-037.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-038 | raw/R-RBI-MD-038.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-039 | raw/R-RBI-MD-039.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-040 | raw/R-RBI-MD-040.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-041 | raw/R-RBI-MD-041.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-042 | raw/R-RBI-MD-042.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-043 | raw/R-RBI-MD-043.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-044 | raw/R-RBI-MD-044.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
 | T2 | R-NCGTC-006 | raw/R-NCGTC-006.html | 5: pick from index | https://www.ncgtc.in/ | beyond what the script could reach |
 | T2 | R-NCGTC-007 | raw/R-NCGTC-007.html | 5: pick from index | https://www.ncgtc.in/ | beyond what the script could reach |
 | T2 | R-NCGTC-008 | raw/R-NCGTC-008.html | 5: pick from index | https://www.ncgtc.in/ | beyond what the script could reach |
@@ -122,54 +122,54 @@ Tiers: T1 RBI Master Directions, RBI FAQs/rates/press releases, CGTMSE replaceme
 | T6 | R-TREDS-012 | raw/R-TREDS-012.html | 12: pick from index | https://www.m1xchange.com/faqs/ | beyond what the script could reach |
 | T6 | R-TREDS-014 | raw/R-TREDS-014.html | 12: pick from index | https://www.m1xchange.com/faqs/ | beyond what the script could reach |
 
-## [Name 2]: 87 documents (egazette.gov.in, rbi.org.in, sbi.co.in, www.ncgtc.in, www.rbi.org.in, www.sci.gov.in)
+## [Name 2]: 87 documents (egazette.gov.in, sbi.co.in, www.ncgtc.in, www.rbi.org.in, www.sci.gov.in)
 
 | Tier | doc_id | Save as | Source | Link | Why manual |
 |---|---|---|---|---|---|
-| T1 | R-RBI-MD-045 | raw/R-RBI-MD-045.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-046 | raw/R-RBI-MD-046.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-047 | raw/R-RBI-MD-047.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-048 | raw/R-RBI-MD-048.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-049 | raw/R-RBI-MD-049.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-050 | raw/R-RBI-MD-050.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-051 | raw/R-RBI-MD-051.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-052 | raw/R-RBI-MD-052.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-053 | raw/R-RBI-MD-053.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-054 | raw/R-RBI-MD-054.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-055 | raw/R-RBI-MD-055.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-056 | raw/R-RBI-MD-056.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-057 | raw/R-RBI-MD-057.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-058 | raw/R-RBI-MD-058.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-059 | raw/R-RBI-MD-059.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-060 | raw/R-RBI-MD-060.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-061 | raw/R-RBI-MD-061.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-062 | raw/R-RBI-MD-062.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-063 | raw/R-RBI-MD-063.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-064 | raw/R-RBI-MD-064.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-065 | raw/R-RBI-MD-065.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-066 | raw/R-RBI-MD-066.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-067 | raw/R-RBI-MD-067.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-068 | raw/R-RBI-MD-068.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-069 | raw/R-RBI-MD-069.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-070 | raw/R-RBI-MD-070.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-071 | raw/R-RBI-MD-071.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-072 | raw/R-RBI-MD-072.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-073 | raw/R-RBI-MD-073.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-074 | raw/R-RBI-MD-074.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-075 | raw/R-RBI-MD-075.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-076 | raw/R-RBI-MD-076.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-077 | raw/R-RBI-MD-077.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-078 | raw/R-RBI-MD-078.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-079 | raw/R-RBI-MD-079.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-080 | raw/R-RBI-MD-080.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-081 | raw/R-RBI-MD-081.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-082 | raw/R-RBI-MD-082.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-083 | raw/R-RBI-MD-083.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-084 | raw/R-RBI-MD-084.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-085 | raw/R-RBI-MD-085.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-086 | raw/R-RBI-MD-086.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-087 | raw/R-RBI-MD-087.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-088 | raw/R-RBI-MD-088.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-045 | raw/R-RBI-MD-045.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-046 | raw/R-RBI-MD-046.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-047 | raw/R-RBI-MD-047.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-048 | raw/R-RBI-MD-048.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-049 | raw/R-RBI-MD-049.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-050 | raw/R-RBI-MD-050.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-051 | raw/R-RBI-MD-051.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-052 | raw/R-RBI-MD-052.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-053 | raw/R-RBI-MD-053.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-054 | raw/R-RBI-MD-054.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-055 | raw/R-RBI-MD-055.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-056 | raw/R-RBI-MD-056.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-057 | raw/R-RBI-MD-057.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-058 | raw/R-RBI-MD-058.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-059 | raw/R-RBI-MD-059.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-060 | raw/R-RBI-MD-060.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-061 | raw/R-RBI-MD-061.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-062 | raw/R-RBI-MD-062.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-063 | raw/R-RBI-MD-063.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-064 | raw/R-RBI-MD-064.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-065 | raw/R-RBI-MD-065.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-066 | raw/R-RBI-MD-066.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-067 | raw/R-RBI-MD-067.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-068 | raw/R-RBI-MD-068.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-069 | raw/R-RBI-MD-069.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-070 | raw/R-RBI-MD-070.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-071 | raw/R-RBI-MD-071.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-072 | raw/R-RBI-MD-072.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-073 | raw/R-RBI-MD-073.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-074 | raw/R-RBI-MD-074.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-075 | raw/R-RBI-MD-075.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-076 | raw/R-RBI-MD-076.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-077 | raw/R-RBI-MD-077.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-078 | raw/R-RBI-MD-078.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-079 | raw/R-RBI-MD-079.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-080 | raw/R-RBI-MD-080.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-081 | raw/R-RBI-MD-081.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-082 | raw/R-RBI-MD-082.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-083 | raw/R-RBI-MD-083.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-084 | raw/R-RBI-MD-084.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-085 | raw/R-RBI-MD-085.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-086 | raw/R-RBI-MD-086.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-087 | raw/R-RBI-MD-087.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-088 | raw/R-RBI-MD-088.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
 | T6 | R-RBI-HIST-001 | raw/R-RBI-HIST-001.html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
 | T6 | R-RBI-HIST-002 | raw/R-RBI-HIST-002.html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
 | T6 | R-RBI-HIST-003 | raw/R-RBI-HIST-003.html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
@@ -483,12 +483,12 @@ Tiers: T1 RBI Master Directions, RBI FAQs/rates/press releases, CGTMSE replaceme
 | T6 | R-TAX-C-004 | raw/R-TAX-C-004.html | 10: pick from index | https://www.indiacode.nic.in/ | manual source |
 | T6 | R-TAX-C-006 | raw/R-TAX-C-006.html | 10: pick from index | https://www.indiacode.nic.in/ | manual source |
 
-## [Name 6]: 92 documents (cbic-gst.gov.in, di.maharashtra.gov.in, egazette.gov.in, rbi.org.in, sansad.in, udyamregistration.gov.in, website.rbi.org.in, www.incometaxindia.gov.in, www.ncgtc.in, www.rbi.org.in, www.rxil.in, www.sci.gov.in)
+## [Name 6]: 92 documents (cbic-gst.gov.in, di.maharashtra.gov.in, egazette.gov.in, sansad.in, udyamregistration.gov.in, website.rbi.org.in, www.incometaxindia.gov.in, www.ncgtc.in, www.rbi.org.in, www.rxil.in, www.sci.gov.in)
 
 | Tier | doc_id | Save as | Source | Link | Why manual |
 |---|---|---|---|---|---|
-| T1 | R-RBI-09 | raw/R-RBI-09.html | 1: RBI Commercial Banks - Know Your Customer Directions, 2025 ( | https://website.rbi.org.in/en/web/rbi/regulations-non-banking/notifications?delta=20 | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-11 | raw/R-RBI-11.html | 1: Reserve Bank of India (Digital Lending) Directions, 2025 | https://website.rbi.org.in/documents/d/rbi/directionsondigitallending | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-09 | raw/R-RBI-09.html | 1: RBI Commercial Banks - Know Your Customer Directions, 2025 ( | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF. old portal link retired; on the Master Directions list open 'Commercial Banks – Know Your Customer Directions, 2025' and save it as Web page, HTML only |
+| T1 | R-RBI-11 | raw/R-RBI-11.html | 1: Reserve Bank of India (Digital Lending) Directions, 2025 | https://website.rbi.org.in/documents/d/rbi/directionsondigitallending | **HTML:** save as *Web page, HTML only*; do not look for the PDF. old portal link may open the RBI homepage; on the Master Directions list open 'Reserve Bank of India (Digital Lending) Directions, 2025' and save it as Web page, HTML only |
 | T1 | R-RBI-FAQ-045 | raw/R-RBI-FAQ-045.html | 3: pick from index | https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
 | T1 | R-RBI-FAQ-046 | raw/R-RBI-FAQ-046.html | 3: pick from index | https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84 | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
 | T1 | R-RBI-FAQ-047 | raw/R-RBI-FAQ-047.html | 3: pick from index | https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
@@ -496,31 +496,31 @@ Tiers: T1 RBI Master Directions, RBI FAQs/rates/press releases, CGTMSE replaceme
 | T1 | R-RBI-FAQ-049 | raw/R-RBI-FAQ-049.html | 3: pick from index | https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
 | T1 | R-RBI-FAQ-050 | raw/R-RBI-FAQ-050.html | 3: pick from index | https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84 | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
 | T1 | R-RBI-FAQ-051 | raw/R-RBI-FAQ-051.html | 3: pick from index | https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-089 | raw/R-RBI-MD-089.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-090 | raw/R-RBI-MD-090.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-091 | raw/R-RBI-MD-091.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-092 | raw/R-RBI-MD-092.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-093 | raw/R-RBI-MD-093.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-094 | raw/R-RBI-MD-094.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-095 | raw/R-RBI-MD-095.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-096 | raw/R-RBI-MD-096.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-097 | raw/R-RBI-MD-097.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-098 | raw/R-RBI-MD-098.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-099 | raw/R-RBI-MD-099.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-100 | raw/R-RBI-MD-100.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-101 | raw/R-RBI-MD-101.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-102 | raw/R-RBI-MD-102.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-103 | raw/R-RBI-MD-103.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-104 | raw/R-RBI-MD-104.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-105 | raw/R-RBI-MD-105.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-106 | raw/R-RBI-MD-106.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-107 | raw/R-RBI-MD-107.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-108 | raw/R-RBI-MD-108.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-109 | raw/R-RBI-MD-109.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-110 | raw/R-RBI-MD-110.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-111 | raw/R-RBI-MD-111.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-MD-112 | raw/R-RBI-MD-112.html | 1: pick from index | https://rbi.org.in/web/rbi/notifications/master-directions | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
-| T1 | R-RBI-01 | raw/R-RBI-01.pdf | 3: RBI press release: 244 consolidated Master Directions (28 No | https://website.rbi.org.in/documents/d/rbi/pr1588rbiconsolidatedmasterdirections-1- | server returned an HTML page instead of the PDF; save the PDF by hand |
+| T1 | R-RBI-MD-089 | raw/R-RBI-MD-089.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-090 | raw/R-RBI-MD-090.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-091 | raw/R-RBI-MD-091.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-092 | raw/R-RBI-MD-092.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-093 | raw/R-RBI-MD-093.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-094 | raw/R-RBI-MD-094.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-095 | raw/R-RBI-MD-095.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-096 | raw/R-RBI-MD-096.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-097 | raw/R-RBI-MD-097.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-098 | raw/R-RBI-MD-098.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-099 | raw/R-RBI-MD-099.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-100 | raw/R-RBI-MD-100.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-101 | raw/R-RBI-MD-101.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-102 | raw/R-RBI-MD-102.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-103 | raw/R-RBI-MD-103.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-104 | raw/R-RBI-MD-104.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-105 | raw/R-RBI-MD-105.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-106 | raw/R-RBI-MD-106.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-107 | raw/R-RBI-MD-107.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-108 | raw/R-RBI-MD-108.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-109 | raw/R-RBI-MD-109.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-110 | raw/R-RBI-MD-110.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-111 | raw/R-RBI-MD-111.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-MD-112 | raw/R-RBI-MD-112.html | 1: pick from index | https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx | **HTML:** save as *Web page, HTML only*; do not look for the PDF |
+| T1 | R-RBI-01 | raw/R-RBI-01.pdf | 3: RBI press release: 244 consolidated Master Directions (28 No | https://website.rbi.org.in/documents/d/rbi/pr1588rbiconsolidatedmasterdirections-1- | old portal link may open the RBI homepage; find the 28 Nov 2025 press release on consolidated Master Directions under Press Releases (BS_PressReleaseDisplay) and save it as Web page, HTML only |
 | T1 | R-SANSAD-045 | raw/R-SANSAD-045.html | 14: pick from index | https://sansad.in/ls/questions/questions-and-answers | manual source |
 | T1 | R-SANSAD-046 | raw/R-SANSAD-046.html | 14: pick from index | https://sansad.in/rs/questions/questions-and-answers | manual source |
 | T1 | R-SANSAD-047 | raw/R-SANSAD-047.html | 14: pick from index | https://sansad.in/ls/questions/questions-and-answers | manual source |
@@ -600,7 +600,7 @@ under `hosts:`, `terms_url`, `terms_note` (does it allow automated access? any r
 | indianbank.in | 1 | [Name 4] | unknown |
 | msme.gov.in | 18 | [Name 1] | unknown |
 | pnb.bank.in | 1 | [Name 6] | unknown |
-| rbi.org.in | 118 | [Name 1] | unknown |
+| rbi.org.in | 6 | [Name 1] | unknown |
 | sahamati.org.in | 1 | [Name 2] | unknown |
 | samadhaan.msme.gov.in | 1 | [Name 3] | unknown |
 | sansad.in | 50 | [Name 3] | unknown |
@@ -608,7 +608,7 @@ under `hosts:`, `terms_url`, `terms_note` (does it allow automated access? any r
 | sbi.co.in | 2 | [Name 2] | unknown |
 | tatacapital.com | 1 | [Name 1] | unknown |
 | udyamregistration.gov.in | 18 | [Name 6] | unknown |
-| website.rbi.org.in | 4 | [Name 6] | unknown |
+| website.rbi.org.in | 3 | [Name 6] | unknown |
 | www.axis.bank.in | 1 | [Name 4] | unknown |
 | www.bajajfinserv.in | 1 | [Name 5] | unknown |
 | www.canarabank.bank.in | 1 | [Name 6] | unknown |
@@ -626,7 +626,7 @@ under `hosts:`, `terms_url`, `terms_note` (does it allow automated access? any r
 | www.meity.gov.in | 2 | [Name 6] | unknown |
 | www.mudra.org.in | 15 | [Name 4] | unknown |
 | www.ncgtc.in | 25 | [Name 1] | unknown |
-| www.rbi.org.in | 118 | [Name 5] | unknown |
+| www.rbi.org.in | 231 | [Name 2] | unknown |
 | www.rxil.in | 2 | [Name 6] | unknown |
 | www.sci.gov.in | 25 | [Name 1] | unknown |
 | www.sidbi.in | 40 | [Name 6] | unknown |

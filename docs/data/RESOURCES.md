@@ -79,7 +79,7 @@ Fake-but-valid identifiers for **redaction tests only** (never stored): generate
 |---|---|---|---|---|
 | R-RBI-02 | Commercial Banks – Responsible Business Conduct Directions, 2025 (RBI/DOR/2025-26/170, 28 Nov 2025; updated 1 Jul 2026), Chapter VIII Responsible Lending Conduct, **Annex XIII KFS** | RBI | KFS format for synthetic docs; APR definition and illustration (confirm `APR_CONVENTION`); copilot citations | ✅ https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13140 ; PDF ✅ https://website.rbi.org.in/documents/d/rbi/commercial-banks-responsible-business-conduct-1- |
 | R-RBI-03 | Commercial Banks – Interest Rates on Advances Directions, 2025 | RBI | Floating-rate/benchmark rules; LW-08 explanations | ✅ https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13149 |
-| R-RBI-10 | Commercial Banks – Credit Facilities Directions, 2025 | RBI | Definitions referenced by RBC Directions | ⚠️ verify via https://rbi.org.in/web/rbi/notifications/master-directions |
+| R-RBI-10 | Commercial Banks – Credit Facilities Directions, 2025 | RBI | Definitions referenced by RBC Directions | ⚠️ verify via https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx |
 | R-CG-01 | CGTMSE — Annual Guarantee Fee structure for CGS-I (guarantees approved/renewed on/after 1 Apr 2025), slab table starting 0.37% p.a. for ₹0–10 lakh | CGTMSE | AGF slab rates for synthetic offers (LW-07) | ✅ https://cgtmse.in/Home/VS/47 |
 | R-CG-02 | CGTMSE — AGF basis: guaranteed amount in year 1, outstanding thereafter (sanctioned/renewed on/after 1 Apr 2025) | CGTMSE | D2 engine rule | ✅ https://cgtmse.in/Home/VS/101 |
 | R-CG-03 | CGTMSE circulars list (incl. Circular 252/2024-25 AGF reduction above ₹1 cr; 256/2025-26 guarantee expiry extension for term loans) | CGTMSE | Corpus volume (~60 circulars) + fee history for superseded tests | ✅ https://www.cgtmse.in/Circulars |
@@ -115,7 +115,7 @@ No external data. Its inputs are the fact ledger, retrieved passages and generat
 
 | Collection / tag | Sources (IDs above) | Target docs |
 |---|---|---|
-| `public/rbi_md` | R-RBI-02, -03, -04, -06, -09, -10 + other relevant 2025 Commercial Banks Directions from the master-directions index ✅ https://rbi.org.in/web/rbi/notifications/master-directions ; consolidation press release ✅ https://website.rbi.org.in/documents/d/rbi/pr1588rbiconsolidatedmasterdirections-1- | 30–40 |
+| `public/rbi_md` | R-RBI-02, -03, -04, -06, -09, -10 + other relevant 2025 Commercial Banks Directions from the master-directions index ✅ https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx ; consolidation press release ✅ https://website.rbi.org.in/documents/d/rbi/pr1588rbiconsolidatedmasterdirections-1- | 30–40 |
 | `public/rbi_faq` | R-RBI-05 + other RBI FAQ pages (MSME, KFS, EBLR) | 10–15 |
 | `public/rbi_treds` | R-RBI-08: TReDS Directions 2026 (draft ✅ https://www.rbi.org.in/scripts/bs_viewcontent.aspx?Id=4976 ; final RBI/DPSS/2026-27/406, 23 Jun 2026 ⚠️ verify RBI URL); 2014 guidelines page ✅ https://website.rbi.org.in/en/web/rbi/payment-and-settlements/other-links/information-useful-to-banks-fis/guidelines (tag superseded) | 5–10 |
 | `public/cgtmse` | R-CG-01..04 + circulars | 50–70 |

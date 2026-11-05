@@ -6883,7 +6883,7 @@
     "final_url": "https://www.rbi.org.in/",
     "legal_basis": "L4",
     "owner": "[Name 6]",
-    "reason": "server returned an HTML page instead of the PDF; save the PDF by hand",
+    "reason": "old portal link may open the RBI homepage; find the 28 Nov 2025 press release on consolidated Master Directions under Press Releases (BS_PressReleaseDisplay) and save it as Web page, HTML only",
     "retrieved_on": "2026-11-05",
     "sha256": "e29882c464300a38b053ccfc38d1f00fc2757349d5f64ad088cbb886c2188955",
     "source_url": "https://website.rbi.org.in/documents/d/rbi/pr1588rbiconsolidatedmasterdirections-1-",
@@ -6976,8 +6976,9 @@
   "R-RBI-09": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
+    "reason": "old portal link retired; on the Master Directions list open 'Commercial Banks – Know Your Customer Directions, 2025' and save it as Web page, HTML only",
     "retrieved_on": "2026-11-05",
-    "source_url": "https://website.rbi.org.in/en/web/rbi/regulations-non-banking/notifications?delta=20",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "http_418"
   },
   "R-RBI-10": {
@@ -6997,7 +6998,7 @@
     "final_url": "https://www.rbi.org.in/",
     "legal_basis": "L4",
     "owner": "[Name 6]",
-    "reason": "server returned an HTML page instead of the PDF; save the PDF by hand",
+    "reason": "old portal link may open the RBI homepage; on the Master Directions list open 'Reserve Bank of India (Digital Lending) Directions, 2025' and save it as Web page, HTML only",
     "retrieved_on": "2026-11-05",
     "sha256": "426b712153fb8883e3fcf4cfad9e15295aea988436b2a5974f42da3692b2b98e",
     "source_url": "https://website.rbi.org.in/documents/d/rbi/directionsondigitallending",
@@ -7794,784 +7795,784 @@
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-002": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-003": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-004": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-005": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-006": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-007": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-008": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-009": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-010": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-011": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-012": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-013": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-014": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-015": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-016": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-017": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-018": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-019": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-020": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-021": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-022": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-023": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-024": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-025": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-026": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-027": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-028": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-029": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-030": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-031": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-032": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-033": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-034": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-035": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-036": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-037": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-038": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-039": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-040": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-041": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-042": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-043": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-044": {
     "legal_basis": "L4",
     "owner": "[Name 1]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-045": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-046": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-047": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-048": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-049": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-050": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-051": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-052": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-053": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-054": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-055": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-056": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-057": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-058": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-059": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-060": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-061": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-062": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-063": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-064": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-065": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-066": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-067": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-068": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-069": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-070": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-071": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-072": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-073": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-074": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-075": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-076": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-077": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-078": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-079": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-080": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-081": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-082": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-083": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-084": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-085": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-086": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-087": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-088": {
     "legal_basis": "L4",
     "owner": "[Name 2]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-089": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-090": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-091": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-092": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-093": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-094": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-095": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-096": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-097": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-098": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-099": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-100": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-101": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-102": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-103": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-104": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-105": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-106": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-107": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-108": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-109": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-110": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-111": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-RBI-MD-112": {
     "legal_basis": "L4",
     "owner": "[Name 6]",
     "reason": "manual source",
-    "source_url": "https://rbi.org.in/web/rbi/notifications/master-directions",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx",
     "status": "pending_manual"
   },
   "R-SANSAD-001": {

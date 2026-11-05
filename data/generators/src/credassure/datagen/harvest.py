@@ -470,7 +470,13 @@ def manual_markdown(manifest: dict[str, Any], lock: dict[str, dict[str, Any]]) -
             record = lock.get(d["doc_id"], {})
             why = record.get("reason") or record.get("status", "pending")
             if rbi_html(d):
-                why = "**HTML:** save as *Web page, HTML only*; do not look for the PDF"
+                note = record.get("reason", "")
+                extra = (
+                    ""
+                    if note in {"", "manual source", "beyond what the script could reach"}
+                    else f". {note}"
+                )
+                why = "**HTML:** save as *Web page, HTML only*; do not look for the PDF" + extra
             what = "pick from index" if d["title"] == PENDING else d["title"][:60].replace("|", "/")
             if d["source"] == 4 and d["title"] == PENDING:
                 what += " (text-layer circular from 2015 onward)"
