@@ -45,3 +45,6 @@ node_modules/
 
 # Third-party PDFs are never committed (BRD §10, legal basis L4)
 docs/**/*.pdf
+
+# Office lock files (an open CORPUS_INDEX.xlsx)
+~$*
