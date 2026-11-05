@@ -24,3 +24,4 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | [0016](0016-langfuse-self-hosted.md) | Langfuse self-hosted in Compose (amends BRD NFR-09) | Accepted | 0 | 44 |
 | [0017](0017-local-ollama.md) | Local default model: Ollama, Llama 3.1 8B | Accepted | 0, 6 | — |
 | [0018](0018-agent-result-contract.md) | AgentResult contract, including agent_version | Proposed (not frozen) | 1 | 25 |
+| [0019](0019-indian-corpus-and-kr04-distractors.md) | Indian-only real corpus; KR-04 distractors are Indian | Accepted | 2, 3, 7 | 14 |

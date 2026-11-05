@@ -6,7 +6,7 @@ COMPOSE := docker compose -f deploy/compose/compose.yaml
 PNPM := $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo "npx --yes pnpm@9.15.0")
 
 .PHONY: help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
-        demo-reset up down audit corpus-audit corpus-download compose-dev compose-test compose-demo langfuse-env-check \
+        demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore
 
 help:  ## List targets
@@ -93,11 +93,26 @@ run-ui:  ## Vite dev server for the React stub
 data:  ## Seeded synthetic data -> data/frozen/v1 + hr.db (Phase 2, idempotent)
 	uv run python -m credassure.datagen
 
-corpus-audit:  ## Legal-basis audit of data/corpus/manifest.yaml (scope #14)
-	uv run python -m credassure.datagen.corpus audit
+corpus-audit:  ## Legal-basis and schema audit of data/corpus/manifest.yaml (scope #14, ADR 0019)
+	uv run python -m credassure.datagen.harvest audit
 
-corpus-download:  ## Throttled download + text extraction of the public corpus (network)
-	uv run python -m credassure.datagen.corpus download
+corpus-harvest:  ## Harvest script sources' index pages into manifest entries (network, 1 req/s)
+	uv run python -m credassure.datagen.harvest harvest
+
+corpus-download:  ## Download pending script entries; blocked hosts go to MANUAL_DOWNLOADS.md (network)
+	uv run python -m credassure.datagen.harvest download
+
+corpus-import:  ## Ingest files saved by hand in data/corpus/raw/ (<doc_id>.pdf|html), then audit
+	uv run python -m credassure.datagen.harvest import
+
+corpus-verify:  ## Check local raw files against the lock-file SHA-256 (team drive sync)
+	uv run python -m credassure.datagen.harvest verify
+
+corpus-manual:  ## Regenerate MANUAL_DOWNLOADS.md (six owner sections)
+	uv run python -m credassure.datagen.harvest manual
+
+corpus-report:  ## Real corpus table: planned, available, manual pending, distance to 500
+	uv run python -m credassure.datagen.harvest report
 
 ingest:  ## Download, hash and index the corpus (Phase 7)
 	@echo "ingest: not implemented until Phase 7"; exit 1

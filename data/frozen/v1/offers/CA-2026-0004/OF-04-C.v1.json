@@ -24,6 +24,7 @@
   "kfs_doc_id": "KFS-OF-04-C-v1",
   "lender_id": "L05",
   "lender_name": "Ennore Credit NBFC (synthetic)",
+  "lender_type": "nbfc",
   "moratorium_months": 4,
   "offer_id": "OF-04-C",
   "prepayment_terms": "1% of the principal prepaid (R-BANK-03 range)",

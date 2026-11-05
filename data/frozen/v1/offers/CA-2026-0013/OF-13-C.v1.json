@@ -24,6 +24,7 @@
   "kfs_doc_id": "KFS-OF-13-C-v1",
   "lender_id": "L08",
   "lender_name": "Hooghly Finance Ltd (synthetic)",
+  "lender_type": "nbfc",
   "moratorium_months": 5,
   "offer_id": "OF-13-C",
   "prepayment_terms": "2% of the principal prepaid (R-BANK-03 range)",

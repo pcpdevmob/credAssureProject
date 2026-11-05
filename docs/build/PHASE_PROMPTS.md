@@ -131,7 +131,7 @@ Implement data/corpus/download.py (reads manifest.yaml, throttled ≤1 req/s, sh
 drops unreadable PDFs with a log) and src/credassure/retrieval/:
 chunking.py: three strategies — fixed512 (512 tokens, 64 overlap), section (heading-aware), semantic
 (split on embedding-similarity drops). ingest.py: documents/chunks rows, FTS5 index, Chroma collection
-per strategy, injection scan per chunk. filters.py: collection, jurisdiction=IN, effective date ≤ AS_OF and
+per strategy, injection scan per chunk. filters.py: collection, jurisdiction ∈ {IN, home state} and applies_to ∈ {all, lender type} (ADR 0019), effective date ≤ AS_OF and
 not superseded, case_id match for KFS. fusion.py: reciprocal-rank fusion (k=60). rerank.py: top-30 → top-5
 via RERANKER setting. Tool: search_knowledge(query, case_id, filters) → passages with chunk_id, doc title,
 section, effective date.

@@ -5,6 +5,7 @@ case_id: CA-2026-0006
 offer_id: OF-01-A
 offer_version: 1
 lender_id: L01
+applies_to: commercial_bank
 jurisdiction: IN
 effective_from: 2026-11-16
 superseded_by: null

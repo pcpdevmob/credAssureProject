@@ -4,7 +4,7 @@ Status legend: **✅ verified** = URL opened/seen in search on 3 Nov 2026 · **�
 Indian banks are migrating to `.bank.in` domains (e.g. `sbi.bank.in`, `bandhan.bank.in`) and RBI is moving to `website.rbi.org.in` / `rbi.org.in/en/web/rbi/...`; old URLs may redirect. Always record the URL you actually downloaded from plus its SHA-256.
 
 Identifier note (5 Nov 2026): the R-IDs here are canonical; `docs/DATA_RESOURCES.md` maps P-numbers to them, adds new IDs
-(R-RBI-01, -11, -12, -13, R-MSME-04..06, R-BANK-06..16, R-RATE-02, R-CAL-01, R-SIDBI-*, R-DATA-*, R-US-*) and replaces every
+(R-RBI-01, -11, -12, -13, R-MSME-04..06, R-BANK-06..16, R-RATE-02, R-CAL-01, R-SIDBI-*, R-DATA-*) and replaces every
 ⚠️ verify below with the URL confirmed in the 5 Nov 2026 web check. Where this file still says ⚠️, DATA_RESOURCES.md wins.
 
 All company, employee, lender and offer data stays **synthetic** (BRD §10). Real sources below serve two purposes only: (1) the copilot's retrieval corpus, and (2) realistic parameter ranges for the seeded generators. Every parameter range taken from a real source is recorded in the generator file header with the source ID from this document.
@@ -125,7 +125,7 @@ No external data. Its inputs are the fact ledger, retrieved passages and generat
 | `public/sidbi` | SIDBI MSME schemes and FAQs (⚠️ verify on sidbi.in) | 15–20 |
 | `public/dpdp_kyc` | R-DPDP-01, R-RBI-09 | 5–10 |
 | `public/rbi_circulars_hist` | Pre-consolidation circulars withdrawn on 28 Nov 2025 (KFS 2024, older MSME circulars) — `superseded_by` set, used to test date filtering | 40–60 |
-| `public/non_indian` | ~10 foreign small-business lending guidance docs (`jurisdiction != IN`) — distractors | 10 |
+| `public/state_policies` | Other-state MSME/industrial policies (`jurisdiction` IN-GJ, IN-KA, IN-TN, IN-UP, IN-TS) — KR-04 distractors; Maharashtra (IN-MH) is the home state (ADR 0019) | 20 |
 | `policy` | Synthetic internal policies + FAQ (DATA_SPEC §5) | 60–90 |
 | `kfs` | Synthetic KFS docs (DATA_SPEC §4) | 120–160 |
 | **Total** | | **~430–610** |

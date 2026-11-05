@@ -5,6 +5,7 @@ case_id: CA-2026-0002
 offer_id: OF-02-C
 offer_version: 1
 lender_id: L03
+applies_to: sfb
 jurisdiction: IN
 effective_from: 2026-11-16
 superseded_by: null

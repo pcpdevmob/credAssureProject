@@ -46,6 +46,13 @@ from .common import (
     write_yaml,
 )
 
+LENDER_TYPE = {  # ADR 0019: retrieval filters rules by the lender type they apply to
+    "L03": "sfb",
+    "L04": "nbfc",
+    "L05": "nbfc",
+    "L07": "coop_bank",
+    "L08": "nbfc",
+}
 LENDERS = {  # lender_id: (name, fee_waiver_v1 response)
     "L01": ("Aravali Commercial Bank (synthetic)", "partial_waiver"),
     "L02": ("Brahmaputra Industrial Bank (synthetic)", "full_waiver"),
@@ -207,6 +214,7 @@ def _offer(
         "guarantee": None,
         "prepayment_terms": f"{r.choice([0, 1, 2])}% of the principal prepaid (R-BANK-03 range)",
         "kfs_doc_id": f"KFS-OF-{no:02d}-{slot}-v1",
+        "lender_type": LENDER_TYPE.get(lender, "commercial_bank"),
     }
     if "eblr" in tags or "mclr" in tags:
         offer.update(

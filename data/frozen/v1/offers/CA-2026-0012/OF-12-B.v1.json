@@ -24,6 +24,7 @@
   "kfs_doc_id": "KFS-OF-12-B-v1",
   "lender_id": "L04",
   "lender_name": "Damodar Capital NBFC (synthetic)",
+  "lender_type": "nbfc",
   "moratorium_months": 4,
   "offer_id": "OF-12-B",
   "prepayment_terms": "0% of the principal prepaid (R-BANK-03 range)",

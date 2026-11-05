@@ -218,7 +218,7 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
 
 #### 2.4.6 Ask CredAssure Copilot — on demand, not a pipeline stage (owner: [Name 6])
 - **Trigger:** `POST /cases/{id}/chat` when the Supervisor classifies the message as `copilot_question`. It can be used at any stage and never advances or blocks the workflow.
-- **Pipeline:** PII redaction → refusal policy (code rules + `cp_refusal_classify v1`) → `cp_qtype v1` {regulatory, policy, case_fact, mixed} → `search_knowledge` (FTS5 + dense → RRF k=60 → rerank top-30→5, filters: jurisdiction IN, effective ≤ AS_OF, not superseded, case_id for KFS) and/or `get_case_facts` → `cp_answer v1` with `[chunk_id]` citations from spotlighted passages, numbers only from case facts → Critic → answer or exact abstention string (CP-02).
+- **Pipeline:** PII redaction → refusal policy (code rules + `cp_refusal_classify v1`) → `cp_qtype v1` {regulatory, policy, case_fact, mixed} → `search_knowledge` (FTS5 + dense → RRF k=60 → rerank top-30→5, filters (ADR 0019): jurisdiction ∈ {IN, home state IN-MH}, applies_to ∈ {all, lender type}, effective ≤ AS_OF, not superseded, case_id for KFS) and/or `get_case_facts` → `cp_answer v1` with `[chunk_id]` citations from spotlighted passages, numbers only from case facts → Critic → answer or exact abstention string (CP-02).
 - **Writes:** `chat_messages` (redacted), citations, trace_id.
 - **Tests:** regulatory ≥20/25 with valid citation; refusal 8/8; injection 8/8; isolation 3/3; retrieval ≥34/40 in top 5.
 

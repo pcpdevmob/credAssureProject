@@ -69,6 +69,7 @@ known-first-party = ["credassure"]
 # Generated document text (Markdown tables, policy prose) is kept on one line per row.
 "data/generators/src/credassure/datagen/kfs.py" = ["E501"]
 "data/generators/src/credassure/datagen/policies.py" = ["E501"]
+"data/generators/src/credassure/datagen/harvest.py" = ["E501"]
 
 [tool.mypy]
 strict = true

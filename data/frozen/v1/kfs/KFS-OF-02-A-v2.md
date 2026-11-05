@@ -5,6 +5,7 @@ case_id: CA-2026-0002
 offer_id: OF-02-A
 offer_version: 2
 lender_id: L04
+applies_to: nbfc
 jurisdiction: IN
 effective_from: 2026-11-16
 superseded_by: null

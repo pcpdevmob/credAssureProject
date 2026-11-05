@@ -20,6 +20,7 @@ class OrderFile(BaseModel):
     enterprise_class: Literal["micro", "small", "medium"]
     investment: Decimal
     turnover: Decimal
+    home_state: str = Field(default="IN-MH", pattern=r"^IN-[A-Z]{2}$")  # ADR 0019 retrieval filter
 
 
 class CreditLine(BaseModel):

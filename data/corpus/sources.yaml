@@ -1,0 +1,194 @@
+# Real Indian corpus sources (ADR 0019, docs/data/DATA_RESOURCES.md "Corpus sources"). Metadata only.
+# method: script = harvest index pages (robots.txt, 1 req/s, stop host on 403/429/418/challenge), rest manual.
+#         manual = never fetched by script; slots go to MANUAL_DOWNLOADS.md.
+# Index pages were read on 2026-11-05. Notes record what a reader saw (status, JS-only pager, block).
+version: 1
+manual_hosts:   # always manual (owner decision, ADR 0019)
+  - rbi.org.in
+  - www.rbi.org.in
+  - website.rbi.org.in
+  - egazette.gov.in
+  - incometaxindia.gov.in
+  - www.incometaxindia.gov.in
+  - indiacode.nic.in
+  - www.indiacode.nic.in
+sources:
+  - id: 1
+    name: RBI Master Directions (2025 consolidation)
+    prefix: R-RBI-MD
+    target: 120
+    basis: L4
+    applies_to: all          # per document: owner sets commercial_bank / nbfc / sfb / coop_bank when filling a slot
+    jurisdiction: [IN]
+    agents: [All]
+    method: manual
+    index_urls: ["https://rbi.org.in/web/rbi/notifications/master-directions"]
+  - id: 2
+    name: RBI circulars superseded by the 2025 consolidation (set superseded_by)
+    prefix: R-RBI-HIST
+    target: 60
+    basis: L4
+    applies_to: all
+    jurisdiction: [IN]
+    agents: [Copilot]
+    method: manual
+    index_urls: ["https://www.rbi.org.in/Scripts/NotificationUser.aspx"]
+  - id: 3
+    name: RBI FAQs, lending-rate releases (24 months), MSME press releases, Bulletin/Annual Report chapters
+    prefix: R-RBI-FAQ
+    target: 60
+    basis: L4
+    applies_to: all
+    jurisdiction: [IN]
+    agents: [LendWise, WC, Copilot]
+    method: manual
+    index_urls: ["https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84", "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx"]
+  - id: 4
+    name: CGTMSE circulars, scheme guidelines, fee pages
+    prefix: R-CG-C
+    target: 180
+    basis: L4
+    applies_to: all
+    jurisdiction: [IN]
+    agents: [LendWise, Copilot]
+    method: script
+    index_urls: ["https://www.cgtmse.in/Circulars"]
+    link_pattern: '/Default/ViewFile/\?id=\d+_[^"&]+&(?:amp;)?path=Circular'
+    form_pages: {field: pageNo, last: 29}   # the page's own <form method="post"> pager (no JS, same headers)
+    note: "200; plain anchors, 10 rows per page; pages 2-29 via the page's HTML form field pageNo"
+  - id: 5
+    name: NCGTC schemes (ECLGS, CGFMU, CGSSI) guidelines and FAQs
+    prefix: R-NCGTC
+    target: 25
+    basis: L4
+    applies_to: all
+    jurisdiction: [IN]
+    agents: [LendWise, Copilot]
+    method: script
+    index_urls: ["https://www.ncgtc.in/"]
+    link_pattern: '[^"]+\.pdf'
+    note: "502 Bad Gateway on 2026-11-05"
+  - id: 6
+    name: MUDRA / PMMY circulars and FAQs
+    prefix: R-MUDRA
+    target: 15
+    basis: L4
+    applies_to: all
+    jurisdiction: [IN]
+    agents: [Copilot]
+    method: script
+    index_urls: ["https://www.mudra.org.in/"]
+    link_pattern: '[^"]+\.pdf'
+    note: "TLS certificate chain error on 2026-11-05; never bypassed"
+  - id: 7
+    name: Ministry of MSME annual reports and scheme guidelines; Udyam and MSME Samadhaan FAQs
+    prefix: R-MSME-G
+    target: 40
+    basis: L4
+    applies_to: all
+    jurisdiction: [IN]
+    agents: [WC, Copilot]
+    method: script
+    index_urls: ["https://udyamregistration.gov.in/", "https://msme.gov.in/"]
+    link_pattern: '/docs/[^"]+\.pdf'
+    note: "msme.gov.in 403 on 2026-11-05; Udyam homepage lists bulletins under /docs/"
+  - id: 8
+    name: Gazette notifications (MSME classification, GST rate/exemption, DPDP Rules, MCA MSME Form 1)
+    prefix: R-GZ
+    target: 40
+    basis: L2
+    applies_to: all
+    jurisdiction: [IN]
+    agents: [WC, LendWise, Onboarding]
+    method: manual
+    index_urls: ["https://egazette.gov.in/"]
+  - id: 9
+    name: CBIC GST circulars and FAQs on financial services; GST Council press releases
+    prefix: R-GST-C
+    target: 30
+    basis: L4
+    applies_to: all
+    jurisdiction: [IN]
+    agents: [LendWise, Copilot]
+    method: script
+    index_urls: ["https://gstcouncil.gov.in/press-release", "https://gstcouncil.gov.in/", "https://cbic-gst.gov.in/"]
+    link_pattern: '(?:/sites/default/files/\d{4}-\d{2}/|/pdf/)[^"]+\.pdf'
+  - id: 10
+    name: CBDT on s.43B(h) and Income-tax Act 2025 s.37(2)(g); relevant Act chapters
+    prefix: R-TAX-C
+    target: 10
+    basis: L3
+    applies_to: all
+    jurisdiction: [IN]
+    agents: [WC, Copilot]
+    method: manual
+    index_urls: ["https://www.incometaxindia.gov.in/", "https://www.indiacode.nic.in/"]
+  - id: 11
+    name: SIDBI publications and MSME Pulse reports
+    prefix: R-SIDBI-P
+    target: 20
+    basis: L4
+    applies_to: all
+    jurisdiction: [IN]
+    agents: [WC, Copilot]
+    method: script
+    index_urls: ["https://sidbi.in/en/publication-and-reports"]
+    link_pattern: '(?:/uploads/[^"]+\.pdf|/en/msme-[a-z-]+)'
+    note: "DAKSHATA/SANKALP downloads are javascript: links, so manual"
+  - id: 12
+    name: TReDS - RBI directions and platform FAQs/rulebooks (RXIL, M1xchange, Invoicemart)
+    prefix: R-TREDS
+    target: 15
+    basis: L4
+    applies_to: all
+    jurisdiction: [IN]
+    agents: [Copilot]
+    method: script
+    index_urls: ["https://www.m1xchange.com/faqs/", "https://www.rxil.in/"]
+    link_pattern: '/wp-content/uploads/\d{4}/\d{2}/[^"]+\.pdf'
+    include_index: ["https://www.m1xchange.com/faqs/", "https://www.invoicemart.com/faq"]
+    note: "rxil.in returned 444 on 2026-11-05"
+  - id: 13
+    name: Bank and NBFC schedules of charges and sample KFS (~20 lenders, current and older)
+    prefix: R-BANK-S
+    target: 40
+    basis: L4
+    applies_to: commercial_bank   # per lender type; NBFC/SFB/co-op entries set their own
+    jurisdiction: [IN]
+    agents: [LendWise, Copilot]
+    method: script
+    index_urls: ["https://bandhan.bank.in/rates-charges"]
+    link_pattern: '/sites/default/files/\d{4}-\d{2}/[^"]*(?:[Cc]harges|KFS)[^"]*\.pdf'
+    include_index: ["https://indianbank.bank.in/en/processing-fees/charges-for-loan-products"]
+  - id: 14
+    name: Lok Sabha / Rajya Sabha answers on MSME credit, CGTMSE, TReDS, delayed payments
+    prefix: R-SANSAD
+    target: 50
+    basis: L4
+    applies_to: all
+    jurisdiction: [IN]
+    agents: [Copilot]
+    method: manual
+    index_urls: ["https://sansad.in/ls/questions/questions-and-answers", "https://sansad.in/rs/questions/questions-and-answers"]
+    note: "sansad.in is a JavaScript app with no HTML listing, so manual"
+  - id: 15
+    name: Supreme Court and High Court judgments on the MSMED Act
+    prefix: R-JUD
+    target: 25
+    basis: L2
+    applies_to: all
+    jurisdiction: [IN]
+    agents: [Copilot]
+    method: manual
+    index_urls: ["https://www.sci.gov.in/judgements-judgement-date/"]
+  - id: 16
+    name: State MSME/industrial policies - Maharashtra (home) and other states (KR-04 distractors)
+    prefix: R-STATE
+    target: 20
+    basis: L4
+    applies_to: all
+    jurisdiction: [IN-MH, IN-MH, IN-MH, IN-MH, IN-MH, IN-GJ, IN-GJ, IN-GJ, IN-KA, IN-KA, IN-KA, IN-TN, IN-TN, IN-TN, IN-UP, IN-UP, IN-UP, IN-TS, IN-TS, IN-TS]
+    agents: [Copilot]
+    method: manual
+    index_urls: ["https://di.maharashtra.gov.in/"]
+    note: "di.maharashtra.gov.in refused connections on 2026-11-05; other states' industries department sites are found by the owner"

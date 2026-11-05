@@ -30,6 +30,7 @@
   "kfs_doc_id": "KFS-OF-06-B-v1",
   "lender_id": "L01",
   "lender_name": "Aravali Commercial Bank (synthetic)",
+  "lender_type": "commercial_bank",
   "moratorium_months": 5,
   "offer_id": "OF-06-B",
   "prepayment_terms": "0% of the principal prepaid (R-BANK-03 range)",

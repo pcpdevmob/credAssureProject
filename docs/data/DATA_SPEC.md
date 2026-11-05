@@ -30,7 +30,7 @@ Files per case (schemas in `domain/schemas/case_files.py`, `schema_version: "1.0
 
 | File | Fields |
 |---|---|
-| `order.json` | order_ref, customer_name, order_value, currency=INR, po_date, delivery_weeks[], payment_terms_days, advance_pct, enterprise_class{micro,small,medium}, investment, turnover |
+| `order.json` | order_ref, customer_name, order_value, currency=INR, po_date, delivery_weeks[], payment_terms_days, advance_pct, enterprise_class{micro,small,medium}, investment, turnover, home_state ("IN-MH", ADR 0019) |
 | `opening_position.json` | as_of_week_start (date), opening_cash, min_cash_buffer, credit_lines[{lender, type, sanctioned, drawn}], confirmed_mitigations[{type, amount, week, evidence_ref}] |
 | `costs.csv` | week, category{components,labour,testing,packaging,logistics,overheads}, amount |
 | `receipts.csv` | week, source{order_advance,order_milestone,other_customer}, amount, confirmed{true,false} |
@@ -131,7 +131,7 @@ record `effective_from` and whether superseded):
 | gst | cbic-gst.gov.in, gstcouncil.gov.in | GST on financial services / loan processing fees (rate notifications, FAQs) |
 | income_tax | incometaxindia.gov.in | Income-tax Act 2025 provisions on payments to MSE suppliers (successor to s.43B(h)) and related circulars |
 | bank_charges | Public schedule-of-charges pages of large Indian banks (e.g. SBI, Bank of Baroda, HDFC Bank, ICICI Bank, Axis Bank) | MSME / business-loan service-charge schedules, KFS samples |
-| non_indian (distractors) | e.g. UK/US small-business lending guidance | ~10 docs, tagged `jurisdiction != IN`, must never be cited as current (KR-04) |
+| state_policies (distractors) | Industries departments of Maharashtra (home) and GJ, KA, TN, UP, TS | Other-state policies (`jurisdiction` IN-XX ≠ home state), superseded RBI circulars and rules for non-applicable lender types (`applies_to`) must never be cited as current (KR-04, ADR 0019). No foreign documents. |
 
 Check each site's terms of use before bulk download; throttle to ≤1 req/s; respect robots.txt.
 
@@ -191,6 +191,6 @@ sources". They are written as items in `evaluation/testset/v1/items.jsonl` with 
 
 ### 8.7 S24 — Bad-citation plants (Critic VER-02, Copilot)
 `evaluation/fixtures/v1/bad_citations.jsonl` (Critic test fixtures, not part of the 100 items), 12 drafted answers with one planted defect each: 3 fabricated chunk IDs,
-3 citations to superseded documents (R-MSME-03, R-BANK-04, R-RBI-12), 2 to `jurisdiction != IN` documents, 2 to a KFS from
+3 citations to superseded documents (R-MSME-03, R-BANK-04, R-RBI-12), 2 to another state's policy (IN-GJ) or an NBFC-only rule cited for a bank offer, 2 to a KFS from
 another case, and 2 whose cited passage does not contain the claimed figure. Expected result: `VER_BAD_CITATION` or
 `VER_SUPERSEDED_SOURCE`, never GO.

@@ -5,6 +5,7 @@ case_id: null
 offer_id: null
 offer_version: null
 lender_id: L03
+applies_to: sfb
 jurisdiction: IN
 effective_from: 2026-04-01
 superseded_by: null

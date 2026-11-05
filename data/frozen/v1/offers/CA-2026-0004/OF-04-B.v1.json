@@ -17,6 +17,7 @@
   "kfs_doc_id": "KFS-OF-04-B-v1",
   "lender_id": "L09",
   "lender_name": "Indravati Bank (synthetic)",
+  "lender_type": "commercial_bank",
   "moratorium_months": 0,
   "offer_id": "OF-04-B",
   "prepayment_terms": "0% of the principal prepaid (R-BANK-03 range)",

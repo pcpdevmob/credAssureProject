@@ -1,6 +1,6 @@
 # CredAssure — Data resources for all agents (capstone, open data only)
 
-Every input is public (legal basis L1–L4, L6) or synthetic and team-owned (L5). Public files are downloaded via
+Every input is Indian public data (legal basis L1–L4) or synthetic and team-owned (L5). No foreign documents (ADR 0019). Public files are downloaded via
 `data/corpus/manifest.yaml`, hashed and frozen at G1. Nothing needs a login, payment, partnership or personal data.
 URLs marked *verify* must be opened and confirmed before they enter the manifest.
 
@@ -30,7 +30,32 @@ Every former *verify* row now has a primary-publisher URL. Open points that must
 | L3 | s.52(1)(q)(ii): Acts reproducible with commentary | Store/index locally; quote short passages with citation; never commit raw text |
 | L4 | Public documents; research fair dealing s.52(1)(a); facts not copyrightable | Local research use; extract numeric facts; never redistribute files |
 | L5 | Team-owned synthetic data, eval sets, code | Release: data CC BY 4.0, code MIT |
-| L6 | US federal government works (public domain) | Any use |
+
+Court judgments (Supreme Court, High Courts) are **L2**: Copyright Act 1957 s.52(1)(q)(iv) permits reproducing a judgment
+or order of a court unless the court prohibits it. L6 (US federal works) was removed with the US distractors (ADR 0019).
+
+## Corpus sources (ADR 0019): ≥500 real Indian documents, target 750
+`data/corpus/sources.yaml` holds index pages, link patterns and methods. Synthetic KFS and policies are extra and never
+count toward 500; real + synthetic ≤ 2,000. RBI, e-Gazette, incometaxindia and India Code are manual only.
+
+| # | Source | Target | Basis | applies_to | Jurisdiction | Method |
+|---|---|---|---|---|---|---|
+| 1 | RBI Master Directions (2025 consolidation) | 120 | L4 | per document | IN | manual |
+| 2 | RBI circulars superseded by the 2025 consolidation | 60 | L4 | per document | IN | manual |
+| 3 | RBI FAQs, lending-rate releases, MSME press releases, Bulletin/Annual Report chapters | 60 | L4 | all | IN | manual |
+| 4 | CGTMSE circulars, scheme guidelines, fee pages | 180 | L4 | all | IN | script, else manual |
+| 5 | NCGTC schemes (ECLGS, CGFMU, …) | 25 | L4 | all | IN | script, else manual |
+| 6 | MUDRA / PMMY circulars and FAQs | 15 | L4 | all | IN | script, else manual |
+| 7 | Ministry of MSME, Udyam, MSME Samadhaan | 40 | L2/L4 | all | IN | script, else manual |
+| 8 | Gazette notifications (MSME classification, GST, DPDP, MCA MSME Form 1) | 40 | L2 | all | IN | manual |
+| 9 | CBIC GST circulars/FAQs, GST Council press releases | 30 | L2/L4 | all | IN | script, else manual |
+| 10 | CBDT on s.43B(h) / Income-tax Act 2025 s.37(2)(g); Act chapters | 10 | L3/L4 | all | IN | manual |
+| 11 | SIDBI publications, MSME Pulse | 20 | L4 | all | IN | script, else manual |
+| 12 | TReDS: RBI directions + RXIL, M1xchange, Invoicemart | 15 | L4 | all | IN | script, else manual |
+| 13 | Bank and NBFC schedules of charges, sample KFS (~20 lenders) | 40 | L4 | per lender type | IN | script, else manual |
+| 14 | Lok Sabha / Rajya Sabha answers on MSME credit | 50 | L4 | all | IN | script, else manual |
+| 15 | Supreme Court and High Court judgments on the MSMED Act | 25 | L2 | all | IN | manual |
+| 16 | State MSME/industrial policies: Maharashtra (home) + GJ, KA, TN, UP, TS (distractors) | 20 | L4 | all | IN-MH, IN-GJ, IN-KA, IN-TN, IN-UP, IN-TS | manual |
 
 ## Public resources
 | P | R-ID (canonical) | Resource | Agents | Source | Basis | Used for |
@@ -63,7 +88,6 @@ Every former *verify* row now has a primary-publisher URL. Open points that must
 | P26 | R-BANK-06..16 | 11 more bank/NBFC charge schedules (BoB, PNB, Canara, Union, HDFC, ICICI, Axis, Kotak, IDFC FIRST, Bajaj Finance, Tata Capital) | LW, CP | URLs in `data/corpus/manifest.example.yaml` | L4 | Fee ranges (processing 0.6%–3.5%, NBFC up to 4.72% incl. tax); corpus volume |
 | P27 | R-DATA-01, R-DATA-02 | data.gov.in Udyam registration catalog + district-wise resource | WC | https://www.data.gov.in/catalog/udyam-registration-msme-registration | L1 | Optional realism |
 | P28 | R-LIC-01 | GODL-India licence | All | https://data.gov.in/sites/default/files/Gazette_Notification_OGDL.pdf | — | Attribution |
-| P29 | R-US-01.. | US federal small-business lending docs (~10) | CP | https://www.sba.gov/document/sop-50-10-lender-development-company-loan-programs (v8.1, eff 1 Oct 2026); 7(a) pages on sba.gov (manifest) | L6 | Non-Indian distractors |
 | P30 | M-03 | BAAI/bge-reranker-base | CP | https://huggingface.co/BAAI/bge-reranker-base | MIT | Optional reranker |
 | P31 | M-01, M-02 | Course chat (≤8B) + embeddings endpoints | All | course | course terms | Model calls |
 | P32 | R-AA-01 | Sahamati FIU eligibility | CP | https://sahamati.org.in/financial-information-user-fiu | L4 | Copilot (AA limits) |

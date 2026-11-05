@@ -167,6 +167,7 @@ def _order(spec: Spec, r: Any, peak: int) -> dict[str, Any]:
         "enterprise_class": spec.enterprise_class,
         "investment": investment,
         "turnover": turnover,
+        "home_state": "IN-MH",  # ADR 0019: Maharashtra is the synthetic MSME home state
         "_lag": lag,
         "_advance": pct_of(value, advance_bp),
     }

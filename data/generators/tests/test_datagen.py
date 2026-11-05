@@ -283,3 +283,12 @@ def test_LW04_hidden_charges_live_only_in_the_schedule() -> None:
         rows = [r.split("|")[1].strip() for r in schedule.splitlines() if r.startswith("| ")][1:]
         extra = set(rows) - {f["name"] for f in offer.get("fees", [])}
         assert len(extra) == 1, (offer_id, extra)
+
+
+def test_ADR0019_home_state_and_lender_type_are_set() -> None:
+    for case_dir in sorted((DATA / "cases").glob("CA-*")):
+        order = OrderFile.model_validate_json((case_dir / "order.json").read_text(encoding="utf-8"))
+        assert order.home_state == "IN-MH"
+    for path in sorted((DATA / "offers").glob("*/*.json")):
+        raw = json.loads(path.read_text(encoding="utf-8"))
+        assert raw["lender_type"] in {"commercial_bank", "nbfc", "sfb", "coop_bank"}

@@ -58,3 +58,4 @@ class Offer(BaseModel):
     guarantee: Guarantee | None = None
     prepayment_terms: str | None = None
     kfs_doc_id: str
+    lender_type: Literal["commercial_bank", "nbfc", "sfb", "coop_bank"] | None = None  # ADR 0019

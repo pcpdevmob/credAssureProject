@@ -8,6 +8,7 @@
   "kfs_doc_id": "KFS-OF-12-A-v1",
   "lender_id": "L07",
   "lender_name": "Ghaghara Co-operative Bank (synthetic)",
+  "lender_type": "coop_bank",
   "moratorium_months": 4,
   "offer_id": "OF-12-A",
   "prepayment_terms": "2% of the principal prepaid (R-BANK-03 range)",

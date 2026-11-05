@@ -24,6 +24,7 @@
   "kfs_doc_id": "KFS-OF-01-B-v1",
   "lender_id": "L02",
   "lender_name": "Brahmaputra Industrial Bank (synthetic)",
+  "lender_type": "commercial_bank",
   "moratorium_months": 5,
   "offer_id": "OF-01-B",
   "prepayment_terms": "0% of the principal prepaid (R-BANK-03 range)",

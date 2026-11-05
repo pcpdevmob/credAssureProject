@@ -1,5 +1,5 @@
-# legal_basis: L1-L6 per docs/DATA_RESOURCES.md (data/corpus/audit.py fails without it).
-# Copy to manifest.yaml and extend to 320–380 public docs. IDs match docs/RESOURCES.md.
+# legal_basis: L1-L4 per docs/DATA_RESOURCES.md (data/corpus/audit.py fails without it).
+# Historical example; the live manifest is manifest.yaml (ADR 0019, Indian sources only). IDs match docs/RESOURCES.md.
 # Raw files are gitignored. Confirm effective dates on each page before freezing.
 version: 1
 documents:
@@ -170,16 +170,3 @@ documents:
      title: "District-wise total MSME registered enterprises under Udyam", publisher: "Ministry of MSME (OGD)",
      effective_from: "2026-03-15", superseded_by: null,
      source_url: "https://www.data.gov.in/resource/district-wise-total-msme-registered-enterprises-under-udyam-registration-till-last-date"}
-  - {doc_id: R-US-01, tag: non_indian, collection: public, jurisdiction: US, legal_basis: L6, format: html,
-     title: "SBA SOP 50 10 Lender and Development Company Loan Programs (v8.1)", publisher: "US Small Business Administration",
-     effective_from: "2026-10-01", superseded_by: null,
-     source_url: "https://www.sba.gov/document/sop-50-10-lender-development-company-loan-programs"}
-  - {doc_id: R-US-02, tag: non_indian, collection: public, jurisdiction: US, legal_basis: L6, format: html,
-     title: "SBA 7(a) loans", publisher: "US Small Business Administration", effective_from: null, superseded_by: null,
-     source_url: "https://www.sba.gov/funding-programs/loans/7a-loans"}
-  - {doc_id: R-US-03, tag: non_indian, collection: public, jurisdiction: US, legal_basis: L6, format: html,
-     title: "SBA 7(a) lender terms and conditions", publisher: "US Small Business Administration", effective_from: null,
-     superseded_by: null, source_url: "https://www.sba.gov/partners/lenders/7a-loan-program/operate-7a-lender"}
-  - {doc_id: R-US-04, tag: non_indian, collection: public, jurisdiction: US, legal_basis: L6, format: html,
-     title: "SBA 7(a) Working Capital Pilot program", publisher: "US Small Business Administration", effective_from: null,
-     superseded_by: null, source_url: "https://www.sba.gov/partners/lenders/7a-loan-program/7a-working-capital-pilot-program"}
