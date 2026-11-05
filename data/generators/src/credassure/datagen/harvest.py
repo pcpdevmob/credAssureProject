@@ -46,6 +46,7 @@ from .corpus import (
     verify,
 )
 from .dates import apply_dates, candidate_date, review_markdown, url_date
+from .export import export
 
 MANIFEST = CORPUS / "manifest.yaml"
 LOCK = CORPUS / "manifest.lock.json"
@@ -576,6 +577,7 @@ def main(argv: list[str] | None = None) -> int:
             "audit",
             "dates",
             "status",
+            "export",
         ],
     )
     command = parser.parse_args(argv).command
@@ -621,6 +623,11 @@ def main(argv: list[str] | None = None) -> int:
         write_text(CORPUS / "DATE_REVIEW.md", review_markdown(manifest, lock))
     if command == "status":
         print(status_screen(sources, manifest, lock, CORPUS / "text"))
+    if command in {"status", "export"}:
+        result = export(sources, manifest, lock, CORPUS)
+        print(
+            f"wrote CORPUS_INDEX.md and CORPUS_INDEX.xlsx: {result['available']}/500 real available"
+        )
         return 0
     if command in {"harvest", "download", "import", "manual", "dates"}:
         print(f"{ensure_slots(sources, manifest, lock)} manual slots added")

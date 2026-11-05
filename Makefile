@@ -6,7 +6,7 @@ COMPOSE := docker compose -f deploy/compose/compose.yaml
 PNPM := $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo "npx --yes pnpm@9.15.0")
 
 .PHONY: help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
-        demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status compose-dev compose-test compose-demo langfuse-env-check \
+        demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-export compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore
 
 help:  ## List targets
@@ -114,7 +114,10 @@ corpus-manual:  ## Regenerate MANUAL_DOWNLOADS.md (six owner sections)
 corpus-dates:  ## Extract effective dates for available docs; write DATE_REVIEW.md (10% human sample)
 	uv run python -m credassure.datagen.harvest dates
 
-corpus-status:  ## One screen: real available vs 500, by source and by owner, rejected count
+corpus-export:  ## Write data/corpus/CORPUS_INDEX.md and .xlsx (one row per manifest entry + summary)
+	uv run python -m credassure.datagen.harvest export
+
+corpus-status:  ## One screen: real available vs 500, by source and owner; also regenerates CORPUS_INDEX.md/.xlsx
 	uv run python -m credassure.datagen.harvest status
 
 corpus-report:  ## Real corpus table: planned, available, manual pending, distance to 500
