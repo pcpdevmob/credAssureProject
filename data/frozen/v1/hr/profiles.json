@@ -1,0 +1,608 @@
+[
+  {
+    "department": "Finance",
+    "display_name": "Asha Synthetic-01",
+    "emp_id": "E001",
+    "policy_ack_version": "v3",
+    "role": "senior_finance_analyst",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-07-18",
+        "expires_on": "2027-07-18",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-09-19",
+        "expires_on": "2028-09-19",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-04-11",
+        "expires_on": "2027-04-11",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Ravi Synthetic-02",
+    "emp_id": "E002",
+    "policy_ack_version": "v3",
+    "role": "credit_proposal_officer",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-07-07",
+        "expires_on": "2027-07-07",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-09-18",
+        "expires_on": "2028-09-18",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-03-20",
+        "expires_on": "2027-03-20",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Meera Synthetic-03",
+    "emp_id": "E003",
+    "policy_ack_version": "v3",
+    "role": "senior_finance_analyst",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-07-04",
+        "expires_on": "2027-07-04",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-06-27",
+        "expires_on": "2028-06-27",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-08-30",
+        "expires_on": "2027-08-28",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Kabir Synthetic-04",
+    "emp_id": "E004",
+    "policy_ack_version": "v3",
+    "role": "credit_proposal_officer",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-09-15",
+        "expires_on": "2027-09-15",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-04-25",
+        "expires_on": "2028-04-25",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-03-20",
+        "expires_on": "2027-03-20",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Nisha Synthetic-05",
+    "emp_id": "E005",
+    "policy_ack_version": "v3",
+    "role": "senior_finance_analyst",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-08-06",
+        "expires_on": "2027-08-06",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-06-22",
+        "expires_on": "2028-06-22",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-09-06",
+        "expires_on": "2027-09-06",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Arjun Synthetic-06",
+    "emp_id": "E006",
+    "policy_ack_version": "v3",
+    "role": "credit_proposal_officer",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-05-07",
+        "expires_on": "2027-05-07",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-09-26",
+        "expires_on": "2028-09-26",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-07-25",
+        "expires_on": "2027-07-25",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Leela Synthetic-07",
+    "emp_id": "E007",
+    "policy_ack_version": "v3",
+    "role": "senior_finance_analyst",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-08-10",
+        "expires_on": "2027-08-10",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-07-20",
+        "expires_on": "2028-07-20",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-06-21",
+        "expires_on": "2027-06-21",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Dev Synthetic-08",
+    "emp_id": "E008",
+    "policy_ack_version": "v3",
+    "role": "credit_proposal_officer",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-09-11",
+        "expires_on": "2027-09-11",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-08-04",
+        "expires_on": "2028-08-04",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-04-15",
+        "expires_on": "2027-04-15",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Tara Synthetic-09",
+    "emp_id": "E009",
+    "policy_ack_version": "v3",
+    "role": "senior_finance_analyst",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-08-15",
+        "expires_on": "2027-08-15",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-05-25",
+        "expires_on": "2028-05-25",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2025-09-20",
+        "expires_on": "2026-09-20",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Vikram Synthetic-10",
+    "emp_id": "E010",
+    "policy_ack_version": "v3",
+    "role": "credit_proposal_officer",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2025-11-02",
+        "expires_on": "2026-11-02",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-07-13",
+        "expires_on": "2028-07-13",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-04-14",
+        "expires_on": "2027-04-14",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Asha Synthetic-11",
+    "emp_id": "E011",
+    "policy_ack_version": "v3",
+    "role": "senior_finance_analyst",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-09-26",
+        "expires_on": "2027-09-26",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2024-09-16",
+        "expires_on": "2026-09-16",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-04-24",
+        "expires_on": "2027-04-24",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Ravi Synthetic-12",
+    "emp_id": "E012",
+    "policy_ack_version": "v3",
+    "role": "credit_proposal_officer",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-05-23",
+        "expires_on": "2028-05-23",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-09-17",
+        "expires_on": "2027-09-17",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Meera Synthetic-13",
+    "emp_id": "E013",
+    "policy_ack_version": "v3",
+    "role": "senior_finance_analyst",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-05-28",
+        "expires_on": "2027-05-28",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-03-28",
+        "expires_on": "2027-03-28",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Kabir Synthetic-14",
+    "emp_id": "E014",
+    "policy_ack_version": "v3",
+    "role": "finance_analyst",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-07-03",
+        "expires_on": "2027-07-03",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-10-08",
+        "expires_on": "2028-10-08",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-07-12",
+        "expires_on": "2027-07-12",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Accounts",
+    "display_name": "Nisha Synthetic-15",
+    "emp_id": "E015",
+    "policy_ack_version": "v3",
+    "role": "accounts_executive",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-04-16",
+        "expires_on": "2027-04-16",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-04-22",
+        "expires_on": "2028-04-22",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-08-16",
+        "expires_on": "2027-08-16",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Arjun Synthetic-16",
+    "emp_id": "E016",
+    "policy_ack_version": "v3",
+    "role": "finance_analyst",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-08-31",
+        "expires_on": "2027-08-28",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-06-05",
+        "expires_on": "2028-06-05",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-07-28",
+        "expires_on": "2027-07-28",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Leela Synthetic-17",
+    "emp_id": "E017",
+    "policy_ack_version": null,
+    "role": "senior_finance_analyst",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-07-03",
+        "expires_on": "2027-07-03",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-04-13",
+        "expires_on": "2028-04-13",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-07-02",
+        "expires_on": "2027-07-02",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Dev Synthetic-18",
+    "emp_id": "E018",
+    "policy_ack_version": "v2",
+    "role": "credit_proposal_officer",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-06-16",
+        "expires_on": "2027-06-16",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-09-03",
+        "expires_on": "2028-09-03",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2026-07-11",
+        "expires_on": "2027-07-11",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Tara Synthetic-19",
+    "emp_id": "E019",
+    "policy_ack_version": "v3",
+    "role": "senior_finance_analyst",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-07-10",
+        "expires_on": "2027-07-10",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-08-24",
+        "expires_on": "2028-08-24",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": null,
+        "expires_on": null,
+        "name": "Credit Policy",
+        "status": "in_progress"
+      }
+    ]
+  },
+  {
+    "department": "Finance",
+    "display_name": "Vikram Synthetic-20",
+    "emp_id": "E020",
+    "policy_ack_version": null,
+    "role": "credit_proposal_officer",
+    "status": "active",
+    "trainings": [
+      {
+        "code": "AML-201",
+        "completed_on": "2026-07-28",
+        "expires_on": "2027-07-28",
+        "name": "AML/KYC",
+        "status": "completed"
+      },
+      {
+        "code": "DPDP-101",
+        "completed_on": "2026-09-10",
+        "expires_on": "2028-09-10",
+        "name": "Data Protection",
+        "status": "completed"
+      },
+      {
+        "code": "FIN-101",
+        "completed_on": "2025-09-17",
+        "expires_on": "2026-09-17",
+        "name": "Credit Policy",
+        "status": "completed"
+      }
+    ]
+  }
+]

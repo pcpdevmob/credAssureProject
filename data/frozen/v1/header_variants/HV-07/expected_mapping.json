@@ -1,0 +1,11 @@
+{
+  "base_case": "CA-2026-0003",
+  "expected_status": "GO",
+  "file": "costs.csv",
+  "mapping": {
+    "Hafta": "week",
+    "Head": "category",
+    "Kharcha": "amount"
+  },
+  "variant_id": "HV-07"
+}

@@ -1,0 +1,11 @@
+{
+  "base_case": "CA-2026-0001",
+  "expected_status": "GO",
+  "file": "costs.csv",
+  "mapping": {
+    "Amt": "amount",
+    "Category": "category",
+    "Wk": "week"
+  },
+  "variant_id": "HV-01"
+}

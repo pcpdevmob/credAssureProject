@@ -1,0 +1,6 @@
+week,source,amount,confirmed
+3,other_customer,1244000,false
+8,other_customer,10.45 lakh,false
+11,order_milestone,"1,36,50,000",true
+14,order_milestone,18200000,true
+17,order_milestone,13650000,true

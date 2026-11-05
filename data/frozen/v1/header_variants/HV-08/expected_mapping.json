@@ -1,0 +1,19 @@
+{
+  "ambiguous": {
+    "Week": [
+      "due_week",
+      "expected_week"
+    ]
+  },
+  "base_case": "CA-2026-0003",
+  "expected_status": "NEEDS_INPUT",
+  "file": "receivables.csv",
+  "mapping": {
+    "Amount": "amount",
+    "Customer": "customer",
+    "Expected": "expected_week",
+    "Invoice": "invoice_id",
+    "Week": null
+  },
+  "variant_id": "HV-08"
+}

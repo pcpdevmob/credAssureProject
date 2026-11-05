@@ -1,0 +1,563 @@
+{
+  "R-AA-01": {
+    "bytes": 162868,
+    "final_url": "https://sahamati.org.in/financial-information-user-fiu/",
+    "retrieved_on": "2026-11-05",
+    "sha256": "328836a4b421e24f36aa1a3dc68340c0813eea75853098716d0d878045e0887a",
+    "source_url": "https://sahamati.org.in/financial-information-user-fiu",
+    "status": "ok",
+    "text_sha256": "b88a5e0c58631e09f45d8c2d5edb6cbede8a01eac370adaa6c45695bccd0097f"
+  },
+  "R-BANK-01": {
+    "bytes": 543898,
+    "final_url": "https://sbi.bank.in/documents/16012/76239/ADVANCES+RELATED+SERVICE+CHARGES+W.E.F.+01.04.2019+A.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "6fc2cd9c5cb287dd79a2b344a7278475036642a43abae61fc3358484d9d472bb",
+    "source_url": "https://sbi.co.in/documents/16012/76239/ADVANCES+RELATED+SERVICE+CHARGES+W.E.F.+01.04.2019+A.pdf",
+    "status": "ok",
+    "text_sha256": "a8298ffbeeeb0bc18d14a9f87c205979d56106287447ada04db76d1c6f978da5"
+  },
+  "R-BANK-02": {
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://sbi.co.in/portal/web/sme/sme-smart-score",
+    "status": "error: ConnectTimeout"
+  },
+  "R-BANK-03": {
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://bandhan.bank.in/sites/default/files/2026-01/Schedule-of-Charges-SME-and-Corporate-Loans-16012026.pdf",
+    "status": "http_404"
+  },
+  "R-BANK-04": {
+    "bytes": 247,
+    "final_url": "https://indianbank.in/wp-content/uploads/2018/11/Service-Charge-for-MSME-Products-1.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "35a141212d2b81d8abda1e49bbec6c5666f5efcdcb9fabbbba86f39df0ad96f7",
+    "source_url": "https://indianbank.in/wp-content/uploads/2018/11/Service-Charge-for-MSME-Products-1.pdf",
+    "status": "dropped_no_text"
+  },
+  "R-BANK-05": {
+    "bytes": 247,
+    "final_url": "https://www.indianbank.in/wp-content/uploads/2022/04/MSME-Service-Charges.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "87490a958a1f424bc7ef4c12632ee4179d516a389dd80a150d2af9058f6c1dfc",
+    "source_url": "https://www.indianbank.in/wp-content/uploads/2022/04/MSME-Service-Charges.pdf",
+    "status": "dropped_no_text"
+  },
+  "R-BANK-06": {
+    "bytes": 816356,
+    "final_url": "https://bankofbaroda.bank.in/interest-rate-and-service-charges/service-charges",
+    "retrieved_on": "2026-11-05",
+    "sha256": "0a0cbd52cfcc48eedaeecab3d2e05ba664a5b2f1c0eec0f44a457f226637deeb",
+    "source_url": "https://bankofbaroda.bank.in/interest-rate-and-service-charges/service-charges",
+    "status": "ok",
+    "text_sha256": "17db5c5d5b09e63f632b12cab8ade7b7218bad11e8ab38671a115e4dc45ec0ef"
+  },
+  "R-BANK-07": {
+    "bytes": 644078,
+    "final_url": "https://pnb.bank.in/Credit-Related-Service-Charges.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "3c3ec9e8482d4b247db6721c8e2983e46a717112659c0e09bc464667b54aae77",
+    "source_url": "https://pnb.bank.in/Credit-Related-Service-Charges.html",
+    "status": "ok",
+    "text_sha256": "91fc7288334c99c327d72785f4e4e45a8d58ece31f56543cb139bd3e00ea3b92"
+  },
+  "R-BANK-08": {
+    "bytes": 151470,
+    "final_url": "https://www.canarabank.bank.in/documents/d/guest/SERV%20CHGS212",
+    "retrieved_on": "2026-11-05",
+    "sha256": "59cb5b5b05ec066143387b66d452abce8ebc0c9570d3f1ea00ccc1c0e8709296",
+    "source_url": "https://www.canarabank.bank.in/documents/d/guest/SERV%20CHGS212",
+    "status": "ok",
+    "text_sha256": "de41d9dd7e3dbe49b6a11ce396d5a5e0ddaeeb955f886ddaca61bffb4634a99e"
+  },
+  "R-BANK-09": {
+    "bytes": 190911,
+    "final_url": "https://www.unionbankofindia.bank.in/en/common/fees-and-services",
+    "retrieved_on": "2026-11-05",
+    "sha256": "e355c670688d63d34704c19f51240c01a8b536453d2d48d97d405a5e61bdc285",
+    "source_url": "https://www.unionbankofindia.bank.in/en/common/fees-and-services",
+    "status": "ok",
+    "text_sha256": "7dd9369dbf9dbce6ad3fc7f32ec9b6127794d8b3ad9fe3f561486f152c4d66c8"
+  },
+  "R-BANK-10": {
+    "bytes": 1138462,
+    "final_url": "https://www.hdfc.bank.in/business-loan/interest-rates-and-charges",
+    "retrieved_on": "2026-11-05",
+    "sha256": "31c6d94a307ddfef0ff5ea0ebdb75967c40df8c67ef8edca2229ba93c3cbbfef",
+    "source_url": "https://www.hdfc.bank.in/business-loan/interest-rates-and-charges",
+    "status": "ok",
+    "text_sha256": "9cc010827ee8dd55860be19a1512754b7912432aac5ef9bcdf660dcf7d5633b5"
+  },
+  "R-BANK-11": {
+    "bytes": 1035056,
+    "final_url": "https://www.icici.bank.in/business-banking/business-loans/schedule-of-charges",
+    "retrieved_on": "2026-11-05",
+    "sha256": "d813c80070c450030fe1dc659b79439dd28229a73945b41eb10e153bc7eaabf7",
+    "source_url": "https://www.icici.bank.in/business-banking/business-loans/schedule-of-charges",
+    "status": "ok",
+    "text_sha256": "52df6200772a4b478add01eafe09c695a15788d5f23113cce458b8da9c6c36ff"
+  },
+  "R-BANK-12": {
+    "bytes": 786507,
+    "final_url": "https://www.axis.bank.in/fees-and-charges",
+    "retrieved_on": "2026-11-05",
+    "sha256": "dbff922632e2d2dc9048652f79c53e93ce3cec75bf56cc23e37e4d8e5b38a2be",
+    "source_url": "https://www.axis.bank.in/fees-and-charges",
+    "status": "ok",
+    "text_sha256": "a49e1e111e2728023bcf364c2c966e74b3db2321ac557504c5736e8b70b19365"
+  },
+  "R-BANK-13": {
+    "bytes": 539945,
+    "final_url": "https://www.kotak.bank.in/en/business/loans/business-loan/fees-and-charges.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "085850707c38fc4822d41316b0abadee82ad540379f620ac8aa75e2b10b0dd81",
+    "source_url": "https://www.kotak.bank.in/en/business/loans/business-loan/fees-and-charges.html",
+    "status": "ok",
+    "text_sha256": "7b9f02625bfb084b16a05a7bc61134516d7c745e7ad07639547adba41edf2bb3"
+  },
+  "R-BANK-14": {
+    "bytes": 2059319,
+    "final_url": "https://www.idfcfirst.bank.in/business-banking/loans/business-loan/fees-and-charges",
+    "retrieved_on": "2026-11-05",
+    "sha256": "856ca99b84d169627e62d7f46c8218cc003a23f4a27270d245f97c3174147e84",
+    "source_url": "https://www.idfcfirst.bank.in/business-banking/loans/business-loan/fees-and-charges",
+    "status": "ok",
+    "text_sha256": "50499ac944c44b90416261c2972f7d16bca8225367e266b80a38aab9f851ac8f"
+  },
+  "R-BANK-15": {
+    "bytes": 1029530,
+    "final_url": "https://www.bajajfinserv.in/business-loan-interest-rate-and-charges",
+    "retrieved_on": "2026-11-05",
+    "sha256": "67155c90fe82ce08543d87bc10113f81f231c60477dc9867ce7735537b11eed4",
+    "source_url": "https://www.bajajfinserv.in/business-loan-interest-rate-and-charges",
+    "status": "ok",
+    "text_sha256": "5fc23d8ce8940a3c4bb10b03899151013f948cf58971a7984118a986259bb570"
+  },
+  "R-BANK-16": {
+    "bytes": 425012,
+    "final_url": "https://www.tatacapital.com/business-loan/rates-and-charges.html",
+    "retrieved_on": "2026-11-05",
+    "sha256": "e41e8715875f9028572e3bb966dcb8c102bca0807005d00bdd4c15dc653768a3",
+    "source_url": "https://tatacapital.com/business-loan/rates-and-charges.html",
+    "status": "ok",
+    "text_sha256": "f6f4e6643feaee477ee42565d1e517f69b17f7c480d70351216e7f5977ed6fc0"
+  },
+  "R-CAL-01": {
+    "bytes": 73907,
+    "final_url": "https://www.rbi.org.in/scripts/HolidayMatrixDisplay.aspx?regoff=Mumbai",
+    "retrieved_on": "2026-11-05",
+    "sha256": "bd8e84b8909a976d51117c5b620ef15a3b19604486d45c04f9b513c1f910dcdd",
+    "source_url": "https://www.rbi.org.in/scripts/HolidayMatrixDisplay.aspx?regoff=Mumbai",
+    "status": "ok",
+    "text_sha256": "4d4c52060c697f18f8c864a26d77da7c925c4f95be394a9560f13835f5b9a1aa"
+  },
+  "R-CG-01": {
+    "bytes": 90766,
+    "final_url": "https://cgtmse.in/Home/VS/47",
+    "retrieved_on": "2026-11-05",
+    "sha256": "2b2188f04bff02133a64d71f957099dbaf9f20c004894a58ee1f2ad817e47b79",
+    "source_url": "https://cgtmse.in/Home/VS/47",
+    "status": "ok",
+    "text_sha256": "4c29e73f1ef1ab8ea9b9f12ffa7e6f1486a4d317e8931a20dcb594ea2f3bb56b"
+  },
+  "R-CG-02": {
+    "bytes": 91897,
+    "final_url": "https://cgtmse.in/Home/VS/101",
+    "retrieved_on": "2026-11-05",
+    "sha256": "9cfc59addbcae3064d0eb91cb382e23aac7ad53c2afa093ea5a2636ae57bd42d",
+    "source_url": "https://cgtmse.in/Home/VS/101",
+    "status": "ok",
+    "text_sha256": "a526167b0cb9873e6a660a17fa59bd4188e30b9ec7094bf1b7fe3bbf68f71ab1"
+  },
+  "R-CG-03": {
+    "bytes": 88235,
+    "final_url": "https://www.cgtmse.in/Circulars",
+    "retrieved_on": "2026-11-05",
+    "sha256": "5fdc79daa0e7608e77d3fa7c23c416c7afeed1d01dd28f644d2d7021b9c98b5d",
+    "source_url": "https://www.cgtmse.in/Circulars",
+    "status": "ok",
+    "text_sha256": "c93fe00629412a768e5194f2e71238d15b796bda4cb9cc394188aacc088f49cc"
+  },
+  "R-CG-04": {
+    "bytes": 473959,
+    "final_url": "https://sbi.bank.in/web/business/sme/sme-government-schemes/cgtmse",
+    "retrieved_on": "2026-11-05",
+    "sha256": "e14079f72e31872e937a8d7ff3d66cbd54bdbdb673c827fb7af90a0b01a53df9",
+    "source_url": "https://sbi.bank.in/web/business/sme/sme-government-schemes/cgtmse",
+    "status": "ok",
+    "text_sha256": "da22d64257d695093ac62b62210ca39ac27850a7e61f5302b54409d29278e280"
+  },
+  "R-CG-05": {
+    "bytes": 90835,
+    "final_url": "https://cgtmse.in/Home/VS/96",
+    "retrieved_on": "2026-11-05",
+    "sha256": "9757b297184ebc4ad519fb1fa681693e389b407327c499901590081315be5b9e",
+    "source_url": "https://cgtmse.in/Home/VS/96",
+    "status": "ok",
+    "text_sha256": "a7c1c164adf70658ef0cb6697e52312f2b972227ae9301c45cee12dcbcf16f19"
+  },
+  "R-DATA-01": {
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://www.data.gov.in/catalog/udyam-registration-msme-registration",
+    "status": "robots_disallowed"
+  },
+  "R-DATA-02": {
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://www.data.gov.in/resource/district-wise-total-msme-registered-enterprises-under-udyam-registration-till-last-date",
+    "status": "robots_disallowed"
+  },
+  "R-DPDP-01": {
+    "bytes": 182082,
+    "final_url": "https://www.meity.gov.in/static/uploads/2024/02/Digital-Personal-Data-Protection-Act-2023.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "4deb23981d3010c8225a2ff6149e7243dc2268455b299e283afebdd7b72a7d15",
+    "source_url": "https://www.meity.gov.in/static/uploads/2024/02/Digital-Personal-Data-Protection-Act-2023.pdf",
+    "status": "ok",
+    "text_sha256": "ecfec5ab018cfc986f317de7459bd6f6e779563421d2b5d67023695e12e5edbd"
+  },
+  "R-DPDP-02": {
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://egazette.gov.in/WriteReadData/2025/267650.pdf",
+    "status": "error: ConnectError"
+  },
+  "R-DPDP-03": {
+    "bytes": 674751,
+    "final_url": "https://www.meity.gov.in/static/uploads/2026/10/daf495a7b5798a3dfa72a944b51fc176.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "943820975e9f35b2395c5bbb363e0db33cbc501311529abedc811a180793de86",
+    "source_url": "https://www.meity.gov.in/static/uploads/2026/10/daf495a7b5798a3dfa72a944b51fc176.pdf",
+    "status": "ok",
+    "text_sha256": "15fd2e105756bf036eb61e70be30d78bdec7016ca9c2730180da860dfd87817a"
+  },
+  "R-GST-01": {
+    "bytes": 408638,
+    "final_url": "https://cbic-gst.gov.in/hindi/pdf/central-tax-rate/Notification11-CGST.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "a8051c8882b8a7e3e2d8b2ad10e3c18b9c85c755fbbfe324dce43b4c6b44d934",
+    "source_url": "https://cbic-gst.gov.in/hindi/pdf/central-tax-rate/Notification11-CGST.pdf",
+    "status": "ok",
+    "text_sha256": "0392a6ba545e98a6ffbe034a24e8670041119f43a3fa708501092094cdd0efbc"
+  },
+  "R-GST-02": {
+    "bytes": 451490,
+    "final_url": "https://cbic-gst.gov.in/hindi/pdf/central-tax-rate/Notification12-CGST.pdf",
+    "retrieved_on": "2026-11-05",
+    "sha256": "49028187048e53a3bd2d99c55f1a561b367ce1faabbf499ff3f7233ab69a5135",
+    "source_url": "https://cbic-gst.gov.in/hindi/pdf/central-tax-rate/Notification12-CGST.pdf",
+    "status": "ok",
+    "text_sha256": "75da67540f58f748f6794fbc20e13e53fa4aaf57739126729a27585c15075600"
+  },
+  "R-GST-03": {
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://egazette.gov.in/WriteReadData/2025/266220.pdf",
+    "status": "error: ConnectError"
+  },
+  "R-MSME-01": {
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://www.indiacode.nic.in/show-data?actid=AC_CEN_46_77_00002_200627_1517807324919&orderno=15",
+    "status": "error: ReadTimeout"
+  },
+  "R-MSME-01-S16": {
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://www.indiacode.nic.in/show-data?actid=AC_CEN_46_77_00002_200627_1517807324919&orderno=16",
+    "status": "error: ReadTimeout"
+  },
+  "R-MSME-02": {
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://egazette.gov.in/writeReadData/2025/261838.pdf",
+    "status": "error: ConnectError"
+  },
+  "R-MSME-03": {
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://dcmsme.gov.in/State-Gov/Notification_%20S%20O%202119.pdf",
+    "status": "error: ConnectError"
+  },
+  "R-MSME-04": {
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://udyamregistration.gov.in/docs/Circular_reverse_24102025.pdf",
+    "status": "error: TooManyRedirects"
+  },
+  "R-MSME-05": {
+    "bytes": 69859,
+    "final_url": "https://samadhaan.msme.gov.in/MyMsme/MSEFC/FAQ.aspx",
+    "retrieved_on": "2026-11-05",
+    "sha256": "641e355638b592f7872e5bfb1f9afd41dd2ff7db9ba8d1dab5d372c019093026",
+    "source_url": "https://samadhaan.msme.gov.in/MyMsme/MSEFC/FAQ.aspx",
+    "status": "ok",
+    "text_sha256": "70b860e13ec56c6b4a4163b986883b914c93bca174d225baa018f48bdbfa4eba"
+  },
+  "R-MSME-06": {
+    "bytes": 37185,
+    "final_url": "https://www.udyamregistration.gov.in/Important.aspx",
+    "retrieved_on": "2026-11-05",
+    "sha256": "298b657b9394b2841298185d1ca98477bb4a85aa20efde3a0357edd830211d8d",
+    "source_url": "https://www.udyamregistration.gov.in/Important.aspx",
+    "status": "ok",
+    "text_sha256": "133310cdfd0c572aad8624f1fe731db4e809d875f77699258442ee5427017ffd"
+  },
+  "R-RATE-01-2026-09": {
+    "bytes": 113499,
+    "final_url": "https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63702",
+    "retrieved_on": "2026-11-05",
+    "sha256": "956d5d57d34818ddfd0771a4418e6bf5343597cae3de41be6b62dc943667b926",
+    "source_url": "https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63702",
+    "status": "ok",
+    "text_sha256": "06a2493c6ba19fa4f4a15c7e49dda7c27d4a1c9b07ea1b310942c2f0ce4ba80e"
+  },
+  "R-RATE-01-A": {
+    "bytes": 113141,
+    "final_url": "https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63481",
+    "retrieved_on": "2026-11-05",
+    "sha256": "ec6408e9f2ba8c0e4c5579a69251a0143a153bb4c622b9c426ff1370947059f8",
+    "source_url": "https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63481",
+    "status": "ok",
+    "text_sha256": "47ba3aea7fefe6b51d064adcf1d8c3f761edfa0d994de9a35169cc6b9d5559cf"
+  },
+  "R-RATE-01-B": {
+    "bytes": 111886,
+    "final_url": "https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63049",
+    "retrieved_on": "2026-11-05",
+    "sha256": "2cdaae08f3ace3eeee0d88d90dd2871523beb36d52397ce48025c365c134fd2c",
+    "source_url": "https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63049",
+    "status": "ok",
+    "text_sha256": "5852635ea59edea08fd99585cabae571a6b9122d0709d698d0f7eac711981250"
+  },
+  "R-RATE-01-C": {
+    "bytes": 113567,
+    "final_url": "https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=62471",
+    "retrieved_on": "2026-11-05",
+    "sha256": "3a3b160e69ebd8ddb2fc33a16ce7737448ea282e2127d1b6f6c44822a08a79b2",
+    "source_url": "https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=62471",
+    "status": "ok",
+    "text_sha256": "c7fa816107967ece6c0c398b1bb8919c025bb7d1a1e0dc8afe464b3e302f21ef"
+  },
+  "R-RATE-02-BOB": {
+    "bytes": 607885,
+    "final_url": "https://bankofbaroda.bank.in/interest-rate-and-service-charges/retail-loans-interest-rates",
+    "retrieved_on": "2026-11-05",
+    "sha256": "50798c8f5eeddaf834d992c8c0d6a212f97305db4d0ba9535ebf6d29d9f8c004",
+    "source_url": "https://bankofbaroda.bank.in/interest-rate-and-service-charges/retail-loans-interest-rates",
+    "status": "ok",
+    "text_sha256": "18fae50d7ede3d07fcb4d6fd4c118ae018da6cfe8559ffbd5cd1e8f280a941bc"
+  },
+  "R-RATE-02-REPO": {
+    "bytes": 120058,
+    "final_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=63742",
+    "retrieved_on": "2026-11-05",
+    "sha256": "7ffc6e5a302bfb94559ca5cc4484484ea6f67adfda5601f36ce84936bfcee21a",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=63742",
+    "status": "ok",
+    "text_sha256": "c5184575a0577c7338b6bd124f62041456e90f58643629529db5030ccbb7f39a"
+  },
+  "R-RATE-02-SBI": {
+    "bytes": 390103,
+    "final_url": "https://sbi.bank.in/web/interest-rates/external-benchmark-based-lending-rate",
+    "retrieved_on": "2026-11-05",
+    "sha256": "679f3a446897bca8c66092dde8fa12cc696cdf6bad8a100f2fc442e6fdea93ea",
+    "source_url": "https://sbi.bank.in/web/interest-rates/external-benchmark-based-lending-rate",
+    "status": "ok",
+    "text_sha256": "b68e6eff3d5a823fff0e4b5d2beaa8e23284c305c3a81ccc7fbe16d337fdb6e9"
+  },
+  "R-RBI-01": {
+    "bytes": 152389,
+    "final_url": "https://www.rbi.org.in/",
+    "retrieved_on": "2026-11-05",
+    "sha256": "e29882c464300a38b053ccfc38d1f00fc2757349d5f64ad088cbb886c2188955",
+    "source_url": "https://website.rbi.org.in/documents/d/rbi/pr1588rbiconsolidatedmasterdirections-1-",
+    "status": "dropped_no_text"
+  },
+  "R-RBI-02": {
+    "bytes": 70165,
+    "final_url": "https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13140",
+    "retrieved_on": "2026-11-05",
+    "sha256": "0a0628659b6fb043457fdd8b79b800655e6f112bfe35bb432e6a34a49bb9c4cb",
+    "source_url": "https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13140",
+    "status": "ok",
+    "text_sha256": "bd1762aafc8366c4b16056822d4ddbf0e575e877dfd801f1d8e7f54f8395cb9b"
+  },
+  "R-RBI-03": {
+    "bytes": 137876,
+    "final_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13149",
+    "retrieved_on": "2026-11-05",
+    "sha256": "707caf626dc73c5f4e52d835c0bc2d33a724b8e9cdd83c22c65ebcc708e24302",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13149",
+    "status": "ok",
+    "text_sha256": "501a162d47edbb3b8b0b3c1f42ad356c336134897e88c464c69c9eced0a2ff37"
+  },
+  "R-RBI-04": {
+    "bytes": 171196,
+    "final_url": "https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11060",
+    "retrieved_on": "2026-11-05",
+    "sha256": "a55c64b8cb3d208872c1266c7e4b80184ce8fce210eacce0b203841ef58b6e28",
+    "source_url": "https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11060",
+    "status": "ok",
+    "text_sha256": "cd0cb5a385db952a7cf145f2be3f0fb824c1c61729f650d79442522cda4fabb5"
+  },
+  "R-RBI-05": {
+    "bytes": 129746,
+    "final_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+    "retrieved_on": "2026-11-05",
+    "sha256": "8e66e1a01cb74cdd1c246fcd7c7932be31656f867a6f5c4ec076d0fdd0d62e58",
+    "source_url": "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84",
+    "status": "ok",
+    "text_sha256": "a5b0bf10c3855fa3d5f626decf71d4f67a9104ea7ac849fffbe0431442d60995"
+  },
+  "R-RBI-06": {
+    "bytes": 152389,
+    "final_url": "https://www.rbi.org.in/",
+    "retrieved_on": "2026-11-05",
+    "sha256": "c02175d57179d84e63af0bedd8dfd8b45b2294eacb9a6948436d8594cf54118e",
+    "source_url": "https://website.rbi.org.in/web/rbi/financial-inclusion-and-development/master-directions",
+    "status": "ok",
+    "text_sha256": "59d21eaeda665b6703e6f529ce3e012063522030985eeb97552688c33246ea59"
+  },
+  "R-RBI-08": {
+    "bytes": 108335,
+    "final_url": "https://www.rbi.org.in/scripts/BS_ViewMasDirections.aspx?id=13526",
+    "retrieved_on": "2026-11-05",
+    "sha256": "76becd48ea23f65d61078ef7675c898ccfccfd54abbd1fed676dcca4e3fe95fc",
+    "source_url": "https://www.rbi.org.in/scripts/BS_ViewMasDirections.aspx?id=13526",
+    "status": "ok",
+    "text_sha256": "60f28fa5e2b298024eacf12780b3426a9b557bca845f8d4902682229226e9d82"
+  },
+  "R-RBI-08-DRAFT": {
+    "bytes": 82540,
+    "final_url": "https://www.rbi.org.in/scripts/bs_viewcontent.aspx?Id=4976",
+    "retrieved_on": "2026-11-05",
+    "sha256": "521203245b5558bfe1cec57e8ae0ba1fad664f07fd8167eac96deb7cd93b239f",
+    "source_url": "https://www.rbi.org.in/scripts/bs_viewcontent.aspx?Id=4976",
+    "status": "ok",
+    "text_sha256": "4846ad03f84aebe146a4aec3f075a1cd73bca2725417c6f71221e9ee885f6113"
+  },
+  "R-RBI-09": {
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://website.rbi.org.in/en/web/rbi/regulations-non-banking/notifications?delta=20",
+    "status": "http_418"
+  },
+  "R-RBI-10": {
+    "bytes": 70123,
+    "final_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13156",
+    "retrieved_on": "2026-11-05",
+    "sha256": "89e4af406cb36eef47aee14e1884524109a91a9526094ef6c4622c27efc5f2b4",
+    "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13156",
+    "status": "ok",
+    "text_sha256": "3ef641e0c5e2ad11fd31fad5cc5d6c93e3cc99d067d4f92de694c23945d45308"
+  },
+  "R-RBI-11": {
+    "bytes": 152383,
+    "final_url": "https://www.rbi.org.in/",
+    "retrieved_on": "2026-11-05",
+    "sha256": "426b712153fb8883e3fcf4cfad9e15295aea988436b2a5974f42da3692b2b98e",
+    "source_url": "https://website.rbi.org.in/documents/d/rbi/directionsondigitallending",
+    "status": "dropped_no_text"
+  },
+  "R-RBI-12": {
+    "bytes": 120887,
+    "final_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12663&Mode=0",
+    "retrieved_on": "2026-11-05",
+    "sha256": "1d28f5cfc99fc827bef5ec540fb801e3ffe0010c80503858c1b11922c2e367fb",
+    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12663&Mode=0",
+    "status": "ok",
+    "text_sha256": "4be4b60a9cf8f95b466b10a7de41966553303dabc34093f1ea3d2f6994019fb8"
+  },
+  "R-RBI-13": {
+    "bytes": 185186,
+    "final_url": "https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=12942&Mode=0",
+    "retrieved_on": "2026-11-05",
+    "sha256": "fe6ed7547f1a916d86092309fb61d50ec59130b270e00af386a5c142d7385891",
+    "source_url": "https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=12942&Mode=0",
+    "status": "ok",
+    "text_sha256": "908f54ef55422dea25a574a433997ed159a070cccc6e071b0ddf527747a066d2"
+  },
+  "R-SIDBI-01": {
+    "bytes": 161340,
+    "final_url": "https://www.sidbi.in/working-capital",
+    "retrieved_on": "2026-11-05",
+    "sha256": "65005491b26919c8262325218c4f100fe52f5f2d628966986122e10b92310bef",
+    "source_url": "https://www.sidbi.in/working-capital",
+    "status": "ok",
+    "text_sha256": "a598158d8b38b6a2b3f44835705aeccb0dc1c5f65f07b78dfe9bf2bb40bb9edb"
+  },
+  "R-SIDBI-02": {
+    "bytes": 157505,
+    "final_url": "https://www.sidbi.in/project-funding",
+    "retrieved_on": "2026-11-05",
+    "sha256": "b354d200a51ca871ba27339104b2bcefee0156a73366b0930ef9b96e3cc1a15a",
+    "source_url": "https://www.sidbi.in/project-funding",
+    "status": "ok",
+    "text_sha256": "cb8bce61ee673a264e7848cb6706e4f5a6010a2724e8163c36d4203373bab581"
+  },
+  "R-SIDBI-03": {
+    "bytes": 168283,
+    "final_url": "https://www.sidbi.in/machinery-loan",
+    "retrieved_on": "2026-11-05",
+    "sha256": "466b652d9fb44dd4120fcbdc116c839f81dc9b0560f81a3a33b96464c1679327",
+    "source_url": "https://www.sidbi.in/machinery-loan",
+    "status": "ok",
+    "text_sha256": "f9f4085cf49d30572299684f5f7d62a2efd47b8fd9d934d2517c5f5fc51169ca"
+  },
+  "R-SIDBI-04": {
+    "bytes": 122409,
+    "final_url": "https://www.sidbi.in/cgtmse",
+    "retrieved_on": "2026-11-05",
+    "sha256": "0ecfe673b1b5dde9a35e2f6a604b601212c64673d81f3fdfc545ae7d985168a5",
+    "source_url": "https://www.sidbi.in/cgtmse",
+    "status": "ok",
+    "text_sha256": "a54cf393ec235c8ce51592f749ca8277ad135db802cd6c3a600e945415d88d4f"
+  },
+  "R-SIDBI-05": {
+    "bytes": 114202,
+    "final_url": "https://www.sidbi.in/treds",
+    "retrieved_on": "2026-11-05",
+    "sha256": "9c47394721b7c4fe1c60127e749eb4974b21f6b6c26b2cc617d54b6e64facc59",
+    "source_url": "https://www.sidbi.in/treds",
+    "status": "ok",
+    "text_sha256": "a820e19dabaaa12e4a3e0da132ebf87280e1316d5f19c870ad1610f1a225eb59"
+  },
+  "R-TAX-01": {
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://www.incometaxindia.gov.in/documents/d/guest/income_tax_act_2025_as_amended_by_fa_act_2026-pdf",
+    "status": "http_403"
+  },
+  "R-TAX-02": {
+    "retrieved_on": "2026-11-05",
+    "source_url": "https://www.incometaxindia.gov.in/w/section-43b-40",
+    "status": "http_403"
+  },
+  "R-US-01": {
+    "bytes": 44991,
+    "final_url": "https://legacy.sba.gov/document/sop-50-10-lender-development-company-loan-programs",
+    "retrieved_on": "2026-11-05",
+    "sha256": "cc6094a67b331e78e5bfb5759b795937f34bd9f29d929a86f8e20460c38f9c26",
+    "source_url": "https://www.sba.gov/document/sop-50-10-lender-development-company-loan-programs",
+    "status": "ok",
+    "text_sha256": "d407504a7848abb5aa0ef9f80d748c1e228f155564e56d5416f0827fc89a837e"
+  },
+  "R-US-02": {
+    "bytes": 164533,
+    "final_url": "https://www.sba.gov/loans/7a-loans/",
+    "retrieved_on": "2026-11-05",
+    "sha256": "9da27a4c8b82d176e9b82ed0dc1e273446e07334e220a29f681276b54b62a76a",
+    "source_url": "https://www.sba.gov/funding-programs/loans/7a-loans",
+    "status": "ok",
+    "text_sha256": "f789d5196e0c68d738f045ff19d8825d2374dd6c9612c54dd4cae48e6e2390c0"
+  },
+  "R-US-03": {
+    "bytes": 300855,
+    "final_url": "https://www.sba.gov/sba-lenders/#operate-7a",
+    "retrieved_on": "2026-11-05",
+    "sha256": "726f485ff6cb64ba1d179ba970452c4c3b34d6613226d3598c5c66a105e1d274",
+    "source_url": "https://www.sba.gov/partners/lenders/7a-loan-program/operate-7a-lender",
+    "status": "ok",
+    "text_sha256": "0375a8d98a4120d293d53522bcb78f0977c0c713ced73ea7827624d15f66ad29"
+  },
+  "R-US-04": {
+    "bytes": 300855,
+    "final_url": "https://www.sba.gov/sba-lenders/#operate-7a",
+    "retrieved_on": "2026-11-05",
+    "sha256": "726f485ff6cb64ba1d179ba970452c4c3b34d6613226d3598c5c66a105e1d274",
+    "source_url": "https://www.sba.gov/partners/lenders/7a-loan-program/7a-working-capital-pilot-program",
+    "status": "ok",
+    "text_sha256": "0375a8d98a4120d293d53522bcb78f0977c0c713ced73ea7827624d15f66ad29"
+  }
+}

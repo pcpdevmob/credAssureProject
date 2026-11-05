@@ -1,0 +1,12 @@
+{
+  "base_case": "CA-2026-0003",
+  "expected_status": "WC_MISSING_FIELD",
+  "file": "costs.csv",
+  "mapping": {
+    "Category": "category",
+    "Notes": null,
+    "Week": "week"
+  },
+  "missing_field": "amount",
+  "variant_id": "HV-09"
+}

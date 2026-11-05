@@ -1,0 +1,35 @@
+{
+  "annual_rate": "0.1145",
+  "benchmark": "MCLR",
+  "disbursal_date": "2026-11-18",
+  "fees": [
+    {
+      "basis": "pct_of_principal",
+      "gst_applicable": true,
+      "name": "Processing fee",
+      "timing": "upfront",
+      "value": "0.0091"
+    }
+  ],
+  "first_repayment_date": "2027-05-18",
+  "guarantee": null,
+  "insurance": null,
+  "kfs_doc_id": "KFS-OF-07-B-v1",
+  "lender_id": "L09",
+  "lender_name": "Indravati Bank (synthetic)",
+  "moratorium_months": 5,
+  "offer_id": "OF-07-B",
+  "prepayment_terms": "2% of the principal prepaid (R-BANK-03 range)",
+  "principal": "23100000",
+  "product": "wc_term_loan",
+  "rate_type": "floating",
+  "repayment": {
+    "frequency": "monthly",
+    "method": "emi"
+  },
+  "schema_version": "1.0",
+  "spread": null,
+  "stated_instalment": "1335099",
+  "tenure_months": 24,
+  "version": 1
+}

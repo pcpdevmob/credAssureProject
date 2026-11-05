@@ -1,0 +1,13 @@
+{
+  "base_case": "CA-2026-0001",
+  "expected_status": "GO",
+  "file": "inventory.csv",
+  "mapping": {
+    "Bought": "purchases",
+    "Closing": "closing_value",
+    "Opening": "opening_value",
+    "Used": "consumption",
+    "Wk": "week"
+  },
+  "variant_id": "HV-10"
+}

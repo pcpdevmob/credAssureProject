@@ -1,0 +1,21 @@
+{
+  "as_of_week_start": "2026-11-16",
+  "confirmed_mitigations": [],
+  "credit_lines": [
+    {
+      "drawn": 1700000,
+      "lender": "Existing Banker (synthetic)",
+      "sanctioned": 1700000,
+      "type": "term_loan"
+    },
+    {
+      "drawn": 1300000,
+      "lender": "Existing Banker (synthetic)",
+      "sanctioned": 6300000,
+      "type": "overdraft"
+    }
+  ],
+  "min_cash_buffer": 2000000,
+  "opening_cash": 1247000,
+  "schema_version": "1.0"
+}

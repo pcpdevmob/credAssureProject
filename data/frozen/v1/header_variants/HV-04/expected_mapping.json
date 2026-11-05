@@ -1,0 +1,12 @@
+{
+  "base_case": "CA-2026-0002",
+  "expected_status": "GO",
+  "file": "costs.csv",
+  "mapping": {
+    "amount": "amount",
+    "category": "category",
+    "remarks": null,
+    "week": "week"
+  },
+  "variant_id": "HV-04"
+}

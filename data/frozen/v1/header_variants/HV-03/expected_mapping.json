@@ -1,0 +1,12 @@
+{
+  "base_case": "CA-2026-0001",
+  "expected_status": "GO",
+  "file": "receipts.csv",
+  "mapping": {
+    "Confirmed?": "confirmed",
+    "Rashi": "amount",
+    "Source": "source",
+    "Week No": "week"
+  },
+  "variant_id": "HV-03"
+}

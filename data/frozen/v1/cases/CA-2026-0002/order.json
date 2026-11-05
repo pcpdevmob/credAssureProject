@@ -1,0 +1,18 @@
+{
+  "advance_pct": "0.2",
+  "currency": "INR",
+  "customer_name": "Customer Synthetic 02",
+  "delivery_weeks": [
+    2,
+    5,
+    8
+  ],
+  "enterprise_class": "small",
+  "investment": 40000000,
+  "order_ref": "PO-CA-2026-0002",
+  "order_value": 25600000,
+  "payment_terms_days": 45,
+  "po_date": "2026-11-13",
+  "schema_version": "1.0",
+  "turnover": 190000000
+}

@@ -46,6 +46,7 @@ members = [
     "packages/tools",
     "packages/lender-sim",
     "evaluation",
+    "data/generators",
 ]
 
 [tool.uv.sources]
@@ -65,6 +66,9 @@ known-first-party = ["credassure"]
 
 [tool.ruff.lint.per-file-ignores]
 "**/tests/**" = ["S101", "S105", "S106", "N802"]
+# Generated document text (Markdown tables, policy prose) is kept on one line per row.
+"data/generators/src/credassure/datagen/kfs.py" = ["E501"]
+"data/generators/src/credassure/datagen/policies.py" = ["E501"]
 
 [tool.mypy]
 strict = true
@@ -90,12 +94,13 @@ mypy_path = [
     "packages/tools/src",
     "packages/lender-sim/src",
     "evaluation/src",
+    "data/generators/src",
 ]
 plugins = ["pydantic.mypy"]
 
 [tool.pytest.ini_options]
 addopts = "--import-mode=importlib"
-testpaths = ["apps", "agents", "packages", "evaluation", "tests"]
+testpaths = ["apps", "agents", "packages", "evaluation", "data/generators", "tests"]
 markers = ["slow: excluded from make check-fast"]
 
 [tool.bandit]

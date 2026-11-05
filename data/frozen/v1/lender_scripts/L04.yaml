@@ -1,0 +1,7 @@
+lender_id: L04
+lender_name: Damodar Capital NBFC (synthetic)
+responses:
+  fee_waiver_v1:
+    processing_fee_share_kept: '0.5'
+    reply_text: We agree to waive 50% of the processing fee.
+    type: partial_waiver

@@ -1,0 +1,5 @@
+invoice_id,customer,amount,due_week,expected_week
+INV-02-001,Other Customer 1,"8,63,000",15,15
+INV-02-002,Other Customer 2,"4,48,000",17,17
+INV-02-003,Other Customer 3,974000,17,19
+INV-02-004,Other Customer 4,"5,12,000",13,14

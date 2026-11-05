@@ -1,0 +1,21 @@
+# S22 cgtmse_agf_slabs (docs/DATA_SPEC.md §8.5, RESOURCES D2/D3). Values are strings, parsed as Decimal.
+# Transcribed 2026-11-05 from https://cgtmse.in/Home/VS/47 ("Modified FEE Structure", Standard Rate p.a.)
+# and https://cgtmse.in/Home/VS/101 FAQ 5 (basis). Ceiling from https://cgtmse.in/Home/VS/96 FAQ 1.
+version: 1
+retrieved_on: "2026-11-05"
+effective_from: "2025-04-01"       # guarantees approved/renewed on or after 1 April 2025 (Circular 251/2024-25)
+source_doc_id: R-CG-01
+basis_source_doc_id: R-CG-02
+basis: y1_guaranteed_then_outstanding   # "guaranteed amount for the first year and on the outstanding amount for the remaining tenure"
+eligible_enterprise_classes: [micro, small]   # D3: medium enterprises are not covered
+ceiling: "100000000"                # ₹10 crore per eligible borrower (VS/96 FAQ 1)
+slabs:                              # upper bound inclusive, in rupees; annual_fee_pct is % p.a.
+  - {up_to: "1000000",   annual_fee_pct: "0.37"}   # 0-10 lakh
+  - {up_to: "5000000",   annual_fee_pct: "0.55"}   # above 10 lakh - 50 lakh
+  - {up_to: "10000000",  annual_fee_pct: "0.60"}   # above 50 lakh - 1 crore
+  - {up_to: "20000000",  annual_fee_pct: "0.85"}   # above 1 crore - 2 crore
+  - {up_to: "50000000",  annual_fee_pct: "1.00"}   # above 2 crore - 5 crore
+  - {up_to: "80000000",  annual_fee_pct: "1.10"}   # above 5 crore - 8 crore
+  - {up_to: "100000000", annual_fee_pct: "1.20"}   # above 8 crore - 10 crore
+concessions_note: "10% relaxation for women/SC/ST/PwD/Agniveer/transgender, NER/aspirational/ICDD, ZED-certified (not used by generators)."
+open_check: "Circular 251/2024-25 date reads 18 Mar 2025 (English) vs 31 Mar 2025 (Hindi VS/101); confirm on the circular."

@@ -1,0 +1,48 @@
+{
+  "annual_rate": "0.1145",
+  "benchmark": null,
+  "disbursal_date": "2026-11-18",
+  "fees": [
+    {
+      "basis": "pct_of_principal",
+      "gst_applicable": true,
+      "name": "Processing fee",
+      "timing": "upfront",
+      "value": "0.0099"
+    },
+    {
+      "basis": "fixed",
+      "gst_applicable": true,
+      "name": "Documentation charges",
+      "timing": "upfront",
+      "value": "15000"
+    }
+  ],
+  "first_repayment_date": "2027-05-18",
+  "guarantee": {
+    "annual_fee_pct": "0.0085",
+    "basis": "y1_guaranteed_then_outstanding",
+    "gst_applicable": false,
+    "passed_to_borrower": true,
+    "scheme": "CGTMSE"
+  },
+  "insurance": null,
+  "kfs_doc_id": "KFS-OF-06-B-v1",
+  "lender_id": "L01",
+  "lender_name": "Aravali Commercial Bank (synthetic)",
+  "moratorium_months": 5,
+  "offer_id": "OF-06-B",
+  "prepayment_terms": "0% of the principal prepaid (R-BANK-03 range)",
+  "principal": "19300000",
+  "product": "wc_term_loan",
+  "rate_type": "fixed",
+  "repayment": {
+    "frequency": "monthly",
+    "method": "emi"
+  },
+  "schema_version": "1.0",
+  "spread": null,
+  "stated_instalment": "1115472",
+  "tenure_months": 24,
+  "version": 1
+}

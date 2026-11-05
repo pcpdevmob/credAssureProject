@@ -1,0 +1,14 @@
+{
+  "base_case": "CA-2026-0002",
+  "expected_status": "GO",
+  "file": "payables.csv",
+  "mapping": {
+    "Amt": "amount",
+    "Bill No": "bill_id",
+    "Bill Wk": "bill_week",
+    "Due Wk": "due_week",
+    "MSME": "msme_supplier",
+    "Vendor": "supplier"
+  },
+  "variant_id": "HV-05"
+}

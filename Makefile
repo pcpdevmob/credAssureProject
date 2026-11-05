@@ -1,11 +1,12 @@
 .DEFAULT_GOAL := help
 PY_SRC := apps/gateway/src $(wildcard agents/*/src) \
-	$(filter-out packages/api-client/src,$(wildcard packages/*/src)) evaluation/src
+	$(filter-out packages/api-client/src,$(wildcard packages/*/src)) evaluation/src \
+	data/generators/src
 COMPOSE := docker compose -f deploy/compose/compose.yaml
 PNPM := $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo "npx --yes pnpm@9.15.0")
 
 .PHONY: help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
-        demo-reset up down audit compose-dev compose-test compose-demo langfuse-env-check \
+        demo-reset up down audit corpus-audit corpus-download compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore
 
 help:  ## List targets
@@ -89,8 +90,14 @@ langfuse-down:
 run-ui:  ## Vite dev server for the React stub
 	$(PNPM) --filter @credassure/web dev
 
-data:  ## Seeded synthetic data -> data/frozen/v1 (Phase 2)
-	@echo "data: not implemented until Phase 2"; exit 1
+data:  ## Seeded synthetic data -> data/frozen/v1 + hr.db (Phase 2, idempotent)
+	uv run python -m credassure.datagen
+
+corpus-audit:  ## Legal-basis audit of data/corpus/manifest.yaml (scope #14)
+	uv run python -m credassure.datagen.corpus audit
+
+corpus-download:  ## Throttled download + text extraction of the public corpus (network)
+	uv run python -m credassure.datagen.corpus download
 
 ingest:  ## Download, hash and index the corpus (Phase 7)
 	@echo "ingest: not implemented until Phase 7"; exit 1

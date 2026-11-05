@@ -1,0 +1,45 @@
+{
+  "annual_rate": "0.1025",
+  "benchmark": null,
+  "disbursal_date": "2026-11-18",
+  "fees": [
+    {
+      "basis": "pct_of_principal",
+      "gst_applicable": true,
+      "name": "Processing fee",
+      "timing": "upfront",
+      "value": "0.01140"
+    },
+    {
+      "basis": "pct_of_principal",
+      "gst_applicable": true,
+      "name": "Annual review fee",
+      "timing": "annual",
+      "value": "0.0025"
+    }
+  ],
+  "first_repayment_date": "2027-03-18",
+  "guarantee": null,
+  "insurance": {
+    "financed": false,
+    "premium": "153300"
+  },
+  "kfs_doc_id": "KFS-OF-03-A-v2",
+  "lender_id": "L09",
+  "lender_name": "Indravati Bank (synthetic)",
+  "moratorium_months": 3,
+  "offer_id": "OF-03-A",
+  "prepayment_terms": "1% of the principal prepaid (R-BANK-03 range)",
+  "principal": "10500000",
+  "product": "wc_term_loan",
+  "rate_type": "fixed",
+  "repayment": {
+    "frequency": "monthly",
+    "method": "emi"
+  },
+  "schema_version": "1.0",
+  "spread": null,
+  "stated_instalment": "1217058",
+  "tenure_months": 12,
+  "version": 2
+}

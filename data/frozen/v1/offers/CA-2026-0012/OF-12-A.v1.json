@@ -1,0 +1,26 @@
+{
+  "annual_rate": "0.123",
+  "benchmark": null,
+  "disbursal_date": "2026-11-18",
+  "first_repayment_date": "2027-04-18",
+  "guarantee": null,
+  "insurance": null,
+  "kfs_doc_id": "KFS-OF-12-A-v1",
+  "lender_id": "L07",
+  "lender_name": "Ghaghara Co-operative Bank (synthetic)",
+  "moratorium_months": 4,
+  "offer_id": "OF-12-A",
+  "prepayment_terms": "2% of the principal prepaid (R-BANK-03 range)",
+  "principal": "8600000",
+  "product": "wc_term_loan",
+  "rate_type": "fixed",
+  "repayment": {
+    "frequency": "monthly",
+    "method": "emi"
+  },
+  "schema_version": "1.0",
+  "spread": null,
+  "stated_instalment": "662552",
+  "tenure_months": 18,
+  "version": 1
+}

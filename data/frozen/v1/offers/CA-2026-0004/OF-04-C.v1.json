@@ -1,0 +1,42 @@
+{
+  "annual_rate": "0.1185",
+  "benchmark": "EBLR",
+  "disbursal_date": "2026-11-18",
+  "fees": [
+    {
+      "basis": "pct_of_principal",
+      "gst_applicable": true,
+      "name": "Processing fee",
+      "timing": "upfront",
+      "value": "0.009"
+    },
+    {
+      "basis": "fixed",
+      "gst_applicable": true,
+      "name": "Documentation charges",
+      "timing": "upfront",
+      "value": "7000"
+    }
+  ],
+  "first_repayment_date": "2027-04-18",
+  "guarantee": null,
+  "insurance": null,
+  "kfs_doc_id": "KFS-OF-04-C-v1",
+  "lender_id": "L05",
+  "lender_name": "Ennore Credit NBFC (synthetic)",
+  "moratorium_months": 4,
+  "offer_id": "OF-04-C",
+  "prepayment_terms": "1% of the principal prepaid (R-BANK-03 range)",
+  "principal": "13800000",
+  "product": "wc_term_loan",
+  "rate_type": "floating",
+  "repayment": {
+    "frequency": "monthly",
+    "method": "emi"
+  },
+  "schema_version": "1.0",
+  "spread": "0.0370",
+  "stated_instalment": "763769",
+  "tenure_months": 24,
+  "version": 1
+}

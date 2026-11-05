@@ -1,0 +1,45 @@
+{
+  "annual_rate": "0.107",
+  "benchmark": null,
+  "disbursal_date": "2026-11-18",
+  "fees": [
+    {
+      "basis": "pct_of_principal",
+      "gst_applicable": true,
+      "name": "Processing fee",
+      "timing": "upfront",
+      "value": "0.0242"
+    },
+    {
+      "basis": "pct_of_principal",
+      "gst_applicable": true,
+      "name": "Annual review fee",
+      "timing": "annual",
+      "value": "0.0025"
+    }
+  ],
+  "first_repayment_date": "2027-03-18",
+  "guarantee": null,
+  "insurance": {
+    "financed": false,
+    "premium": "239250"
+  },
+  "kfs_doc_id": "KFS-OF-10-A-v1",
+  "lender_id": "L08",
+  "lender_name": "Hooghly Finance Ltd (synthetic)",
+  "moratorium_months": 3,
+  "offer_id": "OF-10-A",
+  "prepayment_terms": "0% of the principal prepaid (R-BANK-03 range)",
+  "principal": "16500000",
+  "product": "wc_term_loan",
+  "rate_type": "fixed",
+  "repayment": {
+    "frequency": "monthly",
+    "method": "emi"
+  },
+  "schema_version": "1.0",
+  "spread": null,
+  "stated_instalment": "1916037",
+  "tenure_months": 12,
+  "version": 1
+}

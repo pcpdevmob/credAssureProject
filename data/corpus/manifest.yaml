@@ -1,0 +1,246 @@
+# legal_basis: L1-L6 per docs/DATA_RESOURCES.md (`make corpus-audit`, credassure.datagen.corpus, fails without it).
+# Phase 2 manifest. Extend toward 320-380 public docs; IDs are canonical R-IDs (docs/data/DATA_RESOURCES.md).
+# Raw files are gitignored. Confirm effective dates on each page before freezing.
+version: 1
+documents:
+  - {doc_id: R-RBI-02, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Reserve Bank of India (Commercial Banks – Responsible Business Conduct) Directions, 2025",
+     publisher: "Reserve Bank of India", effective_from: "2025-11-28", superseded_by: null,
+     source_url: "https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13140"}
+  - {doc_id: R-RBI-03, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Reserve Bank of India (Commercial Banks – Interest Rates on Advances) Directions, 2025",
+     publisher: "Reserve Bank of India", effective_from: "2025-11-28", superseded_by: null,
+     source_url: "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13149"}
+  - {doc_id: R-RBI-04, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Master Direction - Lending to Micro, Small & Medium Enterprises (MSME) Sector",
+     publisher: "Reserve Bank of India", effective_from: "2026-02-09", superseded_by: null,
+     source_url: "https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11060"}
+  - {doc_id: R-RBI-05, tag: rbi_faq, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "RBI FAQs - Micro, Small and Medium Enterprises", publisher: "Reserve Bank of India",
+     effective_from: "2025-07-29", superseded_by: null,
+     source_url: "https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84"}
+  - {doc_id: R-MSME-02, tag: msme_gov, collection: public, jurisdiction: IN, legal_basis: L2, format: pdf,
+     title: "Notification S.O. 1364(E) - revised MSME classification", publisher: "Ministry of MSME",
+     effective_from: "2025-04-01", superseded_by: null,
+     source_url: "https://egazette.gov.in/writeReadData/2025/261838.pdf"}
+  - {doc_id: R-MSME-03, tag: msme_gov, collection: public, jurisdiction: IN, legal_basis: L2, format: pdf,
+     title: "Notification S.O. 2119(E) - MSME classification (2020)", publisher: "Ministry of MSME",
+     effective_from: "2020-07-01", superseded_by: R-MSME-02,
+     source_url: "https://dcmsme.gov.in/State-Gov/Notification_%20S%20O%202119.pdf"}
+  - {doc_id: R-CG-01, tag: cgtmse, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "CGTMSE Annual Guarantee Fee structure (CGS-I)", publisher: "CGTMSE",
+     effective_from: "2025-04-01", superseded_by: null, source_url: "https://cgtmse.in/Home/VS/47"}
+  - {doc_id: R-CG-02, tag: cgtmse, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "CGTMSE AGF basis for facilities sanctioned on/after 1 April 2025", publisher: "CGTMSE",
+     effective_from: "2025-04-01", superseded_by: null, source_url: "https://cgtmse.in/Home/VS/101"}
+  - {doc_id: R-BANK-03, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: pdf,
+     title: "Bandhan Bank Schedule of Charges - SME and Corporate Loans", publisher: "Bandhan Bank",
+     effective_from: "2026-01-16", superseded_by: null,
+     source_url: "https://bandhan.bank.in/sites/default/files/2026-01/Schedule-of-Charges-SME-and-Corporate-Loans-16012026.pdf"}
+  # ---- Added after the 5 Nov 2026 web check (docs/DATA_RESOURCES.md "Verification status") ----
+  - {doc_id: R-RBI-08, tag: rbi_treds, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Reserve Bank of India (Trade Receivables Discounting System) Directions, 2026 (RBI/DPSS/2026-27/406)",
+     publisher: "Reserve Bank of India", effective_from: "2026-06-23", superseded_by: null,
+     source_url: "https://www.rbi.org.in/scripts/BS_ViewMasDirections.aspx?id=13526"}
+  - {doc_id: R-RBI-08-DRAFT, tag: rbi_treds, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Draft for Comments - RBI (TReDS) Directions, 2026", publisher: "Reserve Bank of India",
+     effective_from: "2026-04-08", superseded_by: R-RBI-08,
+     source_url: "https://www.rbi.org.in/scripts/bs_viewcontent.aspx?Id=4976"}
+  - {doc_id: R-RBI-10, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Reserve Bank of India (Commercial Banks – Credit Facilities) Directions, 2025 (RBI/DOR/2025-26/154)",
+     publisher: "Reserve Bank of India", effective_from: "2025-11-28", superseded_by: null,
+     source_url: "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13156"}
+  - {doc_id: R-RBI-12, tag: rbi_circulars_hist, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Key Facts Statement (KFS) for Loans & Advances (RBI/2024-25/18)", publisher: "Reserve Bank of India",
+     effective_from: "2024-04-15", superseded_by: R-RBI-02,
+     source_url: "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12663&Mode=0"}
+  - {doc_id: R-RBI-13, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Reserve Bank of India (NBFC – Responsible Business Conduct) Directions, 2025", publisher: "Reserve Bank of India",
+     effective_from: "2025-11-28", superseded_by: null,
+     source_url: "https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=12942&Mode=0"}
+  - {doc_id: R-RATE-02-REPO, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Monetary Policy Resolution, 7 Oct 2026 (repo rate 5.50%)", publisher: "Reserve Bank of India",
+     effective_from: "2026-10-07", superseded_by: null,
+     source_url: "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=63742"}
+  - {doc_id: R-CAL-01, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "RBI holiday matrix (NI Act holidays), Mumbai", publisher: "Reserve Bank of India",
+     effective_from: "2026-01-01", superseded_by: null,
+     source_url: "https://www.rbi.org.in/scripts/HolidayMatrixDisplay.aspx?regoff=Mumbai"}
+  - {doc_id: R-MSME-01, tag: msme_gov, collection: public, jurisdiction: IN, legal_basis: L3, format: html,
+     title: "Micro, Small and Medium Enterprises Development Act, 2006 - section 15", publisher: "Legislative Department (India Code)",
+     effective_from: "2006-10-02", superseded_by: null,
+     source_url: "https://www.indiacode.nic.in/show-data?actid=AC_CEN_46_77_00002_200627_1517807324919&orderno=15"}
+  - {doc_id: R-MSME-01-S16, tag: msme_gov, collection: public, jurisdiction: IN, legal_basis: L3, format: html,
+     title: "Micro, Small and Medium Enterprises Development Act, 2006 - section 16", publisher: "Legislative Department (India Code)",
+     effective_from: "2006-10-02", superseded_by: null,
+     source_url: "https://www.indiacode.nic.in/show-data?actid=AC_CEN_46_77_00002_200627_1517807324919&orderno=16"}
+  - {doc_id: R-MSME-04, tag: msme_gov, collection: public, jurisdiction: IN, legal_basis: L2, format: pdf,
+     title: "Udyam reverse-graduation circular, 24 Oct 2025", publisher: "Ministry of MSME",
+     effective_from: "2025-10-24", superseded_by: null,
+     source_url: "https://udyamregistration.gov.in/docs/Circular_reverse_24102025.pdf"}
+  - {doc_id: R-MSME-05, tag: msme_gov, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "MSME Samadhaan - FAQ", publisher: "Office of DC (MSME)", effective_from: null, superseded_by: null,
+     source_url: "https://samadhaan.msme.gov.in/MyMsme/MSEFC/FAQ.aspx"}
+  - {doc_id: R-MSME-06, tag: msme_gov, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Udyam Registration - Important to know", publisher: "Ministry of MSME", effective_from: null, superseded_by: null,
+     source_url: "https://www.udyamregistration.gov.in/Important.aspx"}
+  - {doc_id: R-TAX-01, tag: income_tax, collection: public, jurisdiction: IN, legal_basis: L3, format: pdf,
+     title: "Income-tax Act, 2025 (as amended by Finance Act 2026) - s.37(2)(g)", publisher: "CBDT",
+     effective_from: "2026-04-01", superseded_by: null,
+     source_url: "https://www.incometaxindia.gov.in/documents/d/guest/income_tax_act_2025_as_amended_by_fa_act_2026-pdf"}
+  - {doc_id: R-TAX-02, tag: income_tax, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Income-tax Act, 1961 - section 43B", publisher: "CBDT", effective_from: null, superseded_by: R-TAX-01,
+     source_url: "https://www.incometaxindia.gov.in/w/section-43b-40"}
+  - {doc_id: R-GST-01, tag: gst, collection: public, jurisdiction: IN, legal_basis: L2, format: pdf,
+     title: "Notification No. 11/2017-Central Tax (Rate)", publisher: "CBIC", effective_from: "2017-07-01", superseded_by: null,
+     source_url: "https://cbic-gst.gov.in/hindi/pdf/central-tax-rate/Notification11-CGST.pdf"}
+  - {doc_id: R-GST-03, tag: gst, collection: public, jurisdiction: IN, legal_basis: L2, format: pdf,
+     title: "Notification No. 15/2025-Central Tax (Rate) amending 11/2017", publisher: "CBIC", effective_from: "2025-09-22",
+     superseded_by: null, source_url: "https://egazette.gov.in/WriteReadData/2025/266220.pdf"}
+  - {doc_id: R-GST-02, tag: gst, collection: public, jurisdiction: IN, legal_basis: L2, format: pdf,
+     title: "Notification No. 12/2017-Central Tax (Rate) - services exemptions", publisher: "CBIC", effective_from: "2017-07-01",
+     superseded_by: null, source_url: "https://cbic-gst.gov.in/hindi/pdf/central-tax-rate/Notification12-CGST.pdf"}
+  - {doc_id: R-DPDP-01, tag: dpdp_kyc, collection: public, jurisdiction: IN, legal_basis: L3, format: pdf,
+     title: "Digital Personal Data Protection Act, 2023", publisher: "MeitY", effective_from: "2023-08-11", superseded_by: null,
+     source_url: "https://www.meity.gov.in/static/uploads/2024/02/Digital-Personal-Data-Protection-Act-2023.pdf"}
+  - {doc_id: R-DPDP-02, tag: dpdp_kyc, collection: public, jurisdiction: IN, legal_basis: L2, format: pdf,
+     title: "Digital Personal Data Protection Rules, 2025 (G.S.R. 846(E))", publisher: "MeitY", effective_from: "2025-11-13",
+     superseded_by: null, source_url: "https://egazette.gov.in/WriteReadData/2025/267650.pdf"}
+  - {doc_id: R-DPDP-03, tag: dpdp_kyc, collection: public, jurisdiction: IN, legal_basis: L2, format: pdf,
+     title: "DPDP (Removal of Difficulties) Order, S.O. 5458(E)", publisher: "MeitY", effective_from: "2026-10-05",
+     superseded_by: null, source_url: "https://www.meity.gov.in/static/uploads/2026/10/daf495a7b5798a3dfa72a944b51fc176.pdf"}
+  - {doc_id: R-BANK-06, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Bank of Baroda - Service Charges (MSME Annexure II)", publisher: "Bank of Baroda", effective_from: null, superseded_by: null,
+     source_url: "https://bankofbaroda.bank.in/interest-rate-and-service-charges/service-charges"}
+  - {doc_id: R-BANK-07, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "PNB - Credit Related Service Charges", publisher: "Punjab National Bank", effective_from: null, superseded_by: null,
+     source_url: "https://pnb.bank.in/Credit-Related-Service-Charges.html"}
+  - {doc_id: R-BANK-08, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: pdf,
+     title: "Canara Bank - Service Charges on Loans & Advances to MSME", publisher: "Canara Bank", effective_from: "2025-12-03",
+     superseded_by: null, source_url: "https://www.canarabank.bank.in/documents/d/guest/SERV%20CHGS212"}
+  - {doc_id: R-BANK-09, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Union Bank of India - Fees and Services", publisher: "Union Bank of India", effective_from: null, superseded_by: null,
+     source_url: "https://www.unionbankofindia.bank.in/en/common/fees-and-services"}
+  - {doc_id: R-BANK-10, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "HDFC Bank - Business Loan Interest Rates and Charges", publisher: "HDFC Bank", effective_from: "2026-10-01",
+     superseded_by: null, source_url: "https://www.hdfc.bank.in/business-loan/interest-rates-and-charges"}
+  - {doc_id: R-BANK-11, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "ICICI Bank - Business Loans Schedule of Charges", publisher: "ICICI Bank", effective_from: "2026-09-01",
+     superseded_by: null, source_url: "https://www.icici.bank.in/business-banking/business-loans/schedule-of-charges"}
+  - {doc_id: R-BANK-12, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Axis Bank - Fees and Charges", publisher: "Axis Bank", effective_from: null, superseded_by: null,
+     source_url: "https://www.axis.bank.in/fees-and-charges"}
+  - {doc_id: R-BANK-13, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Kotak Mahindra Bank - Business Loan Fees and Charges", publisher: "Kotak Mahindra Bank", effective_from: null,
+     superseded_by: null, source_url: "https://www.kotak.bank.in/en/business/loans/business-loan/fees-and-charges.html"}
+  - {doc_id: R-BANK-14, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "IDFC FIRST Bank - Business Loan Fees and Charges", publisher: "IDFC FIRST Bank", effective_from: null,
+     superseded_by: null, source_url: "https://www.idfcfirst.bank.in/business-banking/loans/business-loan/fees-and-charges"}
+  - {doc_id: R-BANK-15, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Bajaj Finance - Business Loan Interest Rates and Charges", publisher: "Bajaj Finance", effective_from: null,
+     superseded_by: null, source_url: "https://www.bajajfinserv.in/business-loan-interest-rate-and-charges"}
+  - {doc_id: R-BANK-16, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Tata Capital - Business Loan Rates and Charges", publisher: "Tata Capital", effective_from: null,
+     superseded_by: null, source_url: "https://tatacapital.com/business-loan/rates-and-charges.html"}
+  - {doc_id: R-RATE-02-SBI, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "SBI External Benchmark based Lending Rate", publisher: "State Bank of India", effective_from: "2026-10-15",
+     superseded_by: null, source_url: "https://sbi.bank.in/web/interest-rates/external-benchmark-based-lending-rate"}
+  - {doc_id: R-RATE-02-BOB, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Bank of Baroda - Retail loan interest rates (BRLLR)", publisher: "Bank of Baroda", effective_from: "2026-10-08",
+     superseded_by: null, source_url: "https://bankofbaroda.bank.in/interest-rate-and-service-charges/retail-loans-interest-rates"}
+  - {doc_id: R-SIDBI-01, tag: sidbi, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "SIDBI - Working Capital FAQ", publisher: "SIDBI", effective_from: null, superseded_by: null,
+     source_url: "https://www.sidbi.in/working-capital"}
+  - {doc_id: R-SIDBI-02, tag: sidbi, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "SIDBI - Project Funding FAQ", publisher: "SIDBI", effective_from: null, superseded_by: null,
+     source_url: "https://www.sidbi.in/project-funding"}
+  - {doc_id: R-SIDBI-03, tag: sidbi, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "SIDBI - Machinery Loan FAQ", publisher: "SIDBI", effective_from: null, superseded_by: null,
+     source_url: "https://www.sidbi.in/machinery-loan"}
+  - {doc_id: R-SIDBI-04, tag: sidbi, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "SIDBI - CGTMSE", publisher: "SIDBI", effective_from: null, superseded_by: null,
+     source_url: "https://www.sidbi.in/cgtmse"}
+  - {doc_id: R-SIDBI-05, tag: sidbi, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "SIDBI - TReDS", publisher: "SIDBI", effective_from: null, superseded_by: null,
+     source_url: "https://www.sidbi.in/treds"}
+  - {doc_id: R-DATA-01, tag: msme_gov, collection: public, jurisdiction: IN, legal_basis: L1, format: html,
+     title: "UDYAM Registration (MSME Registration) catalog", publisher: "Ministry of MSME (OGD)", effective_from: "2026-09-03",
+     superseded_by: null, source_url: "https://www.data.gov.in/catalog/udyam-registration-msme-registration"}
+  - {doc_id: R-DATA-02, tag: msme_gov, collection: public, jurisdiction: IN, legal_basis: L1, format: html,
+     title: "District-wise total MSME registered enterprises under Udyam", publisher: "Ministry of MSME (OGD)",
+     effective_from: "2026-03-15", superseded_by: null,
+     source_url: "https://www.data.gov.in/resource/district-wise-total-msme-registered-enterprises-under-udyam-registration-till-last-date"}
+  - {doc_id: R-US-01, tag: non_indian, collection: public, jurisdiction: US, legal_basis: L6, format: html,
+     title: "SBA SOP 50 10 Lender and Development Company Loan Programs (v8.1)", publisher: "US Small Business Administration",
+     effective_from: "2026-10-01", superseded_by: null,
+     source_url: "https://www.sba.gov/document/sop-50-10-lender-development-company-loan-programs"}
+  - {doc_id: R-US-02, tag: non_indian, collection: public, jurisdiction: US, legal_basis: L6, format: html,
+     title: "SBA 7(a) loans", publisher: "US Small Business Administration", effective_from: null, superseded_by: null,
+     source_url: "https://www.sba.gov/funding-programs/loans/7a-loans"}
+  - {doc_id: R-US-03, tag: non_indian, collection: public, jurisdiction: US, legal_basis: L6, format: html,
+     title: "SBA 7(a) lender terms and conditions", publisher: "US Small Business Administration", effective_from: null,
+     superseded_by: null, source_url: "https://www.sba.gov/partners/lenders/7a-loan-program/operate-7a-lender"}
+  - {doc_id: R-US-04, tag: non_indian, collection: public, jurisdiction: US, legal_basis: L6, format: html,
+     title: "SBA 7(a) Working Capital Pilot program", publisher: "US Small Business Administration", effective_from: null,
+     superseded_by: null, source_url: "https://www.sba.gov/partners/lenders/7a-loan-program/7a-working-capital-pilot-program"}
+  # ---- Phase 2 additions from docs/data/DATA_RESOURCES.md (P05-P40 rows not listed above) ----
+  - {doc_id: R-RBI-01, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: pdf,
+     title: "RBI press release: 244 consolidated Master Directions (28 Nov 2025)", publisher: "Reserve Bank of India",
+     effective_from: "2025-11-28", superseded_by: null,
+     source_url: "https://website.rbi.org.in/documents/d/rbi/pr1588rbiconsolidatedmasterdirections-1-"}
+  - {doc_id: R-RBI-06, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "RBI Priority Sector Lending - Targets and Classification Directions, 2025 (index)", publisher: "Reserve Bank of India",
+     effective_from: "2025-03-24", superseded_by: null,
+     source_url: "https://website.rbi.org.in/web/rbi/financial-inclusion-and-development/master-directions"}
+  - {doc_id: R-RBI-09, tag: dpdp_kyc, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "RBI Commercial Banks - Know Your Customer Directions, 2025 (notifications index)", publisher: "Reserve Bank of India",
+     effective_from: "2025-11-28", superseded_by: null,
+     source_url: "https://website.rbi.org.in/en/web/rbi/regulations-non-banking/notifications?delta=20"}
+  - {doc_id: R-RBI-11, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: pdf,
+     title: "Reserve Bank of India (Digital Lending) Directions, 2025", publisher: "Reserve Bank of India",
+     effective_from: "2025-05-08", superseded_by: null,
+     source_url: "https://website.rbi.org.in/documents/d/rbi/directionsondigitallending"}
+  - {doc_id: R-RATE-01-2026-09, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Lending and Deposit Rates of Scheduled Commercial Banks (September 2026 release)", publisher: "Reserve Bank of India",
+     effective_from: null, superseded_by: null,
+     source_url: "https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63702"}
+  - {doc_id: R-RATE-01-A, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Lending and Deposit Rates of Scheduled Commercial Banks (earlier release, prid 63481)", publisher: "Reserve Bank of India",
+     effective_from: null, superseded_by: null,
+     source_url: "https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63481"}
+  - {doc_id: R-RATE-01-B, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Lending and Deposit Rates of Scheduled Commercial Banks (earlier release, prid 63049)", publisher: "Reserve Bank of India",
+     effective_from: null, superseded_by: null,
+     source_url: "https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63049"}
+  - {doc_id: R-RATE-01-C, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Lending and Deposit Rates of Scheduled Commercial Banks (earlier release, prid 62471)", publisher: "Reserve Bank of India",
+     effective_from: null, superseded_by: null,
+     source_url: "https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=62471"}
+  - {doc_id: R-CG-03, tag: cgtmse, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "CGTMSE circulars (index)", publisher: "CGTMSE", effective_from: null, superseded_by: null,
+     source_url: "https://www.cgtmse.in/Circulars"}
+  - {doc_id: R-CG-04, tag: cgtmse, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "SBI - CGTMSE (AGF payable upfront for year 1, then annually)", publisher: "State Bank of India",
+     effective_from: null, superseded_by: null,
+     source_url: "https://sbi.bank.in/web/business/sme/sme-government-schemes/cgtmse"}
+  - {doc_id: R-CG-05, tag: cgtmse, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "CGTMSE FAQ - Credit facilities and parameters (₹10 crore ceiling)", publisher: "CGTMSE",
+     effective_from: "2025-04-01", superseded_by: null, source_url: "https://cgtmse.in/Home/VS/96"}
+  - {doc_id: R-BANK-01, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: pdf,
+     title: "SBI Advances-related service charges w.e.f. 01.04.2019", publisher: "State Bank of India",
+     effective_from: "2019-04-01", superseded_by: null,
+     source_url: "https://sbi.co.in/documents/16012/76239/ADVANCES+RELATED+SERVICE+CHARGES+W.E.F.+01.04.2019+A.pdf"}
+  - {doc_id: R-BANK-02, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "SBI SME Smart Score", publisher: "State Bank of India", effective_from: null, superseded_by: null,
+     source_url: "https://sbi.co.in/portal/web/sme/sme-smart-score"}
+  - {doc_id: R-BANK-04, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: pdf,
+     title: "Indian Bank - Service charges for MSME products (2018)", publisher: "Indian Bank",
+     effective_from: "2018-11-01", superseded_by: R-BANK-05,
+     source_url: "https://indianbank.in/wp-content/uploads/2018/11/Service-Charge-for-MSME-Products-1.pdf"}
+  - {doc_id: R-BANK-05, tag: bank_charges, collection: public, jurisdiction: IN, legal_basis: L4, format: pdf,
+     title: "Indian Bank - MSME service charges (2022)", publisher: "Indian Bank",
+     effective_from: "2022-04-01", superseded_by: null,
+     source_url: "https://www.indianbank.in/wp-content/uploads/2022/04/MSME-Service-Charges.pdf"}
+  - {doc_id: R-AA-01, tag: rbi_md, collection: public, jurisdiction: IN, legal_basis: L4, format: html,
+     title: "Sahamati - Financial Information User (FIU) eligibility", publisher: "Sahamati",
+     effective_from: null, superseded_by: null, source_url: "https://sahamati.org.in/financial-information-user-fiu"}

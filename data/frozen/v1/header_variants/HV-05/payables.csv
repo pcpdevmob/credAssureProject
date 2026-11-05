@@ -1,0 +1,6 @@
+Bill No,Vendor,Amt,Bill Wk,Due Wk,MSME
+BILL-02-001,Supplier Synthetic 1,389000,18,20,true
+BILL-02-002,Supplier Synthetic 2,"7,87,000",14,20,false
+BILL-02-003,Supplier Synthetic 3,421000,13,16,true
+BILL-02-004,Supplier Synthetic 4,623000,16,24,false
+BILL-02-005,Supplier Synthetic 5,6.37 lakh,18,22,true

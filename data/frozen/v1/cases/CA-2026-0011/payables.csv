@@ -1,0 +1,6 @@
+bill_id,supplier,amount,bill_week,due_week,msme_supplier
+BILL-11-001,Supplier Synthetic 1,"5,35,000",2,4,true
+BILL-11-002,Supplier Synthetic 2,452000,3,7,false
+BILL-11-003,Supplier Synthetic 3,798000,5,11,true
+BILL-11-004,Supplier Synthetic 4,"4,25,000",20,28,false
+BILL-11-005,Supplier Synthetic 5,3.2 lakh,13,17,true

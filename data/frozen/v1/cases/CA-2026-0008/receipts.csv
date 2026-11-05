@@ -1,0 +1,7 @@
+week,source,amount,confirmed
+1,order_advance,3290000,true
+4,other_customer,599000,false
+6,other_customer,867000,false
+10,order_milestone,8883000,true
+13,order_milestone,11844000,true
+16,order_milestone,8883000,true

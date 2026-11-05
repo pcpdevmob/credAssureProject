@@ -1,0 +1,12 @@
+# S22 gst (docs/DATA_SPEC.md §8.5, RESOURCES D7). Values are strings, parsed as Decimal.
+# Read by data/generators and evaluation/gold only; engines get GST_RATE through settings.
+version: 1
+retrieved_on: "2026-11-05"
+as_of_date: "2026-11-15"
+effective_from: "2017-07-01"         # 11/2017-CT(R); amended by 15/2025-CT(R) eff 2025-09-22 (rate to confirm)
+rate: "0.18"
+applies_to: fees_and_charges        # processing, documentation, review, legal, insurance-arranging fees
+interest: exempt                    # R-GST-02 (Notification 12/2017-CT(R), entry 27)
+cgtmse_fee: per_offer_flag          # D7: unconfirmed, each offer carries guarantee.gst_applicable
+source_doc_id: R-GST-01             # Notification 11/2017-CT(R), heading 9971
+open_check: "Confirm heading 9971 is still 18% after Notification 15/2025-CT(R) (eff 22 Sep 2025) before G1."

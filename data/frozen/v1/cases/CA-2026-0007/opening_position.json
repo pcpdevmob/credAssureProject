@@ -1,0 +1,28 @@
+{
+  "as_of_week_start": "2026-11-16",
+  "confirmed_mitigations": [
+    {
+      "amount": 2000000,
+      "evidence_ref": "doc:CA-2026-0007-MIT-1",
+      "type": "promoter_infusion",
+      "week": 3
+    }
+  ],
+  "credit_lines": [
+    {
+      "drawn": 1700000,
+      "lender": "Existing Banker (synthetic)",
+      "sanctioned": 1700000,
+      "type": "term_loan"
+    },
+    {
+      "drawn": 1400000,
+      "lender": "Existing Banker (synthetic)",
+      "sanctioned": 3400000,
+      "type": "overdraft"
+    }
+  ],
+  "min_cash_buffer": 1500000,
+  "opening_cash": 3061986,
+  "schema_version": "1.0"
+}

@@ -1,0 +1,48 @@
+{
+  "annual_rate": "0.119",
+  "benchmark": null,
+  "disbursal_date": "2026-11-18",
+  "fees": [
+    {
+      "basis": "pct_of_principal",
+      "gst_applicable": true,
+      "name": "Processing fee",
+      "timing": "upfront",
+      "value": "0.0076"
+    },
+    {
+      "basis": "fixed",
+      "gst_applicable": true,
+      "name": "Documentation charges",
+      "timing": "upfront",
+      "value": "7000"
+    }
+  ],
+  "first_repayment_date": "2027-06-18",
+  "guarantee": {
+    "annual_fee_pct": "0.006",
+    "basis": "y1_guaranteed_then_outstanding",
+    "gst_applicable": true,
+    "passed_to_borrower": true,
+    "scheme": "CGTMSE"
+  },
+  "insurance": null,
+  "kfs_doc_id": "KFS-OF-15-C-v1",
+  "lender_id": "L08",
+  "lender_name": "Hooghly Finance Ltd (synthetic)",
+  "moratorium_months": 6,
+  "offer_id": "OF-15-C",
+  "prepayment_terms": "0% of the principal prepaid (R-BANK-03 range)",
+  "principal": "5500000",
+  "product": "wc_term_loan",
+  "rate_type": "fixed",
+  "repayment": {
+    "frequency": "monthly",
+    "method": "emi"
+  },
+  "schema_version": "1.0",
+  "spread": null,
+  "stated_instalment": "488411",
+  "tenure_months": 18,
+  "version": 1
+}

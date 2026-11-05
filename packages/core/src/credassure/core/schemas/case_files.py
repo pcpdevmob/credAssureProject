@@ -74,6 +74,7 @@ class PayableRow(BaseModel):
     bill_id: str
     supplier: str
     amount: Decimal
+    bill_week: int | None = None  # needed for the 45-day MSE check (RESOURCES D5)
     due_week: int
     msme_supplier: bool
 

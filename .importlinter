@@ -32,6 +32,7 @@ source_modules =
     credassure.tools
     credassure.lender_sim
     credassure.evaluation
+    credassure.datagen
 forbidden_modules =
     credassure.agents
     credassure.gateway
@@ -63,6 +64,7 @@ source_modules =
     credassure.lender_sim
     credassure.evaluation
     credassure.gateway
+    credassure.datagen
 forbidden_modules =
     credassure.ledger.writes
 
@@ -82,5 +84,15 @@ source_modules =
     credassure.lender_sim
     credassure.evaluation
     credassure.gateway
+    credassure.datagen
 forbidden_modules =
     openai
+
+[importlinter:contract:datagen-independent]
+name = Generators choose inputs; they never import the engines or gold (Phase 2)
+type = forbidden
+source_modules =
+    credassure.datagen
+forbidden_modules =
+    credassure.engines
+    credassure.evaluation

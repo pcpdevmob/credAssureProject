@@ -1,0 +1,7 @@
+lender_id: L06
+lender_name: Falgu Merchant Bank (synthetic)
+responses:
+  fee_waiver_v1:
+    processing_fee_share_kept: '0'
+    reply_text: We agree to waive the processing fee in full.
+    type: full_waiver

@@ -1,7 +1,9 @@
 # CredAssure — Progress (Claude Code reads this first and updates it last)
 
 ## Current phase
-Phase 1 — done (2026-11-05). Next: Phase 2, which needs a go. ADR 0018 (AgentResult, including `agent_version` and `tenant_id`) is Proposed and not frozen. Accept it before G1. Case-table `tenant_id` stays scope #27 in Phase 5.
+Phase 2 is done (2026-11-05). Next is Phase 3: eval set, independent gold and baseline. Two things are still open:
+- **ADR 0018 freeze (human):** ADR 0018 (AgentResult, including `agent_version` and `tenant_id`) is Proposed and not frozen. Accept it before G1.
+- **Corpus shortfall (M1):** the corpus is short of the ≥400 real-document target. See open questions.
 
 ## Gates
 - [ ] G1 (end Week 1): test set + 40 retrieval queries frozen; synthetic data v1; baseline S1–S3; AgentResult frozen; endpoint limits confirmed
@@ -18,9 +20,30 @@ Phase 1 — done (2026-11-05). Next: Phase 2, which needs a go. ADR 0018 (AgentR
 | 0b Monorepo | done | ADR-0005; #46 ports skeleton; #53 import-linter | phase-0b | 52 tests; make check green. security-reviewer and brd-conformance: no MUST. #27, breaking-diff half of #28, and #29 stay later phases |
 | 1 Contract | done | VER-01, BR-05; #8 #9 #21 schema #24 #25 field #26 #32 #46 ADR | phase-1 | 149 tests. Money auditor and security reviewer: no MUST. BRD: the Phase 0b retry route stays HTTP 501; the retry behaviour is Phase 9. ADR 0018 Proposed. E4 critic half waits for Phase 9d |
 | 1 gap fix | done | VER-01, BRD §10 | phase-1-fix | Normaliser `find_all` (free-text scan with spans, `kind`), signed money/rates; RBI PDF untracked; REPO_STRUCTURE env templates point to deploy/env |
+| 2 Data | done | BR-01, BR-14, BRD §10, scope #14; S01–S06, S18–S20, S22 | phase-2 | 393 files in `data/frozen/v1`, byte-identical (SHA256SUMS + test). See note below |
 | UI U0–U6 | todo | UI-01..09 | | React lane |
 
+## Phase 2 note
+- **Plants:** all at or above the DATA_SPEC minimums (PLANTS.md). An independent recompute in `data/generators/tests` checks every case's need, plus an LW-09 cash overlay of every offer.
+- **Reviews:** money-auditor found one MUST: eligible offers were sized at the exact need, so they were unaffordable. Fixed: principal is now need + 10%, rounded up to ₹1 lakh. brd-conformance passed with M1 below.
+- **Corpus:** 69 manifest entries. A real download (2026-11-05) extracted 51. The lock file is `data/corpus/manifest.lock.json`; raw files and text are gitignored.
+
 ## Open questions (owner, date)
+- **M1 corpus shortfall (Copilot owner [Name 6]):** the deadline is the G1 corpus freeze; G2 (≥500 indexed) is the hard stop.
+  - Targets are ≥400 real documents (prompts/04), 320–380 public (DATA_SPEC §6) and ≥500 indexed at G2. The manifest has 69 public entries; 51 downloaded.
+  - Even if all 69 download, the total is 69 + 135 KFS + 62 policies = 266.
+  - The cheapest way to grow is the `rbi_circulars_hist` and `cgtmse` collections (RESOURCES §6).
+  - The 18 entries that failed need a URL fix: 4 "pdf" URLs serve HTML, plus 403 errors, timeouts and robots blocks (see the lock file).
+- **Conventions Phase 3 gold and Phase 4 engines must match:** these are written in the generator headers, `cases.py` and `offers.py`.
+  - Receivables count in their expected week.
+  - Mitigations are never inflows.
+  - Moratorium interest is serviced monthly.
+  - Charge timing: annual charges fall at months 0, 12, …; CGTMSE is paid in year 1 at disbursal.
+  - Eligible = no missing term, no mismatch, not unaffordable, not late or short.
+  - Confirm them, or write an ADR.
+- **Phase 3 must confirm every offer tag in PLANTS.md against independent gold before the FROZEN marker (S6).**
+- **`data/frozen/v1/_design/designs.json` is design intent.** Gold must not read it; add a Phase 3 test for that.
+- **Not yet assigned to a phase:** S07 negotiation templates, S09 chat-intent examples (~60), S11 banned phrases, S13 report templates.
 - Course endpoint context window, JSON/guided-decoding support, token quota (confirm day 2). Local Ollama is settled: `llama3.1:8b`, context 8192, guided JSON off until Phase 6 probes it (ADR 0017).
 - Owner names for [Name 1]…[Name 6] and UI lead; replace `@credassure-owner-*` placeholders in `.github/CODEOWNERS`
 - Before G1 (from the 5 Nov web check, docs/DATA_RESOURCES.md "Verification status"):
@@ -64,4 +87,5 @@ Phase 1 — done (2026-11-05). Next: Phase 2, which needs a go. ADR 0018 (AgentR
 - #24 Agent registry and data-access matrix (`agents/registry.yaml`, `packages/tools` authorize)
 - #25 `agent_version` field on AgentResult. Retry route stays in Phase 9. Freeze is ADR 0018, still Proposed
 - #26 Excluded multi-agent patterns (ADR 0009)
+- #14 Corpus legal-basis audit (`make corpus-audit`, `credassure.datagen.corpus`; throttled downloader `make corpus-download`)
 - #32 Error catalogue (`ApiErrorCode`). HTTP behaviour of the 501 routes is unchanged

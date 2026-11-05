@@ -1,0 +1,41 @@
+{
+  "annual_rate": "0.1215",
+  "benchmark": null,
+  "disbursal_date": "2026-11-18",
+  "fees": [
+    {
+      "basis": "pct_of_principal",
+      "gst_applicable": true,
+      "name": "Processing fee",
+      "timing": "upfront",
+      "value": "0.0089"
+    }
+  ],
+  "first_repayment_date": "2027-04-18",
+  "guarantee": {
+    "annual_fee_pct": "0.0085",
+    "basis": "y1_guaranteed_then_outstanding",
+    "gst_applicable": false,
+    "passed_to_borrower": true,
+    "scheme": "CGTMSE"
+  },
+  "insurance": null,
+  "kfs_doc_id": "KFS-OF-08-A-v1",
+  "lender_id": "L06",
+  "lender_name": "Falgu Merchant Bank (synthetic)",
+  "moratorium_months": 4,
+  "offer_id": "OF-08-A",
+  "prepayment_terms": "0% of the principal prepaid (R-BANK-03 range)",
+  "principal": "17600000",
+  "product": "wc_term_loan",
+  "rate_type": "fixed",
+  "repayment": {
+    "frequency": "monthly",
+    "method": "emi"
+  },
+  "schema_version": "1.0",
+  "spread": null,
+  "stated_instalment": "1354690",
+  "tenure_months": 18,
+  "version": 1
+}

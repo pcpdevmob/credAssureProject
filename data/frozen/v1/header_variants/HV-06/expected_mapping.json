@@ -1,0 +1,13 @@
+{
+  "base_case": "CA-2026-0002",
+  "expected_status": "GO",
+  "file": "receivables.csv",
+  "mapping": {
+    "Amount (INR)": "amount",
+    "Due Week": "due_week",
+    "Expected Week": "expected_week",
+    "Inv No": "invoice_id",
+    "Party": "customer"
+  },
+  "variant_id": "HV-06"
+}
