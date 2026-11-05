@@ -20,9 +20,14 @@ All network access goes through one `Gate`:
 - **Respect the site:** robots.txt is honoured (matched on the product token `CredAssure-capstone`). If robots.txt
   can't be fetched (5xx or a block), the site is treated as disallowed.
 - **Pace:** one request per second, including the robots.txt fetch and each form page.
-- **Identify ourselves:** the User-Agent is `CredAssure-capstone/1.0 (IIT KGP academic project; contact: <team email>)`.
-  The email is read from settings (`CORPUS_CONTACT_EMAIL` in `.env`), never hard-coded. Network commands refuse to start
-  without it.
+- **Identify ourselves:** the User-Agent always names the product and purpose, and adds a contact when one is configured
+  (amended 2026-11-06; contact is optional):
+  - `CORPUS_CONTACT_EMAIL` set: `CredAssure-capstone/1.0 (IIT KGP academic project; contact: <email>)`;
+  - else `CORPUS_CONTACT_URL` set: `CredAssure-capstone/1.0 (IIT KGP academic project; +<url>)`;
+  - else: `CredAssure-capstone/1.0 (IIT KGP academic project)`.
+
+  Both values come from settings (`.env`), never hard-coded. A value that is set but malformed (not an email, not an
+  http(s) URL) stops the run, so a typo is never sent. The product token for robots.txt matching is unchanged.
 - **Stop on a block:** 403, 418, 429, 444 or a bot-challenge page stops that host for the rest of the run, and its
   documents move to `MANUAL_DOWNLOADS.md`. These hosts are never retried.
 - **One retry only:** a 502/503/504 or a connection error gets exactly one retry, no sooner than 24 hours later. The

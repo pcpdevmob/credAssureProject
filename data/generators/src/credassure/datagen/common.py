@@ -30,21 +30,25 @@ WEEK1 = AS_OF_DATE + timedelta(days=(7 - AS_OF_DATE.weekday()) % 7 or 7)
 WEEKS = 26
 UA_PRODUCT = "CredAssure-capstone"  # robots.txt rules are matched on this token (ADR 0020)
 _EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+_URL = re.compile(r"^https?://[^\s()]+$")
 
 
-def contact_email() -> str:
-    """The team contact address for the User-Agent, from settings (env CORPUS_CONTACT_EMAIL)."""
-    email = os.environ.get("CORPUS_CONTACT_EMAIL", "").strip()
-    if not _EMAIL.match(email):
-        raise SystemExit(
-            "Set CORPUS_CONTACT_EMAIL in .env to the team contact address before any network run "
-            "(ADR 0020: scripted fetches identify a contactable sender)."
-        )
-    return email
+def _setting(name: str, pattern: re.Pattern[str], what: str) -> str | None:
+    value = os.environ.get(name, "").strip()
+    if value and not pattern.match(value):
+        raise SystemExit(f"{name} is set but is not {what}; fix it or leave it empty (ADR 0020).")
+    return value or None
 
 
 def user_agent() -> str:
-    return f"{UA_PRODUCT}/1.0 (IIT KGP academic project; contact: {contact_email()})"
+    """ADR 0020 User-Agent. Contact is optional: CORPUS_CONTACT_EMAIL wins, then CORPUS_CONTACT_URL,
+    else the bare product string. A value that is set but malformed stops the run."""
+    base = f"{UA_PRODUCT}/1.0 (IIT KGP academic project"
+    if email := _setting("CORPUS_CONTACT_EMAIL", _EMAIL, "an email address"):
+        return f"{base}; contact: {email})"
+    if url := _setting("CORPUS_CONTACT_URL", _URL, "an http(s) URL"):
+        return f"{base}; +{url})"
+    return f"{base})"
 
 
 LAKH = 100_000

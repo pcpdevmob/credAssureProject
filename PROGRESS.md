@@ -158,8 +158,7 @@ owner      assigned imported pending
   - **Held back:** 54 rows on hosts awaiting their 2026-11-06 one-time retry are left off the list until the retry result is recorded.
   - **Reachable:** 288 available + 237 pending + 23 awaiting dates = 548 against the 500 target.
 - **Before the next corpus network run (incl. the scheduled 2026-11-06 retry run):**
-  - Set `CORPUS_CONTACT_EMAIL` in `.env` to the team contact address. Harvest and download refuse to start without it (ADR 0020).
-  - Add `CORPUS_CONTACT_EMAIL=` to `.env.example`; Claude's permissions block editing that file.
+  - Optional (ADR 0020, amended 2026-11-06): set `CORPUS_CONTACT_EMAIL` or `CORPUS_CONTACT_URL` in `.env` to add a contact to the User-Agent. Without either, runs use `CredAssure-capstone/1.0 (IIT KGP academic project)`.
 - **Host terms (ADR 0020):** 44 hosts have no terms of use recorded (`automated_access: unknown`).
   - Owners are listed in `MANUAL_DOWNLOADS.md` ("Hosts missing terms").
   - Mark a host `restricted` if its terms forbid automated access; the script then never fetches from it.

@@ -16,14 +16,27 @@ from credassure.datagen.harvest import ensure_hosts, hosts_missing_terms, restri
 TODAY = date(2026, 11, 5)
 
 
-def test_ADR0020_user_agent_comes_from_settings(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_ADR0020_user_agent_contact_is_optional(monkeypatch: pytest.MonkeyPatch) -> None:
+    base = "CredAssure-capstone/1.0 (IIT KGP academic project"
+    monkeypatch.delenv("CORPUS_CONTACT_EMAIL", raising=False)
+    monkeypatch.delenv("CORPUS_CONTACT_URL", raising=False)
+    assert user_agent() == f"{base})"
+    monkeypatch.setenv("CORPUS_CONTACT_URL", "https://github.com/example/credassure")
+    assert user_agent() == f"{base}; +https://github.com/example/credassure)"
     monkeypatch.setenv("CORPUS_CONTACT_EMAIL", "team@example.org")
-    assert (
-        user_agent()
-        == "CredAssure-capstone/1.0 (IIT KGP academic project; contact: team@example.org)"
-    )
-    monkeypatch.setenv("CORPUS_CONTACT_EMAIL", "")
-    with pytest.raises(SystemExit):
+    assert user_agent() == f"{base}; contact: team@example.org)"  # email wins over URL
+
+
+@pytest.mark.parametrize(
+    ("name", "value"),
+    [("CORPUS_CONTACT_EMAIL", "not-an-email"), ("CORPUS_CONTACT_URL", "ftp://x")],
+)
+def test_ADR0020_malformed_contact_stops_the_run(
+    monkeypatch: pytest.MonkeyPatch, name: str, value: str
+) -> None:
+    monkeypatch.delenv("CORPUS_CONTACT_EMAIL", raising=False)
+    monkeypatch.setenv(name, value)
+    with pytest.raises(SystemExit, match=name):
         user_agent()
 
 
