@@ -64,6 +64,25 @@ services:
     depends_on:
       ollama: {condition: service_healthy}
 
+  corpus:
+    # Corpus fetch/import/ingest tools (ADR 0020): non-root, read-only root filesystem, no capabilities,
+    # only data/corpus writable. CORPUS_CONTACT_EMAIL comes from .env. Usage: make corpus-docker-download
+    profiles: [tools]
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.corpus
+    env_file:
+      - path: ../../.env
+        required: false
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 1g
+    cpus: 1.0
+    volumes:
+      - ../../data/corpus:/app/data/corpus
+
 volumes:
   credassure_data:
   ollama_models:

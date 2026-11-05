@@ -3,10 +3,12 @@ PY_SRC := apps/gateway/src $(wildcard agents/*/src) \
 	$(filter-out packages/api-client/src,$(wildcard packages/*/src)) evaluation/src \
 	data/generators/src
 COMPOSE := docker compose -f deploy/compose/compose.yaml
+# Settings for corpus network runs (CORPUS_CONTACT_EMAIL, ADR 0020) come from .env when it exists.
+ENV_FILE := $(if $(wildcard .env),--env-file .env,)
 PNPM := $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo "npx --yes pnpm@9.15.0")
 
 .PHONY: help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
-        demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-export compose-dev compose-test compose-demo langfuse-env-check \
+        demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore
 
 help:  ## List targets
@@ -97,10 +99,10 @@ corpus-audit:  ## Legal-basis and schema audit of data/corpus/manifest.yaml (sco
 	uv run python -m credassure.datagen.harvest audit
 
 corpus-harvest:  ## Harvest script sources' index pages into manifest entries (network, 1 req/s)
-	uv run python -m credassure.datagen.harvest harvest
+	uv run $(ENV_FILE) python -m credassure.datagen.harvest harvest
 
 corpus-download:  ## Download pending script entries; blocked hosts go to MANUAL_DOWNLOADS.md (network)
-	uv run python -m credassure.datagen.harvest download
+	uv run $(ENV_FILE) python -m credassure.datagen.harvest download
 
 corpus-import:  ## Ingest files saved by hand in data/corpus/raw/ (<doc_id>.pdf|html), then audit
 	uv run python -m credassure.datagen.harvest import
@@ -117,11 +119,16 @@ corpus-dates:  ## Extract effective dates for available docs; write DATE_REVIEW.
 corpus-export:  ## Write data/corpus/CORPUS_INDEX.md and .xlsx (one row per manifest entry + summary)
 	uv run python -m credassure.datagen.harvest export
 
+corpus-docker-%:  ## Run a corpus target in the hardened container, e.g. make corpus-docker-download (ADR 0020)
+	$(COMPOSE) --profile tools run --rm corpus make corpus-$*
+
 corpus-status:  ## One screen: real available vs 500, by source and owner; also regenerates CORPUS_INDEX.md/.xlsx
 	uv run python -m credassure.datagen.harvest status
 
 corpus-report:  ## Real corpus table: planned, available, manual pending, distance to 500
 	uv run python -m credassure.datagen.harvest report
+
+corpus-ingest: ingest  ## Alias so `make corpus-docker-ingest` runs Phase 7 ingestion in the container
 
 ingest:  ## Download, hash and index the corpus (Phase 7)
 	@echo "ingest: not implemented until Phase 7"; exit 1

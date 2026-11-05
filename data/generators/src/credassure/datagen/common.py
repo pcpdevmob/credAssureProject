@@ -10,6 +10,7 @@ import io
 import json
 import os
 import random
+import re
 from collections.abc import Iterable, Sequence
 from datetime import date, timedelta
 from decimal import Decimal
@@ -27,6 +28,25 @@ AS_OF_DATE = date.fromisoformat(os.environ.get("AS_OF_DATE", "2026-11-15"))
 # Week 1 starts on the Monday after AS_OF_DATE (2026-11-16 by default).
 WEEK1 = AS_OF_DATE + timedelta(days=(7 - AS_OF_DATE.weekday()) % 7 or 7)
 WEEKS = 26
+UA_PRODUCT = "CredAssure-capstone"  # robots.txt rules are matched on this token (ADR 0020)
+_EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+
+def contact_email() -> str:
+    """The team contact address for the User-Agent, from settings (env CORPUS_CONTACT_EMAIL)."""
+    email = os.environ.get("CORPUS_CONTACT_EMAIL", "").strip()
+    if not _EMAIL.match(email):
+        raise SystemExit(
+            "Set CORPUS_CONTACT_EMAIL in .env to the team contact address before any network run "
+            "(ADR 0020: scripted fetches identify a contactable sender)."
+        )
+    return email
+
+
+def user_agent() -> str:
+    return f"{UA_PRODUCT}/1.0 (IIT KGP academic project; contact: {contact_email()})"
+
+
 LAKH = 100_000
 CRORE = 10_000_000
 

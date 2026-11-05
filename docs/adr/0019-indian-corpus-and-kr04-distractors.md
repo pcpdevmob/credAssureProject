@@ -9,6 +9,9 @@ or non-Indian rule cited as current"). Foreign documents add licence and relevan
 actually gets wrong: citing a rule that exists in India but does not apply to this case.
 
 ## Decision
+The acquisition rules (robots, pace, identification, blocks, retries, terms of use, ingestion safety) are consolidated in
+ADR 0020, which governs where the two differ.
+
 1. **Corpus scope.** Real documents come only from Indian public sources (16 sources, target 750, in
    `data/corpus/sources.yaml` and `docs/data/DATA_RESOURCES.md`). Legal bases are L1–L4; L6 is removed. Court judgments are L2
    (Copyright Act s.52(1)(q)(iv)). Synthetic KFS and policy documents (L5) are extra and never count toward 500.

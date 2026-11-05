@@ -29,7 +29,7 @@ from urllib.robotparser import RobotFileParser
 import httpx
 from pypdf import PdfReader
 
-from .common import REPO, write_text
+from .common import REPO, UA_PRODUCT, write_text
 
 CORPUS = REPO / "data" / "corpus"
 BASES = {"L1", "L2", "L3", "L4"}  # real documents only; L5 is synthetic, L6 was removed (ADR 0019)
@@ -50,10 +50,12 @@ REQUIRED = (
     "method",
 )
 OK = {"ok", "ok_manual"}
-DROPPED = frozenset({"rejected_no_text", "skipped_pre_2015"})  # never counted, never manual work
+DROPPED = frozenset(
+    {"rejected_no_text", "skipped_pre_2015", "rejected_too_large"}
+)  # never counted, never manual work
 PENDING = "PENDING"
 MAX_DOCUMENTS = 2_000
-USER_AGENT = "CredAssure-capstone-corpus/0.1 (academic research; throttled 1 req/s)"
+MAX_PAGES = 500  # text extraction reads at most this many PDF pages (ADR 0020 ingestion safety)
 BLOCK_STATUS = {403, 418, 429, 444}  # permanent: never retried
 RETRY_STATUS = {502, 503, 504}  # transient: one retry no sooner than 24 h (ADR 0019)
 MAX_RAW_BYTES = 20 * 1024 * 1024
@@ -109,6 +111,11 @@ def audit(
             errors.append(f"{doc_id}: superseded_by {d['superseded_by']} is not in the manifest")
         if d.get("title") == PENDING:
             warnings.append(f"{doc_id}: manual slot not filled yet")
+    for host, terms in (manifest.get("hosts") or {}).items():
+        if terms.get("automated_access") not in {"allowed", "restricted", "unknown"}:
+            errors.append(f"host {host}: automated_access must be allowed, restricted or unknown")
+        elif not (terms.get("terms_url") and terms.get("terms_note")):
+            warnings.append(f"host {host}: terms of use not recorded yet")
     for path in tracked:
         under_corpus = path.startswith(("data/corpus/raw/", "data/corpus/text/"))
         if under_corpus or (path.lower().endswith(".pdf") and path.startswith(("docs/", "data/"))):
@@ -142,7 +149,8 @@ def extract_text(body: bytes, fmt: str) -> str:
     if fmt == "pdf":
         try:
             reader = PdfReader(BytesIO(body))
-            text = "\n".join((page.extract_text() or "") for page in reader.pages).strip()
+            pages = reader.pages[:MAX_PAGES]  # pypdf text extraction only: no rendering, no OCR
+            text = "\n".join((page.extract_text() or "") for page in pages).strip()
             return text if len(text) >= MIN_PDF_TEXT else ""
         except Exception:
             return ""
@@ -155,10 +163,15 @@ class Gate:
     """Polite access to one run's hosts. Returns a response, or a reason string when it refuses."""
 
     def __init__(
-        self, client: httpx.Client, manual_hosts: set[str], sleep: Callable[[float], None]
+        self,
+        client: httpx.Client,
+        manual_hosts: set[str],
+        sleep: Callable[[float], None],
+        restricted_hosts: set[str] | None = None,
     ) -> None:
         self.client = client
         self.manual_hosts = manual_hosts
+        self.restricted_hosts = restricted_hosts or set()  # terms restrict automated access
         self.sleep = sleep
         self.robots: dict[str, RobotFileParser] = {}
         self.blocked: dict[str, str] = {}
@@ -184,24 +197,29 @@ class Gate:
         return self.robots[root]
 
     def get(self, url: str, form: dict[str, str] | None = None) -> httpx.Response | str:
-        """GET ``url``, or submit the page's own HTML form fields (``form``) by POST."""
+        """GET ``url``, or submit the page's own HTML form fields (``form``) by POST. The body is
+        streamed and abandoned past MAX_RAW_BYTES ("too_large")."""
         host = urlsplit(url).hostname or ""
         if host in self.manual_hosts:
             return "manual_host"
+        if host in self.restricted_hosts:
+            return "terms restrict automated access"
         if host in self.blocked:
             return f"host_blocked: {self.blocked[host]}"
         robots = self._robots(url)
         if isinstance(robots, str):
             self.blocked[host] = robots
             return f"host_blocked: {robots}"
-        if not robots.can_fetch(USER_AGENT, url):
+        if not robots.can_fetch(UA_PRODUCT, url):
             return "robots_disallowed"
         self.sleep(1.0)
         try:
-            response = self.client.post(url, data=form) if form else self.client.get(url)
+            response = self._fetch(url, form)
         except httpx.HTTPError as exc:  # connection, TLS or timeout: stop the host, never retry
             self.blocked[host] = f"error: {type(exc).__name__}"
             return f"host_blocked: {self.blocked[host]}"
+        if isinstance(response, str):
+            return response
         if response.status_code in BLOCK_STATUS | RETRY_STATUS:
             self.blocked[host] = f"http_{response.status_code}"
             return f"host_blocked: {self.blocked[host]}"
@@ -212,6 +230,24 @@ class Gate:
                 return "host_blocked: bot_challenge"
         self.fetched[host] = self.fetched.get(host, 0) + 1
         return response
+
+    def _fetch(self, url: str, form: dict[str, str] | None) -> httpx.Response | str:
+        method = "POST" if form else "GET"
+        with self.client.stream(method, url, data=form) as response:
+            declared = int(response.headers.get("content-length") or 0)
+            if declared > MAX_RAW_BYTES:
+                return "too_large"
+            body = bytearray()
+            for chunk in response.iter_bytes():
+                body += chunk
+                if len(body) > MAX_RAW_BYTES:
+                    return "too_large"
+            return httpx.Response(
+                response.status_code,
+                headers=response.headers,
+                content=bytes(body),
+                request=response.request,
+            )
 
 
 def retryable(reason: str) -> bool:
@@ -232,8 +268,10 @@ def _store(
         "raw_file": f"{doc_id}.{fmt}",
     }
     text = extract_text(body, fmt)
-    if not text:
-        return {**record, "status": "rejected_no_text"}
+    if not text:  # quarantined: kept for the audit trail, never parsed again
+        (out / "quarantine").mkdir(parents=True, exist_ok=True)
+        (out / "quarantine" / record["raw_file"]).write_bytes(body)
+        return {**record, "status": "rejected_no_text", "quarantine_file": record.pop("raw_file")}
     (out / "raw").mkdir(parents=True, exist_ok=True)
     raw = out / "raw" / record["raw_file"]
     if not raw.exists() or raw.read_bytes() != body:
@@ -277,8 +315,12 @@ def download(
             continue
         response = gate.get(d["source_url"])
         if isinstance(response, str):
-            status = "pending_manual" if response != "robots_disallowed" else "robots_disallowed"
-            lock[doc_id] = {**base, "status": status, "reason": response}
+            status = {
+                "robots_disallowed": "robots_disallowed",
+                "too_large": "rejected_too_large",
+            }.get(response, "pending_manual")
+            reason = "larger than 20 MB, not stored" if response == "too_large" else response
+            lock[doc_id] = {**base, "status": status, "reason": reason}
         elif response.status_code != 200:
             lock[doc_id] = {
                 **base,
@@ -353,10 +395,7 @@ def import_raw(
         }
         lock[path.stem] = _store(path.stem, body, fmt, out, record, "ok_manual")
         if lock[path.stem]["status"] == "rejected_no_text":
-            (out / "raw" / "rejected").mkdir(
-                exist_ok=True
-            )  # keep the owner's file; OCR is out of scope
-            path.rename(out / "raw" / "rejected" / path.name)
+            path.unlink()  # _store quarantined a copy; OCR is out of scope
     return errors
 
 

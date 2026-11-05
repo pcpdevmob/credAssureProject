@@ -17,6 +17,7 @@ chroma/
 # Corpus raw and extracted text are never committed (BRD §10, L3/L4)
 data/corpus/raw/
 data/corpus/text/
+data/corpus/quarantine/
 data/corpus/manifest.lock.yaml
 
 # Python

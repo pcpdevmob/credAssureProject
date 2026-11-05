@@ -580,6 +580,59 @@ Tiers: T1 RBI Master Directions, RBI FAQs/rates/press releases, CGTMSE replaceme
 | T6 | R-TREDS-011 | raw/R-TREDS-011.html | 12: pick from index | https://www.rxil.in/ | beyond what the script could reach |
 | T6 | R-TREDS-013 | raw/R-TREDS-013.html | 12: pick from index | https://www.rxil.in/ | beyond what the script could reach |
 
+## Hosts missing terms of use (ADR 0020)
+
+Open the host's terms of use / copyright / hyperlinking policy page and fill, in `data/corpus/manifest.yaml`
+under `hosts:`, `terms_url`, `terms_note` (does it allow automated access? any reuse limits?) and
+`automated_access: allowed | restricted`. A `restricted` host is never fetched by script again.
+
+| Host | Documents | Owner | automated_access |
+|---|---|---|---|
+| bandhan.bank.in | 24 | [Name 5] | unknown |
+| bankofbaroda.bank.in | 2 | [Name 2] | unknown |
+| cbic-gst.gov.in | 69 | [Name 4] | unknown |
+| cgtmse.in | 3 | [Name 4] | unknown |
+| dcmsme.gov.in | 1 | [Name 1] | unknown |
+| di.maharashtra.gov.in | 20 | [Name 4] | unknown |
+| egazette.gov.in | 35 | [Name 1] | unknown |
+| gstcouncil.gov.in | 35 | [Name 2] | unknown |
+| indianbank.bank.in | 1 | [Name 3] | unknown |
+| indianbank.in | 1 | [Name 4] | unknown |
+| msme.gov.in | 18 | [Name 1] | unknown |
+| pnb.bank.in | 1 | [Name 6] | unknown |
+| rbi.org.in | 118 | [Name 1] | unknown |
+| sahamati.org.in | 1 | [Name 2] | unknown |
+| samadhaan.msme.gov.in | 1 | [Name 3] | unknown |
+| sansad.in | 50 | [Name 3] | unknown |
+| sbi.bank.in | 2 | [Name 5] | unknown |
+| sbi.co.in | 2 | [Name 2] | unknown |
+| tatacapital.com | 1 | [Name 1] | unknown |
+| udyamregistration.gov.in | 18 | [Name 6] | unknown |
+| website.rbi.org.in | 4 | [Name 6] | unknown |
+| www.axis.bank.in | 1 | [Name 4] | unknown |
+| www.bajajfinserv.in | 1 | [Name 5] | unknown |
+| www.canarabank.bank.in | 1 | [Name 6] | unknown |
+| www.cgtmse.in | 395 | [Name 4] | unknown |
+| www.data.gov.in | 2 | [Name 4] | unknown |
+| www.hdfc.bank.in | 1 | [Name 3] | unknown |
+| www.icici.bank.in | 1 | [Name 4] | unknown |
+| www.idfcfirst.bank.in | 1 | [Name 5] | unknown |
+| www.incometaxindia.gov.in | 5 | [Name 6] | unknown |
+| www.indiacode.nic.in | 5 | [Name 5] | unknown |
+| www.indianbank.in | 1 | [Name 2] | unknown |
+| www.invoicemart.com | 1 | [Name 3] | unknown |
+| www.kotak.bank.in | 1 | [Name 4] | unknown |
+| www.m1xchange.com | 11 | [Name 1] | unknown |
+| www.meity.gov.in | 2 | [Name 6] | unknown |
+| www.mudra.org.in | 15 | [Name 4] | unknown |
+| www.ncgtc.in | 25 | [Name 1] | unknown |
+| www.rbi.org.in | 118 | [Name 5] | unknown |
+| www.rxil.in | 2 | [Name 6] | unknown |
+| www.sci.gov.in | 25 | [Name 1] | unknown |
+| www.sidbi.in | 40 | [Name 6] | unknown |
+| www.udyamregistration.gov.in | 1 | [Name 1] | unknown |
+| www.unionbankofindia.bank.in | 1 | [Name 2] | unknown |
+
 ## Rejected (no text layer; replacement slots listed above)
 
 - R-BANK-04: https://indianbank.in/wp-content/uploads/2018/11/Service-Charge-for-MSME-Products-1.pdf

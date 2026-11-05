@@ -1,0 +1,16 @@
+# Corpus tools image (ADR 0020): harvest, download, import, verify, status and the Phase 7 `make ingest`.
+# Non-root. The compose `corpus` service adds a read-only root filesystem, no capabilities, no new
+# privileges and resource limits; only data/corpus is writable. Base images are pinned by digest in
+# Phase 12 (scope #41).
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends make \
+    && apt-get clean \
+    && useradd --create-home --uid 10002 corpus
+WORKDIR /app
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=never UV_NO_SYNC=1 \
+    UV_CACHE_DIR=/tmp/uv-cache PATH="/app/.venv/bin:$PATH"
+COPY --chown=corpus:corpus . .
+RUN uv sync --frozen --no-dev --package credassure-datagen && chown -R corpus:corpus /app/.venv
+USER corpus
+CMD ["make", "corpus-status"]

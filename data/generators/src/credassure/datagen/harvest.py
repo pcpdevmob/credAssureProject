@@ -29,13 +29,12 @@ from urllib.parse import urljoin, urlsplit
 import httpx
 import yaml
 
-from .common import OUT, dumps_json, read_yaml, write_text
+from .common import OUT, dumps_json, read_yaml, user_agent, write_text
 from .corpus import (
     CORPUS,
     DROPPED,
     OK,
     PENDING,
-    USER_AGENT,
     Gate,
     audit,
     download,
@@ -321,6 +320,62 @@ def ensure_slots(
     return added
 
 
+ACCESS = ("allowed", "restricted", "unknown")
+
+
+def ensure_hosts(manifest: dict[str, Any]) -> int:
+    """Add every host in the manifest to its ``hosts`` terms map as ``unknown``; never overwrite."""
+    hosts = manifest.setdefault("hosts", {})
+    added = 0
+    for d in manifest["documents"]:
+        host = urlsplit(d["source_url"]).hostname or ""
+        if host and host not in hosts:
+            hosts[host] = {"terms_url": None, "terms_note": None, "automated_access": "unknown"}
+            added += 1
+    manifest["hosts"] = dict(sorted(hosts.items()))
+    return added
+
+
+def restricted_hosts(manifest: dict[str, Any]) -> set[str]:
+    return {
+        h for h, t in manifest.get("hosts", {}).items() if t.get("automated_access") == "restricted"
+    }
+
+
+def hosts_missing_terms(manifest: dict[str, Any], lock: dict[str, dict[str, Any]]) -> list[str]:
+    """Rows for MANUAL_DOWNLOADS.md: hosts whose terms of use nobody has recorded yet."""
+    rows: list[str] = []
+    for host, terms in sorted(manifest.get("hosts", {}).items()):
+        if terms.get("terms_url") and terms.get("terms_note"):
+            continue
+        docs = [d for d in manifest["documents"] if urlsplit(d["source_url"]).hostname == host]
+        owners = [
+            str(lock[d["doc_id"]]["owner"]) for d in docs if lock.get(d["doc_id"], {}).get("owner")
+        ]
+        owner = (
+            max(sorted(set(owners)), key=owners.count)
+            if owners
+            else OWNERS[len(rows) % len(OWNERS)]
+        )
+        rows.append(
+            f"| {host} | {len(docs)} | {owner} | {terms.get('automated_access', 'unknown')} |"
+        )
+    if not rows:
+        return []
+    return [
+        "## Hosts missing terms of use (ADR 0020)",
+        "",
+        "Open the host's terms of use / copyright / hyperlinking policy page and fill, in `data/corpus/manifest.yaml`",
+        "under `hosts:`, `terms_url`, `terms_note` (does it allow automated access? any reuse limits?) and",
+        "`automated_access: allowed | restricted`. A `restricted` host is never fetched by script again.",
+        "",
+        "| Host | Documents | Owner | automated_access |",
+        "|---|---|---|---|",
+        *rows,
+        "",
+    ]
+
+
 def _todo(manifest: dict[str, Any], lock: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
     """Manual work only: the script's own download queue (status ``pending``) is not listed."""
     return [
@@ -423,6 +478,7 @@ def manual_markdown(manifest: dict[str, Any], lock: dict[str, dict[str, Any]]) -
                 f"| T{tier(d)} | {d['doc_id']} | raw/{d['doc_id']}.{'html' if rbi_html(d) else d['format']} | {d['source']}: {what} | {d['source_url']} | {why} |"
             )
         lines.append("")
+    lines += hosts_missing_terms(manifest, lock)
     if rejected:
         lines += ["## Rejected (no text layer; replacement slots listed above)", ""]
         lines += [f"- {d['doc_id']}: {d['source_url']}" for d in rejected]
@@ -585,9 +641,12 @@ def main(argv: list[str] | None = None) -> int:
     import_errors: list[str] = []
     manual_hosts = set(sources["manual_hosts"])
     if command in {"harvest", "download"}:
-        headers = {"User-Agent": USER_AGENT}
+        headers = {"User-Agent": user_agent()}  # contactable sender, from settings (ADR 0020)
+        print(
+            "Notice (ADR 0020): run corpus fetches from a personal machine and network, not an employer network."
+        )
         with httpx.Client(headers=headers, timeout=30.0, follow_redirects=True) as client:
-            gate = Gate(client, manual_hosts, time.sleep)
+            gate = Gate(client, manual_hosts, time.sleep, restricted_hosts(manifest))
             now = datetime.now(UTC)
             due = prepare_hosts(lock, gate, now)
             if command == "harvest":
@@ -631,6 +690,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if command in {"harvest", "download", "import", "manual", "dates"}:
         print(f"{ensure_slots(sources, manifest, lock)} manual slots added")
+        ensure_hosts(manifest)
         write_text(MANUAL, manual_markdown(manifest, lock))  # assigns owners into the lock
         save(manifest, lock)
     if command in {"report", "harvest", "download", "import"}:

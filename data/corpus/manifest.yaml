@@ -15192,3 +15192,180 @@ documents:
   applies_to: all
   method: script
   date_source: pdf_metadata
+hosts:
+  bandhan.bank.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  bankofbaroda.bank.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  cbic-gst.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  cgtmse.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  dcmsme.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  di.maharashtra.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  egazette.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  gstcouncil.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  indianbank.bank.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  indianbank.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  msme.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  pnb.bank.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  rbi.org.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  sahamati.org.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  samadhaan.msme.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  sansad.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  sbi.bank.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  sbi.co.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  tatacapital.com:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  udyamregistration.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  website.rbi.org.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.axis.bank.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.bajajfinserv.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.canarabank.bank.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.cgtmse.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.data.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.hdfc.bank.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.icici.bank.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.idfcfirst.bank.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.incometaxindia.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.indiacode.nic.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.indianbank.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.invoicemart.com:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.kotak.bank.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.m1xchange.com:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.meity.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.mudra.org.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.ncgtc.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.rbi.org.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.rxil.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.sci.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.sidbi.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.udyamregistration.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.unionbankofindia.bank.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown

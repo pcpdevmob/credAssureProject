@@ -205,7 +205,7 @@ def test_scope14_import_accepts_text_rejects_scans_and_unknown_names(
     assert len(errors) == 3  # PENDING slot, unknown doc_id, wrong extension
     assert (tmp_path / "text" / "R-X-001.txt").exists()
     assert not (raw / "R-X-002.pdf").exists()
-    assert (raw / "rejected" / "R-X-002.pdf").exists()
+    assert (tmp_path / "quarantine" / "R-X-002.pdf").exists()
     assert import_raw(docs, lock, tmp_path, TODAY) == errors  # idempotent
 
 

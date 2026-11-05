@@ -10,7 +10,9 @@ deploy/env/*.env
 *.key
 chroma/
 data/
+!data/generators/
 evaluation/
+!evaluation/pyproject.toml
 docs/
 prompts/
 .claude/
