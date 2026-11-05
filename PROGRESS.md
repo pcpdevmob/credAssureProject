@@ -29,37 +29,53 @@ Phase 2 is done (2026-11-05). Next is Phase 3: eval set, independent gold and ba
 - **Reviews:** money-auditor found one MUST: eligible offers were sized at the exact need, so they were unaffordable. Fixed: principal is now need + 10%, rounded up to ₹1 lakh. brd-conformance passed with M1 below.
 - **Corpus:** 69 manifest entries. A real download (2026-11-05) extracted 51. The lock file is `data/corpus/manifest.lock.json`; raw files and text are gitignored.
 
-## Corpus report (`make corpus-report`, 2026-11-05)
-| # | Source | Real planned | Real available | Manual pending | Basis | Agents |
-|---|---|---|---|---|---|---|
-| 1 | RBI Master Directions (2025 consolidation) | 120 | 6 | 114 | L4 | All |
-| 2 | RBI circulars superseded by the 2025 consolidation (set superseded_by) | 60 | 2 | 58 | L4 | Copilot |
-| 3 | RBI FAQs, lending-rate releases (24 months), MSME press releases, Bulletin/Annual Report chapters | 60 | 8 | 52 | L4 | LendWise, WC, Copilot |
-| 4 | CGTMSE circulars, scheme guidelines, fee pages | 180 | 133 | 47 | L4 | LendWise, Copilot |
-| 5 | NCGTC schemes (ECLGS, CGFMU, CGSSI) guidelines and FAQs | 25 | 0 | 25 | L4 | LendWise, Copilot |
-| 6 | MUDRA / PMMY circulars and FAQs | 15 | 0 | 15 | L4 | Copilot |
-| 7 | Ministry of MSME annual reports and scheme guidelines; Udyam and MSME Samadhaan FAQs | 40 | 2 | 38 | L4 | WC, Copilot |
-| 8 | Gazette notifications (MSME classification, GST rate/exemption, DPDP Rules, MCA MSME Form 1) | 40 | 4 | 36 | L2 | WC, LendWise, Onboarding |
-| 9 | CBIC GST circulars and FAQs on financial services; GST Council press releases | 30 | 19 | 11 | L4 | LendWise, Copilot |
-| 10 | CBDT on s.43B(h) and Income-tax Act 2025 s.37(2)(g); relevant Act chapters | 10 | 0 | 10 | L3 | WC, Copilot |
-| 11 | SIDBI publications and MSME Pulse reports | 20 | 14 | 6 | L4 | WC, Copilot |
-| 12 | TReDS - RBI directions and platform FAQs/rulebooks (RXIL, M1xchange, Invoicemart) | 15 | 9 | 6 | L4 | Copilot |
-| 13 | Bank and NBFC schedules of charges and sample KFS (~20 lenders, current and older) | 40 | 33 | 7 | L4 | LendWise, Copilot |
-| 14 | Lok Sabha / Rajya Sabha answers on MSME credit, CGTMSE, TReDS, delayed payments | 50 | 0 | 50 | L4 | Copilot |
-| 15 | Supreme Court and High Court judgments on the MSMED Act | 25 | 0 | 25 | L2 | Copilot |
-| 16 | State MSME/industrial policies - Maharashtra (home) and other states (KR-04 distractors) | 20 | 0 | 20 | L4 | Copilot |
-| | **Total real** | **750** | **230** | **520** | | |
+## Corpus status (`make corpus-status`, 2026-11-05)
+```
+Real available 175/500 [#################.................................] 325 to go
+Pending 520 | rejected (no text) 181 | needs date 55
 
-Real available: **230**. Distance to 500: **270**. Synthetic KFS and policies are extra and not counted (ADR 0019).
+src avail  pend  rej nodate  name
+  1     6   114    0      0  RBI Master Directions (2025 consolidation)
+  2     2    58    0      0  RBI circulars superseded by the 2025 consolidation (
+  3     7    52    0      1  RBI FAQs, lending-rate releases (24 months), MSME pr
+  4   116    47  178     17  CGTMSE circulars, scheme guidelines, fee pages
+  5     0    25    0      0  NCGTC schemes (ECLGS, CGFMU, CGSSI) guidelines and F
+  6     0    15    0      0  MUDRA / PMMY circulars and FAQs
+  7     1    38    0      1  Ministry of MSME annual reports and scheme guideline
+  8     4    36    0      0  Gazette notifications (MSME classification, GST rate
+  9    14    11    1      5  CBIC GST circulars and FAQs on financial services; G
+ 10     0    10    0      0  CBDT on s.43B(h) and Income-tax Act 2025 s.37(2)(g);
+ 11    11     6    0      3  SIDBI publications and MSME Pulse reports
+ 12     3     6    0      6  TReDS - RBI directions and platform FAQs/rulebooks (
+ 13    11     7    2     22  Bank and NBFC schedules of charges and sample KFS (~
+ 14     0    50    0      0  Lok Sabha / Rajya Sabha answers on MSME credit, CGTM
+ 15     0    25    0      0  Supreme Court and High Court judgments on the MSMED 
+ 16     0    20    0      0  State MSME/industrial policies - Maharashtra (home) 
+
+owner      assigned imported pending
+[Name 1]         88        0      88
+[Name 2]         87        0      87
+[Name 3]         86        0      86
+[Name 4]         86        0      86
+[Name 5]         86        0      86
+[Name 6]         87        0      87
+```
+- A document counts as available only if it has extracted text **and** an effective date.
+  - 55 documents have text but no date (`needs_date`). They count once a person dates them; see `data/corpus/DATE_REVIEW.md`.
+  - Of the 120 extracted dates, a seeded 10% (12) are marked for a human check.
+- The 520 manual items are split across six owners in `data/corpus/MANUAL_DOWNLOADS.md`. Each section starts with tier 1.
+- **One retry is due on or after 2026-11-06 05:11 UTC:** NCGTC (502), MUDRA (connection error) and sbi.co.in (timeout). Run `make corpus-harvest` and `make corpus-download` then; the outcome is recorded in the lock.
+- msme.gov.in (403), Udyam (redirect loop) and RXIL (444) stay manual.
+- The commit titled "data: Indian real corpus ≥500" is reserved for when real available reaches 500 or more.
 
 ## Open questions (owner, date)
-- **Corpus (ADR 0019, 2026-11-05): 230 real Indian documents available, 270 short of 500.**
+- **Corpus (ADR 0019, 2026-11-05): 175 real Indian documents available, 325 short of 500.** (55 more count once dated.)
   - The remaining 517 items are manual: RBI, e-Gazette, incometaxindia, India Code, sansad.in, judgments, state policies, and blocked hosts.
   - They are split across six owners in `data/corpus/MANUAL_DOWNLOADS.md`.
   - The owners save the files, fill the PENDING slots in `manifest.yaml`, and run `make corpus-import`.
   - Deadline: before the G1 corpus freeze. G2 (≥500 indexed) is the hard stop.
-  - **Owner decision:** keep, or re-save by hand, the 16 RBI documents fetched by script before the manual-only rule (ADR 0019).
-  - 205 available documents have no `effective_from`. Fill the dates before G1, or the KR-04 date filter cannot use them.
+  - **Closed (owner):** the 16 RBI documents fetched by script are kept (`fetched_by: script_pre_adr0019`).
+  - **Dates:** extracted for 120 documents; 55 need a person to date them (`needs_date`).
   - 181 PDFs, mostly older CGTMSE circulars, are scans with no text layer (no OCR), so they were rejected and given replacement slots.
 - **Conventions Phase 3 gold and Phase 4 engines must match:** these are written in the generator headers, `cases.py` and `offers.py`.
   - Receivables count in their expected week.
