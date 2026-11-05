@@ -29,7 +29,7 @@ Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpu
 
 ## Phase 5 notes (2026-11-06)
 - **`make db`** migrates `var/case.db` and `var/corpus.db` and seeds 25 users from `data/frozen/v1/users/eval_users.yaml`.
-  It needs `SEED_PASSWORD` (12+ characters) or `SEED_PASSWORD_<USERNAME>` in the environment. Add both to `.env.example` (Claude may not edit it).
+  It needs `SEED_PASSWORD` (12+ characters) or `SEED_PASSWORD_<USERNAME>` in the environment (both in `.env.example`).
 - **Decisions:**
   - Only a case in `AWAITING_APPROVAL` or `HELD` can be decided, and only by the routed role (HELD goes to the VP).
   - The role is checked against the approver's user row, never taken from the caller.

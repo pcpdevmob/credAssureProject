@@ -320,8 +320,11 @@ def test_S08_seed_creates_users_with_argon2_hashes_and_is_idempotent(tmp_path: P
     db = tmp_path / "case.db"
     with pytest.raises(SystemExit, match="SEED_PASSWORD"):
         seed.seed(db, {})
-    with pytest.raises(SystemExit, match="12"):
-        seed.seed(db, {"SEED_PASSWORD": "short"})
+    with pytest.raises(SystemExit) as short:
+        seed.seed(db, {"SEED_PASSWORD": "short-pw"})
+    message = str(short.value)
+    assert "SEED_PASSWORD" in message and "12" in message
+    assert "short-pw" not in message  # the value is never echoed
     env = {"SEED_PASSWORD": "demo-pass-0001", "SEED_PASSWORD_DEMO_VP": "vp-pass-00002"}
     assert seed.seed(db, env) == 25
     assert seed.seed(db, env) == 0
