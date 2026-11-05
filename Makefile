@@ -7,7 +7,7 @@ COMPOSE := docker compose -f deploy/compose/compose.yaml
 ENV_FILE := $(if $(wildcard .env),--env-file .env,)
 PNPM := $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo "npx --yes pnpm@9.15.0")
 
-.PHONY: help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
+.PHONY: testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore
 
@@ -136,8 +136,12 @@ ingest:  ## Download, hash and index the corpus (Phase 7)
 eval:  ## Run the 100-item test set through the API (Phase 11)
 	@echo "eval: not implemented until Phase 11"; exit 1
 
-baseline:  ## Prompt baselines S1-S3 (Phase 3)
-	@echo "baseline: not implemented until Phase 3"; exit 1
+baseline:  ## Prompt baselines S1-S3 on the 100 items (EVAL_BASE_URL / EVAL_MODEL; default local Ollama, ADR 0017)
+	uv run $(ENV_FILE) python -m credassure.evaluation.baseline.run --strategy all
+
+testset:  ## Rebuild evaluation/testset/v1 and the retrieval/red-team/fixture assets (refuses once frozen)
+	uv run python -m credassure.evaluation.build_testset
+	uv run python -m credassure.evaluation.build_assets
 
 demo-reset:  ## Reset demo data and replay cache (Phase 12)
 	deploy/scripts/demo-reset.sh

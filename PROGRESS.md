@@ -22,6 +22,7 @@ Phase 2 is done (2026-11-05). Next is Phase 3: eval set, independent gold and ba
 | 1 gap fix | done | VER-01, BRD §10 | phase-1-fix | Normaliser `find_all` (free-text scan with spans, `kind`), signed money/rates; RBI PDF untracked; REPO_STRUCTURE env templates point to deploy/env |
 | 2 Data | done | BR-01, BR-14, BRD §10, scope #14; S01–S06, S18–S20, S22 | phase-2 | 393 files in `data/frozen/v1`, byte-identical (SHA256SUMS + test). See note below |
 | Corpus | done (manual pending) | KR-01, KR-04, G2; ADR 0019 | data: Indian real corpus | 16 Indian sources, target 750. Harvest, download, import, verify, manual, report targets. 233 real available |
+| 3 Eval assets | done (baseline table pending) | BRD §12–13, KR-05, VER-02, scope #13; ADR 0021 | phase-3 | Independent gold (floats + numpy_financial, no engine import, contract-enforced) reproduces every design need, every PLANTS offer tag and RBI Annex B 17.07%. 100 items (25/10/15/15/5/6/8/8/3/5), 40 retrieval queries, 20 red-team prompts, 12 S24 bad citations, scorers (₹1 / 0.01 pp, BRD failure classes), freeze script with readiness gate, run record (#13), baselines S1–S3. money-auditor PASS (no MUST); brd-conformance: only pre-G1 corpus MUST |
 | UI U0–U6 | todo | UI-01..09 | | React lane |
 
 ## Phase 2 note
@@ -83,6 +84,11 @@ owner      assigned imported pending
 - The commit titled "data: Indian real corpus ≥500" is reserved for when real available reaches 500 or more.
 
 ## Open questions (owner, date)
+- **Before G1 (Phase 3):**
+  - **Readiness check:** run `uv run python -m credassure.evaluation.freeze --readiness`. It lists 5 test items and 14 retrieval queries whose relevant documents are not downloaded yet: R-MSME-01, R-MSME-02/-G-004, R-TAX-01/02, R-RBI-09, R-GZ-002, R-MSME-G-003, R-JUD-001, R-STATE-005, R-BANK-02/03/05, R-RBI-01/11. `--write` refuses to freeze until the list is empty.
+  - **Hand check:** two people who don't own the agent fill in `evaluation/gold/hand_check.md` (10 rows).
+  - **Authorship:** gold authors are placeholders ([Name 2]…). Replace them, and confirm that nobody wrote gold for their own agent.
+  - **Baseline:** the local `llama3.1:8b` run is provisional. Ollama's context length depends on how it was started (ADR 0017). The graded baseline runs on the course endpoint.
 - **Manual list rebuilt (2026-11-05):** `data/corpus/MANUAL_DOWNLOADS.md` has 183 rows, ~30 per owner.
   - **Exact links:** 94 rows, built from `data/corpus/manual_curated.yaml`, which was compiled by reading official index pages once:
     - 40 RBI Master Directions (Commercial Banks, plus SFB / co-op distractors);

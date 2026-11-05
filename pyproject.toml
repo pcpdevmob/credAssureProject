@@ -73,6 +73,8 @@ known-first-party = ["credassure"]
 "data/generators/src/credassure/datagen/harvest.py" = ["E501"]
 "data/generators/src/credassure/datagen/dates.py" = ["E501"]
 "data/generators/src/credassure/datagen/export.py" = ["E501"]
+# Evaluation assets: long docstrings, item text and prompts (code is still formatted to 100 columns).
+"evaluation/**" = ["E501"]
 
 [tool.mypy]
 strict = true

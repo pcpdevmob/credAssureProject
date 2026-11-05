@@ -311,8 +311,8 @@
   },
   {
     "dataset": "S04 offers",
-    "id": "OF-04-A.v2",
-    "plant": "revision_full_waiver"
+    "id": "OF-04-C.v2",
+    "plant": "revision_injection"
   },
   {
     "dataset": "S04 offers",
@@ -333,11 +333,6 @@
     "dataset": "S04 offers",
     "id": "CA-2026-0005",
     "plant": "eligible_0"
-  },
-  {
-    "dataset": "S04 offers",
-    "id": "OF-05-B.v2",
-    "plant": "revision_full_waiver"
   },
   {
     "dataset": "S04 offers",
@@ -451,11 +446,6 @@
   },
   {
     "dataset": "S04 offers",
-    "id": "OF-09-B.v2",
-    "plant": "revision_partial_waiver"
-  },
-  {
-    "dataset": "S04 offers",
     "id": "OF-10-A",
     "plant": "headline"
   },
@@ -496,8 +486,13 @@
   },
   {
     "dataset": "S04 offers",
+    "id": "OF-11-C",
+    "plant": "late"
+  },
+  {
+    "dataset": "S04 offers",
     "id": "CA-2026-0011",
-    "plant": "eligible_2"
+    "plant": "eligible_1"
   },
   {
     "dataset": "S04 offers",
@@ -593,11 +588,6 @@
     "dataset": "S04 offers",
     "id": "CA-2026-0015",
     "plant": "eligible_1"
-  },
-  {
-    "dataset": "S04 offers",
-    "id": "OF-15-A.v2",
-    "plant": "revision_partial_waiver"
   },
   {
     "dataset": "S05 lender scripts",

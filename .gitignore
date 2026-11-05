@@ -48,3 +48,6 @@ docs/**/*.pdf
 
 # Office lock files (an open CORPUS_INDEX.xlsx)
 ~$*
+
+# Baseline response cache (re-runs are free; results and summary are committed)
+evaluation/baseline/cache/

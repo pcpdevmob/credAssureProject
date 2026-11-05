@@ -83,7 +83,7 @@ LAYOUT: dict[int, tuple[tuple[str, ...], tuple[str, ...], tuple[str, ...]]] = {
     8: (("cgtmse",), ("hidden",), ("short",)),
     9: (("unaffordable",), ("mismatch",), ("eblr", "hidden")),
     10: (("headline",), ("cgtmse",), ("late",)),
-    11: (("unaffordable",), ("eblr", "equal_principal"), ("hidden",)),
+    11: (("unaffordable",), ("eblr", "equal_principal"), ("hidden", "late")),
     12: (("missing_fees",), ("mclr",), ("cgtmse", "hidden")),
     13: (("mismatch",), ("missing_tenure",), ("short",)),
     14: (("headline",), ("unaffordable",), ("eblr", "hidden")),
@@ -293,11 +293,17 @@ def generate(designs: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[
         plants.append(
             {"id": case["case_id"], "dataset": "S04 offers", "plant": f"eligible_{eligible}"}
         )
-        # Negotiation target: the highest processing fee among offers with every material term.
-        target = max(
-            (x for x in case_offers if not {"missing_tenure", "missing_fees"} & set(x["tags"])),
-            key=lambda x: x["offer"]["fees"][0]["value"],
-        )
+        # Negotiation target (LW-12, BR-10): the highest processing fee among comparable offers
+        # (every material term, stated instalment correct); with fewer than two there is no verified
+        # competing fee to cite, so no round and no revision.
+        comparable = [
+            x
+            for x in case_offers
+            if not {"missing_tenure", "missing_fees", "mismatch"} & set(x["tags"])
+        ]
+        if len(comparable) < 2:
+            continue
+        target = max(comparable, key=lambda x: x["offer"]["fees"][0]["value"])
         v2, _ = _revision(target["offer"])
         if v2 is not None:
             write_json(OUT / "offers" / case["case_id"] / f"{v2['offer_id']}.v2.json", v2)

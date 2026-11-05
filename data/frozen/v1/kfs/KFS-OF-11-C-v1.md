@@ -20,10 +20,10 @@ Offer OF-11-C, version 1. Working-capital term loan.
 | Item | Details |
 |---|---|
 | Sanctioned loan amount | ₹69,00,000 |
-| Disbursal | One tranche on 2026-11-18 |
+| Disbursal | One tranche on 2027-01-11 |
 | Loan term | 24 months |
 | Moratorium | 4 months, interest serviced monthly |
-| Instalments | 20 monthly instalments, ₹3,84,133, emi, from 2027-04-18 |
+| Instalments | 20 monthly instalments, ₹3,84,133, emi, from 2027-06-11 |
 | Interest rate | 12.55% p.a. (fixed) |
 
 ### Fees and charges payable to the lender

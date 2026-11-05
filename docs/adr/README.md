@@ -26,3 +26,4 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | [0018](0018-agent-result-contract.md) | AgentResult contract, including agent_version | Proposed (not frozen) | 1 | 25 |
 | [0019](0019-indian-corpus-and-kr04-distractors.md) | Indian-only real corpus; KR-04 distractors are Indian | Accepted | 2, 3, 7 | 14 |
 | [0020](0020-data-acquisition-policy.md) | Data-acquisition policy (robots, rate, identification, terms, ingestion safety) | Accepted | 2, 7 | 14 |
+| [0021](0021-calculation-conventions.md) | Calculation conventions shared by gold and engines | Accepted | 3, 4 | — |

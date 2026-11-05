@@ -525,6 +525,18 @@ requires-dist = [{ name = "credassure-core", editable = "packages/core" }]
 name = "credassure-evaluation"
 version = "0.1.0"
 source = { editable = "evaluation" }
+dependencies = [
+    { name = "httpx" },
+    { name = "numpy-financial" },
+    { name = "pyyaml" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "httpx", specifier = ">=0.27" },
+    { name = "numpy-financial", specifier = ">=1.0" },
+    { name = "pyyaml", specifier = ">=6.0" },
+]
 
 [[package]]
 name = "credassure-gateway"

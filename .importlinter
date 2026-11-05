@@ -96,3 +96,12 @@ source_modules =
 forbidden_modules =
     credassure.engines
     credassure.evaluation
+
+[importlinter:contract:evaluation-independent]
+name = Evaluation gold and harness never import the engines or the generators (independent gold)
+type = forbidden
+source_modules =
+    credassure.evaluation
+forbidden_modules =
+    credassure.engines
+    credassure.datagen

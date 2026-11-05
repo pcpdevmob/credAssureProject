@@ -1,7 +1,7 @@
 {
   "annual_rate": "0.1255",
   "benchmark": null,
-  "disbursal_date": "2026-11-18",
+  "disbursal_date": "2027-01-11",
   "fees": [
     {
       "basis": "pct_of_principal",
@@ -11,7 +11,7 @@
       "value": "0.0079"
     }
   ],
-  "first_repayment_date": "2027-04-18",
+  "first_repayment_date": "2027-06-11",
   "guarantee": null,
   "insurance": null,
   "kfs_doc_id": "KFS-OF-11-C-v1",

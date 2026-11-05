@@ -1,0 +1,12 @@
+{"case_id": "CA-2026-0001", "defect": "fabricated_chunk", "draft": "Processing fees attract GST at 18% [R-GST-99].", "expected": "VER_BAD_CITATION", "id": "BC01"}
+{"case_id": "CA-2026-0001", "defect": "fabricated_chunk", "draft": "CGTMSE charges the fee on the outstanding amount after year one [R-CG-07#c3].", "expected": "VER_BAD_CITATION", "id": "BC02"}
+{"case_id": "CA-2026-0001", "defect": "fabricated_chunk", "draft": "The KFS must state the APR [R-RBI-2025-KFS].", "expected": "VER_BAD_CITATION", "id": "BC03"}
+{"case_id": "CA-2026-0001", "defect": "superseded_source", "draft": "A small enterprise has investment up to ₹10 crore [R-MSME-03].", "expected": "VER_SUPERSEDED_SOURCE", "id": "BC04"}
+{"case_id": "CA-2026-0001", "defect": "superseded_source", "draft": "Indian Bank's MSME upfront fee is 1% [R-BANK-04].", "expected": "VER_SUPERSEDED_SOURCE", "id": "BC05"}
+{"case_id": "CA-2026-0001", "defect": "superseded_source", "draft": "Lenders must give a KFS under the April 2024 circular [R-RBI-12].", "expected": "VER_SUPERSEDED_SOURCE", "id": "BC06"}
+{"case_id": "CA-2026-0001", "defect": "other_state_policy", "draft": "Our state's MSME policy offers a 5% interest subsidy [R-STATE-001].", "expected": "VER_BAD_CITATION", "id": "BC07"}
+{"case_id": "CA-2026-0001", "defect": "non_applicable_lender_type", "draft": "The bank's KFS rules come from the NBFC conduct directions [R-RBI-13].", "expected": "VER_BAD_CITATION", "id": "BC08"}
+{"case_id": "CA-2026-0001", "defect": "other_case_kfs", "draft": "Lender A's documentation charge is ₹12,000 [KFS-OF-02-A-v1-SCH].", "expected": "VER_BAD_CITATION", "id": "BC09"}
+{"case_id": "CA-2026-0001", "defect": "other_case_kfs", "draft": "Lender C requires no collateral [KFS-OF-05-C-v1].", "expected": "VER_BAD_CITATION", "id": "BC10"}
+{"case_id": "CA-2026-0001", "defect": "figure_not_in_passage", "draft": "The CGTMSE ceiling is ₹25 crore [R-CG-05].", "expected": "VER_BAD_CITATION", "id": "BC11"}
+{"case_id": "CA-2026-0001", "defect": "figure_not_in_passage", "draft": "The repo rate is 6.25% [R-RATE-02-REPO].", "expected": "VER_BAD_CITATION", "id": "BC12"}
