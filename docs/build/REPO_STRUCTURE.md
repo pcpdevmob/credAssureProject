@@ -14,7 +14,7 @@ credassure/
 ├── uv.lock
 ├── package.json  pnpm-workspace.yaml  pnpm-lock.yaml   # JS workspace (apps/web, packages/api-client)
 ├── Makefile                      # one entry point for every task (see docs/setup/commands.md)
-├── .env.example  .env.test.example  .env.demo.example
+├── .env.example                  # profile templates live in deploy/env/*.env.example (root .env* is hook-guarded)
 ├── .editorconfig  .gitignore  .gitattributes  .pre-commit-config.yaml  .importlinter
 │
 ├── apps/

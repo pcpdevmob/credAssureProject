@@ -41,3 +41,6 @@ node_modules/
 # Tooling state
 .claude/.stop_retries
 .DS_Store
+
+# Third-party PDFs are never committed (BRD §10, legal basis L4)
+docs/**/*.pdf

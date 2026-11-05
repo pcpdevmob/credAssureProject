@@ -1,5 +1,6 @@
 """Normaliser known answers (VER-01). Fifty-plus formats, plus hypothesis round-trips."""
 
+import itertools
 from datetime import date
 from decimal import Decimal
 
@@ -8,7 +9,13 @@ from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from credassure.core.money import format_inr
-from credassure.engines.normaliser import format_rate, parse_date, parse_money, parse_rate
+from credassure.engines.normaliser import (
+    find_all,
+    format_rate,
+    parse_date,
+    parse_money,
+    parse_rate,
+)
 
 MONEY = [
     ("₹1,42,00,000", "14200000"),
@@ -44,6 +51,9 @@ MONEY = [
     ("₹2,50,000", "250000"),
     ("0 lakh", "0"),
     ("Rs. 10 Cr.", "100000000"),
+    ("-₹30,00,000", "-3000000"),
+    ("\u2212₹30 lakh", "-3000000"),
+    ("-30 lakh", "-3000000"),
 ]
 
 RATES = [
@@ -127,7 +137,7 @@ def test_VER01_padded_money_span_skips_whitespace() -> None:
 @settings(max_examples=40)
 @given(
     st.decimals(
-        min_value=0,
+        min_value=Decimal("-1000000000"),
         max_value=Decimal("1000000000"),
         places=2,
         allow_nan=False,
@@ -155,3 +165,134 @@ def test_VER01_rate_round_trip(fraction: Decimal) -> None:
 def test_VER01_date_round_trip(day: date) -> None:
     parsed = parse_date(day.isoformat())
     assert parsed.value == day
+
+
+SENTENCES: list[tuple[str, list[tuple[str, str, object]]]] = [
+    (
+        "Peak shortfall ₹1.62 crore in week 9; plus ₹10 lakh buffer, less ₹30 lakh overdraft.",
+        [
+            ("money", "₹1.62 crore", Decimal("16200000")),
+            ("number", "9", Decimal("9")),
+            ("money", "₹10 lakh", Decimal("1000000")),
+            ("money", "₹30 lakh", Decimal("3000000")),
+        ],
+    ),
+    (
+        "Recommended ₹1,42,00,000 at 12% APR (0.12) from 15-11-2026.",
+        [
+            ("money", "₹1,42,00,000", Decimal("14200000")),
+            ("rate", "12%", Decimal("0.12")),
+            ("rate", "0.12", Decimal("0.12")),
+            ("date", "15-11-2026", date(2026, 11, 15)),
+        ],
+    ),
+    (
+        "APR 17.07 per cent; GST 18 percent on fees, disbursed 2026-11-20.",
+        [
+            ("rate", "17.07 per cent", Decimal("0.1707")),
+            ("rate", "18 percent", Decimal("0.18")),
+            ("date", "2026-11-20", date(2026, 11, 20)),
+        ],
+    ),
+    (
+        "Bridge: \u2212₹30 lakh undrawn OD, Rs. 142L total, 1.42 Cr. need.",
+        [
+            ("money", "\u2212₹30 lakh", Decimal("-3000000")),
+            ("money", "Rs. 142L", Decimal("14200000")),
+            ("money", "1.42 Cr.", Decimal("14200000")),
+        ],
+    ),
+    ("No figures here, only Loans and lakhs of words.", []),
+    (
+        "Due 12/11/2026, invoice INV-2041 for ₹ 2,50,000.",
+        [
+            ("date", "12/11/2026", date(2026, 11, 12)),
+            ("money", "₹ 2,50,000", Decimal("250000")),
+        ],
+    ),
+    ("Version v3 of WC-POL and 9th week stay unparsed.", []),
+]
+
+
+@pytest.mark.parametrize(("text", "expected"), SENTENCES)
+def test_VER01_find_all_reads_every_value_with_its_span(
+    text: str, expected: list[tuple[str, str, object]]
+) -> None:
+    found = find_all(text)
+    assert [(p.kind, p.raw, p.value) for p in found] == expected
+    for p in found:
+        assert text[p.start : p.end] == p.raw
+    for a, b in itertools.pairwise(found):
+        assert a.end <= b.start
+
+
+@settings(max_examples=40)
+@given(
+    st.decimals(
+        min_value=Decimal("-1000000000"),
+        max_value=Decimal("1000000000"),
+        places=2,
+        allow_nan=False,
+        allow_infinity=False,
+    )
+)
+def test_VER01_find_all_round_trip_in_a_sentence(amount: Decimal) -> None:
+    text = f"The need is {format_inr(amount)} this quarter."
+    (only,) = find_all(text)
+    assert only.kind == "money"
+    assert only.value == amount.quantize(Decimal("0.01"))
+
+
+# Money-auditor findings, 2026-11-05: nothing may slip past, be truncated or be skipped.
+ADVERSARIAL: list[tuple[str, list[tuple[str, str]]]] = [
+    ("₹10\u201312 lakh", [("number", "10"), ("money", "12 lakh")]),
+    ("APR 14\u201316%", [("number", "14"), ("rate", "16%")]),
+    ("APR 14.5%\u201316%", [("rate", "14.5%"), ("rate", "16%")]),
+    ("between 10-12%", [("number", "10"), ("rate", "12%")]),
+    ("Lender A\u201314.5% APR", [("rate", "14.5%")]),
+    ("-12%", [("rate", "-12%")]),
+    ("rate fell -0.5%", [("rate", "-0.5%")]),
+    ("net -12 in week 9", [("number", "-12"), ("number", "9")]),
+    ("cash \u22121,62,00,000", [("number", "\u22121,62,00,000")]),
+    ("week 9 \u2013₹10 lakh", [("number", "9"), ("money", "₹10 lakh")]),
+    ("week 9 - ₹10 lakh", [("number", "9"), ("money", "₹10 lakh")]),
+    ("₹1,42,00,0001", [("unparsed", "1,42,00,0001")]),
+    ("₹1,42,00,000,000", [("unparsed", "1,42,00,000,000")]),
+    ("₹14,200,000", [("unparsed", "14,200,000")]),
+    ("₹1,42 lakh", [("unparsed", "1,42")]),
+    ("₹10k", [("unparsed", "10")]),
+    ("31-02-2026", [("unparsed", "31-02-2026")]),
+    ("11/15/2026", [("unparsed", "11/15/2026")]),
+    ("0.25 percentage points", [("rate", "0.25 percentage points")]),
+    ("0.5 weeks", [("number", "0.5")]),
+    ("offer 3 L&T Finance", [("number", "3")]),
+    ("₹142 lacs", [("money", "₹142 lacs")]),
+    ("15 Nov 2026", [("date", "15 Nov 2026")]),
+    ("15.11.2026", [("date", "15.11.2026")]),
+    ("1-11-2026", [("date", "1-11-2026")]),
+    ("₹\uff11\uff10 lakh", []),
+    ("A-14.5%", [("unparsed", "14.5")]),
+    ("Rs14,200,000", [("unparsed", "14,200,000")]),
+    ("INR1,42,00,0001", [("unparsed", "1,42,00,0001")]),
+    ("Rs.-10 lakh", [("money", "Rs.-10 lakh")]),
+    ("due 2026/11/15", [("number", "2026"), ("unparsed", "11/15")]),
+    ("₹1,42,00,000/12", [("money", "₹1,42,00,000"), ("unparsed", "12")]),
+    ("₹1.5 million", [("number", "1.5")]),
+    ("₹10 to 12 lakh", [("number", "10"), ("money", "12 lakh")]),
+]
+
+
+@pytest.mark.parametrize(("text", "expected"), ADVERSARIAL)
+def test_VER01_find_all_fails_closed(text: str, expected: list[tuple[str, str]]) -> None:
+    assert [(p.kind, p.raw) for p in find_all(text)] == expected
+
+
+def test_VER01_sign_after_currency_is_kept() -> None:
+    (only,) = find_all("Rs.-10 lakh")
+    assert only.value == Decimal("-1000000")
+
+
+def test_VER01_find_all_scales_lac_and_point_deltas() -> None:
+    lacs, pp = find_all("₹142 lacs and 0.25 pp")
+    assert lacs.value == Decimal("14200000")
+    assert pp.value == Decimal("0.0025")

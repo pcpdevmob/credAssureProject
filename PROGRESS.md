@@ -17,6 +17,7 @@ Phase 1 — done (2026-11-05). Next: Phase 2, which needs a go. ADR 0018 (AgentR
 | 0 Scaffold | done | NFR-07, NFR-09, APR-03 (config) | phase-0 | 29 tests; make check + make audit green; security-reviewer and brd-conformance MUST findings fixed |
 | 0b Monorepo | done | ADR-0005; #46 ports skeleton; #53 import-linter | phase-0b | 52 tests; make check green. security-reviewer and brd-conformance: no MUST. #27, breaking-diff half of #28, and #29 stay later phases |
 | 1 Contract | done | VER-01, BR-05; #8 #9 #21 schema #24 #25 field #26 #32 #46 ADR | phase-1 | 149 tests. Money auditor and security reviewer: no MUST. BRD: the Phase 0b retry route stays HTTP 501; the retry behaviour is Phase 9. ADR 0018 Proposed. E4 critic half waits for Phase 9d |
+| 1 gap fix | done | VER-01, BRD §10 | phase-1-fix | Normaliser `find_all` (free-text scan with spans, `kind`), signed money/rates; RBI PDF untracked; REPO_STRUCTURE env templates point to deploy/env |
 | UI U0–U6 | todo | UI-01..09 | | React lane |
 
 ## Open questions (owner, date)
@@ -29,11 +30,8 @@ Phase 1 — done (2026-11-05). Next: Phase 2, which needs a go. ADR 0018 (AgentR
   - Bank of Baroda MSME fee table — confirm on the bank's own page
 - Phase 7: chromadb 1.5.9 has 5 unfixed advisories (HTTP server mode). Removed from Phase 0 deps; Phase 7 must use embedded
   `PersistentClient` only and record the pip-audit exception or an alternative in an ADR (see ADR 0001).
-- `.claude/hooks/guard_paths.py` blocks root `.env.test.example` / `.env.demo.example` listed in REPO_STRUCTURE; profile
-  templates live in `deploy/env/` instead. Update REPO_STRUCTURE in Phase 0b or relax the hook.
-- `.claude/hooks/*.py` have uncommitted ruff line-wrap changes (no behaviour change) from the first format run; keep or
-  restore by hand (`git restore` is blocked by the bash guard).
-- `docs/source/170MD.pdf` is an untracked third-party RBI PDF; not committed (BRD §10, L4). Delete or gitignore it.
+- `docs/source/170MD.pdf` (third-party RBI PDF) was tracked; untracked and `docs/**/*.pdf` gitignored on 2026-11-05
+  (BRD §10, L4). It stays in history from phase-0b, because we never rewrite history. Delete the local copy if not needed.
 - `make up` is wired (gateway, web, Ollama, Langfuse; no Chroma server, ADR 0001). It was not started: `deploy/env/langfuse.env` is absent. `docker compose config` for the dev+langfuse profiles lists those services.
 - BRD NFR-09 text should be amended to match ADR 0016 in the next BRD revision.
 
