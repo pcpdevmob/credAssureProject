@@ -16,7 +16,7 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | 0008 | Model resilience: circuit breaker, retries, timeouts | Reserved | 6 | 48, 23 |
 | [0009](0009-excluded-multi-agent-patterns.md) | Excluded multi-agent patterns (no agent-to-agent messaging, no inter-agent bus, no cross-case memory, no dynamic spawning) | Accepted | 1 | 26 |
 | [0010](0010-rounding-policy.md) | Rounding policy (exact in engines, lakh round-up, display rounding) | Accepted | 1 | 8 |
-| 0011 | Repayment date to week mapping (calendar, holidays) | Reserved | 4 | 7 |
+| [0011](0011-repayment-calendar.md) | Repayment date to week mapping (calendar, holidays) | Accepted | 4 | 7 |
 | [0012](0012-apr-convention.md) | APR annualisation convention | Accepted | 4 | — |
 | [0013](0013-reranker.md) | Reranker | Accepted | 7 | — |
 | [0014](0014-judge.md) | Automated judge | Accepted | 11 | 11 |

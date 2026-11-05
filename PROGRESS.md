@@ -1,7 +1,7 @@
 # CredAssure — Progress (Claude Code reads this first and updates it last)
 
 ## Current phase
-Phase 2 is done (2026-11-05). Next is Phase 3: eval set, independent gold and baseline. Two things are still open:
+Phase 4 is done (2026-11-05). Next is Phase 5: database, fact ledger, hash-chained audit and auth. Still open:
 - **ADR 0018 freeze (human):** ADR 0018 (AgentResult, including `agent_version` and `tenant_id`) is Proposed and not frozen. Accept it before G1.
 - **Corpus shortfall (M1):** the corpus is short of the ≥400 real-document target. See open questions.
 
@@ -23,6 +23,7 @@ Phase 2 is done (2026-11-05). Next is Phase 3: eval set, independent gold and ba
 | 2 Data | done | BR-01, BR-14, BRD §10, scope #14; S01–S06, S18–S20, S22 | phase-2 | 393 files in `data/frozen/v1`, byte-identical (SHA256SUMS + test). See note below |
 | Corpus | done (manual pending) | KR-01, KR-04, G2; ADR 0019 | data: Indian real corpus | 16 Indian sources, target 750. Harvest, download, import, verify, manual, report targets. 233 real available |
 | 3 Eval assets | done (baseline table pending) | BRD §12–13, KR-05, VER-02, scope #13; ADR 0021 | phase-3 | Independent gold (floats + numpy_financial, no engine import, contract-enforced) reproduces every design need, every PLANTS offer tag and RBI Annex B 17.07%. 100 items (25/10/15/15/5/6/8/8/3/5), 40 retrieval queries, 20 red-team prompts, 12 S24 bad citations, scorers (₹1 / 0.01 pp, BRD failure classes), freeze script with readiness gate, run record (#13), baselines S1–S3. money-auditor PASS (no MUST); brd-conformance: only pre-G1 corpus MUST |
+| 4 Engines | done | WC-01..06, LW-02..11/14, ONB-02/03, APR-01..03, BR-05/07/12; scope #1 (enum), #7; ADR 0011 | phase-4 | Pure Decimal engines. 15/15 cash-flow and 15/15 offer known answers match gold (worst APR 0.005 pp). RBI Annex B 17.07%. 20/20 onboarding profiles. 426 tests, engine coverage 98%. money-auditor PASS, brd-conformance PASS, no MUST. SHOULDs applied: IRR edge/bisection tests, `gst_rate` and `indicative` required (no silent defaults), strict Decimal in audit and negotiation, schedule terms material, fee compared in ₹, week<1 rows blocked, undrawn ≥ 0, routing rejects negatives, deterministic tie-break |
 | UI U0–U6 | todo | UI-01..09 | | React lane |
 
 ## Phase 2 note
@@ -89,6 +90,11 @@ owner      assigned imported pending
   - **Hand check:** two people who don't own the agent fill in `evaluation/gold/hand_check.md` (10 rows).
   - **Authorship:** gold authors are placeholders ([Name 2]…). Replace them, and confirm that nobody wrote gold for their own agent.
   - **Baseline:** the local `llama3.1:8b` run is provisional. Ollama's context length depends on how it was started (ADR 0017). The graded baseline runs on the course endpoint.
+- **Phase 4 follow-ups:**
+  - **Mitigation timing (money-auditor S7):** affordability counts evidenced mitigations from week 1, and gold does the same. The fix needs an ADR 0021 amendment and the same change in gold, so it is the owner's decision.
+  - **Unauthorised role (N5):** training and acknowledgement rules are not evaluated, so ONB-04 names only the role. Gold does the same; recorded as intended.
+  - **Unpriceable offers (N1):** a 0% rate or moratorium = tenure raises. The LendWise agent (Phase 9c) must catch this and mark the offer non-comparable.
+  - **Ablation switching (scope #1):** only the `AblationMode` enum exists. The `ABLATION` setting and the A1/A4 bypasses come in Phases 8 and 11.
 - **Manual list rebuilt (2026-11-05):** `data/corpus/MANUAL_DOWNLOADS.md` has 183 rows, ~30 per owner.
   - **Exact links:** 94 rows, built from `data/corpus/manual_curated.yaml`, which was compiled by reading official index pages once:
     - 40 RBI Master Directions (Commercial Banks, plus SFB / co-op distractors);
@@ -169,3 +175,5 @@ owner      assigned imported pending
 - #26 Excluded multi-agent patterns (ADR 0009)
 - #14 Corpus legal-basis audit (`make corpus-audit`, `credassure.datagen.corpus`; throttled downloader `make corpus-download`)
 - #32 Error catalogue (`ApiErrorCode`). HTTP behaviour of the 501 routes is unchanged
+- #7 Repayment date → week mapping (`engines/calendar.py`, ADR 0011)
+- #1 Ablation enum only (`AblationMode`); switch paths in Phases 8 and 11
