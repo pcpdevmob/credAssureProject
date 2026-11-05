@@ -251,4 +251,7 @@ def score(
         "refusal": refusal,
         "end_to_end": end_to_end,
     }
-    return scorers[kind](gold, answer)
+    try:
+        return scorers[kind](gold, answer)
+    except (TypeError, ValueError, AttributeError, KeyError) as exc:  # malformed model output
+        return _fail("schema_failure", f"unscorable answer: {type(exc).__name__}: {exc}"[:200])

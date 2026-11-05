@@ -270,3 +270,13 @@ def test_scope13_run_kind_only_course_endpoint_is_graded() -> None:
     assert record.run_kind("https://course.example/v1", None) == "graded"
     assert record.run_kind("http://localhost:11434/v1", 8192) == "local_provisional"
     assert record.run_kind("http://127.0.0.1:11434/v1", None) == "smoke_test"
+
+
+def test_BRD13_malformed_answers_score_as_schema_failure_never_crash() -> None:
+    known = baseline_run.known_doc_ids()
+    junk: list[Any] = [[{"a": 1}, {"b": 2}], {"x": 1}, "text", 3, None]
+    for item in ITEMS:
+        for value in junk:
+            answer = {k: value for k in item["gold"]} if isinstance(item["gold"], dict) else {}
+            verdict = scorers.score(item, answer, known)
+            assert verdict["passed"] in (True, False), item["id"]
