@@ -174,6 +174,8 @@ def test_OBJ08_verify_chain_detects_tampering(engine: Engine, tmp_path: Path) ->
     raw.close()
     with session.transaction(engine) as s:
         assert reads.verify_chain(s) == [3]
+        assert reads.verify_chain(s, tenant_id=T) == [3]
+        assert reads.verify_chain(s, tenant_id="tenant-other") == []  # E10 SHOULD-3: no leak
 
 
 def test_APR04_decision_is_recorded_with_audit_and_bumps_row_version(engine: Engine) -> None:

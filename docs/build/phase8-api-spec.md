@@ -222,3 +222,15 @@ sha256 of the value) and `SupervisorStore` (stage_started inserts a `stage_runs`
 stage_finished writes decision/result_json/trace_id/ended_at and audits STAGE_COMPLETED; set_state updates
 cases.status/current_stage; audit appends to the chain; route delegates to `writes.route_case`). Each call is its own
 transaction.
+
+## Phase 8b — tracing exporter contract (`credassure.gateway.tracing`)
+- `mask(data: Any) -> Any`: recursive copy where every string is passed through
+  `credassure.observability.log.default_redact` (dict keys and values, lists, tuples); non-strings unchanged.
+- `make_exporter(client: Any) -> Callable[[str, dict[str, Any]], None]`: each call does
+  `client.start_observation(name=name, as_type="span", metadata=mask(attrs)).end()`. Any exception from the client is
+  logged and swallowed (a failing tracer never breaks a request).
+- `configure(settings: Settings, client_factory: Callable[..., Any] | None = None) -> bool`: installs the exporter via
+  `credassure.observability.tracing.set_exporter` only when `settings.tracing_enabled` and both Langfuse keys are set
+  (returns True); otherwise uninstalls it (`set_exporter(None)`) and returns False. `client_factory` defaults to
+  `langfuse.Langfuse` and is called with `public_key, secret_key, host, mask`.
+- `create_app(...)` calls `configure(settings)`. With tracing off every route still works.

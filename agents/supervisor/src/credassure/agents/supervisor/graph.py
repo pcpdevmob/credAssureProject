@@ -9,6 +9,7 @@ never import each other (ADR 0005, ADR 0009); case_id is always the run's own (S
 """
 
 import json
+import logging
 import uuid
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
@@ -39,25 +40,79 @@ from credassure.observability.tracing import span
 from credassure.tools.runner import LoopDetected
 
 Recheck = Callable[[AgentResult, LedgerPort], list[Blocker]]
+_log = logging.getLogger("credassure.supervisor")
 MAX_REPAIRS = 2  # SUP-04: an invalid result is re-requested at most twice
 AMOUNT_KEY = "wc.recommended_amount"  # rupees, Decimal text (the threshold applies to it, Q-02)
+RETURNABLE = (Stage.ONBOARDING, Stage.WORKING_CAPITAL, Stage.LENDWISE)  # APR-05 named stages
+
+
+class NoPendingApproval(ValueError):  # noqa: N818  # a state, not a failure of the caller
+    """The graph is not waiting at the approval interrupt."""
+
+
+class InvalidReturnStageError(ValueError):
+    """A return must name one of RETURNABLE (N1: never a silent no-op)."""
 
 
 @dataclass
 class RunOutcome:
     # PAUSED | IN_PROGRESS | AWAITING_APPROVAL | HELD | FAILED | APPROVED | REJECTED | RETURNED
+    # | ABANDONED (the run lost its lock and stopped before the next stage)
     status: str
     stage: Stage | None = None
     question: str | None = None
     results: dict[Stage, AgentResult] = field(default_factory=dict)
+    reason: str | None = None  # a blocker code, e.g. SUP_ROUTE_HELD on a HELD route
 
 
 class _State(TypedDict):
     case_id: str
+    trace_id: str  # one Langfuse trace per run; decide() reuses it (BRD §14)
     stages: list[str]
     target: str | None
     outcome: dict[str, Any] | None
     results: NotRequired[dict[str, dict[str, Any]]]  # kept across runs by the checkpointer
+
+
+class _TracedLLM:
+    """E11 M1: every model call an agent makes is a span in the run's trace (BRD §14)."""
+
+    def __init__(self, llm: LLMPort, case_id: str, stage: Stage) -> None:
+        self._llm, self._case_id, self._stage = llm, case_id, stage
+        self.circuit_state = getattr(llm, "circuit_state", "closed")
+
+    def complete(self, prompt: str, *, name: str = "default") -> str:
+        with span("llm", prompt=name, case_id=self._case_id, stage=self._stage.value):
+            return self._llm.complete(prompt, name=name)
+
+
+class _AuditedTools:
+    """E11 M2, design-detail §2.3: every tool call is a span and an audit event."""
+
+    def __init__(
+        self, tools: ToolPort, store: SupervisorStore, agent: AgentName, trace_id: str
+    ) -> None:
+        self._tools, self._store, self._agent, self._trace_id = tools, store, agent, trace_id
+
+    def call(self, name: str, case_id: str, args: Mapping[str, Any] | None = None) -> Any:
+        error: str | None = None
+        try:
+            with span("tool", tool=name, agent=self._agent.value, case_id=case_id):
+                return self._tools.call(name, case_id, args)
+        except Exception as exc:
+            error = type(exc).__name__
+            raise
+        finally:  # arguments stay out of the audit log: the tool's own facts carry provenance
+            self._store.audit(
+                case_id,
+                "TOOL_CALLED",
+                {
+                    "agent": self._agent.value,
+                    "tool": name,
+                    "trace_id": self._trace_id,
+                    "error": error,
+                },
+            )
 
 
 def _evidence_and_gate_check(result: AgentResult, ledger: LedgerPort) -> list[Blocker]:
@@ -106,43 +161,63 @@ class Supervisor:
         self.planner_mode, self.ablation = planner_mode, ablation
         self.boundary_rule: Literal["hold", "director", "vp"] = boundary_rule
         self.graph = self._build().compile(checkpointer=checkpointer)
+        # One run per case at a time (run lock), so a per-case cancel hook is safe to share.
+        self._cancelled: dict[str, Callable[[], bool]] = {}
 
     # ---- public API -------------------------------------------------------------------------
-    def plan(self, case_id: str) -> Plan:
+    def plan(self, case_id: str, trace_id: str | None = None) -> Plan:
         """Visible plan (scope #19). The model may propose; code accepts only the fixed order."""
-        plan, accepted = Plan(case_id=case_id), True
-        if self.planner_mode == "llm_proposes":
-            accepted = False
-            if self.llm is not None:
-                prompt = (
-                    f"Propose the stage order for case {case_id} as a JSON list of: "
-                    + ", ".join(s.value for s in FIXED_STAGES)
-                )
-                try:
-                    proposed = json.loads(self.llm.complete(prompt, name="sup_plan"))
-                    if isinstance(proposed, list) and tuple(proposed) == tuple(
-                        s.value for s in FIXED_STAGES
-                    ):
-                        plan, accepted = Plan(case_id=case_id, mode="llm_proposes"), True
-                except (json.JSONDecodeError, TypeError, ValueError):
-                    pass
+        plan = Plan(case_id=case_id)
         with span(
             "plan",
+            trace_id=trace_id,
             case_id=case_id,
             mode=plan.mode,
-            stages=[s.value for s in plan.stages],
-            accepted=accepted,
-        ):
+            stages=[st.value for st in plan.stages],
+            accepted=self.planner_mode != "llm_proposes",
+        ) as record:  # S1: the model call happens inside the plan span
+            if self.planner_mode == "llm_proposes" and self.llm is not None:
+                prompt = (
+                    f"Propose the stage order for case {case_id} as a JSON list of: "
+                    + ", ".join(st.value for st in FIXED_STAGES)
+                )
+                try:
+                    with span("llm", prompt="sup_plan", case_id=case_id):
+                        proposed = json.loads(self.llm.complete(prompt, name="sup_plan"))
+                    if isinstance(proposed, list) and tuple(proposed) == tuple(
+                        st.value for st in FIXED_STAGES
+                    ):
+                        plan = Plan(case_id=case_id, mode="llm_proposes")
+                        record.update(mode=plan.mode, accepted=True)
+                except (json.JSONDecodeError, TypeError, ValueError):
+                    pass
             return plan
 
-    def run(self, case_id: str, *, stage: Stage | None = None) -> RunOutcome:
+    def run(
+        self,
+        case_id: str,
+        *,
+        stage: Stage | None = None,
+        cancelled: Callable[[], bool] | None = None,
+    ) -> RunOutcome:
+        """Run the plan from the first stage that is not GO. `cancelled()` is checked before each
+        stage: a run that lost its lock stops writing (ADR 0007 §4) and ends ABANDONED."""
+        self._cancelled[case_id] = cancelled or (lambda: False)
+        try:
+            return self._run(case_id, stage)
+        finally:
+            self._cancelled.pop(case_id, None)
+
+    def _run(self, case_id: str, stage: Stage | None) -> RunOutcome:
         config = self._config(case_id)
         snapshot = self.graph.get_state(config)
         if snapshot.next:  # waiting on the approver: nothing to run until a decision arrives
             return self._outcome(snapshot.values)
-        plan = self.plan(case_id)
+        trace_id = uuid.uuid4().hex  # 32 lowercase hex: a valid Langfuse/W3C trace id
+        plan = self.plan(case_id, trace_id)
         state: _State = {
             "case_id": case_id,
+            "trace_id": trace_id,
             "stages": [s.value for s in plan.stages],
             "target": stage.value if stage else None,
             "outcome": None,
@@ -158,15 +233,42 @@ class Supervisor:
         decision: Literal["approve", "reject", "return"],
         return_stage: Stage | None = None,
     ) -> RunOutcome:
-        """Resume the approval interrupt. The ledger already recorded the decision (APR-04)."""
+        """Resume the approval interrupt. The ledger already recorded the decision (APR-04).
+
+        A return is validated first (N1). A return with no pending interrupt fails closed (S1):
+        the case is FAILED with SUP_RETURN_NO_PENDING_APPROVAL, never silently left GO.
+        """
+        if decision == "return" and return_stage not in RETURNABLE:
+            raise InvalidReturnStageError(
+                f"return_stage must be one of {[s.value for s in RETURNABLE]}"
+            )
         config = self._config(case_id)
         if not self.graph.get_state(config).next:
-            raise ValueError(f"case {case_id} is not waiting for a decision")
+            if decision == "return" and return_stage is not None:
+                self.fail_return(case_id, return_stage)
+            raise NoPendingApproval(f"case {case_id} is not waiting for a decision")
         resume = {
             "decision": decision,
             "return_stage": return_stage.value if return_stage else None,
         }
         return self._outcome(self.graph.invoke(Command(resume=resume), config))
+
+    def awaiting_decision(self, case_id: str) -> bool:
+        return bool(self.graph.get_state(self._config(case_id)).next)
+
+    def fail_return(self, case_id: str, return_stage: Stage) -> None:
+        """S1: a return the graph cannot apply. Record the blocker, FAIL the case, audit it."""
+        code = BlockerCode.SUP_RETURN_NO_PENDING_APPROVAL
+        trace_id = uuid.uuid4().hex
+        run_id = self.store.stage_started(case_id, return_stage.value, trace_id)
+        result = self._error(
+            case_id, return_stage, trace_id, code, "return received with no pending approval"
+        )
+        self.store.stage_finished(run_id, result)
+        self.store.set_state(case_id, status="FAILED", current_stage=return_stage.value)
+        self.store.audit(
+            case_id, "RETURN_REJECTED", {"code": code.value, "return_stage": return_stage.value}
+        )
 
     # ---- graph ------------------------------------------------------------------------------
     def _build(self) -> StateGraph[_State]:
@@ -205,7 +307,9 @@ class Supervisor:
 
     def _stage_node(self, stage: Stage) -> Callable[[_State], dict[str, Any]]:
         def node(state: _State) -> dict[str, Any]:
-            result = self._invoke(state["case_id"], stage)
+            if self._cancelled.get(state["case_id"], lambda: False)():
+                return {"outcome": {"status": "ABANDONED", "stage": stage.value, "question": None}}
+            result = self._invoke(state["case_id"], stage, state["trace_id"])
             results = {**state.get("results", {}), stage.value: result.model_dump(mode="json")}
             outcome: dict[str, Any] | None = None
             if result.decision is Decision.ERROR:
@@ -221,12 +325,17 @@ class Supervisor:
     def _upstream_not_go(self, state: _State) -> dict[str, Any]:
         """SUP-03: the agent is never called; the stage is recorded NO_GO by the Supervisor."""
         case_id, target = state["case_id"], Stage(str(state["target"]))
-        message = f"{target.value} needs every earlier stage to be GO first"
+        results = state.get("results", {})
+        first_open = next(s for s in state["stages"] if results.get(s, {}).get("decision") != "GO")
+        message = f"{target.value} needs every earlier stage to be GO first; next is {first_open}"
+        trace_id = state["trace_id"]
         blocked = self._error(
-            case_id, target, uuid.uuid4().hex, BlockerCode.SUP_UPSTREAM_NOT_GO, message
+            case_id, target, trace_id, BlockerCode.SUP_UPSTREAM_NOT_GO, message
         ).model_copy(update={"decision": Decision.NO_GO, "question": message})
-        self.store.audit(case_id, "UPSTREAM_NOT_GO", {"stage": target.value})
-        results = {**state.get("results", {}), target.value: blocked.model_dump(mode="json")}
+        run_id = self.store.stage_started(case_id, target.value, trace_id)
+        self.store.stage_finished(run_id, blocked)  # visible in the stage tracker (UI-03)
+        self.store.set_state(case_id, status="PAUSED", current_stage=first_open)
+        results = {**results, target.value: blocked.model_dump(mode="json")}
         return {
             "results": results,
             "outcome": {"status": "PAUSED", "stage": target.value, "question": message},
@@ -244,26 +353,41 @@ class Supervisor:
             self.store.set_state(case_id, status="FAILED", current_stage=Stage.ROUTING.value)
             return {"outcome": {"status": "FAILED", "stage": "routing", "question": None}}
         route = route_amount(amount, self.boundary_rule)
-        with span("route", case_id=case_id, route=route):
-            self.store.route(case_id, route)
-        status = "HELD" if route == "HELD" else "AWAITING_APPROVAL"
-        return {"outcome": {"status": status, "stage": None, "question": None, "route": route}}
+        held = route == "HELD"
+        reason = BlockerCode.SUP_ROUTE_HELD.value if held else None
+        with span("route", trace_id=state["trace_id"], case_id=case_id, route=route):
+            self.store.route(case_id, route, reason=reason)
+        status = "HELD" if held else "AWAITING_APPROVAL"
+        return {
+            "outcome": {
+                "status": status,
+                "stage": None,
+                "question": None,
+                "route": route,
+                "reason": reason,
+            }
+        }
 
     def _approval(self, state: _State) -> dict[str, Any]:
         """Human decision (OBJ-09): the graph waits here; only /decision resumes it."""
         answer = interrupt({"case_id": state["case_id"], "outcome": state["outcome"]})
         decision, back = answer["decision"], answer.get("return_stage")
-        if decision == "return" and back is not None:
+        with span(
+            "decision", trace_id=state["trace_id"], case_id=state["case_id"], decision=decision
+        ):
+            pass
+        if decision == "return":
             stages = state["stages"]
-            keep = stages[: stages.index(back)] if back in stages else stages
+            if back not in stages:  # decide() validates first; this guards a forged resume
+                raise InvalidReturnStageError(f"unknown return stage {back!r}")
+            keep = stages[: stages.index(back)]
             results = {k: v for k, v in state.get("results", {}).items() if k in keep}
             return {"results": results, "outcome": {"status": "RETURNED", "stage": back}}
         status = {"approve": "APPROVED", "reject": "REJECTED"}[decision]
         return {"outcome": {"status": status, "stage": None, "question": None}}
 
     # ---- one stage --------------------------------------------------------------------------
-    def _invoke(self, case_id: str, stage: Stage) -> AgentResult:
-        trace_id = uuid.uuid4().hex
+    def _invoke(self, case_id: str, stage: Stage, trace_id: str) -> AgentResult:
         agent_name = AgentName(stage.value)
         run_id = self.store.stage_started(case_id, stage.value, trace_id)
         with span("stage", case_id=case_id, stage=stage.value, trace_id=trace_id):
@@ -283,19 +407,33 @@ class Supervisor:
                 stage=stage,
                 trace_id=trace_id,
                 ledger=self.ledger,
-                tools=self.tools(agent_name),
-                llm=self.llm,
+                tools=_AuditedTools(self.tools(agent_name), self.store, agent_name, trace_id),
+                llm=_TracedLLM(self.llm, case_id, stage) if self.llm is not None else None,
                 clock=self.clock,
             )
             try:
                 out: Any = agent(ctx)
-            except LoopDetected as exc:
+            except LoopDetected:
+                # S3: the tool name and arguments stay in the log, never in the stored blocker.
+                _log.exception("loop in %s on case %s (trace %s)", stage.value, case_id, trace_id)
                 return self._error(
-                    case_id, stage, trace_id, BlockerCode.SUP_BUDGET_EXCEEDED, f"loop: {exc}"
+                    case_id,
+                    stage,
+                    trace_id,
+                    BlockerCode.SUP_BUDGET_EXCEEDED,
+                    "loop: repeated identical tool call",
                 )
             except Exception as exc:
+                # NFR-07: the detail stays in the log; the stored, user-visible blocker is generic.
+                _log.exception(
+                    "agent %s failed on case %s (trace %s)", stage.value, case_id, trace_id
+                )
                 return self._error(
-                    case_id, stage, trace_id, BlockerCode.SUP_SCHEMA_INVALID, f"agent error: {exc}"
+                    case_id,
+                    stage,
+                    trace_id,
+                    BlockerCode.SUP_AGENT_ERROR,
+                    f"agent error: {type(exc).__name__}",
                 )
             try:
                 raw = out.model_dump() if isinstance(out, AgentResult) else out
@@ -375,6 +513,7 @@ class Supervisor:
             status=out["status"],
             stage=Stage(stage) if stage else None,
             question=out.get("question"),
+            reason=out.get("reason"),
             results={
                 Stage(k): AgentResult.model_validate(v)
                 for k, v in values.get("results", {}).items()

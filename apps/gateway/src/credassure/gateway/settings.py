@@ -10,6 +10,7 @@ from __future__ import annotations
 from datetime import date
 from decimal import Decimal
 from functools import lru_cache
+from pathlib import Path
 from typing import Literal, Self
 
 from pydantic import Field, SecretStr, field_validator, model_validator
@@ -44,6 +45,12 @@ class Settings(BaseSettings):
     langfuse_host: str = "http://localhost:3000"
     langfuse_public_key: SecretStr | None = None
     langfuse_secret_key: SecretStr | None = None
+
+    case_db: Path = Path("var/case.db")
+    seed_password: SecretStr | None = None  # demo users only (make db); tests pass their own
+    rate_limit: str = "120/minute"  # per user (JWT sub), else per client IP (NFR-04)
+    token_quota: int = Field(default=2_000_000, gt=0)  # team quota; warnings at 70% / 90% (#16)
+    max_upload_bytes: int = Field(default=2 * 1024 * 1024, gt=0)  # 2 MB (UI-02)
 
     jwt_secret: SecretStr | None = None
     jwt_expiry_minutes: int = Field(default=30, gt=0, le=30)

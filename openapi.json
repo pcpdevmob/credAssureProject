@@ -1,6 +1,105 @@
 {
   "components": {
     "schemas": {
+      "Body_upload_v1_cases__case_id__files_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_v1_cases__case_id__files_post",
+        "type": "object"
+      },
+      "Chat": {
+        "properties": {
+          "message": {
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "Chat",
+        "type": "object"
+      },
+      "Config": {
+        "properties": {
+          "key": {
+            "const": "boundary_rule",
+            "title": "Key",
+            "type": "string"
+          },
+          "value": {
+            "enum": [
+              "hold",
+              "director",
+              "vp"
+            ],
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "title": "Config",
+        "type": "object"
+      },
+      "Decision": {
+        "properties": {
+          "comment": {
+            "default": "",
+            "maxLength": 2000,
+            "title": "Comment",
+            "type": "string"
+          },
+          "decision": {
+            "enum": [
+              "approve",
+              "reject",
+              "return"
+            ],
+            "title": "Decision",
+            "type": "string"
+          },
+          "expected_version": {
+            "minimum": 0.0,
+            "title": "Expected Version",
+            "type": "integer"
+          },
+          "return_stage": {
+            "anyOf": [
+              {
+                "enum": [
+                  "onboarding",
+                  "working_capital",
+                  "lendwise"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Return Stage"
+          }
+        },
+        "required": [
+          "decision",
+          "expected_version"
+        ],
+        "title": "Decision",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -12,6 +111,68 @@
           }
         },
         "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "Login": {
+        "properties": {
+          "password": {
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Password",
+            "type": "string"
+          },
+          "username": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "Login",
+        "type": "object"
+      },
+      "NewCase": {
+        "properties": {
+          "due_date": {
+            "format": "date",
+            "title": "Due Date",
+            "type": "string"
+          },
+          "indicative_amount_paise": {
+            "minimum": 0.0,
+            "title": "Indicative Amount Paise",
+            "type": "integer"
+          },
+          "msme_name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Msme Name",
+            "type": "string"
+          },
+          "order_ref": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Order Ref",
+            "type": "string"
+          },
+          "order_value_paise": {
+            "exclusiveMinimum": 0.0,
+            "title": "Order Value Paise",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "msme_name",
+          "order_ref",
+          "order_value_paise",
+          "indicative_amount_paise",
+          "due_date"
+        ],
+        "title": "NewCase",
         "type": "object"
       },
       "ValidationError": {
@@ -54,26 +215,78 @@
         "title": "ValidationError",
         "type": "object"
       }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "scheme": "bearer",
+        "type": "http"
+      }
     }
   },
   "info": {
     "title": "CredAssure API",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "openapi": "3.1.0",
   "paths": {
+    "/v1/admin/config": {
+      "post": {
+        "operationId": "set_config_v1_admin_config_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Config"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Set Config V1 Admin Config Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Set Config",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
     "/v1/agents/copilot/card": {
       "get": {
-        "description": "Agent card: name and version.",
+        "description": "Agent card: name, version and the stage it runs (if any).",
         "operationId": "card_v1_agents_copilot_card_get",
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
+                  "additionalProperties": true,
                   "title": "Response Card V1 Agents Copilot Card Get",
                   "type": "object"
                 }
@@ -90,7 +303,7 @@
     },
     "/v1/agents/copilot/cases/{case_id}/chat": {
       "post": {
-        "description": "Copilot turn. Not implemented until Phase 9e.",
+        "description": "Ask the copilot about this case (placeholder until Phase 9e).",
         "operationId": "chat_v1_agents_copilot_cases__case_id__chat_post",
         "parameters": [
           {
@@ -103,11 +316,29 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Chat V1 Agents Copilot Cases  Case Id  Chat Post",
+                  "type": "object"
+                }
               }
             },
             "description": "Successful Response"
@@ -124,47 +355,6 @@
           }
         },
         "summary": "Chat",
-        "tags": [
-          "copilot"
-        ]
-      }
-    },
-    "/v1/agents/copilot/cases/{case_id}/result": {
-      "get": {
-        "description": "Latest result. Not implemented yet.",
-        "operationId": "result_v1_agents_copilot_cases__case_id__result_get",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "case_id",
-            "required": true,
-            "schema": {
-              "title": "Case Id",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Result",
         "tags": [
           "copilot"
         ]
@@ -197,16 +387,14 @@
     },
     "/v1/agents/critic/card": {
       "get": {
-        "description": "Agent card: name and version.",
+        "description": "Agent card: name, version and the stage it runs (if any).",
         "operationId": "card_v1_agents_critic_card_get",
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
+                  "additionalProperties": true,
                   "title": "Response Card V1 Agents Critic Card Get",
                   "type": "object"
                 }
@@ -223,7 +411,7 @@
     },
     "/v1/agents/critic/cases/{case_id}/findings": {
       "get": {
-        "description": "Critic findings. Not implemented until Phase 9d.",
+        "description": "Arrives in Phase 9d.",
         "operationId": "findings_v1_agents_critic_cases__case_id__findings_get",
         "parameters": [
           {
@@ -264,7 +452,7 @@
     },
     "/v1/agents/critic/cases/{case_id}/result": {
       "get": {
-        "description": "Latest result. Not implemented yet.",
+        "description": "Latest AgentResult for this stage (404 before the first run).",
         "operationId": "result_v1_agents_critic_cases__case_id__result_get",
         "parameters": [
           {
@@ -281,7 +469,11 @@
           "200": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Result V1 Agents Critic Cases  Case Id  Result Get",
+                  "type": "object"
+                }
               }
             },
             "description": "Successful Response"
@@ -305,7 +497,7 @@
     },
     "/v1/agents/critic/cases/{case_id}/run": {
       "post": {
-        "description": "Run this stage through the Supervisor. Not implemented yet.",
+        "description": "Run only this stage through the Supervisor (earlier stages must be GO, SUP-03).",
         "operationId": "run_stage_v1_agents_critic_cases__case_id__run_post",
         "parameters": [
           {
@@ -316,13 +508,34 @@
               "title": "Case Id",
               "type": "string"
             }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
           }
         ],
         "responses": {
-          "200": {
+          "202": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Run Stage V1 Agents Critic Cases  Case Id  Run Post",
+                  "type": "object"
+                }
               }
             },
             "description": "Successful Response"
@@ -371,16 +584,14 @@
     },
     "/v1/agents/lendwise/card": {
       "get": {
-        "description": "Agent card: name and version.",
+        "description": "Agent card: name, version and the stage it runs (if any).",
         "operationId": "card_v1_agents_lendwise_card_get",
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
+                  "additionalProperties": true,
                   "title": "Response Card V1 Agents Lendwise Card Get",
                   "type": "object"
                 }
@@ -397,7 +608,7 @@
     },
     "/v1/agents/lendwise/cases/{case_id}/negotiate": {
       "post": {
-        "description": "One negotiation round. Not implemented until Phase 9c. Never accepts an offer.",
+        "description": "Arrives in Phase 9c. Never accepts an offer.",
         "operationId": "negotiate_v1_agents_lendwise_cases__case_id__negotiate_post",
         "parameters": [
           {
@@ -438,7 +649,7 @@
     },
     "/v1/agents/lendwise/cases/{case_id}/offers": {
       "get": {
-        "description": "Offer comparison. Not implemented until Phase 9c.",
+        "description": "Arrives in Phase 9c.",
         "operationId": "offers_v1_agents_lendwise_cases__case_id__offers_get",
         "parameters": [
           {
@@ -479,7 +690,7 @@
     },
     "/v1/agents/lendwise/cases/{case_id}/result": {
       "get": {
-        "description": "Latest result. Not implemented yet.",
+        "description": "Latest AgentResult for this stage (404 before the first run).",
         "operationId": "result_v1_agents_lendwise_cases__case_id__result_get",
         "parameters": [
           {
@@ -496,7 +707,11 @@
           "200": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Result V1 Agents Lendwise Cases  Case Id  Result Get",
+                  "type": "object"
+                }
               }
             },
             "description": "Successful Response"
@@ -520,7 +735,7 @@
     },
     "/v1/agents/lendwise/cases/{case_id}/run": {
       "post": {
-        "description": "Run this stage through the Supervisor. Not implemented yet.",
+        "description": "Run only this stage through the Supervisor (earlier stages must be GO, SUP-03).",
         "operationId": "run_stage_v1_agents_lendwise_cases__case_id__run_post",
         "parameters": [
           {
@@ -531,13 +746,34 @@
               "title": "Case Id",
               "type": "string"
             }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
           }
         ],
         "responses": {
-          "200": {
+          "202": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Run Stage V1 Agents Lendwise Cases  Case Id  Run Post",
+                  "type": "object"
+                }
               }
             },
             "description": "Successful Response"
@@ -586,16 +822,14 @@
     },
     "/v1/agents/onboarding/card": {
       "get": {
-        "description": "Agent card: name and version.",
+        "description": "Agent card: name, version and the stage it runs (if any).",
         "operationId": "card_v1_agents_onboarding_card_get",
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
+                  "additionalProperties": true,
                   "title": "Response Card V1 Agents Onboarding Card Get",
                   "type": "object"
                 }
@@ -612,7 +846,7 @@
     },
     "/v1/agents/onboarding/cases/{case_id}/result": {
       "get": {
-        "description": "Latest result. Not implemented yet.",
+        "description": "Latest AgentResult for this stage (404 before the first run).",
         "operationId": "result_v1_agents_onboarding_cases__case_id__result_get",
         "parameters": [
           {
@@ -629,7 +863,11 @@
           "200": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Result V1 Agents Onboarding Cases  Case Id  Result Get",
+                  "type": "object"
+                }
               }
             },
             "description": "Successful Response"
@@ -653,7 +891,7 @@
     },
     "/v1/agents/onboarding/cases/{case_id}/run": {
       "post": {
-        "description": "Run this stage through the Supervisor. Not implemented yet.",
+        "description": "Run only this stage through the Supervisor (earlier stages must be GO, SUP-03).",
         "operationId": "run_stage_v1_agents_onboarding_cases__case_id__run_post",
         "parameters": [
           {
@@ -664,13 +902,34 @@
               "title": "Case Id",
               "type": "string"
             }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
           }
         ],
         "responses": {
-          "200": {
+          "202": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Run Stage V1 Agents Onboarding Cases  Case Id  Run Post",
+                  "type": "object"
+                }
               }
             },
             "description": "Successful Response"
@@ -719,16 +978,14 @@
     },
     "/v1/agents/supervisor/card": {
       "get": {
-        "description": "Agent card: name and version.",
+        "description": "Agent card: name, version and the stage it runs (if any).",
         "operationId": "card_v1_agents_supervisor_card_get",
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
+                  "additionalProperties": true,
                   "title": "Response Card V1 Agents Supervisor Card Get",
                   "type": "object"
                 }
@@ -745,7 +1002,7 @@
     },
     "/v1/agents/supervisor/cases/{case_id}/plan": {
       "get": {
-        "description": "Case plan. Not implemented until Phase 8.",
+        "description": "The visible Plan for this case (scope #19).",
         "operationId": "plan_v1_agents_supervisor_cases__case_id__plan_get",
         "parameters": [
           {
@@ -762,7 +1019,11 @@
           "200": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Plan V1 Agents Supervisor Cases  Case Id  Plan Get",
+                  "type": "object"
+                }
               }
             },
             "description": "Successful Response"
@@ -786,7 +1047,7 @@
     },
     "/v1/agents/supervisor/cases/{case_id}/result": {
       "get": {
-        "description": "Latest result. Not implemented yet.",
+        "description": "Latest AgentResult of any stage (404 before the first run).",
         "operationId": "result_v1_agents_supervisor_cases__case_id__result_get",
         "parameters": [
           {
@@ -803,7 +1064,11 @@
           "200": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Result V1 Agents Supervisor Cases  Case Id  Result Get",
+                  "type": "object"
+                }
               }
             },
             "description": "Successful Response"
@@ -827,7 +1092,7 @@
     },
     "/v1/agents/supervisor/cases/{case_id}/stages/{stage}/retry": {
       "post": {
-        "description": "Retry one stage. Not implemented until Phase 8.",
+        "description": "Evaluator only (scope #25); the retry itself arrives in Phase 9.",
         "operationId": "retry_v1_agents_supervisor_cases__case_id__stages__stage__retry_post",
         "parameters": [
           {
@@ -902,16 +1167,14 @@
     },
     "/v1/agents/working-capital/card": {
       "get": {
-        "description": "Agent card: name and version.",
+        "description": "Agent card: name, version and the stage it runs (if any).",
         "operationId": "card_v1_agents_working_capital_card_get",
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
+                  "additionalProperties": true,
                   "title": "Response Card V1 Agents Working Capital Card Get",
                   "type": "object"
                 }
@@ -922,13 +1185,13 @@
         },
         "summary": "Card",
         "tags": [
-          "working-capital"
+          "working_capital"
         ]
       }
     },
     "/v1/agents/working-capital/cases/{case_id}/cash-table": {
       "get": {
-        "description": "Cash table. Not implemented until Phase 9b.",
+        "description": "Arrives in Phase 9b.",
         "operationId": "cash_table_v1_agents_working_capital_cases__case_id__cash_table_get",
         "parameters": [
           {
@@ -963,13 +1226,13 @@
         },
         "summary": "Cash Table",
         "tags": [
-          "working-capital"
+          "working_capital"
         ]
       }
     },
     "/v1/agents/working-capital/cases/{case_id}/result": {
       "get": {
-        "description": "Latest result. Not implemented yet.",
+        "description": "Latest AgentResult for this stage (404 before the first run).",
         "operationId": "result_v1_agents_working_capital_cases__case_id__result_get",
         "parameters": [
           {
@@ -986,7 +1249,11 @@
           "200": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Result V1 Agents Working Capital Cases  Case Id  Result Get",
+                  "type": "object"
+                }
               }
             },
             "description": "Successful Response"
@@ -1004,13 +1271,13 @@
         },
         "summary": "Result",
         "tags": [
-          "working-capital"
+          "working_capital"
         ]
       }
     },
     "/v1/agents/working-capital/cases/{case_id}/run": {
       "post": {
-        "description": "Run this stage through the Supervisor. Not implemented yet.",
+        "description": "Run only this stage through the Supervisor (earlier stages must be GO, SUP-03).",
         "operationId": "run_stage_v1_agents_working_capital_cases__case_id__run_post",
         "parameters": [
           {
@@ -1021,13 +1288,34 @@
               "title": "Case Id",
               "type": "string"
             }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
           }
         ],
         "responses": {
-          "200": {
+          "202": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Run Stage V1 Agents Working Capital Cases  Case Id  Run Post",
+                  "type": "object"
+                }
               }
             },
             "description": "Successful Response"
@@ -1045,7 +1333,7 @@
         },
         "summary": "Run Stage",
         "tags": [
-          "working-capital"
+          "working_capital"
         ]
       }
     },
@@ -1070,13 +1358,1035 @@
         },
         "summary": "Health",
         "tags": [
-          "working-capital"
+          "working_capital"
+        ]
+      }
+    },
+    "/v1/auth/token": {
+      "post": {
+        "operationId": "token_v1_auth_token_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Token V1 Auth Token Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Token",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/v1/cases": {
+      "get": {
+        "operationId": "list_cases_v1_cases_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response List Cases V1 Cases Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "List Cases",
+        "tags": [
+          "cases"
+        ]
+      },
+      "post": {
+        "operationId": "create_case_v1_cases_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewCase"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Create Case V1 Cases Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Create Case",
+        "tags": [
+          "cases"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}": {
+      "get": {
+        "operationId": "get_case_v1_cases__case_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Get Case V1 Cases  Case Id  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Case",
+        "tags": [
+          "cases"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}/assessment": {
+      "post": {
+        "description": "Run only the working_capital stage; earlier stages must be GO (SUP-03).",
+        "operationId": "run_assessment_v1_cases__case_id__assessment_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Run Assessment V1 Cases  Case Id  Assessment Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Run Assessment",
+        "tags": [
+          "workflow"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}/audit": {
+      "get": {
+        "operationId": "audit_v1_cases__case_id__audit_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Audit V1 Cases  Case Id  Audit Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Audit",
+        "tags": [
+          "cases"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}/chat": {
+      "post": {
+        "operationId": "chat_v1_cases__case_id__chat_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Chat"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Chat V1 Cases  Case Id  Chat Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Chat",
+        "tags": [
+          "cases"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}/decision": {
+      "post": {
+        "description": "Only the routed approver; never the preparer (maker-checker); internal only (APR-06).",
+        "operationId": "decide_v1_cases__case_id__decision_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Decide V1 Cases  Case Id  Decision Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Decide",
+        "tags": [
+          "workflow"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}/files": {
+      "post": {
+        "operationId": "upload_v1_cases__case_id__files_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": true,
+            "schema": {
+              "enum": [
+                "order",
+                "opening_position",
+                "costs",
+                "receipts",
+                "receivables",
+                "payables",
+                "inventory"
+              ],
+              "title": "Kind",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_v1_cases__case_id__files_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Upload V1 Cases  Case Id  Files Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Upload",
+        "tags": [
+          "cases"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}/funding": {
+      "get": {
+        "operationId": "funding_v1_cases__case_id__funding_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Funding V1 Cases  Case Id  Funding Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Funding",
+        "tags": [
+          "cases"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}/inbox": {
+      "get": {
+        "operationId": "case_inbox_v1_cases__case_id__inbox_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Case Inbox V1 Cases  Case Id  Inbox Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Case Inbox",
+        "tags": [
+          "workflow"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}/offers": {
+      "get": {
+        "operationId": "offers_v1_cases__case_id__offers_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Offers V1 Cases  Case Id  Offers Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Offers",
+        "tags": [
+          "cases"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}/proposal": {
+      "post": {
+        "description": "Run only the lendwise stage; earlier stages must be GO (SUP-03).",
+        "operationId": "run_proposal_v1_cases__case_id__proposal_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Run Proposal V1 Cases  Case Id  Proposal Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Run Proposal",
+        "tags": [
+          "workflow"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}/readiness": {
+      "post": {
+        "description": "Run only the onboarding stage; earlier stages must be GO (SUP-03).",
+        "operationId": "run_readiness_v1_cases__case_id__readiness_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Run Readiness V1 Cases  Case Id  Readiness Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Run Readiness",
+        "tags": [
+          "workflow"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}/report": {
+      "get": {
+        "description": "Skeleton report (Phase 10 renders the full template): stages, decisions, trace IDs.",
+        "operationId": "report_v1_cases__case_id__report_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "fmt",
+            "required": false,
+            "schema": {
+              "default": "md",
+              "enum": [
+                "md",
+                "html"
+              ],
+              "title": "Fmt",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Report",
+        "tags": [
+          "cases"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}/run": {
+      "post": {
+        "operationId": "run_v1_cases__case_id__run_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Run V1 Cases  Case Id  Run Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Run",
+        "tags": [
+          "workflow"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}/verify": {
+      "post": {
+        "description": "Run only the critic stage; earlier stages must be GO (SUP-03).",
+        "operationId": "run_verify_v1_cases__case_id__verify_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Run Verify V1 Cases  Case Id  Verify Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Run Verify",
+        "tags": [
+          "workflow"
+        ]
+      }
+    },
+    "/v1/eval/runs": {
+      "post": {
+        "operationId": "start_eval_v1_eval_runs_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Start Eval",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/eval/runs/{run_id}": {
+      "get": {
+        "operationId": "get_eval_v1_eval_runs__run_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "title": "Run Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Eval",
+        "tags": [
+          "admin"
         ]
       }
     },
     "/v1/health/live": {
       "get": {
-        "description": "Liveness probe; readiness (DB, Chroma, model circuit) arrives in Phase 8 (scope #50).",
         "operationId": "live_v1_health_live_get",
         "responses": {
           "200": {
@@ -1097,6 +2407,175 @@
         "summary": "Live",
         "tags": [
           "health"
+        ]
+      }
+    },
+    "/v1/health/ready": {
+      "get": {
+        "operationId": "ready_v1_health_ready_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Ready V1 Health Ready Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Ready",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/v1/inbox": {
+      "get": {
+        "operationId": "inbox_v1_inbox_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Inbox V1 Inbox Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Inbox",
+        "tags": [
+          "workflow"
+        ]
+      }
+    },
+    "/v1/jobs/{job_id}": {
+      "get": {
+        "operationId": "get_job_v1_jobs__job_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "title": "Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Get Job V1 Jobs  Job Id  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Job",
+        "tags": [
+          "workflow"
+        ]
+      }
+    },
+    "/v1/jobs/{job_id}/events": {
+      "get": {
+        "description": "SSE: one `stage` event per stage run since the job started, then `end` (ADR 0007).",
+        "operationId": "events_v1_jobs__job_id__events_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "title": "Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Events",
+        "tags": [
+          "workflow"
+        ]
+      }
+    },
+    "/v1/me": {
+      "get": {
+        "operationId": "me_v1_me_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Me V1 Me Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Me",
+        "tags": [
+          "auth"
         ]
       }
     }

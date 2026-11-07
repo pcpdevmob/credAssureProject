@@ -76,37 +76,53 @@ class SupervisorStore(Protocol):
 
     def audit(self, case_id: str, event_type: str, payload: dict[str, Any]) -> None: ...
 
-    def route(self, case_id: str, route: str) -> None: ...
+    def route(self, case_id: str, route: str, reason: str | None = None) -> None: ...
 
 
 class SupervisorPort(Protocol):
-    """Stage runs go through this interface, never straight into an agent (ADR 0005)."""
+    """How an agent's API router reaches the Supervisor (ADR 0005): stage runs, results, plan,
+    and copilot chat all go through the gateway's service, never straight into an agent.
+
+    `actor` is the authenticated principal; `schedule(fn, *args)` queues background work
+    (FastAPI passes `BackgroundTasks.add_task`), so the port stays framework-free.
+    """
 
     def start_run(
-        self, actor: Any, case_id: str, *, stage: str | None, idempotency_key: str | None
+        self,
+        actor: Any,
+        case_id: str,
+        *,
+        stage: str | None,
+        idempotency_key: str | None,
+        schedule: Callable[..., Any],
     ) -> dict[str, Any]: ...
 
-    def latest_result(self, actor: Any, case_id: str, stage: str) -> AgentResult | None: ...
+    def latest_result(self, actor: Any, case_id: str, stage: str | None) -> AgentResult | None: ...
 
     def plan(self, actor: Any, case_id: str) -> dict[str, Any]: ...
 
-    def run_stage(self, case_id: str, stage: str) -> AgentResult: ...
+    def chat(self, actor: Any, case_id: str, message: str) -> dict[str, Any]: ...
 
 
 class UnavailableSupervisor:
-    """Default dependency; the gateway overrides it with the real service."""
+    """Default dependency in each agent's api/deps.py; the gateway overrides it."""
 
     def start_run(
-        self, actor: Any, case_id: str, *, stage: str | None, idempotency_key: str | None
+        self,
+        actor: Any,
+        case_id: str,
+        *,
+        stage: str | None,
+        idempotency_key: str | None,
+        schedule: Callable[..., Any] | None = None,
     ) -> dict[str, Any]:
         raise NotImplementedError("supervisor not wired")
 
-    def latest_result(self, actor: Any, case_id: str, stage: str) -> AgentResult | None:
+    def latest_result(self, actor: Any, case_id: str, stage: str | None) -> AgentResult | None:
         raise NotImplementedError("supervisor not wired")
 
     def plan(self, actor: Any, case_id: str) -> dict[str, Any]:
         raise NotImplementedError("supervisor not wired")
 
-    def run_stage(self, case_id: str, stage: str) -> AgentResult:
-        # ponytail: kept until the Phase 8 agent routers move to start_run; then delete.
-        raise NotImplementedError(f"stage {stage} is not implemented")
+    def chat(self, actor: Any, case_id: str, message: str) -> dict[str, Any]:
+        raise NotImplementedError("supervisor not wired")

@@ -19,6 +19,13 @@ jobs:
       - run: uv python install 3.12
       - run: uv sync --locked --all-packages
       - run: make check
+      - name: No breaking API change against main (scope #28)
+        if: github.event_name == 'pull_request'
+        run: |
+          git show origin/${{ github.base_ref }}:openapi.json > /tmp/base-openapi.json
+          # ponytail: unpinned image; Phase 12 (#41) pins every image by digest
+          docker run --rm -v /tmp:/base -v "$PWD":/head tufin/oasdiff \
+            breaking /base/base-openapi.json /head/openapi.json --fail-on ERR
       - run: make audit
       - uses: gitleaks/gitleaks-action@v2
         env:

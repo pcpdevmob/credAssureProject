@@ -16,14 +16,22 @@ from sqlalchemy.orm.exc import StaleDataError
 from credassure.security.auth import DECIDABLE, may_decide_route
 
 from .chain import GENESIS, canonical, hashed_fields, row_hash
-from .models import Approval, AuditHead, AuditLog, Case, Job, LedgerFact, StageRun, User
+from .errors import ConflictError
+from .models import (
+    AppConfig,
+    Approval,
+    AuditHead,
+    AuditLog,
+    Case,
+    CaseFile,
+    Job,
+    LedgerFact,
+    StageRun,
+    User,
+)
 
 DECISIONS = {"approve": "APPROVED", "reject": "REJECTED", "return": "RETURNED"}
 FINAL = frozenset({"APPROVED", "REJECTED"})  # APR-04: nothing reopens these
-
-
-class ConflictError(Exception):
-    """Optimistic-concurrency or business-rule conflict (the API answers 409)."""
 
 
 def _now() -> datetime:
@@ -184,7 +192,15 @@ def create_case(
     return case
 
 
-def route_case(s: Session, *, tenant_id: str, case_id: str, route: str, actor: str) -> Case:
+def route_case(
+    s: Session,
+    *,
+    tenant_id: str,
+    case_id: str,
+    route: str,
+    actor: str,
+    reason: str | None = None,
+) -> Case:
     """After the Critic GO (Supervisor, Phase 8): store the engine route and await the approver."""
     case = s.scalar(select(Case).where(Case.tenant_id == tenant_id, Case.id == case_id))
     if case is None:
@@ -201,7 +217,7 @@ def route_case(s: Session, *, tenant_id: str, case_id: str, route: str, actor: s
         case_id=case_id,
         actor=actor,
         event_type="ROUTED",
-        payload={"route": route, "status": case.status},
+        payload={"route": route, "status": case.status} | ({"reason": reason} if reason else {}),
     )
     return case
 
@@ -393,3 +409,91 @@ def update_job(
         job.error = error
     s.flush()
     return job
+
+
+def next_case_id(s: Session, *, tenant_id: str, year: int) -> str:
+    """CA-YYYY-NNNN, allocated inside the caller's BEGIN IMMEDIATE transaction (no race)."""
+    prefix = f"CA-{year}-"
+    last = s.scalar(
+        select(func.max(Case.id)).where(Case.tenant_id == tenant_id, Case.id.like(prefix + "%"))
+    )
+    return f"{prefix}{(int(last.rsplit('-', 1)[1]) if last else 0) + 1:04d}"
+
+
+def store_case_file(
+    s: Session,
+    *,
+    tenant_id: str,
+    case_id: str,
+    kind: str,
+    payload_json: str,
+    uploaded_by: str,
+    sha256: str,
+) -> CaseFile:
+    """New version of one case file (newest wins; old kept) plus its FILE_UPLOADED event.
+
+    `sha256` is the hash of the bytes as uploaded, so the file can be matched to its source.
+    """
+    digest = sha256
+    row = CaseFile(
+        tenant_id=tenant_id,
+        case_id=case_id,
+        kind=kind,
+        schema_version="1.0",
+        sha256=digest,
+        payload_json=payload_json,
+        uploaded_by=uploaded_by,
+        created_at=_now(),
+    )
+    s.add(row)
+    s.flush()
+    append_audit(
+        s,
+        tenant_id=tenant_id,
+        case_id=case_id,
+        actor=uploaded_by,
+        event_type="FILE_UPLOADED",
+        payload={"kind": kind, "sha256": digest},
+    )
+    return row
+
+
+def upsert_config(s: Session, *, tenant_id: str, key: str, value: str, actor: str) -> AppConfig:
+    """Admin setting (APR-03 boundary rule), audited."""
+    row = s.get(AppConfig, (tenant_id, key))
+    if row is None:
+        row = AppConfig(
+            tenant_id=tenant_id, key=key, value=value, updated_by=actor, updated_at=_now()
+        )
+        s.add(row)
+    else:
+        row.value, row.updated_by, row.updated_at = value, actor, _now()
+    s.flush()
+    append_audit(
+        s,
+        tenant_id=tenant_id,
+        case_id=None,
+        actor=actor,
+        event_type="CONFIG_CHANGED",
+        payload={"key": key, "value": value},
+    )
+    return row
+
+
+def claim_job(s: Session, job_id: str) -> bool:
+    """queued → running exactly once; a duplicate background task finds nothing to claim."""
+    job = s.get(Job, job_id)
+    if job is None or job.status != "queued":
+        return False
+    job.status, job.updated_at = "running", _now()
+    s.flush()
+    return True
+
+
+def set_password_hash(s: Session, *, user_id: str, password_hash: str) -> None:
+    """Rehash on login with newer argon2 parameters (never a plaintext path)."""
+    user = s.get(User, user_id)
+    if user is None:
+        raise ConflictError(f"no user {user_id}")
+    user.password_hash = password_hash
+    s.flush()

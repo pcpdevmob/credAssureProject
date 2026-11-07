@@ -1,5 +1,7 @@
 """Core contract smoke test (design-detail §2.1, scope #25, #27, #46)."""
 
+import pytest
+
 from credassure.core.enums import AgentName, Decision, Stage
 from credassure.core.ports import UnavailableSupervisor
 from credassure.core.results import AgentResult
@@ -19,9 +21,5 @@ def test_agent_result_round_trip() -> None:
 
 
 def test_supervisor_port_is_unavailable() -> None:
-    try:
-        UnavailableSupervisor().run_stage("CA-2026-0001", "onboarding")
-    except NotImplementedError as exc:
-        assert "not implemented" in str(exc)
-    else:
-        raise AssertionError("expected NotImplementedError")
+    with pytest.raises(NotImplementedError):
+        UnavailableSupervisor().start_run(None, "CA-2026-0001", stage=None, idempotency_key=None)

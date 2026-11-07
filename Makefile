@@ -147,7 +147,7 @@ testset:  ## Rebuild evaluation/testset/v1 and the retrieval/red-team/fixture as
 db:  ## Migrate var/case.db + var/corpus.db and seed users (needs SEED_PASSWORD; ADR 0005, scope #29)
 	uv run python -m credassure.ledger.migrate upgrade case var/case.db
 	uv run python -m credassure.ledger.migrate upgrade corpus var/corpus.db
-	uv run $(ENV_FILE) python -m credassure.ledger.seed var/case.db
+	uv run $(ENV_FILE) python -m credassure.gateway.seed  # SEED_PASSWORD via Settings, into CASE_DB
 
 demo-reset:  ## Reset demo data and replay cache (Phase 12)
 	deploy/scripts/demo-reset.sh

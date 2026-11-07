@@ -1,27 +1,28 @@
-"""HTTP surface mounted at /v1/agents/copilot (ADR 0005, scope #28)."""
+"""HTTP surface mounted at /v1/agents/copilot (ADR 0005, scope #28).
 
-from typing import Annotated
+Every case route goes through the Supervisor service with the authenticated caller; gates,
+caps, case policy and audit always apply. No route accepts, signs or submits a lender offer.
+"""
 
-from fastapi import APIRouter, Depends, HTTPException
+from typing import Annotated, Any
 
-from credassure.agents.copilot.api.deps import get_supervisor
+from fastapi import APIRouter, Depends, Header, HTTPException
+
+from credassure.agents.copilot import __version__
+from credassure.agents.copilot.api.deps import get_principal, get_supervisor
 from credassure.core.ports import SupervisorPort
 
 router = APIRouter(tags=["copilot"])
 SupervisorDep = Annotated[SupervisorPort, Depends(get_supervisor)]
-
-
-def _unavailable(case_id: str, supervisor: SupervisorPort) -> None:
-    try:
-        supervisor.run_stage(case_id, "copilot")
-    except NotImplementedError as exc:
-        raise HTTPException(status_code=501, detail=str(exc)) from exc
+Caller = Annotated[Any, Depends(get_principal)]
+IdempotencyKey = Annotated[str | None, Header(alias="Idempotency-Key", max_length=128)]
+STAGE = None
 
 
 @router.get("/card")
-def card() -> dict[str, str]:
-    """Agent card: name and version."""
-    return {"name": "copilot", "version": "0.1.0"}
+def card() -> dict[str, Any]:
+    """Agent card: name, version and the stage it runs (if any)."""
+    return {"name": "copilot", "version": __version__, "stage": STAGE}
 
 
 @router.get("/health")
@@ -29,13 +30,12 @@ def health() -> dict[str, str]:
     return {"status": "ok", "agent": "copilot"}
 
 
-@router.get("/cases/{case_id}/result")
-def result(case_id: str, supervisor: SupervisorDep) -> None:
-    """Latest result. Not implemented yet."""
-    _unavailable(case_id, supervisor)
-
-
 @router.post("/cases/{case_id}/chat")
-def chat(case_id: str, supervisor: SupervisorDep) -> None:
-    """Copilot turn. Not implemented until Phase 9e."""
-    _unavailable(case_id, supervisor)
+def chat(
+    case_id: str, body: dict[str, str], who: Caller, supervisor: SupervisorDep
+) -> dict[str, Any]:
+    """Ask the copilot about this case (placeholder until Phase 9e)."""
+    message = body.get("message", "")
+    if not message or len(message) > 4000:
+        raise HTTPException(status_code=422, detail="message must be 1-4000 characters")
+    return supervisor.chat(who, case_id, message)

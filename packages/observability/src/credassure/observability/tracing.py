@@ -5,6 +5,7 @@
 """
 
 import logging
+import time
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar
@@ -12,6 +13,7 @@ from typing import Any
 
 _log = logging.getLogger("credassure.trace")
 _captured: ContextVar[list[dict[str, Any]] | None] = ContextVar("captured", default=None)
+_trace: ContextVar[str | None] = ContextVar("trace", default=None)
 _exporter: Callable[[str, dict[str, Any]], None] | None = None
 
 
@@ -22,15 +24,33 @@ def set_exporter(fn: Callable[[str, dict[str, Any]], None] | None) -> None:
 
 
 @contextmanager
-def span(name: str, **attrs: Any) -> Iterator[None]:
+def span(name: str, **attrs: Any) -> Iterator[dict[str, Any]]:
+    """Yield the span's mutable record (callers may add attributes, e.g. tokens).
+
+    A nested span without a trace_id joins its parent's trace (one trace per run, BRD §14).
+    The exporter runs on exit with ``duration_ms`` and ``error`` (exception type or None).
+    """
+    if attrs.get("trace_id") is None and _trace.get() is not None:
+        attrs["trace_id"] = _trace.get()
     record = {"name": name, **attrs}
     sink = _captured.get()
     if sink is not None:
         sink.append(record)
     _log.info("span %s", name, extra={"span": record})
-    if _exporter is not None:
-        _exporter(name, attrs)
-    yield
+    token = _trace.set(attrs.get("trace_id"))
+    started, error = time.perf_counter(), None
+    try:
+        yield record
+    except BaseException as exc:
+        error = type(exc).__name__
+        raise
+    finally:
+        _trace.reset(token)
+        if _exporter is not None:
+            out = {k: v for k, v in record.items() if k != "name"}
+            out["duration_ms"] = round((time.perf_counter() - started) * 1000, 3)
+            out["error"] = error
+            _exporter(name, out)
 
 
 @contextmanager

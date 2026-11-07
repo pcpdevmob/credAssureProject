@@ -67,6 +67,9 @@ source_modules =
     credassure.datagen
 forbidden_modules =
     credassure.ledger.writes
+# Direct imports only: the sanctioned path is the adapter (ledger.store / ledger.seed), which is
+# inside the ledger package. Agents are held to the stricter agents-use-ports contract below.
+allow_indirect_imports = True
 
 [importlinter:contract:openai]
 name = Only the llm package imports the OpenAI SDK
@@ -87,6 +90,19 @@ source_modules =
     credassure.datagen
 forbidden_modules =
     openai
+# Direct imports only: the gateway wires credassure.llm.client (the adapter) into LLMPort.
+allow_indirect_imports = True
+
+[importlinter:contract:agents-use-ports]
+name = Agents reach the ledger and the model only through ports (ADR 0006)
+type = forbidden
+source_modules =
+    credassure.agents
+forbidden_modules =
+    credassure.ledger
+    credassure.llm
+    openai
+    sqlalchemy
 
 [importlinter:contract:datagen-independent]
 name = Generators choose inputs; they never import the engines or gold (Phase 2)

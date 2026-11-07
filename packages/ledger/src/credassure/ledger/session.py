@@ -11,7 +11,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any, cast
 
-from sqlalchemy import CursorResult, Engine, create_engine, delete, event, update
+from sqlalchemy import CursorResult, Engine, create_engine, delete, event, select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -77,6 +77,16 @@ def run_lock(engine: Engine, tenant_id: str, case_id: str, run_id: str) -> Itera
     finally:
         with transaction(engine) as s:
             s.execute(delete(RunLock).where(RunLock.case_id == case_id, RunLock.run_id == run_id))
+
+
+def run_in_progress(engine: Engine, case_id: str) -> bool:
+    """A live (not stale) run lock exists: callers answer 409 RUN_IN_PROGRESS (ADR 0007)."""
+    cutoff = datetime.now(UTC) - STALE_LOCK
+    with transaction(engine) as s:
+        held = select(RunLock.case_id).where(
+            RunLock.case_id == case_id, RunLock.acquired_at >= cutoff
+        )
+        return s.scalar(held) is not None
 
 
 def heartbeat(engine: Engine, case_id: str, run_id: str) -> bool:

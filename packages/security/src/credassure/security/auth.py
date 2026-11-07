@@ -72,6 +72,14 @@ def hash_password(password: str) -> str:
     return _HASHER.hash(password)
 
 
+def needs_rehash(digest: str) -> bool:
+    """True when the stored hash predates the current argon2 parameters (rehash on login)."""
+    try:
+        return _HASHER.check_needs_rehash(digest)
+    except InvalidHashError:
+        return True
+
+
 def verify_password(digest: str, password: str) -> bool:
     try:
         return _HASHER.verify(digest, password)

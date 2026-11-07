@@ -1,0 +1,70 @@
+"""Login and identity (NFR-07). Tokens are short-lived; the user row is re-checked per request."""
+
+from typing import Any
+
+from fastapi import APIRouter, Request
+from limits import parse
+from pydantic import BaseModel, Field
+
+from credassure.core.errors import ApiErrorCode
+from credassure.gateway.deps import Svc, User
+from credassure.gateway.problems import ProblemError
+from credassure.ledger import reads
+from credassure.ledger.session import transaction
+from credassure.security.auth import (
+    AuthError,
+    Principal,
+    Role,
+    hash_password,
+    issue_token,
+    needs_rehash,
+    verify_password,
+)
+
+router = APIRouter(prefix="/v1", tags=["auth"])
+# A real argon2 hash of a throwaway value: an unknown username costs the same verify (timing).
+_DUMMY_HASH = hash_password("credassure-dummy-password-for-timing")
+LOGIN_FAILURES = parse("5/minute")  # S4: per username and client IP
+
+
+class Login(BaseModel):
+    username: str = Field(min_length=1, max_length=64)
+    password: str = Field(min_length=1, max_length=256)
+
+
+@router.post("/auth/token")
+def token(body: Login, request: Request, svc: Svc) -> dict[str, Any]:
+    limiter = request.app.state.login_limiter
+    key = (body.username.lower(), request.client.host if request.client else "unknown")
+    if not limiter.test(LOGIN_FAILURES, *key):
+        raise ProblemError(429, "too many failed logins; wait a minute", ApiErrorCode.RATE_LIMITED)
+    with transaction(svc.engine) as s:
+        user = reads.user_by_name(s, body.username)
+    digest = user.password_hash if user is not None else _DUMMY_HASH
+    ok = verify_password(digest, body.password)
+    if user is None or not ok or not user.active:
+        limiter.hit(LOGIN_FAILURES, *key)  # only failures count, so a busy user is never locked out
+        raise AuthError("invalid credentials")
+    if needs_rehash(user.password_hash):
+        svc.ledger.set_password_hash(user.id, hash_password(body.password))
+    secret = svc.settings.jwt_secret
+    if secret is None:
+        raise AuthError("server has no JWT secret")
+    minutes = svc.settings.jwt_expiry_minutes
+    who = Principal(user.id, Role(user.role), user.tenant_id)
+    return {
+        "access_token": issue_token(who, secret.get_secret_value(), minutes),
+        "token_type": "bearer",  # nosec B105 - OAuth2 token type name, not a secret
+        "expires_in": minutes * 60,
+    }
+
+
+@router.get("/me")
+def me(who: User, svc: Svc) -> dict[str, Any]:
+    with transaction(svc.engine) as s:
+        user = reads.get_user(s, who.user_id)
+    return {
+        "user_id": who.user_id,
+        "username": user.username if user else None,
+        "role": who.role.value,
+    }

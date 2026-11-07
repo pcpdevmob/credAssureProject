@@ -1,7 +1,7 @@
 # CredAssure — Progress (Claude Code reads this first and updates it last)
 
 ## Current phase
-Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpus guard, baseline infra_error, freeze test). Phase 5 is done (2026-11-06). Phase 8a is done (2026-11-07). **Next is Phase 8b (gateway, agent routers, e2e, openapi, reviews), then Phase 6, which must redact approver comments before the audit write.** Still open:
+Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpus guard, baseline infra_error, freeze test). Phase 5 is done (2026-11-06). Phase 8a and 8b are done (2026-11-07). **Next is Phase 6, which must add redaction of approver comments before the audit write.** `openapi.json` and `packages/api-client` are current, so the UI lane can start U1. Still open:
 - **ADR 0018 freeze (human):** ADR 0018 (AgentResult, including `agent_version` and `tenant_id`) is Proposed and not frozen. Accept it before G1.
 - **Corpus shortfall (M1):** the corpus is short of the ≥400 real-document target. See open questions.
 
@@ -26,7 +26,52 @@ Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpu
 | 4 Engines | done | WC-01..06, LW-02..11/14, ONB-02/03, APR-01..03, BR-05/07/12; scope #1 (enum), #7; ADR 0011 | phase-4 | Pure Decimal engines. 15/15 cash-flow and 15/15 offer known answers match gold (worst APR 0.005 pp). RBI Annex B 17.07%. 20/20 onboarding profiles. 426 tests, engine coverage 98%. money-auditor PASS, brd-conformance PASS, no MUST. SHOULDs applied: IRR edge/bisection tests, `gst_rate` and `indicative` required (no silent defaults), strict Decimal in audit and negotiation, schedule terms material, fee compared in ₹, week<1 rows blocked, undrawn ≥ 0, routing rejects negatives, deterministic tie-break |
 | 5 Ledger + auth | done | SUP-08, APR-04/05, ONB-05, NFR-07, OBJ-08, BR-05, BR-14; scope #22 #27 #29 #49 | phase-5 | `packages/ledger` (case.db + corpus.db models, Alembic up/down, append-only triggers, hash-chained audit, fact ledger, run lock, read-only hr.db, seed) and `packages/security/auth.py` (argon2id, JWT, case policy). 39 tests; 468 total. brd-conformance PHASE COMPLETE; security-reviewer 2 MUST fixed (decision only on AWAITING_APPROVAL/HELD and only by the routed role, at both layers). E10 (auth part, security-reviewer): 1 MUST fixed (re-routing could reopen an APPROVED or REJECTED case); after the fix 46/47 adversarial checks pass. The open one, tail truncation of the audit chain, is a SHOULD (see Phase 5 notes). Route checks are N/A until Phase 8 |
 | 8a Supervisor + jobs + anchor | done | SUP-01..08, APR-01..03 wiring, OBJ-08; scope #1 (A4), #4, #19, #22, #46, #47 | phase-8a | Supervisor graph, placeholders, adapters, audit_head, heartbeat lock, jobs table, ADR 0007. 546 tests. Reviews and evals run with 8b |
+| 8b Gateway + async runs + e2e | done | API-01, UI-01..08 (API side), SUP-02 (placeholder), SUP-03/08, APR-04/05, NFR-03/04/07, OBJ-08/09; scope #4 #15 #16 #28 #46 #47 #50 | phase-8b | /v1 routers, RFC 9457, rate and login limits, uploads, 202 + job + SSE, agent routers on `start_run`, health/quota, Langfuse exporter, e2e LLM on/off, openapi + TS client. 670 tests. E9 READY, E10 routes READY, E11 NOT READY → 2 MUST fixed. Reports in `evaluation/reports/` |
 | UI U0–U6 | todo | UI-01..09 | | React lane |
+
+## Phase 8b notes (2026-11-07)
+- **Built:**
+  - Gateway `/v1` routers: auth, cases, files, workflow (run, steps, jobs, SSE, inbox, decision), report, audit, admin, health.
+  - Errors are RFC 9457 through one dispatcher, and 500s carry `INTERNAL_ERROR`.
+  - Limits: a per-user/IP rate limit (`limits`), and a login limit of 5 failures per minute per (username, IP). CORS is the outermost middleware.
+  - Uploads: owner only; 409 while a run holds the lock; 413/415; field/row/reason errors; formula cells and non-finite or absurd money are rejected.
+  - Async runs (ADR 0007): 202 + job, Idempotency-Key replay, lock probe → 409 `RUN_IN_PROGRESS`, heartbeat with cancellation. SSE reads run in a threadpool, with a 10-minute cap and a stale-run end.
+  - The agent routers call `SupervisorPort.start_run`, and the `run_stage` bridge is removed.
+  - Health: `/health/live` and `/health/ready`; quota warns at 70% and 90%.
+  - Tracing: a Langfuse exporter behind a flag with a PII mask. Spans export on exit with duration and error. Every model call is an `llm` span and every tool call is a `tool` span plus a `TOOL_CALLED` audit event, all in the run's one trace.
+  - The e2e demo case runs to the Director and is approved, with the LLM on and off.
+  - `openapi.json` is guarded by a staleness test; CI runs `oasdiff breaking` on PRs.
+- **Review fixes (tests first):**
+  - **E9 S1:** a return with no pending approval fails closed: the case is FAILED, the blocker is `SUP_RETURN_NO_PENDING_APPROVAL`, the event `RETURN_REJECTED` is audited, the API answers 409 and no approval row is written. The decision runs under the run lock.
+  - **E9 S3:** blockers store only the exception type and a stable code (`SUP_AGENT_ERROR`, or `loop: repeated identical tool call`). The detail is logged with the trace_id.
+  - **E9 N1:** an unknown or missing return stage raises `InvalidReturnStageError`.
+  - **E9 N2:** a HELD route reports `SUP_ROUTE_HELD` in the outcome and in the ROUTED audit event.
+  - **E11 M1/M2, S1, S3, N1:** model and tool spans, the plan model call inside the plan span, export on exit, and the chat trace_id names a span.
+  - **E10 SHOULD-3 and NIT-1:** the audit route verifies only the caller's tenant; retry is evaluator-only.
+  - security-reviewer M1 and S2–S10.
+  - brd-conformance MUST 1–3: one trace per run, the openapi CI guard, and this row.
+  - Chat returns a fixed notice and no unverified model text, until the Critic exists (9d/9e).
+- **Reviews and evals:**
+  - security-reviewer: 1 MUST, fixed.
+  - brd-conformance: 3 MUST, fixed.
+  - `evaluation/reports/E9-2026-11-07.md`: READY.
+  - `E10-routes-2026-11-07.md`: READY, no MUST.
+  - `E11-2026-11-07.md`: NOT READY on 2 MUSTs (model and tool spans), both fixed and tested.
+- **Deferred by design:**
+  - #23 timeouts (30 s model call, 5 min stage) → Phase 6.
+  - #25 stage retry route → Phase 9. It is a 501 stub, already evaluator-only.
+  - ARCHITECTURE §6.3 Critic → stage re-route, together with #21 regeneration → Phase 9d.
+  - E9 S2: each of 9a, 9b and 9c adds a test that injects a wrong ledger value and expects `GATE_OVERRIDE`. The default re-check now only checks gate blockers and that evidence facts exist.
+  - Approver comment redaction before the audit write → Phase 6.
+  - NFR-04 per-team rate limit → Phase 6 with the shared limiter.
+  - E10 SHOULD-1: an ASGI upload-size guard before multipart parsing → Phase 10.
+  - E10 SHOULD-2: openapi should declare bearer security on agent routers and problem+json error responses. This goes to Phase 10 with #51 Schemathesis, but **tell the UI lane first**: errors are problem+json at runtime even though the schema says otherwise.
+  - E11 S2: the plan GET re-plans, which spends tokens under `llm_proposes` → Phase 9 stores the Plan.
+  - E11 S4: an import-linter contract api → own agent internals → Phase 10 with #53.
+  - E11 N2: move `NoPendingApproval` to core errors.
+  - E10 NIT-2..4.
+  - security N4: an idempotency key reused with a different kind → 422.
+- **Gates:** the Skeleton gate stays open until a UI walks the demo case (UI lane U1).
 
 ## Phase 8a notes (2026-11-07)
 - **Built:**
@@ -262,6 +307,7 @@ owner      assigned imported pending
 - #43 Architecture records (C4 in ARCHITECTURE.md, ADR index, ADR 0002 STRIDE + OWASP LLM Top 10 register)
 - #44 Environment profiles (deploy/compose dev/test/demo/langfuse; deploy/env templates)
 - #46 Ports skeleton only (`LLMPort`, `ToolPort`, `LedgerPort`, `RetrievalPort`, `ClockPort` in packages/core). ADR 0006 accepted. Adapters stay with Phase 8
+- #4 Loop detection, #15 e2e with FakeLLM (LLM on/off), #16 health + quota 70/90%, #28 /v1 + openapi CI guard, #46 adapters injected by the gateway, #47 async stage jobs (202, Idempotency-Key, SSE, heartbeat), #50 health probes (Phase 8, 2026-11-07)
 - #53 Import-linter slice (five contracts in `make check` / CI, plus the web `fetch` pytest). Eval E18 stays in phases 10 and 12
 - #8 Rounding policy (ADR 0010; `packages/core` money helpers)
 - #9 Blocker catalogue (`BlockerCode`, gate vs warning vs needs-input)

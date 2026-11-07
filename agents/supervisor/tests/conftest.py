@@ -28,6 +28,7 @@ class FakeStore:
         self.calls: list[tuple[Any, ...]] = []
         self.audits: list[tuple[str, str, dict[str, Any]]] = []
         self.routes: list[tuple[str, str]] = []
+        self.route_reasons: list[str | None] = []
         self.states: list[tuple[str, str, str | None]] = []
         self.started: list[tuple[str, str, str]] = []
         self.finished: list[tuple[int, AgentResult]] = []
@@ -51,8 +52,9 @@ class FakeStore:
         self.audits.append((case_id, event_type, payload))
         self.calls.append(("audit", case_id, event_type))
 
-    def route(self, case_id: str, route: str) -> None:
+    def route(self, case_id: str, route: str, reason: str | None = None) -> None:
         self.routes.append((case_id, route))
+        self.route_reasons.append(reason)
         self.calls.append(("route", case_id, route))
 
     def event_types(self) -> list[str]:
