@@ -53,6 +53,18 @@ Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpu
   - ADR 0007 Accepted.
 - **Verified:** with real adapters (SqliteSaver on case.db), the placeholders run to the Director and the case resumes from disk with the LLM on and off.
 - **Tests:** `make check` green, 546 tests (68 new from the test-writer plus placeholder and wiring tests).
+- **Mutation evidence (2026-11-07, each mutation alone, then restored):**
+
+  | Mutation | Tests that fail |
+  |---|---|
+  | Repeated-call rule removed from `ToolRunner` | only `test_scope4_identical_repeat_call_raises_loop_detected` (44 others pass) |
+  | `LoopDetected` no longer special-cased in the graph | only `test_scope4_loop_detected_inside_an_agent_fails_the_stage` |
+  | New run forgets earlier GO stages | `test_SUP06_resume_reruns_only_the_blocked_stage`, `test_APR05_return_reopens_the_named_stage_only` |
+  | Pause drops the question | both `test_SUP06_*question*` tests |
+  | Takeover after 1 missed heartbeat | `test_scope22_lock_younger_than_stale_is_not_taken_over` |
+  | Heartbeat stops refreshing | `test_scope22_heartbeat_refreshes_a_held_lock` |
+
+- **Ignore rule:** `.gitignore` `build/` is now `/build/`, so `docs/build/` is tracked normally. The only ignored files under `docs/` are `docs/source/170MD.pdf` (L4, on purpose) and `.DS_Store`.
 - **Still in 8b:**
   - gateway routers, auth hardening SHOULDs, RFC 9457, upload validation, rate limit;
   - job runner and SSE, health/ready, quota;
