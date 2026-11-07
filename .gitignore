@@ -51,3 +51,4 @@ docs/**/*.pdf
 
 # Baseline response cache (re-runs are free; results and summary are committed)
 evaluation/baseline/cache/
+evaluation/baseline/results/
