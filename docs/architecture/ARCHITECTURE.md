@@ -135,10 +135,10 @@ fakes (`FakeLLM`, in-memory ledger, fixed clock). No agent imports another agent
 ### 5.3 Packages
 | Package | Responsibility | Key interfaces |
 |---|---|---|
-| core | `AgentResult`, `Plan`, `CriticFinding`, enums, money, errors, blockers, ports | Shared contract (frozen at G1) |
+| core | `AgentResult`, `Plan`, `CriticFinding`, enums, money, errors (incl. `LLMError`), blockers, ports, stage token budget, prompt registry | Shared contract (frozen at G1) |
 | engines | Cash flow, loan cost (IRR/APR, GST, CGTMSE), affordability, ranking, offer audit, routing, onboarding rules, calendar, normaliser | Pure functions |
 | ledger | Models, migrations, repositories, unit of work, fact ledger, hash-chained audit | `LedgerPort`, `AuditLog` |
-| llm | Client, structured output + repair, prompt registry, cache, token budget, rate limiter, timeouts, circuit breaker | `LLMPort` |
+| llm | Client, structured output + repair, cache, rate limiter, timeouts, circuit breaker (registry and budget contract in core, ADR 0008) | `LLMPort` |
 | retrieval | Chunkers, FTS5, Chroma, RRF fusion, reranker, filters | `RetrievalPort` |
 | security | JWT, roles/attributes policy, PII redaction, spotlighting, injection scanner | Policy functions |
 | tools | Tool registry, per-agent allowlists and data-access matrix | `ToolPort` |
@@ -334,7 +334,7 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0005 | Monorepo; one project per agent with own API router; React web app | Accepted |
 | 0006 | Hexagonal agents: ports in core, adapters in packages | Accepted (adapters in Phase 8) |
 | 0007 | Asynchronous stage jobs with 202 + SSE progress, heartbeat lock | Accepted |
-| 0008 | Model resilience: timeouts, retries, circuit breaker, fallbacks | Proposed |
+| 0008 | Model resilience: timeouts, retries, circuit breaker, fallbacks | Accepted |
 | 0009 | Excluded multi-agent patterns (no agent-to-agent messaging, no inter-agent bus, no cross-case memory, no dynamic spawning) | Accepted |
 | 0010 | Rounding policy | Accepted |
 | 0011 | Repayment date → week mapping | Proposed |

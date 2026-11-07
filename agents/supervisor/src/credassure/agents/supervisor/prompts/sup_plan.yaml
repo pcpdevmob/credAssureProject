@@ -1,0 +1,4 @@
+# PLANNER_MODE=llm_proposes (scope #19). Code accepts the reply only if it equals the fixed order.
+name: sup_plan
+version: 1.0.0
+template: "Propose the stage order for case $case_id as a JSON list of: $stages"

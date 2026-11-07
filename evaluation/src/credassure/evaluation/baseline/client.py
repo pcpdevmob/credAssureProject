@@ -13,6 +13,8 @@ from typing import Any, Protocol
 
 import httpx
 
+from credassure.llm.resilience import shared_limiter
+
 from ..gold.data import REPO
 
 CACHE = REPO / "evaluation" / "baseline" / "cache"
@@ -63,6 +65,7 @@ class OpenAICompatible:
                 else {}
             )
             for attempt in range(2):  # one retry, then InfraError; failures are never cached
+                shared_limiter().acquire()  # one per-team limiter with the agents (NFR-04)
                 try:
                     response = httpx.post(
                         f"{self.endpoint}/chat/completions",

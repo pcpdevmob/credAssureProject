@@ -7,6 +7,7 @@ dependencies = [
     "credassure-core",
     "credassure-engines",
     "credassure-observability",
+    "credassure-security",
     "credassure-tools",
     "fastapi>=0.115",
     "langgraph>=0.2",
@@ -16,6 +17,7 @@ dependencies = [
 credassure-core = { workspace = true }
 credassure-engines = { workspace = true }
 credassure-observability = { workspace = true }
+credassure-security = { workspace = true }
 credassure-tools = { workspace = true }
 
 [build-system]

@@ -1,7 +1,7 @@
 # CredAssure — Progress (Claude Code reads this first and updates it last)
 
 ## Current phase
-Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpus guard, baseline infra_error, freeze test). Phase 5 is done (2026-11-06). Phase 8a and 8b are done (2026-11-07). **Next is Phase 6, which must add redaction of approver comments before the audit write.** `openapi.json` and `packages/api-client` are current, so the UI lane can start U1. Still open:
+Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpus guard, baseline infra_error, freeze test). Phase 5 is done (2026-11-06). Phase 8a and 8b are done (2026-11-07). Phase 6 is done (2026-11-07). **Next is Phase 7 (retrieval) or Phase 9 (agents); run `make llm-probe` against Ollama and the course endpoint first.** `openapi.json` and `packages/api-client` are current, so the UI lane can start U1. Still open:
 - **ADR 0018 freeze (human):** ADR 0018 (AgentResult, including `agent_version` and `tenant_id`) is Proposed and not frozen. Accept it before G1.
 - **Corpus shortfall (M1):** the corpus is short of the ≥400 real-document target. See open questions.
 
@@ -27,7 +27,35 @@ Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpu
 | 5 Ledger + auth | done | SUP-08, APR-04/05, ONB-05, NFR-07, OBJ-08, BR-05, BR-14; scope #22 #27 #29 #49 | phase-5 | `packages/ledger` (case.db + corpus.db models, Alembic up/down, append-only triggers, hash-chained audit, fact ledger, run lock, read-only hr.db, seed) and `packages/security/auth.py` (argon2id, JWT, case policy). 39 tests; 468 total. brd-conformance PHASE COMPLETE; security-reviewer 2 MUST fixed (decision only on AWAITING_APPROVAL/HELD and only by the routed role, at both layers). E10 (auth part, security-reviewer): 1 MUST fixed (re-routing could reopen an APPROVED or REJECTED case); after the fix 46/47 adversarial checks pass. The open one, tail truncation of the audit chain, is a SHOULD (see Phase 5 notes). Route checks are N/A until Phase 8 |
 | 8a Supervisor + jobs + anchor | done | SUP-01..08, APR-01..03 wiring, OBJ-08; scope #1 (A4), #4, #19, #22, #46, #47 | phase-8a | Supervisor graph, placeholders, adapters, audit_head, heartbeat lock, jobs table, ADR 0007. 546 tests. Reviews and evals run with 8b |
 | 8b Gateway + async runs + e2e | done | API-01, UI-01..08 (API side), SUP-02 (placeholder), SUP-03/08, APR-04/05, NFR-03/04/07, OBJ-08/09; scope #4 #15 #16 #28 #46 #47 #50 | phase-8b | /v1 routers, RFC 9457, rate and login limits, uploads, 202 + job + SSE, agent routers on `start_run`, health/quota, Langfuse exporter, e2e LLM on/off, openapi + TS client. 670 tests. E9 READY, E10 routes READY, E11 NOT READY → 2 MUST fixed. Reports in `evaluation/reports/` |
+| 6 Model layer + safeguards | done | NFR-03/04/05/07, ONB-06 (primitive), BR-15, SUP-04/07; scope #22 (limiter), #23, #36, #48; ADR 0008 | phase-6 | Client (30 s, transient-only retries ×2 with jitter, breaker 5→open 60 s with one half-open probe, shared limiter, SQLite cache, guided JSON), structured output (repair ×2), prompt registry + bump check + eval-fast CI, Verhoeff PII redaction, spotlighting, injection scanner, 5 min stage timeout with cancellation and template fallback. 787 tests. security-reviewer: no MUST; brd-conformance: 1 MUST (flaky test) fixed. E4 (scoped): READY. |
 | UI U0–U6 | todo | UI-01..09 | | React lane |
+
+## Phase 6 notes (2026-11-07)
+- **Built:**
+  - `packages/llm`: `client.py` (redact in/out → cache → budget → breaker → limiter → 30 s attempt, retries only on connection/timeout/429/5xx; 401/403/404 → `ModelUnavailable` so the stage uses templates), `resilience.py` (CircuitBreaker with a single half-open probe, RateLimiter, `shared_limiter`), `cache.py`, `structured.py` (`complete_model`, repair ×2 → `StructuredOutputError`), `probe.py` (`make llm-probe`).
+  - `packages/core`: `prompts.py` (YAML registry: name = file stem, semver, sha256; `python -m credassure.core.prompts check --base <ref>`), `budget.py` (thread-safe stage budget), `LLMError` family and `NoPendingApproval` in `errors.py` (E11 N2), `SUP_TIMEOUT`, `LLMPort.complete(json_schema=…)`. These sit in core because ADR 0006 forbids agents importing `credassure.llm` (ADR 0008 §9).
+  - `packages/security`: `pii.py` (Aadhaar only when Verhoeff-valid, PAN, IFSC, account near a keyword, phone, email; `redact_value`), `spotlight.py`, `injection.py`.
+  - Supervisor: the stage runs in a worker thread with copied context; at 5 min a cancel event makes the orphan's next model/tool/ledger call raise, the result is `SUP_TIMEOUT`, audit `STAGE_TIMEOUT`; open circuit or `ModelUnavailable` → `llm=None` (template path) + `LLM_FALLBACK`; planner falls back to the fixed plan; tokens from the budget feed `stage_runs.tokens_used` → quota monitor; `llm` spans carry prompt version, sha and redacted I/O; orphan tool audits are tagged `after_timeout`.
+  - Gateway: settings `LLM_CALL_TIMEOUT_S`, `STAGE_TIMEOUT_S`, `LLM_MAX_RETRIES`, `LLM_CIRCUIT_FAILURES`, `LLM_CIRCUIT_OPEN_S`, `LLM_RATE_PER_MINUTE`, `LLM_CACHE_PATH`; `set_redactor(pii.redact)`; Langfuse mask = `redact_value`; approver comment redacted before the approval row and audit; uploads scanned (`INJECTION_FLAGGED` audit, `injection_flags` in the response) and refused with a field error when they contain an Aadhaar, PAN or account number.
+  - `sup_plan` prompt moved to `agents/supervisor/.../prompts/sup_plan.yaml` 1.0.0. Eval record carries `system_prompt_versions`; the baseline client uses the shared limiter.
+  - `.github/workflows/eval-fast.yml` + `make eval-fast` (bump check + offline prompt subset). ADR 0008 Accepted.
+- **Mutation evidence (each alone, then restored):**
+
+  | Mutation | Tests that fail |
+  |---|---|
+  | Breaker threshold 5 → 50 | `test_scope48_breaker_opens_after_5_consecutive_failed_calls`, `..._half_opens_after_60s...`, `..._failed_probe_reopens...` |
+  | Open circuit no longer short-circuits | `test_scope48_breaker_opens_after_5_consecutive_failed_calls` |
+  | Stage timeout removed (`future.result()`) | `test_scope23_hung_stage_times_out_saves_state_and_cancels_the_orphan`, `test_scope23_orphan_tool_and_model_calls_are_refused` |
+  | `cancel.set()` removed on timeout | the same two tests |
+
+- **Reviews and evals:** security-reviewer: no MUST; SHOULD 1–3 fixed (single probe, orphan audit tag, upload PII refusal), SHOULD 4 mitigated (orphan-thread warning). brd-conformance: MUST (flaky backoff test; retry sleeps now recorded apart from limiter spacing) fixed; SHOULD half-open probe and span I/O fixed. `evaluation/reports/E4-2026-11-07.md`: Phase 6 scope READY; Critic half N/B until 9d.
+- **Carried forward:**
+  - Injection scanner + spotlighting on retrieval ingest (7), KFS and lender replies (9c), copilot passages (9e); chat persistence redaction (9e).
+  - E4 S1 (engines owner): strict `parse_money` / `parse_rate` reject `/-` and `p.a.` suffixes; CSV cells like `1,42,00,000/-` fail closed.
+  - E4 N2: RT14-style tool/secret probing goes in the copilot refusal policy (9e).
+  - Security NITs: pin `eval-fast.yml` actions by SHA with #41 (Phase 12); configure the baseline limiter from `LLM_RATE_PER_MINUTE`; IFSC shape matches IDs like `INVC0000123` (documented ceiling).
+  - Limiter and breaker are per process (`ponytail`); SQLite bucket if baseline and gateway run together.
+  - Python cannot kill a thread: a pure-CPU loop in an orphan is not cancelled (ADR 0008 consequences).
 
 ## Phase 8b notes (2026-11-07)
 - **Built:**
@@ -58,17 +86,13 @@ Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpu
   - `E10-routes-2026-11-07.md`: READY, no MUST.
   - `E11-2026-11-07.md`: NOT READY on 2 MUSTs (model and tool spans), both fixed and tested.
 - **Deferred by design:**
-  - #23 timeouts (30 s model call, 5 min stage) → Phase 6.
   - #25 stage retry route → Phase 9. It is a 501 stub, already evaluator-only.
   - ARCHITECTURE §6.3 Critic → stage re-route, together with #21 regeneration → Phase 9d.
   - E9 S2: each of 9a, 9b and 9c adds a test that injects a wrong ledger value and expects `GATE_OVERRIDE`. The default re-check now only checks gate blockers and that evidence facts exist.
-  - Approver comment redaction before the audit write → Phase 6.
-  - NFR-04 per-team rate limit → Phase 6 with the shared limiter.
   - E10 SHOULD-1: an ASGI upload-size guard before multipart parsing → Phase 10.
   - E10 SHOULD-2: openapi should declare bearer security on agent routers and problem+json error responses. This goes to Phase 10 with #51 Schemathesis, but **tell the UI lane first**: errors are problem+json at runtime even though the schema says otherwise.
   - E11 S2: the plan GET re-plans, which spends tokens under `llm_proposes` → Phase 9 stores the Plan.
   - E11 S4: an import-linter contract api → own agent internals → Phase 10 with #53.
-  - E11 N2: move `NoPendingApproval` to core errors.
   - E10 NIT-2..4.
   - security N4: an idempotency key reused with a different kind → 422.
 - **Gates:** the Skeleton gate stays open until a UI walks the demo case (UI lane U1).
@@ -272,7 +296,7 @@ owner      assigned imported pending
 - **Phase 3 must confirm every offer tag in PLANTS.md against independent gold before the FROZEN marker (S6).**
 - **`data/frozen/v1/_design/designs.json` is design intent.** Gold must not read it; add a Phase 3 test for that.
 - **Not yet assigned to a phase:** S07 negotiation templates, S09 chat-intent examples (~60), S11 banned phrases, S13 report templates.
-- Course endpoint context window, JSON/guided-decoding support, token quota (confirm day 2). Local Ollama is settled: `llama3.1:8b`, context 8192, guided JSON off until Phase 6 probes it (ADR 0017).
+- Course endpoint context window, JSON/guided-decoding support, token quota (confirm day 2). Local Ollama is settled: `llama3.1:8b`, context 8192, guided JSON off until `make llm-probe` (Phase 6) passes against it (ADR 0017).
 - Owner names for [Name 1]…[Name 6] and UI lead; replace `@credassure-owner-*` placeholders in `.github/CODEOWNERS`
 - Before G1 (from the 5 Nov web check, docs/DATA_RESOURCES.md "Verification status"):
   - GST heading 9971 rate after Notification 15/2025-CT(R) — confirm 18% on loan fees (D7)
@@ -319,7 +343,10 @@ owner      assigned imported pending
 - #32 Error catalogue (`ApiErrorCode`). HTTP behaviour of the 501 routes is unchanged
 - #7 Repayment date → week mapping (`engines/calendar.py`, ADR 0011)
 - #1 Ablation enum only (`AblationMode`); switch paths in Phases 8 and 11
-- #22 Concurrency, DB part (WAL, busy_timeout 5000, BEGIN IMMEDIATE, one run per case with stale takeover). The limiter part is Phase 6
+- #22 Concurrency, DB part (WAL, busy_timeout 5000, BEGIN IMMEDIATE, one run per case with stale takeover); limiter part done in Phase 6 (shared per-process limiter)
+- #23 Timeouts and cancellation (30 s per model attempt, 5 min per stage, cancel event, SUP_TIMEOUT, state saved; Phase 6)
+- #36 Prompt/model change control (YAML registry with semver + sha, bump check, eval-fast CI; Phase 6)
+- #48 Model resilience (ADR 0008: transient-only retries with jitter, circuit breaker, template fallback; Phase 6)
 - #27 tenant_id on every case table; reads are scoped by tenant and case
 - #29 Alembic for case.db and corpus.db; upgrade, downgrade and upgrade again tested; seeds separate (`credassure.ledger.seed`)
 - #49 Fact or decision commits together with its audit event; row_version on cases (version_id_col) and approvals

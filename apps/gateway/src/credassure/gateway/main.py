@@ -50,7 +50,8 @@ from credassure.gateway.supervisor_service import SupervisorService
 from credassure.ledger import migrate, reads
 from credassure.ledger.session import case_engine, transaction
 from credassure.ledger.store import SqlLedger
-from credassure.observability.log import configure_logging, log_context
+from credassure.observability.log import configure_logging, log_context, set_redactor
+from credassure.security import pii
 from credassure.security.auth import verify_token
 from credassure.tools.runner import ToolRunner
 
@@ -84,10 +85,22 @@ class _Clock:
 def _default_llm(settings: Settings) -> LLMPort | None:
     if not settings.llm_enabled or not settings.llm_base_url:
         return None
+    from credassure.llm.cache import ResponseCache
     from credassure.llm.client import OpenAICompatLLM
+    from credassure.llm.resilience import CircuitBreaker, configure_shared_limiter
 
     key = settings.llm_api_key.get_secret_value() if settings.llm_api_key else None
-    return OpenAICompatLLM(settings.llm_base_url, key, settings.llm_model or "default")
+    return OpenAICompatLLM(
+        settings.llm_base_url,
+        key,
+        settings.llm_model or "default",
+        call_timeout=settings.llm_call_timeout_s,
+        retries=settings.llm_max_retries,
+        breaker=CircuitBreaker(settings.llm_circuit_failures, settings.llm_circuit_open_s),
+        limiter=configure_shared_limiter(settings.llm_rate_per_minute),
+        cache=ResponseCache(settings.llm_cache_path) if settings.llm_cache_path else None,
+        guided_json=settings.llm_supports_guided_json,
+    )
 
 
 def _tools(agent: AgentName) -> ToolPort:
@@ -113,6 +126,7 @@ def build_services(settings: Settings, llm: LLMPort | None) -> Services:
         tenant_id=settings.tenant_id,
         max_steps=settings.agent_max_steps,
         token_cap=settings.token_cap_per_stage,
+        stage_timeout=settings.stage_timeout_s,
         planner_mode=settings.planner_mode,
         ablation=settings.ablation,
         boundary_rule=rule,  # type: ignore[arg-type]  # validated on write (admin) and in settings
@@ -147,6 +161,7 @@ def _rate_key(settings: Settings, request: Request) -> str:
 def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) -> FastAPI:
     settings = settings or get_settings()
     configure_logging(settings.log_level)
+    set_redactor(pii.redact)  # NFR-07: Verhoeff-aware redaction for every log line
     tracing.configure(settings)
     svc = build_services(settings, llm if llm is not None else _default_llm(settings))
     app = FastAPI(title="CredAssure API", version="0.2.0")

@@ -8,10 +8,13 @@ The model never decides order, gates or routes (BR-11). Agents are injected by t
 never import each other (ADR 0005, ADR 0009); case_id is always the run's own (SUP-08).
 """
 
+import contextvars
 import json
 import logging
+import threading
 import uuid
 from collections.abc import Callable, Mapping
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 from typing import Any, Literal, NotRequired, TypedDict, cast
@@ -23,7 +26,15 @@ from pydantic import ValidationError
 
 from credassure.agents.supervisor import __version__
 from credassure.core.blockers import BlockerCode, BlockerEffect, blocker_effect
+from credassure.core.budget import stage_budget
 from credassure.core.enums import AgentName, Decision, Stage
+from credassure.core.errors import (
+    BudgetExceeded,
+    LLMError,
+    LLMTimeout,
+    ModelUnavailable,
+    NoPendingApproval,
+)
 from credassure.core.plan import FIXED_STAGES, Plan
 from credassure.core.ports import (
     ClockPort,
@@ -34,9 +45,12 @@ from credassure.core.ports import (
     SupervisorStore,
     ToolPort,
 )
+from credassure.core.prompts import prompt_sha, prompt_version
+from credassure.core.prompts import registry as prompts
 from credassure.core.results import AgentResult, Blocker
 from credassure.engines.routing import route as route_amount
 from credassure.observability.tracing import span
+from credassure.security.pii import redact
 from credassure.tools.runner import LoopDetected
 
 Recheck = Callable[[AgentResult, LedgerPort], list[Blocker]]
@@ -46,8 +60,9 @@ AMOUNT_KEY = "wc.recommended_amount"  # rupees, Decimal text (the threshold appl
 RETURNABLE = (Stage.ONBOARDING, Stage.WORKING_CAPITAL, Stage.LENDWISE)  # APR-05 named stages
 
 
-class NoPendingApproval(ValueError):  # noqa: N818  # a state, not a failure of the caller
-    """The graph is not waiting at the approval interrupt."""
+class StageCancelledError(RuntimeError):
+    """The stage timed out (scope #23): its orphan thread may not call the model, tools or
+    ledger again, so nothing it does after the timeout is written."""
 
 
 class InvalidReturnStageError(ValueError):
@@ -74,27 +89,87 @@ class _State(TypedDict):
     results: NotRequired[dict[str, dict[str, Any]]]  # kept across runs by the checkpointer
 
 
+def _check(cancel: threading.Event) -> None:
+    if cancel.is_set():
+        raise StageCancelledError("stage timed out")
+
+
 class _TracedLLM:
-    """E11 M1: every model call an agent makes is a span in the run's trace (BRD §14)."""
+    """E11 M1: every model call an agent makes is a span in the run's trace (BRD §14), carrying
+    the prompt version and hash (scope #36). Refused once the stage has timed out (#23)."""
 
-    def __init__(self, llm: LLMPort, case_id: str, stage: Stage) -> None:
-        self._llm, self._case_id, self._stage = llm, case_id, stage
+    def __init__(self, llm: LLMPort, case_id: str, stage: Stage, cancel: threading.Event) -> None:
+        self._llm, self._case_id, self._stage, self._cancel = llm, case_id, stage, cancel
         self.circuit_state = getattr(llm, "circuit_state", "closed")
+        self.versions: dict[str, str] = {}
 
-    def complete(self, prompt: str, *, name: str = "default") -> str:
-        with span("llm", prompt=name, case_id=self._case_id, stage=self._stage.value):
-            return self._llm.complete(prompt, name=name)
+    def complete(
+        self, prompt: str, *, name: str = "default", json_schema: Mapping[str, Any] | None = None
+    ) -> str:
+        _check(self._cancel)
+        self.versions[name] = version = prompt_version(name)
+        with span(
+            "llm",
+            prompt=name,
+            prompt_version=version,
+            prompt_sha=prompt_sha(name),
+            case_id=self._case_id,
+            stage=self._stage.value,
+            input=redact(prompt)[:2000],  # masked I/O on the span (Phase 6, NFR-07)
+        ) as record:
+            reply = self._llm.complete(prompt, name=name, json_schema=json_schema)
+            record["output"] = redact(reply)[:2000]
+            return reply
+
+
+class _GuardedLedger:
+    """The stage's ledger; writes are refused once the stage has timed out (#23)."""
+
+    def __init__(self, ledger: LedgerPort, cancel: threading.Event) -> None:
+        self._ledger, self._cancel = ledger, cancel
+
+    def get(self, case_id: str, key: str) -> str | None:
+        return self._ledger.get(case_id, key)
+
+    def put_fact(
+        self,
+        case_id: str,
+        key: str,
+        value: Decimal | int | str,
+        *,
+        unit: str,
+        source_type: str,
+        source_ref: str,
+        produced_by: str,
+    ) -> int:
+        _check(self._cancel)
+        return self._ledger.put_fact(
+            case_id,
+            key,
+            value,
+            unit=unit,
+            source_type=source_type,
+            source_ref=source_ref,
+            produced_by=produced_by,
+        )
 
 
 class _AuditedTools:
     """E11 M2, design-detail §2.3: every tool call is a span and an audit event."""
 
     def __init__(
-        self, tools: ToolPort, store: SupervisorStore, agent: AgentName, trace_id: str
+        self,
+        tools: ToolPort,
+        store: SupervisorStore,
+        agent: AgentName,
+        trace_id: str,
+        cancel: threading.Event,
     ) -> None:
         self._tools, self._store, self._agent, self._trace_id = tools, store, agent, trace_id
+        self._cancel = cancel
 
     def call(self, name: str, case_id: str, args: Mapping[str, Any] | None = None) -> Any:
+        _check(self._cancel)
         error: str | None = None
         try:
             with span("tool", tool=name, agent=self._agent.value, case_id=case_id):
@@ -111,6 +186,7 @@ class _AuditedTools:
                     "tool": name,
                     "trace_id": self._trace_id,
                     "error": error,
+                    "after_timeout": self._cancel.is_set(),  # an orphan's event, tagged (#23)
                 },
             )
 
@@ -152,12 +228,14 @@ class Supervisor:
         planner_mode: Literal["fixed", "llm_proposes"] = "fixed",
         ablation: str | None = None,
         boundary_rule: Literal["hold", "director", "vp"] = "hold",
+        stage_timeout: float = 300.0,
     ) -> None:
         self.agents, self.store, self.ledger = agents, store, ledger
         self.tools, self.llm, self.clock = tools, llm, clock
         self.tenant_id = tenant_id
         self.rechecks = default_rechecks() if rechecks is None else dict(rechecks)
         self.max_steps, self.token_cap = max_steps, token_cap
+        self.stage_timeout = stage_timeout  # scope #23: 5 min per stage
         self.planner_mode, self.ablation = planner_mode, ablation
         self.boundary_rule: Literal["hold", "director", "vp"] = boundary_rule
         self.graph = self._build().compile(checkpointer=checkpointer)
@@ -177,20 +255,25 @@ class Supervisor:
             accepted=self.planner_mode != "llm_proposes",
         ) as record:  # S1: the model call happens inside the plan span
             if self.planner_mode == "llm_proposes" and self.llm is not None:
-                prompt = (
-                    f"Propose the stage order for case {case_id} as a JSON list of: "
-                    + ", ".join(st.value for st in FIXED_STAGES)
+                prompt = prompts()["sup_plan"].render(
+                    case_id=case_id, stages=", ".join(st.value for st in FIXED_STAGES)
                 )
                 try:
-                    with span("llm", prompt="sup_plan", case_id=case_id):
+                    with span(
+                        "llm",
+                        prompt="sup_plan",
+                        prompt_version=prompt_version("sup_plan"),
+                        prompt_sha=prompt_sha("sup_plan"),
+                        case_id=case_id,
+                    ):
                         proposed = json.loads(self.llm.complete(prompt, name="sup_plan"))
                     if isinstance(proposed, list) and tuple(proposed) == tuple(
                         st.value for st in FIXED_STAGES
                     ):
                         plan = Plan(case_id=case_id, mode="llm_proposes")
                         record.update(mode=plan.mode, accepted=True)
-                except (json.JSONDecodeError, TypeError, ValueError):
-                    pass
+                except (json.JSONDecodeError, TypeError, ValueError, LLMError):
+                    pass  # model down or wrong: the fixed plan stands
             return plan
 
     def run(
@@ -400,19 +483,57 @@ class Supervisor:
         self, case_id: str, stage: Stage, agent_name: AgentName, trace_id: str
     ) -> AgentResult:
         agent = self.agents[stage]
+        llm = self.llm
+        if llm is not None and getattr(llm, "circuit_state", "closed") == "open":
+            llm = None
+            self._fallback(case_id, stage, trace_id, "circuit_open")
         for _ in range(MAX_REPAIRS + 1):
+            cancel = threading.Event()
+            traced = _TracedLLM(llm, case_id, stage, cancel) if llm is not None else None
             ctx = StageContext(
                 case_id=case_id,  # SUP-08: injected here, never read from model output
                 tenant_id=self.tenant_id,
                 stage=stage,
                 trace_id=trace_id,
-                ledger=self.ledger,
-                tools=_AuditedTools(self.tools(agent_name), self.store, agent_name, trace_id),
-                llm=_TracedLLM(self.llm, case_id, stage) if self.llm is not None else None,
+                ledger=_GuardedLedger(self.ledger, cancel),
+                tools=_AuditedTools(
+                    self.tools(agent_name), self.store, agent_name, trace_id, cancel
+                ),
+                llm=traced,
                 clock=self.clock,
             )
             try:
-                out: Any = agent(ctx)
+                with stage_budget(self.token_cap) as budget:
+                    out: Any = self._run_with_timeout(agent, ctx, cancel)
+            except ModelUnavailable:
+                # scope #48: the template path every agent has for LLM_ENABLED=false.
+                llm = None
+                self._fallback(case_id, stage, trace_id, "model_unavailable")
+                continue
+            except (TimeoutError, LLMTimeout) as exc:
+                _log.warning("timeout in %s on case %s (trace %s)", stage.value, case_id, trace_id)
+                self.store.audit(
+                    case_id,
+                    "STAGE_TIMEOUT",
+                    {"stage": stage.value, "trace_id": trace_id, "kind": type(exc).__name__},
+                )
+                return self._error(
+                    case_id,
+                    stage,
+                    trace_id,
+                    BlockerCode.SUP_TIMEOUT,
+                    "model call timed out"
+                    if isinstance(exc, LLMTimeout)
+                    else f"stage ran past {self.stage_timeout:g} s",
+                )
+            except BudgetExceeded:
+                return self._error(
+                    case_id,
+                    stage,
+                    trace_id,
+                    BlockerCode.SUP_BUDGET_EXCEEDED,
+                    f"token budget of {self.token_cap} spent",
+                )
             except LoopDetected:
                 # S3: the tool name and arguments stay in the log, never in the stored blocker.
                 _log.exception("loop in %s on case %s (trace %s)", stage.value, case_id, trace_id)
@@ -441,13 +562,42 @@ class Supervisor:
             except ValidationError:
                 continue
             if result.case_id == case_id and result.stage is stage:
-                return result
+                return result.model_copy(
+                    update={
+                        "tokens_used": max(result.tokens_used, budget.used),
+                        "prompt_versions": {
+                            **(traced.versions if traced else {}),
+                            **result.prompt_versions,
+                        },
+                    }
+                )
         return self._error(
             case_id,
             stage,
             trace_id,
             BlockerCode.SUP_SCHEMA_INVALID,
             f"invalid result after {MAX_REPAIRS} repairs",
+        )
+
+    def _run_with_timeout(self, agent: StageAgent, ctx: StageContext, cancel: Any) -> Any:
+        """scope #23: the agent runs in a worker thread (same trace and budget context). On
+        timeout `cancel` is set, so the orphan's next model, tool or ledger call raises."""
+        pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix=f"stage-{ctx.stage.value}")
+        future = pool.submit(contextvars.copy_context().run, agent, ctx)
+        try:
+            return future.result(timeout=self.stage_timeout)
+        except TimeoutError:
+            cancel.set()
+            # ponytail: Python cannot kill a thread; orphans stop at their next port call.
+            orphans = sum(t.name.startswith("stage-") for t in threading.enumerate())
+            _log.warning("stage %s timed out; %d stage threads alive", ctx.stage.value, orphans)
+            raise
+        finally:
+            pool.shutdown(wait=False)
+
+    def _fallback(self, case_id: str, stage: Stage, trace_id: str, reason: str) -> None:
+        self.store.audit(
+            case_id, "LLM_FALLBACK", {"stage": stage.value, "reason": reason, "trace_id": trace_id}
         )
 
     def _gate(self, result: AgentResult) -> AgentResult:

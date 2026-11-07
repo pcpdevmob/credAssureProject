@@ -37,6 +37,8 @@ from credassure.ledger import reads
 from credassure.ledger.models import Case
 from credassure.ledger.session import run_in_progress, transaction
 from credassure.security.auth import Principal, Role, can_view_case
+from credassure.security.injection import scan
+from credassure.security.pii import find as pii_find
 
 router = APIRouter(prefix="/v1", tags=["cases"])
 
@@ -304,11 +306,33 @@ async def upload(
         raise ProblemError(
             415, "file is not UTF-8 text", ApiErrorCode.UNSUPPORTED_MEDIA_TYPE
         ) from exc
+    # NFR-07: personal identifiers are refused, never stored. IFSC, phone and email are not
+    # checked here: the IFSC shape matches ordinary IDs (see security.pii).
+    ids = [h for h in pii_find(text) if h.kind in {"AADHAAR", "PAN", "ACCOUNT"}]
+    if ids:
+        raise ProblemError(
+            422,
+            f"{kind} contains a personal identifier",
+            errors=[
+                {
+                    "field": None,
+                    "row": text.count("\n", 0, h.start) + 1,
+                    "reason": f"{h.kind} number not allowed in case files",
+                }
+                for h in ids[:20]
+            ],
+        )
     payload, count = _parse(kind, text)
     stored = svc.ledger.store_case_file(
         case.id, kind, json.dumps(payload), who.user_id, sha256=hashlib.sha256(raw).hexdigest()
     )
-    return {"kind": kind, "sha256": stored.sha256, "rows": count}
+    # BR-15: uploads are data. A hit is flagged and audited; nothing in the file is obeyed.
+    flags = scan(text)
+    if flags:
+        svc.ledger.audit(
+            case.id, "INJECTION_FLAGGED", {"kind": kind, "sha256": stored.sha256, "flags": flags}
+        )
+    return {"kind": kind, "sha256": stored.sha256, "rows": count, "injection_flags": flags}
 
 
 # ---- views -------------------------------------------------------------------------------------

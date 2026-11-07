@@ -13,6 +13,8 @@ from datetime import UTC, datetime
 from typing import Any
 from urllib.parse import urlparse
 
+from credassure.core.prompts import versions as registry_versions
+
 from .gold.data import REPO
 
 
@@ -61,6 +63,7 @@ def run_record(
             name: hashlib.sha256(text.encode()).hexdigest()[:16]
             for name, text in sorted(prompts.items())
         },
+        "system_prompt_versions": registry_versions(),  # scope #36: the registry's prompts
         "engine_version": engine_version(),
         "corpus_hash": _sha("data/corpus/manifest.yaml", "data/corpus/manifest.lock.json"),
         "data_hash": _sha("data/frozen/v1/SHA256SUMS"),

@@ -15,7 +15,11 @@ from credassure.core.results import AgentResult
 
 
 class LLMPort(Protocol):
-    def complete(self, prompt: str, *, name: str = "default") -> str: ...
+    """`json_schema` asks for guided decoding where the endpoint supports it (Phase 6)."""
+
+    def complete(
+        self, prompt: str, *, name: str = "default", json_schema: Mapping[str, Any] | None = None
+    ) -> str: ...
 
 
 class ToolPort(Protocol):

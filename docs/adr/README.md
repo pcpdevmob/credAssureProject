@@ -13,7 +13,7 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | [0005](0005-monorepo-structure.md) | Monorepo structure | Accepted | 0b | — |
 | [0006](0006-hexagonal-agents.md) | Hexagonal agents: ports and adapters | Accepted (adapters in Phase 8) | 1, 8 | 46 |
 | [0007](0007-async-stage-jobs.md) | Async stage jobs, SSE progress, Idempotency-Key, heartbeat lock | Accepted | 8 | 47 |
-| 0008 | Model resilience: circuit breaker, retries, timeouts | Reserved | 6 | 48, 23 |
+| [0008](0008-model-resilience.md) | Model resilience: timeouts, retries, circuit breaker, template fallback | Accepted | 6 | 48, 23, 22, 36 |
 | [0009](0009-excluded-multi-agent-patterns.md) | Excluded multi-agent patterns (no agent-to-agent messaging, no inter-agent bus, no cross-case memory, no dynamic spawning) | Accepted | 1 | 26 |
 | [0010](0010-rounding-policy.md) | Rounding policy (exact in engines, lakh round-up, display rounding) | Accepted | 1 | 8 |
 | [0011](0011-repayment-calendar.md) | Repayment date to week mapping (calendar, holidays) | Accepted | 4 | 7 |

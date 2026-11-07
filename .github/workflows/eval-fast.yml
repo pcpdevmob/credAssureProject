@@ -1,0 +1,30 @@
+name: eval-fast
+
+# Prompt change control (scope #36): a changed prompt must bump its version, and the offline
+# prompt subset must pass. Runs only when a prompt file changes.
+on:
+  pull_request:
+    paths:
+      - "**/prompts/*.yaml"
+  push:
+    branches: [main]
+    paths:
+      - "**/prompts/*.yaml"
+
+permissions:
+  contents: read
+
+jobs:
+  prompts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v5
+      - run: uv python install 3.12
+      - run: uv sync --locked --all-packages
+      - name: Version bump check and fast prompt subset
+        env:
+          PROMPTS_BASE: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || github.event.before }}
+        run: make eval-fast

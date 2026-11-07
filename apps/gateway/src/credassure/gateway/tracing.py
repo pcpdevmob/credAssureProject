@@ -6,25 +6,19 @@ swallowed: tracing off, missing keys or a failing tracer never break a request.
 """
 
 import logging
-from collections.abc import Callable, Mapping
+from collections.abc import Callable
 from typing import Any
 
 from credassure.gateway.settings import Settings
-from credassure.observability.log import default_redact
 from credassure.observability.tracing import set_exporter
+from credassure.security.pii import redact_value
 
 _log = logging.getLogger("credassure.tracing")
 
 
 def mask(data: Any, **_: Any) -> Any:
     """Recursive PII redaction; also Langfuse's `mask` hook (called as mask(data=...))."""
-    if isinstance(data, str):
-        return default_redact(data)
-    if isinstance(data, Mapping):
-        return {mask(k): mask(v) for k, v in data.items()}
-    if isinstance(data, list | tuple):
-        return [mask(v) for v in data]
-    return data
+    return redact_value(data)
 
 
 def make_exporter(client: Any) -> Callable[[str, dict[str, Any]], None]:

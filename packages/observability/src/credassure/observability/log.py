@@ -2,8 +2,8 @@
 
 Every record is one JSON object carrying the context fields below. All text (message, string
 extras, exception text) passes through the active redactor before it is written. The built-in
-redactor is a conservative fallback that over-masks; `security.pii.redact` replaces it via
-`set_redactor` once the security package exists.
+redactor is a conservative fallback that over-masks; the gateway installs `security.pii.redact`
+(Verhoeff-aware) via `set_redactor` at startup (Phase 6).
 """
 
 from __future__ import annotations

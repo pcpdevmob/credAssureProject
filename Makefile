@@ -9,7 +9,7 @@ PNPM := $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo "npx --yes 
 
 .PHONY: testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
-        langfuse-up langfuse-down ollama-pull backup restore
+        langfuse-up langfuse-down ollama-pull backup restore eval-fast llm-probe
 
 help:  ## List targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -136,6 +136,14 @@ ingest:  ## Download, hash and index the corpus (Phase 7)
 
 eval:  ## Run the 100-item test set through the API (Phase 11)
 	@echo "eval: not implemented until Phase 11"; exit 1
+
+# ponytail: offline subset; the API-driven fast eval subset replaces it with the Phase 11 harness
+eval-fast:  ## Prompt change control (#36): version-bump check + offline prompt subset (FakeLLM)
+	uv run python -m credassure.core.prompts check --base $${PROMPTS_BASE:-origin/main}
+	uv run pytest -q packages/llm/tests agents/supervisor/tests/test_resilience.py tests/e2e
+
+llm-probe:  ## Does the endpoint honour guided JSON? Decides LLM_SUPPORTS_GUIDED_JSON (ADR 0017)
+	uv run $(ENV_FILE) python -m credassure.llm.probe
 
 baseline:  ## Prompt baselines S1-S3 on the 100 items (EVAL_BASE_URL / EVAL_MODEL; default local Ollama, ADR 0017)
 	uv run $(ENV_FILE) python -m credassure.evaluation.baseline.run --strategy all

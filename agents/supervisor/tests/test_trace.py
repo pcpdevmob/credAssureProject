@@ -66,6 +66,7 @@ def test_E11_M1_M2_model_and_tool_calls_have_spans_in_the_run_trace(
         "tool": "compute_cash_table",
         "trace_id": trace_id,
         "error": None,
+        "after_timeout": False,  # True only for an orphan's call (#23)
     }
 
 

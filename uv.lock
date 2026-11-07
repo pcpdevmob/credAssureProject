@@ -456,6 +456,7 @@ dependencies = [
     { name = "credassure-core" },
     { name = "credassure-engines" },
     { name = "credassure-observability" },
+    { name = "credassure-security" },
     { name = "credassure-tools" },
     { name = "fastapi" },
     { name = "langgraph" },
@@ -466,6 +467,7 @@ requires-dist = [
     { name = "credassure-core", editable = "packages/core" },
     { name = "credassure-engines", editable = "packages/engines" },
     { name = "credassure-observability", editable = "packages/observability" },
+    { name = "credassure-security", editable = "packages/security" },
     { name = "credassure-tools", editable = "packages/tools" },
     { name = "fastapi", specifier = ">=0.115" },
     { name = "langgraph", specifier = ">=0.2" },
@@ -492,10 +494,14 @@ version = "0.1.0"
 source = { editable = "packages/core" }
 dependencies = [
     { name = "pydantic" },
+    { name = "pyyaml" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pydantic", specifier = ">=2.9" }]
+requires-dist = [
+    { name = "pydantic", specifier = ">=2.9" },
+    { name = "pyyaml", specifier = ">=6" },
+]
 
 [[package]]
 name = "credassure-datagen"
@@ -534,6 +540,7 @@ name = "credassure-evaluation"
 version = "0.1.0"
 source = { editable = "evaluation" }
 dependencies = [
+    { name = "credassure-llm" },
     { name = "httpx" },
     { name = "numpy-financial" },
     { name = "pyyaml" },
@@ -541,6 +548,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "credassure-llm", editable = "packages/llm" },
     { name = "httpx", specifier = ">=0.27" },
     { name = "numpy-financial", specifier = ">=1.0" },
     { name = "pyyaml", specifier = ">=6.0" },
@@ -562,6 +570,7 @@ dependencies = [
     { name = "credassure-ledger" },
     { name = "credassure-llm" },
     { name = "credassure-observability" },
+    { name = "credassure-security" },
     { name = "credassure-tools" },
     { name = "fastapi" },
     { name = "httpx" },
@@ -599,6 +608,7 @@ requires-dist = [
     { name = "credassure-ledger", editable = "packages/ledger" },
     { name = "credassure-llm", editable = "packages/llm" },
     { name = "credassure-observability", editable = "packages/observability" },
+    { name = "credassure-security", editable = "packages/security" },
     { name = "credassure-tools", editable = "packages/tools" },
     { name = "fastapi", specifier = ">=0.115" },
     { name = "httpx", specifier = ">=0.27" },
@@ -651,11 +661,23 @@ name = "credassure-llm"
 version = "0.1.0"
 source = { editable = "packages/llm" }
 dependencies = [
+    { name = "credassure-core" },
+    { name = "credassure-security" },
+    { name = "httpx2" },
     { name = "openai" },
+    { name = "pydantic" },
+    { name = "pyyaml" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "openai", specifier = ">=1.55" }]
+requires-dist = [
+    { name = "credassure-core", editable = "packages/core" },
+    { name = "credassure-security", editable = "packages/security" },
+    { name = "httpx2", specifier = ">=2" },
+    { name = "openai", specifier = ">=1.55" },
+    { name = "pydantic", specifier = ">=2.9" },
+    { name = "pyyaml", specifier = ">=6" },
+]
 
 [[package]]
 name = "credassure-observability"

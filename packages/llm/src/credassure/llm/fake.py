@@ -6,6 +6,7 @@ A list reply is consumed in order; its last item repeats. Unknown names get ``de
 """
 
 from collections.abc import Mapping
+from typing import Any
 
 
 class FakeLLM:
@@ -18,7 +19,9 @@ class FakeLLM:
         self.default = default
         self.calls: list[tuple[str, str]] = []
 
-    def complete(self, prompt: str, *, name: str = "default") -> str:
+    def complete(
+        self, prompt: str, *, name: str = "default", json_schema: Mapping[str, Any] | None = None
+    ) -> str:
         self.calls.append((name, prompt))
         queue = self.replies.get(name)
         if not queue:

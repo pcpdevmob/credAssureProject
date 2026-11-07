@@ -17,9 +17,8 @@ from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
-from credassure.agents.supervisor.graph import NoPendingApproval
 from credassure.core.enums import Stage
-from credassure.core.errors import ApiErrorCode
+from credassure.core.errors import ApiErrorCode, NoPendingApproval
 from credassure.gateway.deps import Svc, User, case_ref, role, visible_case
 from credassure.gateway.jobs import job_view
 from credassure.gateway.problems import ProblemError
@@ -34,6 +33,7 @@ from credassure.security.auth import (
     can_decide,
     may_decide_route,
 )
+from credassure.security.pii import redact
 
 router = APIRouter(prefix="/v1", tags=["workflow"])
 Approver = Annotated[Principal, role(Role.DIRECTOR_FINANCE, Role.VP_FINANCE)]
@@ -226,7 +226,7 @@ def decide(case_id: str, body: Decision, who: Approver, svc: Svc) -> dict[str, A
             # S1: fail closed. The return is not recorded as applied; the case is FAILED.
             svc.supervisor.fail_return(case.id, back)
             raise ProblemError(409, "no approval is pending for this case", ApiErrorCode.CONFLICT)
-        # ponytail: approver comments are stored as typed; Phase 6 redacts them before the audit.
+        # NFR-07: the comment is redacted before it reaches the approval row and its audit event.
         approval = svc.ledger.record_decision(
             case.id,
             approver_id=who.user_id,
@@ -234,7 +234,7 @@ def decide(case_id: str, body: Decision, who: Approver, svc: Svc) -> dict[str, A
             expected_version=body.expected_version,
             decision=body.decision,
             return_stage=body.return_stage,
-            comment=body.comment,
+            comment=redact(body.comment),
         )
         try:
             svc.supervisor.decide(case.id, decision=body.decision, return_stage=back)

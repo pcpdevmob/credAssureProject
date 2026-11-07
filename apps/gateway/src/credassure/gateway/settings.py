@@ -35,6 +35,14 @@ class Settings(BaseSettings):
     llm_model: str | None = None
     llm_context_tokens: int = Field(default=8192, gt=0)
     llm_supports_guided_json: bool = False
+    # ADR 0008 / scope #22, #23, #48: model-call resilience
+    llm_call_timeout_s: float = Field(default=30.0, gt=0)
+    stage_timeout_s: float = Field(default=300.0, gt=0)
+    llm_max_retries: int = Field(default=2, ge=0, le=2)
+    llm_circuit_failures: int = Field(default=5, gt=0)
+    llm_circuit_open_s: float = Field(default=60.0, gt=0)
+    llm_rate_per_minute: float = Field(default=60.0, gt=0)  # shared per team (NFR-04)
+    llm_cache_path: str | None = "var/llm_cache.db"  # unset/empty turns the response cache off
     llm_enabled: bool = True
     embed_base_url: str | None = None
     embed_model: str | None = None
