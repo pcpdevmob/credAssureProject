@@ -1,7 +1,7 @@
 # CredAssure — Progress (Claude Code reads this first and updates it last)
 
 ## Current phase
-Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpus guard, baseline infra_error, freeze test). Phase 5 is done (2026-11-06). **Next is Phase 8 (walking skeleton), before Phase 6;** plan it in a fresh session. Still open:
+Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpus guard, baseline infra_error, freeze test). Phase 5 is done (2026-11-06). Phase 8a is done (2026-11-07). **Next is Phase 8b (gateway, agent routers, e2e, openapi, reviews), then Phase 6, which must redact approver comments before the audit write.** Still open:
 - **ADR 0018 freeze (human):** ADR 0018 (AgentResult, including `agent_version` and `tenant_id`) is Proposed and not frozen. Accept it before G1.
 - **Corpus shortfall (M1):** the corpus is short of the ≥400 real-document target. See open questions.
 
@@ -25,7 +25,41 @@ Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpu
 | 3 Eval assets | done (G1 items below) | BRD §12–13, KR-05, VER-02, scope #13; ADR 0021 | phase-3 | Independent gold (floats + numpy_financial, no engine import, contract-enforced) reproduces every design need, every PLANTS offer tag and RBI Annex B 17.07%. 100 items (25/10/15/15/5/6/8/8/3/5), 40 retrieval queries, 20 red-team prompts, 12 S24 bad citations, scorers (₹1 / 0.01 pp, BRD failure classes), freeze script with readiness gate, run record (#13), baselines S1–S3. money-auditor PASS (no MUST); brd-conformance: only pre-G1 corpus MUST |
 | 4 Engines | done | WC-01..06, LW-02..11/14, ONB-02/03, APR-01..03, BR-05/07/12; scope #1 (enum), #7; ADR 0011 | phase-4 | Pure Decimal engines. 15/15 cash-flow and 15/15 offer known answers match gold (worst APR 0.005 pp). RBI Annex B 17.07%. 20/20 onboarding profiles. 426 tests, engine coverage 98%. money-auditor PASS, brd-conformance PASS, no MUST. SHOULDs applied: IRR edge/bisection tests, `gst_rate` and `indicative` required (no silent defaults), strict Decimal in audit and negotiation, schedule terms material, fee compared in ₹, week<1 rows blocked, undrawn ≥ 0, routing rejects negatives, deterministic tie-break |
 | 5 Ledger + auth | done | SUP-08, APR-04/05, ONB-05, NFR-07, OBJ-08, BR-05, BR-14; scope #22 #27 #29 #49 | phase-5 | `packages/ledger` (case.db + corpus.db models, Alembic up/down, append-only triggers, hash-chained audit, fact ledger, run lock, read-only hr.db, seed) and `packages/security/auth.py` (argon2id, JWT, case policy). 39 tests; 468 total. brd-conformance PHASE COMPLETE; security-reviewer 2 MUST fixed (decision only on AWAITING_APPROVAL/HELD and only by the routed role, at both layers). E10 (auth part, security-reviewer): 1 MUST fixed (re-routing could reopen an APPROVED or REJECTED case); after the fix 46/47 adversarial checks pass. The open one, tail truncation of the audit chain, is a SHOULD (see Phase 5 notes). Route checks are N/A until Phase 8 |
+| 8a Supervisor + jobs + anchor | done | SUP-01..08, APR-01..03 wiring, OBJ-08; scope #1 (A4), #4, #19, #22, #46, #47 | phase-8a | Supervisor graph, placeholders, adapters, audit_head, heartbeat lock, jobs table, ADR 0007. 546 tests. Reviews and evals run with 8b |
 | UI U0–U6 | todo | UI-01..09 | | React lane |
+
+## Phase 8a notes (2026-11-07)
+- **Built:**
+  - Supervisor LangGraph (`agents/supervisor/.../graph.py`) with fixed plan and code-decided edges. It covers:
+    - SUP-03 upstream-not-GO and SUP-04 repair ×2 → ERROR;
+    - SUP-05 re-check on every GO with a `GATE_OVERRIDE` audit (A4 skips it, scope #1);
+    - SUP-06 pause with one question, and resume of the blocked stage only;
+    - SUP-07 step and token caps;
+    - scope #4 loop → ERROR;
+    - routing as a code node, and the approval `interrupt()`; a return clears that stage onward.
+  - Plan span; `PLANNER_MODE=llm_proposes` is accepted only when it matches the fixed order (#19).
+  - Placeholder agents return real `AgentResult`s. WC writes a canned ₹1,42,00,000 with `source_type=placeholder`.
+  - Adapters (#46):
+    - `ledger.store.SqlLedger` (LedgerPort + SupervisorStore);
+    - `tools.runner.ToolRunner` (allowlist, 2 retries, loop detection);
+    - `llm.fake.FakeLLM`;
+    - `observability.tracing` (`span`, `capture`, `set_exporter`).
+  - Ledger:
+    - `audit_head` anchor, upserted with every append; `verify_chain` now catches a cut tail (closes the Phase 5 SHOULD);
+    - `HEARTBEAT` 30 s, with `STALE_LOCK` = 3 heartbeats = 90 s and `heartbeat()` (closes the run-lock SHOULD);
+    - `jobs` table with an idempotency key;
+    - `set_case_state`, stage-run start/finish;
+    - Alembic rev `5c1e0a8f2d47` (up/down tested).
+  - ADR 0007 Accepted.
+- **Verified:** with real adapters (SqliteSaver on case.db), the placeholders run to the Director and the case resumes from disk with the LLM on and off.
+- **Tests:** `make check` green, 546 tests (68 new from the test-writer plus placeholder and wiring tests).
+- **Still in 8b:**
+  - gateway routers, auth hardening SHOULDs, RFC 9457, upload validation, rate limit;
+  - job runner and SSE, health/ready, quota;
+  - agent routers moved to `start_run` (then delete the `run_stage` shim), `make openapi && make client`;
+  - e2e (#15);
+  - reviews (security-reviewer, brd-conformance), `/eval E9`, `E11`, and E10 routes.
+  - The Langfuse exporter for `tracing.set_exporter` is wired in the gateway.
 
 ## Phase 5 notes (2026-11-06)
 - **`make db`** migrates `var/case.db` and `var/corpus.db` and seeds 25 users from `data/frozen/v1/users/eval_users.yaml`.

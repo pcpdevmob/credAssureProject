@@ -5,11 +5,18 @@ description = "Supervisor. Fixed plan; the model only classifies chat intent."
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "credassure-core",
+    "credassure-engines",
+    "credassure-observability",
+    "credassure-tools",
     "fastapi>=0.115",
+    "langgraph>=0.2",
 ]
 
 [tool.uv.sources]
 credassure-core = { workspace = true }
+credassure-engines = { workspace = true }
+credassure-observability = { workspace = true }
+credassure-tools = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

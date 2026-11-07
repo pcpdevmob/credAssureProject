@@ -7,10 +7,12 @@ dependencies = [
     "sqlalchemy>=2.0",
     "alembic>=1.14",
     "pyyaml>=6",
+    "credassure-core",
     "credassure-security",
 ]
 
 [tool.uv.sources]
+credassure-core = { workspace = true }
 credassure-security = { workspace = true }
 
 [build-system]

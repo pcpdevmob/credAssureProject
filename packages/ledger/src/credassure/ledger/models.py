@@ -210,6 +210,35 @@ class RunLock(CaseBase):
     acquired_at: Mapped[datetime] = mapped_column(DateTime)
 
 
+class AuditHead(CaseBase):
+    """Newest (seq, hash) of the audit chain, written with every append: a cut tail no longer
+    matches it (OBJ-08). Mutable by design, so it carries no append-only trigger."""
+
+    __tablename__ = "audit_head"
+    tenant_id: Mapped[str] = mapped_column(TENANT, primary_key=True)
+    seq: Mapped[int] = mapped_column(Integer)
+    hash: Mapped[str] = mapped_column(String(64))
+
+
+class Job(CaseBase):
+    """Asynchronous run of the workflow or one stage (ADR 0007, scope #47)."""
+
+    __tablename__ = "jobs"
+    __table_args__ = (UniqueConstraint("tenant_id", "case_id", "idempotency_key"),)
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(TENANT, index=True)
+    case_id: Mapped[str] = mapped_column(ForeignKey("cases.id"), index=True)
+    kind: Mapped[str] = mapped_column(String(16))  # run | stage | decision
+    stage: Mapped[str | None] = mapped_column(String(32))
+    idempotency_key: Mapped[str | None] = mapped_column(String(128))
+    status: Mapped[str] = mapped_column(String(16))  # queued|running|succeeded|failed|abandoned
+    outcome: Mapped[str | None] = mapped_column(String(32))
+    error: Mapped[str | None] = mapped_column(Text)
+    created_by: Mapped[str] = mapped_column(String(64))
+    created_at: Mapped[datetime] = mapped_column(DateTime)
+    updated_at: Mapped[datetime] = mapped_column(DateTime)
+
+
 class AppConfig(CaseBase):
     __tablename__ = "app_config"
     tenant_id: Mapped[str] = mapped_column(TENANT, primary_key=True)

@@ -4,6 +4,7 @@ Every function takes the caller's Session; session.transaction() commits a write
 event together or neither (scope #49).
 """
 
+import uuid
 from datetime import UTC, date, datetime
 from decimal import Decimal
 from typing import Any
@@ -15,7 +16,7 @@ from sqlalchemy.orm.exc import StaleDataError
 from credassure.security.auth import DECIDABLE, may_decide_route
 
 from .chain import GENESIS, canonical, hashed_fields, row_hash
-from .models import Approval, AuditLog, Case, LedgerFact, User
+from .models import Approval, AuditHead, AuditLog, Case, Job, LedgerFact, StageRun, User
 
 DECISIONS = {"approve": "APPROVED", "reject": "REJECTED", "return": "RETURNED"}
 FINAL = frozenset({"APPROVED", "REJECTED"})  # APR-04: nothing reopens these
@@ -57,6 +58,11 @@ def append_audit(
         ts=ts,
     )
     s.add(row)
+    head = s.get(AuditHead, tenant_id)  # OBJ-08 tail anchor, same transaction as the row
+    if head is None:
+        s.add(AuditHead(tenant_id=tenant_id, seq=seq, hash=row.hash))
+    else:
+        head.seq, head.hash = seq, row.hash
     s.flush()
     return row
 
@@ -271,3 +277,119 @@ def record_decision(
         },
     )
     return approval
+
+
+def set_case_state(
+    s: Session, *, tenant_id: str, case_id: str, status: str, current_stage: str | None, actor: str
+) -> Case:
+    """Workflow status set by the Supervisor (PAUSED, FAILED, IN_PROGRESS); never a decision."""
+    case = s.scalar(select(Case).where(Case.tenant_id == tenant_id, Case.id == case_id))
+    if case is None:
+        raise ConflictError(f"no case {case_id}")
+    if case.status in FINAL:
+        raise ConflictError(f"case is {case.status}; a final decision cannot be reopened")
+    case.status, case.current_stage = status, current_stage
+    s.flush()
+    append_audit(
+        s,
+        tenant_id=tenant_id,
+        case_id=case_id,
+        actor=actor,
+        event_type="STATE_CHANGED",
+        payload={"status": status, "current_stage": current_stage},
+    )
+    return case
+
+
+def start_stage_run(
+    s: Session, *, tenant_id: str, case_id: str, stage: str, trace_id: str
+) -> StageRun:
+    attempts = s.scalar(
+        select(func.count()).where(
+            StageRun.tenant_id == tenant_id, StageRun.case_id == case_id, StageRun.stage == stage
+        )
+    )
+    run = StageRun(
+        tenant_id=tenant_id,
+        case_id=case_id,
+        stage=stage,
+        attempt=(attempts or 0) + 1,
+        trace_id=trace_id,
+        started_at=_now(),
+    )
+    s.add(run)
+    s.flush()
+    return run
+
+
+def finish_stage_run(
+    s: Session, *, tenant_id: str, run_id: int, decision: str, result_json: str, actor: str
+) -> StageRun:
+    run = s.get(StageRun, run_id)
+    if run is None or run.tenant_id != tenant_id:
+        raise ConflictError(f"no stage run {run_id}")
+    run.decision, run.result_json, run.ended_at = decision, result_json, _now()
+    s.flush()
+    append_audit(
+        s,
+        tenant_id=tenant_id,
+        case_id=run.case_id,
+        actor=actor,
+        event_type="STAGE_COMPLETED",
+        payload={"stage": run.stage, "attempt": run.attempt, "decision": decision},
+    )
+    return run
+
+
+def create_job(
+    s: Session,
+    *,
+    tenant_id: str,
+    case_id: str,
+    kind: str,
+    stage: str | None,
+    idempotency_key: str | None,
+    actor: str,
+) -> Job:
+    """New queued job, or the existing one for the same Idempotency-Key (ADR 0007)."""
+    if idempotency_key is not None:
+        existing = s.scalar(
+            select(Job).where(
+                Job.tenant_id == tenant_id,
+                Job.case_id == case_id,
+                Job.idempotency_key == idempotency_key,
+            )
+        )
+        if existing is not None:
+            return existing
+    now = _now()
+    job = Job(
+        id=uuid.uuid4().hex,
+        tenant_id=tenant_id,
+        case_id=case_id,
+        kind=kind,
+        stage=stage,
+        idempotency_key=idempotency_key,
+        status="queued",
+        created_by=actor,
+        created_at=now,
+        updated_at=now,
+    )
+    s.add(job)
+    s.flush()
+    return job
+
+
+def update_job(
+    s: Session, job_id: str, *, status: str, outcome: str | None = None, error: str | None = None
+) -> Job:
+    job = s.get(Job, job_id)
+    if job is None:
+        raise ConflictError(f"no job {job_id}")
+    job.status, job.updated_at = status, _now()
+    if outcome is not None:
+        job.outcome = outcome
+    if error is not None:
+        job.error = error
+    s.flush()
+    return job

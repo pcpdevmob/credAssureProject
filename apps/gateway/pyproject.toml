@@ -11,6 +11,9 @@ dependencies = [
     "credassure-agent-supervisor",
     "credassure-agent-working-capital",
     "credassure-observability",
+    "credassure-tools",
+    "credassure-llm",
+    "credassure-ledger",
     "fastapi>=0.115",
     "uvicorn[standard]>=0.32",
     "pydantic>=2.9",
@@ -41,6 +44,9 @@ credassure-agent-onboarding = { workspace = true }
 credassure-agent-supervisor = { workspace = true }
 credassure-agent-working-capital = { workspace = true }
 credassure-observability = { workspace = true }
+credassure-tools = { workspace = true }
+credassure-llm = { workspace = true }
+credassure-ledger = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

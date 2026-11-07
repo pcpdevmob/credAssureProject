@@ -18,7 +18,8 @@ from sqlalchemy.orm import Session, sessionmaker
 from .models import RunLock
 
 BUSY_TIMEOUT_MS = 5000
-STALE_LOCK = timedelta(minutes=5)  # the stage timeout (#23): an older lock belongs to a dead run
+HEARTBEAT = timedelta(seconds=30)  # a live run refreshes its lock this often (ADR 0007)
+STALE_LOCK = 3 * HEARTBEAT  # three missed heartbeats: the run is dead and its lock may be taken
 
 
 class RunInProgressError(Exception):
@@ -56,7 +57,7 @@ def transaction(engine: Engine) -> Iterator[Session]:
 
 @contextmanager
 def run_lock(engine: Engine, tenant_id: str, case_id: str, run_id: str) -> Iterator[None]:
-    """One active run per case. A lock older than STALE_LOCK (crashed run) is taken over."""
+    """One active run per case. A lock not refreshed for STALE_LOCK (dead run) is taken over."""
     now = datetime.now(UTC)
     try:
         with transaction(engine) as s:
@@ -76,6 +77,17 @@ def run_lock(engine: Engine, tenant_id: str, case_id: str, run_id: str) -> Itera
     finally:
         with transaction(engine) as s:
             s.execute(delete(RunLock).where(RunLock.case_id == case_id, RunLock.run_id == run_id))
+
+
+def heartbeat(engine: Engine, case_id: str, run_id: str) -> bool:
+    """Refresh this run's lock. False means another run took it over: stop writing."""
+    with transaction(engine) as s:
+        result = s.execute(
+            update(RunLock)
+            .where(RunLock.case_id == case_id, RunLock.run_id == run_id)
+            .values(acquired_at=datetime.now(UTC))
+        )
+        return bool(cast(CursorResult[Any], result).rowcount)
 
 
 def hr_engine(path: Path | str) -> Engine:

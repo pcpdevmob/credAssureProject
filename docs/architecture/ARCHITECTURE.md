@@ -333,7 +333,7 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0004 | UI deferred; API-first | Accepted (updated by 0005) |
 | 0005 | Monorepo; one project per agent with own API router; React web app | Accepted |
 | 0006 | Hexagonal agents: ports in core, adapters in packages | Accepted (adapters in Phase 8) |
-| 0007 | Asynchronous stage jobs with 202 + SSE progress | Proposed |
+| 0007 | Asynchronous stage jobs with 202 + SSE progress, heartbeat lock | Accepted |
 | 0008 | Model resilience: timeouts, retries, circuit breaker, fallbacks | Proposed |
 | 0009 | Excluded multi-agent patterns (no agent-to-agent messaging, no inter-agent bus, no cross-case memory, no dynamic spawning) | Accepted |
 | 0010 | Rounding policy | Accepted |
