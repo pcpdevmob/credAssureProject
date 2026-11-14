@@ -8,5 +8,5 @@ COPY packages/api-client packages/api-client
 RUN pnpm install --frozen-lockfile && pnpm --filter @credassure/web build
 
 FROM nginxinc/nginx-unprivileged:1.27-alpine
-COPY --from=build /app/apps/web/dist /usr/share/nginx/html
+COPY --from=build /app/apps/web/out /usr/share/nginx/html
 EXPOSE 8080

@@ -138,7 +138,7 @@ class Searcher:
             return []
         where, params = self._where(case_id, tenant_id, f)
         sql = (
-            "SELECT c.chunk_id FROM chunks_fts JOIN chunks c ON c.rowid = chunks_fts.rowid"  # noqa: S608
+            "SELECT c.chunk_id FROM chunks_fts JOIN chunks c ON c.rowid = chunks_fts.rowid"  # noqa: S608  # nosec B608
             " JOIN documents d ON d.doc_id = c.doc_id"
             f" WHERE chunks_fts MATCH :match AND c.strategy = :strategy AND {where}"
             " ORDER BY bm25(chunks_fts) LIMIT :n"
@@ -188,7 +188,7 @@ class Searcher:
         where, params = self._where(case_id, tenant_id, f)
         marks = ", ".join(f":id{i}" for i in range(len(ids)))
         sql = (
-            "SELECT c.chunk_id, c.doc_id, d.title, d.collection, c.section_path,"  # noqa: S608
+            "SELECT c.chunk_id, c.doc_id, d.title, d.collection, c.section_path,"  # noqa: S608  # nosec B608
             " d.effective_from,"
             " c.text, c.injection_flag FROM chunks c JOIN documents d ON d.doc_id = c.doc_id"
             f" WHERE c.chunk_id IN ({marks}) AND {where}"

@@ -1,0 +1,16 @@
+[Unit]
+Description=FinBridge AI auth service (127.0.0.1:3420)
+After=network.target
+[Service]
+User=finbridge
+Group=finbridge
+Environment=FB_DB=/var/lib/finbridge-auth/auth.db FB_PORT=3420
+ExecStart=/usr/bin/python3 /opt/finbridge-auth/server.py
+Restart=on-failure
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/finbridge-auth
+[Install]
+WantedBy=multi-user.target

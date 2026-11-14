@@ -28,7 +28,7 @@ Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpu
 | 8a Supervisor + jobs + anchor | done | SUP-01..08, APR-01..03 wiring, OBJ-08; scope #1 (A4), #4, #19, #22, #46, #47 | phase-8a | Supervisor graph, placeholders, adapters, audit_head, heartbeat lock, jobs table, ADR 0007. 546 tests. Reviews and evals run with 8b |
 | 8b Gateway + async runs + e2e | done | API-01, UI-01..08 (API side), SUP-02 (placeholder), SUP-03/08, APR-04/05, NFR-03/04/07, OBJ-08/09; scope #4 #15 #16 #28 #46 #47 #50 | phase-8b | /v1 routers, RFC 9457, rate and login limits, uploads, 202 + job + SSE, agent routers on `start_run`, health/quota, Langfuse exporter, e2e LLM on/off, openapi + TS client. 670 tests. E9 READY, E10 routes READY, E11 NOT READY → 2 MUST fixed. Reports in `evaluation/reports/` |
 | 6 Model layer + safeguards | done | NFR-03/04/05/07, ONB-06 (primitive), BR-15, SUP-04/07; scope #22 (limiter), #23, #36, #48; ADR 0008 | phase-6 | Client (30 s, transient-only retries ×2 with jitter, breaker 5→open 60 s with one half-open probe, shared limiter, SQLite cache, guided JSON), structured output (repair ×2), prompt registry + bump check + eval-fast CI, Verhoeff PII redaction, spotlighting, injection scanner, 5 min stage timeout with cancellation and template fallback. 787 tests. security-reviewer: no MUST; brd-conformance: 1 MUST (flaky test) fixed. E4 (scoped): READY. |
-| UI U0–U6 | todo | UI-01..09 | | React lane |
+| UI U0–U6 | in progress | UI-01..09 | | finbridge Next.js imported as apps/web (ADR 0022): services map the gateway, typecheck + `next build` pass; live walk-through, bridge security review and U6 hardening still open |
 
 ## Phase 6 notes (2026-11-07)
 - **Built:**

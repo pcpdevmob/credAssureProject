@@ -1,0 +1,39 @@
+@tailwind base; @tailwind components; @tailwind utilities;
+/* Colours come from src/styles/tokens.js (emitted as --fb-* CSS variables). */
+body { @apply bg-canvas text-ink-800 antialiased; font-family: var(--font-inter), Inter, system-ui, sans-serif; }
+.dot-canvas { background-color: var(--fb-canvas); background-image: radial-gradient(color-mix(in srgb, var(--fb-ink-300) 45%, transparent) 1px, transparent 1px); background-size: 22px 22px; }
+.hatch { background-image: repeating-linear-gradient(135deg, var(--fb-sunken) 0 6px, var(--fb-line) 6px 8px); }
+h1, h2, h3, .font-display { font-family: var(--font-sora), var(--font-inter), sans-serif; letter-spacing: -0.015em; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.num { font-variant-numeric: tabular-nums; }
+.glass { background: rgba(255,255,255,.78); backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%); border: 1px solid var(--fb-line); box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 12px 32px -12px rgba(15,23,42,.12); }
+.mesh-midnight { background-color: var(--fb-ink-950); background-image: radial-gradient(40rem 30rem at 0% 0%, color-mix(in srgb, var(--fb-ink-700) 70%, transparent), transparent 60%), radial-gradient(35rem 28rem at 100% 100%, color-mix(in srgb, var(--fb-brand-500) 22%, transparent), transparent 60%), radial-gradient(28rem 22rem at 85% 10%, color-mix(in srgb, var(--fb-gold-400) 16%, transparent), transparent 60%); }
+.text-gold-grad { background: linear-gradient(90deg,var(--fb-gold-200),var(--fb-gold-400) 45%,var(--fb-brand-400)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; } }
+
+/* Animated gold→emerald shimmer for the login wordmark */
+.fb-shimmer {
+  background-image: linear-gradient(100deg, var(--fb-gold-300) 0%, var(--fb-gold-50) 18%, var(--fb-gold-400) 36%, var(--fb-brand-400) 58%, var(--fb-gold-300) 80%, var(--fb-gold-50) 100%);
+  background-size: 300% 100%;
+  background-attachment: fixed;
+  -webkit-background-clip: text;
+  animation: fb-shimmer 6s linear infinite;
+  text-shadow: none;
+  filter: drop-shadow(0 0 18px rgba(226, 176, 74, .25));
+}
+@keyframes fb-shimmer { from { background-position: 0% 50%; } to { background-position: 300% 50%; } }
+@media (prefers-reduced-motion: reduce) { .fb-shimmer { animation: none; } }
+
+/* Responsive QA fixes */
+html, body { overflow-x: clip; }
+.grid > * { min-width: 0; }
+@media (max-width: 767px) {
+  button, select, input:not([type=checkbox]):not([type=radio]):not([type=hidden]), textarea, [role=tab], a:not(p a):not(td a):not(li > p a) { min-height: 44px; }
+  button { min-width: 44px; }
+  a.underline-link { display: inline-flex; align-items: center; }
+}
+/* Team IntelliCore wave */
+.fb-wave { display: inline-block; animation: fb-wave 2.8s cubic-bezier(.45,0,.55,1) infinite; animation-delay: calc(var(--i) * 90ms); }
+@keyframes fb-wave { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-0.09em); } }
+.fb-team-grad { background-image: linear-gradient(100deg, var(--fb-gold-500) 0%, var(--fb-gold-300) 25%, var(--fb-brand-600) 55%, var(--fb-gold-500) 85%); background-size: 250% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: fb-shimmer 7s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .fb-wave, .fb-team-grad { animation: none; } }

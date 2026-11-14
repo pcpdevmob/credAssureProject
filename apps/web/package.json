@@ -2,22 +2,35 @@
   "name": "@credassure/web",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "dev": "next dev",
+    "build": "next build",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@credassure/api-client": "workspace:*",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "@react-three/drei": "^9.114.0",
+    "@react-three/fiber": "^8.17.10",
+    "clsx": "2.1.1",
+    "framer-motion": "^11.11.9",
+    "lucide-react": "0.441.0",
+    "next": "^14.2.35",
+    "qrcode": "^1.5.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "recharts": "2.12.7",
+    "tailwind-merge": "2.5.2",
+    "three": "^0.169.0"
   },
   "devDependencies": {
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react": "^4.3.4",
-    "typescript": "^5.7.2",
-    "vite": "^6.0.6"
+    "@types/node": "20.16.10",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "18.3.11",
+    "@types/react-dom": "18.3.0",
+    "@types/three": "^0.169.0",
+    "autoprefixer": "10.4.20",
+    "postcss": "8.4.47",
+    "tailwindcss": "3.4.13",
+    "typescript": "5.6.2"
   }
 }
