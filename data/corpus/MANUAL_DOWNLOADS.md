@@ -37,7 +37,7 @@ for that doc_id in `manifest.yaml`.
 - **Recipe 15 - Supreme Court and High Court judgments on the MSMED Act:** Do not use the sci.gov.in judgment-date search; it only covers 30 days per search. Search by keyword instead, one CAPTCHA per search, solved by a person (ADR 0020). Supreme Court: https://scr.sci.gov.in/ (Digital SCR) with the phrase 'Micro, Small and Medium Enterprises Development Act', then 'Facilitation Council', then 'section 18' AND 'MSMED'. High Courts: https://judgments.ecourts.gov.in/ with the same phrases. Keep judgments dated 2015-2026 that decide a point on delayed payment, section 15/16 interest, a section 18 reference or arbitration, or the section 19 pre-deposit; skip orders that only list or adjourn a case. Save the official judgment PDF as raw/R-JUD-NNN.pdf and fill title (<parties>, <court>, <date>), source_url and effective_from. Well-known starting points to confirm in the search before saving: Silpi Industries v. Kerala SRTC (SC, 2021); Gujarat State Civil Supplies Corp. v. Mahakali Foods (SC, 2022); Jharkhand Urja Vikas Nigam v. State of Rajasthan (SC, 2021); Shanti Conductors v. Assam SEB (SC, 2019). The sites show a CAPTCHA when searches come quickly: space them out and save a few judgments per sitting; the source 15 target of 25 is close to met, so extra judgments are optional. Legal points only (ADR 0020).
 - **Recipe 16 - State MSME/industrial policies - Maharashtra (home) and other states (KR-04 distractors):** Maharashtra (home, IN-MH): di.maharashtra.gov.in refuses connections; use the MIDC policy page https://midc.maharashtra.gov.in/industrial-policies-and-incentives/ (Industrial Policy 2019 and the 2025 Industries, Investment and Services Policy PDFs). Karnataka (IN-KA): kum.karnataka.gov.in does not resolve; save the Industrial Policy 2025-30 PDF from https://investkarnataka.co.in/. Set jurisdiction accordingly. Maharashtra GRs and MIDC policies are often Marathi only; save English versions only (Marathi is excluded).
 
-**87 documents pending** across six owners.
+**16 documents pending** across six owners.
 
 ## [Name 1]: 2 documents (scr.sci.gov.in)
 
@@ -53,97 +53,27 @@ for that doc_id in `manifest.yaml`.
 | T3 | R-JUD-012 | raw/R-JUD-012.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
 | T3 | R-JUD-013 | raw/R-JUD-013.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
 
-## [Name 3]: 21 documents (scr.sci.gov.in, www.rbi.org.in)
+## [Name 3]: 2 documents (scr.sci.gov.in)
 
 | Tier | doc_id | Save as | Source | Link | Why manual |
 |---|---|---|---|---|---|
-| T6 | R-RBI-HIST-001 | raw/R-RBI-HIST-001.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-002 | raw/R-RBI-HIST-002.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-003 | raw/R-RBI-HIST-003.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-004 | raw/R-RBI-HIST-004.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-005 | raw/R-RBI-HIST-005.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-006 | raw/R-RBI-HIST-006.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-007 | raw/R-RBI-HIST-007.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-008 | raw/R-RBI-HIST-008.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-009 | raw/R-RBI-HIST-009.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-010 | raw/R-RBI-HIST-010.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-011 | raw/R-RBI-HIST-011.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-012 | raw/R-RBI-HIST-012.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-013 | raw/R-RBI-HIST-013.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-014 | raw/R-RBI-HIST-014.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-015 | raw/R-RBI-HIST-015.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-016 | raw/R-RBI-HIST-016.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-017 | raw/R-RBI-HIST-017.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-018 | raw/R-RBI-HIST-018.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-019 | raw/R-RBI-HIST-019.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
 | T3 | R-JUD-020 | raw/R-JUD-020.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
 | T3 | R-JUD-021 | raw/R-JUD-021.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
 
-## [Name 4]: 36 documents (scr.sci.gov.in, www.rbi.org.in)
+## [Name 4]: 1 documents (scr.sci.gov.in)
 
 | Tier | doc_id | Save as | Source | Link | Why manual |
 |---|---|---|---|---|---|
-| T1 | R-RBI-MD-005 | raw/R-RBI-MD-005.html | 1: Reserve Bank of India (Commercial Banks – Income Recognition | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13146 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-006 | raw/R-RBI-MD-006.html | 1: Reserve Bank of India (Commercial Banks – Securitisation Tra | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13150 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-007 | raw/R-RBI-MD-007.html | 1: Reserve Bank of India (Commercial Banks – Transfer and Distr | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13151 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-008 | raw/R-RBI-MD-008.html | 1: Reserve Bank of India (Commercial Banks – Concentration Risk | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13152 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-009 | raw/R-RBI-MD-009.html | 1: Reserve Bank of India (Commercial Banks – Credit Risk Manage | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13153 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-010 | raw/R-RBI-MD-010.html | 1: Reserve Bank of India (Commercial Banks – Credit Information | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13154 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-011 | raw/R-RBI-MD-011.html | 1: Reserve Bank of India (Commercial Banks - Asset Classificati | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13400 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-012 | raw/R-RBI-MD-012.html | 1: Reserve Bank of India (Commercial Banks - Capital Charge for | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13399 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-013 | raw/R-RBI-MD-013.html | 1: Reserve Bank of India (Small Finance Banks – Miscellaneous)  | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13105 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-014 | raw/R-RBI-MD-014.html | 1: Reserve Bank of India (Small Finance Banks – Responsible Bus | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13108 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-015 | raw/R-RBI-MD-015.html | 1: Reserve Bank of India (Small Finance Banks – Know Your Custo | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13109 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-016 | raw/R-RBI-MD-016.html | 1: Reserve Bank of India (Small Finance Banks – Treatment of Wi | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13112 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-017 | raw/R-RBI-MD-017.html | 1: Reserve Bank of India (Small Finance Banks – Resolution of S | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13113 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-018 | raw/R-RBI-MD-018.html | 1: Reserve Bank of India (Small Finance Banks – Income Recognit | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13114 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-019 | raw/R-RBI-MD-019.html | 1: Reserve Bank of India (Small Finance Banks – Interest Rates  | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13117 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-020 | raw/R-RBI-MD-020.html | 1: Reserve Bank of India (Small Finance Banks – Securitisation  | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13118 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T6 | R-RBI-HIST-020 | raw/R-RBI-HIST-020.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-021 | raw/R-RBI-HIST-021.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-022 | raw/R-RBI-HIST-022.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-023 | raw/R-RBI-HIST-023.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-024 | raw/R-RBI-HIST-024.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-025 | raw/R-RBI-HIST-025.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-026 | raw/R-RBI-HIST-026.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-027 | raw/R-RBI-HIST-027.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-028 | raw/R-RBI-HIST-028.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-029 | raw/R-RBI-HIST-029.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-030 | raw/R-RBI-HIST-030.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-031 | raw/R-RBI-HIST-031.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-032 | raw/R-RBI-HIST-032.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-033 | raw/R-RBI-HIST-033.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-034 | raw/R-RBI-HIST-034.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-035 | raw/R-RBI-HIST-035.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-036 | raw/R-RBI-HIST-036.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-037 | raw/R-RBI-HIST-037.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
-| T6 | R-RBI-HIST-038 | raw/R-RBI-HIST-038.pdf or .html | 2: pick from index | https://www.rbi.org.in/Scripts/NotificationUser.aspx | **Recipe 2** (see Recipes above) |
 | T3 | R-JUD-024 | raw/R-JUD-024.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
 
-## [Name 5]: 18 documents (scr.sci.gov.in, www.incometaxindia.gov.in, www.rbi.org.in)
+## [Name 5]: 2 documents (scr.sci.gov.in, www.incometaxindia.gov.in)
 
 | Tier | doc_id | Save as | Source | Link | Why manual |
 |---|---|---|---|---|---|
-| T1 | R-RBI-MD-021 | raw/R-RBI-MD-021.html | 1: Reserve Bank of India (Small Finance Banks – Transfer and Di | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13119 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-022 | raw/R-RBI-MD-022.html | 1: Reserve Bank of India (Small Finance Banks – Concentration R | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13120 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-023 | raw/R-RBI-MD-023.html | 1: Reserve Bank of India (Small Finance Banks – Credit Risk Man | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13121 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-024 | raw/R-RBI-MD-024.html | 1: Reserve Bank of India (Small Finance Banks – Credit Informat | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13122 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-025 | raw/R-RBI-MD-025.html | 1: Reserve Bank of India (Small Finance Banks – Credit Faciliti | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13124 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-026 | raw/R-RBI-MD-026.html | 1: Reserve Bank of India (Urban Co-operative Banks – Miscellane | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13011 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-027 | raw/R-RBI-MD-027.html | 1: Reserve Bank of India (Urban Co-operative Banks – Responsibl | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13013 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-028 | raw/R-RBI-MD-028.html | 1: Reserve Bank of India (Urban Co-operative Banks – Know Your  | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13014 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-029 | raw/R-RBI-MD-029.html | 1: Reserve Bank of India (Urban Co-operative Banks – Treatment  | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13017 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-030 | raw/R-RBI-MD-030.html | 1: Reserve Bank of India (Urban Co-operative Banks – Resolution | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13018 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-031 | raw/R-RBI-MD-031.html | 1: Reserve Bank of India (Urban Co-operative Banks – Income Rec | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13019 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-032 | raw/R-RBI-MD-032.html | 1: Reserve Bank of India (Urban Co-operative Banks – Interest R | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13022 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-033 | raw/R-RBI-MD-033.html | 1: Reserve Bank of India (Urban Co-operative Banks – Transfer a | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13023 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-034 | raw/R-RBI-MD-034.html | 1: Reserve Bank of India (Urban Co-operative Banks – Concentrat | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13024 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-035 | raw/R-RBI-MD-035.html | 1: Reserve Bank of India (Urban Co-operative Banks – Credit Ris | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13025 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
-| T1 | R-RBI-MD-036 | raw/R-RBI-MD-036.html | 1: Reserve Bank of India (Urban Co-operative Banks – Credit Inf | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13026 | **HTML:** save as *Web page, HTML only*; do not look for the PDF. exact document: open the link and save it |
 | T3 | R-JUD-001 | raw/R-JUD-001.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
 | T6 | R-TAX-C-001 | raw/R-TAX-C-001.pdf or .html | 10: pick from index | https://www.incometaxindia.gov.in/ | **Recipe 10** (see Recipes above) |
 
-## [Name 6]: 8 documents (scr.sci.gov.in, udyamregistration.gov.in, website.rbi.org.in)
+## [Name 6]: 7 documents (scr.sci.gov.in, website.rbi.org.in)
 
 | Tier | doc_id | Save as | Source | Link | Why manual |
 |---|---|---|---|---|---|
@@ -154,7 +84,6 @@ for that doc_id in `manifest.yaml`.
 | T3 | R-JUD-004 | raw/R-JUD-004.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
 | T3 | R-JUD-005 | raw/R-JUD-005.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
 | T3 | R-JUD-006 | raw/R-JUD-006.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
-| T6 | R-MSME-G-005 | raw/R-MSME-G-005.pdf or .html | 7: pick from index | https://udyamregistration.gov.in/ | **Recipe 7** (see Recipes above) |
 
 ## Hosts missing terms of use (ADR 0020)
 
@@ -209,7 +138,7 @@ under `hosts:`, `terms_url`, `terms_note` (does it allow automated access? any r
 | www.meity.gov.in | 2 | [Name 1] | unknown |
 | www.mudra.org.in | 0 | [Name 2] | unknown |
 | www.ncgtc.in | 0 | [Name 3] | unknown |
-| www.rbi.org.in | 93 | [Name 4] | unknown |
+| www.rbi.org.in | 576 | [Name 4] | unknown |
 | www.rxil.in | 0 | [Name 5] | unknown |
 | www.sci.gov.in | 0 | [Name 6] | unknown |
 | www.sidbi.in | 44 | [Name 1] | unknown |

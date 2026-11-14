@@ -33,7 +33,8 @@ from .common import REPO, UA_PRODUCT, write_text
 
 CORPUS = REPO / "data" / "corpus"
 BASES = {"L1", "L2", "L3", "L4"}  # real documents only; L5 is synthetic, L6 was removed (ADR 0019)
-APPLIES_TO = {"commercial_bank", "nbfc", "sfb", "coop_bank", "all"}
+# "other": RRBs, local area banks, AIFIs, CICs, payments banks; never matches an offer's lender type
+APPLIES_TO = {"commercial_bank", "nbfc", "sfb", "coop_bank", "other", "all"}
 JURISDICTION = re.compile(r"^IN(?:-[A-Z]{2})?$")
 REQUIRED = (
     "doc_id",

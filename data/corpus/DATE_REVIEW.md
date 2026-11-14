@@ -5,7 +5,7 @@ file name -> PDF metadata -> retrieval date (bank charge schedules only, meaning
 A seeded 10% per date_source is marked yes in the Check column: open the document and confirm. If wrong, correct
 `effective_from` in `manifest.yaml` and set `date_source: human`. Human and curated dates are never recomputed.
 
-Dated: extracted 250, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 36. Needs review: 1. Needs a date: 22.
+Dated: extracted 282, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 40. Needs review: 1. Needs a date: 22.
 
 | doc_id | effective_from | date_source | Evidence | Source | Check |
 |---|---|---|---|---|---|
@@ -22,7 +22,7 @@ Dated: extracted 250, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 36
 | R-BANK-S-002 | 2025-12-01 | url | url month folder: 2025-12 | https://bandhan.bank.in/sites/default/files/2025-12/Biz-Elite-Current-Account-Schedule-of-Charges.pdf |  |
 | R-BANK-S-003 | 2026-01-01 | url | url month folder: 2026-01 | https://bandhan.bank.in/sites/default/files/2026-01/Schedule-of-Charges-for-CVCE.pdf |  |
 | R-BANK-S-004 | 2026-04-01 | url | url month folder: 2026-04 | https://bandhan.bank.in/sites/default/files/2026-04/Schedule-of-Charges-Bandhan-Super-Saver.pdf |  |
-| R-BANK-S-005 | 2026-04-01 | extracted | unit in April 17 will be from April 1, 2026 to April | https://bandhan.bank.in/sites/default/files/2026-05/Current-Account-Product-Variants-Schedule-of-Charges-and-Features.pdf | **yes** |
+| R-BANK-S-005 | 2026-04-01 | extracted | unit in April 17 will be from April 1, 2026 to April | https://bandhan.bank.in/sites/default/files/2026-05/Current-Account-Product-Variants-Schedule-of-Charges-and-Features.pdf |  |
 | R-BANK-S-006 | 2026-07-15 | url | url ddmmyyyy: 15072026 | https://bandhan.bank.in/sites/default/files/2026-07/Car-Loan-Schedule-of-Charges-15072026.pdf |  |
 | R-BANK-S-007 | 2026-07-01 | url | url month folder: 2026-07 | https://bandhan.bank.in/sites/default/files/2026-07/Personal-Loan-Schedule-of-Charges-July-2026.pdf |  |
 | R-BANK-S-008 | 2026-07-01 | url | url month folder: 2026-07 | https://bandhan.bank.in/sites/default/files/2026-07/Salary-Account-Schedule-of-Charges.pdf |  |
@@ -36,22 +36,22 @@ Dated: extracted 250, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 36
 | R-BANK-S-016 | 2026-01-01 | wef | e amount being prepaid, w.e.f Jan 01, 2026 | https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-Charges-SME-and-Corporate-Loans-21082026.pdf |  |
 | R-BANK-S-017 | 2026-08-01 | url | url month folder: 2026-08 | https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-Charges-Small-Loan-Against-Property.pdf | **yes** |
 | R-BANK-S-018 | 2025-07-02 | extracted | .38/ 01.01.001/2025-26 dated July 02, 2025, shall be | https://bandhan.bank.in/sites/default/files/2026-08/Schedule-of-charges-for-Business-Banking-Group-21082026.pdf |  |
-| R-BANK-S-019 | 2024-06-29 | extracted | on-Resident Deposits (w.e.f. June 29, 2024) Sched | https://bandhan.bank.in/sites/default/files/2026-08/Standard-Schedule-of-Charges-for-Savings-NR-Accounts-and-Debit-Cards.pdf | **yes** |
+| R-BANK-S-019 | 2024-06-29 | extracted | on-Resident Deposits (w.e.f. June 29, 2024) Sched | https://bandhan.bank.in/sites/default/files/2026-08/Standard-Schedule-of-Charges-for-Savings-NR-Accounts-and-Debit-Cards.pdf |  |
 | R-BANK-S-025 | 2026-05-01 | url | url month folder: 2026-05 | https://bandhan.bank.in/sites/default/files/2026-05/SOC-NR-Account-Product-Variants.pdf |  |
-| R-CG-03 | 2026-06-15 | extracted | it Guarantee Scheme 2026 CGS1 15/06/2026 View View | https://www.cgtmse.in/Circulars |  |
+| R-CG-03 | 2026-06-15 | extracted | it Guarantee Scheme 2026 CGS1 15/06/2026 View View | https://www.cgtmse.in/Circulars | **yes** |
 | R-CG-04 | 2000-06-01 | wef | ible borrowers effective from June 1, 2000 | https://sbi.bank.in/web/business/sme/sme-government-schemes/cgtmse |  |
 | R-CG-C-002 | 2025-09-16 | url | url dmy: 16.09.2025 | https://www.cgtmse.in/Default/ViewFile/?id=1767027845598_Loan%20Operational%20Guidelines%20-%2016.09.2025(Annexure%20-II).pdf&path=Circular |  |
 | R-CG-C-003 | 2025-09-16 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1767027921148_Credit%20Card%20Operational%20guidelines%20-%2016.9.25(Annexure%20-III).pdf&path=Circular | **yes** |
 | R-CG-C-006 | 2026-02-06 | pdf_metadata | pdf metadata ModDate | https://www.cgtmse.in/Default/ViewFile/?id=1770397812214_Circular%20257%20-%20CGS%20for%20Export%20credit%20merged.pdf&path=Circular |  |
 | R-CG-C-008 | 2026-02-10 | extracted | फिविी 10, 2026 सीजीट | https://www.cgtmse.in/Default/ViewFile/?id=1772467706992_Circular%20258%20-%20TPG%20definition.pdf&path=Circular |  |
 | R-CG-C-009 | 2026-01-23 | extracted | 23 जनविी 2026 सीज | https://www.cgtmse.in/Default/ViewFile/?id=1772467742052_Circular%20257%20-%20CGS%20for%20Export%20credit.pdf&path=Circular |  |
-| R-CG-C-015 | 2026-06-15 | extracted | 15 जून 2026 सीजीटी | https://www.cgtmse.in/Default/ViewFile/?id=1782398519918_Hindi%20Circular%20-%20TReDS-150626.pdf&path=Circular |  |
+| R-CG-C-015 | 2026-06-15 | extracted | 15 जून 2026 सीजीटी | https://www.cgtmse.in/Default/ViewFile/?id=1782398519918_Hindi%20Circular%20-%20TReDS-150626.pdf&path=Circular | **yes** |
 | R-CG-C-016 | 2026-06-15 | extracted | जून 15, 2026 | https://www.cgtmse.in/Default/ViewFile/?id=1782398570934_%E0%A4%B9%E0%A4%BF%E0%A4%A8%E0%A5%8D%E0%A4%A6%E0%A5%80%20Addendum%20to%20MCC%20Circular-%20Modification%20in%20claim%20settlement.pdf&path=Circular |  |
 | R-CG-C-040 | 2025-03-18 | extracted | rcular No.251/2024-25 dated March 18, 2025. 3. Is An | https://www.cgtmse.in/Home/VS/98 |  |
 | R-CG-C-071 | 2015-02-24 | extracted | February 24, 2015 To | https://www.cgtmse.in/Default/ViewFile/?id=1633522797530_Follow%20up%20of%20recovery%20after%20settlement%20of%20CGTMSE%20claim.pdf&path=Circular |  |
 | R-CG-C-089 | 2018-03-22 | extracted | March 22, 2018 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1528140049145_Circular%20148-%202017-18%20%E2%80%93%20Refund%20of%20Annual%20Guarantee%20Fee.pdf&path=Circular |  |
 | R-CG-C-090 | 2018-06-07 | extracted | June 07, 2018 All Memb | https://www.cgtmse.in/Default/ViewFile/?id=1528733504995_Circular%20149%20-2018%E2%80%9319-%20Tenure%20for%20working%20capital%20facility%20-%20Modification%20in%20CGS.pdf&path=Circular |  |
-| R-CG-C-092 | 2018-06-11 | extracted | June 11, 2018 All Memb | https://www.cgtmse.in/Default/ViewFile/?id=1529006104582_Circular%20No142B%20Clarification%20on%20charge%20on%20securities.pdf&path=Circular |  |
+| R-CG-C-092 | 2018-06-11 | extracted | June 11, 2018 All Memb | https://www.cgtmse.in/Default/ViewFile/?id=1529006104582_Circular%20No142B%20Clarification%20on%20charge%20on%20securities.pdf&path=Circular | **yes** |
 | R-CG-C-093 | 2018-07-12 | extracted | July 12, 2018 All Memb | https://www.cgtmse.in/Default/ViewFile/?id=1610466843809_Circular_No.151.pdf&path=Circular |  |
 | R-CG-C-094 | 2018-07-12 | extracted | July 12, 2018 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1610533088323_Circular_No.152.pdf&path=Circular |  |
 | R-CG-C-095 | 2018-08-07 | extracted | CGTMSE Ref.No.159/ HR August 07, 2018 All | https://www.cgtmse.in/Default/ViewFile/?id=1610533188934_Circular_No.153.pdf&path=Circular |  |
@@ -59,47 +59,47 @@ Dated: extracted 250, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 36
 | R-CG-C-097 | 2018-02-28 | extracted | GTMSE Ref.No.6455 / 44 February 28, 2018 All | https://www.cgtmse.in/Default/ViewFile/?id=1528139664447_Circular%20139-%202017-18%20-Charging%20of%20Annual%20Guarantee%20Fee%20(AGF)%20on%20Outstanding%20Amount.pdf&path=Circular |  |
 | R-CG-C-098 | 2013-12-16 | extracted | Circular No.70/2013 -14 dated December 16, 2013 it was de | https://www.cgtmse.in/Default/ViewFile/?id=1528139700599_Circular%20140-%202017-18%20-Increase%20in%20the%20extent%20of%20guarantee%20coverage%20for%20proposals%20above%20%E2%82%B950%20lakh.pdf&path=Circular |  |
 | R-CG-C-099 | 2016-01-28 | extracted | ircular No.107/ 2015-16 dated January 28, 2016. The abo | https://www.cgtmse.in/Default/ViewFile/?id=1528139726822_Circular%20141-%202017-18%20%E2%80%93%20Coverage%20of%20Retail%20Trade%20under%20Credit%20Guarantee%20Scheme.pdf&path=Circular |  |
-| R-CG-C-100 | 2012-10-10 | extracted | ircular No. 62/2012 -13 dated October 10, 2012 whereby, | https://www.cgtmse.in/Default/ViewFile/?id=1528139948904_Circular%20144%20-2017-18-%20Waiver%20of%20Initiation%20of%20Legal%20Action%20in%20respect%20of%20smaller%20loans.pdf&path=Circular | **yes** |
+| R-CG-C-100 | 2012-10-10 | extracted | ircular No. 62/2012 -13 dated October 10, 2012 whereby, | https://www.cgtmse.in/Default/ViewFile/?id=1528139948904_Circular%20144%20-2017-18-%20Waiver%20of%20Initiation%20of%20Legal%20Action%20in%20respect%20of%20smaller%20loans.pdf&path=Circular |  |
 | R-CG-C-102 | 2018-02-28 | extracted | CGTMSE Ref.No.6458 / 44 February 28, 2018 A | https://www.cgtmse.in/Default/ViewFile/?id=1529081281665_Circular%20142-%202017-18%20%E2%80%93%20Partial%20Collateral%20Security%20under%20Credit%20Guarantee%20Scheme.pdf&path=Circular |  |
 | R-CG-C-104 | 2019-04-04 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1632012426981_Circular_No.140A.pdf&path=Circular | **yes** |
 | R-CG-C-105 | 2018-03-14 | extracted | f.No. 6547 / 44 March 14, 2018 To all | https://www.cgtmse.in/Default/ViewFile/?id=1633603014526_Circular_No.143.pdf&path=Circular |  |
-| R-CG-C-109 | 2017-12-08 | extracted | December 08, 2017 All Memb | https://www.cgtmse.in/Default/ViewFile/?id=1528139508123_Circular%20134%20-%202017-18%20-%20Aadhaar%20Number%20in%20Guarantee%20Application%20Form.pdf&path=Circular | **yes** |
+| R-CG-C-109 | 2017-12-08 | extracted | December 08, 2017 All Memb | https://www.cgtmse.in/Default/ViewFile/?id=1528139508123_Circular%20134%20-%202017-18%20-%20Aadhaar%20Number%20in%20Guarantee%20Application%20Form.pdf&path=Circular |  |
 | R-CG-C-111 | 2016-04-01 | extracted | facilities above 5 lakh since 01 April, 2016 the credi | https://www.cgtmse.in/Default/ViewFile/?id=1528139593377_Circular%20136-%202017-18%20-%20Regarding%20Search%20Facility%20using%20ITPAN.pdf&path=Circular |  |
 | R-CG-C-112 | 2017-01-25 | extracted | to our Circular No. 123 dated January 25, 2017 whereby, | https://www.cgtmse.in/Default/ViewFile/?id=1528139615207_Circular%20137-%202017-18%20-%20Regarding%20Coverage%20of%20unsecured%20loans%20for%20NBFCs..pdf&path=Circular |  |
 | R-CG-C-114 | 2017-07-21 | extracted | CGTMSE/(44)/5622 July 21, 2017 All th | https://www.cgtmse.in/Default/ViewFile/?id=1633520465349_131.pdf&path=Circular |  |
-| R-CG-C-123 | 2017-04-24 | extracted | April 24, 2017 All M | https://www.cgtmse.in/Default/ViewFile/?id=1633521341307_127_Eng.pdf&path=Circular | **yes** |
-| R-CG-C-124 | 2017-04-12 | extracted | TMSE Ref. No. 5100 / 44 April 12, 2017 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1633521651962_Circular%20No126.pdf&path=Circular | **yes** |
+| R-CG-C-123 | 2017-04-24 | extracted | April 24, 2017 All M | https://www.cgtmse.in/Default/ViewFile/?id=1633521341307_127_Eng.pdf&path=Circular |  |
+| R-CG-C-124 | 2017-04-12 | extracted | TMSE Ref. No. 5100 / 44 April 12, 2017 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1633521651962_Circular%20No126.pdf&path=Circular |  |
 | R-CG-C-125 | 2017-04-12 | extracted | SE. Ref. No. 44/GF/5082 April 12, 2017 All Memb | https://www.cgtmse.in/Default/ViewFile/?id=1633522151279_125.pdf&path=Circular |  |
 | R-CG-C-168 | 2011-08-30 | extracted | August 30, 2011 All th | https://www.cgtmse.in/Default/ViewFile/?id=1632012994086_Office-converted.pdf&path=Circular |  |
 | R-CG-C-169 | 2010-07-30 | extracted | July 30, 2010 A | https://www.cgtmse.in/Default/ViewFile/?id=1632013281045_Office-converted%20(1).pdf&path=Circular |  |
 | R-CG-C-170 | 2010-06-01 | extracted | June 1, 2010 Al | https://www.cgtmse.in/Default/ViewFile/?id=1633523125349_Updation%20of%20Member%20Address.pdf&path=Circular |  |
 | R-CG-C-171 | 2010-07-30 | extracted | July 30, 2010 A | https://www.cgtmse.in/Default/ViewFile/?id=1633523366154_60.pdf&path=Circular |  |
 | R-CG-C-172 | 2010-06-03 | extracted | June 03, 2010 All M | https://www.cgtmse.in/Default/ViewFile/?id=1633523748459_Updation%20and%20Deadline%20for%20NPA%20declaration.pdf&path=Circular |  |
-| R-CG-C-183 | 2009-09-29 | extracted | September 29, 2009 Al | https://www.cgtmse.in/Default/ViewFile/?id=1633523913712_Change%20in%20office%20timings.pdf&path=Circular | **yes** |
+| R-CG-C-183 | 2009-09-29 | extracted | September 29, 2009 Al | https://www.cgtmse.in/Default/ViewFile/?id=1633523913712_Change%20in%20office%20timings.pdf&path=Circular |  |
 | R-CG-C-184 | 2025-02-28 | extracted | February 28, 2025 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1741363456012_cgscl%20circular%20249%20upload%20final.pdf&path=Circular |  |
 | R-CG-C-185 | 2025-02-28 | extracted | No. CGTMSE /256 February 28, 2025 Credit | https://www.cgtmse.in/Default/ViewFile/?id=1741369414503_Trangender-1_246.pdf&path=Circular |  |
 | R-CG-C-186 | 2025-02-28 | extracted | February 28, 2025 Credit | https://www.cgtmse.in/Default/ViewFile/?id=1741369591548_Circular%20for%20eligibility%20criteria.pdf&path=Circular |  |
-| R-CG-C-187 | 2025-02-28 | extracted | February 28, 2025 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1741369687793_Circular%20for%20modification%20in%20CGS%20I_final.pdf&path=Circular | **yes** |
+| R-CG-C-187 | 2025-02-28 | extracted | February 28, 2025 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1741369687793_Circular%20for%20modification%20in%20CGS%20I_final.pdf&path=Circular |  |
 | R-CG-C-188 | 2025-03-18 | extracted | March 18, 2025 Credit G | https://www.cgtmse.in/Default/ViewFile/?id=1742382157365_Circular%20No.%202502024-25%205cr%20to%2010%20cr.pdf&path=Circular |  |
 | R-CG-C-189 | 2025-03-18 | extracted | March 18, 2025 To All M | https://www.cgtmse.in/Default/ViewFile/?id=1742382368090_Circular%20No.2512024-25%20reduction%20in%20AGF.pdf&path=Circular |  |
-| R-CG-C-190 | 2025-04-01 | extracted | April 01, 2025 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1743589132849_Reduction%20in%20AGF%20CGS%20III%20FINAL.pdf&path=Circular |  |
+| R-CG-C-190 | 2025-04-01 | extracted | April 01, 2025 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1743589132849_Reduction%20in%20AGF%20CGS%20III%20FINAL.pdf&path=Circular | **yes** |
 | R-CG-C-192 | 2025-03-18 | extracted | 18 मार्भ 2025 क्रे | https://www.cgtmse.in/Default/ViewFile/?id=1747745049498_250%20Circular%20No.%202024-25%205cr%20to%2010%20cr.pdf&path=Circular |  |
 | R-CG-C-193 | 2025-02-28 | extracted | 28 फरवरी 2025 क्रे | https://www.cgtmse.in/Default/ViewFile/?id=1747745171550_Circular%20for%20eligibility%20criteria.pdf&path=Circular |  |
 | R-CG-C-194 | 2025-02-28 | extracted | ीटीएमएसई / 28 फरवरी, 2025 क्रेडि | https://www.cgtmse.in/Default/ViewFile/?id=1747745390505_Circular%20for%20transgender%20final.pdf&path=Circular |  |
 | R-CG-C-199 | 2024-01-01 | extracted | Ref. No. CGTMSE / 44/ 208 January 01, 2024 All El | https://www.cgtmse.in/Default/ViewFile/?id=1704191499006_Circular-%20CGSCL%20Fee%20Structure.pdf&path=Circular |  |
 | R-CG-C-204 | 2024-01-01 | extracted | र्भ सं. सीजीटीएमएसई / 44/208 01 जनवरी 2024 सर्ी प | https://www.cgtmse.in/Default/ViewFile/?id=1733935011521_Circular%20No.%20236%20-%20CGSCL%20Fee%20Structure.pdf&path=Circular |  |
 | R-CG-C-205 | 2024-01-18 | extracted | 18 जनवरी 2024 क्रेडि | https://www.cgtmse.in/Default/ViewFile/?id=1733935042510_Circular%20No.%20237_GCGS.pdf&path=Circular |  |
-| R-CG-C-206 | 2024-02-14 | extracted | फ़रवरी 14, 2024 सीजीटी | https://www.cgtmse.in/Default/ViewFile/?id=1733935074866_Circular%20No.%20238%202023-24_IME%20V2.pdf&path=Circular |  |
+| R-CG-C-206 | 2024-02-14 | extracted | फ़रवरी 14, 2024 सीजीटी | https://www.cgtmse.in/Default/ViewFile/?id=1733935074866_Circular%20No.%20238%202023-24_IME%20V2.pdf&path=Circular | **yes** |
 | R-CG-C-207 | 2024-03-06 | extracted | मार्ा 06, 2024 ऋण गारंट | https://www.cgtmse.in/Default/ViewFile/?id=1733935106053_Circular%20No.%20239%20-%20OCGS%20circular.pdf&path=Circular |  |
 | R-CG-C-208 | 2024-08-01 | extracted | 01 अगस्त 2024 सीजीटी | https://www.cgtmse.in/Default/ViewFile/?id=1733935126975_Circular%20No.%20240%20-%20IME%20Circular%20Clarification.pdf&path=Circular |  |
-| R-CG-C-209 | 2024-12-10 | extracted | December 10, 2024 Credit G | https://www.cgtmse.in/Default/ViewFile/?id=1734171815262_Circular%20241-%20enhancement%20in%20extent%20of%20coverage%20for%20women%20entrepreneurs%5B90%5D.pdf&path=Circular |  |
+| R-CG-C-209 | 2024-12-10 | extracted | December 10, 2024 Credit G | https://www.cgtmse.in/Default/ViewFile/?id=1734171815262_Circular%20241-%20enhancement%20in%20extent%20of%20coverage%20for%20women%20entrepreneurs%5B90%5D.pdf&path=Circular | **yes** |
 | R-CG-C-210 | 2022-11-30 | extracted | तक दकया जाना कृपया हमारे 30 नवंबर, 2022 के पररपत् | https://www.cgtmse.in/Default/ViewFile/?id=1734171818388_hindi%20Circular%20241-%20enhancement%20in%20extent%20of%20coverage%20for%20women%20entrepreneurs.pdf&path=Circular |  |
 | R-CG-C-211 | 2025-02-28 | extracted | February 28, 2025 To A | https://www.cgtmse.in/Default/ViewFile/?id=1741353836549_Circular%20No.242.pdf&path=Circular |  |
-| R-CG-C-212 | 2023-12-18 | extracted | ircular No. 234/2023-24 dated December 18, 2023 on the c | https://www.cgtmse.in/Default/ViewFile/?id=1741354004731_Circular%20No%20-%20243.pdf&path=Circular | **yes** |
-| R-CG-C-213 | 2025-02-28 | extracted | February 28, 2025 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1741358954826_Gujarat%20circular_final.pdf&path=Circular |  |
+| R-CG-C-212 | 2023-12-18 | extracted | ircular No. 234/2023-24 dated December 18, 2023 on the c | https://www.cgtmse.in/Default/ViewFile/?id=1741354004731_Circular%20No%20-%20243.pdf&path=Circular |  |
+| R-CG-C-213 | 2025-02-28 | extracted | February 28, 2025 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1741358954826_Gujarat%20circular_final.pdf&path=Circular | **yes** |
 | R-CG-C-214 | 2025-02-28 | extracted | February 28, 2025 Credit | https://www.cgtmse.in/Default/ViewFile/?id=1741359008951_Mizoram%20Circular%20final.pdf&path=Circular |  |
 | R-CG-C-215 | 2025-02-28 | extracted | 28 फरवरी 2025 क्र | https://www.cgtmse.in/Default/ViewFile/?id=1747745452907_Mizoram%20Circular%20final.pdf&path=Circular |  |
-| R-CG-C-216 | 2025-02-28 | extracted | 28 फरवरी 2025 सीजीट | https://www.cgtmse.in/Default/ViewFile/?id=1747745520737_NBFC%20Circular%20No.%20243.pdf&path=Circular |  |
+| R-CG-C-216 | 2025-02-28 | extracted | 28 फरवरी 2025 सीजीट | https://www.cgtmse.in/Default/ViewFile/?id=1747745520737_NBFC%20Circular%20No.%20243.pdf&path=Circular | **yes** |
 | R-CG-C-217 | 2025-02-28 | extracted | 28 फरवरी 2025 | https://www.cgtmse.in/Default/ViewFile/?id=1747745549827_NBFC%20Circular%20No.242.pdf&path=Circular |  |
 | R-CG-C-218 | 2023-05-19 | extracted | May 19, 2023 To All | https://www.cgtmse.in/Default/ViewFile/?id=1684578860932_NBFC%20Circular%20No%20226.pdf&path=Circular |  |
 | R-CG-C-219 | 2023-06-09 | extracted | June 09, 2023 Credit G | https://www.cgtmse.in/Default/ViewFile/?id=1686328603047_Circular%20No.227%202023-24.pdf&path=Circular |  |
@@ -109,26 +109,26 @@ Dated: extracted 250, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 36
 | R-CG-C-231 | 2024-12-11 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1733934927248_Circular%20No.%20230.pdf&path=Circular |  |
 | R-CG-C-232 | 2024-12-11 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1733934971517_Circular%20No.%20231%202023-24.pdf&path=Circular |  |
 | R-CG-C-235 | 2023-01-06 | extracted | January 06, 2023 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1673044027617_Circular%20no.%20217%20-%20Agniveer.pdf&path=Circular |  |
-| R-CG-C-236 | 2023-02-01 | extracted | February 01, 2023 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1675275782886_Circular%20no.%20218%20-%20Outstanding%20Clarification%20(003).pdf&path=Circular | **yes** |
+| R-CG-C-236 | 2023-02-01 | extracted | February 01, 2023 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1675275782886_Circular%20no.%20218%20-%20Outstanding%20Clarification%20(003).pdf&path=Circular |  |
 | R-CG-C-237 | 2022-09-08 | extracted | e shall be operational w.e.f. September 08, 2022 and conti | https://www.cgtmse.in/Default/ViewFile/?id=1680097385416_Revised%20Circular_219.pdf&path=Circular |  |
 | R-CG-C-238 | 2023-03-31 | extracted | March 31, 2023 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1680282460228_Circular%20no.%20222%20-%20Increase%20in%20the%20threshold%20for%20Waiver%20of%20Legal%20Action_REVISED.pdf&path=Circular |  |
 | R-CG-C-239 | 2023-03-31 | extracted | March 31, 2023 All Pu | https://www.cgtmse.in/Default/ViewFile/?id=1680774247788_Circular%20No.%20220_Increase%20in%20ceiling%20of%20Coverage_REV.pdf&path=Circular |  |
 | R-CG-C-240 | 2023-03-31 | extracted | 6 March 31, 2023 All El | https://www.cgtmse.in/Default/ViewFile/?id=1680774258496_Circular%20No.%20223_Fee%20revision%20under%20Co-lending_REV.pdf&path=Circular |  |
 | R-CG-C-241 | 2023-03-31 | extracted | March 31, 2023 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1680774271189_Circular%20No.%20221_Reduction%20in%20AGF_REV.pdf&path=Circular |  |
-| R-CG-C-252 | 2023-04-11 | extracted | April 11, 2023 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1715764860533_Circular%20No.225%202023-24_rev.pdf&path=Circular |  |
+| R-CG-C-252 | 2023-04-11 | extracted | April 11, 2023 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1715764860533_Circular%20No.225%202023-24_rev.pdf&path=Circular | **yes** |
 | R-CG-C-253 | 2023-04-11 | extracted | भ सं. सीजीटीएमएसई /07 11 अप्रैल, 2023 सर्ी सदस | https://www.cgtmse.in/Default/ViewFile/?id=1733934781434_Circular%20No.%20225%202023-24.pdf&path=Circular |  |
-| R-CG-C-254 | 2022-03-09 | extracted | ircular No.1 99/2021-22 dated March 09, 2022 advising | https://www.cgtmse.in/Default/ViewFile/?id=1666115840408_Circular%20no.%20206%20-%20URN%20Mandatory.pdf&path=Circular |  |
+| R-CG-C-254 | 2022-03-09 | extracted | ircular No.1 99/2021-22 dated March 09, 2022 advising | https://www.cgtmse.in/Default/ViewFile/?id=1666115840408_Circular%20no.%20206%20-%20URN%20Mandatory.pdf&path=Circular | **yes** |
 | R-CG-C-260 | 2023-01-01 | extracted | eme shall be operational from January 01, 2023. 2. Def | https://www.cgtmse.in/Default/ViewFile/?id=1672424179117_Manipur%20Credit%20Guarantee%20Scheme%20(MCGS).pdf&path=Circular |  |
 | R-CG-C-274 | 2022-02-25 | extracted | shall come into force w.e.f. February 25, 2022. The sam | https://www.cgtmse.in/Default/ViewFile/?id=1645813400842_196.pdf&path=Circular |  |
 | R-CG-C-275 | 2022-03-07 | extracted | .No.155 March 07, 2022 To All | https://www.cgtmse.in/Default/ViewFile/?id=1646671238480_Circular%20198%20for%20Extention%20in%20the%20CGSSD%20timeline.pdf&path=Circular |  |
 | R-CG-C-276 | 2020-08-06 | extracted | 019-P&G/Policy(pt. IV) dated August 6, 2020 for onlin | https://www.cgtmse.in/Default/ViewFile/?id=1647038585241_Circular%20no.%20199%20-%20Udyog%20Aadhaar_updated.pdf&path=Circular |  |
 | R-CG-C-280 | 2022-06-06 | extracted | SVANidhi June 06, 2022 All Le | https://www.cgtmse.in/Default/ViewFile/?id=1654625838148_Circular%20no.%20202%20-%20CGS%20PMS-%20Revision%20in%20Scheme%20Guidelines%20and%20Extension%20of%20the%20Lending%20period_Final.pdf&path=Circular |  |
 | R-CG-C-282 | 2022-10-11 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1665508184793_Circular-205_Benefits%20to%20Agniveer.pdf&path=Circular |  |
-| R-CG-C-293 | 2021-10-08 | extracted | October 08, 2021 All Memb | https://www.cgtmse.in/Default/ViewFile/?id=1633870635262_Circular%20no.%20187%20-%20Allowing%20submission%20of%20application%20anytime-%20Final.pdf&path=Circular |  |
+| R-CG-C-293 | 2021-10-08 | extracted | October 08, 2021 All Memb | https://www.cgtmse.in/Default/ViewFile/?id=1633870635262_Circular%20no.%20187%20-%20Allowing%20submission%20of%20application%20anytime-%20Final.pdf&path=Circular | **yes** |
 | R-CG-C-294 | 2021-10-08 | extracted | October 08, 2021 All Memb | https://www.cgtmse.in/Default/ViewFile/?id=1633958523782_Circular%20no.%20186%20-%20Increase%20in%20the%20threshold%20for%20Waiver%20of%20Legal%20Action_Final.pdf&path=Circular |  |
 | R-CG-C-295 | 2015-02-24 | extracted | ference No. 9443/claims dated February 24, 2015 requesti | https://www.cgtmse.in/Default/ViewFile/?id=1637604934484_Circular%20No%20188%20for%20audit%20certificate.pdf&path=Circular |  |
 | R-CG-C-296 | 2021-11-18 | extracted | November 18, 2021 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1637667604994_Circular%20no.%20189%20-%20Eligibility%20of%20FPO%20under%20CGTMSE%20_final.pdf&path=Circular |  |
-| R-CG-C-297 | 2022-01-03 | extracted | January 03, 2022 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1642598376662_REV_Circular%20no.%20191%20-%20Clarification%20on%20Hybrid%20Model%20Rev.pdf&path=Circular | **yes** |
+| R-CG-C-297 | 2022-01-03 | extracted | January 03, 2022 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1642598376662_REV_Circular%20no.%20191%20-%20Clarification%20on%20Hybrid%20Model%20Rev.pdf&path=Circular |  |
 | R-CG-C-298 | 2022-01-03 | extracted | January 03, 2022 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1642612435346_REV_%20Circular%20no.%20190%20-%20Clarification%20on%20charging%20of%20fee%20for%20WC.pdf&path=Circular |  |
 | R-CG-C-299 | 2022-01-19 | extracted | January 19, 2022 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1642612481924_Circular%20no.%20192%20-%20Clarification%20in%20respect%20of%20updation%20of%20Outsatanding%20Amt%20for%20WC%20accounts.pdf&path=Circular |  |
 | R-CG-C-300 | 2022-01-20 | extracted | January 20, 2022 To All | https://www.cgtmse.in/Default/ViewFile/?id=1642682792079_CGTMSE%20Circular%20193-%20Inspection%20of%20CGTMSE%20covered%20accounts.pdf&path=Circular |  |
@@ -146,11 +146,11 @@ Dated: extracted 250, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 36
 | R-CG-C-319 | 2020-07-02 | extracted | heme has come into Iorce lrom July 02, 2020. 4. Defin | https://www.cgtmse.in/Default/ViewFile/?id=1610534699710_Circular_No.172_Operational_Guidelines.pdf&path=Circular |  |
 | R-CG-C-320 | 2020-08-18 | extracted | August 18, 2020 All Stat | https://www.cgtmse.in/Default/ViewFile/?id=1610534781274_Circular_No.173.pdf&path=Circular |  |
 | R-CG-C-321 | 2020-10-14 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1610534893423_Circular_No.174_Annuxure-I.pdf&path=Circular |  |
-| R-CG-C-322 | 2020-12-29 | extracted | December 29, 2020 To Al | https://www.cgtmse.in/Default/ViewFile/?id=1610534948807_Circular_No.175.pdf&path=Circular |  |
+| R-CG-C-322 | 2020-12-29 | extracted | December 29, 2020 To Al | https://www.cgtmse.in/Default/ViewFile/?id=1610534948807_Circular_No.175.pdf&path=Circular | **yes** |
 | R-CG-C-323 | 2020-10-14 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1622571364238_Circular_No.174_Annexure-II.pdf&path=Circular |  |
 | R-CG-C-324 | 2020-07-22 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1622571622885_Circular_No.172_FAQ.pdf&path=Circular |  |
 | R-CG-C-326 | 2020-10-14 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1622573864948_Circular_No.174.pdf&path=Circular |  |
-| R-CG-C-327 | 2020-07-22 | extracted | July 22, 2020 To all e | https://www.cgtmse.in/Default/ViewFile/?id=1622574052028_Circular_No.172.pdf&path=Circular |  |
+| R-CG-C-327 | 2020-07-22 | extracted | July 22, 2020 To all e | https://www.cgtmse.in/Default/ViewFile/?id=1622574052028_Circular_No.172.pdf&path=Circular | **yes** |
 | R-CG-C-328 | 2019-07-01 | extracted | July 01, 2019 All Memb | https://www.cgtmse.in/Default/ViewFile/?id=1610534102398_Circular_No.164.pdf&path=Circular |  |
 | R-CG-C-329 | 2019-09-18 | extracted | September 18, 2019 To all e | https://www.cgtmse.in/Default/ViewFile/?id=1610534202513_Circular_No.165.pdf&path=Circular |  |
 | R-CG-C-330 | 2019-12-06 | extracted | December 06, 2019 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1610534253007_Circular_No.166.pdf&path=Circular |  |
@@ -159,12 +159,12 @@ Dated: extracted 250, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 36
 | R-CG-C-334 | 2020-04-30 | extracted | SMA-2, and NPA accounts as on 30.04.2020 and can b | https://www.cgtmse.in/Default/ViewFile/?id=1610534541687_Subdebt_Scheme_Guidilines.pdf&path=Circular |  |
 | R-CG-C-336 | 2021-03-31 | extracted | e guarantee availment date or March 31, 2021 whichever | https://www.cgtmse.in/Default/ViewFile/?id=1633541021116_FAQs_on_Sub-Debt_Scheme.pdf&path=Circular |  |
 | R-CG-C-338 | 2018-02-28 | extracted | ircular No.142/ 2017-18 dated February 28, 2018 and No.1 | https://www.cgtmse.in/Default/ViewFile/?id=1610533305390_Circular_No.154.pdf&path=Circular |  |
-| R-CG-C-342 | 2017-12-19 | extracted | rcular No. 136/2017-18 dated December 19, 2017. The info | https://www.cgtmse.in/Default/ViewFile/?id=1610533717054_Circular_No.158.pdf&path=Circular | **yes** |
+| R-CG-C-342 | 2017-12-19 | extracted | rcular No. 136/2017-18 dated December 19, 2017. The info | https://www.cgtmse.in/Default/ViewFile/?id=1610533717054_Circular_No.158.pdf&path=Circular |  |
 | R-CG-C-343 | 2018-11-13 | extracted | November 13, 2018 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1610533801534_Circular_No.159.pdf&path=Circular |  |
 | R-CG-C-344 | 2018-02-28 | extracted | ircular No. 139/2017-18 dated February 28, 2018, CGTMSE h | https://www.cgtmse.in/Default/ViewFile/?id=1610533864599_Circular_No.160.pdf&path=Circular |  |
-| R-CG-C-345 | 2019-01-15 | extracted | January 15, 2019 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1610533907624_Circular_No.161.pdf&path=Circular |  |
+| R-CG-C-345 | 2019-01-15 | extracted | January 15, 2019 All Me | https://www.cgtmse.in/Default/ViewFile/?id=1610533907624_Circular_No.161.pdf&path=Circular | **yes** |
 | R-CG-C-348 | 2012-10-10 | extracted | ircular No. 62/2012 -13 dated October 10, 2012 whereby, | https://www.cgtmse.in/Default/ViewFile/?id=1528139983318_Circular%20145-%202017-18%20-%20Modifications%20in%20the%20guidelines%20for%20lodgment%20of%20claim.pdf&path=Circular |  |
-| R-CG-C-349 | 2017-12-08 | extracted | to our Circular No. 134 dated December 08, 2017 advising | https://www.cgtmse.in/Default/ViewFile/?id=1528140003890_Circular%20146%20-%202017-18%20%E2%80%93%20Udyog%20Aadhaar%20Number%20Mandatory%20for%20Guarantee%20coverage.pdf&path=Circular | **yes** |
+| R-CG-C-349 | 2017-12-08 | extracted | to our Circular No. 134 dated December 08, 2017 advising | https://www.cgtmse.in/Default/ViewFile/?id=1528140003890_Circular%20146%20-%202017-18%20%E2%80%93%20Udyog%20Aadhaar%20Number%20Mandatory%20for%20Guarantee%20coverage.pdf&path=Circular |  |
 | R-CG-C-350 | 2018-03-21 | extracted | March 21, 2018 To all | https://www.cgtmse.in/Default/ViewFile/?id=1528140026231_Circular%20147-%202017-18%20%E2%80%93%20Coverage%20of%20unsecured%20loan%20for%20NBFCs.pdf&path=Circular |  |
 | R-CG-C-395 | 2020-10-13 | extracted | al Guidelines (Updated till October 13, 2020) I. I | https://www.cgtmse.in/Default/ViewFile/?id=1607434364745_Scheme%20Document%20-%20PM%20SVANidhi.pdf&path=Page |  |
 | R-CG-C-396 | 2022-02-25 | extracted | come into operations w.e.f. February 25, 2022 . The sam | https://www.cgtmse.in/Default/ViewFile/?id=1659539206433_Scheme%20Document_merged.pdf&path=Page |  |
@@ -181,7 +181,7 @@ Dated: extracted 250, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 36
 | R-CG-C-407 | 2017-01-25 | extracted | GS -II)” was launched w.e.f. January 25, 2017. Subseque | https://www.cgtmse.in/Default/ViewFile/?id=1744137228030_NBFC-%20CGS%20II%20Scheme%20Document.pdf&path=Page |  |
 | R-CG-C-408 | 2025-08-11 | pdf_metadata | pdf metadata CreationDate | https://www.cgtmse.in/Default/ViewFile/?id=1754919522963_Availing%20Credit%20Guarantees%20through%20CGTMSE%20Your%20Path%20to%20Collateral-Free%20Loans.pdf&path=Page | **yes** |
 | R-CG-C-411 | 2007-12-31 | extracted | n DD/MM/YYYY format. For e.g. 31st December 2007 is to be | https://www.cgtmse.in/Home/VS/102 |  |
-| R-CG-C-412 | 2025-04-01 | extracted | approved/ renewed on or after April 01, 2025 is given | https://www.cgtmse.in/Home/VS/47 |  |
+| R-CG-C-412 | 2025-04-01 | extracted | approved/ renewed on or after April 01, 2025 is given | https://www.cgtmse.in/Home/VS/47 | **yes** |
 | R-GST-C-001 | 2015-12-04 | extracted | Tax (GST) December 4, 2015 Co | https://gstcouncil.gov.in/sites/default/files/2024-02/cea-rpt-rnr.pdf |  |
 | R-GST-C-002 | 2010-01-01 | url | url ddmmyyyy: 01012010 | https://gstcouncil.gov.in/sites/default/files/2024-02/comments-dor-1st-discn-paper-01012010.pdf |  |
 | R-GST-C-003 | 2016-09-08 | extracted | FIRST AMENDMENT) ACT, 2016 [8th September, 2016.] An Act | https://gstcouncil.gov.in/sites/default/files/2024-02/consti-amend-act.pdf |  |
@@ -189,7 +189,7 @@ Dated: extracted 250, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 36
 | R-GST-C-005 | 2026-10-08 | extracted | er up to ₹ 5 crore Posted On: 08 OCT 2026 7:03PM by | https://gstcouncil.gov.in/sites/default/files/2026-10/press_release.pdf |  |
 | R-GST-C-006 | 2019-04-01 | wef | as undergone a change w.e.f. 01.04.2019 | https://gstcouncil.gov.in/sites/default/files/2024-03/model-all-india-gst-audit-manual_final.pdf |  |
 | R-GST-C-007 | 2024-09-25 | extracted | September 25, 2024 | https://gstcouncil.gov.in/sites/default/files/2024-09/compensation_cess.pdf |  |
-| R-GST-C-008 | 2024-09-15 | extracted | STC/2024 15-09-2024 OFFICE | https://gstcouncil.gov.in/sites/default/files/2024-09/om_gom_on_life_and_health_insurance_1.pdf |  |
+| R-GST-C-008 | 2024-09-15 | extracted | STC/2024 15-09-2024 OFFICE | https://gstcouncil.gov.in/sites/default/files/2024-09/om_gom_on_life_and_health_insurance_1.pdf | **yes** |
 | R-GST-C-010 | 2025-08-01 | url | url month folder: 2025-08 | https://gstcouncil.gov.in/sites/default/files/2025-08/meeting_notice_56th_gst_council_meeting_0.pdf |  |
 | R-GST-C-011 | 2025-09-17 | extracted | ught Circus, New Delhi-110001 17-09-2025 VACANCY C | https://gstcouncil.gov.in/sites/default/files/2025-09/document-339.pdf |  |
 | R-GST-C-012 | 2025-09-03 | extracted | held in New Delhi Posted On: 03 SEP 2025 11:28PM b | https://gstcouncil.gov.in/sites/default/files/2025-09/faq_0.pdf |  |
@@ -202,14 +202,14 @@ Dated: extracted 250, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 36
 | R-GST-C-019 | 2026-10-01 | url | url month folder: 2026-10 | https://gstcouncil.gov.in/sites/default/files/2026-10/faqs_on_recommendations_made_in_57th_gst_council_meeting.pdf |  |
 | R-GST-C-021 | 2022-10-01 | wef | een amended with effect from 01.10.2022 | https://gstcouncil.gov.in/sites/default/files/Minutes/48-thminutes.pdf |  |
 | R-GST-C-032 | 2019-06-01 | extracted | 1 GST – An Update (As on 1st June, 2019) 2 This | https://cbic-gst.gov.in/pdf/01062019-GST-An-Update.pdf |  |
-| R-GST-C-033 | 2025-12-31 | extracted | -Central Excise (N.T.) dated 31.12.2025. 2. As p | https://cbic-gst.gov.in/pdf/ADVISORY_03-2026_CE_DECLARATION.pdf |  |
-| R-GST-C-034 | 2026-02-10 | extracted | ZU- CHENNAI Dated 10.02.2026 ADVISORY | https://cbic-gst.gov.in/pdf/ADVISORY_05-2026_CE_PMT_01.pdf |  |
+| R-GST-C-033 | 2025-12-31 | extracted | -Central Excise (N.T.) dated 31.12.2025. 2. As p | https://cbic-gst.gov.in/pdf/ADVISORY_03-2026_CE_DECLARATION.pdf | **yes** |
+| R-GST-C-034 | 2026-02-10 | extracted | ZU- CHENNAI Dated 10.02.2026 ADVISORY | https://cbic-gst.gov.in/pdf/ADVISORY_05-2026_CE_PMT_01.pdf | **yes** |
 | R-GST-C-035 | 2025-12-16 | extracted | Cess) 2025 Act, notified on 16.12.2025 and being | https://cbic-gst.gov.in/pdf/Advisory%20No.%2009_2026%20dated%20050626_HSNS.pdf |  |
 | R-GST-C-037 | 2025-12-31 | extracted | 5-Central Excise (N.T.) dated 31.12.2025. 2. The | https://cbic-gst.gov.in/pdf/Advisory%20No.%2010%20of%202026%20dated%2009.06.2026%20on%20filing%20procedure%20of%20CE%20INT%2001%20and%20CE_INT02.pdf |  |
 | R-GST-C-038 | 2026-06-21 | extracted | the ACES-GST application from 21st June 2026 onwards. | https://cbic-gst.gov.in/pdf/Advisory%20No.%2011of%202026%20on%202%20Factor%20Authentication.pdf |  |
-| R-GST-C-039 | 2026-01-29 | extracted | ENNAI-Part(1) Date: 29.01.2026 ADVISORY | https://cbic-gst.gov.in/pdf/Advisory022026.pdf |  |
+| R-GST-C-039 | 2026-01-29 | extracted | ENNAI-Part(1) Date: 29.01.2026 ADVISORY | https://cbic-gst.gov.in/pdf/Advisory022026.pdf | **yes** |
 | R-GST-C-040 | 2025-12-31 | extracted | 5-Central Excise (N.T.) dated 31.12.2025. 2. As p | https://cbic-gst.gov.in/pdf/AdvisoryNo%2008%20of%202026_CE%20Declaration_Change%20_Addition_disposal%20of%20machines.pdf |  |
-| R-GST-C-041 | 2026-02-01 | extracted | d introduced with effect from 01.02.2026. 2. The H | https://cbic-gst.gov.in/pdf/AdvisoryNo.%2007_2026HSNSAMENDMENT%20DECLARATION.pdf |  |
+| R-GST-C-041 | 2026-02-01 | extracted | d introduced with effect from 01.02.2026. 2. The H | https://cbic-gst.gov.in/pdf/AdvisoryNo.%2007_2026HSNSAMENDMENT%20DECLARATION.pdf | **yes** |
 | R-GST-C-042 | 2025-12-16 | extracted | Cess) Act, 2025 notified on 16.12.2025 and intro | https://cbic-gst.gov.in/pdf/AdvisoryNo.06of2026dated12.03.26onfilingofHSNSReturns_RET-01.pdf |  |
 | R-GST-C-043 | 2024-07-01 | extracted | ntral Excise New Delhi, the 1st July, 2024 G.S.R... | https://cbic-gst.gov.in/pdf/CE-17-2024-Eng.pdf |  |
 | R-GST-C-044 | 2024-07-01 | extracted | ुल् क नई ददल् ली, ददनांक 1 जुलाई, 2024 सा.का | https://cbic-gst.gov.in/pdf/CE-17-2024-Hindi.pdf |  |
@@ -218,7 +218,7 @@ Dated: extracted 250, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 36
 | R-GST-C-048 | 2025-06-24 | extracted | orth Block, New Delhi Dated: 24th June, 2025 To, The | https://cbic-gst.gov.in/pdf/Circular-No-250-2025.pdf |  |
 | R-GST-C-049 | 2024-09-27 | extracted | No. 17/2024-Central Tax dated 27.09.2024. 3. In | https://cbic-gst.gov.in/pdf/Circular-Services-Co-insurance-Re-insurance.pdf |  |
 | R-GST-C-050 | 2024-12-11 | extracted | nt of India (Last updated on 11.12.2024) Visio | https://cbic-gst.gov.in/pdf/Citizens_Charter_CBIC_GST.pdf |  |
-| R-GST-C-053 | 2017-07-01 | extracted | into force with effect from 01.07.2017, for impo | https://cbic-gst.gov.in/pdf/Guidance-Note-for-Importers-Exporters-v2.pdf |  |
+| R-GST-C-053 | 2017-07-01 | extracted | into force with effect from 01.07.2017, for impo | https://cbic-gst.gov.in/pdf/Guidance-Note-for-Importers-Exporters-v2.pdf | **yes** |
 | R-GST-C-054 | 2025-12-16 | extracted | ve Department) New Delhi, the 16th December, 2025/Agrahayan | https://cbic-gst.gov.in/pdf/HSNS%20ACT%20No%2035%20of%202025.pdf |  |
 | R-GST-C-055 | 2026-01-28 | extracted | -ZU-CHENNAI-Part(1) Date:28.01.2026 ADVISORY | https://cbic-gst.gov.in/pdf/HSNS_Advisory_Helpdesk_01-2026.pdf |  |
 | R-GST-C-056 | 2025-12-16 | extracted | Cess) Act, 2025 notified on 16.12.2025 and intro | https://cbic-gst.gov.in/pdf/HSNS_Declaration_filing_procedure.pdf |  |
@@ -230,19 +230,19 @@ Dated: extracted 250, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 36
 | R-GST-C-062 | 2024-11-27 | extracted | – CENTRAL TAX New Delhi, the 27th November, 2024 G.S.R... | https://cbic-gst.gov.in/pdf/NN-29-Eng.pdf |  |
 | R-GST-C-063 | 2024-11-27 | extracted | ᱶ ᮤीय कर नई ᳰद᭨ली, तारीख 27 नवंबर, 2024 सा.का. | https://cbic-gst.gov.in/pdf/NN-29-Hindi.pdf |  |
 | R-GST-C-064 | 2024-12-10 | extracted | – CENTRAL TAX New Delhi, the 10th December, 2024 G.S.R... | https://cbic-gst.gov.in/pdf/NN-30-2024-Eng.pdf |  |
-| R-GST-C-065 | 2024-11-20 | extracted | रत करते हᱹ। 2. यह अिधसूचना 20 नवंबर, 2024 से ᮧभावी | https://cbic-gst.gov.in/pdf/NN-30-2024-Hindi.pdf |  |
-| R-GST-C-066 | 2024-12-13 | extracted | Central Tax New Delhi, the 13th December, 2024. S.O…( | https://cbic-gst.gov.in/pdf/NN-31-2024-Eng.pdf | **yes** |
+| R-GST-C-065 | 2024-11-20 | extracted | रत करते हᱹ। 2. यह अिधसूचना 20 नवंबर, 2024 से ᮧभावी | https://cbic-gst.gov.in/pdf/NN-30-2024-Hindi.pdf | **yes** |
+| R-GST-C-066 | 2024-12-13 | extracted | Central Tax New Delhi, the 13th December, 2024. S.O…( | https://cbic-gst.gov.in/pdf/NN-31-2024-Eng.pdf |  |
 | R-GST-C-068 | 2026-02-01 | extracted | उपकर जनयम, 2026 है। (2) ये 1 फरिरी, 2026 को प्रिृत | https://cbic-gst.gov.in/pdf/Notification%20No%2001_2026%20-%20HSNS%20CESS.pdf |  |
-| R-GST-C-069 | 2026-02-01 | extracted | िोधन) जनयम, 2026 है। (2) ये 1 फरिरी, 2026 को प्रिृत | https://cbic-gst.gov.in/pdf/Notification%20No%2002_2026%20-%20HSNS%20CESS.pdf | **yes** |
-| R-GST-C-070 | 2026-05-20 | extracted | जिभाग) अजधसूचना नई दिल्ली, 20 मई, 2026 सं. 03/2 | https://cbic-gst.gov.in/pdf/Notification%20No%2003_2026%20-%20HSNS%20CESS.pdf | **yes** |
+| R-GST-C-069 | 2026-02-01 | extracted | िोधन) जनयम, 2026 है। (2) ये 1 फरिरी, 2026 को प्रिृत | https://cbic-gst.gov.in/pdf/Notification%20No%2002_2026%20-%20HSNS%20CESS.pdf |  |
+| R-GST-C-070 | 2026-05-20 | extracted | जिभाग) अजधसूचना नई दिल्ली, 20 मई, 2026 सं. 03/2 | https://cbic-gst.gov.in/pdf/Notification%20No%2003_2026%20-%20HSNS%20CESS.pdf |  |
 | R-GST-C-071 | 2024-09-09 | extracted | h Meeting of the GST Council 9th September, 2024 *** PRE | https://cbic-gst.gov.in/pdf/Press-Release-54-GSTC-090924.pdf |  |
 | R-GST-C-072 | 2024-02-15 | extracted | ntral Excise New Delhi, the 15th February, 2024 G.S.R... | https://cbic-gst.gov.in/pdf/central-excise-6-24-eng.pdf |  |
 | R-GST-C-073 | 2024-02-15 | extracted | ुल् क नई ददल् ली, ददनांक 15 फ़रवरी, 2024 सा.का | https://cbic-gst.gov.in/pdf/central-excise-6-24-hindi.pdf |  |
 | R-GST-C-074 | 2024-02-15 | extracted | ntral Excise New Delhi, the 15th February, 2024 | https://cbic-gst.gov.in/pdf/central-excise-7-24-eng.pdf |  |
-| R-GST-C-075 | 2024-02-15 | extracted | ुल् क नई ददल् ली, ददनांक 15 फ़रिरी, 2024 सा.का. | https://cbic-gst.gov.in/pdf/central-excise-7-24-hindi.pdf |  |
+| R-GST-C-075 | 2024-02-15 | extracted | ुल् क नई ददल् ली, ददनांक 15 फ़रिरी, 2024 सा.का. | https://cbic-gst.gov.in/pdf/central-excise-7-24-hindi.pdf | **yes** |
 | R-GST-C-076 | 2025-01-30 | extracted | Block New Delhi, Dated the 30th January, 2025 To, | https://cbic-gst.gov.in/pdf/cir-cgst-246-03-2025.pdf |  |
 | R-GST-C-077 | 2024-07-15 | extracted | North Block, New Delhi Date: 15th July, 2024 To | https://cbic-gst.gov.in/pdf/circular-229-23-2024-GST.pdf |  |
-| R-GST-C-078 | 2024-09-10 | extracted | *** New Delhi, dated the 10th September, 2024 To, | https://cbic-gst.gov.in/pdf/circular-230.pdf | **yes** |
+| R-GST-C-078 | 2024-09-10 | extracted | *** New Delhi, dated the 10th September, 2024 To, | https://cbic-gst.gov.in/pdf/circular-230.pdf |  |
 | R-GST-C-079 | 2024-09-10 | extracted | *** New Delhi, dated the 10th September, 2024 To, | https://cbic-gst.gov.in/pdf/circular-231.pdf |  |
 | R-GST-C-080 | 2024-09-10 | extracted | *** New Delhi, dated the 10th September, 2024 To, | https://cbic-gst.gov.in/pdf/circular-232.pdf | **yes** |
 | R-GST-C-081 | 2024-09-10 | extracted | *** New Delhi, dated the 10th September, 2024 To, | https://cbic-gst.gov.in/pdf/circular-233.pdf |  |
@@ -250,9 +250,9 @@ Dated: extracted 250, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 36
 | R-GST-C-083 | 2024-10-15 | extracted | g **** New Delhi, dated the 15th October, 2024 To, T | https://cbic-gst.gov.in/pdf/circular-238-32-2024-GST.pdf |  |
 | R-GST-C-085 | 2024-07-15 | extracted | Block, New Delhi Dated the 15th July, 2024 To, | https://cbic-gst.gov.in/pdf/circular-services-228-22-2024-GST.pdf |  |
 | R-GST-C-086 | 2024-10-25 | extracted | ***** New Delhi, dated the 25th October, 2024 To, | https://cbic-gst.gov.in/pdf/corrigendum-Circular-237-31-2024-GST.pdf |  |
-| R-GST-C-087 | 2025-01-23 | extracted | mber G.S.R. 72(E), dated the 23rd January, 2025. | https://cbic-gst.gov.in/pdf/gst-ct-11-2025.pdf | **yes** |
+| R-GST-C-087 | 2025-01-23 | extracted | mber G.S.R. 72(E), dated the 23rd January, 2025. | https://cbic-gst.gov.in/pdf/gst-ct-11-2025.pdf |  |
 | R-GST-C-088 | 2025-02-07 | extracted | A , North Block, New Delhi, 7th February, 2025 To, | https://cbic-gst.gov.in/pdf/ins-gst-02-2025.pdf |  |
-| R-GST-C-089 | 2025-04-17 | extracted | Wing ***** New Delhi, dated 17th April, 2025 To, A | https://cbic-gst.gov.in/pdf/ins-gst-no-03-2025.pdf | **yes** |
+| R-GST-C-089 | 2025-04-17 | extracted | Wing ***** New Delhi, dated 17th April, 2025 To, A | https://cbic-gst.gov.in/pdf/ins-gst-no-03-2025.pdf |  |
 | R-GST-C-090 | 2024-08-12 | extracted | ing New Delhi, dated the 12th August 2024 To, | https://cbic-gst.gov.in/pdf/instruction-02-2024-GST-12082024.pdf |  |
 | R-GST-C-093 | 2024-02-06 | pdf_metadata | pdf metadata CreationDate | https://cbic-gst.gov.in/pdf/procedure-locate-e-payment-challan.pdf |  |
 | R-GST-C-094 | 2017-04-30 | extracted | T DATE FOR GST MIGRATION IS 30TH APRIL, 2017 ALL SE | https://cbic-gst.gov.in/pdf/public-notice-st-gst-last-date-eng.pdf |  |
@@ -262,7 +262,7 @@ Dated: extracted 250, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 36
 | R-GST-C-098 | 2017-06-14 | pdf_metadata | pdf metadata CreationDate | https://cbic-gst.gov.in/pdf/sectoral-working-gp-contactdtls-14june2017.pdf |  |
 | R-GST-C-100 | 2024-07-25 | extracted | GovtofIndia/GSTC/2023 Date: 25-07-2024 Subject | https://gstcouncil.gov.in/sites/default/files/2024-11/advisory_in_case_of_tobacco_products.pdf |  |
 | R-GST-C-101 | 2017-09-20 | extracted | Circular No.01l2017 Dated: 20th September, 2017 All Chie | https://gstcouncil.gov.in/sites/default/files/2024-11/document_1.pdf |  |
-| R-GST-C-102 | 2025-09-04 | extracted | GST Council Meeting 3rd and 4th September, 2025 Volume - | https://gstcouncil.gov.in/sites/default/files/Agenda/006b06de-0a53-4bc8-8007-f9c6f3130e37.pdf | **yes** |
+| R-GST-C-102 | 2025-09-04 | extracted | GST Council Meeting 3rd and 4th September, 2025 Volume - | https://gstcouncil.gov.in/sites/default/files/Agenda/006b06de-0a53-4bc8-8007-f9c6f3130e37.pdf |  |
 | R-GST-C-103 | 2022-06-29 | extracted | h GST Council Meeting 28-29 June 2022 Volu | https://gstcouncil.gov.in/sites/default/files/Agenda/47-agenda.pdf |  |
 | R-GST-C-104 | 2022-12-17 | extracted | 48th GST Council Meeting 17th December 2022 Volu | https://gstcouncil.gov.in/sites/default/files/Agenda/48-agenda.pdf |  |
 | R-GST-C-105 | 2023-02-18 | extracted | da for GST Council Meeting 18th February 2023 | https://gstcouncil.gov.in/sites/default/files/Agenda/49-agenda_0.pdf |  |
@@ -281,24 +281,56 @@ Dated: extracted 250, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 36
 | R-MSME-G-003 | 2021-08-23 | pdf_metadata | pdf metadata ModDate | https://udyamregistration.gov.in/docs/Benefits_of_UR.pdf |  |
 | R-MSME-G-004 | 2025-03-21 | extracted | ्रालय अजधसूचना नई दिल्ली, 21 माचच, 2025 का.आ. 13 | https://udyamregistration.gov.in/docs/261838_220191.pdf |  |
 | R-RATE-01-2026-09 | 2026-09-30 | extracted | ss Releases ( 304 kb ) Date : Sep 30, 2026 Lending a | https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63702 |  |
-| R-RATE-01-A | 2026-08-31 | extracted | ss Releases ( 269 kb ) Date : Aug 31, 2026 Lending a | https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63481 | **yes** |
+| R-RATE-01-A | 2026-08-31 | extracted | ss Releases ( 269 kb ) Date : Aug 31, 2026 Lending a | https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63481 |  |
 | R-RATE-01-B | 2026-06-30 | extracted | ss Releases ( 304 kb ) Date : Jun 30, 2026 Lending a | https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63049 |  |
 | R-RATE-01-C | 2026-03-30 | extracted | ss Releases ( 271 kb ) Date : Mar 30, 2026 Lending a | https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=62471 |  |
-| R-RBI-FAQ-001 | 2026-09-11 | extracted | Asked Questions 514 kb Date : Sep 11, 2026 FAQs on P | https://www.rbi.org.in/Scripts/FAQView.aspx?Id=87 | **yes** |
+| R-RBI-FAQ-001 | 2026-09-11 | extracted | Asked Questions 514 kb Date : Sep 11, 2026 FAQs on P | https://www.rbi.org.in/Scripts/FAQView.aspx?Id=87 |  |
 | R-RBI-FAQ-002 | 2025-06-09 | extracted | Asked Questions 256 kb Date : Jun 09, 2025 FAQs on M | https://www.rbi.org.in/Scripts/FAQView.aspx?Id=173 |  |
 | R-RBI-FAQ-003 | 2020-01-01 | extracted | uently Asked Questions Date : Jan 01, 2020 Trade Rec | https://www.rbi.org.in/Scripts/FAQView.aspx?Id=132 |  |
-| R-RBI-FAQ-004 | 2026-11-11 | extracted | Asked Questions 399 kb Date : Nov 11, 2026 All you w | https://www.rbi.org.in/Scripts/FAQView.aspx?Id=92 | **yes** |
-| R-RBI-FAQ-005 | 2026-10-30 | extracted | ss Releases ( 340 kb ) Date : Oct 30, 2026 Lending a | https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=63894 | **yes** |
+| R-RBI-FAQ-004 | 2026-11-11 | extracted | Asked Questions 399 kb Date : Nov 11, 2026 All you w | https://www.rbi.org.in/Scripts/FAQView.aspx?Id=92 |  |
+| R-RBI-FAQ-005 | 2026-10-30 | extracted | ss Releases ( 340 kb ) Date : Oct 30, 2026 Lending a | https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=63894 |  |
 | R-RBI-MD-001 | 2026-10-19 | extracted | rections, 2025 (Updated as on October 19, 2026) RBI/DOR/ | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13136 |  |
 | R-RBI-MD-002 | 2025-11-28 | extracted | .MRG.REC.92/00-00-003/2025-26 November 28, 2025 Reserve B | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13137 |  |
 | R-RBI-MD-003 | 2025-11-28 | extracted | N.REC.No.85/20-16-003/2025-26 November 28, 2025 Reserve B | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13144 |  |
 | R-RBI-MD-004 | 2026-10-01 | extracted | rections, 2025 (Updated as on October 1, 2026) RBI/DOR/ | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13145 |  |
+| R-RBI-MD-005 | 2025-11-28 | extracted | /21.04.048/2025-26 November 28, 2025 Reserve | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13146 |  |
+| R-RBI-MD-006 | 2025-11-28 | extracted | 7/2025-26 November 28, 2025 Reserve | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13150 |  |
+| R-RBI-MD-007 | 2025-11-28 | extracted | .78/21.04.048/2025-26 November 28, 2025 Reser | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13151 | **yes** |
+| R-RBI-MD-008 | 2025-11-28 | extracted | 1/2025-26 November 28, 2025 Reserve | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13152 |  |
+| R-RBI-MD-009 | 2025-11-28 | extracted | .CRE.REC.76/07-02-001/2025-26 November 28, 2025 Reserv | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13153 |  |
+| R-RBI-MD-010 | 2025-11-28 | extracted | .75/20.16.056/2025-26 November 28, 2025 Reserv | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13154 |  |
+| R-RBI-MD-011 | 2026-04-27 | extracted | April 27, 2026 Reserve | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13400 |  |
+| R-RBI-MD-012 | 2026-04-27 | extracted | 27 April 27, 2026 Reserv | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13399 |  |
+| R-RBI-MD-013 | 2025-11-28 | extracted | -04-001/2025-26 November 28, 2025 Reserv | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13105 |  |
+| R-RBI-MD-014 | 2025-11-28 | extracted | November 28, 2025 Reserv | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13108 |  |
+| R-RBI-MD-015 | 2025-11-28 | extracted | November 28, 2025 | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13109 |  |
+| R-RBI-MD-016 | 2025-11-28 | extracted | .No.116/20-16-003/2025-26 November 28, 2025 Reserve | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13112 |  |
+| R-RBI-MD-017 | 2025-11-28 | extracted | 5/21.04.048/2025-26 November 28, 2025 Reserve | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13113 |  |
+| R-RBI-MD-018 | 2025-11-28 | extracted | 14./21.04.048/2025-26 November 28, 2025 Reserve | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13114 | **yes** |
+| R-RBI-MD-019 | 2025-11-28 | extracted | November 28, 2025 Reserve | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13117 |  |
+| R-RBI-MD-020 | 2025-11-28 | extracted | 10/21-04-177/2025-26 November 28, 2025 Reserve | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13118 |  |
+| R-RBI-MD-021 | 2025-11-28 | extracted | C.109/21.04.048/2025-26 November 28, 2025 Reser | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13119 |  |
+| R-RBI-MD-022 | 2025-11-28 | extracted | REC.108/07-03-002/2025-26 November 28, 2025 Reserve | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13120 |  |
+| R-RBI-MD-023 | 2025-11-28 | extracted | -26 November 28, 2025 Reser | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13121 |  |
+| R-RBI-MD-024 | 2025-11-28 | extracted | 06/20.16.056/2025-26 November 28, 2025 Reserv | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13122 |  |
+| R-RBI-MD-025 | 2025-11-28 | extracted | RE.REC.104/07-01-002/2025-26 November 28, 2025 Reserve B | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13124 |  |
+| R-RBI-MD-026 | 2025-11-28 | extracted | No.213/13-04-001/2025-26 November 28, 2025 Reserv | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13011 |  |
+| R-RBI-MD-027 | 2025-11-28 | extracted | 11/01-01-037/2025-26 November 28, 2025 Reserv | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13013 |  |
+| R-RBI-MD-028 | 2025-11-28 | extracted | 10/14.01.006/2025-26 November 28, 2025 | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13014 |  |
+| R-RBI-MD-029 | 2025-11-28 | extracted | 207/20-16-003/2025-26 November 28, 2025 Reserv | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13017 |  |
+| R-RBI-MD-030 | 2025-11-28 | extracted | 048/2025-26 November 28, 2025 Reserve | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13018 |  |
+| R-RBI-MD-031 | 2025-11-28 | extracted | 05./21.04.048/2025-26 November 28, 2025 Reser | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13019 |  |
+| R-RBI-MD-032 | 2025-11-28 | extracted | November 28, 2025 Reserve | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13022 |  |
+| R-RBI-MD-033 | 2025-11-28 | extracted | .201/21.04.048/2025-26 November 28, 2025 Reserv | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13023 |  |
+| R-RBI-MD-034 | 2025-11-28 | extracted | 3-005/2025-26 November 28, 2025 Reserve | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13024 | **yes** |
+| R-RBI-MD-035 | 2025-11-28 | extracted | November 28, 2025 Reser | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13025 | **yes** |
+| R-RBI-MD-036 | 2025-11-28 | extracted | 98/20.16.056/2025-26 November 28, 2025 Reserv | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13026 |  |
 | R-RBI-MD-037 | 2026-10-01 | extracted | rections, 2025 (Updated as on October 1, 2026) RBI/DOR/ | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13028 |  |
 | R-RBI-MD-038 | 2025-12-04 | extracted | .REC.No.332/13-04-001/2025-26 December 04, 2025 Reserve B | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13202 |  |
 | R-RBI-MD-039 | 2018-01-04 | extracted | n of Banking Statistics dated January 04, 2018 , as amen | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12987 |  |
 | R-RBI-MD-040 | 2026-09-18 | extracted | rections, 2025 (Updated as on September 18, 2026) RBI/DOR/ | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12988 |  |
 | R-SIDBI-01 | 2026-10-07 | extracted | rights reserved Last Updated: 07-10-2026 | https://www.sidbi.in/working-capital |  |
-| R-SIDBI-02 | 2026-10-07 | extracted | rights reserved Last Updated: 07-10-2026 | https://www.sidbi.in/project-funding |  |
+| R-SIDBI-02 | 2026-10-07 | extracted | rights reserved Last Updated: 07-10-2026 | https://www.sidbi.in/project-funding | **yes** |
 | R-SIDBI-03 | 2026-10-07 | extracted | rights reserved Last Updated: 07-10-2026 | https://www.sidbi.in/machinery-loan |  |
 | R-SIDBI-04 | 2026-10-07 | extracted | rights reserved Last Updated: 07-10-2026 | https://www.sidbi.in/cgtmse |  |
 | R-SIDBI-05 | 2026-10-07 | extracted | rights reserved Last Updated: 07-10-2026 | https://www.sidbi.in/treds |  |
