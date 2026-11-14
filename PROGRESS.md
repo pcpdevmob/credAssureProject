@@ -1,9 +1,10 @@
 # CredAssure — Progress (Claude Code reads this first and updates it last)
 
 ## Current phase
-Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpus guard, baseline infra_error, freeze test). Phase 5 is done (2026-11-06). Phase 8a and 8b are done (2026-11-07). Phase 6 is done (2026-11-07). **Next is Phase 7 (retrieval) or Phase 9 (agents); run `make llm-probe` against Ollama and the course endpoint first.** `openapi.json` and `packages/api-client` are current, so the UI lane can start U1. Still open:
+Phase 7 is done (2026-11-14); KR-05 stays OPEN (23/40 vs 34, ceiling 33 today, see Phase 7 notes). Earlier: Phase 4 (2026-11-05), Phase 3 follow-ups and Phase 5 (2026-11-06), Phases 8a, 8b and 6 (2026-11-07). **Next is Phase 9 (agents); 9e (copilot) needs the KFS date decision below first.** `openapi.json` and `packages/api-client` are current, so the UI lane can start U1. Still open:
 - **ADR 0018 freeze (human):** ADR 0018 (AgentResult, including `agent_version` and `tenant_id`) is Proposed and not frozen. Accept it before G1.
-- **Corpus shortfall (M1):** the corpus is short of the ≥400 real-document target. See open questions.
+- **KFS dates vs AS_OF_DATE (owner):** all 111 case-scoped KFS have `effective_from: 2026-11-16`, after `AS_OF_DATE` 2026-11-15, so KR-04 keeps every KFS out of search. Either date them on or before AS_OF in a v2 data set, or exempt case-scoped documents from the date filter by ADR. Never edit `data/frozen/v1`.
+- **Retrieval labels (non-copilot owner):** judge pooled top-10 results and widen `relevant_doc_ids` (E8 SHOULD 1), then sign off the `SECTIONS` labels in `build_assets.py`.
 
 ## Gates
 - [ ] G1 (end Week 1): test set + 40 retrieval queries frozen; synthetic data v1; baseline S1–S3; AgentResult frozen; endpoint limits confirmed
@@ -28,7 +29,64 @@ Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpu
 | 8a Supervisor + jobs + anchor | done | SUP-01..08, APR-01..03 wiring, OBJ-08; scope #1 (A4), #4, #19, #22, #46, #47 | phase-8a | Supervisor graph, placeholders, adapters, audit_head, heartbeat lock, jobs table, ADR 0007. 546 tests. Reviews and evals run with 8b |
 | 8b Gateway + async runs + e2e | done | API-01, UI-01..08 (API side), SUP-02 (placeholder), SUP-03/08, APR-04/05, NFR-03/04/07, OBJ-08/09; scope #4 #15 #16 #28 #46 #47 #50 | phase-8b | /v1 routers, RFC 9457, rate and login limits, uploads, 202 + job + SSE, agent routers on `start_run`, health/quota, Langfuse exporter, e2e LLM on/off, openapi + TS client. 670 tests. E9 READY, E10 routes READY, E11 NOT READY → 2 MUST fixed. Reports in `evaluation/reports/` |
 | 6 Model layer + safeguards | done | NFR-03/04/05/07, ONB-06 (primitive), BR-15, SUP-04/07; scope #22 (limiter), #23, #36, #48; ADR 0008 | phase-6 | Client (30 s, transient-only retries ×2 with jitter, breaker 5→open 60 s with one half-open probe, shared limiter, SQLite cache, guided JSON), structured output (repair ×2), prompt registry + bump check + eval-fast CI, Verhoeff PII redaction, spotlighting, injection scanner, 5 min stage timeout with cancellation and template fallback. 787 tests. security-reviewer: no MUST; brd-conformance: 1 MUST (flaky test) fixed. E4 (scoped): READY. |
+| 7 Retrieval | done (KR-05 OPEN) | KR-01..05, BR-14, BR-15, SUP-08, NFR-04/05/07; ADR 0013, 0019 | phase-7 | 697 documents indexed (506 real). 3 chunkers, FTS5 + Chroma, RRF k=60, pinned cross-encoder, ADR 0019 filters, (tenant, case) KFS scoping. Recall@5 best 23/40 (section/dense/rerank = section/hybrid/off). KR-04 0 violations over 3,600 passages. security-reviewer: 1 MUST fixed. E8 (retrieval): NOT READY on KR-05 only |
 | UI U0–U6 | in progress | UI-01..09 | | finbridge Next.js imported as apps/web (ADR 0022): services map the gateway, typecheck + `next build` pass; live walk-through, bridge security review and U6 hardening still open |
+
+## Phase 7 notes (2026-11-14)
+- **Built:**
+  - **Corpus loading** (`packages/retrieval`, `sources.py`): reads the manifest + lock (status ok/ok_manual with text) and the synthetic KFS/policy front matter. Case-scoped KFS go under tenant `demo` (`core/seeded.py`). A boilerplate filter drops repeated site-menu lines.
+  - **Chunkers** (`chunking.py`): `section_path` on every chunk; fixed 512/64, section, and semantic (25th-percentile split). CHUNKER_VERSION 3.
+  - **Ingest** (`index.py`, `make ingest`):
+    - It is re-runnable. The skip key covers the text, every filter field, the replacement's date, the chunker and the embedding model.
+    - It writes corpus.db rows, FTS5 and one Chroma collection per strategy, with Chroma telemetry off.
+    - The injection scanner runs on each chunk together with its heading, on the whole document, and on the raw text before boilerplate removal. A hit is flagged on the chunk, kept in the index, and audited once per document after commit.
+  - **Search** (`search.py`, `search_knowledge`):
+    - BM25 and dense retrieval fused by RRF (k=60), with an optional cross-encoder pinned to 2cfc18c9415c.
+    - Filters run in both retrievers and again in SQL on the final rows: effective_from ≤ as_of; superseded only once the replacement is in force (an unknown or undated replacement counts as in force); jurisdiction in {IN, IN-MH}; applies_to in {all, lender type}; KFS only for their own (tenant, case).
+    - The query is redacted before embedding.
+  - **Embeddings** (`llm/embed.py`): batches through the limiter, transient retries ×2, SQLite cache.
+  - **Case IDs** (`ledger.writes.next_case_id`): global across tenants and starts after the highest seeded ID (CA-2026-0016). This fixes a latent cross-tenant primary-key collision.
+  - **Migrations:** corpus `b8582bd9a52e` (legal_basis, index_version) and `d41e7c2a9b10` (tenant_id).
+  - **Eval:** `make retrieval-eval` writes `evaluation/reports/retrieval-2026-11-14.md` (18 configurations, KR-04 re-check, awaiting list). Queries carry `relevant_sections`. Q27 was relabelled to R-STATE-015/014, because R-STATE-005 was rejected as Marathi-only. R-JUD-001 is pinned in the builder because its URL changed.
+  - **Corpus guard:** reads amounts written in words (T010 "twenty five crore").
+- **Results:**
+  - Recall@5, out of 40:
+
+    | Chunking | Keyword | Dense | Hybrid |
+    |---|---|---|---|
+    | fixed512 | 20 | 19 | 20 |
+    | section | 18 | 16 | 23 |
+    | semantic | 21 | 22 | 19 |
+
+    Best with rerank on is section/dense at 23. Re-run independently in E8: same numbers, 0 KR-04 violations, isolation holds.
+  - **Ceiling today: 33/40.** 7 queries lack their document: Q11, Q12 (R-MSME-01), Q26 (R-JUD-001), Q30 (R-BANK-03), Q31 (R-BANK-04/05), Q36 (R-RBI-11) and Q37 (R-RBI-01). Q18–Q21 and Q27 also wait on KR-04 distractor documents (R-RBI-MD-014/015/019/025/027/028/032, R-STATE-001/004).
+  - Most misses are a different relevant document outranking the labelled one. The labels are too narrow for a 506-document corpus (E8 SHOULD 1).
+  - **Injection:** 34 documents flagged (10 planted KFS + 24 real, mostly zero-width characters or "rank/recommend" phrasing); 34 audit events in the final run. Earlier interrupted runs also audited; each indexing audits once.
+- **Reviews:**
+  - **security-reviewer:**
+    - MUST: a metadata-only change was skipped by ingest. Fixed and tested.
+    - SHOULDs fixed: heading and whole-document scan, query redaction, audit after commit. chromadb advisories: risk register plus `make audit --ignore-vuln`.
+  - **Owner follow-ups (2026-11-14), all done:**
+    - Chroma is embedded only. There is no Compose service, and `test_chroma_runs_embedded_only` keeps it that way.
+    - (tenant, case) KFS scoping, the seeded tenant `demo`, and the case-ID floor, plus the isolation test.
+    - Raw-text scan before boilerplate removal.
+    - Supersession by the replacement's date.
+    - Pinned reranker revision.
+  - **E8 (retrieval part):** `evaluation/reports/E8-2026-11-14.md`. NOT READY on KR-05 only.
+- **Deferred:**
+  - **demo-reset (Phase 12):** must create the seeded cases CA-2026-0001..0015 under tenant `demo` (`core.seeded.SEED_TENANT`). `SEEDED_CASE_MAX` must track `data/frozen/v1/cases` (a ledger test checks it).
+  - **Copilot (9e):**
+    - `case_id`, `tenant_id` and `lender_type` for `search_knowledge` come from Supervisor/case state, never from model output (SUP-08).
+    - Spotlight both `Passage.text` and `section_path`.
+    - The rest of E8: 25 regulatory, 8 refusal, 8 injection, 3 isolation, CP-02, #2, #20.
+  - **Reranker default:** keep `RERANKER=none`. Hybrid without the reranker ties the reranked best (ADR 0013); re-decide after the labels are widened.
+  - **chromadb upgrade:** upgrade when a fixed release exists, then drop the `--ignore-vuln` flags in `make audit`.
+  - **Gateway wiring:** `make corpus-docker-ingest` runs in the read-only corpus container, which cannot write `var/`. Give it a `var` volume before using it. Settings has `reranker_revision`, but the gateway does not wire a Searcher yet (9e).
+  - **NITs:**
+    - The read-only SQLite URI is not escaped for paths containing `?` or `#`.
+    - The superseded rule needs the replacement in the corpus (it fails closed otherwise).
+    - Noisy PDF headings produce odd `section_path` values (E8 SHOULD 5).
+    - R-RBI-06 is a page shell; re-save the PDF by hand.
 
 ## Phase 6 notes (2026-11-07)
 - **Built:**
@@ -174,7 +232,7 @@ Phase 4 is done (2026-11-05); the Phase 3 follow-ups landed on 2026-11-06 (corpu
 ## G1 still needs (in this order, then `/freeze-g1`)
 - [ ] Corpus ≥500 real documents available (`make corpus-status`; today 286 after the two RBI shells were re-queued)
 - [ ] Every referenced document available: `uv run python -m credassure.evaluation.check_corpus_refs --strict` clean (34 items today), or replace those items or queries
-- [ ] `section_path` on the 40 retrieval labels (brd-conformance SHOULD)
+- [x] `section_path` on the 40 retrieval labels (`relevant_sections`, Phase 7). A non-copilot owner still signs them off
 - [ ] Hand check by 2 people who don't own the agent: `evaluation/gold/hand_check.md`
 - [ ] Second independent transcription of the RBI Annex B APR illustration (S21)
 - [ ] Owner names for [Name 1]…[Name 6] and gold authors (no one writes gold for their own agent)
