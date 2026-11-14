@@ -54,8 +54,48 @@ def known_doc_ids() -> set[str]:
     return Corpus().known()
 
 
+_UNITS = [
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+    "ten",
+    "eleven",
+    "twelve",
+    "thirteen",
+    "fourteen",
+    "fifteen",
+    "sixteen",
+    "seventeen",
+    "eighteen",
+    "nineteen",
+]
+_TENS = ["_", "_", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"]
+_NUM = {w: i for i, w in enumerate(_UNITS)} | {w: 10 * i for i, w in enumerate(_TENS) if w != "_"}
+_WORDS = "|".join(sorted([*_NUM, "hundred"], key=len, reverse=True))
+_NUM_RUN = re.compile(rf"\b(?:{_WORDS})(?:[\s-]+(?:and\s+)?(?:{_WORDS}))*\b")
+
+
+def _number(match: re.Match[str]) -> str:
+    total = 0
+    for word in re.split(r"[\s-]+", match.group(0)):
+        if word == "hundred":
+            total = max(total, 1) * 100
+        elif word != "and":
+            total += _NUM[word]
+    return str(total)
+
+
 def _norm(text: str) -> str:
-    return re.sub(r"\s+", " ", text).casefold()
+    # Gazette notifications spell amounts out ("twenty five crore"); key facts use digits.
+    # ponytail: below a thousand only, which covers crore/lakh multipliers; "one" in prose also becomes "1".
+    return _NUM_RUN.sub(_number, re.sub(r"\s+", " ", text).casefold())
 
 
 @dataclass

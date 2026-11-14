@@ -280,3 +280,19 @@ def test_BRD13_malformed_answers_score_as_schema_failure_never_crash() -> None:
             answer = {k: value for k in item["gold"]} if isinstance(item["gold"], dict) else {}
             verdict = scorers.score(item, answer, known)
             assert verdict["passed"] in (True, False), item["id"]
+
+
+def test_KR05_corpus_guard_reads_amounts_written_in_words() -> None:
+    """Gazette notifications spell limits out ("twenty five crore"); the guard must still match "25 crore"."""
+    from credassure.evaluation.check_corpus_refs import _norm
+
+    text = _norm(
+        "the words “twenty five crore” and “one hundred crore”, “one hundred twenty five crore”"
+    )
+    assert _norm("25 crore") in text
+    assert _norm("100 crore") in text
+    assert _norm("125 crore") in text
+    assert _norm("two crore and fifty lakh") == _norm("2 crore and 50 lakh")
+    assert (
+        _norm("Section One") == "section 1"
+    )  # documented ceiling: any number word becomes a digit
