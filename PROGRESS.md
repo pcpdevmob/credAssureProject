@@ -22,7 +22,7 @@ Phase 7 is done (2026-11-14); KR-05 stays OPEN (23/40 vs 34, ceiling 33 today, s
 | 1 Contract | done | VER-01, BR-05; #8 #9 #21 schema #24 #25 field #26 #32 #46 ADR | phase-1 | 149 tests. Money auditor and security reviewer: no MUST. BRD: the Phase 0b retry route stays HTTP 501; the retry behaviour is Phase 9. ADR 0018 Proposed. E4 critic half waits for Phase 9d |
 | 1 gap fix | done | VER-01, BRD §10 | phase-1-fix | Normaliser `find_all` (free-text scan with spans, `kind`), signed money/rates; RBI PDF untracked; REPO_STRUCTURE env templates point to deploy/env |
 | 2 Data | done | BR-01, BR-14, BRD §10, scope #14; S01–S06, S18–S20, S22 | phase-2 | 393 files in `data/frozen/v1`, byte-identical (SHA256SUMS + test). See note below |
-| Corpus | done (manual pending) | KR-01, KR-04, G2; ADR 0019 | data: Indian real corpus | 16 Indian sources, target 750. Harvest, download, import, verify, manual, report targets. 233 real available |
+| Corpus | CLOSED 2026-11-14 | KR-01, KR-04, G2; ADR 0019 | data: Indian real corpus | 16 Indian sources, target 750. Harvest, download, import, verify, manual, report targets. 1,092 real available (closed) |
 | 3 Eval assets | done (G1 items below) | BRD §12–13, KR-05, VER-02, scope #13; ADR 0021 | phase-3 | Independent gold (floats + numpy_financial, no engine import, contract-enforced) reproduces every design need, every PLANTS offer tag and RBI Annex B 17.07%. 100 items (25/10/15/15/5/6/8/8/3/5), 40 retrieval queries, 20 red-team prompts, 12 S24 bad citations, scorers (₹1 / 0.01 pp, BRD failure classes), freeze script with readiness gate, run record (#13), baselines S1–S3. money-auditor PASS (no MUST); brd-conformance: only pre-G1 corpus MUST |
 | 4 Engines | done | WC-01..06, LW-02..11/14, ONB-02/03, APR-01..03, BR-05/07/12; scope #1 (enum), #7; ADR 0011 | phase-4 | Pure Decimal engines. 15/15 cash-flow and 15/15 offer known answers match gold (worst APR 0.005 pp). RBI Annex B 17.07%. 20/20 onboarding profiles. 426 tests, engine coverage 98%. money-auditor PASS, brd-conformance PASS, no MUST. SHOULDs applied: IRR edge/bisection tests, `gst_rate` and `indicative` required (no silent defaults), strict Decimal in audit and negotiation, schedule terms material, fee compared in ₹, week<1 rows blocked, undrawn ≥ 0, routing rejects negatives, deterministic tie-break |
 | 5 Ledger + auth | done | SUP-08, APR-04/05, ONB-05, NFR-07, OBJ-08, BR-05, BR-14; scope #22 #27 #29 #49 | phase-5 | `packages/ledger` (case.db + corpus.db models, Alembic up/down, append-only triggers, hash-chained audit, fact ledger, run lock, read-only hr.db, seed) and `packages/security/auth.py` (argon2id, JWT, case policy). 39 tests; 468 total. brd-conformance PHASE COMPLETE; security-reviewer 2 MUST fixed (decision only on AWAITING_APPROVAL/HELD and only by the routed role, at both layers). E10 (auth part, security-reviewer): 1 MUST fixed (re-routing could reopen an APPROVED or REJECTED case); after the fix 46/47 adversarial checks pass. The open one, tail truncation of the audit chain, is a SHOULD (see Phase 5 notes). Route checks are N/A until Phase 8 |
@@ -31,6 +31,36 @@ Phase 7 is done (2026-11-14); KR-05 stays OPEN (23/40 vs 34, ceiling 33 today, s
 | 6 Model layer + safeguards | done | NFR-03/04/05/07, ONB-06 (primitive), BR-15, SUP-04/07; scope #22 (limiter), #23, #36, #48; ADR 0008 | phase-6 | Client (30 s, transient-only retries ×2 with jitter, breaker 5→open 60 s with one half-open probe, shared limiter, SQLite cache, guided JSON), structured output (repair ×2), prompt registry + bump check + eval-fast CI, Verhoeff PII redaction, spotlighting, injection scanner, 5 min stage timeout with cancellation and template fallback. 787 tests. security-reviewer: no MUST; brd-conformance: 1 MUST (flaky test) fixed. E4 (scoped): READY. |
 | 7 Retrieval | done (KR-05 OPEN) | KR-01..05, BR-14, BR-15, SUP-08, NFR-04/05/07; ADR 0013, 0019 | phase-7 | 697 documents indexed (506 real). 3 chunkers, FTS5 + Chroma, RRF k=60, pinned cross-encoder, ADR 0019 filters, (tenant, case) KFS scoping. Recall@5 best 23/40 (section/dense/rerank = section/hybrid/off). KR-04 0 violations over 3,600 passages. security-reviewer: 1 MUST fixed. E8 (retrieval): NOT READY on KR-05 only |
 | UI U0–U6 | in progress | UI-01..09 | | finbridge Next.js imported as apps/web (ADR 0022): services map the gateway, typecheck + `next build` pass; live walk-through, bridge security review and U6 hardening still open |
+
+## Corpus CLOSED (2026-11-14)
+**1,092 real documents available** (target 530, G2 500). 0 undated, 0 open slots. Adding a document now means re-running `make ingest` and `check_corpus_refs`, and an ADR 0019 note.
+- **Done in this close:** India Code host moved to `indiacode.gov.in` (sources.yaml `manual_hosts`, source 10 recipe, R-MSME-01 URL, `hosts:` map, ADR 0020 amendment, DATA_RESOURCES P18, RESOURCES). The old `nic.in` hosts stay in `manual_hosts` so a redirect never skips the gate. Not checked live from the sandbox.
+- **Import:** no new files (all 1,094 raw files were already in the lock).
+- **Dated (23):** 3 MSME Pulse editions from the month (`human`, first of month); 18 evergreen web pages/guidelines with no date of their own dated at retrieval 2026-11-14 (`date_source: human` plus `date_note`; the tool allows `retrieved` for bank charges only). Review these at the next date sample: R-AA-01, R-CG-C-001, 038, 039, 041, 409, 410, 413-420, R-MSME-05, R-TREDS-001/002.
+- **Rejected:** R-CG-C-325 and R-CG-C-337 are Word files saved as .html (no text). Quarantined; their replacement slots were dropped and the source 4 target set to 161.
+- **Unavailable, accepted:** R-BANK-03 (404) and R-STATE-002 (host blocked).
+- **Index is stale:** Phase 7 indexed 697 documents (506 real). Run `make ingest` before re-measuring KR-05.
+
+| # | Source | Available | Rejected |
+|---|---|---|---|
+| 1 | RBI Master Directions | 369 | 0 |
+| 2 | RBI superseded circulars | 202 | 0 |
+| 3 | RBI FAQs, rates, press releases | 14 | 0 |
+| 4 | CGTMSE | 161 | 221 |
+| 7 | Ministry of MSME, Udyam, Samadhaan | 9 | 1 |
+| 8 | Gazette notifications | 10 | 0 |
+| 9 | CBIC GST, GST Council | 92 | 10 |
+| 10 | CBDT, Income-tax Act | 3 | 0 |
+| 11 | SIDBI | 40 | 4 |
+| 12 | TReDS | 21 | 4 |
+| 13 | Bank and NBFC charges | 35 | 2 |
+| 14 | Lok Sabha / Rajya Sabha answers | 101 | 0 |
+| 15 | Court judgments | 27 | 0 |
+| 16 | State policies | 8 | 3 |
+| 5, 6 | NCGTC, MUDRA | 0 | 0 |
+| | **Total** | **1,092** | **245** |
+
+By owner (manual slots only; 5 assigned in total): [Name 2] 1, [Name 5] 1, [Name 6] 4 (1 unavailable), others 0. Nothing is waiting on an owner.
 
 ## Phase 7 notes (2026-11-14)
 - **Built:**

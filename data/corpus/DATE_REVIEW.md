@@ -5,7 +5,7 @@ file name -> PDF metadata -> retrieval date (bank charge schedules only, meaning
 A seeded 10% per date_source is marked yes in the Check column: open the document and confirm. If wrong, correct
 `effective_from` in `manifest.yaml` and set `date_source: human`. Human and curated dates are never recomputed.
 
-Dated: extracted 282, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 40. Needs review: 1. Needs a date: 22.
+Dated: extracted 282, wef 10, url 30, pdf_metadata 53, retrieved 4. To check: 40. Needs review: 0. Needs a date: 0.
 
 | doc_id | effective_from | date_source | Evidence | Source | Check |
 |---|---|---|---|---|---|
@@ -395,31 +395,9 @@ Confirm with `date_confirmed: true`, or correct the date and set `date_source: h
 
 | doc_id | effective_from | date_source | Evidence | Source | Check |
 |---|---|---|---|---|---|
-| R-CG-C-001 | 2030-03-31 | extracted | on of the lending period till March 31, 2030. Liabilit | https://www.cgtmse.in/Default/ViewFile/?id=1767027747558_PM%20SVANidhi%20Scheme%20Guidelines%20-%2016.9.25(Annexure%20-I).pdf&path=Circular |  |
 
 ## No date found (not counted)
 
 Fill `effective_from` and `date_source: human` in `manifest.yaml`, then run `make corpus-dates`.
 
-- R-AA-01: https://sahamati.org.in/financial-information-user-fiu
-- R-CG-C-038: https://www.cgtmse.in/Home/VS/96
-- R-CG-C-039: https://www.cgtmse.in/Home/VS/97
-- R-CG-C-041: https://www.cgtmse.in/Home/VS/99
-- R-CG-C-325: https://www.cgtmse.in/Default/ViewFile/?id=1622571716314_Circular_No.172_Undertaking-Format.docx&path=Circular
-- R-CG-C-337: https://www.cgtmse.in/Default/ViewFile/?id=1633542827969_Undertaking_Sub-debt_Scheme%20(1).docx&path=Circular
-- R-CG-C-409: https://www.cgtmse.in/Home/VS/100
-- R-CG-C-410: https://www.cgtmse.in/Home/VS/101
-- R-CG-C-413: https://www.cgtmse.in/Home/VS/50
-- R-CG-C-414: https://www.cgtmse.in/Home/VS/55
-- R-CG-C-415: https://www.cgtmse.in/Home/VS/56
-- R-CG-C-416: https://www.cgtmse.in/Home/VS/57
-- R-CG-C-417: https://www.cgtmse.in/Home/VS/71
-- R-CG-C-418: https://www.cgtmse.in/Home/VS/72
-- R-CG-C-419: https://www.cgtmse.in/Home/VS/94
-- R-CG-C-420: https://www.cgtmse.in/Home/VS/95
-- R-MSME-05: https://samadhaan.msme.gov.in/MyMsme/MSEFC/FAQ.aspx
-- R-SIDBI-P-016: https://www.sidbi.in/en/msme-pulse-edition/December-2025
-- R-SIDBI-P-017: https://www.sidbi.in/en/msme-pulse-edition/July-2026
-- R-SIDBI-P-018: https://www.sidbi.in/en/msme-pulse-edition/September-2025
-- R-TREDS-001: https://www.m1xchange.com/faqs/
-- R-TREDS-002: https://www.invoicemart.com/faq
+- none

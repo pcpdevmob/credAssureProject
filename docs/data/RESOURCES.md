@@ -60,7 +60,7 @@ Fake-but-valid identifiers for **redaction tests only** (never stored): generate
 
 | ID | Resource | Publisher | Use | Status / URL |
 |---|---|---|---|---|
-| R-MSME-01 | Micro, Small and Medium Enterprises Development Act, 2006 (esp. s.15–16: payment within agreed period, max 45 days; interest on delay) | Govt of India | Payables/receivables timing ranges; copilot answers | ⚠️ verify on indiacode.nic.in |
+| R-MSME-01 | Micro, Small and Medium Enterprises Development Act, 2006 (esp. s.15–16: payment within agreed period, max 45 days; interest on delay) | Govt of India | Payables/receivables timing ranges; copilot answers | ⚠️ verify on indiacode.gov.in (moved from indiacode.nic.in) |
 | R-MSME-02 | Notification S.O. 1364(E), 21 Mar 2025 — revised MSME classification (w.e.f. 1 Apr 2025) | Ministry of MSME | MSME profile bands (D3, D4) | ✅ https://egazette.gov.in/writeReadData/2025/261838.pdf ; reverse-graduation clarification ✅ https://udyamregistration.gov.in/docs/Circular_reverse_24102025.pdf |
 | R-MSME-03 | Principal notification S.O. 2119(E), 26 Jun 2020 | Ministry of MSME | Superseded-limits distractor (KR-04 filter test) | ✅ https://dcmsme.gov.in/State-Gov/Notification_%20S%20O%202119.pdf |
 | R-TAX-01 | Income-tax Act, 2025 s.37(2)(g) (successor of s.43B(h)); Rajya Sabha reply, 21 Jul 2026 | Ministry of Finance | D5; cash-timing rules for MSE payables | ⚠️ verify bare Act on incometaxindia.gov.in; 1961-Act s.43B page ✅ https://www.incometaxindia.gov.in/w/section-43b-40 |

@@ -33,7 +33,8 @@ All network access goes through one `Gate`:
 - **One retry only:** a 502/503/504 or a connection error gets exactly one retry, no sooner than 24 hours later. The
   outcome is recorded in the lock as `host:<name>`.
 - **Manual hosts:** blocked hosts, and RBI, e-Gazette, incometaxindia and India Code, are downloaded by a person in a
-  browser and imported with `make corpus-import`.
+  browser and imported with `make corpus-import`. (Amended 2026-11-14: India Code moved from `indiacode.nic.in` to
+  `indiacode.gov.in`; both hosts are manual only, listed in `data/corpus/sources.yaml` `manual_hosts`.)
 - **Never:** spoofed or rotated headers, headless or automated browsers, CAPTCHA solving, proxy rotation, or working
   around a block in any other way.
 

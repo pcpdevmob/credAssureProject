@@ -10,7 +10,9 @@ manual_hosts:   # always manual (owner decision, ADR 0019)
   - egazette.gov.in
   - incometaxindia.gov.in
   - www.incometaxindia.gov.in
-  - indiacode.nic.in
+  - indiacode.gov.in
+  - www.indiacode.gov.in
+  - indiacode.nic.in   # old host, still redirects; kept so a redirect never skips the gate
   - www.indiacode.nic.in
 sources:
   - id: 1
@@ -48,7 +50,7 @@ sources:
   - id: 4
     name: CGTMSE circulars, scheme guidelines, fee pages
     prefix: R-CG-C
-    target: 163
+    target: 161   # corpus closed 2026-11-14: held count, no open slots
     min_date: "2015-01-01"   # owner: circulars from 2015 onward only (year from the table row; else checked on download)
     buffer: 20   # scheme/FAQ pages and scheme documents (2026-11-05 discovery of the cgtmse.in menus)
     basis: L4
@@ -133,7 +135,7 @@ sources:
     link_pattern: '(?:/sites/default/files/\d{4}-\d{2}/|(?:^|/)pdf/)[^"]+\.pdf'
   - id: 10
     name: CBDT on s.43B(h) and Income-tax Act 2025 s.37(2)(g); relevant Act chapters
-    manual_recipe: "Replacement for a rejected scan (the MSME Samadhaan copy of the MSMED Act 2006 has no text layer). Preferred: a text-layer PDF of the full Micro, Small and Medium Enterprises Development Act, 2006 from India Code (https://www.indiacode.nic.in/, search the Act title and save the Act PDF). Otherwise: a CBDT circular or FAQ on section 43B(h) / Income-tax Act 2025 section 37(2)(g) from https://www.incometaxindia.gov.in/ (Communications > Circulars). Save in a browser; both hosts are manual only (ADR 0020)."
+    manual_recipe: "Replacement for a rejected scan (the MSME Samadhaan copy of the MSMED Act 2006 has no text layer). Preferred: a text-layer PDF of the full Micro, Small and Medium Enterprises Development Act, 2006 from India Code (https://www.indiacode.gov.in/, search the Act title and save the Act PDF). Otherwise: a CBDT circular or FAQ on section 43B(h) / Income-tax Act 2025 section 37(2)(g) from https://www.incometaxindia.gov.in/ (Communications > Circulars). Save in a browser; both hosts are manual only (ADR 0020)."
     prefix: R-TAX-C
     target: 2
     basis: L3
@@ -141,7 +143,7 @@ sources:
     jurisdiction: [IN]
     agents: [WC, Copilot]
     method: manual
-    index_urls: ["https://www.incometaxindia.gov.in/", "https://www.indiacode.nic.in/"]
+    index_urls: ["https://www.incometaxindia.gov.in/", "https://www.indiacode.gov.in/"]
   - id: 11
     name: SIDBI publications and MSME Pulse reports
     prefix: R-SIDBI-P

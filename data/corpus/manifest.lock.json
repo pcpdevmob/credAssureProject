@@ -6,8 +6,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "328836a4b421e24f36aa1a3dc68340c0813eea75853098716d0d878045e0887a",
     "source_url": "https://sahamati.org.in/financial-information-user-fiu",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "b88a5e0c58631e09f45d8c2d5edb6cbede8a01eac370adaa6c45695bccd0097f"
   },
   "R-BANK-01": {
@@ -503,8 +502,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "ea12dd8334a536115052dd492eeb26bbc13c84bd9c8991828bcec1da871f3f9b",
     "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1767027747558_PM%20SVANidhi%20Scheme%20Guidelines%20-%2016.9.25(Annexure%20-I).pdf&path=Circular",
-    "status": "needs_review",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "45e20a3feb1e2d3ccca92f5b106dc2ad86ec2772eaab634d84ed005d9d622243"
   },
   "R-CG-C-002": {
@@ -671,6 +669,9 @@
     "status": "ok",
     "text_sha256": "31a4f418a5b07eec5e5837640fbd6bb2a7e13924cdf05c7e0f04d447ebc57429"
   },
+  "R-CG-C-018": {
+    "owner": "[Name 1]"
+  },
   "R-CG-C-038": {
     "bytes": 91155,
     "legal_basis": "L4",
@@ -678,8 +679,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "794aaa1df618326d692af1ff82ad00eeed6566db31fb9c64ae79eb08606951df",
     "source_url": "https://www.cgtmse.in/Home/VS/96",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "154f6832676b994b3d782278ddf04d2311e725c8c726be158c4a31207233cee3"
   },
   "R-CG-C-039": {
@@ -689,8 +689,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "82ef34faf794c9ba8ea739f66a1749de478c95d14facabcb798933cdf546e952",
     "source_url": "https://www.cgtmse.in/Home/VS/97",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "06e5d8228c6da67c82debbbf02547c072e01cce836985fcfd9573f9da8aa0818"
   },
   "R-CG-C-040": {
@@ -712,8 +711,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "c8159983c0c6cff8eed9e0ab6e5327153a771814a8c9b0964765e913d86fcfb0",
     "source_url": "https://www.cgtmse.in/Home/VS/99",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "ac74ebc1959f04087879185bda4ac5fdb97f1805fcaa2b4601be5bcd6e056fd3"
   },
   "R-CG-C-064": {
@@ -3531,13 +3529,12 @@
   "R-CG-C-325": {
     "bytes": 18973,
     "legal_basis": "L4",
-    "raw_file": "R-CG-C-325.html",
+    "quarantine_file": "R-CG-C-325.html",
+    "reject_reason": "Word .docx saved as .html; no readable text",
     "retrieved_on": "2026-11-14",
     "sha256": "d11cb2d2f8a53c76e3387e26e47f88cbdc6925e135fc073c967ed054cdb589ff",
     "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1622571716314_Circular_No.172_Undertaking-Format.docx&path=Circular",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
-    "text_sha256": "1c59b0b99988451c2a4fe3210bcee1fce6769156fc805614cf8579c6d40b29cd"
+    "status": "rejected_no_text"
   },
   "R-CG-C-326": {
     "bytes": 919857,
@@ -3670,13 +3667,12 @@
   "R-CG-C-337": {
     "bytes": 18915,
     "legal_basis": "L4",
-    "raw_file": "R-CG-C-337.html",
+    "quarantine_file": "R-CG-C-337.html",
+    "reject_reason": "Word .docx saved as .html; no readable text",
     "retrieved_on": "2026-11-14",
     "sha256": "ba325fef45b878c24dcfa2c9033b59bd122688b7bd6d05a7d5b36a60318506d1",
     "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1633542827969_Undertaking_Sub-debt_Scheme%20(1).docx&path=Circular",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
-    "text_sha256": "83ea89ba30e38b8f0bc2d11b7cbf992d7f4ee0e7b49ee7cd00b7c24d7668f2a4"
+    "status": "rejected_no_text"
   },
   "R-CG-C-338": {
     "bytes": 596827,
@@ -4439,8 +4435,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "a50922bd91c5b9e80d840da3990acaf61a245a06866839656e120878a36e03a2",
     "source_url": "https://www.cgtmse.in/Home/VS/100",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "c4c95c912287584818ebb90be3b543c629dacf5c82a4d914059166c1517cf9c4"
   },
   "R-CG-C-410": {
@@ -4450,8 +4445,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "553e52469ed8cee376807a1cda31a4763dddec068ae02ffd9b7584303c67b3dc",
     "source_url": "https://www.cgtmse.in/Home/VS/101",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "d9271f3a385eb61b9666ab1afb8e47b9196b57914c59c3282b23e0c78eabec1b"
   },
   "R-CG-C-411": {
@@ -4485,8 +4479,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "b3b97629cc569f8c213d83f263dc687342bf9b22cc7c5acc4c4fd8e34b2b4acc",
     "source_url": "https://www.cgtmse.in/Home/VS/50",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "76e9bdb859f125b385648a186fcfcd333e7b5cd1f2c34d680d0cea8d7f6fe0ab"
   },
   "R-CG-C-414": {
@@ -4496,8 +4489,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "e67be4d95d95f2a139b9205773f3abc4772c3d7bf4a03f78cdba3ccc684b8078",
     "source_url": "https://www.cgtmse.in/Home/VS/55",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "7e8da8c65d8974362a0f59ed6fcfad937990e743fe64e0afb5deb8fa6e477762"
   },
   "R-CG-C-415": {
@@ -4507,8 +4499,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "d4b189fb4bbea7580a81ce533e2a06c516689df39d4fda1722bdf9b8dba20483",
     "source_url": "https://www.cgtmse.in/Home/VS/56",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "b4ca9d6ccc97a87d4ad98aec7158998d99bb05921500636c3bee19381ab18a8c"
   },
   "R-CG-C-416": {
@@ -4518,8 +4509,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "74b9a1ea68583bb8ba6ee17898e82b844231396c86735f747c20fcf3fec10ae6",
     "source_url": "https://www.cgtmse.in/Home/VS/57",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "a27a68dbb20fd72bc244cf854084bac96098d4e42174c7ba56f88ef0323dcad7"
   },
   "R-CG-C-417": {
@@ -4529,8 +4519,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "9f601f6b8ccb50a4df92fe164c7ae709585163dab1445b55007db7a0d13359bd",
     "source_url": "https://www.cgtmse.in/Home/VS/71",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "dade6c98b73e91d5cba3dd0699b86baa43376d4eff2bc5215fdc4f5dd6da9c80"
   },
   "R-CG-C-418": {
@@ -4540,8 +4529,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "f2352bd514f9855e55e47569fe871e8e69a81e0233ee69592e18c34d9a48416d",
     "source_url": "https://www.cgtmse.in/Home/VS/72",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "dcca09942c2f105ee0f64111e03e5dacbd8b50853f2e47b8fddf075aefb3174f"
   },
   "R-CG-C-419": {
@@ -4551,8 +4539,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "4ae1836d99d49353ca90ec745ee3cd17e482ba6f8bd3e14b34e606de7dada97e",
     "source_url": "https://www.cgtmse.in/Home/VS/94",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "4917d71a379135a5079ab3ae0146bb6b2df9966fb04d9173263c0d66280a37b0"
   },
   "R-CG-C-420": {
@@ -4562,8 +4549,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "d9c5283eb4d6893636281c3e2e3ee647df6feb9f62e95daa485b2a44ef9d277f",
     "source_url": "https://www.cgtmse.in/Home/VS/95",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "3790da21d97cd9f4d1f640d5fb60015721bcd6ee7421501b21abed39a07d6353"
   },
   "R-DATA-01": {
@@ -6107,7 +6093,7 @@
     "raw_file": "R-MSME-01.pdf",
     "retrieved_on": "2026-11-14",
     "sha256": "5fe90947fb006a59734245966c2f0cf90421c76d9f321e57abcb8669b942b342",
-    "source_url": "https://www.indiacode.nic.in/",
+    "source_url": "https://www.indiacode.gov.in/",
     "status": "ok_manual",
     "text_sha256": "5bad7a146bb39c024a481b4c6454b82840fbf70c7683a8b79009761880c2a1e4"
   },
@@ -6146,8 +6132,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "641e355638b592f7872e5bfb1f9afd41dd2ff7db9ba8d1dab5d372c019093026",
     "source_url": "https://samadhaan.msme.gov.in/MyMsme/MSEFC/FAQ.aspx",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "70b860e13ec56c6b4a4163b986883b914c93bca174d225baa018f48bdbfa4eba"
   },
   "R-MSME-06": {
@@ -13409,8 +13394,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "f62c96268d6640f9818940fe28b4ae690c161bda3a2a93e675cd0956a1948ab2",
     "source_url": "https://www.sidbi.in/en/msme-pulse-edition/December-2025",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "d943f2d654337200de0ca4eeba864bf5d7dcc1410b58bf17273f854b430a67ec"
   },
   "R-SIDBI-P-017": {
@@ -13420,8 +13404,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "9294198db289bb72435ffabdccf2b77af848e8dd6929c5105553862ba67ecea2",
     "source_url": "https://www.sidbi.in/en/msme-pulse-edition/July-2026",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "1f68b812befd3cb9789b61bf6050b74aeec42fb1895239508df067b099627159"
   },
   "R-SIDBI-P-018": {
@@ -13431,8 +13414,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "c7524f0d9021634c8a8a0bf2ef5d24fd308d15b0ee63e1d34b7b80ac793a4715",
     "source_url": "https://www.sidbi.in/en/msme-pulse-edition/September-2025",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "034efdbc2137a27ad859b5eb6ecb2e5eecf23d2d4940c91f16f5533853728925"
   },
   "R-SIDBI-P-019": {
@@ -13846,8 +13828,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "ae1ac1f5dc09ec3ef752f5c0d5463e75cbbff5ebf40320d16220844aa6699d06",
     "source_url": "https://www.m1xchange.com/faqs/",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "762bf3b690d252c460b5d4c160d50fa971bb5dcedd54aa71f240e6258294a928"
   },
   "R-TREDS-002": {
@@ -13857,8 +13838,7 @@
     "retrieved_on": "2026-11-14",
     "sha256": "f8c95b8ef4bd9fb1fee72c6527ce13959ddc56c8fadff170f1cd6dbacec01e70",
     "source_url": "https://www.invoicemart.com/faq",
-    "status": "needs_date",
-    "status_before_date": "ok_manual",
+    "status": "ok_manual",
     "text_sha256": "a950b341d41c02df5b9b958879cf5a8505e5bf54566b675decb076990221b950"
   },
   "R-TREDS-003": {

@@ -252,7 +252,7 @@ documents:
   publisher: India Code
   effective_from: '2006-10-02'
   superseded_by: null
-  source_url: https://www.indiacode.nic.in/
+  source_url: https://www.indiacode.gov.in/
   source: 10
   applies_to: all
   method: manual
@@ -279,12 +279,14 @@ documents:
   format: html
   title: MSME Samadhaan - FAQ
   publisher: Office of DC (MSME)
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://samadhaan.msme.gov.in/MyMsme/MSEFC/FAQ.aspx
   source: 7
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-MSME-06
   tag: msme_gov
   collection: public
@@ -951,12 +953,14 @@ documents:
   format: html
   title: Sahamati - Financial Information User (FIU) eligibility
   publisher: Sahamati
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://sahamati.org.in/financial-information-user-fiu
   source: 3
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-CG-C-001
   tag: r-cg-c
   collection: public
@@ -965,13 +969,14 @@ documents:
   format: pdf
   title: View
   publisher: www.cgtmse.in
-  effective_from: '2030-03-31'
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Default/ViewFile/?id=1767027747558_PM%20SVANidhi%20Scheme%20Guidelines%20-%2016.9.25(Annexure%20-I).pdf&path=Circular
   source: 4
   applies_to: all
   method: script
-  date_source: extracted
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-CG-C-002
   tag: r-cg-c
   collection: public
@@ -1635,12 +1640,14 @@ documents:
   format: html
   title: https://www.m1xchange.com/faqs/
   publisher: www.m1xchange.com
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.m1xchange.com/faqs/
   source: 12
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-TREDS-002
   tag: r-treds
   collection: public
@@ -1649,12 +1656,14 @@ documents:
   format: html
   title: faq
   publisher: www.invoicemart.com
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.invoicemart.com/faq
   source: 12
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-TREDS-003
   tag: r-treds
   collection: public
@@ -18136,12 +18145,14 @@ documents:
   format: html
   title: Legal Proceedings, OTS etc. कानूनी कार्यवाही, ओटीएस आदि।
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Home/VS/100
   source: 4
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-CG-C-410
   tag: r-cg-c
   collection: public
@@ -18150,12 +18161,14 @@ documents:
   format: html
   title: General सामान्य
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Home/VS/101
   source: 4
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-CG-C-411
   tag: r-cg-c
   collection: public
@@ -18194,12 +18207,14 @@ documents:
   format: html
   title: List of Documents for registration पंजीकरण के लिए दस्तावेजों की सूची
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Home/VS/50
   source: 4
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-CG-C-414
   tag: r-cg-c
   collection: public
@@ -18208,12 +18223,14 @@ documents:
   format: html
   title: FAQs पूछे जाने वाले समान प्रश्न
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Home/VS/55
   source: 4
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-CG-C-415
   tag: r-cg-c
   collection: public
@@ -18222,12 +18239,14 @@ documents:
   format: html
   title: List of Documents for registration पंजीकरण के लिए दस्तावेजों की सूची
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Home/VS/56
   source: 4
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-CG-C-416
   tag: r-cg-c
   collection: public
@@ -18236,12 +18255,14 @@ documents:
   format: html
   title: List of MLI एमएलआई की सूची
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Home/VS/57
   source: 4
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-CG-C-417
   tag: r-cg-c
   collection: public
@@ -18250,12 +18271,14 @@ documents:
   format: html
   title: FAQs पूछे जाने वाले समान प्रश्न
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Home/VS/71
   source: 4
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-CG-C-418
   tag: r-cg-c
   collection: public
@@ -18264,12 +18287,14 @@ documents:
   format: html
   title: List of Documents for registration पंजीकरण के लिए दस्तावेजों की सूची
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Home/VS/72
   source: 4
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-CG-C-419
   tag: r-cg-c
   collection: public
@@ -18279,12 +18304,14 @@ documents:
   title: Member Lending Institutions - Eligibility, responsibility etc. सदस्य ऋणदात्री संस्थाएँ – पात्रता, उत्तरदायित्व आदि
     |
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Home/VS/94
   source: 4
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-CG-C-420
   tag: r-cg-c
   collection: public
@@ -18293,12 +18320,14 @@ documents:
   format: html
   title: Eligible Borrowers पात्र उधारकर्ता
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Home/VS/95
   source: 4
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-GST-C-032
   tag: r-gst-c
   collection: public
@@ -19526,12 +19555,14 @@ documents:
   format: html
   title: December-2025
   publisher: www.sidbi.in
-  effective_from: null
+  effective_from: '2025-12-01'
   superseded_by: null
   source_url: https://www.sidbi.in/en/msme-pulse-edition/December-2025
   source: 11
   applies_to: all
   method: script
+  date_source: human
+  date_note: MSME Pulse December 2025 edition
 - doc_id: R-SIDBI-P-017
   tag: r-sidbi-p
   collection: public
@@ -19540,12 +19571,14 @@ documents:
   format: html
   title: July-2026
   publisher: www.sidbi.in
-  effective_from: null
+  effective_from: '2026-07-01'
   superseded_by: null
   source_url: https://www.sidbi.in/en/msme-pulse-edition/July-2026
   source: 11
   applies_to: all
   method: script
+  date_source: human
+  date_note: MSME Pulse July 2026 edition
 - doc_id: R-SIDBI-P-018
   tag: r-sidbi-p
   collection: public
@@ -19554,12 +19587,14 @@ documents:
   format: html
   title: September-2025
   publisher: www.sidbi.in
-  effective_from: null
+  effective_from: '2025-09-01'
   superseded_by: null
   source_url: https://www.sidbi.in/en/msme-pulse-edition/September-2025
   source: 11
   applies_to: all
   method: script
+  date_source: human
+  date_note: MSME Pulse September 2025 edition
 - doc_id: R-BANK-S-025
   tag: r-bank-s
   collection: public
@@ -19583,12 +19618,14 @@ documents:
   format: html
   title: Credit Facilities & Parameters ऋण सुविधाएं और पैरामीटर
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Home/VS/96
   source: 4
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-CG-C-039
   tag: r-cg-c
   collection: public
@@ -19598,12 +19635,14 @@ documents:
   title: Primary Security vis-a-vis Collateral security/personal guarantee vis-à-vis third party guarantee प्राथमिक सुरक्षा
     की तुलना में संपार्श्विक सुरक्षा/व्यक्तिगत गारंटी की तुलना में तीसरे पक्ष की गारंटी
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Home/VS/97
   source: 4
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-CG-C-040
   tag: r-cg-c
   collection: public
@@ -19627,12 +19666,14 @@ documents:
   format: html
   title: Credit guarantee - extent of cover, invocation, claim etc. ऋण गारंटी – कवर की मात्रा,गारंटी लागू करना, दावा आदि
   publisher: www.cgtmse.in
-  effective_from: null
+  effective_from: '2026-11-14'
   superseded_by: null
   source_url: https://www.cgtmse.in/Home/VS/99
   source: 4
   applies_to: all
   method: script
+  date_source: human
+  date_note: evergreen web page or guideline with no own date; dated as current at retrieval (2026-11-14)
 - doc_id: R-GST-C-021
   tag: r-gst-c
   collection: public
@@ -20223,6 +20264,10 @@ hosts:
     terms_note: null
     automated_access: unknown
   www.incometaxindia.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  www.indiacode.gov.in:
     terms_url: null
     terms_note: null
     automated_access: unknown

@@ -32,7 +32,7 @@ for that doc_id in `manifest.yaml`.
 
 - **Recipe 2 - RBI circulars superseded by the 2025 consolidation (set superseded_by):** RBI Notifications (https://www.rbi.org.in/Scripts/NotificationUser.aspx): use the year filter for 2015-2025 and open circulars on lending to MSMEs, Key Facts Statement, interest rates on advances / external benchmark, fair practices code, or loans and advances that the 28 Nov 2025 consolidation repealed (the new Master Direction lists them in its repeal annex). Save the circular page as Web page, HTML only; set superseded_by to the matching R-RBI Direction.
 - **Recipe 7 - Ministry of MSME annual reports and scheme guidelines; Udyam and MSME Samadhaan FAQs:** Replacement for a dead link (the Udyam reverse-graduation circular now redirects to FileNotFound). Pick one English, text-layer PDF linked from the Udyam site (https://udyamregistration.gov.in/, Important to know / circulars and notifications), e.g. a circular on Udyam classification, Udyam Assist or MSME status; or an English Ministry of MSME scheme guideline. Save it in a browser as raw/R-MSME-G-NNN.pdf and fill title, source_url (the PDF itself) and effective_from.
-- **Recipe 10 - CBDT on s.43B(h) and Income-tax Act 2025 s.37(2)(g); relevant Act chapters:** Replacement for a rejected scan (the MSME Samadhaan copy of the MSMED Act 2006 has no text layer). Preferred: a text-layer PDF of the full Micro, Small and Medium Enterprises Development Act, 2006 from India Code (https://www.indiacode.nic.in/, search the Act title and save the Act PDF). Otherwise: a CBDT circular or FAQ on section 43B(h) / Income-tax Act 2025 section 37(2)(g) from https://www.incometaxindia.gov.in/ (Communications > Circulars). Save in a browser; both hosts are manual only (ADR 0020).
+- **Recipe 10 - CBDT on s.43B(h) and Income-tax Act 2025 s.37(2)(g); relevant Act chapters:** Replacement for a rejected scan (the MSME Samadhaan copy of the MSMED Act 2006 has no text layer). Preferred: a text-layer PDF of the full Micro, Small and Medium Enterprises Development Act, 2006 from India Code (https://www.indiacode.gov.in/, search the Act title and save the Act PDF). Otherwise: a CBDT circular or FAQ on section 43B(h) / Income-tax Act 2025 section 37(2)(g) from https://www.incometaxindia.gov.in/ (Communications > Circulars). Save in a browser; both hosts are manual only (ADR 0020).
 - **Recipe 14 - Lok Sabha / Rajya Sabha answers on MSME credit, CGTMSE, TReDS, delayed payments:** sansad.in Questions and Answers (Lok Sabha: https://sansad.in/ls/questions/questions-and-answers ; Rajya Sabha: https://sansad.in/rs/questions/questions-and-answers): the filters take numbers, not years. Lok Sabha: set Lok Sabha = XVIII (18th, constituted June 2024) and go through its sessions from I upward. Rajya Sabha: set the session to each one held from June 2024 onward (check the session dates shown on the page). Skip any answer dated after 15 Nov 2026 (AS_OF_DATE). On both sites filter Ministry = Micro, Small and Medium Enterprises or Finance, and search the subject for MSME credit, CGTMSE, TReDS, delayed payment, Samadhaan or Udyam. Open each answer and save its PDF; one answer per row.
 - **Recipe 15 - Supreme Court and High Court judgments on the MSMED Act:** Do not use the sci.gov.in judgment-date search; it only covers 30 days per search. Search by keyword instead, one CAPTCHA per search, solved by a person (ADR 0020). Supreme Court: https://scr.sci.gov.in/ (Digital SCR) with the phrase 'Micro, Small and Medium Enterprises Development Act', then 'Facilitation Council', then 'section 18' AND 'MSMED'. High Courts: https://judgments.ecourts.gov.in/ with the same phrases. Keep judgments dated 2015-2026 that decide a point on delayed payment, section 15/16 interest, a section 18 reference or arbitration, or the section 19 pre-deposit; skip orders that only list or adjourn a case. Save the official judgment PDF as raw/R-JUD-NNN.pdf and fill title (<parties>, <court>, <date>), source_url and effective_from. Well-known starting points to confirm in the search before saving: Silpi Industries v. Kerala SRTC (SC, 2021); Gujarat State Civil Supplies Corp. v. Mahakali Foods (SC, 2022); Jharkhand Urja Vikas Nigam v. State of Rajasthan (SC, 2021); Shanti Conductors v. Assam SEB (SC, 2019). The sites show a CAPTCHA when searches come quickly: space them out and save a few judgments per sitting; the source 15 target of 25 is close to met, so extra judgments are optional. Legal points only (ADR 0020).
 - **Recipe 16 - State MSME/industrial policies - Maharashtra (home) and other states (KR-04 distractors):** Maharashtra (home, IN-MH): di.maharashtra.gov.in refuses connections; use the MIDC policy page https://midc.maharashtra.gov.in/industrial-policies-and-incentives/ (Industrial Policy 2019 and the 2025 Industries, Investment and Services Policy PDFs). Karnataka (IN-KA): kum.karnataka.gov.in does not resolve; save the Industrial Policy 2025-30 PDF from https://investkarnataka.co.in/. Set jurisdiction accordingly. Maharashtra GRs and MIDC policies are often Marathi only; save English versions only (Marathi is excluded).
@@ -87,19 +87,20 @@ under `hosts:`, `terms_url`, `terms_note` (does it allow automated access? any r
 | www.icici.bank.in | 1 | [Name 2] | unknown |
 | www.idfcfirst.bank.in | 1 | [Name 3] | unknown |
 | www.incometaxindia.gov.in | 2 | [Name 4] | unknown |
-| www.indiacode.nic.in | 1 | [Name 5] | unknown |
-| www.indianbank.in | 1 | [Name 6] | unknown |
-| www.invoicemart.com | 1 | [Name 1] | unknown |
-| www.kotak.bank.in | 1 | [Name 2] | unknown |
+| www.indiacode.gov.in | 1 | [Name 5] | unknown |
+| www.indiacode.nic.in | 0 | [Name 6] | unknown |
+| www.indianbank.in | 1 | [Name 1] | unknown |
+| www.invoicemart.com | 1 | [Name 2] | unknown |
+| www.kotak.bank.in | 1 | [Name 3] | unknown |
 | www.m1xchange.com | 23 | [Name 6] | unknown |
-| www.meity.gov.in | 2 | [Name 4] | unknown |
-| www.mudra.org.in | 0 | [Name 5] | unknown |
-| www.ncgtc.in | 0 | [Name 6] | unknown |
-| www.rbi.org.in | 577 | [Name 1] | unknown |
-| www.rxil.in | 0 | [Name 2] | unknown |
-| www.sci.gov.in | 0 | [Name 3] | unknown |
-| www.sidbi.in | 44 | [Name 4] | unknown |
-| www.udyamregistration.gov.in | 1 | [Name 5] | unknown |
-| www.unionbankofindia.bank.in | 1 | [Name 6] | unknown |
+| www.meity.gov.in | 2 | [Name 5] | unknown |
+| www.mudra.org.in | 0 | [Name 6] | unknown |
+| www.ncgtc.in | 0 | [Name 1] | unknown |
+| www.rbi.org.in | 577 | [Name 2] | unknown |
+| www.rxil.in | 0 | [Name 3] | unknown |
+| www.sci.gov.in | 0 | [Name 4] | unknown |
+| www.sidbi.in | 44 | [Name 5] | unknown |
+| www.udyamregistration.gov.in | 1 | [Name 6] | unknown |
+| www.unionbankofindia.bank.in | 1 | [Name 1] | unknown |
 
-**243 documents were rejected as scans (no text layer) and are not listed, so nobody downloads them again.** Each has a replacement slot above.
+**245 documents were rejected as scans (no text layer) and are not listed, so nobody downloads them again.** Each has a replacement slot above.
