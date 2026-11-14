@@ -232,7 +232,7 @@ def test_KR04_available_document_without_a_date_is_an_audit_error(
     assert any(w.startswith("B:") for w in warnings)
 
 
-def test_scope14_import_refuses_oversize_and_duplicate_files(
+def test_scope14_import_refuses_duplicates_but_not_large_files(
     tmp_path: Path, entry: Callable[..., dict[str, Any]], text_pdf: Callable[[str], bytes]
 ) -> None:
     import credassure.datagen.corpus as corpus
@@ -241,17 +241,18 @@ def test_scope14_import_refuses_oversize_and_duplicate_files(
     raw.mkdir()
     body = text_pdf("Master Direction " * 20)
     (raw / "R-X-002.pdf").write_bytes(body)
-    (raw / "R-X-003.pdf").write_bytes(b"x" * 64)
+    (raw / "R-X-003.pdf").write_bytes(text_pdf("Lending policy " * 400))
     lock = {"R-X-001": {"status": "ok", "sha256": hashlib.sha256(body).hexdigest()}}
     docs = [entry(doc_id=i, format="pdf") for i in ("R-X-001", "R-X-002", "R-X-003")]
-    limit = corpus.MAX_RAW_BYTES
-    corpus.MAX_RAW_BYTES = 32
+    limit = corpus.MAX_SCRIPT_BYTES
+    corpus.MAX_SCRIPT_BYTES = 32  # smaller than both files: the script cap never limits imports
     try:
         errors = import_raw(docs, lock, tmp_path, TODAY)
     finally:
-        corpus.MAX_RAW_BYTES = limit
-    assert any("duplicate of R-X-001" in e for e in errors) or any("20 MB" in e for e in errors)
-    assert "R-X-002" not in lock and "R-X-003" not in lock
+        corpus.MAX_SCRIPT_BYTES = limit
+    assert any("duplicate of R-X-001" in e for e in errors)
+    assert "R-X-002" not in lock
+    assert lock["R-X-003"]["status"] == "ok_manual" and not any("R-X-003" in e for e in errors)
 
 
 def test_KR04_available_document_needs_a_date_source(entry: Callable[..., dict[str, Any]]) -> None:

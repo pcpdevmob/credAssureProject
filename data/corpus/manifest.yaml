@@ -77,6 +77,7 @@ documents:
   source: 8
   applies_to: all
   method: manual
+  date_source: human
 - doc_id: R-MSME-03
   tag: msme_gov
   collection: public
@@ -91,6 +92,7 @@ documents:
   source: 8
   applies_to: all
   method: script
+  date_source: human
 - doc_id: R-CG-01
   tag: cgtmse
   collection: public
@@ -253,7 +255,7 @@ documents:
   source_url: https://samadhaan.msme.gov.in/WriteReadData/DocumentFile/MSMED2006act.pdf
   source: 10
   applies_to: all
-  method: manual
+  method: script
 - doc_id: R-MSME-04
   tag: msme_gov
   collection: public
@@ -311,6 +313,7 @@ documents:
   source: 10
   applies_to: all
   method: manual
+  date_source: human
 - doc_id: R-TAX-02
   tag: income_tax
   collection: public
@@ -319,12 +322,13 @@ documents:
   format: html
   title: Income-tax Act, 1961 - section 43B
   publisher: CBDT
-  effective_from: null
+  effective_from: '2024-04-01'
   superseded_by: R-TAX-01
   source_url: https://www.incometaxindia.gov.in/w/section-43b-40
   source: 10
   applies_to: all
   method: manual
+  date_source: extracted
 - doc_id: R-GST-01
   tag: gst
   collection: public
@@ -354,6 +358,7 @@ documents:
   source: 8
   applies_to: all
   method: manual
+  date_source: human
 - doc_id: R-GST-02
   tag: gst
   collection: public
@@ -398,6 +403,7 @@ documents:
   source: 8
   applies_to: all
   method: manual
+  date_source: human
 - doc_id: R-DPDP-03
   tag: dpdp_kyc
   collection: public
@@ -697,6 +703,7 @@ documents:
   source: 7
   applies_to: all
   method: script
+  date_source: human
 - doc_id: R-DATA-02
   tag: msme_gov
   collection: public
@@ -711,6 +718,7 @@ documents:
   source: 7
   applies_to: all
   method: script
+  date_source: human
 - doc_id: R-RBI-01
   tag: rbi_md
   collection: public
@@ -754,6 +762,7 @@ documents:
   source: 1
   applies_to: commercial_bank
   method: manual
+  date_source: human
 - doc_id: R-RBI-11
   tag: rbi_md
   collection: public
@@ -896,12 +905,13 @@ documents:
   format: html
   title: SBI SME Smart Score
   publisher: State Bank of India
-  effective_from: null
+  effective_from: '2026-10-15'
   superseded_by: null
-  source_url: https://sbi.co.in/portal/web/sme/sme-smart-score
+  source_url: https://sbi.bank.in/web/business/sme/sme-loans/sme-smart-score
   source: 13
   applies_to: all
   method: script
+  date_source: wef
 - doc_id: R-BANK-04
   tag: bank_charges
   collection: public
@@ -2039,12 +2049,13 @@ documents:
   format: html
   title: Reserve Bank of India (Commercial Banks – Miscellaneous) Directions, 2025
   publisher: www.rbi.org.in
-  effective_from: null
+  effective_from: '2026-10-19'
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13136
   source: 1
   applies_to: commercial_bank
   method: manual
+  date_source: extracted
 - doc_id: R-RBI-MD-002
   tag: r-rbi-md
   collection: public
@@ -2053,12 +2064,13 @@ documents:
   format: html
   title: Reserve Bank of India (Commercial Banks – Forthcoming Instructions) Directions, 2025
   publisher: www.rbi.org.in
-  effective_from: null
+  effective_from: '2025-11-28'
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13137
   source: 1
   applies_to: commercial_bank
   method: manual
+  date_source: extracted
 - doc_id: R-RBI-MD-003
   tag: r-rbi-md
   collection: public
@@ -2067,12 +2079,13 @@ documents:
   format: html
   title: Reserve Bank of India (Commercial Banks – Treatment of Wilful Defaulters and Large Defaulters) Directions, 2025
   publisher: www.rbi.org.in
-  effective_from: null
+  effective_from: '2025-11-28'
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13144
   source: 1
   applies_to: commercial_bank
   method: manual
+  date_source: extracted
 - doc_id: R-RBI-MD-004
   tag: r-rbi-md
   collection: public
@@ -2081,12 +2094,13 @@ documents:
   format: html
   title: Reserve Bank of India (Commercial Banks – Resolution of Stressed Assets) Directions, 2025
   publisher: www.rbi.org.in
-  effective_from: null
+  effective_from: '2026-10-01'
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13145
   source: 1
   applies_to: commercial_bank
   method: manual
+  date_source: extracted
 - doc_id: R-RBI-MD-005
   tag: r-rbi-md
   collection: public
@@ -2548,12 +2562,13 @@ documents:
   format: html
   title: Reserve Bank of India (Urban Co-operative Banks – Credit Facilities) Directions, 2025
   publisher: www.rbi.org.in
-  effective_from: null
+  effective_from: '2026-10-01'
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13028
   source: 1
   applies_to: coop_bank
   method: manual
+  date_source: extracted
 - doc_id: R-RBI-MD-038
   tag: r-rbi-md
   collection: public
@@ -2562,12 +2577,13 @@ documents:
   format: html
   title: Reserve Bank of India (Rural Co-operative Banks – Miscellaneous) Directions, 2025
   publisher: www.rbi.org.in
-  effective_from: null
+  effective_from: '2025-12-04'
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13202
   source: 1
   applies_to: coop_bank
   method: manual
+  date_source: extracted
 - doc_id: R-RBI-MD-039
   tag: r-rbi-md
   collection: public
@@ -2576,12 +2592,13 @@ documents:
   format: html
   title: Reserve Bank of India (Rural Co-operative Banks – Responsible Business Conduct) Directions, 2025
   publisher: www.rbi.org.in
-  effective_from: null
+  effective_from: '2018-01-04'
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12987
   source: 1
   applies_to: coop_bank
   method: manual
+  date_source: extracted
 - doc_id: R-RBI-MD-040
   tag: r-rbi-md
   collection: public
@@ -2590,12 +2607,13 @@ documents:
   format: html
   title: Reserve Bank of India (Rural Co-operative Banks – Know Your Customer) Directions, 2025
   publisher: www.rbi.org.in
-  effective_from: null
+  effective_from: '2026-09-18'
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12988
   source: 1
   applies_to: coop_bank
   method: manual
+  date_source: extracted
 - doc_id: R-RBI-HIST-001
   tag: r-rbi-hist
   collection: public
@@ -3136,12 +3154,13 @@ documents:
   format: html
   title: RBI FAQs on Priority Sector Lending (PSL)
   publisher: www.rbi.org.in
-  effective_from: null
+  effective_from: '2026-09-11'
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/FAQView.aspx?Id=87
   source: 3
   applies_to: all
   method: manual
+  date_source: extracted
 - doc_id: R-RBI-FAQ-002
   tag: r-rbi-faq
   collection: public
@@ -3150,12 +3169,13 @@ documents:
   format: html
   title: RBI FAQs on Master Direction on KYC
   publisher: www.rbi.org.in
-  effective_from: null
+  effective_from: '2025-06-09'
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/FAQView.aspx?Id=173
   source: 3
   applies_to: commercial_bank
   method: manual
+  date_source: extracted
 - doc_id: R-RBI-FAQ-003
   tag: r-rbi-faq
   collection: public
@@ -3164,12 +3184,13 @@ documents:
   format: html
   title: 'RBI FAQs: Trade Receivables Discounting System (TReDS)'
   publisher: www.rbi.org.in
-  effective_from: null
+  effective_from: '2020-01-01'
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/FAQView.aspx?Id=132
   source: 3
   applies_to: all
   method: manual
+  date_source: extracted
 - doc_id: R-RBI-FAQ-004
   tag: r-rbi-faq
   collection: public
@@ -3178,12 +3199,13 @@ documents:
   format: html
   title: 'RBI FAQs: All you wanted to know about NBFCs'
   publisher: www.rbi.org.in
-  effective_from: null
+  effective_from: '2026-11-11'
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/FAQView.aspx?Id=92
   source: 3
   applies_to: nbfc
   method: manual
+  date_source: extracted
 - doc_id: R-RBI-FAQ-005
   tag: r-rbi-faq
   collection: public
@@ -3192,320 +3214,13 @@ documents:
   format: html
   title: Lending and Deposit Rates of Scheduled Commercial Banks – October 2026
   publisher: www.rbi.org.in
-  effective_from: null
+  effective_from: '2026-10-30'
   superseded_by: null
   source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=63894
   source: 3
   applies_to: all
   method: manual
-- doc_id: R-RBI-FAQ-006
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – November 2024
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-007
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – December 2024
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-008
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – January 2025
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-009
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – February 2025
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-010
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – March 2025
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-011
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – April 2025
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-012
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – May 2025
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-013
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – June 2025
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-014
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – July 2025
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-015
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – August 2025
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-016
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – September 2025
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-017
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – October 2025
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-018
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – November 2025
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-019
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – December 2025
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-020
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – January 2026
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-021
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – February 2026
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-022
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – March 2026
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-023
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – April 2026
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-024
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – May 2026
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-025
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – June 2026
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-026
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – July 2026
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
-- doc_id: R-RBI-FAQ-027
-  tag: r-rbi-faq
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: Lending and Deposit Rates of Scheduled Commercial Banks – August 2026
-  publisher: www.rbi.org.in
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx
-  source: 3
-  applies_to: all
-  method: manual
+  date_source: extracted
 - doc_id: R-MSME-G-001
   tag: r-msme-g
   collection: public
@@ -3514,12 +3229,13 @@ documents:
   format: pdf
   title: 'Udyam: Acceptance of Udyam Registration Certificate presented through DigiLocker (01/01/2025)'
   publisher: udyamregistration.gov.in
-  effective_from: null
+  effective_from: '2025-01-01'
   superseded_by: null
   source_url: https://udyamregistration.gov.in/docs/Acceptance_URC_Doucment_DigiLocker.pdf
   source: 7
   applies_to: all
   method: manual
+  date_source: extracted
 - doc_id: R-MSME-G-002
   tag: r-msme-g
   collection: public
@@ -3528,12 +3244,13 @@ documents:
   format: pdf
   title: RBI notification FIDD.MSME & NFS.BC.No.4/06.02.31/2020-21 on MSME classification (21/08/2020), Udyam copy
   publisher: udyamregistration.gov.in
-  effective_from: null
+  effective_from: '2020-07-02'
   superseded_by: null
   source_url: https://udyamregistration.gov.in/docs/RBI_NOTIFICATION_21082020.pdf
   source: 7
   applies_to: all
   method: manual
+  date_source: extracted
 - doc_id: R-MSME-G-003
   tag: r-msme-g
   collection: public
@@ -3542,12 +3259,13 @@ documents:
   format: pdf
   title: Udyam Registration benefits
   publisher: udyamregistration.gov.in
-  effective_from: null
+  effective_from: '2021-08-23'
   superseded_by: null
   source_url: https://udyamregistration.gov.in/docs/Benefits_of_UR.pdf
   source: 7
   applies_to: all
   method: manual
+  date_source: pdf_metadata
 - doc_id: R-MSME-G-004
   tag: r-msme-g
   collection: public
@@ -3556,12 +3274,13 @@ documents:
   format: pdf
   title: Legal framework for MSME classification (S.O. 1364(E) 2025 with S.O. 2119(E) 2020), Udyam copy
   publisher: udyamregistration.gov.in
-  effective_from: null
+  effective_from: '2025-03-21'
   superseded_by: null
   source_url: https://udyamregistration.gov.in/docs/261838_220191.pdf
   source: 7
   applies_to: all
   method: manual
+  date_source: extracted
 - doc_id: R-GZ-001
   tag: r-gz
   collection: public
@@ -3570,12 +3289,13 @@ documents:
   format: pdf
   title: Notification under MSMED Act 2006 extending non-tax benefits to MSMEs (18/10/2022)
   publisher: udyamregistration.gov.in
-  effective_from: null
+  effective_from: '2020-06-26'
   superseded_by: null
   source_url: https://udyamregistration.gov.in/docs/239737.pdf
   source: 8
   applies_to: all
   method: manual
+  date_source: extracted
 - doc_id: R-GZ-002
   tag: r-gz
   collection: public
@@ -3584,387 +3304,1764 @@ documents:
   format: pdf
   title: 'S.O. 1296(E): Udyam Registration Certificate for PSL benefits (20/03/2023)'
   publisher: udyamregistration.gov.in
-  effective_from: null
+  effective_from: '2023-03-20'
   superseded_by: null
   source_url: https://udyamregistration.gov.in/docs/SO1296.pdf
   source: 8
   applies_to: all
   method: manual
+  date_source: extracted
 - doc_id: R-TREDS-010
   tag: r-treds
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: M1xchange TReDS guideline
+  format: pdf
+  title: TReDS Frequently Asked Questions
+  publisher: www.m1xchange.com
+  effective_from: '2020-01-01'
+  superseded_by: null
+  source_url: https://www.m1xchange.com/wp-content/uploads/2023/10/FREQUENTLY-ASKED-QUESTIONS.pdf
+  source: 12
+  applies_to: all
+  method: script
+  date_source: extracted
+- doc_id: R-TREDS-011
+  tag: r-treds
+  collection: public
+  jurisdiction: IN
+  legal_basis: L3
+  format: pdf
+  title: Micro, Small and Medium Enterprises Development (Amendment) Act, 2026
+  publisher: www.m1xchange.com
+  effective_from: '2026-08-13'
+  superseded_by: null
+  source_url: https://www.m1xchange.com/wp-content/uploads/2026/10/Micro-Small-and-Medium-Enterprises-Development-Amendment-Act-2026.pdf
+  source: 12
+  applies_to: all
+  method: script
+  date_source: extracted
+- doc_id: R-TREDS-012
+  tag: r-treds
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: TReDS Notification dt. 23.06.2026 - Onboarding Support
+  publisher: www.m1xchange.com
+  effective_from: '2026-06-23'
+  superseded_by: null
+  source_url: https://www.m1xchange.com/wp-content/uploads/2026/07/TReDS-Notification-dt.-23.06.2026-Onboarding-Support.pdf
+  source: 12
+  applies_to: all
+  method: script
+  date_source: curated
+- doc_id: R-TREDS-013
+  tag: r-treds
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: TReDS Notification dt. 15.06.2026 - CGTMSE Special Provision
+  publisher: www.m1xchange.com
+  effective_from: '2026-06-15'
+  superseded_by: null
+  source_url: https://www.m1xchange.com/wp-content/uploads/2026/07/TReDS-Notification-dt.-15.06.2026-CGTMSE-Special-Provision.pdf
+  source: 12
+  applies_to: all
+  method: script
+  date_source: curated
+- doc_id: R-TREDS-014
+  tag: r-treds
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: TReDS Notification dt. 30.06.2026 - CPSE TReDS Mandate
+  publisher: www.m1xchange.com
+  effective_from: '2026-06-30'
+  superseded_by: null
+  source_url: https://www.m1xchange.com/wp-content/uploads/2026/07/TReDS-Notification-dt.-30.06.2026-CPSE-TReDS-Mandate.pdf
+  source: 12
+  applies_to: all
+  method: script
+  date_source: curated
+- doc_id: R-TREDS-015
+  tag: r-treds
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: Ministry of MSME S.O. 4845(E), 7 Nov 2024 - CPSEs on board TReDS
+  publisher: www.m1xchange.com
+  effective_from: '2024-11-07'
+  superseded_by: null
+  source_url: https://www.m1xchange.com/wp-content/uploads/2024/11/S.O.-4845E-dated-7.11.2024-reg-CPSEs-on-board-on-TReDS-platform.pdf
+  source: 12
+  applies_to: all
+  method: script
+  date_source: curated
+- doc_id: R-TREDS-016
+  tag: r-treds
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: MSME Form 1 (half-yearly return on outstanding payments to MSMEs) - Gazette notification
   publisher: www.m1xchange.com
   effective_from: null
   superseded_by: null
-  source_url: https://www.m1xchange.com/treds-guideline/
+  source_url: https://www.m1xchange.com/wp-content/uploads/2024/07/New-MSME-Form1-Half-yearly-return-w.r.t-outstanding-payments-to-MSME-Gazette-notification-released.pdf
   source: 12
   applies_to: all
-  method: manual
+  method: script
+- doc_id: R-TREDS-017
+  tag: r-treds
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Registration of Factors (Reserve Bank) Regulations, 2022
+  publisher: www.m1xchange.com
+  effective_from: '2022-01-20'
+  superseded_by: null
+  source_url: https://www.m1xchange.com/wp-content/uploads/2023/10/RBI-issues-regulations-under-the-amended-Factoring-Regulation-Act-2011.pdf
+  source: 12
+  applies_to: all
+  method: script
+  date_source: extracted
+- doc_id: R-TREDS-018
+  tag: r-treds
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Dues of MSMEs
+  publisher: www.m1xchange.com
+  effective_from: '2020-09-14'
+  superseded_by: null
+  source_url: https://www.m1xchange.com/wp-content/uploads/2023/10/Dues-of-MSMEs.pdf
+  source: 12
+  applies_to: all
+  method: script
+  date_source: extracted
+- doc_id: R-TREDS-019
+  tag: r-treds
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Letter by MSME Secretary
+  publisher: www.m1xchange.com
+  effective_from: null
+  superseded_by: null
+  source_url: https://www.m1xchange.com/wp-content/uploads/2023/10/Letter-by-MSME-Secretary.pdf
+  source: 12
+  applies_to: all
+  method: script
+- doc_id: R-TREDS-020
+  tag: r-treds
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Onboarding of MSME vendors of CPSE on TReDS Portal
+  publisher: www.m1xchange.com
+  effective_from: '2018-10-17'
+  superseded_by: null
+  source_url: https://www.m1xchange.com/wp-content/uploads/2023/10/Onboarding-of-MSME-vendors-of-CPSE-on-TReDS-Portal.pdf
+  source: 12
+  applies_to: all
+  method: script
+  date_source: extracted
+- doc_id: R-TREDS-021
+  tag: r-treds
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: MSME RBI Circular
+  publisher: www.m1xchange.com
+  effective_from: '2007-04-04'
+  superseded_by: null
+  source_url: https://www.m1xchange.com/wp-content/uploads/2023/10/MSME-RBI-Circular.pdf
+  source: 12
+  applies_to: all
+  method: script
+  date_source: extracted
+- doc_id: R-TREDS-022
+  tag: r-treds
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: Gazette Notification dated 1st June 2020
+  publisher: www.m1xchange.com
+  effective_from: '2020-06-01'
+  superseded_by: null
+  source_url: https://www.m1xchange.com/wp-content/uploads/2023/10/Gazette-Notification-dated-1st-June-2020.pdf
+  source: 12
+  applies_to: all
+  method: script
+  date_source: curated
+- doc_id: R-TREDS-023
+  tag: r-treds
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: Gazette Notification dated 2nd November 2018
+  publisher: www.m1xchange.com
+  effective_from: '2018-11-02'
+  superseded_by: null
+  source_url: https://www.m1xchange.com/wp-content/uploads/2023/10/Gazette-Notification-dated-2nd-November-2018.pdf
+  source: 12
+  applies_to: all
+  method: script
+  date_source: curated
+- doc_id: R-TREDS-024
+  tag: r-treds
+  collection: public
+  jurisdiction: IN
+  legal_basis: L3
+  format: pdf
+  title: Factoring Regulation Act, 2011 (as amended)
+  publisher: www.m1xchange.com
+  effective_from: '2023-10-01'
+  superseded_by: null
+  source_url: https://www.m1xchange.com/wp-content/uploads/2023/10/Factoring-Regulation-Act.pdf
+  source: 12
+  applies_to: all
+  method: script
+  date_source: url
 - doc_id: R-SANSAD-001
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Starred Q. 219 (03 Aug 2026): Credit Flow to Micro, Small and Medium Enterprises'
+  publisher: sansad.in
+  effective_from: '2026-08-03'
   superseded_by: null
   source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-002
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 2861 (08 Aug 2024): Expansion of Micro, Small and Medium Enterprises (MSMEs)'
+  publisher: sansad.in
+  effective_from: '2024-08-08'
   superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-003
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 141 (29 Jan 2026): MSME Credit Disbursement in Tamil Nadu'
+  publisher: sansad.in
+  effective_from: '2026-01-29'
   superseded_by: null
   source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-004
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 3121 (18 Dec 2025): MSME Credit Growth in Tamil Nadu'
+  publisher: sansad.in
+  effective_from: '2025-12-18'
   superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-005
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 1274 (28 Jul 2025): Protection of MSME Creditors'
+  publisher: sansad.in
+  effective_from: '2025-07-28'
   superseded_by: null
   source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-006
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 1682 (05 Dec 2024): MSME Credit Assessment Model'
+  publisher: sansad.in
+  effective_from: '2024-12-05'
   superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-007
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 37 (20 Jul 2026): Credit Flow under Mudra, Stand-Up India and CGTMSE in Karnataka'
+  publisher: sansad.in
+  effective_from: '2026-07-20'
   superseded_by: null
   source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-008
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 2119 (12 Feb 2026): CGTMSE in Maharashtra'
+  publisher: sansad.in
+  effective_from: '2026-02-12'
   superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-009
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 1055 (05 Feb 2026): CGTMSE in MSMEs'
+  publisher: sansad.in
+  effective_from: '2026-02-05'
   superseded_by: null
   source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-010
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 1001 (05 Feb 2026): Accounts under CGTMSE Component'
+  publisher: sansad.in
+  effective_from: '2026-02-05'
   superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-011
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 2992 (18 Dec 2025): Credit Institutions under CGTMSE'
+  publisher: sansad.in
+  effective_from: '2025-12-18'
   superseded_by: null
   source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-012
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 1989 (11 Dec 2025): Loans under CGTMSE'
+  publisher: sansad.in
+  effective_from: '2025-12-11'
   superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-013
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 1895 (11 Dec 2025): CGTMSE in Andhra Pradesh'
+  publisher: sansad.in
+  effective_from: '2025-12-11'
   superseded_by: null
   source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-014
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 3127 (07 Aug 2025): Credit Support under CGTMSE'
+  publisher: sansad.in
+  effective_from: '2025-08-07'
   superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-015
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 1568 (13 Feb 2025): CGTMSE'
+  publisher: sansad.in
+  effective_from: '2025-02-13'
   superseded_by: null
   source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-016
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 4063 (19 Dec 2024): Funds under CGTMSE'
+  publisher: sansad.in
+  effective_from: '2024-12-19'
   superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-017
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 626 (28 Nov 2024): CGTMSE'
+  publisher: sansad.in
+  effective_from: '2024-11-28'
   superseded_by: null
   source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-018
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 538 (25 Jul 2024): Credit Guarantee Fund Trust for Micro and Small Enterprises (CGTMSE)'
+  publisher: sansad.in
+  effective_from: '2024-07-25'
   superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-019
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 4411 (19 Mar 2026): TReDS Platform'
+  publisher: sansad.in
+  effective_from: '2026-03-19'
   superseded_by: null
   source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-020
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 4554 (19 Mar 2026): Delayed Payments to MSMEs'
+  publisher: sansad.in
+  effective_from: '2026-03-19'
   superseded_by: null
-  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-021
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 513 (25 Jul 2024): Delayed Payments to MSMEs'
+  publisher: sansad.in
+  effective_from: '2024-07-25'
   superseded_by: null
   source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-022
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 1992 (18 Mar 2025): Mutual Credit Guarantee Scheme for MSMEs'
+  publisher: sansad.in
+  effective_from: '2025-03-18'
   superseded_by: null
   source_url: https://sansad.in/rs/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-SANSAD-023
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://sansad.in/ls/questions/questions-and-answers
-  source: 14
-  applies_to: all
-  method: manual
-- doc_id: R-SANSAD-024
-  tag: r-sansad
-  collection: public
-  jurisdiction: IN
-  legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 1823 (04 Aug 2026): SIDBI Initiatives to Enhance Credit Flow to MSMEs'
+  publisher: sansad.in
+  effective_from: '2026-08-04'
   superseded_by: null
   source_url: https://sansad.in/rs/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
+- doc_id: R-SANSAD-024
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 1375 (11 Mar 2025): Credit Access to MSMEs and Strengthening SIDBI'
+  publisher: sansad.in
+  effective_from: '2025-03-11'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
 - doc_id: R-SANSAD-025
   tag: r-sansad
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 1345 (11 Mar 2025): Launch of Mutual Credit Guarantee Scheme for MSMEs'
+  publisher: sansad.in
+  effective_from: '2025-03-11'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-026
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 1021 (29 Jul 2025): MSME Sector NPAs and Credit Flow'
+  publisher: sansad.in
+  effective_from: '2025-07-29'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-027
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 4093 (30 Mar 2026): Access to Institutional Credit for MSMEs'
+  publisher: sansad.in
+  effective_from: '2026-03-30'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-028
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 4090 (30 Mar 2026): Institutional Credit for Newly Registered MSMEs'
+  publisher: sansad.in
+  effective_from: '2026-03-30'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-029
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 2814 (18 Aug 2025): Credit to Women-Led MSMEs'
+  publisher: sansad.in
+  effective_from: '2025-08-18'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-031
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 2764 (18 Aug 2025): MSME Credit and the CGTMSE Scheme'
+  publisher: sansad.in
+  effective_from: '2025-08-18'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-032
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 2658 (16 Mar 2026): Credit Access for MSMEs'
+  publisher: sansad.in
+  effective_from: '2026-03-16'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-033
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 2649 (24 Mar 2025): Credit Cards to MSMEs Owners'
+  publisher: sansad.in
+  effective_from: '2025-03-24'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-034
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 2490 (11 Aug 2025): Revival of Agro-Marine MSMEs in Konkan Region and Bottlenecks in Credit
+    Flow'
+  publisher: sansad.in
+  effective_from: '2025-08-11'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-035
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 2327 (16 Dec 2024): MSMEs RuPay Credit Card'
+  publisher: sansad.in
+  effective_from: '2024-12-16'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-036
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 1709 (15 Dec 2025): Credit Gap for MSMEs in the Country'
+  publisher: sansad.in
+  effective_from: '2025-12-15'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-037
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 1682 (04 Aug 2025): Government Support for MSME Growth, Market Access, Credit Facilitation'
+  publisher: sansad.in
+  effective_from: '2025-08-04'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-038
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 1548 (05 Aug 2024): Credit Card Scheme for MSMEs'
+  publisher: sansad.in
+  effective_from: '2024-08-05'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-039
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 1538 (05 Aug 2024): Credit Access and Finance for MSMEs'
+  publisher: sansad.in
+  effective_from: '2024-08-05'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-040
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 920 (28 Jul 2025): Bridging the Credit Gap in India''s MSME Sector'
+  publisher: sansad.in
+  effective_from: '2025-07-28'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-041
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 908 (28 Jul 2025): Formal Credit Supply to MSMEs'
+  publisher: sansad.in
+  effective_from: '2025-07-28'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-042
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 907 (08 Dec 2025): Credit Rating Framework for MSMEs'
+  publisher: sansad.in
+  effective_from: '2025-12-08'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-043
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 748 (29 Jul 2024): Steps Taken to Enhance and Simplify Credit Flow to MSMEs'
+  publisher: sansad.in
+  effective_from: '2024-07-29'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-044
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 743 (10 Feb 2025): Credit and Funding Challenges Faced by MSMEs'
+  publisher: sansad.in
+  effective_from: '2025-02-10'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-045
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 280 (02 Feb 2026): Credit to MSME Units in Belagavi District under ECLGS'
+  publisher: sansad.in
+  effective_from: '2026-02-02'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-046
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Starred Q. 245 (24 Mar 2025): Credit Guarantee Scheme for MSMEs'
+  publisher: sansad.in
+  effective_from: '2025-03-24'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-047
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 117 (01 Dec 2025): Access to Credit by MSMEs'
+  publisher: sansad.in
+  effective_from: '2025-12-01'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-048
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Starred Q. 87 (27 Jul 2026): Credit Support and Technology Upgradation Extended to MSMEs'
+  publisher: sansad.in
+  effective_from: '2026-07-27'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-050
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 2651 (16 Mar 2026): Collateral-Free Credit and CGTMSE Coverage in Odisha'
+  publisher: sansad.in
+  effective_from: '2026-03-16'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-051
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 905 (28 Jul 2025): Evaluation of Credit Guarantee Scheme'
+  publisher: sansad.in
+  effective_from: '2025-07-28'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-055
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 2487 (10 Aug 2026): CPSE Compliance with TReDS Onboarding Before Mandatory Settlement'
+  publisher: sansad.in
+  effective_from: '2026-08-10'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-056
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 4088 (30 Mar 2026): Delayed Payments from Government and PSUs'
+  publisher: sansad.in
+  effective_from: '2026-03-30'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-057
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 2660 (16 Mar 2026): Delayed Payments Faced by Small Enterprises'
+  publisher: sansad.in
+  effective_from: '2026-03-16'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-058
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 2334 (16 Dec 2024): Delayed Payments of Micro and Small Enterprises'
+  publisher: sansad.in
+  effective_from: '2024-12-16'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-059
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 1868 (09 Mar 2026): Delayed Payments to MSMEs'
+  publisher: sansad.in
+  effective_from: '2026-03-09'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-060
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 1701 (03 Aug 2026): Delayed Payments to MSMEs'
+  publisher: sansad.in
+  effective_from: '2026-08-03'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-061
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Starred Q. 82 (27 Jul 2026): MSMEs Closed Due to Delayed Payments'
+  publisher: sansad.in
+  effective_from: '2026-07-27'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-062
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Starred Q. 96 (09 Feb 2026): Delayed Payments to MSMEs'
+  publisher: sansad.in
+  effective_from: '2026-02-09'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-063
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 747 (29 Jul 2024): Addressing Delayed Payments and Support for MSMEs'
+  publisher: sansad.in
+  effective_from: '2024-07-29'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-064
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 900 (27 Jul 2026): Delayed Payments to MSMEs'
+  publisher: sansad.in
+  effective_from: '2026-07-27'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-065
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 1689 (03 Aug 2026): Pendency of Delayed Payment Cases and Technology-Driven Redressal'
+  publisher: sansad.in
+  effective_from: '2026-08-03'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-066
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 744 (02 Dec 2024): Effectiveness of MSME Samadhaan Portal in Telangana'
+  publisher: sansad.in
+  effective_from: '2024-12-02'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-067
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 3028 (06 Aug 2026): Pendency on MSME Samadhaan Portal'
+  publisher: sansad.in
+  effective_from: '2026-08-06'
   superseded_by: null
   source_url: https://sansad.in/ls/questions/questions-and-answers
   source: 14
   applies_to: all
   method: manual
+  date_source: curated
+- doc_id: R-SANSAD-068
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 2139 (12 Feb 2026): Disposal of Cases under Samadhaan Portal'
+  publisher: sansad.in
+  effective_from: '2026-02-12'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-069
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 972 (05 Feb 2026): MSME Samadhaan Portal'
+  publisher: sansad.in
+  effective_from: '2026-02-05'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-070
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 2847 (08 Aug 2024): Udyam Assist Platform'
+  publisher: sansad.in
+  effective_from: '2024-08-08'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-071
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 2919 (08 Aug 2024): Udyam Portal'
+  publisher: sansad.in
+  effective_from: '2024-08-08'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-072
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 2774 (12 Dec 2024): Easy Access for Entrepreneurs in Udyam Portal'
+  publisher: sansad.in
+  effective_from: '2024-12-12'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-073
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Starred Q. 256 (12 Dec 2024): MSME Udyam Portal'
+  publisher: sansad.in
+  effective_from: '2024-12-12'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-074
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 1781 (10 Mar 2025): Pradhan Mantri Yuva Udyamita Vikas Abhiyan'
+  publisher: sansad.in
+  effective_from: '2025-03-10'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-075
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 3995 (19 Dec 2024): Udyam Registration Portal'
+  publisher: sansad.in
+  effective_from: '2024-12-19'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-076
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 1883 (11 Dec 2025): MSMEs Registered on Udyam Portal'
+  publisher: sansad.in
+  effective_from: '2025-12-11'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-077
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 749 (04 Dec 2025): Udyam Registration Certificate'
+  publisher: sansad.in
+  effective_from: '2025-12-04'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-079
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Starred Q. 405 (21 Aug 2025): Udyam Sakhi Portal'
+  publisher: sansad.in
+  effective_from: '2025-08-21'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-080
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 4717 (21 Aug 2025): Udyam Portal'
+  publisher: sansad.in
+  effective_from: '2025-08-21'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-081
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 3144 (07 Aug 2025): MSME Udyam Vikas Yojana'
+  publisher: sansad.in
+  effective_from: '2025-08-07'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-082
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 1861 (31 Jul 2025): Registration of Traders under Udyam Portal'
+  publisher: sansad.in
+  effective_from: '2025-07-31'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-083
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 721 (24 Jul 2025): Udyam Portal'
+  publisher: sansad.in
+  effective_from: '2025-07-24'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-084
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 3799 (24 Mar 2025): Pradhan Mantri Yuva Udyamita Vikas Abhiyan (PM-YUVA) Yojana-2.0'
+  publisher: sansad.in
+  effective_from: '2025-03-24'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-085
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 2375 (13 Mar 2025): Udyami Mitra Portal'
+  publisher: sansad.in
+  effective_from: '2025-03-13'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-086
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 188 (29 Jan 2026): Udyam Registration and Udyam Assist Platforms'
+  publisher: sansad.in
+  effective_from: '2026-01-29'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-087
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 2011 (11 Dec 2025): Programmes under Udyam Sakhi Initiative'
+  publisher: sansad.in
+  effective_from: '2025-12-11'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-088
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 1916 (11 Dec 2025): New Analytics System of Udyam Portal'
+  publisher: sansad.in
+  effective_from: '2025-12-11'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-089
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 1892 (11 Dec 2025): New Udyam Portal Analytics'
+  publisher: sansad.in
+  effective_from: '2025-12-11'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-090
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 3217 (06 Aug 2026): Udyam Sakhi Portal'
+  publisher: sansad.in
+  effective_from: '2026-08-06'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-091
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 1892 (30 Jul 2026): Udyam Assist Portal'
+  publisher: sansad.in
+  effective_from: '2026-07-30'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-092
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 4416 (19 Mar 2026): Udyam Sakhi Portal in Madhya Pradesh'
+  publisher: sansad.in
+  effective_from: '2026-03-19'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-093
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Lok Sabha Unstarred Q. 3374 (12 Mar 2026): Credit Cards for Micro Enterprises Through the Udyam Portal'
+  publisher: sansad.in
+  effective_from: '2026-03-12'
+  superseded_by: null
+  source_url: https://sansad.in/ls/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-108
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 4086 (30 Mar 2026): Credit Cards to Micro Enterprises under Udyam'
+  publisher: sansad.in
+  effective_from: '2026-03-30'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-109
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 3466 (23 Mar 2026): Udyam Assist Platform and Formalization of Informal Enterprises in
+    Patna'
+  publisher: sansad.in
+  effective_from: '2026-03-23'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-110
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 2821 (18 Aug 2025): Performance of Udyam Sakhi Portal'
+  publisher: sansad.in
+  effective_from: '2025-08-18'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-111
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 2818 (18 Aug 2025): Impact of Udyam Sakhi Portal'
+  publisher: sansad.in
+  effective_from: '2025-08-18'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-112
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 2489 (10 Aug 2026): MSMEs Registered on Udyam Portal'
+  publisher: sansad.in
+  effective_from: '2026-08-10'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-113
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 2479 (10 Aug 2026): Status on District-Wise Udyam Registration'
+  publisher: sansad.in
+  effective_from: '2026-08-10'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-114
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 1686 (04 Aug 2025): Status of Udyam Sakhi Initiative'
+  publisher: sansad.in
+  effective_from: '2025-08-04'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-115
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 1540 (09 Dec 2024): Udyam Sakhi Portal'
+  publisher: sansad.in
+  effective_from: '2024-12-09'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-116
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 914 (08 Dec 2025): Closure of MSMEs Registered on the Udyam Portal'
+  publisher: sansad.in
+  effective_from: '2025-12-08'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-117
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 896 (23 Jul 2026): MSME Registered on Udyam Registration Portal in Tamil Nadu'
+  publisher: sansad.in
+  effective_from: '2026-07-23'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-118
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 746 (02 Dec 2024): MSMEs Registered on Udyam Portal'
+  publisher: sansad.in
+  effective_from: '2024-12-02'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-120
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Starred Q. 158 (15 Dec 2025): Implementation Status of Udyam Sakhi Portal'
+  publisher: sansad.in
+  effective_from: '2025-12-15'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-121
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 112 (03 Feb 2025): Udyam Scheme'
+  publisher: sansad.in
+  effective_from: '2025-02-03'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-SANSAD-123
+  tag: r-sansad
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: 'Rajya Sabha Unstarred Q. 111 (20 Jul 2026): Status on Udyam Portal and RAMP Scheme'
+  publisher: sansad.in
+  effective_from: '2026-07-20'
+  superseded_by: null
+  source_url: https://sansad.in/rs/questions/questions-and-answers
+  source: 14
+  applies_to: all
+  method: manual
+  date_source: curated
 - doc_id: R-JUD-001
   tag: r-jud
   collection: public
   jurisdiction: IN
   legal_basis: L2
   format: html
-  title: 'MSME Samadhaan: Supreme Court judgments related to delayed payment (list page)'
-  publisher: samadhaan.msme.gov.in
+  title: PENDING
+  publisher: PENDING
   effective_from: null
   superseded_by: null
-  source_url: https://samadhaan.msme.gov.in/OrderDocument.aspx
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
@@ -3978,7 +5075,7 @@ documents:
   publisher: PENDING
   effective_from: null
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
@@ -3992,7 +5089,7 @@ documents:
   publisher: PENDING
   effective_from: null
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
@@ -4006,7 +5103,7 @@ documents:
   publisher: PENDING
   effective_from: null
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
@@ -4020,7 +5117,7 @@ documents:
   publisher: PENDING
   effective_from: null
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
@@ -4034,7 +5131,7 @@ documents:
   publisher: PENDING
   effective_from: null
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
@@ -4048,7 +5145,7 @@ documents:
   publisher: PENDING
   effective_from: null
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
@@ -4057,43 +5154,46 @@ documents:
   collection: public
   jurisdiction: IN
   legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: Power Machines India Limited v. State of Madhya Pradesh & Ors (Supreme Court, 17 Apr 2017)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2017-04-17'
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-JUD-009
   tag: r-jud
   collection: public
   jurisdiction: IN
   legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: Bank of India v. Yadav Consultancy Services (P) Ltd. and Anr (Supreme Court, 5 Dec 2017)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2017-12-05'
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-JUD-010
   tag: r-jud
   collection: public
   jurisdiction: IN
   legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: Swiss Ribbons Pvt. Ltd. & Anr. v. Union of India & Ors (Supreme Court, 25 Jan 2019)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2019-01-25'
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-JUD-011
   tag: r-jud
   collection: public
@@ -4104,7 +5204,7 @@ documents:
   publisher: PENDING
   effective_from: null
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
@@ -4118,7 +5218,7 @@ documents:
   publisher: PENDING
   effective_from: null
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
@@ -4132,7 +5232,7 @@ documents:
   publisher: PENDING
   effective_from: null
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
@@ -4141,85 +5241,94 @@ documents:
   collection: public
   jurisdiction: IN
   legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: Shri Shri Swami Samarth Construction & Finance Solution & Anr. v. The Board of Directors of NKGSB CO-OP. Bank Ltd.
+    & Ors (Supreme Court, 28 Jul 2025)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2025-07-28'
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-JUD-015
   tag: r-jud
   collection: public
   jurisdiction: IN
   legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: M/s Sonali Power Equipments Pvt. Ltd. v. Chairman, Maharashtra State Electricity Board, Mumbai & Ors (Supreme Court,
+    17 Jul 2025)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2025-07-17'
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-JUD-016
   tag: r-jud
   collection: public
   jurisdiction: IN
   legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: M/s Harcharan Dass Gupta v. Union of India (Supreme Court, 14 May 2025)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2025-05-14'
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-JUD-017
   tag: r-jud
   collection: public
   jurisdiction: IN
   legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: Electrosteel Steel Limited (Now M/s ESL Steel Limited) v. Ispat Carrier Private Limited (Supreme Court, 21 Apr 2025)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2025-04-21'
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-JUD-018
   tag: r-jud
   collection: public
   jurisdiction: IN
   legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: Lifecare Innovations Pvt. Ltd. & Anr. v. Union of India & Ors (Supreme Court, 25 Feb 2025)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2025-02-25'
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-JUD-019
   tag: r-jud
   collection: public
   jurisdiction: IN
   legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: M/s Tamil Nadu Cements Corporation Limited v. Micro and Small Enterprises Facilitation Council and Another (Supreme
+    Court, 22 Jan 2025)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2025-01-22'
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-JUD-020
   tag: r-jud
   collection: public
@@ -4230,7 +5339,7 @@ documents:
   publisher: PENDING
   effective_from: null
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
@@ -4244,7 +5353,7 @@ documents:
   publisher: PENDING
   effective_from: null
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
@@ -4253,29 +5362,31 @@ documents:
   collection: public
   jurisdiction: IN
   legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: M/s Pro Knits v. The Board of Directors of Canara Bank & Ors (Supreme Court, 1 Aug 2024)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2024-08-01'
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-JUD-023
   tag: r-jud
   collection: public
   jurisdiction: IN
   legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: Fertilizer Corporation of India Limited & Ors. v. M/s Coromandal Sacks Private Limited (Supreme Court, 26 Apr 2024)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2024-04-26'
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
+  date_source: curated
 - doc_id: R-JUD-024
   tag: r-jud
   collection: public
@@ -4286,7 +5397,7 @@ documents:
   publisher: PENDING
   effective_from: null
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
@@ -4295,15 +5406,211 @@ documents:
   collection: public
   jurisdiction: IN
   legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: Hari Babu Thota, Resolution Professional of Shree Aashraya Infra-Con Ltd. (Supreme Court, 29 Nov 2023)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2023-11-29'
   superseded_by: null
-  source_url: https://www.sci.gov.in/judgements-judgement-date/
+  source_url: https://scr.sci.gov.in/
   source: 15
   applies_to: all
   method: manual
+  date_source: curated
+- doc_id: R-JUD-026
+  tag: r-jud
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: Kotak Mahindra Bank Limited v. Girnar Corrugators Pvt. Ltd. & Ors (Supreme Court, 5 Jan 2023)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2023-01-05'
+  superseded_by: null
+  source_url: https://scr.sci.gov.in/
+  source: 15
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-JUD-027
+  tag: r-jud
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: Gujarat State Civil Supplies Corporation Ltd. v. Mahakali Foods Pvt. Ltd. (unit 2) & Anr (Supreme Court, 31 Oct 2022)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2022-10-31'
+  superseded_by: null
+  source_url: https://scr.sci.gov.in/
+  source: 15
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-JUD-029
+  tag: r-jud
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: Jharkhand Urja Vikas Nigam Limited v. the State of Rajasthan & Ors (Supreme Court, 15 Dec 2021)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2021-12-15'
+  superseded_by: null
+  source_url: https://scr.sci.gov.in/
+  source: 15
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-JUD-030
+  tag: r-jud
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: Gujarat State Disaster Management Authority v. M/s Aska Equipments Limited (Supreme Court, 8 Oct 2021)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2021-10-08'
+  superseded_by: null
+  source_url: https://scr.sci.gov.in/
+  source: 15
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-JUD-031
+  tag: r-jud
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: M/s Vijeta Construction v. M/s Indus Smelters Ltd. & Anr (Supreme Court, 23 Sep 2021)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2021-09-23'
+  superseded_by: null
+  source_url: https://scr.sci.gov.in/
+  source: 15
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-JUD-032
+  tag: r-jud
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: Uflex Ltd. v. Government of Tamil Nadu & Ors (Supreme Court, 17 Sep 2021)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2021-09-17'
+  superseded_by: null
+  source_url: https://scr.sci.gov.in/
+  source: 15
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-JUD-033
+  tag: r-jud
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: M/s Silpi Industries Etc. v. Kerala State Road Transport Corporation & Anr. Etc (Supreme Court, 29 Jun 2021)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2021-06-29'
+  superseded_by: null
+  source_url: https://scr.sci.gov.in/
+  source: 15
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-STATE-011
+  tag: r-state
+  collection: public
+  jurisdiction: IN-MH
+  legal_basis: L4
+  format: pdf
+  title: Setting up of Global Fintech Hub and implementation of Fintech Policy (GR DIT-2018/C.R-17/D-1/39, 16 Feb 2018)
+  publisher: Government of Maharashtra
+  effective_from: '2018-02-16'
+  superseded_by: null
+  source_url: https://midc.maharashtra.gov.in/industrial-policies-and-incentives/
+  source: 16
+  applies_to: all
+  method: manual
+  date_source: extracted
+- doc_id: R-STATE-012
+  tag: r-state
+  collection: public
+  jurisdiction: IN-MH
+  legal_basis: L4
+  format: pdf
+  title: State Textile Policy 2018-23 (GR Policy 2017/C.R. 6/Text-5, 17 Feb 2018)
+  publisher: Government of Maharashtra
+  effective_from: '2018-02-17'
+  superseded_by: null
+  source_url: https://midc.maharashtra.gov.in/industrial-policies-and-incentives/
+  source: 16
+  applies_to: all
+  method: manual
+  date_source: extracted
+- doc_id: R-STATE-014
+  tag: r-state
+  collection: public
+  jurisdiction: IN-MH
+  legal_basis: L4
+  format: pdf
+  title: Package Scheme of Incentives 2019 (GR PSI-2019/CR 46/IND-8, 16 Sep 2019)
+  publisher: Government of Maharashtra
+  effective_from: '2019-09-16'
+  superseded_by: null
+  source_url: https://midc.maharashtra.gov.in/industrial-policies-and-incentives/
+  source: 16
+  applies_to: all
+  method: manual
+  date_source: extracted
+- doc_id: R-STATE-015
+  tag: r-state
+  collection: public
+  jurisdiction: IN-MH
+  legal_basis: L4
+  format: pdf
+  title: Maharashtra Industrial Policy 2019
+  publisher: Government of Maharashtra
+  effective_from: '2019-03-06'
+  superseded_by: null
+  source_url: https://midc.maharashtra.gov.in/industrial-policies-and-incentives/
+  source: 16
+  applies_to: all
+  method: manual
+  date_source: pdf_metadata
+- doc_id: R-STATE-016
+  tag: r-state
+  collection: public
+  jurisdiction: IN-MH
+  legal_basis: L4
+  format: pdf
+  title: Maharashtra Electric Vehicle Policy, 2021
+  publisher: Government of Maharashtra
+  effective_from: '2018-02-14'
+  superseded_by: null
+  source_url: https://midc.maharashtra.gov.in/industrial-policies-and-incentives/
+  source: 16
+  applies_to: all
+  method: manual
+  date_source: extracted
+- doc_id: R-STATE-021
+  tag: r-state
+  collection: public
+  jurisdiction: IN-MH
+  legal_basis: L4
+  format: pdf
+  title: Maharashtra Integrated Logistics Masterplan (Industries Department)
+  publisher: Government of Maharashtra
+  effective_from: '2024-09-02'
+  superseded_by: null
+  source_url: https://midc.maharashtra.gov.in/industrial-policies-and-incentives/
+  source: 16
+  applies_to: all
+  method: manual
+  date_source: pdf_metadata
 - doc_id: R-STATE-001
   tag: r-state
   collection: public
@@ -4317,7 +5624,7 @@ documents:
   source_url: https://ic.gujarat.gov.in/documents/Viksit-Gujarat-Industrial-Policy2026_new.pdf
   source: 16
   applies_to: all
-  method: manual
+  method: script
 - doc_id: R-STATE-002
   tag: r-state
   collection: public
@@ -4331,7 +5638,7 @@ documents:
   source_url: https://msmeonline.tn.gov.in/msme_policy_doc.php
   source: 16
   applies_to: all
-  method: manual
+  method: script
 - doc_id: R-STATE-003
   tag: r-state
   collection: public
@@ -4340,12 +5647,13 @@ documents:
   format: html
   title: Uttar Pradesh MSME Promotion Policy and other policies
   publisher: msme.up.gov.in
-  effective_from: null
+  effective_from: '2022-10-31'
   superseded_by: null
   source_url: https://msme.up.gov.in/Home/Policies
   source: 16
   applies_to: all
-  method: manual
+  method: script
+  date_source: extracted
 - doc_id: R-STATE-004
   tag: r-state
   collection: public
@@ -4359,35 +5667,37 @@ documents:
   source_url: https://industries.telangana.gov.in/Library/MSME%20Policy%20Booklet%20English1.pdf
   source: 16
   applies_to: all
-  method: manual
+  method: script
 - doc_id: R-STATE-005
   tag: r-state
   collection: public
   jurisdiction: IN-MH
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: Maharashtra Industries, Investment and Services Policy 2025
+  publisher: midc.maharashtra.gov.in
+  effective_from: '2025-12-11'
   superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
+  source_url: https://midc.maharashtra.gov.in/wp-content/uploads/2026/07/Maharashtra-Industries-Investment-and-Services-Policy-2025.pdf
   source: 16
   applies_to: all
-  method: manual
+  method: script
+  date_source: extracted
 - doc_id: R-STATE-006
   tag: r-state
   collection: public
-  jurisdiction: IN-GJ
+  jurisdiction: IN-KA
   legal_basis: L4
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
+  format: pdf
+  title: Karnataka Industrial Policy 2025-30
+  publisher: investkarnataka.co.in
+  effective_from: '2025-02-01'
   superseded_by: null
-  source_url: https://di.maharashtra.gov.in/
+  source_url: https://investkarnataka.co.in/wp-content/uploads/2025/02/IndustrialPolicy2025_PrintPagesSingle_.pdf
   source: 16
   applies_to: all
-  method: manual
+  method: script
+  date_source: url
 - doc_id: R-CG-C-184
   tag: r-cg-c
   collection: public
@@ -9755,12 +11065,13 @@ documents:
   title: Generation and quoting of Document Identification Number(DIN) on any communication issued by the officers of the
     Central Board of Indirect Taxes and Customs (CBIC) to tax payers and other concerned pe
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2025-06-09'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/Circular-No-249-2025.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-048
   tag: r-gst-c
   collection: public
@@ -9770,12 +11081,13 @@ documents:
   title: Reviewing authority, Revisional Authority and Appellate Authority in respect of orders passed by Common Adjudicating
     Authority (CAA) for show cause notices issued by DGGI -reg.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2025-06-24'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/Circular-No-250-2025.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-049
   tag: r-gst-c
   collection: public
@@ -9785,12 +11097,13 @@ documents:
   title: Regularizing payment of GST on co-insurance premium apportioned by the lead insurer to the co-insurer and on ceding
     /re-insurance commission deducted from the reinsurance premium paid by the insurer t
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-09-27'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/Circular-Services-Co-insurance-Re-insurance.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-050
   tag: r-gst-c
   collection: public
@@ -9799,12 +11112,13 @@ documents:
   format: pdf
   title: Citizen Charter
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-12-11'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/Citizens_Charter_CBIC_GST.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-051
   tag: r-gst-c
   collection: public
@@ -9842,12 +11156,13 @@ documents:
   format: pdf
   title: Guidance Note for Importers and Exporters
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2017-07-01'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/Guidance-Note-for-Importers-Exporters-v2.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-054
   tag: r-gst-c
   collection: public
@@ -9856,12 +11171,13 @@ documents:
   format: pdf
   title: HSNS ACT No 35 of 2025
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2025-12-16'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/HSNS%20ACT%20No%2035%20of%202025.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-055
   tag: r-gst-c
   collection: public
@@ -9870,12 +11186,13 @@ documents:
   format: pdf
   title: Click here for Advisory.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2026-01-28'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/HSNS_Advisory_Helpdesk_01-2026.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-056
   tag: r-gst-c
   collection: public
@@ -9884,12 +11201,13 @@ documents:
   format: pdf
   title: Click here for Advisory.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2025-12-16'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/HSNS_Declaration_filing_procedure.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-057
   tag: r-gst-c
   collection: public
@@ -9898,12 +11216,13 @@ documents:
   format: pdf
   title: Click here for Advisory.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2025-07-29'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/Helpdesk-Advisory-8-2025-29072025.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: url
 - doc_id: R-GST-C-058
   tag: r-gst-c
   collection: public
@@ -9912,12 +11231,13 @@ documents:
   format: pdf
   title: IGST (Amendment) Act, 2023
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2023-08-18'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/IGST-Amendment-Act-2023.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-059
   tag: r-gst-c
   collection: public
@@ -9926,12 +11246,13 @@ documents:
   format: pdf
   title: Please Click here for Advisory.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2026-06-19'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/Introduction_of_2FA.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-060
   tag: r-gst-c
   collection: public
@@ -9940,12 +11261,13 @@ documents:
   format: pdf
   title: Hindi
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-11-18'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/NN-26-2024-Hindi.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-061
   tag: r-gst-c
   collection: public
@@ -9954,12 +11276,13 @@ documents:
   format: pdf
   title: English
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-11-18'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/NN-26-2024_Eng.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-062
   tag: r-gst-c
   collection: public
@@ -9968,12 +11291,13 @@ documents:
   format: pdf
   title: English
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-11-27'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/NN-29-Eng.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-063
   tag: r-gst-c
   collection: public
@@ -9982,12 +11306,13 @@ documents:
   format: pdf
   title: Hindi
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-11-27'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/NN-29-Hindi.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-064
   tag: r-gst-c
   collection: public
@@ -9996,12 +11321,13 @@ documents:
   format: pdf
   title: English
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-12-10'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/NN-30-2024-Eng.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-065
   tag: r-gst-c
   collection: public
@@ -10010,12 +11336,13 @@ documents:
   format: pdf
   title: Hindi
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-11-20'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/NN-30-2024-Hindi.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-066
   tag: r-gst-c
   collection: public
@@ -10024,12 +11351,13 @@ documents:
   format: pdf
   title: English
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-12-13'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/NN-31-2024-Eng.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-067
   tag: r-gst-c
   collection: public
@@ -10052,12 +11380,13 @@ documents:
   format: pdf
   title: Notification No 01/2026 - HSNS CESS
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2026-02-01'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/Notification%20No%2001_2026%20-%20HSNS%20CESS.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-069
   tag: r-gst-c
   collection: public
@@ -10066,12 +11395,13 @@ documents:
   format: pdf
   title: Notification No 02/2026 - HSNS CESS
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2026-02-01'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/Notification%20No%2002_2026%20-%20HSNS%20CESS.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-070
   tag: r-gst-c
   collection: public
@@ -10080,12 +11410,13 @@ documents:
   format: pdf
   title: Notification No 03/2026 - HSNS CESS
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2026-05-20'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/Notification%20No%2003_2026%20-%20HSNS%20CESS.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-071
   tag: r-gst-c
   collection: public
@@ -10094,12 +11425,13 @@ documents:
   format: pdf
   title: Press Release of decisions of the 54th GST Council.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-09-09'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/Press-Release-54-GSTC-090924.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-072
   tag: r-gst-c
   collection: public
@@ -10108,12 +11440,13 @@ documents:
   format: pdf
   title: English
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-02-15'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/central-excise-6-24-eng.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-073
   tag: r-gst-c
   collection: public
@@ -10122,12 +11455,13 @@ documents:
   format: pdf
   title: Hindi
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-02-15'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/central-excise-6-24-hindi.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-074
   tag: r-gst-c
   collection: public
@@ -10136,12 +11470,13 @@ documents:
   format: pdf
   title: English
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-02-15'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/central-excise-7-24-eng.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-075
   tag: r-gst-c
   collection: public
@@ -10150,12 +11485,13 @@ documents:
   format: pdf
   title: Hindi
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-02-15'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/central-excise-7-24-hindi.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-076
   tag: r-gst-c
   collection: public
@@ -10164,12 +11500,13 @@ documents:
   format: pdf
   title: Clarification on applicability of late fee for delay in furnishing of FORM GSTR-9C- reg.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2025-01-30'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/cir-cgst-246-03-2025.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-077
   tag: r-gst-c
   collection: public
@@ -10179,12 +11516,13 @@ documents:
   title: Clarification regarding GST rates & classification (goods) based on the recommendations of the GST Council in its
     53rd meeting held on 22nd June, 2024, at New Delhi –reg.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-07-15'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/circular-229-23-2024-GST.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-078
   tag: r-gst-c
   collection: public
@@ -10193,12 +11531,13 @@ documents:
   format: pdf
   title: Clarification in respect of advertising services provided to foreign clients–reg.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-09-10'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/circular-230.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-079
   tag: r-gst-c
   collection: public
@@ -10207,12 +11546,13 @@ documents:
   format: pdf
   title: Clarification on availability of input tax credit in respect of demo vehicles-reg.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-09-10'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/circular-231.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-080
   tag: r-gst-c
   collection: public
@@ -10222,12 +11562,13 @@ documents:
   title: Clarification on place of supply of data hosting services provided by service providers located in India to cloud
     computing service providers located outside India-reg.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-09-10'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/circular-232.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-081
   tag: r-gst-c
   collection: public
@@ -10237,12 +11578,13 @@ documents:
   title: Clarification regarding regularization of refund of IGST availed in contravention of rule 96(10) of CGST Rules, 2017,
     in cases where the exporters had imported certain inputs without payment of integr
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-09-10'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/circular-233.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-082
   tag: r-gst-c
   collection: public
@@ -10252,12 +11594,13 @@ documents:
   title: Clarifying the issues regarding implementation of provisions of sub-section (5) and sub-section (6) in section 16
     of CGST Act, 2017-reg.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-10-15'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/circular-237-31-2024-GST.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-083
   tag: r-gst-c
   collection: public
@@ -10266,12 +11609,13 @@ documents:
   format: pdf
   title: Clarification of various doubts related to Section 128A of the CGST Act, 2017.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-10-15'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/circular-238-32-2024-GST.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-084
   tag: r-gst-c
   collection: public
@@ -10287,6 +11631,7 @@ documents:
   source: 9
   applies_to: all
   method: script
+  date_source: human
 - doc_id: R-GST-C-085
   tag: r-gst-c
   collection: public
@@ -10295,12 +11640,13 @@ documents:
   format: pdf
   title: Clarifications regarding applicability of GST on certain services – reg.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-07-15'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/circular-services-228-22-2024-GST.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-086
   tag: r-gst-c
   collection: public
@@ -10309,12 +11655,13 @@ documents:
   format: pdf
   title: Corrigendum to Circular No. 237/31/2024-GST dated 15th October, 2024 issued vide F. No. CBIC-20001/6/2024-GST-reg.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-10-25'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/corrigendum-Circular-237-31-2024-GST.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-087
   tag: r-gst-c
   collection: public
@@ -10323,12 +11670,13 @@ documents:
   format: pdf
   title: Seeks to notify Central Goods and Services Tax (Second Amendment) Rules 2025
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2025-01-23'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/gst-ct-11-2025.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-088
   tag: r-gst-c
   collection: public
@@ -10338,12 +11686,13 @@ documents:
   title: Procedure to be followed in department appeal filed against interest and/or penalty only, related to Section 128A
     of the CGST Act, 2017 -regarding.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2025-02-07'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/ins-gst-02-2025.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-089
   tag: r-gst-c
   collection: public
@@ -10352,12 +11701,13 @@ documents:
   format: pdf
   title: Instructions for processing of applications for GST registration - regarding.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2025-04-17'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/ins-gst-no-03-2025.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-090
   tag: r-gst-c
   collection: public
@@ -10366,12 +11716,13 @@ documents:
   format: pdf
   title: Instruction No. 02/2024 -GST - Guidelines for Second special All-India Drive against fake registrations –reg.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-08-12'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/instruction-02-2024-GST-12082024.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-091
   tag: r-gst-c
   collection: public
@@ -10409,12 +11760,13 @@ documents:
   format: pdf
   title: Latest Update - 6th February 2024 - alternate steps to locate e-Payment Challan under ICEGATE portal.
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2024-02-06'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/procedure-locate-e-payment-challan.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-GST-C-094
   tag: r-gst-c
   collection: public
@@ -10423,12 +11775,13 @@ documents:
   format: pdf
   title: GST migration(English)
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2017-04-30'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/public-notice-st-gst-last-date-eng.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: extracted
 - doc_id: R-GST-C-095
   tag: r-gst-c
   collection: public
@@ -10437,12 +11790,13 @@ documents:
   format: pdf
   title: GST migration(Hindi)
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2017-04-26'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/public-notice-st-gst-last-date-hindi.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-GST-C-096
   tag: r-gst-c
   collection: public
@@ -10451,12 +11805,13 @@ documents:
   format: pdf
   title: Shifting of Office Address(English)
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2017-04-26'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/public-notice-st-new-address-eng.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-GST-C-097
   tag: r-gst-c
   collection: public
@@ -10465,12 +11820,13 @@ documents:
   format: pdf
   title: Shifting of Office Address(Hindi)
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2017-04-26'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/public-notice-st-new-address-hindi.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-GST-C-098
   tag: r-gst-c
   collection: public
@@ -10479,12 +11835,13 @@ documents:
   format: pdf
   title: Sectoral Groups on GST - Contact details (As on June 14, 2017)
   publisher: cbic-gst.gov.in
-  effective_from: null
+  effective_from: '2017-06-14'
   superseded_by: null
   source_url: https://cbic-gst.gov.in/pdf/sectoral-working-gp-contactdtls-14june2017.pdf
   source: 9
   applies_to: all
   method: script
+  date_source: pdf_metadata
 - doc_id: R-GST-C-099
   tag: r-gst-c
   collection: public
@@ -11165,6 +12522,94 @@ documents:
   applies_to: all
   method: script
   date_source: pdf_metadata
+- doc_id: R-TAX-C-001
+  tag: r-tax-c
+  collection: public
+  jurisdiction: IN
+  legal_basis: L3
+  format: html
+  title: PENDING
+  publisher: PENDING
+  effective_from: null
+  superseded_by: null
+  source_url: https://www.incometaxindia.gov.in/
+  source: 10
+  applies_to: all
+  method: manual
+- doc_id: R-SIDBI-P-010
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Punjabi
+  publisher: www.sidbi.in
+  effective_from: '2022-10-04'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Punjabi.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-011
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Telugu
+  publisher: www.sidbi.in
+  effective_from: '2022-10-10'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME%20Report_August%202022_Telugu.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-012
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Gujarati
+  publisher: www.sidbi.in
+  effective_from: '2021-04-09'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME-2021-Final-Gujarati.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-SIDBI-P-039
+  tag: r-sidbi-p
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: pdf
+  title: Hindi
+  publisher: www.sidbi.in
+  effective_from: '2021-03-26'
+  superseded_by: null
+  source_url: https://www.sidbi.in/head/uploads/msmepluse_documents/MSME-2021-Final-Hindi.pdf
+  source: 11
+  applies_to: all
+  method: script
+  date_source: pdf_metadata
+- doc_id: R-MSME-G-005
+  tag: r-msme-g
+  collection: public
+  jurisdiction: IN
+  legal_basis: L4
+  format: html
+  title: PENDING
+  publisher: PENDING
+  effective_from: null
+  superseded_by: null
+  source_url: https://udyamregistration.gov.in/
+  source: 7
+  applies_to: all
+  method: manual
 hosts:
   bandhan.bank.in:
     terms_url: null
@@ -11214,6 +12659,14 @@ hosts:
     terms_url: null
     terms_note: null
     automated_access: unknown
+  investkarnataka.co.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  midc.maharashtra.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
   msme.gov.in:
     terms_url: null
     terms_note: null
@@ -11251,6 +12704,10 @@ hosts:
     terms_note: null
     automated_access: unknown
   sbi.co.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  scr.sci.gov.in:
     terms_url: null
     terms_note: null
     automated_access: unknown

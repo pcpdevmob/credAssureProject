@@ -57,8 +57,10 @@ person-centric features: no extraction or indexing of party names as entities, n
 Judgments are L2 (Copyright Act s.52(1)(q)(iv)).
 
 ### Ingestion safety
-- **Size:** at most 20 MB per file. A script download is streamed and abandoned past the limit
-  (`rejected_too_large`, nothing stored). The same limit applies to files imported by hand.
+- **Size:** a script download is streamed and abandoned past 100 MB (`rejected_too_large`, nothing stored), because
+  the script holds the response in memory. Files saved and imported by hand have no size limit: they are already on
+  disk and a person chose them. (Amended 2026-11-14 at the owner's request; was 20 MB for both, which blocked real
+  state-policy and GST documents.)
 - **Text extraction:** pypdf only, at most 500 pages, with no rendering, no OCR and no external converters. HTML is
   parsed with the standard-library parser, and scripts and styles are dropped.
 - **Quarantine:** files rejected for having no text layer are kept in `data/corpus/quarantine/` for the audit trail and

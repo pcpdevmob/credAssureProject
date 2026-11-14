@@ -71,7 +71,8 @@ RULES = [
     "",
     "- Relevant to MSME credit, credit guarantees, KFS / loan disclosure, interest rates, payments to MSEs or GST on loan fees.",
     "- Not already in the manifest (import rejects a file whose SHA-256 matches another document).",
-    "- One file of at most 20 MB, with a text layer (scans are rejected; there is no OCR).",
+    "- One file with a text layer (scans are rejected; there is no OCR).",
+    "- English text only: Hindi- or Marathi-only documents are not used (the copilot answers in English).",
     "- CGTMSE replacements: prefer text-layer circulars from 2015 onward.",
     "- **RBI pages (rows marked HTML, listed first):** save the page in the browser as *Web page, HTML only* to",
     "  `data/corpus/raw/<doc_id>.html`. Do not look for the PDF: HTML always has text, so it can never be rejected as a scan.",
@@ -595,9 +596,11 @@ def manual_markdown(
         lines.append("")
     lines += hosts_missing_terms(manifest, lock)
     if rejected:
-        lines += ["## Rejected (no text layer; replacement slots listed above)", ""]
-        lines += [f"- {d['doc_id']}: {d['source_url']}" for d in rejected]
-        lines.append("")
+        lines += [
+            f"**{len(rejected)} documents were rejected as scans (no text layer) and are not listed, "
+            "so nobody downloads them again.** Each has a replacement slot above.",
+            "",
+        ]
     return "\n".join(lines)
 
 

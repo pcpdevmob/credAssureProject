@@ -37,13 +37,14 @@ sources:
   - id: 3
     name: RBI FAQs, lending-rate releases (24 months), MSME press releases, Bulletin/Annual Report chapters
     prefix: R-RBI-FAQ
-    target: 36
+    target: 14
     basis: L4
     applies_to: all
     jurisdiction: [IN]
     agents: [LendWise, WC, Copilot]
     method: manual
-    index_urls: ["https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84", "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx"]
+    index_urls: ["https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84"]
+    note: "monthly Lending and Deposit Rates releases dropped 2026-11-14 (target 36 -> 14): the press-release archive is a form with no stable per-release link, and repeated saves captured the archive list. Reference rates come from data/reference/reference_rates.yaml (R-RATE-02)."
   - id: 4
     name: CGTMSE circulars, scheme guidelines, fee pages
     prefix: R-CG-C
@@ -87,6 +88,7 @@ sources:
     note: "TLS certificate chain error on 2026-11-05; never bypassed"
   - id: 7
     name: Ministry of MSME annual reports and scheme guidelines; Udyam and MSME Samadhaan FAQs
+    manual_recipe: "Replacement for a dead link (the Udyam reverse-graduation circular now redirects to FileNotFound). Pick one English, text-layer PDF linked from the Udyam site (https://udyamregistration.gov.in/, Important to know / circulars and notifications), e.g. a circular on Udyam classification, Udyam Assist or MSME status; or an English Ministry of MSME scheme guideline. Save it in a browser as raw/R-MSME-G-NNN.pdf and fill title, source_url (the PDF itself) and effective_from."
     prefix: R-MSME-G
     target: 9
     basis: L4
@@ -131,6 +133,7 @@ sources:
     link_pattern: '(?:/sites/default/files/\d{4}-\d{2}/|(?:^|/)pdf/)[^"]+\.pdf'
   - id: 10
     name: CBDT on s.43B(h) and Income-tax Act 2025 s.37(2)(g); relevant Act chapters
+    manual_recipe: "Replacement for a rejected scan (the MSME Samadhaan copy of the MSMED Act 2006 has no text layer). Preferred: a text-layer PDF of the full Micro, Small and Medium Enterprises Development Act, 2006 from India Code (https://www.indiacode.nic.in/, search the Act title and save the Act PDF). Otherwise: a CBDT circular or FAQ on section 43B(h) / Income-tax Act 2025 section 37(2)(g) from https://www.incometaxindia.gov.in/ (Communications > Circulars). Save in a browser; both hosts are manual only (ADR 0020)."
     prefix: R-TAX-C
     target: 3
     basis: L3
@@ -182,7 +185,7 @@ sources:
     include_index: ["https://indianbank.bank.in/en/processing-fees/charges-for-loan-products"]
   - id: 14
     name: Lok Sabha / Rajya Sabha answers on MSME credit, CGTMSE, TReDS, delayed payments
-    manual_recipe: "sansad.in Questions and Answers (Lok Sabha: https://sansad.in/ls/questions/questions-and-answers ; Rajya Sabha: https://sansad.in/rs/questions/questions-and-answers): filter Ministry = Micro, Small and Medium Enterprises or Finance, sessions 2024-2026, and search the subject for MSME credit, CGTMSE, TReDS, delayed payment, Samadhaan or Udyam. Open each answer and save its PDF; one answer per row."
+    manual_recipe: "sansad.in Questions and Answers (Lok Sabha: https://sansad.in/ls/questions/questions-and-answers ; Rajya Sabha: https://sansad.in/rs/questions/questions-and-answers): the filters take numbers, not years. Lok Sabha: set Lok Sabha = XVIII (18th, constituted June 2024) and go through its sessions from I upward. Rajya Sabha: set the session to each one held from June 2024 onward (check the session dates shown on the page). Skip any answer dated after 15 Nov 2026 (AS_OF_DATE). On both sites filter Ministry = Micro, Small and Medium Enterprises or Finance, and search the subject for MSME credit, CGTMSE, TReDS, delayed payment, Samadhaan or Udyam. Open each answer and save its PDF; one answer per row."
     prefix: R-SANSAD
     target: 25
     basis: L4
@@ -194,7 +197,7 @@ sources:
     note: "sansad.in is a JavaScript app with no HTML listing, so manual"
   - id: 15
     name: Supreme Court and High Court judgments on the MSMED Act
-    manual_recipe: "Start with the MSME Samadhaan list of Supreme Court judgments on delayed payment (https://samadhaan.msme.gov.in/OrderDocument.aspx) and save each linked judgment PDF as its own row. For more, use the Supreme Court judgment search (sci.gov.in, by free text 'MSMED Act' / 'Facilitation Council', years 2015-2026; a person may solve the CAPTCHA, a script may not) and save the official judgment PDF. Legal points only (ADR 0020)."
+    manual_recipe: "Do not use the sci.gov.in judgment-date search; it only covers 30 days per search. Search by keyword instead, one CAPTCHA per search, solved by a person (ADR 0020). Supreme Court: https://scr.sci.gov.in/ (Digital SCR) with the phrase 'Micro, Small and Medium Enterprises Development Act', then 'Facilitation Council', then 'section 18' AND 'MSMED'. High Courts: https://judgments.ecourts.gov.in/ with the same phrases. Keep judgments dated 2015-2026 that decide a point on delayed payment, section 15/16 interest, a section 18 reference or arbitration, or the section 19 pre-deposit; skip orders that only list or adjourn a case. Save the official judgment PDF as raw/R-JUD-NNN.pdf and fill title (<parties>, <court>, <date>), source_url and effective_from. Well-known starting points to confirm in the search before saving: Silpi Industries v. Kerala SRTC (SC, 2021); Gujarat State Civil Supplies Corp. v. Mahakali Foods (SC, 2022); Jharkhand Urja Vikas Nigam v. State of Rajasthan (SC, 2021); Shanti Conductors v. Assam SEB (SC, 2019). The sites show a CAPTCHA when searches come quickly: space them out and save a few judgments per sitting; the source 15 target of 25 is close to met, so extra judgments are optional. Legal points only (ADR 0020)."
     prefix: R-JUD
     target: 25
     basis: L2
@@ -202,10 +205,11 @@ sources:
     jurisdiction: [IN]
     agents: [Copilot]
     method: manual
-    index_urls: ["https://www.sci.gov.in/judgements-judgement-date/"]
+    index_urls: ["https://scr.sci.gov.in/", "https://judgments.ecourts.gov.in/"]
+    note: "sci.gov.in judgment-date search covers only 30 days per search (owner report, 2026-11-14); keyword search on Digital SCR / eCourts replaces it"
   - id: 16
     name: State MSME/industrial policies - Maharashtra (home) and other states (KR-04 distractors)
-    manual_recipe: "Maharashtra (home, IN-MH): the Industries Department site di.maharashtra.gov.in does not respond; find the Maharashtra Industrial Policy 2019 or current MSME policy on an official Maharashtra site (maharashtra.gov.in Government Resolutions, MIDC midc.maharashtra.gov.in) and save the PDF. Karnataka (IN-KA): save the Karnataka Industrial Policy PDF from the Karnataka Commerce and Industries department site. Set jurisdiction accordingly."
+    manual_recipe: "Maharashtra (home, IN-MH): di.maharashtra.gov.in refuses connections; use the MIDC policy page https://midc.maharashtra.gov.in/industrial-policies-and-incentives/ (Industrial Policy 2019 and the 2025 Industries, Investment and Services Policy PDFs). Karnataka (IN-KA): kum.karnataka.gov.in does not resolve; save the Industrial Policy 2025-30 PDF from https://investkarnataka.co.in/. Set jurisdiction accordingly. Maharashtra GRs and MIDC policies are often Marathi only; save English versions only (Marathi is excluded)."
     prefix: R-STATE
     target: 6
     basis: L4
@@ -213,5 +217,5 @@ sources:
     jurisdiction: [IN-MH, IN-MH, IN-MH, IN-MH, IN-MH, IN-GJ, IN-GJ, IN-GJ, IN-KA, IN-KA, IN-KA, IN-TN, IN-TN, IN-TN, IN-UP, IN-UP, IN-UP, IN-TS, IN-TS, IN-TS]
     agents: [Copilot]
     method: manual
-    index_urls: ["https://di.maharashtra.gov.in/"]
-    note: "di.maharashtra.gov.in refused connections on 2026-11-05; other states' industries department sites are found by the owner"
+    index_urls: ["https://midc.maharashtra.gov.in/industrial-policies-and-incentives/"]
+    note: "di.maharashtra.gov.in refused connections on 2026-11-05 and 2026-11-11 (MH policies moved to MIDC); other states' industries department sites are found by the owner"

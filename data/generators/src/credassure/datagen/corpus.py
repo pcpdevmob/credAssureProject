@@ -51,14 +51,21 @@ REQUIRED = (
 )
 OK = {"ok", "ok_manual"}
 DROPPED = frozenset(
-    {"rejected_no_text", "skipped_pre_2015", "rejected_too_large"}
+    {
+        "rejected_no_text",
+        "skipped_pre_2015",
+        "rejected_too_large",
+        "rejected_duplicate",
+        "rejected_language",
+        "rejected_dead_link",
+    }
 )  # never counted, never manual work
 PENDING = "PENDING"
 MAX_DOCUMENTS = 2_000
 MAX_PAGES = 500  # text extraction reads at most this many PDF pages (ADR 0020 ingestion safety)
 BLOCK_STATUS = {403, 418, 429, 444}  # permanent: never retried
 RETRY_STATUS = {502, 503, 504}  # transient: one retry no sooner than 24 h (ADR 0019)
-MAX_RAW_BYTES = 20 * 1024 * 1024
+MAX_SCRIPT_BYTES = 100 * 1024 * 1024  # script downloads only; hand imports have no limit (ADR 0020)
 CHALLENGE = ("captcha", "cf-chl", "access denied", "request unsuccessful", "are you a robot")
 MIN_PDF_TEXT = 200  # fewer characters means a scan with page numbers only, not a text layer
 EXTENSIONS = {".pdf": "pdf", ".html": "html", ".htm": "html"}
@@ -198,7 +205,7 @@ class Gate:
 
     def get(self, url: str, form: dict[str, str] | None = None) -> httpx.Response | str:
         """GET ``url``, or submit the page's own HTML form fields (``form``) by POST. The body is
-        streamed and abandoned past MAX_RAW_BYTES ("too_large")."""
+        streamed and abandoned past MAX_SCRIPT_BYTES ("too_large")."""
         host = urlsplit(url).hostname or ""
         if host in self.manual_hosts:
             return "manual_host"
@@ -235,12 +242,12 @@ class Gate:
         method = "POST" if form else "GET"
         with self.client.stream(method, url, data=form) as response:
             declared = int(response.headers.get("content-length") or 0)
-            if declared > MAX_RAW_BYTES:
+            if declared > MAX_SCRIPT_BYTES:
                 return "too_large"
             body = bytearray()
             for chunk in response.iter_bytes():
                 body += chunk
-                if len(body) > MAX_RAW_BYTES:
+                if len(body) > MAX_SCRIPT_BYTES:
                     return "too_large"
             return httpx.Response(
                 response.status_code,
@@ -319,7 +326,7 @@ def download(
                 "robots_disallowed": "robots_disallowed",
                 "too_large": "rejected_too_large",
             }.get(response, "pending_manual")
-            reason = "larger than 20 MB, not stored" if response == "too_large" else response
+            reason = "larger than 100 MB, not stored" if response == "too_large" else response
             lock[doc_id] = {**base, "status": status, "reason": reason}
         elif response.status_code != 200:
             lock[doc_id] = {
@@ -371,22 +378,16 @@ def import_raw(
                 "in manifest.yaml first"
             )
             continue
-        if path.stat().st_size > MAX_RAW_BYTES:
-            errors.append(f"{path.name}: larger than 20 MB; pick a smaller document")
-            continue
         body = path.read_bytes()
         digest = hashlib.sha256(body).hexdigest()
+        current = lock.get(path.stem, {})
+        if current.get("status") in OK and current.get("sha256") == digest:
+            continue  # already imported, unchanged
         twin = next(
             (k for k, v in lock.items() if k != path.stem and v.get("sha256") == digest), None
         )
         if twin is not None:
             errors.append(f"{path.name}: duplicate of {twin}; pick a different document")
-            continue
-        current = lock.get(path.stem, {})
-        if (
-            current.get("status") in OK
-            and current.get("sha256") == hashlib.sha256(body).hexdigest()
-        ):
             continue
         record = {
             "source_url": doc["source_url"],

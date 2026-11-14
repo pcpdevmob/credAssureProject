@@ -39,9 +39,19 @@ COLUMNS = [
     "applies_to",
     "effective_from",
     "date_source",
+    "downloaded",
+    "agent_name",
 ]
-WIDTHS = [18, 60, 9, 60, 26, 9, 11, 11, 7, 12, 16, 14, 13]
+WIDTHS = [18, 60, 9, 60, 26, 9, 11, 11, 7, 12, 16, 14, 13, 11, 16]
 OWNERS = [f"[Name {i}]" for i in range(1, 7)]
+# Owner -> agent they own (BRD §5.2, docs/build/REPO_STRUCTURE.md ownership table)
+OWNER_AGENT = dict(
+    zip(
+        OWNERS,
+        ["Supervisor", "Onboarding", "Working Capital", "LendWise", "Critic", "Copilot"],
+        strict=True,
+    )
+)
 TARGET = 500  # BRD §15 G2: at least 500 documents indexed
 FIXED_TIME = datetime(2026, 1, 1)  # document properties are fixed so the file is byte-stable
 FONT = "Arial"
@@ -86,6 +96,9 @@ def rows(
                 "applies_to": d["applies_to"],
                 "effective_from": d.get("effective_from") or "",
                 "date_source": d.get("date_source") or "",
+                # file in hand and accepted (text layer present); pending/rejected are not downloaded
+                "downloaded": "No" if export_status(raw) in {"pending", "rejected"} else "Yes",
+                "agent_name": OWNER_AGENT.get(record.get("owner", ""), ""),
             }
         )
     return out

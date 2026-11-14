@@ -102,7 +102,7 @@ def test_ADR0020_audit_rejects_invalid_access_value(entry: Callable[..., dict[st
 def test_ADR0020_oversize_download_is_refused_and_not_stored(
     tmp_path: Path, entry: Callable[..., dict[str, Any]], monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    monkeypatch.setattr(corpus, "MAX_RAW_BYTES", 100)
+    monkeypatch.setattr(corpus, "MAX_SCRIPT_BYTES", 100)
 
     def handler(request: httpx.Request) -> httpx.Response:
         if request.url.path == "/robots.txt":
