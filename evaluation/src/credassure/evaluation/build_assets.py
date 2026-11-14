@@ -32,11 +32,9 @@ def queries() -> list[dict[str, Any]]:
     )
     sfb_int, ucb_int, sfb_cf = doc("id=13117"), doc("id=13022"), doc("id=13124")
     gj, ts = doc("Viksit-Gujarat"), doc("MSME%20Policy%20Booklet")
-    mh = next(
-        d["doc_id"]
-        for d in MANIFEST["documents"]
-        if d["source"] == 16 and d["jurisdiction"] == "IN-MH"
-    )
+    # Home-state policy (Q27): R-STATE-005 (2025 policy) was rejected as Marathi-only, so the label is
+    # the English 2019 Industrial Policy and its Package Scheme of Incentives (both IN-MH, on main).
+    mh = ["R-STATE-015", "R-STATE-014"]
     rows: list[tuple[str, list[str], str, list[str]]] = [
         (
             "How is the CGTMSE guarantee fee calculated after April 2025?",
@@ -135,13 +133,13 @@ def queries() -> list[dict[str, Any]]:
         ("benefits of Udyam registration", [doc("Benefits_of_UR.pdf")], "benefits", []),
         (
             "MSMED Act delayed payment Supreme Court judgments",
-            [doc("OrderDocument.aspx")],
+            ["R-JUD-001"],  # URL changed to scr.sci.gov.in; id pinned
             "judgments list",
             [],
         ),
         (
             "Maharashtra MSME industrial policy incentives",
-            [mh],
+            mh,
             "home state policy (manual recipe slot)",
             [gj, ts],
         ),
@@ -184,12 +182,37 @@ def queries() -> list[dict[str, Any]]:
             "id": f"Q{n:02d}",
             "query": q,
             "relevant_doc_ids": docs,
+            "relevant_sections": [
+                {"doc_id": d, "section_path": path}
+                for d in docs
+                for path in SECTIONS.get(f"Q{n:02d}", {}).get(d, [""])
+            ],
             "section_hint": hint,
             "must_not_cite": bad,
             "filters": FILTERS,
         }
         for n, (q, docs, hint, bad) in enumerate(rows, start=1)
     ]
+
+
+# Section labels (DATA_SPEC §7), read off the section chunker (CHUNKER_VERSION 3) and checked against the
+# text on 2026-11-14. A label matches the start of a passage's section_path or of one of its " > "
+# segments. A document not listed here is labelled "" (any section): it has no internal headings, or
+# the question asks about the document as a whole. Drafted in Phase 7; a non-copilot owner confirms
+# them before the G1 freeze.
+SECTIONS: dict[str, dict[str, list[str]]] = {
+    "Q01": {"R-CG-02": ["1. How is this guarantee scheme operated"]},
+    "Q05": {"R-GST-01": ["15 Heading 9971"]},
+    "Q06": {"R-GST-02": ["27 Heading 9971"]},
+    "Q07": {"R-RBI-03": ["Chapter III - Benchmark", "Chapter IV - Other aspects of lending rates"]},
+    "Q08": {"R-RBI-02": ["Annex XIII", "Chapter VIII \u2013 Responsible Lending Conduct"]},
+    "Q09": {"R-RBI-02": ["Annex XIII", "Chapter I \u2013 Preliminary"]},
+    "Q10": {"R-MSME-02": ["1. In the said notification in paragraph 1"]},
+    "Q13": {"R-TAX-01": ["5. Hindu undivided"]},  # s.37(2)(g) sits under this noisy PDF heading
+    "Q14": {"R-RBI-FAQ-003": ["1. What is TReDS"]},
+    "Q19": {"R-RBI-02": ["Chapter VIII \u2013 Responsible Lending Conduct"]},
+    "Q35": {"R-DPDP-01": ["PENALTIES AND ADJUDICATION", "Schedule"]},
+}
 
 
 def redteam() -> list[dict[str, Any]]:

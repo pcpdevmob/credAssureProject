@@ -1,0 +1,92 @@
+"""`make ingest`: index data/corpus (real, ADR 0019) and data/frozen/v1 (synthetic KFS + policies).
+
+Reads its configuration from the environment like `make llm-probe` (packages never import the
+gateway's Settings): EMBED_BASE_URL, EMBED_MODEL, EMBED_API_KEY (else LLM_API_KEY for the same
+host), CORPUS_DB, CASE_DB (audit), CHROMA_PATH, EMBED_CACHE_PATH, EMBED_RATE_PER_MINUTE, TENANT_ID.
+"""
+
+import os
+import sys
+from collections.abc import Mapping
+from pathlib import Path
+from urllib.parse import urlparse
+
+from credassure.ledger import migrate
+from credassure.ledger.session import case_engine
+from credassure.ledger.store import SqlLedger
+from credassure.llm.cache import ResponseCache
+from credassure.llm.embed import OpenAIEmbedder
+from credassure.llm.resilience import RateLimiter
+from credassure.retrieval.index import ingest, open_chroma
+from credassure.retrieval.sources import load_corpus
+
+TARGET_REAL = 500  # BRD G2
+LOCAL_EMBED = ("http://localhost:11434/v1", "nomic-embed-text")  # ADR 0017 default, as .env.example
+
+
+def embed_target(env: Mapping[str, str]) -> tuple[str, str]:
+    return env.get("EMBED_BASE_URL") or LOCAL_EMBED[0], env.get("EMBED_MODEL") or LOCAL_EMBED[1]
+
+
+def endpoint(url: str) -> str:
+    """Scheme and host only: never print credentials or query strings from a URL."""
+    p = urlparse(url)
+    return f"{p.scheme}://{p.hostname}" + (f":{p.port}" if p.port else "")
+
+
+def api_key(env: Mapping[str, str], url: str) -> str | None:
+    """EMBED_API_KEY, else LLM_API_KEY only when embeddings go to the same host as the model."""
+    same = urlparse(url).hostname == urlparse(env.get("LLM_BASE_URL", "")).hostname
+    return env.get("EMBED_API_KEY") or (env.get("LLM_API_KEY") if same else None)
+
+
+def embedder(env: Mapping[str, str]) -> OpenAIEmbedder:
+    url, model = embed_target(env)
+    return OpenAIEmbedder(
+        url,
+        api_key(env, url),
+        model,
+        limiter=RateLimiter(float(env.get("EMBED_RATE_PER_MINUTE", "600"))),
+        cache=ResponseCache(env.get("EMBED_CACHE_PATH", "var/embed_cache.db")),
+    )
+
+
+def paths(env: Mapping[str, str]) -> tuple[Path, Path, Path]:
+    return (
+        Path(env.get("CORPUS_DB", "var/corpus.db")),
+        Path(env.get("CASE_DB", "var/case.db")),
+        Path(env.get("CHROMA_PATH", "var/chroma")),
+    )
+
+
+def main(env: Mapping[str, str] = os.environ) -> int:
+    corpus_db, case_db, chroma_path = paths(env)
+    migrate.upgrade("corpus", corpus_db)
+    migrate.upgrade("case", case_db)
+    ledger = SqlLedger(case_engine(case_db), env.get("TENANT_ID", "default"), actor="ingest")
+    url, model = embed_target(env)
+    print(f"ingest: embeddings from {model} at {endpoint(url)}", file=sys.stderr)
+    docs = load_corpus(Path.cwd())
+    summary = ingest(
+        docs,
+        corpus_db=corpus_db,
+        chroma=open_chroma(chroma_path),
+        embed=embedder(env),
+        embed_model=model,
+        audit=ledger.audit,
+        progress=lambda line: print(line, file=sys.stderr, flush=True),
+    )
+    print(
+        f"ingest: {summary.real} real + {summary.synthetic} synthetic documents; "
+        f"{summary.indexed} indexed, {summary.unchanged} unchanged, {summary.removed} removed; "
+        f"chunks {summary.chunks}; {summary.flagged_docs} documents with injection-flagged chunks"
+    )
+    if summary.real < TARGET_REAL:
+        print(
+            f"ingest: WARNING {summary.real} real documents < {TARGET_REAL} (G2)", file=sys.stderr
+        )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

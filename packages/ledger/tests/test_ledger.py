@@ -370,3 +370,36 @@ def test_APR04_a_final_decision_cannot_be_reopened_by_rerouting(engine: Engine) 
         )
     with pytest.raises(writes.ConflictError, match="REJECTED"), session.transaction(engine) as s:
         writes.route_case(s, tenant_id=T, case_id="CA-2026-0001", route="vp_finance", actor="x")
+
+
+def test_SUP08_new_case_ids_start_after_the_seeded_ones_across_tenants(tmp_path: Path) -> None:
+    from credassure.core.seeded import SEEDED_CASE_MAX
+
+    frozen = Path(__file__).resolve().parents[3] / "data" / "frozen" / "v1" / "cases"
+    highest = max(int(p.name.rsplit("-", 1)[1]) for p in frozen.glob("CA-2026-*"))
+    assert SEEDED_CASE_MAX[2026] == highest  # the table tracks the frozen data
+
+    db = tmp_path / "case.db"
+    migrate.upgrade("case", db)
+    engine = session.case_engine(db)
+    with session.transaction(engine) as s:
+        first = writes.next_case_id(s, tenant_id="default", year=2026)
+        assert first == f"CA-2026-{highest + 1:04d}"
+        assert writes.next_case_id(s, tenant_id="default", year=2027) == "CA-2027-0001"
+    with session.transaction(engine) as s:  # IDs are a global key: another tenant's case counts
+        writes.add_user(
+            s, user_id="u-o", tenant_id="other", username="o", role="preparer", password_hash="x"
+        )
+        writes.create_case(
+            s,
+            tenant_id="other",
+            case_id="CA-2026-0040",
+            msme_name="m",
+            order_ref="o",
+            order_value_paise=1,
+            indicative_amount_paise=1,
+            due_date=date(2027, 1, 1),
+            preparer_id="u-o",
+        )
+    with session.transaction(engine) as s:
+        assert writes.next_case_id(s, tenant_id="default", year=2026) == "CA-2026-0041"

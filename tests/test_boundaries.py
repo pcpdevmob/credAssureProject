@@ -15,3 +15,19 @@ def test_web_does_not_call_fetch_directly() -> None:
         if "fetch(" in path.read_text(encoding="utf-8"):
             offenders.append(str(path.relative_to(ROOT)))
     assert offenders == []
+
+
+def test_chroma_runs_embedded_only() -> None:
+    """The accepted chromadb advisories (docs/security/risk-register.md) are all in Chroma's HTTP
+    server. Keep that true: no Compose service runs a Chroma server, no code opens an HTTP client.
+    """
+    compose = "\n".join(p.read_text(encoding="utf-8") for p in (ROOT / "deploy").rglob("*.y*ml"))
+    assert "chroma" not in compose.lower()
+    code = [
+        str(p.relative_to(ROOT))
+        for top in ("apps", "agents", "packages", "evaluation")
+        for p in (ROOT / top).rglob("*.py")
+        if ".venv" not in p.parts
+        and any(s in p.read_text(encoding="utf-8") for s in ("HttpClient(", "AsyncHttpClient("))
+    ]
+    assert code == []

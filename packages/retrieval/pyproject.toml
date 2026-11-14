@@ -4,7 +4,16 @@ version = "0.1.0"
 description = "Ingestion and search. Empty until Phase 7."
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "chromadb>=1.0",
+    "credassure-ledger",
+    "credassure-llm",
+    "credassure-security",
+    "pyyaml>=6",
+]
 
+[project.optional-dependencies]
+rerank = [
+    "sentence-transformers>=3.3",
 ]
 
 [build-system]
@@ -13,3 +22,8 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/credassure"]
+
+[tool.uv.sources]
+credassure-security = { workspace = true }
+credassure-ledger = { workspace = true }
+credassure-llm = { workspace = true }

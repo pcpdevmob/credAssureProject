@@ -13,6 +13,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import StaleDataError
 
+from credassure.core.seeded import SEEDED_CASE_MAX
 from credassure.security.auth import DECIDABLE, may_decide_route
 
 from .chain import GENESIS, canonical, hashed_fields, row_hash
@@ -412,12 +413,17 @@ def update_job(
 
 
 def next_case_id(s: Session, *, tenant_id: str, year: int) -> str:
-    """CA-YYYY-NNNN, allocated inside the caller's BEGIN IMMEDIATE transaction (no race)."""
+    """CA-YYYY-NNNN, allocated inside the caller's BEGIN IMMEDIATE transaction (no race).
+
+    `cases.id` is a global key, so the counter spans every tenant (`tenant_id` is kept for the
+    caller's audit trail), and it starts after the highest seeded synthetic case: a live case never
+    shares an ID with a seeded case or that case's synthetic KFS documents (SUP-08, BR-14).
+    """
+    del tenant_id
     prefix = f"CA-{year}-"
-    last = s.scalar(
-        select(func.max(Case.id)).where(Case.tenant_id == tenant_id, Case.id.like(prefix + "%"))
-    )
-    return f"{prefix}{(int(last.rsplit('-', 1)[1]) if last else 0) + 1:04d}"
+    last = s.scalar(select(func.max(Case.id)).where(Case.id.like(prefix + "%")))
+    used = int(last.rsplit("-", 1)[1]) if last else 0
+    return f"{prefix}{max(used, SEEDED_CASE_MAX.get(year, 0)) + 1:04d}"
 
 
 def store_case_file(

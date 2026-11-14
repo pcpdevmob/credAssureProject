@@ -5,6 +5,7 @@ description = "Eval harness, gold and baselines. Does not import the engines."
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "credassure-llm",
+    "credassure-retrieval",
     "httpx>=0.27",
     "numpy-financial>=1.0",
     "pyyaml>=6.0",
@@ -12,6 +13,7 @@ dependencies = [
 
 [tool.uv.sources]
 credassure-llm = { workspace = true }
+credassure-retrieval = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

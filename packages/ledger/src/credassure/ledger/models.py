@@ -293,6 +293,10 @@ class Document(CorpusBase):
     sha256: Mapped[str | None] = mapped_column(String(64))
     license_note: Mapped[str | None] = mapped_column(Text)
     case_id: Mapped[str | None] = mapped_column(String(16), index=True)  # KFS only
+    legal_basis: Mapped[str | None] = mapped_column(String(4))  # L1-L5 (ADR 0019)
+    tenant_id: Mapped[str | None] = mapped_column(String(64))  # with case_id: KFS of that case only
+    # text sha256 : chunker version : embed model; ingest skips a document whose key is unchanged
+    index_version: Mapped[str | None] = mapped_column(String(160))
 
 
 class Chunk(CorpusBase):
