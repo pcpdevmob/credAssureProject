@@ -3,8 +3,12 @@
 Applied before every model call and to every reply (llm client), to logs (`set_redactor`), to the
 Langfuse mask, and to human free text before it is stored (approver comments, chat).
 
-Aadhaar is redacted only when the 12 digits pass the Verhoeff check, so 12-digit amounts and
-references survive. Account numbers need an account keyword within 20 characters.
+Aadhaar is redacted only when it is `XXXX XXXX XXXX` or 12 contiguous digits, starts 2-9 and
+passes the Verhoeff check, so 12-digit amounts and references survive. A number in money context
+(₹/Rs/INR before it, Indian comma grouping, a `/-` suffix or a decimal part) is never masked as
+Aadhaar, phone or account. Redact free text only; never engine outputs or ledger fields
+(import-linter forbids engines and ledger from importing this module).
+Account numbers need an account keyword within 20 characters.
 Known ceiling: the IFSC shape (4 letters, 0, 6 alphanumerics) also matches IDs like `INVC0000123`,
 so redact free text and model I/O, never structured case files.
 The PHONE shape also matches a bare 10-digit figure starting 6-9 (₹60 crore and up in plain
@@ -59,7 +63,23 @@ def verhoeff_digit(digits: str) -> str:
     return str(_INV[_checksum(digits, 1)])
 
 
-_AADHAAR = re.compile(r"(?<![\d-])[2-9]\d{3}([ -]?)\d{4}\1\d{4}(?![\d-])")
+_AADHAAR = re.compile(r"(?<![\d-])[2-9]\d{3}( ?)\d{4}\1\d{4}(?![\d-])")
+_CURRENCY_BEFORE = re.compile(r"(?:₹|\bRs\.?|\bINR)\s*$", re.IGNORECASE)
+_MONEY_AFTER = re.compile(r"\s*/-|\.\d|,\d")
+_NUMERIC = frozenset({"AADHAAR", "ACCOUNT", "PHONE"})
+
+
+def _is_money(text: str, start: int, end: int) -> bool:
+    """The digits at text[start:end] are a rupee amount, not an identifier."""
+    digits = re.search(r"\d", text[start:end])
+    first = start + digits.start() if digits else start
+    return bool(
+        _CURRENCY_BEFORE.search(text, 0, first)
+        or _MONEY_AFTER.match(text, end)
+        or text[first - 1 : first] == ","
+    )
+
+
 _PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("EMAIL", re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")),
     ("ACCOUNT", re.compile(r"(?i)\b(?:a/?c|acct|account)\b[^\d\n]{0,20}\d{9,18}\b")),
@@ -85,12 +105,12 @@ def find(text: str) -> list[Hit]:
         return all(b <= s or a >= e for s, e in taken)
 
     for m in _AADHAAR.finditer(text):
-        if verhoeff_valid(re.sub(r"\D", "", m.group())):
+        if verhoeff_valid(re.sub(r"\D", "", m.group())) and not _is_money(text, *m.span()):
             hits.append(Hit("AADHAAR", m.start(), m.end()))
             taken.append(m.span())
     for kind, pattern in _PATTERNS:
         for m in pattern.finditer(text):
-            if free(*m.span()):
+            if free(*m.span()) and not (kind in _NUMERIC and _is_money(text, *m.span())):
                 hits.append(Hit(kind, m.start(), m.end()))
                 taken.append(m.span())
     return sorted(hits, key=lambda h: h.start)

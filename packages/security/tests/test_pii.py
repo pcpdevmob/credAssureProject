@@ -1,8 +1,13 @@
 """PII redaction (NFR-07, ONB-06, VER-03): Aadhaar with Verhoeff, PAN, IFSC, account near a keyword,
 Indian mobile, email. Identifiers are generated here and never stored (RESOURCES §2)."""
 
-import pytest
+from decimal import Decimal
 
+import pytest
+from hypothesis import given, settings
+from hypothesis import strategies as st
+
+from credassure.core.money import format_inr
 from credassure.security import pii
 
 
@@ -27,7 +32,6 @@ def test_verhoeff_known_vector() -> None:
     [
         f"Aadhaar {GOOD}",
         f"my id is {GOOD[:4]} {GOOD[4:8]} {GOOD[8:]}",
-        f"{GOOD[:4]}-{GOOD[4:8]}-{GOOD[8:]}",
     ],
 )
 def test_valid_aadhaar_is_redacted(text: str) -> None:
@@ -113,3 +117,79 @@ def test_redact_value_walks_nested_data() -> None:
     data = {"note": "PAN ABCPE1234F", "items": ["a@b.in", 5], "n": None}
     out = pii.redact_value(data)
     assert out == {"note": "PAN [REDACTED_PAN]", "items": ["[REDACTED_EMAIL]", 5], "n": None}
+
+
+def test_dashed_aadhaar_shape_is_not_aadhaar() -> None:
+    # Only XXXX XXXX XXXX or 12 contiguous digits count; dashes read as a reference.
+    assert "AADHAAR" not in pii.redact(f"{GOOD[:4]}-{GOOD[4:8]}-{GOOD[8:]}")
+
+
+PHONE_LIKE = "6000000000"  # ₹600 crore in bare rupee digits; PHONE-shaped
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        f"₹{GOOD}",
+        f"₹ {GOOD}",
+        f"Rs. {GOOD}",
+        f"Rs{GOOD}",
+        f"INR {GOOD}",
+        f"{GOOD}/-",
+        f"{GOOD}.50",
+        f"1,{GOOD}",
+        f"{GOOD},00",
+        f"amount ₹{GOOD[:4]} {GOOD[4:8]} {GOOD[8:]}",
+        f"₹{PHONE_LIKE}",
+        f"Rs. {PHONE_LIKE}/-",
+        f"{PHONE_LIKE}.00",
+        f"A/C balance ₹{PHONE_LIKE}",
+    ],
+)
+def test_money_is_never_masked(text: str) -> None:
+    assert pii.find(text) == []
+
+
+def test_plain_aadhaar_still_masked_next_to_money() -> None:
+    out = pii.redact(f"paid ₹{GOOD}; Aadhaar {GOOD}")
+    assert out == f"paid ₹{GOOD}; Aadhaar [REDACTED_AADHAAR]"
+
+
+def _formats(paise: int, body12: str) -> list[str]:
+    rupees = Decimal(paise) / 100
+    whole = str(paise // 100)
+    lakh = (rupees / 100000).normalize()
+    crore = (rupees / 10000000).normalize()
+    return [
+        format_inr(rupees),
+        f"{format_inr(rupees)}/-",
+        f"Rs. {whole}",
+        f"Rs{whole}",
+        f"INR {whole}",
+        f"₹{whole}",
+        f"{whole}/-",
+        f"{whole}.{paise % 100:02d}",
+        f"{format_inr(rupees).lstrip('₹')}/-",
+        f"{lakh:f} lakh",
+        f"{lakh:f} lac",
+        f"{lakh:f}L",
+        f"{crore:f} crore",
+        f"{crore:f} Cr",
+        f"{crore:f} Cr.",
+        # Verhoeff-valid and phone-shaped bodies on purpose: the money context must win.
+        f"₹{body12}",
+        f"Rs. {body12}/-",
+        f"INR {body12}.00",
+        f"₹{body12[:10]}",
+    ]
+
+
+@settings(max_examples=1000, deadline=None)
+@given(
+    paise=st.integers(min_value=0, max_value=10**14),
+    body11=st.from_regex(r"[2-9][0-9]{10}", fullmatch=True),
+    pick=st.integers(min_value=0, max_value=18),
+)
+def test_property_rupee_amounts_are_never_masked(paise: int, body11: str, pick: int) -> None:
+    text = _formats(paise, aadhaar(body11))[pick]
+    assert pii.find(text) == [], text
