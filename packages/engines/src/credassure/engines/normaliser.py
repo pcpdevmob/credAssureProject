@@ -20,6 +20,11 @@ _LAKH = Decimal("100000")
 _HUNDRED = Decimal(100)
 _NUM = r"[0-9]{1,3}(?:,[0-9]{2})*,[0-9]{3}(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?"
 _UNIT = r"crores?|lakhs?|lacs?|cr\.?|l"
+# Indian suffixes: "₹1,42,00,000/-" (rupees only) and "12.50 % p.a." / "pa" / "per annum".
+_RUPEE_ONLY = r"(?:\s*/-)?"
+_PER_ANNUM = r"(?:\s*(?:p(?:\.\s?)?a\b\.?|per\s+annum\b))?"
+# A monthly or quarterly rate is not an annual one: the Critic must not match it (fail closed).
+_NOT_ANNUAL_RE = re.compile(r"\s*(?:p(?:\.\s?)?[mq]\b|per\s+(?:month|quarter)\b)", re.IGNORECASE)
 _MONTHS = r"jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec"
 _MONTH_NO = {name: i for i, name in enumerate(_MONTHS.split("|"), start=1)}
 
@@ -33,19 +38,21 @@ _MONEY_RE = re.compile(
         (?P<sign2>[\-\u2212])?
         (?P<num>{_NUM})
         (?:\s*(?P<unit>{_UNIT}))?
+        {_RUPEE_ONLY}
     )
     \s*$
     """,
     re.IGNORECASE | re.VERBOSE,
 )
 _PERCENT_RE = re.compile(
-    r"""
+    rf"""
     ^\s*
     (?P<body>
         (?P<sign>[\-\u2212])?
         (?P<num>[0-9]+(?:\.[0-9]+)?)
         \s*
         (?:%|percent|per\s+cent)
+        {_PER_ANNUM}
     )
     \s*$
     """,
@@ -83,11 +90,11 @@ _SCAN_RE = re.compile(
                    |[0-9]{{1,2}}(?P<sep>[-/.])[0-9]{{1,2}}(?P=sep)[0-9]{{4}}
                    |[0-9]{{1,2}}\s+(?:{_MONTHS})[a-z]*\.?,?\s+[0-9]{{4}})(?![0-9]))
       | (?P<pp>{_SIGN}[0-9]+(?:\.[0-9]+)?\s*(?:pp|percentage\s+points?)(?!\w))
-      | (?P<rate>{_SIGN}[0-9]+(?:\.[0-9]+)?\s*(?:%|percent(?!\w)|per\s+cent(?!\w)))
+      | (?P<rate>{_SIGN}[0-9]+(?:\.[0-9]+)?\s*(?:%|percent(?!\w)|per\s+cent(?!\w)){_PER_ANNUM})
       | (?P<money>{_SIGN}
             (?:(?:₹|Rs\.?|INR)\s*[\-\u2212]?(?:{_NUM})
                 (?:\s*(?:{_UNIT})(?![\w&])|{_END}{_NOT_RANGE}{_NO_OTHER_SCALE})
-              | (?:{_NUM})\s*(?:{_UNIT})(?![\w&])))
+              | (?:{_NUM})\s*(?:{_UNIT})(?![\w&])){_RUPEE_ONLY})
       | (?P<number>{_SIGN}(?:{_NUM}){_END})
     )
     """,
@@ -208,6 +215,8 @@ def find_all(text: str) -> list[Found]:
             with localcontext(MONEY):
                 value = Decimal(number) / _HUNDRED
             item = Parsed(value=value, start=start, end=end, raw=raw, kind="rate")
+        elif kind == "rate" and _NOT_ANNUAL_RE.match(text, end):
+            item = Parsed(value=raw, start=start, end=end, raw=raw, kind="unparsed")
         elif kind == "rate":
             item = _at(parse_rate(raw), start)
         elif kind == "money":

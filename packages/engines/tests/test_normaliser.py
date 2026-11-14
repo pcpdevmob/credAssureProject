@@ -296,3 +296,66 @@ def test_VER01_find_all_scales_lac_and_point_deltas() -> None:
     lacs, pp = find_all("₹142 lacs and 0.25 pp")
     assert lacs.value == Decimal("14200000")
     assert pp.value == Decimal("0.0025")
+
+
+# Indian CSV and KFS suffixes (E4 S1): "/-", Rs/INR, lac/L, Cr., "% p.a.".
+SUFFIX_MONEY = [
+    ("1,42,00,000/-", "14200000"),
+    ("₹1,42,00,000/-", "14200000"),
+    ("₹ 1,42,00,000 /-", "14200000"),
+    ("Rs. 1,42,00,000/-", "14200000"),
+    ("Rs 142 lakh", "14200000"),
+    ("Rs.1.42 Cr.", "14200000"),
+    ("INR 142 lac", "14200000"),
+    ("INR 1,42,00,000/-", "14200000"),
+    ("142L/-", "14200000"),
+    ("142 lacs/-", "14200000"),
+    ("1.42 crore /-", "14200000"),
+    ("1.42 Cr./-", "14200000"),
+    ("Rs 10,000/-", "10000"),
+    ("14200000/-", "14200000"),
+]
+SUFFIX_RATE = [
+    ("12.50 % p.a.", "0.125"),
+    ("12.50%p.a.", "0.125"),
+    ("12% pa", "0.12"),
+    ("12 % per annum", "0.12"),
+    ("12.5 percent per annum", "0.125"),
+    ("9.25 %  p.a", "0.0925"),
+    ("10.75% P.A.", "0.1075"),
+    ("18 %", "0.18"),
+]
+
+
+@pytest.mark.parametrize(("text", "expected"), SUFFIX_MONEY)
+def test_VER01_parse_money_indian_suffixes(text: str, expected: str) -> None:
+    assert parse_money(text).value == Decimal(expected)
+
+
+@pytest.mark.parametrize(("text", "expected"), SUFFIX_RATE)
+def test_VER01_parse_rate_indian_suffixes(text: str, expected: str) -> None:
+    assert parse_rate(text).value == Decimal(expected)
+
+
+@pytest.mark.parametrize("text", ["/-", "1,42,00,000/-/-", "12 p.a.", "p.a.", "12% p.a. p.a."])
+def test_VER01_suffixes_alone_or_doubled_fail_closed(text: str) -> None:
+    for parse in (parse_money, parse_rate):
+        with pytest.raises(ValueError):
+            parse(text)
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("need ₹1,42,00,000/- now", [("money", "₹1,42,00,000/-")]),
+        ("rate 12.50 % p.a. fixed", [("rate", "12.50 % p.a.")]),
+        ("at 12% per annum.", [("rate", "12% per annum")]),
+    ],
+)
+def test_VER01_find_all_spans_cover_suffixes(text: str, expected: list[tuple[str, str]]) -> None:
+    assert [(p.kind, p.raw) for p in find_all(text)] == expected
+
+
+@pytest.mark.parametrize("text", ["12% p.m.", "1.5 % per month", "3% p.q.", "2% pm"])
+def test_VER01_non_annual_rate_is_unparsed_not_read_as_annual(text: str) -> None:
+    assert [p.kind for p in find_all(text)] == ["unparsed"]
