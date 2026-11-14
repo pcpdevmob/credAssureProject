@@ -160,7 +160,9 @@ def test_ADR0019_manual_markdown_lists_pending_not_available(
     }
     text = manual_markdown(manifest, lock)
     assert "| B |" in text and "| A |" not in text
-    assert "## [Name 6]" in text and "rejected as scans" in text
+    assert (
+        text.count("\n## [Name ") == 1 and "rejected as scans" in text
+    )  # owners with nothing pending are skipped
     assert "Placeholder-selection rules" in text and "20 MB" not in text
     queued = manual_markdown({"documents": [entry(doc_id="Q")]}, {"Q": {"status": "pending"}})
     assert "| Q |" not in queued  # the script's download queue is not manual work

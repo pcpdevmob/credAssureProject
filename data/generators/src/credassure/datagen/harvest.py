@@ -564,6 +564,8 @@ def manual_markdown(
             (d for d in items if lock[d["doc_id"]]["owner"] == owner),
             key=lambda d: (not rbi_html(d), tier(d), d["doc_id"]),
         )
+        if not section:
+            continue
         hosts = sorted({urlsplit(d["source_url"]).hostname or "" for d in section})
         lines += [
             f"## {owner}: {len(section)} documents ({', '.join(hosts)})",

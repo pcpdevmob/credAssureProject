@@ -135,7 +135,7 @@ sources:
     name: CBDT on s.43B(h) and Income-tax Act 2025 s.37(2)(g); relevant Act chapters
     manual_recipe: "Replacement for a rejected scan (the MSME Samadhaan copy of the MSMED Act 2006 has no text layer). Preferred: a text-layer PDF of the full Micro, Small and Medium Enterprises Development Act, 2006 from India Code (https://www.indiacode.nic.in/, search the Act title and save the Act PDF). Otherwise: a CBDT circular or FAQ on section 43B(h) / Income-tax Act 2025 section 37(2)(g) from https://www.incometaxindia.gov.in/ (Communications > Circulars). Save in a browser; both hosts are manual only (ADR 0020)."
     prefix: R-TAX-C
-    target: 3
+    target: 2
     basis: L3
     applies_to: all
     jurisdiction: [IN]

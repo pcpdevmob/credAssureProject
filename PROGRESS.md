@@ -230,8 +230,8 @@ Phase 7 is done (2026-11-14); KR-05 stays OPEN (23/40 vs 34, ceiling 33 today, s
   - SHOULD, by design: the `judge` scorer is a key-fact substring stub until J1 (scope #11, Phase 11).
 
 ## G1 still needs (in this order, then `/freeze-g1`)
-- [ ] Corpus ≥500 real documents available (`make corpus-status`; today 286 after the two RBI shells were re-queued)
-- [ ] Every referenced document available: `uv run python -m credassure.evaluation.check_corpus_refs --strict` clean (34 items today), or replace those items or queries
+- [x] Corpus ≥500 real documents available: 1071 (2026-11-14; manual list empty)
+- [x] Every referenced document available: `check_corpus_refs --strict` 0 failures and `freeze --readiness` clean (2026-11-14). Pre-freeze label changes, for the retrieval-label sign-off below: Q27 must_not_cite → R-STATE-003/-006 (old ones were scans); Q30 → R-BANK-S-016 + S-010 (R-BANK-03 404); Q31 retargeted to "Canara Bank MSME service charges" → R-BANK-08 (Indian Bank copies were scans); Q36 → R-RBI-10 Ch. III, must_not_cite R-RBI-11 (withdrawn). R-MSME-01 now holds the India Code MSMED Act text
 - [x] `section_path` on the 40 retrieval labels (`relevant_sections`, Phase 7). A non-copilot owner still signs them off
 - [ ] Hand check by 2 people who don't own the agent: `evaluation/gold/hand_check.md`
 - [ ] Second independent transcription of the RBI Annex B APR illustration (S21)

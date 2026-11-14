@@ -5831,53 +5831,14 @@
     "text_sha256": "4bde1fb6809582473d243e0a754d3716d028517a5d0daaffa789e03207a8ce00"
   },
   "R-JUD-001": {
+    "bytes": 188289,
     "legal_basis": "L2",
-    "owner": "[Name 5]",
-    "reason": "exact document: open the link and save it",
-    "source_url": "https://samadhaan.msme.gov.in/OrderDocument.aspx",
-    "status": "pending_manual"
-  },
-  "R-JUD-002": {
-    "legal_basis": "L2",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
-    "status": "pending_manual"
-  },
-  "R-JUD-003": {
-    "legal_basis": "L2",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
-    "status": "pending_manual"
-  },
-  "R-JUD-004": {
-    "legal_basis": "L2",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
-    "status": "pending_manual"
-  },
-  "R-JUD-005": {
-    "legal_basis": "L2",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
-    "status": "pending_manual"
-  },
-  "R-JUD-006": {
-    "legal_basis": "L2",
-    "owner": "[Name 6]",
-    "reason": "manual source",
-    "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
-    "status": "pending_manual"
-  },
-  "R-JUD-007": {
-    "legal_basis": "L2",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
-    "status": "pending_manual"
+    "raw_file": "R-JUD-001.pdf",
+    "retrieved_on": "2026-11-14",
+    "sha256": "d9ff6651347e9bbda0ccfbd132b947f9f53886ebc1c73e208a145da9830144bb",
+    "source_url": "https://scr.sci.gov.in/",
+    "status": "ok_manual",
+    "text_sha256": "e5d69517553bb9513df07fa1ca22eb92a5a11a153981bf2027c066c988d7bb1e"
   },
   "R-JUD-008": {
     "bytes": 771863,
@@ -5908,27 +5869,6 @@
     "source_url": "https://scr.sci.gov.in/",
     "status": "ok_manual",
     "text_sha256": "54b9184ac06e4bf81d8578da3de30cec978c403104f16f9c1905f0a65fcd8387"
-  },
-  "R-JUD-011": {
-    "legal_basis": "L2",
-    "owner": "[Name 1]",
-    "reason": "manual source",
-    "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
-    "status": "pending_manual"
-  },
-  "R-JUD-012": {
-    "legal_basis": "L2",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
-    "status": "pending_manual"
-  },
-  "R-JUD-013": {
-    "legal_basis": "L2",
-    "owner": "[Name 2]",
-    "reason": "manual source",
-    "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
-    "status": "pending_manual"
   },
   "R-JUD-014": {
     "bytes": 144032,
@@ -5990,20 +5930,6 @@
     "status": "ok_manual",
     "text_sha256": "98fb6f363f68e804b1006a88ce42b2e8e2b50b37d5b6d5a57b3f82522fcd8d7e"
   },
-  "R-JUD-020": {
-    "legal_basis": "L2",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
-    "status": "pending_manual"
-  },
-  "R-JUD-021": {
-    "legal_basis": "L2",
-    "owner": "[Name 3]",
-    "reason": "manual source",
-    "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
-    "status": "pending_manual"
-  },
   "R-JUD-022": {
     "bytes": 159609,
     "legal_basis": "L2",
@@ -6023,13 +5949,6 @@
     "source_url": "https://scr.sci.gov.in/",
     "status": "ok_manual",
     "text_sha256": "7ef363540404d0b8aabe03985c1df87982a8095a891f64cab174d95dcd9baa80"
-  },
-  "R-JUD-024": {
-    "legal_basis": "L2",
-    "owner": "[Name 4]",
-    "reason": "manual source",
-    "source_url": "https://www.sci.gov.in/judgements-judgement-date/",
-    "status": "pending_manual"
   },
   "R-JUD-025": {
     "bytes": 431146,
@@ -6111,15 +6030,86 @@
     "status": "ok_manual",
     "text_sha256": "ca067b4c14cfd90cbd5e0567e1c5afe4388924f95ef555b39474c1f016347b40"
   },
+  "R-JUD-042": {
+    "bytes": 171541,
+    "legal_basis": "L2",
+    "raw_file": "R-JUD-042.pdf",
+    "retrieved_on": "2026-11-14",
+    "sha256": "2e5c354bc5b3aff7bbad8cb5162e39b5715329e2382cf92f5d4319c4184014f9",
+    "source_url": "https://scr.sci.gov.in/",
+    "status": "ok_manual",
+    "text_sha256": "2f5be37904551cddb68d5504672b4280ed036b03be2163e471669f077f6783f2"
+  },
+  "R-JUD-044": {
+    "bytes": 208639,
+    "legal_basis": "L2",
+    "raw_file": "R-JUD-044.pdf",
+    "retrieved_on": "2026-11-14",
+    "sha256": "fbecc6d4e7c80e26ac777b6adb3a89b20ef97a6bab475fa37c030f58ca2fc837",
+    "source_url": "https://judgments.ecourts.gov.in/",
+    "status": "ok_manual",
+    "text_sha256": "e8486af7562e1594dd52ad7a2ee53dc984c4e25deca4d111528a2ef439253973"
+  },
+  "R-JUD-045": {
+    "bytes": 246138,
+    "legal_basis": "L2",
+    "raw_file": "R-JUD-045.pdf",
+    "retrieved_on": "2026-11-14",
+    "sha256": "7729604997413c4ef624acdb7af7ea174c11cd3f22b94e3fd6c0d90b78b12903",
+    "source_url": "https://judgments.ecourts.gov.in/",
+    "status": "ok_manual",
+    "text_sha256": "81ae7a8a010aebe69200f1ccd1664f41bfa501d77fb3912da25e3871309f3857"
+  },
+  "R-JUD-046": {
+    "bytes": 160330,
+    "legal_basis": "L2",
+    "raw_file": "R-JUD-046.pdf",
+    "retrieved_on": "2026-11-14",
+    "sha256": "6960d729b0d2712fae47e72d48ea2ed39f293aacc0f49e3605c7699755ab34ea",
+    "source_url": "https://judgments.ecourts.gov.in/",
+    "status": "ok_manual",
+    "text_sha256": "48231790cc41ada3337668b97366d345157e2359cf789f8010e3cefd3aa930b9"
+  },
+  "R-JUD-047": {
+    "bytes": 34500,
+    "legal_basis": "L2",
+    "raw_file": "R-JUD-047.pdf",
+    "retrieved_on": "2026-11-14",
+    "sha256": "c9e39a0bdb32eb0687f3c133914b310c9804d59c866338cd44ad28a2b34418bb",
+    "source_url": "https://delhihighcourt.nic.in/",
+    "status": "ok_manual",
+    "text_sha256": "395c5f6fbfa2945664f3eaf9f1b4217925a959cb3e2ee32b7ab79d3735c4a4ec"
+  },
+  "R-JUD-048": {
+    "bytes": 524875,
+    "legal_basis": "L2",
+    "raw_file": "R-JUD-048.pdf",
+    "retrieved_on": "2026-11-14",
+    "sha256": "afc370d419a64bc903896a711dfb31df7f95b1813eff590a6a8d51a4e2c9fe8f",
+    "source_url": "https://delhihighcourt.nic.in/",
+    "status": "ok_manual",
+    "text_sha256": "92143012f044c58f06ce4687c7d86a176959578883e1cd76ecab07b2fbb70b4e"
+  },
+  "R-JUD-049": {
+    "bytes": 596298,
+    "legal_basis": "L2",
+    "raw_file": "R-JUD-049.pdf",
+    "retrieved_on": "2026-11-14",
+    "sha256": "49336b17e04254a9d9e47052f76a65fee04211a7d7892bda116182b06164cecc",
+    "source_url": "https://delhihighcourt.nic.in/",
+    "status": "ok_manual",
+    "text_sha256": "f319d714998e30ea7736f49c57102053c05f218621d11d80cca945c3391848db"
+  },
   "R-MSME-01": {
-    "bytes": 5676954,
+    "bytes": 416516,
     "legal_basis": "L3",
-    "quarantine_file": "R-MSME-01.pdf",
+    "previous_scan": "quarantine/R-MSME-01.pdf (Samadhaan copy, no text layer)",
     "raw_file": "R-MSME-01.pdf",
     "retrieved_on": "2026-11-14",
-    "sha256": "e6cadcfaf9f920d2d78240730768b37ccb7b8f36a9e65e8573b544c5c1d9b4a4",
-    "source_url": "https://samadhaan.msme.gov.in/WriteReadData/DocumentFile/MSMED2006act.pdf",
-    "status": "rejected_no_text"
+    "sha256": "5fe90947fb006a59734245966c2f0cf90421c76d9f321e57abcb8669b942b342",
+    "source_url": "https://www.indiacode.nic.in/",
+    "status": "ok_manual",
+    "text_sha256": "5bad7a146bb39c024a481b4c6454b82840fbf70c7683a8b79009761880c2a1e4"
   },
   "R-MSME-02": {
     "bytes": 852441,
@@ -6313,15 +6303,14 @@
     "text_sha256": "b68e6eff3d5a823fff0e4b5d2beaa8e23284c305c3a81ccc7fbe16d337fdb6e9"
   },
   "R-RBI-01": {
-    "bytes": 152389,
-    "final_url": "https://www.rbi.org.in/",
+    "bytes": 324558,
     "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "the website.rbi.org.in link redirects to the RBI home page (2026-11-14). On www.rbi.org.in open Press Releases, choose November 2025, open the 28 Nov 2025 release on the consolidated Master Directions (the address bar must end in ?prid=<number>), save it as Web page, HTML only, and put that URL in source_url.",
-    "retrieved_on": "2026-11-05",
-    "sha256": "e29882c464300a38b053ccfc38d1f00fc2757349d5f64ad088cbb886c2188955",
-    "source_url": "https://website.rbi.org.in/documents/d/rbi/pr1588rbiconsolidatedmasterdirections-1-",
-    "status": "pending_manual"
+    "raw_file": "R-RBI-01.pdf",
+    "retrieved_on": "2026-11-14",
+    "sha256": "e1ca9c8f081b44a2274024421c918cc08ba5a99565c298d1f814925775382acd",
+    "source_url": "https://rbidocs.rbi.org.in/rdocs/PressRelease/PDFs/PR15890DF4E2C09CAB4521A677BADA645E5299.PDF",
+    "status": "ok_manual",
+    "text_sha256": "6d4ea6d71487c49a78ee6018d77b2a549db1c27fa739117b90c888f400b499a1"
   },
   "R-RBI-02": {
     "bytes": 844480,
@@ -6427,15 +6416,14 @@
     "text_sha256": "d13fdb1326f6039cd192206ac769886c01defc9db93bd61f43a1d787325383e2"
   },
   "R-RBI-11": {
-    "bytes": 152383,
-    "final_url": "https://www.rbi.org.in/",
+    "bytes": 255738,
     "legal_basis": "L4",
-    "owner": "[Name 6]",
-    "reason": "the website.rbi.org.in link redirects to the RBI home page (2026-11-14). On www.rbi.org.in open Notifications > Master Directions, open 'Reserve Bank of India (Digital Lending) Directions, 2025', save it as Web page, HTML only, and put its BS_ViewMasDirections.aspx?id= URL in source_url.",
-    "retrieved_on": "2026-11-05",
-    "sha256": "426b712153fb8883e3fcf4cfad9e15295aea988436b2a5974f42da3692b2b98e",
-    "source_url": "https://website.rbi.org.in/documents/d/rbi/directionsondigitallending",
-    "status": "pending_manual"
+    "raw_file": "R-RBI-11.html",
+    "retrieved_on": "2026-11-14",
+    "sha256": "2863e9b49172859e977d56f4c18b219dfcf98cc7ceebcd404da80180b838b63f",
+    "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12848&Mode=0",
+    "status": "ok_manual",
+    "text_sha256": "539e384ccc617407f16917c94ca387a5f223cf54df80fe901397b8e46a13a991"
   },
   "R-RBI-12": {
     "bytes": 120887,
@@ -13850,13 +13838,6 @@
     "source_url": "https://www.incometaxindia.gov.in/w/section-43b-40",
     "status": "ok_manual",
     "text_sha256": "478925cfea2d6bf29749f22184997a9d3098bc00a1041830f138bfed968ec871"
-  },
-  "R-TAX-C-001": {
-    "legal_basis": "L3",
-    "owner": "[Name 5]",
-    "reason": "manual source",
-    "source_url": "https://www.incometaxindia.gov.in/",
-    "status": "pending_manual"
   },
   "R-TREDS-001": {
     "bytes": 313954,

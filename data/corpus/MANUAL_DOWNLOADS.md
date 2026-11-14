@@ -37,53 +37,7 @@ for that doc_id in `manifest.yaml`.
 - **Recipe 15 - Supreme Court and High Court judgments on the MSMED Act:** Do not use the sci.gov.in judgment-date search; it only covers 30 days per search. Search by keyword instead, one CAPTCHA per search, solved by a person (ADR 0020). Supreme Court: https://scr.sci.gov.in/ (Digital SCR) with the phrase 'Micro, Small and Medium Enterprises Development Act', then 'Facilitation Council', then 'section 18' AND 'MSMED'. High Courts: https://judgments.ecourts.gov.in/ with the same phrases. Keep judgments dated 2015-2026 that decide a point on delayed payment, section 15/16 interest, a section 18 reference or arbitration, or the section 19 pre-deposit; skip orders that only list or adjourn a case. Save the official judgment PDF as raw/R-JUD-NNN.pdf and fill title (<parties>, <court>, <date>), source_url and effective_from. Well-known starting points to confirm in the search before saving: Silpi Industries v. Kerala SRTC (SC, 2021); Gujarat State Civil Supplies Corp. v. Mahakali Foods (SC, 2022); Jharkhand Urja Vikas Nigam v. State of Rajasthan (SC, 2021); Shanti Conductors v. Assam SEB (SC, 2019). The sites show a CAPTCHA when searches come quickly: space them out and save a few judgments per sitting; the source 15 target of 25 is close to met, so extra judgments are optional. Legal points only (ADR 0020).
 - **Recipe 16 - State MSME/industrial policies - Maharashtra (home) and other states (KR-04 distractors):** Maharashtra (home, IN-MH): di.maharashtra.gov.in refuses connections; use the MIDC policy page https://midc.maharashtra.gov.in/industrial-policies-and-incentives/ (Industrial Policy 2019 and the 2025 Industries, Investment and Services Policy PDFs). Karnataka (IN-KA): kum.karnataka.gov.in does not resolve; save the Industrial Policy 2025-30 PDF from https://investkarnataka.co.in/. Set jurisdiction accordingly. Maharashtra GRs and MIDC policies are often Marathi only; save English versions only (Marathi is excluded).
 
-**16 documents pending** across six owners.
-
-## [Name 1]: 2 documents (scr.sci.gov.in)
-
-| Tier | doc_id | Save as | Source | Link | Why manual |
-|---|---|---|---|---|---|
-| T3 | R-JUD-007 | raw/R-JUD-007.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
-| T3 | R-JUD-011 | raw/R-JUD-011.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
-
-## [Name 2]: 2 documents (scr.sci.gov.in)
-
-| Tier | doc_id | Save as | Source | Link | Why manual |
-|---|---|---|---|---|---|
-| T3 | R-JUD-012 | raw/R-JUD-012.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
-| T3 | R-JUD-013 | raw/R-JUD-013.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
-
-## [Name 3]: 2 documents (scr.sci.gov.in)
-
-| Tier | doc_id | Save as | Source | Link | Why manual |
-|---|---|---|---|---|---|
-| T3 | R-JUD-020 | raw/R-JUD-020.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
-| T3 | R-JUD-021 | raw/R-JUD-021.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
-
-## [Name 4]: 1 documents (scr.sci.gov.in)
-
-| Tier | doc_id | Save as | Source | Link | Why manual |
-|---|---|---|---|---|---|
-| T3 | R-JUD-024 | raw/R-JUD-024.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
-
-## [Name 5]: 2 documents (scr.sci.gov.in, www.incometaxindia.gov.in)
-
-| Tier | doc_id | Save as | Source | Link | Why manual |
-|---|---|---|---|---|---|
-| T3 | R-JUD-001 | raw/R-JUD-001.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
-| T6 | R-TAX-C-001 | raw/R-TAX-C-001.pdf or .html | 10: pick from index | https://www.incometaxindia.gov.in/ | **Recipe 10** (see Recipes above) |
-
-## [Name 6]: 7 documents (scr.sci.gov.in, website.rbi.org.in)
-
-| Tier | doc_id | Save as | Source | Link | Why manual |
-|---|---|---|---|---|---|
-| T1 | R-RBI-11 | raw/R-RBI-11.html | 1: Reserve Bank of India (Digital Lending) Directions, 2025 | https://website.rbi.org.in/documents/d/rbi/directionsondigitallending | **HTML:** save as *Web page, HTML only*; do not look for the PDF. the website.rbi.org.in link redirects to the RBI home page (2026-11-14). On www.rbi.org.in open Notifications > Master Directions, open 'Reserve Bank of India (Digital Lending) Directions, 2025', save it as Web page, HTML only, and put its BS_ViewMasDirections.aspx?id= URL in source_url. |
-| T1 | R-RBI-01 | raw/R-RBI-01.pdf | 3: RBI press release: 244 consolidated Master Directions (28 No | https://website.rbi.org.in/documents/d/rbi/pr1588rbiconsolidatedmasterdirections-1- | the website.rbi.org.in link redirects to the RBI home page (2026-11-14). On www.rbi.org.in open Press Releases, choose November 2025, open the 28 Nov 2025 release on the consolidated Master Directions (the address bar must end in ?prid=<number>), save it as Web page, HTML only, and put that URL in source_url. |
-| T3 | R-JUD-002 | raw/R-JUD-002.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
-| T3 | R-JUD-003 | raw/R-JUD-003.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
-| T3 | R-JUD-004 | raw/R-JUD-004.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
-| T3 | R-JUD-005 | raw/R-JUD-005.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
-| T3 | R-JUD-006 | raw/R-JUD-006.pdf or .html | 15: pick from index | https://scr.sci.gov.in/ | **Recipe 15** (see Recipes above) |
+**0 documents pending** across six owners.
 
 ## Hosts missing terms of use (ADR 0020)
 
@@ -98,51 +52,54 @@ under `hosts:`, `terms_url`, `terms_note` (does it allow automated access? any r
 | cbic-gst.gov.in | 69 | [Name 2] | unknown |
 | cgtmse.in | 3 | [Name 4] | unknown |
 | dcmsme.gov.in | 1 | [Name 5] | unknown |
-| di.maharashtra.gov.in | 0 | [Name 6] | unknown |
-| egazette.gov.in | 3 | [Name 1] | unknown |
-| gstcouncil.gov.in | 35 | [Name 2] | unknown |
-| ic.gujarat.gov.in | 1 | [Name 3] | unknown |
-| indianbank.bank.in | 1 | [Name 4] | unknown |
-| indianbank.in | 1 | [Name 5] | unknown |
-| industries.telangana.gov.in | 1 | [Name 6] | unknown |
-| investkarnataka.co.in | 1 | [Name 1] | unknown |
-| midc.maharashtra.gov.in | 7 | [Name 2] | unknown |
-| msme.gov.in | 0 | [Name 3] | unknown |
-| msme.up.gov.in | 1 | [Name 4] | unknown |
-| msmeonline.tn.gov.in | 1 | [Name 5] | unknown |
-| pnb.bank.in | 1 | [Name 6] | unknown |
-| rbi.org.in | 6 | [Name 1] | unknown |
-| sahamati.org.in | 1 | [Name 2] | unknown |
-| samadhaan.msme.gov.in | 2 | [Name 3] | unknown |
-| sansad.in | 101 | [Name 4] | unknown |
-| sbi.bank.in | 3 | [Name 5] | unknown |
-| sbi.co.in | 1 | [Name 6] | unknown |
-| scr.sci.gov.in | 32 | [Name 6] | unknown |
-| tatacapital.com | 1 | [Name 2] | unknown |
+| delhihighcourt.nic.in | 3 | [Name 6] | unknown |
+| di.maharashtra.gov.in | 0 | [Name 1] | unknown |
+| egazette.gov.in | 3 | [Name 2] | unknown |
+| gstcouncil.gov.in | 35 | [Name 3] | unknown |
+| ic.gujarat.gov.in | 1 | [Name 4] | unknown |
+| indianbank.bank.in | 1 | [Name 5] | unknown |
+| indianbank.in | 1 | [Name 6] | unknown |
+| industries.telangana.gov.in | 1 | [Name 1] | unknown |
+| investkarnataka.co.in | 1 | [Name 2] | unknown |
+| judgments.ecourts.gov.in | 3 | [Name 3] | unknown |
+| midc.maharashtra.gov.in | 7 | [Name 4] | unknown |
+| msme.gov.in | 0 | [Name 5] | unknown |
+| msme.up.gov.in | 1 | [Name 6] | unknown |
+| msmeonline.tn.gov.in | 1 | [Name 1] | unknown |
+| pnb.bank.in | 1 | [Name 2] | unknown |
+| rbi.org.in | 6 | [Name 3] | unknown |
+| rbidocs.rbi.org.in | 1 | [Name 4] | unknown |
+| sahamati.org.in | 1 | [Name 5] | unknown |
+| samadhaan.msme.gov.in | 1 | [Name 6] | unknown |
+| sansad.in | 101 | [Name 1] | unknown |
+| sbi.bank.in | 3 | [Name 2] | unknown |
+| sbi.co.in | 1 | [Name 3] | unknown |
+| scr.sci.gov.in | 21 | [Name 4] | unknown |
+| tatacapital.com | 1 | [Name 5] | unknown |
 | udyamregistration.gov.in | 8 | [Name 6] | unknown |
-| website.rbi.org.in | 3 | [Name 6] | unknown |
-| www.axis.bank.in | 1 | [Name 5] | unknown |
-| www.bajajfinserv.in | 1 | [Name 6] | unknown |
-| www.canarabank.bank.in | 1 | [Name 1] | unknown |
-| www.cgtmse.in | 378 | [Name 2] | unknown |
-| www.data.gov.in | 2 | [Name 3] | unknown |
-| www.hdfc.bank.in | 1 | [Name 4] | unknown |
-| www.icici.bank.in | 1 | [Name 5] | unknown |
-| www.idfcfirst.bank.in | 1 | [Name 6] | unknown |
-| www.incometaxindia.gov.in | 3 | [Name 5] | unknown |
-| www.indiacode.nic.in | 0 | [Name 2] | unknown |
-| www.indianbank.in | 1 | [Name 3] | unknown |
-| www.invoicemart.com | 1 | [Name 4] | unknown |
-| www.kotak.bank.in | 1 | [Name 5] | unknown |
+| website.rbi.org.in | 1 | [Name 1] | unknown |
+| www.axis.bank.in | 1 | [Name 2] | unknown |
+| www.bajajfinserv.in | 1 | [Name 3] | unknown |
+| www.canarabank.bank.in | 1 | [Name 4] | unknown |
+| www.cgtmse.in | 378 | [Name 5] | unknown |
+| www.data.gov.in | 2 | [Name 6] | unknown |
+| www.hdfc.bank.in | 1 | [Name 1] | unknown |
+| www.icici.bank.in | 1 | [Name 2] | unknown |
+| www.idfcfirst.bank.in | 1 | [Name 3] | unknown |
+| www.incometaxindia.gov.in | 2 | [Name 4] | unknown |
+| www.indiacode.nic.in | 1 | [Name 5] | unknown |
+| www.indianbank.in | 1 | [Name 6] | unknown |
+| www.invoicemart.com | 1 | [Name 1] | unknown |
+| www.kotak.bank.in | 1 | [Name 2] | unknown |
 | www.m1xchange.com | 23 | [Name 6] | unknown |
-| www.meity.gov.in | 2 | [Name 1] | unknown |
-| www.mudra.org.in | 0 | [Name 2] | unknown |
-| www.ncgtc.in | 0 | [Name 3] | unknown |
-| www.rbi.org.in | 576 | [Name 4] | unknown |
-| www.rxil.in | 0 | [Name 5] | unknown |
-| www.sci.gov.in | 0 | [Name 6] | unknown |
-| www.sidbi.in | 44 | [Name 1] | unknown |
-| www.udyamregistration.gov.in | 1 | [Name 2] | unknown |
-| www.unionbankofindia.bank.in | 1 | [Name 3] | unknown |
+| www.meity.gov.in | 2 | [Name 4] | unknown |
+| www.mudra.org.in | 0 | [Name 5] | unknown |
+| www.ncgtc.in | 0 | [Name 6] | unknown |
+| www.rbi.org.in | 577 | [Name 1] | unknown |
+| www.rxil.in | 0 | [Name 2] | unknown |
+| www.sci.gov.in | 0 | [Name 3] | unknown |
+| www.sidbi.in | 44 | [Name 4] | unknown |
+| www.udyamregistration.gov.in | 1 | [Name 5] | unknown |
+| www.unionbankofindia.bank.in | 1 | [Name 6] | unknown |
 
-**244 documents were rejected as scans (no text layer) and are not listed, so nobody downloads them again.** Each has a replacement slot above.
+**243 documents were rejected as scans (no text layer) and are not listed, so nobody downloads them again.** Each has a replacement slot above.

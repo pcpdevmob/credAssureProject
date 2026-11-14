@@ -64,9 +64,9 @@ count toward 500; real + synthetic ≤ 2,000. RBI, e-Gazette, incometaxindia and
 | P02 | R-RBI-03 | RBI Commercial Banks – Interest Rates on Advances Directions 2025 | LW, CP | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13149 | L4 | Floating/benchmark rules |
 | P03 | R-RBI-04 | RBI Master Direction – Lending to MSME Sector (upd. 9 Feb 2026) | WC, CP | https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11060 | L4 | WC context |
 | P04 | R-RBI-05 | RBI FAQs – MSME | WC, CP | https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=84 | L4 | EBLR rule for MSE loans; gold answers |
-| P05 | R-RBI-01 | RBI press release: 244 consolidated Master Directions (28 Nov 2025) | CP | https://website.rbi.org.in/documents/d/rbi/pr1588rbiconsolidatedmasterdirections-1- | L4 | Superseded tagging |
+| P05 | R-RBI-01 | RBI press release: 244 consolidated Master Directions (28 Nov 2025) | CP | https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=61705 (verified 2026-11-14) | L4 | Superseded tagging |
 | P06 | R-RBI-09 | RBI Commercial Banks – KYC Directions 2025 + 29 Dec 2025 amendment | ONB, CP | https://website.rbi.org.in/en/web/rbi/regulations-non-banking/notifications?delta=20 | L4 | AML/KYC training |
-| P07 | R-RBI-11 | RBI (Digital Lending) Directions 2025 | CP | https://website.rbi.org.in/documents/d/rbi/directionsondigitallending | L4 | Copilot |
+| P07 | R-RBI-11 | RBI (Digital Lending) Directions 2025 | CP | https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12848&Mode=0 (verified 2026-11-14; withdrawn 28 Nov 2025, superseded by R-RBI-10 Credit Facilities Directions, Chapter III) | L4 | Copilot |
 | P08 | R-RBI-08 | RBI TReDS Directions 2026 | CP | final (RBI/DPSS/2026-27/406, 23 Jun 2026) https://www.rbi.org.in/scripts/BS_ViewMasDirections.aspx?id=13526 ; draft (superseded) https://www.rbi.org.in/scripts/bs_viewcontent.aspx?Id=4976 | L4 | Copilot |
 | P09 | R-RATE-01 | RBI "Lending and Deposit Rates of SCBs" monthly releases | LW, CP | https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63702 (Sep 2026), prid=63481, prid=63049, prid=62471 | L4 facts | Rate ranges |
 | P10 | R-RBI-06 | RBI Priority Sector Lending Directions 2025 | CP | https://website.rbi.org.in/web/rbi/financial-inclusion-and-development/master-directions | L4 | Copilot |
@@ -85,7 +85,7 @@ count toward 500; real + synthetic ≤ 2,000. RBI, e-Gazette, incometaxindia and
 | P23 | R-BANK-02 | SBI SME Smart Score | LW | https://sbi.co.in/portal/web/sme/sme-smart-score | L4 facts | Low-fee archetype |
 | P24 | R-BANK-03 | Bandhan Bank SME charges (Jan 2026) | LW | https://bandhan.bank.in/sites/default/files/2026-01/Schedule-of-Charges-SME-and-Corporate-Loans-16012026.pdf | L4 facts | High-fee archetype |
 | P25 | R-BANK-04, R-BANK-05 | Indian Bank MSME charges 2018 / 2022 | LW, CP | https://indianbank.in/wp-content/uploads/2018/11/Service-Charge-for-MSME-Products-1.pdf ; https://www.indianbank.in/wp-content/uploads/2022/04/MSME-Service-Charges.pdf | L4 facts | Rating-based archetype; superseded pair |
-| P26 | R-BANK-06..16 | 11 more bank/NBFC charge schedules (BoB, PNB, Canara, Union, HDFC, ICICI, Axis, Kotak, IDFC FIRST, Bajaj Finance, Tata Capital) | LW, CP | URLs in `data/corpus/manifest.example.yaml` | L4 | Fee ranges (processing 0.6%–3.5%, NBFC up to 4.72% incl. tax); corpus volume |
+| P26 | R-BANK-06..16 | 11 more bank/NBFC charge schedules (BoB, PNB, Canara, Union, HDFC, ICICI, Axis, Kotak, IDFC FIRST, Bajaj Finance, Tata Capital) | LW, CP | URLs in `data/corpus/manifest.yaml` | L4 | Fee ranges (processing 0.6%–3.5%, NBFC up to 4.72% incl. tax); corpus volume |
 | P27 | R-DATA-01, R-DATA-02 | data.gov.in Udyam registration catalog + district-wise resource | WC | https://www.data.gov.in/catalog/udyam-registration-msme-registration | L1 | Optional realism |
 | P28 | R-LIC-01 | GODL-India licence | All | https://data.gov.in/sites/default/files/Gazette_Notification_OGDL.pdf | — | Attribution |
 | P30 | M-03 | BAAI/bge-reranker-base | CP | https://huggingface.co/BAAI/bge-reranker-base | MIT | Optional reranker |

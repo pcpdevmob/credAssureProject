@@ -248,14 +248,15 @@ documents:
   jurisdiction: IN
   legal_basis: L3
   format: pdf
-  title: Micro, Small and Medium Enterprises Development Act, 2006 (full text, Ministry of MSME / MSME Samadhaan copy)
-  publisher: Ministry of MSME (MSME Samadhaan)
+  title: The Micro, Small and Medium Enterprises Development Act, 2006 (as on 15 Oct 2026)
+  publisher: India Code
   effective_from: '2006-10-02'
   superseded_by: null
-  source_url: https://samadhaan.msme.gov.in/WriteReadData/DocumentFile/MSMED2006act.pdf
+  source_url: https://www.indiacode.nic.in/
   source: 10
   applies_to: all
-  method: script
+  method: manual
+  date_source: human
 - doc_id: R-MSME-04
   tag: msme_gov
   collection: public
@@ -729,10 +730,11 @@ documents:
   publisher: Reserve Bank of India
   effective_from: '2025-11-28'
   superseded_by: null
-  source_url: https://website.rbi.org.in/documents/d/rbi/pr1588rbiconsolidatedmasterdirections-1-
+  source_url: https://rbidocs.rbi.org.in/rdocs/PressRelease/PDFs/PR15890DF4E2C09CAB4521A677BADA645E5299.PDF
   source: 3
   applies_to: all
   method: manual
+  date_source: human
 - doc_id: R-RBI-06
   tag: rbi_md
   collection: public
@@ -768,15 +770,16 @@ documents:
   collection: public
   jurisdiction: IN
   legal_basis: L4
-  format: pdf
+  format: html
   title: Reserve Bank of India (Digital Lending) Directions, 2025
   publisher: Reserve Bank of India
   effective_from: '2025-05-08'
-  superseded_by: null
-  source_url: https://website.rbi.org.in/documents/d/rbi/directionsondigitallending
+  superseded_by: R-RBI-10
+  source_url: https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12848&Mode=0
   source: 1
   applies_to: all
   method: manual
+  date_source: human
 - doc_id: R-RATE-01-2026-09
   tag: rbi_md
   collection: public
@@ -1777,7 +1780,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Biz Elite Current Account Schedule of Charges
   publisher: bandhan.bank.in
   effective_from: '2025-12-01'
   superseded_by: null
@@ -1792,7 +1795,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Schedule of Charges for CVCE
   publisher: bandhan.bank.in
   effective_from: '2026-01-01'
   superseded_by: null
@@ -1807,7 +1810,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Schedule of Charges Bandhan Super Saver
   publisher: bandhan.bank.in
   effective_from: '2026-04-01'
   superseded_by: null
@@ -1822,7 +1825,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Current Account Product Variants Schedule of Charges and Features
   publisher: bandhan.bank.in
   effective_from: '2026-04-01'
   superseded_by: null
@@ -1837,7 +1840,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Car Loan Schedule of Charges (15.07.2026)
   publisher: bandhan.bank.in
   effective_from: '2026-07-15'
   superseded_by: null
@@ -1852,7 +1855,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Personal Loan Schedule of Charges July 2026
   publisher: bandhan.bank.in
   effective_from: '2026-07-01'
   superseded_by: null
@@ -1867,7 +1870,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Salary Account Schedule of Charges
   publisher: bandhan.bank.in
   effective_from: '2026-07-01'
   superseded_by: null
@@ -1882,7 +1885,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Savings Account Product Variants Schedule of Charges and Features
   publisher: bandhan.bank.in
   effective_from: '2026-07-01'
   superseded_by: null
@@ -1897,7 +1900,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Schedule of Charges Aspiring Business Loan (14.07.2026)
   publisher: bandhan.bank.in
   effective_from: '2026-07-14'
   superseded_by: null
@@ -1912,7 +1915,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Schedule of Charges Two Wheeler Loan
   publisher: bandhan.bank.in
   effective_from: '2026-07-01'
   superseded_by: null
@@ -1927,7 +1930,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Schedule of Charges for Trade Finance (07.07.2026)
   publisher: bandhan.bank.in
   effective_from: '2026-07-07'
   superseded_by: null
@@ -1942,7 +1945,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Schedule of Charges of Home Loan and LAP (03.07.2026)
   publisher: bandhan.bank.in
   effective_from: '2026-07-03'
   superseded_by: null
@@ -1957,7 +1960,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Schedule of Charges Agri Loan (01.08.2026)
   publisher: bandhan.bank.in
   effective_from: '2026-08-01'
   superseded_by: null
@@ -1972,7 +1975,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Schedule of Charges Bandhan Commodity Finance (01.08.2026)
   publisher: bandhan.bank.in
   effective_from: '2026-08-01'
   superseded_by: null
@@ -1987,7 +1990,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Schedule of Charges SME and Corporate Loans (21.08.2026)
   publisher: bandhan.bank.in
   effective_from: '2026-01-01'
   superseded_by: null
@@ -2002,7 +2005,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Schedule of Charges Small Loan Against Property
   publisher: bandhan.bank.in
   effective_from: '2026-08-01'
   superseded_by: null
@@ -2017,7 +2020,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Schedule of charges for Business Banking Group (21.08.2026)
   publisher: bandhan.bank.in
   effective_from: '2025-07-02'
   superseded_by: null
@@ -2032,7 +2035,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Standard Schedule of Charges for Savings NR Accounts and Debit Cards
   publisher: bandhan.bank.in
   effective_from: '2024-06-29'
   superseded_by: null
@@ -12575,104 +12578,6 @@ documents:
   applies_to: all
   method: manual
   date_source: curated
-- doc_id: R-JUD-001
-  tag: r-jud
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://scr.sci.gov.in/
-  source: 15
-  applies_to: all
-  method: manual
-- doc_id: R-JUD-002
-  tag: r-jud
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://scr.sci.gov.in/
-  source: 15
-  applies_to: all
-  method: manual
-- doc_id: R-JUD-003
-  tag: r-jud
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://scr.sci.gov.in/
-  source: 15
-  applies_to: all
-  method: manual
-- doc_id: R-JUD-004
-  tag: r-jud
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://scr.sci.gov.in/
-  source: 15
-  applies_to: all
-  method: manual
-- doc_id: R-JUD-005
-  tag: r-jud
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://scr.sci.gov.in/
-  source: 15
-  applies_to: all
-  method: manual
-- doc_id: R-JUD-006
-  tag: r-jud
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://scr.sci.gov.in/
-  source: 15
-  applies_to: all
-  method: manual
-- doc_id: R-JUD-007
-  tag: r-jud
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://scr.sci.gov.in/
-  source: 15
-  applies_to: all
-  method: manual
 - doc_id: R-JUD-008
   tag: r-jud
   collection: public
@@ -12718,48 +12623,6 @@ documents:
   applies_to: all
   method: manual
   date_source: curated
-- doc_id: R-JUD-011
-  tag: r-jud
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://scr.sci.gov.in/
-  source: 15
-  applies_to: all
-  method: manual
-- doc_id: R-JUD-012
-  tag: r-jud
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://scr.sci.gov.in/
-  source: 15
-  applies_to: all
-  method: manual
-- doc_id: R-JUD-013
-  tag: r-jud
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://scr.sci.gov.in/
-  source: 15
-  applies_to: all
-  method: manual
 - doc_id: R-JUD-014
   tag: r-jud
   collection: public
@@ -12853,34 +12716,6 @@ documents:
   applies_to: all
   method: manual
   date_source: curated
-- doc_id: R-JUD-020
-  tag: r-jud
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://scr.sci.gov.in/
-  source: 15
-  applies_to: all
-  method: manual
-- doc_id: R-JUD-021
-  tag: r-jud
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://scr.sci.gov.in/
-  source: 15
-  applies_to: all
-  method: manual
 - doc_id: R-JUD-022
   tag: r-jud
   collection: public
@@ -12911,20 +12746,6 @@ documents:
   applies_to: all
   method: manual
   date_source: curated
-- doc_id: R-JUD-024
-  tag: r-jud
-  collection: public
-  jurisdiction: IN
-  legal_basis: L2
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://scr.sci.gov.in/
-  source: 15
-  applies_to: all
-  method: manual
 - doc_id: R-JUD-025
   tag: r-jud
   collection: public
@@ -13041,6 +12862,128 @@ documents:
   effective_from: '2021-06-29'
   superseded_by: null
   source_url: https://scr.sci.gov.in/
+  source: 15
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-JUD-001
+  tag: r-jud
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: M/s Tirupati Steels v. M/s Shubh Industrial Component & Anr. (Supreme Court, 19 Apr 2022)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2022-04-19'
+  superseded_by: null
+  source_url: https://scr.sci.gov.in/
+  source: 15
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-JUD-042
+  tag: r-jud
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: M/s Vaishno Enterprises v. Hamilton Medical AG & Anr. (Supreme Court, 24 Mar 2022)
+  publisher: Supreme Court of India (Digital SCR)
+  effective_from: '2022-03-24'
+  superseded_by: null
+  source_url: https://scr.sci.gov.in/
+  source: 15
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-JUD-044
+  tag: r-jud
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: M/s Seirra Infraventure Pvt. Ltd. v. Micro and Small Enterprise Facilitation Council, Raipur & Anr. (Chhattisgarh
+    High Court, 5 Nov 2026)
+  publisher: High Court of Chhattisgarh
+  effective_from: '2026-11-05'
+  superseded_by: null
+  source_url: https://judgments.ecourts.gov.in/
+  source: 15
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-JUD-045
+  tag: r-jud
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: M/s Gupta and Company v. M/s Dheeraj Traders (Chhattisgarh High Court, 30 Oct 2026)
+  publisher: High Court of Chhattisgarh
+  effective_from: '2026-10-30'
+  superseded_by: null
+  source_url: https://judgments.ecourts.gov.in/
+  source: 15
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-JUD-046
+  tag: r-jud
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: Assurgen Pharma Pvt. Ltd. v. Union of India & Ors. (Andhra Pradesh High Court, 16 Oct 2026)
+  publisher: High Court of Andhra Pradesh
+  effective_from: '2026-10-16'
+  superseded_by: null
+  source_url: https://judgments.ecourts.gov.in/
+  source: 15
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-JUD-047
+  tag: r-jud
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: Uttar Pradesh Rajkiya Nirman Nigam Ltd. v. Vedang Soft Pvt. Ltd. (Delhi High Court, 13 Oct 2026)
+  publisher: High Court of Delhi
+  effective_from: '2026-10-13'
+  superseded_by: null
+  source_url: https://delhihighcourt.nic.in/
+  source: 15
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-JUD-048
+  tag: r-jud
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: TPL-KIPL Joint Venture v. Micro and Small Enterprise Facilitation Council, District Magistrate West, Delhi & Anr.
+    (Delhi High Court, 13 Oct 2026)
+  publisher: High Court of Delhi
+  effective_from: '2026-10-13'
+  superseded_by: null
+  source_url: https://delhihighcourt.nic.in/
+  source: 15
+  applies_to: all
+  method: manual
+  date_source: curated
+- doc_id: R-JUD-049
+  tag: r-jud
+  collection: public
+  jurisdiction: IN
+  legal_basis: L2
+  format: pdf
+  title: GM Telecom District, Bharat Sanchar Nigam Ltd. v. Vichitra Constructions Pvt. Ltd. (Delhi High Court, 13 Oct 2026)
+  publisher: High Court of Delhi
+  effective_from: '2026-10-13'
+  superseded_by: null
+  source_url: https://delhihighcourt.nic.in/
   source: 15
   applies_to: all
   method: manual
@@ -19623,7 +19566,7 @@ documents:
   jurisdiction: IN
   legal_basis: L4
   format: pdf
-  title: click here
+  title: Bandhan Bank – Schedule of Charges NR Account Product Variants
   publisher: bandhan.bank.in
   effective_from: '2026-05-01'
   superseded_by: null
@@ -20046,20 +19989,6 @@ documents:
   applies_to: all
   method: script
   date_source: pdf_metadata
-- doc_id: R-TAX-C-001
-  tag: r-tax-c
-  collection: public
-  jurisdiction: IN
-  legal_basis: L3
-  format: html
-  title: PENDING
-  publisher: PENDING
-  effective_from: null
-  superseded_by: null
-  source_url: https://www.incometaxindia.gov.in/
-  source: 10
-  applies_to: all
-  method: manual
 - doc_id: R-SIDBI-P-010
   tag: r-sidbi-p
   collection: public
@@ -20157,6 +20086,10 @@ hosts:
     terms_url: null
     terms_note: null
     automated_access: unknown
+  delhihighcourt.nic.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
   di.maharashtra.gov.in:
     terms_url: null
     terms_note: null
@@ -20189,6 +20122,10 @@ hosts:
     terms_url: null
     terms_note: null
     automated_access: unknown
+  judgments.ecourts.gov.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
   midc.maharashtra.gov.in:
     terms_url: null
     terms_note: null
@@ -20210,6 +20147,10 @@ hosts:
     terms_note: null
     automated_access: unknown
   rbi.org.in:
+    terms_url: null
+    terms_note: null
+    automated_access: unknown
+  rbidocs.rbi.org.in:
     terms_url: null
     terms_note: null
     automated_access: unknown
