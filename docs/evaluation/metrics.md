@@ -1,6 +1,6 @@
 # Metrics
 
-TODO owner: [Name 2].
+TODO owner: Tejas.
 
 ## Scores
 ## Retrieval

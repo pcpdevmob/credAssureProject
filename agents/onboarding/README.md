@@ -1,6 +1,6 @@
 # onboarding
 
-Owner: [Name 2]. Requirement: ONB-01.
+Owner: Tejas. Requirement: ONB-01.
 
 Gate 1 readiness: role, training, policy acknowledgement.
 

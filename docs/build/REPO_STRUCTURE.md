@@ -126,10 +126,10 @@ credassure/
 | Path | Owner |
 |---|---|
 | agents/supervisor, apps/gateway, deploy/ | [Name 1] |
-| agents/onboarding, evaluation/testset | [Name 2] |
-| agents/working-capital, packages/engines (cash flow) | [Name 3] |
+| agents/onboarding, evaluation/testset | Tejas |
+| agents/working-capital, packages/engines (cash flow) | Suresh |
 | agents/lendwise, packages/engines (loan cost), packages/lender-sim | Pritish |
-| agents/critic, packages/observability, evaluation/ablations | [Name 5] |
+| agents/critic, packages/observability, evaluation/ablations | Abhishek |
 | agents/copilot, packages/retrieval, data/corpus | [Name 6] |
 | apps/web, packages/api-client | UI lead (assign) |
 

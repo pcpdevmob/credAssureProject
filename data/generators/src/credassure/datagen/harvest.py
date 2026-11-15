@@ -45,13 +45,12 @@ from .corpus import (
     verify,
 )
 from .dates import apply_dates, candidate_date, review_markdown, url_date
-from .export import export
+from .export import OWNERS, export
 
 MANIFEST = CORPUS / "manifest.yaml"
 LOCK = CORPUS / "manifest.lock.json"
 SOURCES = CORPUS / "sources.yaml"
 MANUAL = CORPUS / "MANUAL_DOWNLOADS.md"
-OWNERS = [f"[Name {i}]" for i in range(1, 7)]
 LINK = re.compile(r'<a\b[^>]*?href\s*=\s*["\']([^"\']+)["\'][^>]*>(.*?)</a>', re.I | re.S)
 TAG = re.compile(r"<[^>]+>")
 DMY = re.compile(r"\b(\d{1,2})[./-](\d{1,2})[./-](20\d{2})\b")

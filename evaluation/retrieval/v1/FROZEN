@@ -1,0 +1,5 @@
+status: provisional
+frozen_on: 2026-11-15
+manifest: evaluation/FROZEN.sha256 (verify: uv run python -m credassure.evaluation.freeze --verify-only)
+final_when: every item in the "G1-final checklist" in PROGRESS.md is done
+corrections: never edit this version; add a new version with an ADR and report old and new scores side by side

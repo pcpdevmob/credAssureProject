@@ -1,6 +1,6 @@
 # critic
 
-Owner: [Name 5]. Requirement: VER-01.
+Owner: Abhishek. Requirement: VER-01.
 
 Gate 4 verification. The model does not check itself.
 

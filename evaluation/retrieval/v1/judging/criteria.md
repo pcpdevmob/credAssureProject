@@ -6,9 +6,9 @@ out to be unclear, write the case in your note column and let the adjudicator de
 ## Who judges
 | Role | Owner (CODEOWNERS) | Why |
 |---|---|---|
-| Judge A | @credassure-owner-name2 | Owns `evaluation/testset`; does not own the copilot or retrieval |
-| Judge B | @credassure-owner-name5 | Owns the Critic and ablations; does not own the copilot or retrieval |
-| Adjudicator | @credassure-owner-name3 | Decides only the rows where A and B disagree |
+| Judge A | @credassure-owner-name2 (Tejas) | Owns `evaluation/testset`; does not own the copilot or retrieval |
+| Judge B | @credassure-owner-name5 (Abhishek) | Owns the Critic and ablations; does not own the copilot or retrieval |
+| Adjudicator | @credassure-owner-name3 (Suresh) | Decides only the rows where A and B disagree |
 
 The copilot owner (name6) and the co-owner of `packages/retrieval` (name1) do not judge, because their own system is being measured.
 

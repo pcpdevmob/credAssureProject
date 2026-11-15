@@ -65,58 +65,58 @@ under `hosts:`, `terms_url`, `terms_note` (does it allow automated access? any r
 | Host | Documents | Owner | automated_access |
 |---|---|---|---|
 | bandhan.bank.in | 20 | [Name 6] | unknown |
-| bankofbaroda.bank.in | 2 | [Name 2] | unknown |
-| cbic-gst.gov.in | 69 | [Name 2] | unknown |
-| cgtmse.in | 3 | [Name 4] | unknown |
-| dcmsme.gov.in | 1 | [Name 5] | unknown |
+| bankofbaroda.bank.in | 2 | Tejas | unknown |
+| cbic-gst.gov.in | 69 | Abhishek | unknown |
+| cgtmse.in | 3 | Pritish | unknown |
+| dcmsme.gov.in | 1 | Abhishek | unknown |
 | delhihighcourt.nic.in | 3 | [Name 6] | unknown |
 | di.maharashtra.gov.in | 0 | [Name 1] | unknown |
-| egazette.gov.in | 3 | [Name 2] | unknown |
-| gstcouncil.gov.in | 35 | [Name 3] | unknown |
-| ic.gujarat.gov.in | 1 | [Name 4] | unknown |
-| indianbank.bank.in | 1 | [Name 5] | unknown |
+| egazette.gov.in | 3 | Tejas | unknown |
+| gstcouncil.gov.in | 35 | Suresh | unknown |
+| ic.gujarat.gov.in | 1 | Pritish | unknown |
+| indianbank.bank.in | 1 | Abhishek | unknown |
 | indianbank.in | 1 | [Name 6] | unknown |
 | industries.telangana.gov.in | 1 | [Name 1] | unknown |
-| investkarnataka.co.in | 1 | [Name 2] | unknown |
-| judgments.ecourts.gov.in | 3 | [Name 3] | unknown |
-| midc.maharashtra.gov.in | 7 | [Name 4] | unknown |
-| msme.gov.in | 0 | [Name 5] | unknown |
+| investkarnataka.co.in | 1 | Tejas | unknown |
+| judgments.ecourts.gov.in | 3 | Suresh | unknown |
+| midc.maharashtra.gov.in | 7 | Pritish | unknown |
+| msme.gov.in | 0 | Abhishek | unknown |
 | msme.up.gov.in | 1 | [Name 6] | unknown |
 | msmeonline.tn.gov.in | 1 | [Name 1] | unknown |
-| pnb.bank.in | 1 | [Name 2] | unknown |
-| rbi.org.in | 6 | [Name 3] | unknown |
-| rbidocs.rbi.org.in | 1 | [Name 4] | unknown |
-| sahamati.org.in | 1 | [Name 5] | unknown |
+| pnb.bank.in | 1 | Tejas | unknown |
+| rbi.org.in | 6 | Suresh | unknown |
+| rbidocs.rbi.org.in | 1 | Pritish | unknown |
+| sahamati.org.in | 1 | Abhishek | unknown |
 | samadhaan.msme.gov.in | 1 | [Name 6] | unknown |
 | sansad.in | 101 | [Name 1] | unknown |
-| sbi.bank.in | 3 | [Name 2] | unknown |
-| sbi.co.in | 1 | [Name 3] | unknown |
-| scr.sci.gov.in | 21 | [Name 4] | unknown |
-| tatacapital.com | 1 | [Name 5] | unknown |
+| sbi.bank.in | 3 | Tejas | unknown |
+| sbi.co.in | 1 | Suresh | unknown |
+| scr.sci.gov.in | 21 | Pritish | unknown |
+| tatacapital.com | 1 | Abhishek | unknown |
 | udyamregistration.gov.in | 8 | [Name 6] | unknown |
 | website.rbi.org.in | 1 | [Name 1] | unknown |
-| www.axis.bank.in | 1 | [Name 2] | unknown |
-| www.bajajfinserv.in | 1 | [Name 3] | unknown |
-| www.canarabank.bank.in | 1 | [Name 4] | unknown |
-| www.cgtmse.in | 378 | [Name 5] | unknown |
+| www.axis.bank.in | 1 | Tejas | unknown |
+| www.bajajfinserv.in | 1 | Suresh | unknown |
+| www.canarabank.bank.in | 1 | Pritish | unknown |
+| www.cgtmse.in | 378 | Abhishek | unknown |
 | www.data.gov.in | 2 | [Name 6] | unknown |
 | www.hdfc.bank.in | 1 | [Name 1] | unknown |
-| www.icici.bank.in | 1 | [Name 2] | unknown |
-| www.idfcfirst.bank.in | 1 | [Name 3] | unknown |
-| www.incometaxindia.gov.in | 2 | [Name 4] | unknown |
-| www.indiacode.gov.in | 1 | [Name 5] | unknown |
+| www.icici.bank.in | 1 | Tejas | unknown |
+| www.idfcfirst.bank.in | 1 | Suresh | unknown |
+| www.incometaxindia.gov.in | 2 | Pritish | unknown |
+| www.indiacode.gov.in | 1 | Abhishek | unknown |
 | www.indiacode.nic.in | 0 | [Name 6] | unknown |
 | www.indianbank.in | 1 | [Name 1] | unknown |
-| www.invoicemart.com | 1 | [Name 2] | unknown |
-| www.kotak.bank.in | 1 | [Name 3] | unknown |
+| www.invoicemart.com | 1 | Tejas | unknown |
+| www.kotak.bank.in | 1 | Suresh | unknown |
 | www.m1xchange.com | 23 | [Name 6] | unknown |
-| www.meity.gov.in | 2 | [Name 5] | unknown |
+| www.meity.gov.in | 2 | Abhishek | unknown |
 | www.mudra.org.in | 0 | [Name 6] | unknown |
 | www.ncgtc.in | 0 | [Name 1] | unknown |
-| www.rbi.org.in | 577 | [Name 2] | unknown |
-| www.rxil.in | 0 | [Name 3] | unknown |
-| www.sci.gov.in | 0 | [Name 4] | unknown |
-| www.sidbi.in | 44 | [Name 5] | unknown |
+| www.rbi.org.in | 577 | Tejas | unknown |
+| www.rxil.in | 0 | Suresh | unknown |
+| www.sci.gov.in | 0 | Pritish | unknown |
+| www.sidbi.in | 44 | Abhishek | unknown |
 | www.udyamregistration.gov.in | 1 | [Name 6] | unknown |
 | www.unionbankofindia.bank.in | 1 | [Name 1] | unknown |
 

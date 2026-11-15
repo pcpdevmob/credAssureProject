@@ -1,6 +1,6 @@
 name: working_capital
 version: "0.1.0"
-owner: "[Name 3]"
+owner: "Suresh"
 requirement_ids: [WC-01]
 tools: []
 readable_data: []

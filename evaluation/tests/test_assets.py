@@ -34,6 +34,27 @@ QUERIES = [
 ]
 
 
+# Owner of the agent each category grades (BRD §5.2, docs/build/REPO_STRUCTURE.md). Placeholders are still unnamed.
+CATEGORY_OWNER = {
+    "regulatory": "[Name 6]",  # copilot
+    "onboarding": "Tejas",
+    "cashflow": "Suresh",
+    "offers": "Pritish",
+    "negotiation": "Pritish",
+    "routing": "[Name 1]",  # supervisor
+    "injection": "[Name 6]",
+    "refusal": "[Name 6]",
+    "isolation": "[Name 1]",
+    "e2e": "[Name 1]",
+}
+
+
+def test_BRD5_nobody_writes_gold_for_their_own_agent() -> None:
+    assert set(build_testset.AUTHOR) == set(CATEGORY_OWNER)
+    assert all(build_testset.AUTHOR[c] != CATEGORY_OWNER[c] for c in CATEGORY_OWNER)
+    assert all(i["author"] == build_testset.AUTHOR[i["category"]] for i in ITEMS)
+
+
 def test_BRD13_category_counts_are_exact() -> None:
     assert Counter(i["category"] for i in ITEMS) == build_testset.COUNTS
     assert len({i["id"] for i in ITEMS}) == 100

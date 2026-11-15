@@ -16,16 +16,16 @@ from .scorers import ABSTAIN
 
 OUT = REPO / "evaluation" / "testset" / "v1"
 AUTHOR = {
-    "regulatory": "[Name 2]",
-    "onboarding": "[Name 3]",
-    "cashflow": "[Name 4]",
-    "offers": "[Name 3]",
-    "negotiation": "[Name 3]",
-    "routing": "[Name 2]",
-    "injection": "[Name 2]",
-    "refusal": "[Name 5]",
-    "isolation": "[Name 5]",
-    "e2e": "[Name 2]",
+    "regulatory": "Tejas",
+    "onboarding": "Suresh",
+    "cashflow": "Pritish",
+    "offers": "Suresh",
+    "negotiation": "Suresh",
+    "routing": "Tejas",
+    "injection": "Tejas",
+    "refusal": "Abhishek",
+    "isolation": "Abhishek",
+    "e2e": "Tejas",
 }  # nobody writes gold for their own agent (owner confirms at G1)
 SCHEMA = {
     "regulatory": '{"answer": str, "citations": [doc_id]}',

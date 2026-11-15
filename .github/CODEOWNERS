@@ -1,5 +1,7 @@
 # Ownership per docs/REPO_STRUCTURE.md (scope #42). Replace the @placeholder handles with real
 # Git host usernames before enabling branch protection. Shared packages need two reviewers.
+# Display names: name2 = Tejas, name3 = Suresh, pritish = Pritish, name5 = Abhishek;
+# name1, name6 and uilead are still to be named.
 *                               @credassure-owner-name1
 /agents/supervisor/             @credassure-owner-name1
 /apps/gateway/                  @credassure-owner-name1

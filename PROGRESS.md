@@ -2,7 +2,7 @@
 
 ## Current phase
 Phase 7 is done and re-measured on the closed corpus (2026-11-15): 1,275 documents indexed (1,084 real after the junk-page check); KR-05 stays OPEN (26/40 vs 34, all 40 queries answerable now); KR-04 0 violations. Earlier: Phase 4 (2026-11-05), Phase 3 follow-ups and Phase 5 (2026-11-06), Phases 8a, 8b and 6 (2026-11-07). **Next is Phase 9 (agents); 9e (copilot) needs the KFS date decision below first.** `openapi.json` and `packages/api-client` are current, so the UI lane can start U1. Still open:
-- **ADR 0018 freeze (human):** ADR 0018 (AgentResult, including `agent_version` and `tenant_id`) is Proposed and not frozen. Accept it before G1.
+- **G1 provisionally frozen (2026-11-15):** `evaluation/FROZEN.sha256` + FROZEN markers (`status: provisional`) on `evaluation/testset/v1`, `evaluation/retrieval/v1`, `data/frozen/v1`. ADR 0018 accepted (AgentResult frozen). Owners named: Tejas (Onboarding), Suresh (Working Capital), Pritish (LendWise), Abhishek (Critic); [Name 1], [Name 6] and the UI lead pending. G1 becomes final when the **G1-final checklist** below is done. **Next: Phase 9a in a fresh session.**
 - ~~KFS dates vs AS_OF_DATE~~ **closed by P2b (2026-11-15):** offers carry `issue_date` (po_date..AS_OF, own rng stream; v2 = AS_OF) and every case-scoped KFS uses it as `effective_from`; 111/111 in force; case isolation now tested live (E8 addendum).
 - **Retrieval labels — G1 labels v1.1-silver complete, human check pending (2026-11-15):** self-consistency 100/100; after the B1 section pass, strict +110 / lenient +204 labels; the 72 v1.0 labels disputed before it are kept and listed in `judging/human_pass_disputed_v1.0.md`; best recall@5 v1.0 24/40, strict 35, lenient 38 (section labels remove document-level inflation; was 26/37/38), pooling-biased, LLM-judged (E8 addenda 2–3). `make retrieval-eval` now fails only on KR-04 violations or isolation leaks; `make kappa` gives plain and weighted κ, verdict on weighted. **Next: `make judge JUDGE=pritish` on the 249-item stratified sample, then `make kappa JUDGE=pritish`.**
 - **Retrieval labels — silver first (decided 2026-11-15, `evaluation/retrieval/v1/judging/README.md`):** a blind Claude Code session judges the top-5 pool (995 items + 100 seeded duplicates for self-consistency; map in `judging/duplicates_map.json`) from a package exported outside the repo to `../credassure-judging/` (2/1/0; 2 = R, 1 and 0 = N); labels are **v1.1-silver**. Later, a seeded 25% sample (249 items) is judged blind with `make judge SAMPLE=0.25`: Pritish, then Tejas or Abhishek. Kappa (silver vs human) ≥ 0.7 confirms; otherwise full human judging per `criteria.md` with Suresh adjudicating. Then step 4: merge → `queries.v1.1.jsonl` (v1.0 kept), diff + kappa, re-run `make retrieval-eval` under both label sets; add v1.1 to `freeze.py` assets before `/freeze-g1`.
@@ -61,7 +61,7 @@ Phase 7 is done and re-measured on the closed corpus (2026-11-15): 1,275 documen
 | 5, 6 | NCGTC, MUDRA | 0 | 0 |
 | | **Total** | **1,092** | **245** |
 
-By owner (manual slots only; 5 assigned in total): [Name 2] 1, [Name 5] 1, [Name 6] 4 (1 unavailable), others 0. Nothing is waiting on an owner.
+By owner (manual slots only; 5 assigned in total): Tejas 1, Abhishek 1, [Name 6] 4 (1 unavailable), others 0. Nothing is waiting on an owner.
 
 ## Phase 7 re-measure on the closed corpus (2026-11-15)
 - **Clean re-ingest:** `var/corpus.db` deleted and the three Chroma collections dropped through the Chroma API (a hook blocks recursive deletes). `var/embed_cache.db` and `var/case.db` were kept. `make ingest` indexed 1,283 documents (1,092 real + 191 synthetic: kfs 129, policy 62), with 0 unchanged and 0 removed.
@@ -282,21 +282,31 @@ By owner (manual slots only; 5 assigned in total): [Name 2] 1, [Name 5] 1, [Name
   - SHOULD, not done: retrieval labels are doc_id + `section_hint`, not `section_path` (DATA_SPEC §7). Add `section_path` before G1, or recall@5 is inflated at document level.
   - SHOULD, by design: the `judge` scorer is a key-fact substring stub until J1 (scope #11, Phase 11).
 
-## G1 still needs (in this order, then `/freeze-g1`)
+## G1 pre-freeze work (done; provisional freeze 2026-11-15)
 - [x] Corpus ≥500 real documents available: 1071 (2026-11-14; manual list empty)
 - [x] Every referenced document available: `check_corpus_refs --strict` 0 failures and `freeze --readiness` clean (2026-11-14). Pre-freeze label changes, for the retrieval-label sign-off below: Q27 must_not_cite → R-STATE-003/-006 (old ones were scans); Q30 → R-BANK-S-016 + S-010 (R-BANK-03 404); Q31 retargeted to "Canara Bank MSME service charges" → R-BANK-08 (Indian Bank copies were scans); Q36 → R-RBI-10 Ch. III, must_not_cite R-RBI-11 (withdrawn). R-MSME-01 now holds the India Code MSMED Act text. **B1 (2026-11-15):** these edits now live in `build_assets.py` (a test keeps builder = committed); `check_corpus_refs --strict` also checks evidence quotes per document and KR-04 supersession (a superseded relevant doc, or a predecessor missing from `must_not_cite`; R-RBI-01 exempt as a withdrawal notice) over items, v1.0 and both v1.1-silver label files: 0 failures
 - [x] `section_path` on all 40 retrieval labels (B1, 2026-11-15): every label names a section read from the section chunker and the text (never from results); 10 headingless documents are explicit `exact ""`; 4 labels add an `exact ""` preamble where the answering text sits before the first heading. Q23 drops R-RBI-06 (saved file is the RBI home page; re-save, label in v2). Known chunker limit, reported not patched: Q06/Q35 under fixed512 and Q28 under semantic have no passage carrying the labelled section. A non-copilot owner still signs them off
 - [x] Regulatory gold (B1): 19 answerable items carry short `key_facts` plus verbatim `evidence` quotes checked in their own document. Fixes: T005 18% is CGST 9% (R-GST-01 heading 9971(v)) + SGST 9%; T013 cites the 2025 Act s.37(1)/(2)(g)/(3), R-TAX-02 (1961 s.43B) moved to must_not_cite; T004 adds R-CG-04 (the only CGTMSE page stating MSE eligibility); T010 and T019 exclude R-MSME-G-005 and R-RBI-12. Same KR-04 fixes in Q04, Q10, Q13, Q19, Q21
 - [x] G1 label set: `queries.v1.1-silver.jsonl` added to `freeze.py` assets (v1.0 kept). The 72 v1.0 labels disputed before the section pass are kept and listed for the human pass in `judging/human_pass_disputed_v1.0.md` (16 still recompute as disputed after narrowing)
-- [ ] Hand check by 2 people who don't own the agent: `evaluation/gold/hand_check.md` — form ready (rows 1–4 Tejas + Pritish, 5–8 Tejas + Suresh, 9 Suresh + Pritish, 10 Abhishek + Pritish)
-- [ ] Second independent transcription of the RBI Annex B APR illustration (S21) — blind form ready for Tejas (A) and Suresh (B): `evaluation/gold/fixtures/apr_transcription_sheet.md`
-- [ ] Owner names for [Name 1]…[Name 6] and gold authors (no one writes gold for their own agent)
-- [ ] Graded baseline S1–S3 on the course endpoint (`EVAL_BASE_URL`, `EVAL_NUM_CTX` set to its context window)
+- [ ] Hand check — moved to the G1-final checklist below
+- [ ] APR transcription — moved to the G1-final checklist below
+- [x] Owner names [Name 2]–[Name 5] → Tejas, Suresh, Pritish, Abhishek (2026-11-15), in docs, agent cards, CODEOWNERS legend, corpus lock/MANUAL_DOWNLOADS/CORPUS_INDEX (regenerated) and gold authors (`build_testset.AUTHOR`, items.jsonl `author` only). Checked: no one authors gold for, hand-checks, transcribes or judges their own agent's category; `test_BRD5_nobody_writes_gold_for_their_own_agent` guards the gold authors. [Name 1], [Name 6], UI lead → G1-final checklist
+- [ ] Graded baseline S1–S3 on the course endpoint (moved to the G1-final checklist below) (`EVAL_BASE_URL`, `EVAL_NUM_CTX` set to its context window)
   - **PENDING (B2, 2026-11-15):** `make llm-probe` fails, and neither `LLM_BASE_URL` nor `EVAL_BASE_URL` is set in `.env`, so the course endpoint is unreachable from here. Set `LLM_BASE_URL`/`LLM_MODEL` (probe) and `EVAL_BASE_URL`/`EVAL_MODEL`/`EVAL_NUM_CTX` (baseline) to the course values, then run `make llm-probe && make baseline`.
   - **2026-11-15 unblocked in code:** course endpoint is `Qwen/Qwen3-8B` at `https://103.42.50.41:1032/v1` (groups 016-030, CA `vm06-ca.crt`). Client now takes `LLM_CA_CERT`/`EVAL_CA_CERT`, `LLM_MAX_TOKENS`/`EVAL_MAX_TOKENS` and `LLM_DISABLE_THINKING`/`EVAL_DISABLE_THINKING` (ADR 0017 amendment). Remaining: owner puts keys + CA paths in the dotenv file, then `make llm-probe MODELS=course && make baseline MODELS=course`.
   - **Decision 2026-11-15:** integrate end to end on `MODELS=local` (Ollama qwen3:8b + in-process bge-small), then switch to `MODELS=course` for graded runs (ADR 0017).
-- [ ] ADR 0018 accepted (AgentResult freeze)
-- [ ] then `/freeze-g1`
+- [x] ADR 0018 accepted (AgentResult freeze), Alternatives section added (2026-11-15)
+- [x] `/freeze-g1` run as a **provisional** freeze (2026-11-15): `freeze --write` → `evaluation/FROZEN.sha256`; markers say `status: provisional`
+
+## G1-final checklist (turns the provisional freeze into the final G1 freeze)
+- [ ] Human label check: `make judge JUDGE=pritish` on the 249-item sample, then Tejas or Abhishek; `make kappa` **weighted κ ≥ 0.7** confirms v1.1-silver, else full human judging per `judging/criteria.md` (Suresh adjudicates)
+- [ ] Hand check (10 rows, `evaluation/gold/hand_check.md`): rows 1–4 Tejas + Pritish, 5–8 Tejas + Suresh, 9 Suresh + Pritish, 10 Abhishek + Pritish; all match gold
+- [ ] APR transcription (S21, `evaluation/gold/fixtures/apr_transcription_sheet.md`): Tejas (A) and Suresh (B) agree and **match 17.07%**
+- [ ] Graded baseline S1–S3 on the course endpoint (`make llm-probe MODELS=course && make baseline MODELS=course`)
+- [ ] Names for [Name 1] (Supervisor), [Name 6] (Copilot) and the UI lead; then CODEOWNERS handles
+- [ ] When all are ticked: change the three FROZEN markers to `status: final` (markers only; the manifest must still verify)
+
+**Correction rule after the provisional freeze:** v1 files are never edited. Any correction (gold, label, item) goes into a new version (`evaluation/testset/v2/`, `queries.v2…`) with an ADR naming each change and why. Every score affected is recomputed and reported next to the old one (old version, new version, delta), never replacing it.
 
 ## G1 eval notes (2026-11-15)
 - **Gold corrections (B1), with reasons:**
@@ -354,10 +364,10 @@ src tgt+buf avail  pend  rej nodate  name
 
 owner      assigned imported pending
 [Name 1]         92        0      92
-[Name 2]         87        0      87
-[Name 3]         86        0      86
-[Name 4]         86        0      86
-[Name 5]         82        0      82
+Tejas         87        0      87
+Suresh         86        0      86
+Pritish         86        0      86
+Abhishek         82        0      82
 [Name 6]         92        0      92
 ```
 - A document counts as available only if it has extracted text **and** an effective date.
@@ -386,7 +396,7 @@ owner      assigned imported pending
 - **Before G1 (Phase 3):**
   - **Readiness check:** run `uv run python -m credassure.evaluation.freeze --readiness`. It lists 5 test items and 14 retrieval queries whose relevant documents are not downloaded yet: R-MSME-01, R-MSME-02/-G-004, R-TAX-01/02, R-RBI-09, R-GZ-002, R-MSME-G-003, R-JUD-001, R-STATE-005, R-BANK-02/03/05, R-RBI-01/11. `--write` refuses to freeze until the list is empty.
   - **Hand check:** two people who don't own the agent fill in `evaluation/gold/hand_check.md` (10 rows).
-  - **Authorship:** gold authors are placeholders ([Name 2]…). Replace them, and confirm that nobody wrote gold for their own agent.
+  - ~~Authorship~~ done 2026-11-15 (Tejas, Suresh, Pritish, Abhishek; no one authors their own category).
   - **Baseline:** the local `llama3.1:8b` run is provisional. Ollama's context length depends on how it was started (ADR 0017). The graded baseline runs on the course endpoint.
 - **Phase 4 follow-ups:**
   - **Mitigation timing (money-auditor S7):** affordability counts evidenced mitigations from week 1, and gold does the same. The fix needs an ADR 0021 amendment and the same change in gold, so it is the owner's decision.
@@ -428,7 +438,7 @@ owner      assigned imported pending
 - **`data/frozen/v1/_design/designs.json` is design intent.** Gold must not read it; add a Phase 3 test for that.
 - **Not yet assigned to a phase:** S07 negotiation templates, S09 chat-intent examples (~60), S11 banned phrases, S13 report templates.
 - Course endpoint context window, JSON/guided-decoding support, token quota (confirm day 2). Course: `Qwen/Qwen3-8B`, 8192 tokens in+out, 1024 output max, 1 active request/key, 60/min (2026-11-15). Local Ollama: `qwen3:8b` (was `llama3.1:8b`), context 8192, guided JSON off until `make llm-probe` (Phase 6) passes against it (ADR 0017).
-- Owner names for [Name 1]…[Name 6] and UI lead; replace `@credassure-owner-*` placeholders in `.github/CODEOWNERS`
+- Owner names for [Name 1], [Name 6] and UI lead (Tejas, Suresh, Pritish, Abhishek done 2026-11-15); replace `@credassure-owner-*` placeholders in `.github/CODEOWNERS` with real git usernames
 - Before G1 (from the 5 Nov web check, docs/DATA_RESOURCES.md "Verification status"):
   - GST heading 9971 rate after Notification 15/2025-CT(R) — confirm 18% on loan fees (D7)
   - CGTMSE guarantee ceiling ₹10 cr (RESOURCES D3) vs ₹5 cr on SIDBI page — confirm on cgtmse.in
@@ -456,7 +466,6 @@ owner      assigned imported pending
 - Known side effect of P2b: v2 revision KFS are in force (AS_OF) before the negotiation round runs. LW-13/BR-09 gate concessions by offer version in code, not by retrieval; revisit if the copilot quotes a v2 fee early.
 
 ## Decisions pending (human)
-- Accept ADR 0018 before G1 to freeze AgentResult, including `agent_version` (scope #25). The field is on the model. The stage-retry route stays in Phase 9
 - Permitted cut order if Week 3 slips (each needs an ADR): scope #35, #41, #38, #37
 
 ## Decisions
@@ -476,7 +485,7 @@ owner      assigned imported pending
 - #9 Blocker catalogue (`BlockerCode`, gate vs warning vs needs-input)
 - #21 CriticFinding schema only. Regeneration stays in Phase 9d
 - #24 Agent registry and data-access matrix (`agents/registry.yaml`, `packages/tools` authorize)
-- #25 `agent_version` field on AgentResult. Retry route stays in Phase 9. Freeze is ADR 0018, still Proposed
+- #25 `agent_version` field on AgentResult. Retry route stays in Phase 9. Frozen by ADR 0018 (Accepted 2026-11-15)
 - #26 Excluded multi-agent patterns (ADR 0009)
 - #14 Corpus legal-basis audit (`make corpus-audit`, `credassure.datagen.corpus`; throttled downloader `make corpus-download`)
 - #32 Error catalogue (`ApiErrorCode`). HTTP behaviour of the 501 routes is unchanged

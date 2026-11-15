@@ -145,10 +145,10 @@ Each member owns one agent end to end (prompts, tools, tests and its test catego
 | Member | Agent owned | Shared responsibility |
 | --- | --- | --- |
 | [Name 1] | Supervisor (master agent) | Integration lead; FastAPI service; approval routing; Streamlit interface; Docker |
-| [Name 2] | Employee Onboarding Agent | Test set and gold answers; prompt baseline study |
-| [Name 3] | Working Capital Advisory Agent | Cash-flow engine; synthetic MSME cases |
-| [Name 4] | LendWise Agent | Loan-cost engine; synthetic lender offers and KFS documents; lender simulator |
-| [Name 5] | Verification Critic | Number normaliser; tracing; red-teaming; ablations; failure analysis |
+| Tejas | Employee Onboarding Agent | Test set and gold answers; prompt baseline study |
+| Suresh | Working Capital Advisory Agent | Cash-flow engine; synthetic MSME cases |
+| Pritish | LendWise Agent | Loan-cost engine; synthetic lender offers and KFS documents; lender simulator |
+| Abhishek | Verification Critic | Number normaliser; tracing; red-teaming; ablations; failure analysis |
 | [Name 6] | Ask CredAssure copilot | Document library; search experiments |
 
 Rules for working agent-wise: all agents return one shared result format and use the shared fact-ledger functions, both frozen at the end of Week 1; a working skeleton of all six agents runs by mid-Week 2; and no member writes the gold answers for their own agent's test category.

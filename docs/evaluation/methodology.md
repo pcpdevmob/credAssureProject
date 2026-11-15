@@ -1,6 +1,6 @@
 # Evaluation methodology
 
-TODO owner: [Name 2].
+TODO owner: Tejas.
 
 ## Test set
 ## Gold

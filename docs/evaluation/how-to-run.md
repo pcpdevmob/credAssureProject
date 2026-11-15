@@ -1,6 +1,6 @@
 # How to run the evaluation
 
-TODO owner: [Name 2].
+TODO owner: Tejas.
 
 ## Commands
 ## Reports

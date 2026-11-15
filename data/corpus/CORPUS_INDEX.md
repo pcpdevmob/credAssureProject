@@ -33,10 +33,10 @@ One row per manifest entry, sorted by source then doc_id. The spreadsheet versio
 | Owner | Assigned | Imported (ok_manual) | Pending |
 |---|---|---|---|
 | [Name 1] | 0 | 0 | 0 |
-| [Name 2] | 1 | 0 | 0 |
-| [Name 3] | 0 | 0 | 0 |
-| [Name 4] | 0 | 0 | 0 |
-| [Name 5] | 1 | 0 | 0 |
+| Tejas | 1 | 0 | 0 |
+| Suresh | 0 | 0 | 0 |
+| Pritish | 0 | 0 | 0 |
+| Abhishek | 1 | 0 | 0 |
 | [Name 6] | 4 | 0 | 1 |
 
 ## Index
@@ -1086,7 +1086,7 @@ One row per manifest entry, sorted by source then doc_id. The spreadsheet versio
 | R-GST-C-064 | English | 9 | [link](https://cbic-gst.gov.in/pdf/NN-30-2024-Eng.pdf) | LendWise, Copilot | Partial | ok_manual |  | L4 | IN | all | 2024-12-10 | extracted | Yes |  |
 | R-GST-C-065 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/NN-30-2024-Hindi.pdf) | LendWise, Copilot | Partial | ok_manual |  | L4 | IN | all | 2024-11-20 | extracted | Yes |  |
 | R-GST-C-066 | English | 9 | [link](https://cbic-gst.gov.in/pdf/NN-31-2024-Eng.pdf) | LendWise, Copilot | Partial | ok_manual |  | L4 | IN | all | 2024-12-13 | extracted | Yes |  |
-| R-GST-C-067 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/NN-31-2024-Hindiss.pdf) | LendWise, Copilot | No | rejected | [Name 2] | L4 | IN | all |  |  | No | Onboarding |
+| R-GST-C-067 | Hindi | 9 | [link](https://cbic-gst.gov.in/pdf/NN-31-2024-Hindiss.pdf) | LendWise, Copilot | No | rejected | Tejas | L4 | IN | all |  |  | No | Onboarding |
 | R-GST-C-068 | Notification No 01/2026 - HSNS CESS | 9 | [link](https://cbic-gst.gov.in/pdf/Notification%20No%2001_2026%20-%20HSNS%20CESS.pdf) | LendWise, Copilot | Partial | ok_manual |  | L4 | IN | all | 2026-02-01 | extracted | Yes |  |
 | R-GST-C-069 | Notification No 02/2026 - HSNS CESS | 9 | [link](https://cbic-gst.gov.in/pdf/Notification%20No%2002_2026%20-%20HSNS%20CESS.pdf) | LendWise, Copilot | Partial | ok_manual |  | L4 | IN | all | 2026-02-01 | extracted | Yes |  |
 | R-GST-C-070 | Notification No 03/2026 - HSNS CESS | 9 | [link](https://cbic-gst.gov.in/pdf/Notification%20No%2003_2026%20-%20HSNS%20CESS.pdf) | LendWise, Copilot | Partial | ok_manual |  | L4 | IN | all | 2026-05-20 | extracted | Yes |  |
@@ -1111,7 +1111,7 @@ One row per manifest entry, sorted by source then doc_id. The spreadsheet versio
 | R-GST-C-089 | Instructions for processing of applications for GST registration - regarding. | 9 | [link](https://cbic-gst.gov.in/pdf/ins-gst-no-03-2025.pdf) | LendWise, Copilot | Partial | ok_manual |  | L4 | IN | all | 2025-04-17 | extracted | Yes |  |
 | R-GST-C-090 | Instruction No. 02/2024 -GST - Guidelines for Second special All-India Drive against fake registrations –reg. | 9 | [link](https://cbic-gst.gov.in/pdf/instruction-02-2024-GST-12082024.pdf) | LendWise, Copilot | Partial | ok_manual |  | L4 | IN | all | 2024-08-12 | extracted | Yes |  |
 | R-GST-C-091 | KIND ATTENTION: CENTRAL EXCISE TAXPAYERS: Request for Suggestions from Industry & Trade Associations for Budget 2024-25 regarding changes in direct and indirect taxes. | 9 | [link](https://cbic-gst.gov.in/pdf/letter-trade-associations-webmaster.pdf) | LendWise, Copilot | No | rejected |  | L4 | IN | all |  |  | No |  |
-| R-GST-C-092 | Short PPT | 9 | [link](https://cbic-gst.gov.in/pdf/ovw-short.pdf) | LendWise, Copilot | No | rejected | [Name 5] | L4 | IN | all |  |  | No | Critic |
+| R-GST-C-092 | Short PPT | 9 | [link](https://cbic-gst.gov.in/pdf/ovw-short.pdf) | LendWise, Copilot | No | rejected | Abhishek | L4 | IN | all |  |  | No | Critic |
 | R-GST-C-093 | Latest Update - 6th February 2024 - alternate steps to locate e-Payment Challan under ICEGATE portal. | 9 | [link](https://cbic-gst.gov.in/pdf/procedure-locate-e-payment-challan.pdf) | LendWise, Copilot | Partial | ok_manual |  | L4 | IN | all | 2024-02-06 | pdf_metadata | Yes |  |
 | R-GST-C-094 | GST migration(English) | 9 | [link](https://cbic-gst.gov.in/pdf/public-notice-st-gst-last-date-eng.pdf) | LendWise, Copilot | Partial | ok_manual |  | L4 | IN | all | 2017-04-30 | extracted | Yes |  |
 | R-GST-C-095 | GST migration(Hindi) | 9 | [link](https://cbic-gst.gov.in/pdf/public-notice-st-gst-last-date-hindi.pdf) | LendWise, Copilot | Partial | ok_manual |  | L4 | IN | all | 2017-04-26 | pdf_metadata | Yes |  |

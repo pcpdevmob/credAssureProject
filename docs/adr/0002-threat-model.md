@@ -28,13 +28,13 @@ content to `docs/security/` per docs/REPO_STRUCTURE.md; until then this ADR is t
 ## OWASP LLM Top 10 (2025) risk register
 | ID | Risk | Where it applies | Primary controls | Test evidence | Owner |
 |---|---|---|---|---|---|
-| LLM01 | Prompt injection | KFS text, corpus passages, lender replies, chat | Spotlighting, injection scan + flags, no document-driven control flow, Critic | 8 injection items, red-team log (S16), ablation A5 | [Name 5] |
+| LLM01 | Prompt injection | KFS text, corpus passages, lender replies, chat | Spotlighting, injection scan + flags, no document-driven control flow, Critic | 8 injection items, red-team log (S16), ablation A5 | Abhishek |
 | LLM02 | Sensitive information disclosure | Chat, logs, traces, cross-case retrieval | PII redaction everywhere, case scoping, log redactor | Redaction tests, 3 isolation items | [Name 1] |
 | LLM03 | Supply chain | Python deps, images, model endpoint | uv.lock, pip-audit in CI, image digests (Phase 12), SBOM | CI audit job | [Name 1] |
 | LLM04 | Data and model poisoning | Public corpus, synthetic data | Primary publishers only, hashed manifest, frozen v1 data | `data/corpus/audit.py` | [Name 6] |
-| LLM05 | Improper output handling | Report rendering, negotiation messages | Jinja2 autoescape, Markdown escaping, Critic before any output | Report tests, safety items | [Name 5] |
+| LLM05 | Improper output handling | Report rendering, negotiation messages | Jinja2 autoescape, Markdown escaping, Critic before any output | Report tests, safety items | Abhishek |
 | LLM06 | Excessive agency | Tools, gates, approvals | Allowlisted tools per agent, code-only gates, no offer acceptance path | Forced-GO tests, routing items | [Name 1] |
 | LLM07 | System prompt leakage | Copilot | No secrets in prompts; refusal policy | Red-team prompts | [Name 6] |
 | LLM08 | Vector and embedding weaknesses | Chroma + FTS5 retrieval | Metadata filters (case, jurisdiction, date), embedded Chroma only (no server mode) | Retrieval eval, isolation items | [Name 6] |
-| LLM09 | Misinformation | Narratives, copilot answers | Ledger-only numbers, citation verification, abstention string | Regulatory items, bad-citation fixtures (S24) | [Name 5] |
+| LLM09 | Misinformation | Narratives, copilot answers | Ledger-only numbers, citation verification, abstention string | Regulatory items, bad-citation fixtures (S24) | Abhishek |
 | LLM10 | Unbounded consumption | Token quota, loops | Step cap 10, token caps, loop detection, rate limits, circuit breaker | Budget tests, scope #4 | [Name 1] |

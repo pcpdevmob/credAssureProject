@@ -1,6 +1,6 @@
 # working-capital
 
-Owner: [Name 3]. Requirement: WC-01.
+Owner: Suresh. Requirement: WC-01.
 
 Gate 2 funding need from the weekly cash table.
 

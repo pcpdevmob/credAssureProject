@@ -344,9 +344,9 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0015 | Demo: live, with replay profile and recorded video fallback | Accepted |
 | 0016 | Langfuse self-hosted in Compose (amends BRD NFR-09) | Accepted |
 | 0017 | Local default model: Ollama, Llama 3.1 8B (course endpoint stays the graded path) | Accepted |
-| 0018 | AgentResult contract, including agent_version and tenant_id | Proposed (not frozen) |
+| 0018 | AgentResult contract, including agent_version and tenant_id | Accepted (frozen at G1) |
 
-Full index with phase and scope numbers: `docs/adr/README.md`. ADR 0018 stays Proposed until the owner accepts the freeze.
+Full index with phase and scope numbers: `docs/adr/README.md`.
 
 ## 10. Quality requirements — scenarios
 | ID | Characteristic | Stimulus | Response | Measure |

@@ -267,12 +267,12 @@ def test_G2_status_screen_shows_progress_sources_and_owners(
     manifest = {"documents": [entry(doc_id="A"), entry(doc_id="B"), entry(doc_id="C")]}
     lock = {
         "A": {"status": "ok"},
-        "B": {"status": "pending_manual", "owner": "[Name 2]"},
+        "B": {"status": "pending_manual", "owner": "Tejas"},
         "C": {"status": "needs_date"},
     }
     screen = status_screen(_sources(), manifest, lock, tmp_path)
     assert screen.splitlines()[0].startswith("Real available 1/500 [")
-    assert "needs date or review 1" in screen and "[Name 2]" in screen
+    assert "needs date or review 1" in screen and "Tejas" in screen
 
 
 def test_KR01_buffer_harvests_past_target_without_manual_slots() -> None:

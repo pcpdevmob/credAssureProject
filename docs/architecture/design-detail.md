@@ -180,7 +180,7 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
 - **Blockers:** `SUP_UPSTREAM_NOT_GO`, `SUP_BUDGET_EXCEEDED`, `SUP_SCHEMA_INVALID`, `SUP_ROUTE_HELD`.
 - **Tests:** isolation 3/3, routing 6/6, end-to-end ≥4/5; forced-GO agent outputs still blocked.
 
-#### 2.4.2 Employee Onboarding Agent — Gate 1 Readiness (owner: [Name 2])
+#### 2.4.2 Employee Onboarding Agent — Gate 1 Readiness (owner: Tejas)
 - **Inputs:** preparer `emp_id` from the authenticated user (never from chat — ONB-01); hr.db (read-only).
 - **Pipeline:** `get_hr_profile(emp_id)` → `evaluate_onboarding_rules(profile, AS_OF_DATE)` returns per-rule {PASS, FAIL, UNKNOWN} for role, each mandatory training (status + expiry), policy ack version → code sets gate → LLM drafts the explanation of FAIL/UNKNOWN rules and next actions → Critic check that every failed rule is named.
 - **LLM calls:** `onb_explain v1` (input: rule results table only, no raw HR record). Stretch ONB-07: `onb_checklist v1` with policy citations from `search_knowledge(collection=policy)`.
@@ -190,7 +190,7 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
 - **Safety:** no write tool to HR (ONB-05); PII redaction on chat (ONB-06).
 - **Tests:** onboarding 10/10.
 
-#### 2.4.3 Working Capital Advisory Agent — Gate 2 Funding Need (owner: [Name 3])
+#### 2.4.3 Working Capital Advisory Agent — Gate 2 Funding Need (owner: Suresh)
 - **Inputs:** case files (order, opening_position, costs, receipts, receivables, payables, inventory).
 - **Pipeline:** optional header mapping (only when CSV headers differ) → `validate_case_files` (WC-01/02) → if blockers: pick highest-priority blocker by code → one question → NEEDS_INPUT; else `compute_cash_table` (26 weeks, confirmed receipts only, WC-05) → `compute_recommendation` (peak shortfall + buffer − undrawn limits − confirmed mitigations, round up to ₹1 lakh) → `bridge` from ₹2 cr request → write ledger → LLM drafts drivers explanation from ledger keys only (WC-07).
 - **LLM calls:** `wc_header_map v1` (map unknown headers to a fixed field list; code validates); `wc_explain v1` (input: ledger facts dict).
@@ -206,7 +206,7 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
 - **Gate (code):** ≥2 comparable AND affordable offers → GO.
 - **Tests:** offers 15/15; negotiation safety 5/5.
 
-#### 2.4.5 Verification Critic — Gate 4 Verification (owner: [Name 5])
+#### 2.4.5 Verification Critic — Gate 4 Verification (owner: Abhishek)
 - **Inputs:** any generated text (agent narratives, copilot answers, negotiation messages, report), the case ledger, cited chunk IDs.
 - **Pipeline:** `verify_claims` = (a) normaliser extracts every amount/percent/date with span → match each to a ledger fact (₹1 / 0.01 pp; dates exact); (b) each citation: chunk exists, collection allowed, not superseded as of `AS_OF_DATE`, same case for KFS, quoted span/keywords present; (c) banned-content scan; (d) report completeness vs required sections → findings {critical, warning}.
 - **On failure:** return findings to the owning stage; the owner regenerates (≤2) → then fixed template fallback (`reports/templates/fallback_*.j2`).
