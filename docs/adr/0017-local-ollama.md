@@ -1,4 +1,4 @@
-# ADR 0017 — Local default model: Ollama, Llama 3.1 8B
+# ADR 0017 — Local default model: Ollama (Qwen3 8B since 2026-11-15; was Llama 3.1 8B)
 
 Status: Accepted · 2026-11-05 · Approved by the project owner (Pritish) · Does not amend BRD NFR-01
 
@@ -13,6 +13,7 @@ NFR-01 says the product runs only on the course's ≤8B chat and embeddings endp
 - `LLM_API_KEY=ollama`. Ollama ignores the key; the OpenAI SDK refuses an empty one.
 - `LLM_SUPPORTS_GUIDED_JSON` stays `false` until Phase 6 probes Ollama's JSON mode.
 - Graded evaluation uses the course endpoint. Set `LLM_BASE_URL`, `LLM_MODEL`, `EMBED_BASE_URL` and `EMBED_MODEL` to the course values. No code change.
+- Amendment 2026-11-15 (chat): the course model is `Qwen/Qwen3-8B`; groups 016-030 use `https://103.42.50.41:1032/v1` with CA `vm06-ca.crt` (`LLM_CA_CERT`). The local default moves from `llama3.1:8b` to `qwen3:8b`, so local results come from the same model family as graded results. Qwen3 thinks by default; `LLM_DISABLE_THINKING=true` sends `chat_template_kwargs.enable_thinking=false` and strips any `<think>` block. Course limits: 1 active request per key, 60 per minute (`LLM_RATE_PER_MINUTE=55`), 8192 tokens in+out, 1024 output max (`LLM_MAX_TOKENS`). The endpoint serves no embeddings.
 - Amendment 2026-11-15: the course embeddings endpoint serves `bge-small-en-v1.5` (384 dimensions, at most 16 texts per request, 512 model tokens each) behind a self-signed CA. Set `EMBED_CA_CERT` to the CA file, keep `EMBED_BATCH=16` and index into a fresh `CHROMA_PATH`; KR-05 is reported on this embedder.
 
 ## Consequences

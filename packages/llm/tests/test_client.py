@@ -332,3 +332,20 @@ def test_scope36_bump_check_refuses_an_option_as_base() -> None:
 
     with pytest.raises(SystemExit):
         prompts.main(["check", "--base", "--output=x"])
+
+
+def test_NFR02_qwen3_thinking_off_is_requested_and_think_block_stripped() -> None:
+    script = Script(_ok('<think>\nweighing it\n</think>\n\n{"a": 1}'))
+    llm, _ = make(script, disable_thinking=True, max_tokens=1024)
+    assert llm.complete("x", name="p") == '{"a": 1}'
+    body = script.bodies[0]
+    assert body["chat_template_kwargs"] == {"enable_thinking": False}
+    assert body["max_tokens"] == 1024
+
+
+def test_NFR02_defaults_send_neither_thinking_switch_nor_max_tokens() -> None:
+    script = Script(_ok("<think>kept</think>ok"))
+    llm, _ = make(script)
+    assert llm.complete("x", name="p") == "<think>kept</think>ok"
+    assert "chat_template_kwargs" not in script.bodies[0]
+    assert "max_tokens" not in script.bodies[0]

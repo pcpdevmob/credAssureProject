@@ -293,6 +293,7 @@ By owner (manual slots only; 5 assigned in total): [Name 2] 1, [Name 5] 1, [Name
 - [ ] Owner names for [Name 1]…[Name 6] and gold authors (no one writes gold for their own agent)
 - [ ] Graded baseline S1–S3 on the course endpoint (`EVAL_BASE_URL`, `EVAL_NUM_CTX` set to its context window)
   - **PENDING (B2, 2026-11-15):** `make llm-probe` fails, and neither `LLM_BASE_URL` nor `EVAL_BASE_URL` is set in `.env`, so the course endpoint is unreachable from here. Set `LLM_BASE_URL`/`LLM_MODEL` (probe) and `EVAL_BASE_URL`/`EVAL_MODEL`/`EVAL_NUM_CTX` (baseline) to the course values, then run `make llm-probe && make baseline`.
+  - **2026-11-15 unblocked in code:** course endpoint is `Qwen/Qwen3-8B` at `https://103.42.50.41:1032/v1` (groups 016-030, CA `vm06-ca.crt`). Client now takes `LLM_CA_CERT`/`EVAL_CA_CERT`, `LLM_MAX_TOKENS`/`EVAL_MAX_TOKENS` and `LLM_DISABLE_THINKING`/`EVAL_DISABLE_THINKING` (ADR 0017 amendment). Remaining: owner puts the group key + values in `.env`, then `make llm-probe && make baseline`.
 - [ ] ADR 0018 accepted (AgentResult freeze)
 - [ ] then `/freeze-g1`
 
@@ -425,7 +426,7 @@ owner      assigned imported pending
 - **Phase 3 must confirm every offer tag in PLANTS.md against independent gold before the FROZEN marker (S6).**
 - **`data/frozen/v1/_design/designs.json` is design intent.** Gold must not read it; add a Phase 3 test for that.
 - **Not yet assigned to a phase:** S07 negotiation templates, S09 chat-intent examples (~60), S11 banned phrases, S13 report templates.
-- Course endpoint context window, JSON/guided-decoding support, token quota (confirm day 2). Local Ollama is settled: `llama3.1:8b`, context 8192, guided JSON off until `make llm-probe` (Phase 6) passes against it (ADR 0017).
+- Course endpoint context window, JSON/guided-decoding support, token quota (confirm day 2). Course: `Qwen/Qwen3-8B`, 8192 tokens in+out, 1024 output max, 1 active request/key, 60/min (2026-11-15). Local Ollama: `qwen3:8b` (was `llama3.1:8b`), context 8192, guided JSON off until `make llm-probe` (Phase 6) passes against it (ADR 0017).
 - Owner names for [Name 1]…[Name 6] and UI lead; replace `@credassure-owner-*` placeholders in `.github/CODEOWNERS`
 - Before G1 (from the 5 Nov web check, docs/DATA_RESOURCES.md "Verification status"):
   - GST heading 9971 rate after Notification 15/2025-CT(R) — confirm 18% on loan fees (D7)
@@ -443,7 +444,7 @@ owner      assigned imported pending
 - APR nominal, proven by RBI Annex B reproduction (17.07% on exact EMI ₹969.73; rounded ₹970 gives 17.10% and fails)
 - Reranker none unless mentor approves · Judge J1 calibrated, kappa ≥ 0.7 else human scoring · Live demo with replay + video fallback · Boundary rule hold
 - Langfuse self-hosted in Compose (ADR 0016, approved by owner 2026-11-05)
-- Local dev and demo model: Ollama `llama3.1:8b` plus `nomic-embed-text`, context 8192 (ADR 0017). Graded eval stays on the course endpoint.
+- Local dev and demo model: Ollama `qwen3:8b` (switched from `llama3.1:8b` on 2026-11-15 to match the course Qwen3-8B) plus `nomic-embed-text`, context 8192 (ADR 0017). Graded eval stays on the course endpoint.
 
 ## Retrieval v2 query backlog (P2b, after G1; never edit v1 after freeze)
 - One NBFC-perspective query (`lender_type=nbfc`), so the `applies_to` filter is tested both ways (E8 S2).

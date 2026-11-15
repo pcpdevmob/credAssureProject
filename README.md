@@ -29,12 +29,12 @@ Both tools share the same docs and rules. **Read START_HERE.md first.** For a on
 make install                 # uv sync (Python 3.12 workspace)
 cp .env.example .env         # fill JWT_SECRET (>=32 chars); model defaults are already Ollama
 OLLAMA_CONTEXT_LENGTH=8192 ollama serve   # host install; skip if you use Compose
-make ollama-pull             # llama3.1:8b + nomic-embed-text (about 5 GB, once)
+make ollama-pull             # qwen3:8b + nomic-embed-text (about 5 GB, once)
 make check                   # ruff, format, mypy --strict, pytest, bandit
 make run-api                 # http://localhost:8000/docs
 make langfuse-up             # self-hosted tracing (ADR 0016); needs deploy/env/langfuse.env
 ```
-Local chat model is Llama 3.1 8B Instruct (`llama3.1:8b`) and embeddings are `nomic-embed-text`, both on Ollama (ADR 0017). Graded eval points `LLM_BASE_URL`, `LLM_MODEL`, `EMBED_BASE_URL` and `EMBED_MODEL` at the course endpoint instead; that needs a re-index if the embeddings model changes.
+Local chat model is Qwen3 8B (`qwen3:8b`, same family as the course `Qwen/Qwen3-8B`) and embeddings are `nomic-embed-text`, both on Ollama (ADR 0017). Graded eval points `LLM_BASE_URL`, `LLM_MODEL`, `EMBED_BASE_URL` and `EMBED_MODEL` at the course endpoint instead; that needs a re-index if the embeddings model changes.
 
 Compose profiles: `make compose-dev` and `make compose-demo` start Ollama and point the gateway at `http://ollama:11434/v1` (`make ollama-pull` then downloads into that container). `make compose-test` keeps the LLM off (FakeLLM arrives in Phase 6). Replay arrives in Phase 12.
 

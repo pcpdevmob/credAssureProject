@@ -35,6 +35,9 @@ class Settings(BaseSettings):
     llm_model: str | None = None
     llm_context_tokens: int = Field(default=8192, gt=0)
     llm_supports_guided_json: bool = False
+    llm_ca_cert: Path | None = None  # course endpoint: CA file of its self-signed certificate
+    llm_max_tokens: int = Field(default=1024, gt=0, le=1024)  # course cap per call
+    llm_disable_thinking: bool = False  # Qwen3: no <think> block (ADR 0017 amendment)
     # ADR 0008 / scope #22, #23, #48: model-call resilience
     llm_call_timeout_s: float = Field(default=30.0, gt=0)
     stage_timeout_s: float = Field(default=300.0, gt=0)

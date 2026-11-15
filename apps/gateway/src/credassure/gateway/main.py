@@ -85,11 +85,16 @@ class _Clock:
 def _default_llm(settings: Settings) -> LLMPort | None:
     if not settings.llm_enabled or not settings.llm_base_url:
         return None
+    import ssl
+
+    import httpx2
+
     from credassure.llm.cache import ResponseCache
     from credassure.llm.client import OpenAICompatLLM
     from credassure.llm.resilience import CircuitBreaker, configure_shared_limiter
 
     key = settings.llm_api_key.get_secret_value() if settings.llm_api_key else None
+    ca = settings.llm_ca_cert
     return OpenAICompatLLM(
         settings.llm_base_url,
         key,
@@ -100,6 +105,9 @@ def _default_llm(settings: Settings) -> LLMPort | None:
         limiter=configure_shared_limiter(settings.llm_rate_per_minute),
         cache=ResponseCache(settings.llm_cache_path) if settings.llm_cache_path else None,
         guided_json=settings.llm_supports_guided_json,
+        max_tokens=settings.llm_max_tokens,
+        disable_thinking=settings.llm_disable_thinking,
+        http_client=httpx2.Client(verify=ssl.create_default_context(cafile=ca)) if ca else None,
     )
 
 

@@ -6,7 +6,9 @@ LLM_SUPPORTS_GUIDED_JSON=true (ADR 0017, PROGRESS open question). Never part of 
 """
 
 import os
+import ssl
 
+import httpx2
 from pydantic import BaseModel
 
 from credassure.llm.client import OpenAICompatLLM
@@ -19,11 +21,15 @@ class _Probe(BaseModel):
 
 
 def main() -> int:
+    ca = os.environ.get("LLM_CA_CERT")
     llm = OpenAICompatLLM(
         os.environ["LLM_BASE_URL"],
         os.environ.get("LLM_API_KEY"),
         os.environ.get("LLM_MODEL", "default"),
         guided_json=True,
+        max_tokens=int(os.environ.get("LLM_MAX_TOKENS", "1024")),
+        disable_thinking=os.environ.get("LLM_DISABLE_THINKING", "").lower() == "true",
+        http_client=httpx2.Client(verify=ssl.create_default_context(cafile=ca)) if ca else None,
     )
     try:
         got = complete_model(

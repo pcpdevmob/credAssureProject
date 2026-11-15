@@ -108,7 +108,8 @@ def test_env_example_loads_with_required_values_filled(tmp_path: Path) -> None:
     env_file.write_text(filled, encoding="utf-8")
     s = Settings(_env_file=env_file)
     assert s.llm_base_url == "https://llm.example.test/v1"
-    assert s.llm_model == "llama3.1:8b"
+    assert s.llm_model == "qwen3:8b"
+    assert s.llm_disable_thinking and s.llm_max_tokens == 1024 and s.llm_ca_cert is None
     assert s.embed_model == "nomic-embed-text"
     assert s.ablation is None
     assert s.boundary_rule == "hold"

@@ -38,12 +38,12 @@ audit:  ## Dependency vulnerability audit (accepted advisories: docs/security/ri
 		--ignore-vuln PYSEC-2026-311 --ignore-vuln PYSEC-2026-3813 \
 		--ignore-vuln PYSEC-2026-3814 --ignore-vuln PYSEC-2026-3815
 
-ollama-pull:  ## Download llama3.1:8b and nomic-embed-text (ADR 0017; not part of make check)
+ollama-pull:  ## Download qwen3:8b and nomic-embed-text (ADR 0017; not part of make check)
 	@if $(COMPOSE) --profile dev ps --status running --services 2>/dev/null | grep -qx ollama; then \
-		$(COMPOSE) --profile dev exec ollama ollama pull llama3.1:8b; \
+		$(COMPOSE) --profile dev exec ollama ollama pull qwen3:8b; \
 		$(COMPOSE) --profile dev exec ollama ollama pull nomic-embed-text; \
 	elif command -v ollama >/dev/null 2>&1; then \
-		ollama pull llama3.1:8b; \
+		ollama pull qwen3:8b; \
 		ollama pull nomic-embed-text; \
 	else \
 		echo "No Ollama found. Install it and run 'OLLAMA_CONTEXT_LENGTH=8192 ollama serve', or start 'make compose-dev'."; \
