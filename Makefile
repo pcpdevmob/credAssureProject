@@ -4,7 +4,14 @@ PY_SRC := apps/gateway/src $(wildcard agents/*/src) \
 	data/generators/src
 COMPOSE := docker compose -f deploy/compose/compose.yaml
 # Settings for corpus network runs (CORPUS_CONTACT_EMAIL, ADR 0020) come from .env when it exists.
-ENV_FILE := $(if $(wildcard .env),--env-file .env,)
+# MODELS=local (default, Ollama qwen3:8b + in-process bge-small) | course (graded endpoints).
+# The profile loads after the dotenv file, so it wins for model settings; keys and CA paths stay there.
+MODELS ?= local
+MODELS_FILE := deploy/env/models-$(MODELS).env
+ifeq ($(wildcard $(MODELS_FILE)),)
+$(error MODELS=$(MODELS): no $(MODELS_FILE); use local or course)
+endif
+ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 PNPM := $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo "npx --yes pnpm@9.15.0")
 
 .PHONY: testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
@@ -51,7 +58,7 @@ ollama-pull:  ## Download qwen3:8b and nomic-embed-text (ADR 0017; not part of m
 	fi
 
 run-api:  ## FastAPI on :8000 (docs at /docs)
-	uv run uvicorn credassure.gateway.main:app --factory --reload --port 8000
+	uv run $(ENV_FILE) uvicorn credassure.gateway.main:app --factory --reload --port 8000
 
 openapi:  ## Export openapi.json (ADR 0004)
 	uv run python -m credassure.gateway.openapi
@@ -151,7 +158,7 @@ retrieval-silver:  ## Silver labels: self-consistency gate, v1.1-silver strict/l
 JUDGE ?= pritish
 SAMPLE ?= 1
 judge:  ## Judge the blind human sample, one passage at a time, resumable (JUDGE=name; SAMPLE= for the whole pool)
-	uv run python -m credassure.evaluation.retrieval_judging judge --judge $(JUDGE) $(if $(SAMPLE),--sample)
+	uv run $(ENV_FILE) python -m credassure.evaluation.retrieval_judging judge --judge $(JUDGE) $(if $(SAMPLE),--sample)
 
 kappa:  ## Cohen's kappa, silver vs JUDGE on the human sample (run after make judge)
 	uv run python -m credassure.evaluation.retrieval_judging kappa --judge $(JUDGE)

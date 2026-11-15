@@ -113,3 +113,18 @@ def test_env_example_loads_with_required_values_filled(tmp_path: Path) -> None:
     assert s.embed_model == "nomic-embed-text"
     assert s.ablation is None
     assert s.boundary_rule == "hold"
+
+
+@pytest.mark.parametrize("profile", ["local", "course"])
+def test_NFR07_model_profiles_load_and_hold_no_secrets(profile: str) -> None:
+    path = REPO_ROOT / "deploy" / "env" / f"models-{profile}.env"
+    for line in path.read_text(encoding="utf-8").splitlines():
+        name, sep, value = line.partition("=")
+        if line.startswith("#") or not sep:
+            continue
+        if name.endswith("_API_KEY"):
+            assert value in ("", "ollama"), f"{name}: keys belong in the dotenv file only"
+        assert not name.endswith("_CA_CERT"), "CA paths are machine-specific"
+    s = Settings(_env_file=path, jwt_secret=GOOD_SECRET)
+    assert s.llm_disable_thinking and s.llm_max_tokens == 1024
+    assert s.llm_model == {"local": "qwen3:8b", "course": "Qwen/Qwen3-8B"}[profile]

@@ -3,6 +3,7 @@
 .env.*
 !.env.example
 deploy/env/*.env
+!deploy/env/models-*.env
 
 *.pem
 *.key

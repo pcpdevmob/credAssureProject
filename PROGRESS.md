@@ -293,7 +293,8 @@ By owner (manual slots only; 5 assigned in total): [Name 2] 1, [Name 5] 1, [Name
 - [ ] Owner names for [Name 1]…[Name 6] and gold authors (no one writes gold for their own agent)
 - [ ] Graded baseline S1–S3 on the course endpoint (`EVAL_BASE_URL`, `EVAL_NUM_CTX` set to its context window)
   - **PENDING (B2, 2026-11-15):** `make llm-probe` fails, and neither `LLM_BASE_URL` nor `EVAL_BASE_URL` is set in `.env`, so the course endpoint is unreachable from here. Set `LLM_BASE_URL`/`LLM_MODEL` (probe) and `EVAL_BASE_URL`/`EVAL_MODEL`/`EVAL_NUM_CTX` (baseline) to the course values, then run `make llm-probe && make baseline`.
-  - **2026-11-15 unblocked in code:** course endpoint is `Qwen/Qwen3-8B` at `https://103.42.50.41:1032/v1` (groups 016-030, CA `vm06-ca.crt`). Client now takes `LLM_CA_CERT`/`EVAL_CA_CERT`, `LLM_MAX_TOKENS`/`EVAL_MAX_TOKENS` and `LLM_DISABLE_THINKING`/`EVAL_DISABLE_THINKING` (ADR 0017 amendment). Remaining: owner puts the group key + values in `.env`, then `make llm-probe && make baseline`.
+  - **2026-11-15 unblocked in code:** course endpoint is `Qwen/Qwen3-8B` at `https://103.42.50.41:1032/v1` (groups 016-030, CA `vm06-ca.crt`). Client now takes `LLM_CA_CERT`/`EVAL_CA_CERT`, `LLM_MAX_TOKENS`/`EVAL_MAX_TOKENS` and `LLM_DISABLE_THINKING`/`EVAL_DISABLE_THINKING` (ADR 0017 amendment). Remaining: owner puts keys + CA paths in the dotenv file, then `make llm-probe MODELS=course && make baseline MODELS=course`.
+  - **Decision 2026-11-15:** integrate end to end on `MODELS=local` (Ollama qwen3:8b + in-process bge-small), then switch to `MODELS=course` for graded runs (ADR 0017).
 - [ ] ADR 0018 accepted (AgentResult freeze)
 - [ ] then `/freeze-g1`
 
