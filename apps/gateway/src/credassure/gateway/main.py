@@ -13,8 +13,10 @@ import sqlite3
 import uuid
 from collections.abc import Awaitable, Callable
 from datetime import date
+from decimal import Decimal
 from typing import Any
 
+import yaml
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from langgraph.checkpoint.sqlite import SqliteSaver
@@ -44,7 +46,15 @@ from credassure.core.enums import AgentName, Stage
 from credassure.core.errors import ApiErrorCode
 from credassure.core.money import from_paise
 from credassure.core.ports import LLMPort, ToolPort
-from credassure.engines import cashflow, onboarding_rules
+from credassure.engines import (
+    affordability,
+    calendar,
+    cashflow,
+    loancost,
+    offer_audit,
+    onboarding_rules,
+    ranking,
+)
 from credassure.gateway import problems, tracing
 from credassure.gateway.deps import Services, current_user
 from credassure.gateway.jobs import JobRunner
@@ -144,6 +154,118 @@ def _case_inputs(settings: Settings, engine: Engine) -> Callable[[str], working_
     return load
 
 
+def _reference_rates(settings: Settings) -> tuple[lendwise.ReferenceRate, ...]:
+    """S22 reference rates in force on AS_OF_DATE, each with its cited source (R-RATE-02).
+    Values must be quoted strings (never float). Missing file: fatal outside tests."""
+    path = settings.reference_rates_file
+    if not path.is_file():
+        if settings.app_env == "test":
+            return ()
+        raise RuntimeError(f"reference rates file not found: {path}")
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    rates = []
+    for r in data.get("rates", []):
+        if not isinstance(r.get("value_pct"), str):
+            raise ValueError(f"reference rate {r.get('id')}: value_pct must be a quoted string")
+        if date.fromisoformat(str(r["effective_from"])) <= settings.as_of_date:
+            rate = Decimal(r["value_pct"])
+            rates.append(lendwise.ReferenceRate(str(r["id"]), rate, str(r["source_doc_id"])))
+    return tuple(rates)
+
+
+def _offer_inputs(settings: Settings, engine: Engine) -> Callable[[str], lendwise.Inputs]:
+    """Case -> its uploaded offers and KFS schedules plus its funding position (read-only)."""
+    funding, rates = _case_inputs(settings, engine), _reference_rates(settings)
+    week1 = calendar.week1_start(settings.as_of_date)
+
+    def load(case_id: str) -> lendwise.Inputs:
+        with transaction(engine) as s:
+            rows = reads.case_files(s, settings.tenant_id, case_id)  # ascending id
+            uploads = [
+                (r.kind, r.sha256, json.loads(r.payload_json))
+                for r in rows
+                if r.kind in ("offer", "kfs")
+            ]
+        wc = funding(case_id)
+        position = (
+            None
+            if wc.blockers or wc.files is None
+            else lendwise.position(wc.files, wc.indicative, wc.weeks, week1)
+        )
+        cls = str(wc.files.order.get("enterprise_class", "")) if wc.files else ""
+        return lendwise.load_inputs(uploads, cls, position, rates)
+
+    return load
+
+
+def _lendwise_handlers(settings: Settings, engine: Engine) -> dict[str, Callable[..., Any]]:
+    """LW engines as tools. Pure calls; only load_offers reads the case (SUP-08)."""
+    load = _offer_inputs(settings, engine)
+    gst, convention = settings.gst_rate, settings.apr_convention
+
+    def price(case_id: str, offers: list[dict[str, Any]], hidden: dict[str, Any]) -> Any:
+        return {
+            o["offer_id"]: (
+                loancost.price(
+                    o, hidden.get(o["offer_id"], ()), gst_rate=gst, convention=convention
+                ),
+                loancost.gst_total(o, hidden.get(o["offer_id"], ()), gst_rate=gst),
+            )
+            for o in offers
+        }
+
+    def afford(
+        case_id: str, position: lendwise.Position, offers: list[dict[str, Any]], flows: Any
+    ) -> Any:
+        return {
+            o["offer_id"]: affordability.assess(
+                position.cumulative,
+                position.available,
+                position.buffer,
+                flows[o["offer_id"]],
+                date.fromisoformat(str(o["disbursal_date"])),
+                position.week1,
+                Decimal(str(o["principal"])),
+                position.need,
+                position.peak_week,
+            )
+            for o in offers
+        }
+
+    return {
+        "load_offers": lambda case_id: load(case_id),
+        "audit_offer": lambda case_id, offers, hidden, unpriced, enterprise_class: {
+            o["offer_id"]: offer_audit.audit(
+                o,
+                hidden.get(o["offer_id"], ()),
+                enterprise_class,
+                unpriced.get(o["offer_id"], ()),
+            )
+            for o in offers
+        },
+        "price_offer": price,
+        "check_affordability": afford,
+        "rank_offers": lambda case_id, candidates, need: ranking.rank(candidates, need),
+    }
+
+
+def _offer_preview(settings: Settings, engine: Engine) -> Callable[[str], dict[str, str]]:
+    """LW-02..08 audit and pricing without affordability or ranking, for a case whose funding
+    stage is not GO (SUP-03 keeps the stage from running). Writes nothing."""
+    load, handlers = _offer_inputs(settings, engine), _lendwise_handlers(settings, engine)
+
+    def preview(case_id: str) -> dict[str, str]:
+        inputs = load(case_id)
+        if not inputs.offers:
+            return {}
+        inputs = lendwise.Inputs(inputs.offers, inputs.schedules, inputs.enterprise_class, None)
+        hidden = lendwise.code_hidden(inputs) if lendwise.ready(inputs) else {}
+        c = lendwise.compare(ToolRunner(AgentName.LENDWISE, handlers), case_id, inputs, hidden)
+        return {k: str(v) for k, (v, _) in lendwise.facts_for(c, inputs).items()}
+
+    return preview
+
+
 def _tool_factory(settings: Settings, engine: Engine) -> Callable[[AgentName], ToolPort]:
     load = _profile_loader(settings, engine)
     inputs = _case_inputs(settings, engine)
@@ -161,9 +283,10 @@ def _tool_factory(settings: Settings, engine: Engine) -> Callable[[AgentName], T
                 files, table, indicative=indicative
             ),
         },
+        AgentName.LENDWISE: _lendwise_handlers(settings, engine),  # no tool accepts an offer
     }
 
-    # ponytail: other agents get no handlers until Phases 9c-9e register their engines here.
+    # ponytail: other agents get no handlers until Phases 9d-9e register their engines here.
     def tools(agent: AgentName) -> ToolPort:
         return ToolRunner(agent, handlers.get(agent, {}))
 
@@ -179,6 +302,10 @@ def build_services(settings: Settings, llm: LLMPort | None) -> Services:
             _profile_loader(settings, engine), settings.as_of_date
         ),
         Stage.WORKING_CAPITAL: working_capital.make_recheck(_case_inputs(settings, engine)),
+        Stage.LENDWISE: lendwise.make_recheck(
+            lambda: ToolRunner(AgentName.LENDWISE, _lendwise_handlers(settings, engine)),
+            _offer_inputs(settings, engine),
+        ),
     }
     with transaction(engine) as s:
         rule = reads.get_config(s, settings.tenant_id, "boundary_rule") or settings.boundary_rule
@@ -209,6 +336,7 @@ def build_services(settings: Settings, llm: LLMPort | None) -> Services:
         jobs=JobRunner(engine, ledger, supervisor),
     )
     svc.service = SupervisorService(svc)
+    svc.offer_preview = _offer_preview(settings, engine)
     return svc
 
 

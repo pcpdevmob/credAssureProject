@@ -224,7 +224,8 @@ export interface paths {
         };
         /**
          * Offers
-         * @description Arrives in Phase 9c.
+         * @description Offer comparison (UI-05, LW-05..11): APR, total cost, amount received, GST and flags per
+         *     offer, the ranking and the gate. Same view as GET /v1/cases/{id}/offers.
          */
         get: operations["offers_v1_agents_lendwise_cases__case_id__offers_get"];
         put?: never;
@@ -749,7 +750,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Offers */
+        /**
+         * Offers
+         * @description The offer comparison (UI-05): stored lw.* facts after the LendWise stage, else a
+         *     read-only audit preview (no affordability, no ranking).
+         */
         get: operations["offers_v1_cases__case_id__offers_get"];
         put?: never;
         post?: never;
@@ -1420,7 +1425,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */
@@ -2193,7 +2200,7 @@ export interface operations {
     upload_v1_cases__case_id__files_post: {
         parameters: {
             query: {
-                kind: "order" | "opening_position" | "costs" | "receipts" | "receivables" | "payables" | "inventory";
+                kind: "order" | "opening_position" | "costs" | "receipts" | "receivables" | "payables" | "inventory" | "offer" | "kfs";
             };
             header?: never;
             path: {

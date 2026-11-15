@@ -158,7 +158,7 @@ class _GuardedLedger:
     ) -> int:
         _check(self._cancel)
         _same_case(self._case, case_id)
-        authorize_fact(self._agent, key)
+        authorize_fact(self._agent, key, write=True)
         return self._ledger.put_fact(
             case_id,
             key,

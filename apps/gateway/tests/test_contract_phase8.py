@@ -509,7 +509,8 @@ def test_UI05_offers_route_returns_offers_and_facts(fx: SimpleNamespace) -> None
     case_id = fx.run_case()
     r = fx.client.get(f"/v1/cases/{case_id}/offers", headers=fx.login("demo.preparer"))
     assert r.status_code == 200
-    assert {"offers", "facts"} <= r.json().keys()
+    assert {"gate", "source", "ranking", "offers"} <= r.json().keys()
+    assert r.json()["gate"] == "GO" and r.json()["source"] == "ledger"
 
 
 def test_UI06_chat_with_llm_off_says_unavailable(fx: SimpleNamespace) -> None:

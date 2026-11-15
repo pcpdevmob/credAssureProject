@@ -1,6 +1,6 @@
 """Full demo case through the API with FakeLLM, LLM on and off (scope #15, API-01, ADR 0003 §2).
 
-SUP-01 fixed plan end to end → APR-02 Director route for ₹1,42,00,000 (placeholder WC fact) →
+SUP-01 fixed plan end to end → LW-11 offers ranked → APR-02 Director route for ₹1,42,00,000 →
 APR-05 maker-checker → APR-04 decision → OBJ-08 audit chain → UI-08 report with trace IDs.
 """
 
@@ -19,6 +19,7 @@ KINDS = ("order", "opening_position", "costs", "receipts", "receivables", "payab
 def test_scope15_SUP01_APR02_demo_case_end_to_end(
     make_client: Callable[[bool], tuple[TestClient, Any]],
     login: Callable[[TestClient, str], dict[str, str]],
+    upload_offers: Callable[[TestClient, str, dict[str, str]], None],
     llm_enabled: bool,
 ) -> None:
     client, llm = make_client(llm_enabled)
@@ -48,6 +49,7 @@ def test_scope15_SUP01_APR02_demo_case_end_to_end(
             headers=prep,
         )
         assert up.status_code == 201, (kind, up.text)
+    upload_offers(client, case_id, prep)
 
     run = client.post(f"/v1/cases/{case_id}/run", headers=prep)
     assert run.status_code == 202, run.text
@@ -59,6 +61,8 @@ def test_scope15_SUP01_APR02_demo_case_end_to_end(
     assert case["route"] == "director_finance"
     funding = client.get(f"/v1/cases/{case_id}/funding", headers=prep).json()
     assert funding["recommended_amount"]["paise"] == 1_42_00_000_00
+    offers = client.get(f"/v1/cases/{case_id}/offers", headers=prep).json()
+    assert offers["gate"] == "GO" and offers["ranking"] == ["OF-01-B", "OF-01-A"]  # BRD App. A
 
     decision = {"decision": "approve", "comment": "ok", "expected_version": case["row_version"]}
     assert (

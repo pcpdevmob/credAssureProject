@@ -594,16 +594,20 @@ requires-dist = [
 
 [[package]]
 name = "credassure-agent-lendwise"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "agents/lendwise" }
 dependencies = [
     { name = "credassure-core" },
+    { name = "credassure-engines" },
+    { name = "credassure-security" },
     { name = "fastapi" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "credassure-core", editable = "packages/core" },
+    { name = "credassure-engines", editable = "packages/engines" },
+    { name = "credassure-security", editable = "packages/security" },
     { name = "fastapi", specifier = ">=0.115" },
 ]
 

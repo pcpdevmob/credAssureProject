@@ -60,3 +60,29 @@ class Offer(BaseModel):
     prepayment_terms: str | None = None
     kfs_doc_id: str
     lender_type: Literal["commercial_bank", "nbfc", "sfb", "coop_bank"] | None = None  # ADR 0019
+
+
+OFFER_ID = r"^OF-[A-Za-z0-9-]{1,60}$"  # no "." or spaces: it becomes part of ledger keys
+LENDER_ID = r"^[A-Za-z0-9-]{1,40}$"
+KFS_DOC_ID = r"^KFS-[A-Za-z0-9-]{1,60}$"
+
+
+class OfferUpload(Offer):
+    """An uploaded offer (LW-01). Material terms may be absent: the audit flags them (LW-02, BR-06)
+    instead of the upload rejecting the file. Everything present is still type-checked, and ids
+    are constrained because they become ledger keys and narrative text."""
+
+    offer_id: str = Field(pattern=OFFER_ID)
+    lender_id: str = Field(pattern=LENDER_ID)
+    kfs_doc_id: str = Field(pattern=KFS_DOC_ID)
+    version: int = Field(ge=1, le=99)
+    lender_name: str = Field(min_length=1, max_length=120)
+
+    principal: Decimal | None = None  # type: ignore[assignment]
+    rate_type: Literal["fixed", "floating"] | None = None  # type: ignore[assignment]
+    annual_rate: Decimal | None = None  # type: ignore[assignment]
+    tenure_months: int | None = None  # type: ignore[assignment]
+    repayment: Repayment | None = None  # type: ignore[assignment]
+    disbursal_date: date | None = None  # type: ignore[assignment]
+    first_repayment_date: date | None = None  # type: ignore[assignment]
+    fees: list[OfferFee] | None = None  # type: ignore[assignment]  # absent != no fees

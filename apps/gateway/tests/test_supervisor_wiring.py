@@ -69,7 +69,37 @@ WC_TOOLS = {
         files, table, indicative=indicative
     ),
 }
-TOOLS = {AgentName.ONBOARDING: ONB_TOOLS, AgentName.WORKING_CAPITAL: WC_TOOLS}
+
+
+def _demo_offers(case_id: str) -> lendwise.Inputs:
+    """The demo case's v1 offers and schedules (Phase 9c real LendWise agent)."""
+    files = _demo_inputs(case_id).files
+    assert files is not None
+    frozen = _DEMO.parents[1]
+    uploads: list[tuple[str, str, Any]] = []
+    for path in sorted((frozen / "offers" / CASE).glob("*.v1.json")):
+        offer = json.loads(path.read_text())
+        doc = f"{offer['kfs_doc_id']}-SCH"
+        uploads += [
+            ("offer", "sha", offer),
+            ("kfs", "sha", {"doc_id": doc, "text": (frozen / "kfs" / f"{doc}.md").read_text()}),
+        ]
+    pos = lendwise.position(files, Decimal("20000000"), 26, date(2026, 11, 16))
+    return lendwise.load_inputs(uploads, files.order["enterprise_class"], pos)
+
+
+def _lw_tools(db: Path) -> dict[str, Any]:
+    from credassure.gateway.main import _lendwise_handlers
+    from credassure.gateway.settings import Settings
+
+    handlers = _lendwise_handlers(Settings(app_env="test", case_db=db), session.case_engine(db))
+    return {**handlers, "load_offers": _demo_offers}
+
+
+TOOLS: dict[AgentName, dict[str, Any]] = {
+    AgentName.ONBOARDING: ONB_TOOLS,
+    AgentName.WORKING_CAPITAL: WC_TOOLS,
+}
 
 
 class _Clock:
@@ -114,7 +144,9 @@ def _supervisor(db: Path, llm: FakeLLM | None) -> tuple[Supervisor, Any]:
         },
         store=ledger,
         ledger=ledger,
-        tools=lambda agent: ToolRunner(agent, TOOLS.get(agent, {})),
+        tools=lambda agent: ToolRunner(
+            agent, _lw_tools(db) if agent is AgentName.LENDWISE else TOOLS.get(agent, {})
+        ),
         llm=llm,
         clock=_Clock(),
         checkpointer=saver,

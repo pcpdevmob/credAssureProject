@@ -18,6 +18,7 @@ TOOL_NAMES: tuple[str, ...] = (
     "validate_case_files",
     "compute_cash_table",
     "compute_recommendation",
+    "load_offers",
     "audit_offer",
     "price_offer",
     "check_affordability",
@@ -62,16 +63,19 @@ def authorize(
         raise RegistryError(ApiErrorCode.CASE_REQUIRED)
 
 
-def authorize_fact(agent: AgentName | str, key: str) -> None:
-    """Raise ``RegistryError`` unless ``agent`` may read or write ledger fact ``key``.
+def authorize_fact(agent: AgentName | str, key: str, *, write: bool = False) -> None:
+    """Raise ``RegistryError`` unless ``agent`` may read (or, with ``write``, write) fact ``key``.
 
     Deny by default: an agent without a ``ledger_prefixes`` entry may touch no fact.
+    ``ledger_read_prefixes`` adds keys it may only read.
     """
     name = agent.value if isinstance(agent, AgentName) else agent
-    prefixes = _load().get("ledger_prefixes") or {}
-    if not isinstance(prefixes, dict):
+    loaded = _load()
+    prefixes = loaded.get("ledger_prefixes") or {}
+    reads = {} if write else loaded.get("ledger_read_prefixes") or {}
+    if not isinstance(prefixes, dict) or not isinstance(reads, dict):
         raise RegistryError(ApiErrorCode.VALIDATION_FAILED)
-    allowed = prefixes.get(name) or []
+    allowed = [*(prefixes.get(name) or []), *(reads.get(name) or [])]
     if not any(key.startswith(str(p)) for p in allowed):
         raise RegistryError(ApiErrorCode.TOOL_NOT_ALLOWED)
 

@@ -4,12 +4,15 @@ Agent routers never touch an agent or the database: they hand the authenticated 
 this service, which applies the same case policy and job runner as the core /v1 routes.
 """
 
+import re
 import uuid
 from collections.abc import Callable
+from decimal import Decimal
 from typing import Any
 
 from credassure.core.enums import Stage
 from credassure.core.errors import ApiErrorCode
+from credassure.core.money import format_inr, from_paise, to_paise
 from credassure.core.results import AgentResult
 from credassure.gateway.deps import Services, own_case, visible_case
 from credassure.gateway.jobs import NOT_RUNNABLE, job_view
@@ -87,6 +90,21 @@ class SupervisorService:
             found = reads.get_latest(s, case.tenant_id, case.id, key)
         return None if found is None else found.value_text
 
+    def offers(self, actor: Principal, case_id: str) -> dict[str, Any]:
+        """The offer comparison. After the LendWise stage: its stored facts. Before it, while
+        the funding stage is not GO, a read-only audit preview (no affordability, no ranking)."""
+        case = visible_case(self.svc, actor, case_id)
+        with transaction(self.svc.engine) as s:
+            facts = reads.list_for_case(s, case.tenant_id, case.id)
+        latest = {f.key: f.value_text for f in facts}  # versions ascend per key
+        stored = {k: v for k, v in latest.items() if k.startswith("lw.")}
+        if "lw.gate" in stored:
+            return {"gate": stored["lw.gate"], "source": "ledger", **offer_view(stored)}
+        wc_gate = latest.get("wc.gate")
+        gate = wc_gate if wc_gate not in (None, "GO") else None
+        preview = self.svc.offer_preview(case.id)
+        return {"gate": gate, "source": "preview", **offer_view(preview)}
+
     def plan(self, actor: Principal, case_id: str) -> dict[str, Any]:
         case = visible_case(self.svc, actor, case_id)
         plan: dict[str, Any] = self.svc.supervisor.plan(case.id).model_dump(mode="json")
@@ -112,3 +130,38 @@ class SupervisorService:
         if kinds:
             reply["notice"] = PII_NOTICE.format(kinds=", ".join(kinds))
         return reply
+
+
+def _money(paise: int) -> dict[str, Any]:
+    return {"paise": paise, "display": format_inr(from_paise(paise))}
+
+
+_LW_MONEY = ("amount_received", "total_repayment", "total_cost", "gst", "cgst", "sgst")
+
+
+def offer_view(facts: dict[str, str]) -> dict[str, Any]:
+    """lw.* facts -> the comparison (UI-05): each offer at its latest version, money as
+    {paise, display}, APR as a percentage with two decimals."""
+    latest: dict[str, int] = {}
+    for key in facts:
+        m = re.match(r"^lw\.(OF-[A-Za-z0-9-]+)\.v(\d+)\.", key)
+        if m:
+            latest[m[1]] = max(latest.get(m[1], 0), int(m[2]))
+    out = []
+    for oid, ver in sorted(latest.items()):
+        f = {k.rsplit(".", 1)[1]: v for k, v in facts.items() if k.startswith(f"lw.{oid}.v{ver}.")}
+        apr = Decimal(f["apr"]) * 100 if "apr" in f else None
+        out.append(
+            {
+                "offer_id": oid,
+                "version": ver,
+                "flags": [] if f.get("flags", "none") == "none" else f["flags"].split(","),
+                "comparable": f.get("comparable") == "true",
+                "affordable": None if "affordable" not in f else f["affordable"] == "true",
+                "rank": int(f["rank"]) if "rank" in f else None,
+                "apr_pct": None if apr is None else str(apr.quantize(Decimal("0.01"))),
+                **{k: _money(to_paise(Decimal(f[k]))) if k in f else None for k in _LW_MONEY},
+            }
+        )
+    order = facts.get("lw.ranking", "none")
+    return {"ranking": [] if order == "none" else order.split(","), "offers": out}

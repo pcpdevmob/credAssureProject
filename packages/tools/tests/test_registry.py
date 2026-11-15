@@ -7,8 +7,8 @@ from credassure.core.errors import ApiErrorCode
 from credassure.tools.registry import TOOL_NAMES, RegistryError, authorize, rules_from_allow
 
 
-def test_registry_lists_the_thirteen_tools() -> None:
-    assert len(TOOL_NAMES) == 13
+def test_registry_lists_the_thirteen_tools_plus_load_offers() -> None:
+    assert len(TOOL_NAMES) == 14 and "load_offers" in TOOL_NAMES
     assert "get_hr_profile" in TOOL_NAMES
     assert "verify_claims" in TOOL_NAMES
     assert "route_proposal" in TOOL_NAMES
@@ -108,3 +108,17 @@ def test_scope24_onboarding_ledger_access_is_onb_facts_only() -> None:
             authorize_fact("working_capital", key)
     with pytest.raises(RegistryError):
         authorize_fact("unknown_agent", "wc.recommended_amount")  # deny by default
+
+
+def test_scope24_lendwise_writes_lw_facts_and_only_reads_wc_facts() -> None:
+    import pytest
+
+    from credassure.tools.registry import RegistryError, authorize_fact
+
+    authorize_fact("lendwise", "lw.OF-01-A.v1.apr", write=True)
+    authorize_fact("lendwise", "wc.recommended_amount")
+    for key in ("wc.recommended_amount", "onb.gate"):
+        with pytest.raises(RegistryError):
+            authorize_fact("lendwise", key, write=True)
+    with pytest.raises(RegistryError):
+        authorize_fact("lendwise", "onb.gate")

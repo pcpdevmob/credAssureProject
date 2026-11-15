@@ -5,6 +5,7 @@ the LLM on the app gets a FakeLLM. Fixtures return callables because importlib m
 importing helpers from this file (API-01: tests drive the same HTTP endpoints a UI would).
 """
 
+import json
 import shutil
 from collections.abc import Callable, Iterator
 from contextlib import ExitStack
@@ -131,6 +132,22 @@ def upload_demo_files(
                 headers=headers,
             )
             assert r.status_code == 201, (kind, r.text)
+        frozen = DEMO_CASE.parents[1]
+        for offer in sorted((frozen / "offers" / DEMO_CASE.name).glob("*.v1.json")):
+            doc = json.loads(offer.read_text())["kfs_doc_id"]
+            for kind, path in (
+                ("offer", offer),
+                ("kfs", frozen / "kfs" / f"{doc}.md"),
+                ("kfs", frozen / "kfs" / f"{doc}-SCH.md"),
+            ):
+                mime = "application/json" if kind == "offer" else "text/markdown"
+                r = client.post(
+                    f"/v1/cases/{case_id}/files",
+                    params={"kind": kind},
+                    files={"file": (path.name, path.read_bytes(), mime)},
+                    headers=headers,
+                )
+                assert r.status_code == 201, (kind, r.text)
 
     return _upload
 
@@ -141,7 +158,7 @@ def run_case(
     new_case: Callable[[TestClient], str],
     upload_demo_files: Callable[[TestClient, str], None],
 ) -> Callable[[TestClient], str]:
-    """Create the demo case, upload its 7 files and run it to AWAITING_APPROVAL (director route)."""
+    """Create the demo case, upload its 7 files, offers and KFS; run it to AWAITING_APPROVAL."""
 
     def _run(client: TestClient) -> str:
         case_id = new_case(client)

@@ -40,6 +40,7 @@ class Services:
     llm: LLMPort | None
     jobs: Any  # gateway.jobs.JobRunner (typed loosely to avoid an import cycle)
     service: Any = None  # gateway.supervisor_service.SupervisorService, set after construction
+    offer_preview: Any = None  # case_id -> lw.* facts as text, computed and never stored (9c)
 
 
 def services(request: Request) -> Services:

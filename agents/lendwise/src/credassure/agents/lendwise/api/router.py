@@ -54,9 +54,10 @@ def result(case_id: str, who: Caller, supervisor: SupervisorDep) -> dict[str, An
 
 
 @router.get("/cases/{case_id}/offers")
-def offers(case_id: str, who: Caller) -> None:
-    """Arrives in Phase 9c."""
-    raise HTTPException(status_code=501, detail="arrives in Phase 9c")
+def offers(case_id: str, who: Caller, supervisor: SupervisorDep) -> dict[str, Any]:
+    """Offer comparison (UI-05, LW-05..11): APR, total cost, amount received, GST and flags per
+    offer, the ranking and the gate. Same view as GET /v1/cases/{id}/offers."""
+    return supervisor.offers(who, case_id)
 
 
 @router.post("/cases/{case_id}/negotiate")

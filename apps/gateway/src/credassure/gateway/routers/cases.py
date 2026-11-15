@@ -14,6 +14,7 @@ from datetime import UTC, date, datetime
 from decimal import Decimal
 from typing import Annotated, Any, Literal, get_args
 
+import yaml
 from fastapi import APIRouter, File, Query, Request, UploadFile
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, Field, ValidationError
@@ -24,12 +25,14 @@ from credassure.core.money import format_inr, from_paise, to_paise
 from credassure.core.schemas import (
     CostRow,
     InventoryRow,
+    OfferUpload,
     OpeningPosition,
     OrderFile,
     PayableRow,
     ReceiptRow,
     ReceivableRow,
 )
+from credassure.core.schemas.offer import KFS_DOC_ID, OFFER_ID
 from credassure.engines.normaliser import parse_money
 from credassure.gateway.deps import Svc, User, case_ref, own_case, role, visible_case
 from credassure.gateway.problems import ProblemError
@@ -43,7 +46,15 @@ from credassure.security.pii import find as pii_find
 router = APIRouter(prefix="/v1", tags=["cases"])
 
 FileKind = Literal[
-    "order", "opening_position", "costs", "receipts", "receivables", "payables", "inventory"
+    "order",
+    "opening_position",
+    "costs",
+    "receipts",
+    "receivables",
+    "payables",
+    "inventory",
+    "offer",  # one lender offer version per file (LW-01)
+    "kfs",  # a KFS or schedule of charges, Markdown with frontmatter (LW-04)
 ]
 _SCHEMAS: dict[str, type[BaseModel]] = {
     "order": OrderFile,
@@ -53,8 +64,10 @@ _SCHEMAS: dict[str, type[BaseModel]] = {
     "receivables": ReceivableRow,
     "payables": PayableRow,
     "inventory": InventoryRow,
+    "offer": OfferUpload,
 }
-_JSON_KINDS = frozenset({"order", "opening_position"})
+_JSON_KINDS = frozenset({"order", "opening_position", "offer"})
+_KFS_ID, _OFFER_ID = re.compile(KFS_DOC_ID), re.compile(OFFER_ID)
 _LOCKED = frozenset({"AWAITING_APPROVAL", "HELD", "APPROVED", "REJECTED"})
 INTERNAL_APPROVAL = (
     "Approval in CredAssure is an internal sign-off on this proposal only. It is not loan "
@@ -218,11 +231,38 @@ def _errors(exc: ValidationError, row: int | None) -> list[dict[str, Any]]:
     ]
 
 
+def _kfs(text: str) -> dict[str, Any]:
+    """KFS Markdown: frontmatter names the document; the body is stored as data only (BR-15)."""
+    head, sep, body = text.removeprefix("---\n").partition("\n---\n")
+    try:
+        meta = yaml.safe_load(head) if text.startswith("---\n") and sep else None
+    except yaml.YAMLError:
+        meta = None
+    meta = meta if isinstance(meta, dict) else {}
+    doc_id = meta.get("doc_id")
+    if not isinstance(doc_id, str) or not _KFS_ID.match(doc_id):
+        raise ProblemError(
+            422,
+            "kfs failed validation",
+            errors=[{"field": "doc_id", "row": None, "reason": "frontmatter has no doc_id"}],
+        )
+    # Only plain short strings leave the frontmatter: a YAML alias bomb never gets stringified.
+    oid, cid = meta.get("offer_id"), meta.get("case_id")
+    return {
+        "doc_id": doc_id,
+        "offer_id": oid if isinstance(oid, str) and _OFFER_ID.match(oid) else "",
+        "case_ref": cid if isinstance(cid, str) and len(cid) <= 32 else "",
+        "text": body,
+    }
+
+
 def _parse(kind: str, text: str) -> tuple[Any, int]:
+    if kind == "kfs":
+        return _kfs(text), 1
     model = _SCHEMAS[kind]
     if kind in _JSON_KINDS:
         try:
-            data = json.loads(text)
+            data = json.loads(text, parse_float=Decimal)  # rates and money are never float
         except (json.JSONDecodeError, RecursionError) as exc:  # N3: deep nesting is bad input
             reason = exc.msg if isinstance(exc, json.JSONDecodeError) else "nested too deeply"
             raise ProblemError(
@@ -287,9 +327,13 @@ async def upload(
         raise ProblemError(
             413, f"file is larger than {limit} bytes", ApiErrorCode.PAYLOAD_TOO_LARGE
         )
-    suffix = "json" if kind in _JSON_KINDS else "csv"
+    suffix = "json" if kind in _JSON_KINDS else "md" if kind == "kfs" else "csv"
     name = (file.filename or "").lower()
-    allowed = {"json": {"application/json"}, "csv": {"text/csv", "application/csv"}}[suffix]
+    allowed = {
+        "json": {"application/json"},
+        "csv": {"text/csv", "application/csv"},
+        "md": {"text/markdown", "text/plain", "text/x-markdown"},
+    }[suffix]
     content_type = (file.content_type or "").split(";")[0].strip().lower()
     if not name.endswith(f".{suffix}") or content_type not in {
         *allowed,
@@ -326,11 +370,13 @@ async def upload(
             ],
         )
     payload, count = _parse(kind, text)
+    # BR-15: uploads are data. A hit is flagged and audited; nothing in the file is obeyed.
+    flags = scan(text)
+    if kind == "kfs" and payload["case_ref"] not in ("", case.id):
+        flags.append("KFS_CASE_MISMATCH")  # the document names another case: recorded, kept
     stored = svc.ledger.store_case_file(
         case.id, kind, json.dumps(payload), who.user_id, sha256=hashlib.sha256(raw).hexdigest()
     )
-    # BR-15: uploads are data. A hit is flagged and audited; nothing in the file is obeyed.
-    flags = scan(text)
     if flags:
         svc.ledger.audit(
             case.id, "INJECTION_FLAGGED", {"kind": kind, "sha256": stored.sha256, "flags": flags}
@@ -372,8 +418,10 @@ def funding(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
 
 @router.get("/cases/{case_id}/offers")
 def offers(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
-    case = visible_case(svc, who, case_id)
-    return {"offers": [], "facts": _facts(svc, case, "lw.")}  # Phase 9c fills the comparison
+    """The offer comparison (UI-05): stored lw.* facts after the LendWise stage, else a
+    read-only audit preview (no affordability, no ranking)."""
+    result: dict[str, Any] = svc.service.offers(who, case_id)
+    return result
 
 
 class Chat(BaseModel):

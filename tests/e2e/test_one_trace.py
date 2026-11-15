@@ -15,6 +15,7 @@ KINDS = ("order", "opening_position", "costs", "receipts", "receivables", "payab
 def test_OBJ08_demo_case_run_and_approval_share_one_trace(
     make_client: Callable[[bool], tuple[TestClient, Any]],
     login: Callable[[TestClient, str], dict[str, str]],
+    upload_offers: Callable[[TestClient, str, dict[str, str]], None],
 ) -> None:
     client, _ = make_client(False)
     prep = login(client, "demo.preparer")
@@ -39,6 +40,7 @@ def test_OBJ08_demo_case_run_and_approval_share_one_trace(
             headers=prep,
         )
         assert r.status_code == 201, r.text
+    upload_offers(client, case_id, prep)
     with capture() as spans:
         assert client.post(f"/v1/cases/{case_id}/run", headers=prep).status_code == 202
         version = client.get(f"/v1/cases/{case_id}", headers=prep).json()["row_version"]

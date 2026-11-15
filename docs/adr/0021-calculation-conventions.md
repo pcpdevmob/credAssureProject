@@ -50,6 +50,18 @@ them, and this ADR settles them. Gold and engines are still implemented independ
 - **Not priced yet:** financed insurance, and CGTMSE bases other than "year 1 guaranteed, then outstanding". Gold
   raises an error on them until a convention is agreed.
 
+**Phase 9c-a additions**
+- **GST split:** the GST on each offer is reported as CGST + SGST in equal halves (paise, half-up), treating the
+  supply as intra-state for the home state IN-MH (ADR 0019, R-GST-01). An inter-state lender would charge IGST at
+  the same total, so the APR is unaffected.
+- **GST on schedule rows:** a charge is taxed unless its row states it is exempt (LW-06); every frozen row says
+  "+ GST", so gold is unchanged.
+- **Unreadable rows:** an undeclared schedule row whose amount code cannot read is flagged `LW_HIDDEN_CHARGE` and
+  makes the offer non-comparable (fail closed), never dropped.
+- **Model extraction:** the model's charge list is a cross-check recorded in `lw.kfs.<doc>.extraction`; prices
+  always come from the code parse of the schedule, so the model's reading cannot change an APR.
+- **Ranking ties:** APRs equal at 0.01 pp go to total cost, as gold ranks on the displayed APR.
+
 **Negotiation (LW-12/13, BR-09/10)**
 - **Target:** the comparable offer with the highest processing fee. It cites the lowest processing fee among the
   other comparable offers. With fewer than two comparable offers there is no message.

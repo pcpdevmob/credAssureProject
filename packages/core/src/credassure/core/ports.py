@@ -108,6 +108,8 @@ class SupervisorPort(Protocol):
 
     def plan(self, actor: Any, case_id: str) -> dict[str, Any]: ...
 
+    def offers(self, actor: Any, case_id: str) -> dict[str, Any]: ...
+
     def chat(self, actor: Any, case_id: str, message: str) -> dict[str, Any]: ...
 
 
@@ -132,6 +134,9 @@ class UnavailableSupervisor:
         raise NotImplementedError("supervisor not wired")
 
     def plan(self, actor: Any, case_id: str) -> dict[str, Any]:
+        raise NotImplementedError("supervisor not wired")
+
+    def offers(self, actor: Any, case_id: str) -> dict[str, Any]:
         raise NotImplementedError("supervisor not wired")
 
     def chat(self, actor: Any, case_id: str, message: str) -> dict[str, Any]:

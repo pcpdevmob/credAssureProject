@@ -13,7 +13,14 @@ from credassure.core.schemas.case_files import (
 )
 from credassure.core.schemas.hr import HrProfile, TrainingRecord
 from credassure.core.schemas.kfs import KfsFee, KfsMetadata
-from credassure.core.schemas.offer import Guarantee, Insurance, Offer, OfferFee, Repayment
+from credassure.core.schemas.offer import (
+    Guarantee,
+    Insurance,
+    Offer,
+    OfferFee,
+    OfferUpload,
+    Repayment,
+)
 
 __all__ = [
     "ConfirmedMitigation",
@@ -27,6 +34,7 @@ __all__ = [
     "KfsMetadata",
     "Offer",
     "OfferFee",
+    "OfferUpload",
     "OpeningPosition",
     "OrderFile",
     "PayableRow",

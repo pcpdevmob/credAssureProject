@@ -7,7 +7,7 @@ then disbursal date. GO needs at least two eligible offers; NOT_REQUIRED when th
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import date
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Literal
 
 Gate = Literal["GO", "NO_GO", "NOT_REQUIRED"]
@@ -33,7 +33,13 @@ def rank(candidates: Sequence[Candidate], need: Decimal) -> Ranking:
         return Ranking("NOT_REQUIRED", ())
     eligible = sorted(
         (c for c in candidates if c.eligible),
-        key=lambda c: (c.apr, c.total_cost, c.disbursal, c.offer_id),
+        # LW-11 ties at the displayed precision (0.01 pp) go to total cost, as in gold
+        key=lambda c: (
+            (c.apr * 100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+            c.total_cost,
+            c.disbursal,
+            c.offer_id,
+        ),
     )
     order = tuple(c.offer_id for c in eligible)
     return Ranking("GO" if len(order) >= 2 else "NO_GO", order)

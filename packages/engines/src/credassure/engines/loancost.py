@@ -62,6 +62,17 @@ def charges(offer: Mapping[str, Any], hidden: Sequence[Charge] = ()) -> list[Cha
     return [*declared, *hidden]
 
 
+def gst_total(
+    offer: Mapping[str, Any], hidden: Sequence[Charge] = (), *, gst_rate: Decimal
+) -> Decimal:
+    """Every rupee of GST the borrower pays over the loan: on charges flagged ``gst_applicable``
+    and on a CGTMSE fee passed on with ``gst_applicable``; never on interest (D7, BR-08)."""
+    with localcontext(MONEY):
+        untaxed = cash_flows(offer, hidden, gst_rate=Decimal(0))
+        taxed = cash_flows(offer, hidden, gst_rate=gst_rate)
+        return sum((a - b for a, b in zip(untaxed, taxed, strict=True)), Decimal(0))
+
+
 def instalment(offer: Mapping[str, Any]) -> Decimal:
     """First amortising instalment from principal, rate and tenure (exact; LW-03 compares to ₹1)."""
     with localcontext(MONEY):

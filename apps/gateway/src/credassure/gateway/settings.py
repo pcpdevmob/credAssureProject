@@ -74,6 +74,8 @@ class Settings(BaseSettings):
     ui_origins: str = "http://localhost:3000,http://localhost:5173"
 
     gst_rate: Decimal = Decimal("0.18")
+    # S22 reference rates (R-RATE-02), loaded once at startup; engines never read the file.
+    reference_rates_file: Path = Path("data/reference/reference_rates.yaml")
     apr_convention: Literal["nominal", "effective"] = "nominal"
     boundary_rule: Literal["hold", "director", "vp"] = "hold"
     approval_threshold_paise: int = Field(default=1_500_000_000, gt=0)

@@ -649,7 +649,7 @@
     },
     "/v1/agents/lendwise/cases/{case_id}/offers": {
       "get": {
-        "description": "Arrives in Phase 9c.",
+        "description": "Offer comparison (UI-05, LW-05..11): APR, total cost, amount received, GST and flags per\noffer, the ranking and the gate. Same view as GET /v1/cases/{id}/offers.",
         "operationId": "offers_v1_agents_lendwise_cases__case_id__offers_get",
         "parameters": [
           {
@@ -666,7 +666,11 @@
           "200": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Offers V1 Agents Lendwise Cases  Case Id  Offers Get",
+                  "type": "object"
+                }
               }
             },
             "description": "Successful Response"
@@ -1792,7 +1796,9 @@
                 "receipts",
                 "receivables",
                 "payables",
-                "inventory"
+                "inventory",
+                "offer",
+                "kfs"
               ],
               "title": "Kind",
               "type": "string"
@@ -1944,6 +1950,7 @@
     },
     "/v1/cases/{case_id}/offers": {
       "get": {
+        "description": "The offer comparison (UI-05): stored lw.* facts after the LendWise stage, else a\nread-only audit preview (no affordability, no ranking).",
         "operationId": "offers_v1_cases__case_id__offers_get",
         "parameters": [
           {
