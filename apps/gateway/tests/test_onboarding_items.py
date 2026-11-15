@@ -12,6 +12,8 @@ from typing import Any
 import pytest
 from fastapi.testclient import TestClient
 
+from credassure.agents.onboarding.agent import RULE_NAMES
+
 ROOT = Path(__file__).resolve().parents[3]
 ITEMS = [
     item
@@ -44,7 +46,9 @@ def test_ONB03_E5_ten_frozen_onboarding_items_through_the_api(
     client = make_client(llm_enabled=llm_enabled)
     passed = []
     for item in ITEMS:
-        drafted = " ".join(f"[{r}] needs action." for r in item["gold"]["failed_rules"])
+        drafted = " ".join(
+            f"Your {{rule.{r}}} needs action; {{next.{r}}}." for r in item["gold"]["failed_rules"]
+        )
         if client.llm is not None:  # S2: a real model path, not only the template fallback
             client.llm.replies = {"onb_explain": [drafted]}
         result = run_item(client, login, item["input"]["actor"])
@@ -52,9 +56,10 @@ def test_ONB03_E5_ten_frozen_onboarding_items_through_the_api(
         assert result["decision"] == item["gold"]["gate"], item["id"]
         assert failed == item["gold"]["failed_rules"], item["id"]
         for rule in failed:  # ONB-04: every failed rule named, model on or off
-            assert f"[{rule}]" in result["narrative"], (item["id"], rule)
-        if client.llm is not None and failed:
-            assert result["narrative"] == drafted, item["id"]  # the model's wording was used
+            assert RULE_NAMES[rule] in result["narrative"], (item["id"], rule)
+        if client.llm is not None and failed:  # the model's wording was used, slots rendered
+            assert result["narrative"].startswith("Your "), item["id"]
+            assert "{" not in result["narrative"], item["id"]
         passed.append(item["id"])
     assert len(passed) == 10
 

@@ -2,7 +2,7 @@
 
 Each item: create a case, upload the frozen files of its case, run onboarding then working
 capital through the agent routes, and compare the stage result and wc.* facts with gold to ₹1.
-Model off and on (on: a grounded scripted reply must be used; a stray number never is).
+Model off and on (on: a slot draft must be used, rendered by code to the gold figures).
 """
 
 import json
@@ -93,7 +93,12 @@ def test_WC03_E6_fifteen_frozen_cashflow_items_through_the_api(
                 f"{format_inr(Decimal(gold['recommended_amount']))} against the request of "
                 f"{format_inr(Decimal('20000000'))}."
             )
-            client.llm.replies = {"wc_explain": [drafted]}
+            client.llm.replies = {  # the model writes slots; code renders the figures above
+                "wc_explain": [
+                    "Cash is lowest in week {wc.peak_week}, so the recommended facility is "
+                    "{wc.recommended_amount} against the request of {wc.request}."
+                ]
+            }
         case_id, h = start(client, login, item["input"]["case_id"])
         result = run_wc(client, case_id, h)
         assert result["decision"] == gold["gate"], item["id"]

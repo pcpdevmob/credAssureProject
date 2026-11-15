@@ -2,8 +2,9 @@
 
 Code decides: the HR profile comes from the case's preparer binding (ONB-01, never chat), the
 rules engine sets every rule and the gate (ONB-02/03). The model only words the explanation of
-failed rules (onb_explain); a reply that does not name every failed rule falls back to the
-template (ONB-04). No tool writes HR data (ONB-05).
+failed rules (onb_explain) with {rule.<id>} slots that code renders; a draft that misses a failed
+rule or has any figure outside a slot falls back to the template (ONB-04).
+No tool writes HR data (ONB-05).
 """
 
 import re
@@ -12,6 +13,7 @@ from datetime import date
 from typing import Any
 
 from credassure.agents.onboarding import __version__
+from credassure.core import slots
 from credassure.core.blockers import BlockerCode
 from credassure.core.enums import AgentName, Decision
 from credassure.core.errors import LLMError
@@ -91,30 +93,32 @@ def template(blockers: list[Blocker]) -> str:
     return "Preparer readiness is blocked:\n" + "\n".join(lines)
 
 
+def narrative_slots(blockers: list[Blocker]) -> dict[str, str]:
+    """ONB-04: failed rules only; a passed rule has no slot, so naming one rejects the draft."""
+    out: dict[str, str] = {}
+    for b in blockers:
+        out[f"rule.{b.field}"] = RULE_NAMES.get(str(b.field), str(b.field))
+        action = str(b.next_action or "").rstrip(".")
+        out[f"next.{b.field}"] = action[:1].lower() + action[1:]
+    return out
+
+
 def _explain(ctx: StageContext, readiness: Readiness, blockers: list[Blocker]) -> str | None:
-    """Model wording of the failed rules, or None to use the template (ONB-04)."""
+    """Model wording with {rule.<id>} / {next.<id>} slots, or None to use the template (ONB-04)."""
     if ctx.llm is None or not blockers:
         return None
-    table = "\n".join(f"{rule}: {outcome}" for rule, outcome in sorted(readiness.rules.items()))
-    actions = "\n".join(f"{b.field}: {b.code.value}; next: {b.next_action}" for b in blockers)
-    prompt = prompts()[PROMPT].render(rules=table, blockers=actions)
+    failed = "\n".join(f"{{rule.{b.field}}}: {b.code.value}; {{next.{b.field}}}" for b in blockers)
+    prompt = prompts()[PROMPT].render(blockers=failed)
     try:
         reply = ctx.llm.complete(prompt, name=PROMPT).strip()
     except LLMError:  # slow or down model: the gate is already decided, only wording is lost
         return None
-    if not reply or any(f"[{rule}]" not in reply for rule in readiness.failed):
-        return None
-    # Until the Critic (9d): no number, date or rate of the model's own; rule ids are the only
-    # digits allowed. Anything else -> template.
-    scrubbed = reply
-    for rule in readiness.failed:
-        scrubbed = scrubbed.replace(f"[{rule}]", "")
-    if any(ch.isdigit() for ch in scrubbed) or BANNED.search(reply):
-        return None
-    passed = [r for r, o in readiness.rules.items() if o == "PASS"]
-    if any(f"[{rule}]" in reply for rule in passed):
-        return None
-    return reply
+    return slots.render(
+        reply,
+        narrative_slots(blockers),
+        required=[f"rule.{rule}" for rule in readiness.failed],
+        banned=BANNED,
+    )
 
 
 def run(ctx: StageContext) -> AgentResult:

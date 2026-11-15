@@ -4,7 +4,8 @@ Code decides: the stored case files are validated (WC-01/02), the engines build 
 table, peak shortfall, recommendation rounded up to ₹1 lakh and the bridge from the indicative
 request (WC-03..06), and every figure is a `wc.*` ledger fact with its inputs hash (lineage).
 Any blocker -> NEEDS_INPUT with one question. The model only words the drivers from those facts
-(wc_explain); a reply with any number that is not a fact falls back to the template (WC-07).
+(wc_explain) with {slot} placeholders; code renders every figure and direction word, and a
+draft with any figure outside a slot falls back to the template (WC-07).
 """
 
 import hashlib
@@ -16,6 +17,7 @@ from decimal import Decimal
 from typing import Any
 
 from credassure.agents.working_capital import __version__
+from credassure.core import slots
 from credassure.core.blockers import BlockerCode, BlockerEffect, blocker_effect
 from credassure.core.enums import AgentName, Decision
 from credassure.core.errors import LLMError
@@ -26,7 +28,6 @@ from credassure.core.prompts import registry as prompts
 from credassure.core.results import AgentResult, Blocker, EvidenceRef
 from credassure.engines import cashflow, validators
 from credassure.engines.cashflow import CashTable, Recommendation
-from credassure.engines.normaliser import find_all
 
 PROMPT = "wc_explain"
 ENGINE = "engines.cashflow"
@@ -35,12 +36,6 @@ ENGINE_VERSION = "1"  # bump when cashflow/validators change a result (lineage, 
 BANNED = re.compile(
     r"(?-i:\bGO\b|\bNO_GO\b)|approv|accept|\bsign|guarantee|lender|\bbank|sanction|disburs"
     r"|interest|\brate\b|urgent|immediately",
-    re.IGNORECASE,
-)
-# Amounts must be digits the normaliser can match to a fact; words and links never can.
-_WORDS = re.compile(
-    r"\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|twenty|thirty|forty"
-    r"|fifty|hundred|thousand|lakh|lac|crore|cr|percent|half|quarter)s?\b|https?://|www\.",
     re.IGNORECASE,
 )
 FILES = {  # kind -> file name; inventory is information only (engines.cashflow)
@@ -187,52 +182,42 @@ def template(rec: Recommendation, table: CashTable) -> str:
     )
 
 
-def grounded(text: str, facts: Mapping[str, tuple[Decimal | int | str, str]], weeks: int) -> bool:
-    """WC-07 until the Critic (9d): every amount is a ledger fact (₹1), every bare number a week
-    fact or the horizon; rates, dates and unparsed digits are not allowed."""
-    amounts = [abs(Decimal(v)) for v, unit in facts.values() if unit == "INR"]
-    counts = {Decimal(v) for v, unit in facts.values() if unit in ("week", "weeks")} | {
-        Decimal(weeks)
+def narrative_slots(rec: Recommendation, table: CashTable) -> dict[str, str]:
+    """WC-07: every value and direction word the model may use, rendered by code. A zero offset
+    has no slot, so the model cannot dwell on it."""
+    request = rec.bridge[0][1]
+    out = {
+        "wc.peak_shortfall": slots.money(rec.peak_shortfall),
+        "wc.peak_week": str(rec.peak_week),
+        "wc.recommended_amount": slots.money(rec.recommended_amount),
+        "wc.request": slots.money(request),
+        "cmp.recommended_vs_request": slots.compare(rec.recommended_amount, request),
     }
-    if _WORDS.search(text):
-        return False
-    hits = find_all(text)
-    rest = list(text)
-    for found in hits:
-        rest[found.start : found.end] = " " * (found.end - found.start)
-    if re.search(r"\d", "".join(rest)):  # identifiers like "Q1 FY27" are skipped by find_all
-        return False
-    for found in hits:
-        value = found.value
-        if found.kind == "money" and isinstance(value, Decimal):
-            if not any(abs(abs(value) - a) <= 1 for a in amounts):
-                return False
-        elif found.kind == "number" and isinstance(value, Decimal):
-            if value not in counts:
-                return False
-        else:
-            return False
-    return True
+    optional = {
+        "wc.shortfall_weeks": (table.shortfall_weeks, str(table.shortfall_weeks)),
+        "wc.min_buffer": (rec.min_cash_buffer, slots.money(rec.min_cash_buffer)),
+        "wc.undrawn_limits": (rec.undrawn_limits, slots.money(rec.undrawn_limits)),
+        "wc.mitigations": (rec.mitigations, slots.money(rec.mitigations)),
+    }
+    out |= {key: text for key, (value, text) in optional.items() if value}
+    return out
 
 
-def _explain(
-    ctx: StageContext, facts: Mapping[str, tuple[Decimal | int | str, str]], weeks: int
-) -> str | None:
+def _explain(ctx: StageContext, rec: Recommendation, table: CashTable) -> str | None:
     if ctx.llm is None:
         return None
-    lines = [
-        f"{key}: {format_inr(Decimal(value)) if unit == 'INR' else value}"
-        for key, (value, unit) in facts.items()
-        if key != "wc.cash_table"
-    ]
-    prompt = prompts()[PROMPT].render(facts="\n".join(lines))
+    names = "\n".join(sorted(narrative_slots(rec, table)))
+    prompt = prompts()[PROMPT].render(slots=names)
     try:
         reply = ctx.llm.complete(prompt, name=PROMPT).strip()
     except LLMError:  # slow or down model: the gate and figures are already decided
         return None
-    if not reply or BANNED.search(reply) or not grounded(reply, facts, weeks):
-        return None
-    return reply
+    return slots.render(
+        reply,
+        narrative_slots(rec, table),
+        required=["wc.recommended_amount"],
+        banned=BANNED,
+    )
 
 
 def run(ctx: StageContext) -> AgentResult:
@@ -271,7 +256,7 @@ def run(ctx: StageContext) -> AgentResult:
     )
     steps += 2
     facts = facts_for(table, rec)
-    drafted = _explain(ctx, facts, inputs.weeks)
+    drafted = _explain(ctx, rec, table)
     versions = {}
     if ctx.llm is not None:
         steps += 1

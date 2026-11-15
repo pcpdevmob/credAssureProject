@@ -609,7 +609,7 @@ requires-dist = [
 
 [[package]]
 name = "credassure-agent-onboarding"
-version = "0.2.0"
+version = "0.2.1"
 source = { editable = "agents/onboarding" }
 dependencies = [
     { name = "credassure-core" },
@@ -651,7 +651,7 @@ requires-dist = [
 
 [[package]]
 name = "credassure-agent-working-capital"
-version = "0.2.0"
+version = "0.2.1"
 source = { editable = "agents/working-capital" }
 dependencies = [
     { name = "credassure-core" },

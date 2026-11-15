@@ -1,6 +1,6 @@
 [project]
 name = "credassure-agent-onboarding"
-version = "0.2.0"
+version = "0.2.1"
 description = "Gate 1 readiness: role, training, policy acknowledgement."
 requires-python = ">=3.12,<3.13"
 dependencies = [

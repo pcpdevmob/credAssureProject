@@ -1,5 +1,5 @@
 name: onboarding
-version: "0.2.0"
+version: "0.2.1"
 owner: "Tejas"
 requirement_ids: [ONB-01, ONB-02, ONB-03, ONB-04, ONB-05, ONB-06, BR-03, BR-04]
 tools: [get_hr_profile, evaluate_onboarding_rules]  # read-only; enforced by agents/registry.yaml

@@ -92,13 +92,31 @@ def test_ONB04_template_names_every_failed_rule(item: dict[str, Any]) -> None:
 
 
 def test_ONB04_model_reply_used_only_when_it_names_every_failed_rule() -> None:
-    good = FakeLLM(
-        {"onb_explain": "[FIN-101] has expired and [policy_ack] is missing; retake both."}
+    draft = (
+        "Your {rule.FIN-101} has expired; {next.FIN-101}."
+        " Also {rule.policy_ack}: {next.policy_ack}."
     )
-    assert run(ctx("E020", good)).narrative.startswith("[FIN-101] has expired")  # type: ignore[union-attr]
-    partial = FakeLLM({"onb_explain": "[FIN-101] has expired."})
+    narrative = run(ctx("E020", FakeLLM({"onb_explain": draft}))).narrative or ""
+    assert narrative.startswith(
+        "Your Credit Policy training (FIN-101) has expired; retake the course"
+    )
+    assert "{" not in narrative and "WC-POL v3" in narrative
+    partial = FakeLLM({"onb_explain": "Your {rule.FIN-101} has expired."})
     narrative = run(ctx("E020", partial)).narrative or ""
     assert "policy_ack" in narrative and narrative.startswith("Preparer readiness is blocked")
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        "Your {rule.FIN-101} expired on 2026-10-01; {rule.policy_ack} is missing.",  # a date
+        "Your {rule.FIN-101} and {rule.policy_ack} block you; {rule.role} is fine.",  # passed rule
+        "Your {rule.FIN-101} and {rule.policy_ack} are missing; you will be approved after.",
+    ],
+)
+def test_ONB04_figure_passed_rule_or_banned_word_falls_back(bad: str) -> None:
+    narrative = run(ctx("E020", FakeLLM({"onb_explain": bad}))).narrative or ""
+    assert narrative.startswith("Preparer readiness is blocked")
 
 
 def test_ONB04_model_sees_only_the_rule_table_not_the_hr_record() -> None:
@@ -189,5 +207,6 @@ def test_VER03_interim_guard_rejects_approval_wording_and_passed_rules(reply: st
 
 
 def test_VER03_guard_keeps_plain_go_in_a_sentence() -> None:
-    reply = "Please go to the HR portal and retake [FIN-101]."
-    assert run(ctx("E009", FakeLLM({"onb_explain": reply}))).narrative == reply
+    reply = "Please go to the HR portal and retake your {rule.FIN-101}."
+    want = "Please go to the HR portal and retake your Credit Policy training (FIN-101)."
+    assert run(ctx("E009", FakeLLM({"onb_explain": reply}))).narrative == want

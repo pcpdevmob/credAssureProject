@@ -85,7 +85,7 @@ def run(inputs: agent.CaseInputs, llm: Any = None) -> tuple[Any, Ledger, Tools]:
 
 
 def test_smoke_version() -> None:
-    assert agent.version() == "0.2.0"
+    assert agent.version() == "0.2.1"
 
 
 def test_WC03_WC06_demo_case_go_with_facts_bridge_and_lineage() -> None:
@@ -105,7 +105,6 @@ def test_WC03_WC06_demo_case_go_with_facts_bridge_and_lineage() -> None:
     assert tools.called == ["validate_case_files", "compute_cash_table", "compute_recommendation"]
     table, rec = _engine(inputs)
     assert result.narrative == agent.template(rec, table)  # LLM off: the template
-    assert agent.grounded(result.narrative, agent.facts_for(table, rec), 26)
 
 
 def _engine(inputs: agent.CaseInputs) -> tuple[Any, Any]:
@@ -114,22 +113,52 @@ def _engine(inputs: agent.CaseInputs) -> tuple[Any, Any]:
     return table, cashflow.recommend(inputs.files, table, indicative=inputs.indicative)
 
 
-def test_WC07_model_wording_used_only_when_every_number_is_a_fact() -> None:
+DRAFT = (
+    "Cash is lowest in week {wc.peak_week}, a shortfall of {wc.peak_shortfall}. With the buffer of"
+    " {wc.min_buffer} and undrawn limits of {wc.undrawn_limits}, the facility of"
+    " {wc.recommended_amount} is {cmp.recommended_vs_request} the request of {wc.request}."
+)
+RENDERED = (
+    "Cash is lowest in week 9, a shortfall of ₹1,62,00,000. With the buffer of ₹10,00,000 and"
+    " undrawn limits of ₹30,00,000, the facility of ₹1,42,00,000 is lower than the request of"
+    " ₹2,00,00,000."
+)
+
+
+def test_WC07_code_renders_every_slot_and_direction_word() -> None:
     inputs = agent.load_inputs(stored(), INDICATIVE)
-    good = (
-        "Cash is lowest in week 9 at a shortfall of ₹1,62,00,000. After the buffer of ₹10,00,000"
-        " and undrawn limits of ₹30,00,000, the facility is ₹1,42,00,000, not ₹2,00,00,000."
-    )
-    result, _, _ = run(inputs, FakeLLM(replies={"wc_explain": [good]}))
-    assert result.narrative == good and result.prompt_versions == {"wc_explain": "1.0.0"}
-    for bad in (
-        good.replace("₹1,42,00,000", "₹1,45,00,000"),  # invented amount
-        good + " Interest is 11% a year.",  # a rate
-        good.replace("week 9", "week 11"),  # wrong week
-        good + " Lenders will approve it.",  # approval prediction
-    ):
-        result, _, _ = run(inputs, FakeLLM(replies={"wc_explain": [bad]}))
-        assert result.narrative != bad and "₹1,42,00,000" in str(result.narrative)
+    result, _, _ = run(inputs, FakeLLM(replies={"wc_explain": [DRAFT]}))
+    assert result.narrative == RENDERED and result.prompt_versions == {"wc_explain": "2.0.0"}
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        DRAFT.replace("{wc.recommended_amount}", "₹1,45,00,000"),  # a figure of its own
+        DRAFT.replace("{wc.recommended_amount}", "₹1,42,00,000"),  # even a right one
+        DRAFT + " Interest is {wc.min_buffer} a year.",  # lender talk
+        DRAFT.replace("{wc.peak_week}", "11"),
+        DRAFT.replace("{wc.undrawn_limits}", "{wc.mitigations}"),  # zero offset has no slot
+        DRAFT.replace("{cmp.recommended_vs_request}", "higher than"),  # direction of its own
+        DRAFT.replace("{wc.request}", "{wc.indicative}"),  # unknown slot
+        DRAFT + " Lenders will approve it.",
+        "Cash is short in {wc.peak_week}.",  # never names the facility
+    ],
+)
+def test_WC07_any_figure_or_direction_outside_a_slot_falls_back(bad: str) -> None:
+    inputs = agent.load_inputs(stored(), INDICATIVE)
+    result, _, _ = run(inputs, FakeLLM(replies={"wc_explain": [bad]}))
+    table, rec = _engine(inputs)
+    assert result.narrative == agent.template(rec, table)
+
+
+def test_WC07_model_sees_slot_names_never_values() -> None:
+    llm = FakeLLM(replies={"wc_explain": [DRAFT]})
+    run(agent.load_inputs(stored(), INDICATIVE), llm)
+    ((_, prompt),) = llm.calls
+    assert "wc.recommended_amount" in prompt
+    assert "1,42" not in prompt and "1,62" not in prompt
+    assert "wc.mitigations" not in prompt.split("<slots>")[1].split("</slots>")[0]
 
 
 def test_WC01_missing_field_needs_input_with_one_question_naming_it() -> None:
@@ -186,39 +215,9 @@ def test_SUP05_recheck_flags_any_tampered_fact(key: str) -> None:
     assert [b.code.value for b in found] == ["SUP_RECHECK_MISMATCH"] and key in found[0].message
 
 
-@pytest.mark.parametrize(
-    "extra",
-    [
-        " Plan for Q1 FY27.",
-        " See https://x.example/a.",
-        " You need two crore rupees.",
-        " Rate is twelve percent.",
-        " Bank X will sanction quickly.",
-    ],
-)
-def test_WC07_guard_refuses_unsourced_figures_in_words_ids_links_and_lender_talk(
-    extra: str,
-) -> None:
-    inputs = agent.load_inputs(stored(), INDICATIVE)
-    good = "The facility is ₹1,42,00,000 against ₹2,00,00,000."
-    result, _, _ = run(inputs, FakeLLM(replies={"wc_explain": [good + extra]}))
-    assert result.narrative != good + extra
-    result, _, _ = run(inputs, FakeLLM(replies={"wc_explain": [good]}))
-    assert result.narrative == good
-
-
 def test_WC07_zero_need_template_names_the_dip_and_what_covers_it() -> None:
     inputs = agent.load_inputs(stored("CA-2026-0015"), INDICATIVE)
     result, ledger, _ = run(inputs)
     assert Decimal(ledger.facts["wc.recommended_amount"]) == 0
     assert "peak shortfall of ₹40,00,000 in week 7" in str(result.narrative)
     assert "no new facility" in str(result.narrative)
-
-
-@pytest.mark.parametrize("case", sorted(p.name for p in CASES.iterdir()))
-def test_WC07_template_always_passes_its_own_guard(case: str) -> None:
-    inputs = agent.load_inputs(stored(case), INDICATIVE)
-    if inputs.blockers:
-        pytest.skip("NEEDS_INPUT case: no figures")
-    table, rec = _engine(inputs)
-    assert agent.grounded(agent.template(rec, table), agent.facts_for(table, rec), 26)

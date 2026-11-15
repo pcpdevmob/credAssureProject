@@ -1,5 +1,5 @@
 name: working_capital
-version: "0.2.0"
+version: "0.2.1"
 owner: "Suresh"
 requirement_ids: [WC-01, WC-02, WC-03, WC-04, WC-05, WC-06, WC-07, BR-01, BR-02, BR-05]
 tools: [validate_case_files, compute_cash_table, compute_recommendation]  # enforced by agents/registry.yaml
