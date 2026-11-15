@@ -14,7 +14,7 @@ The copilot owner (name6) and the co-owner of `packages/retrieval` (name1) do no
 
 ## What you are judging
 `judging_sheet.csv` lists every distinct passage that any of the 18 retrieval configurations (3 chunkings × 3 retrievers ×
-rerank on/off) returned in its top 10 for one of the 40 KR-05 queries. Duplicates are merged and the order is shuffled within
+rerank on/off) returned in its top 5 for one of the 40 KR-05 queries. Duplicates are merged and the order is shuffled within
 each query. Nothing in the sheet tells you which configuration, which rank or which existing label a passage came from. Some
 rows are already labelled relevant in v1.0. You are not told which, and you judge them like any other row.
 

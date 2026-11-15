@@ -1,6 +1,6 @@
 """Blind pooled judgement for the KR-05 retrieval labels (E8 M1).
 
-`pool`: the union of every query's top 10 over all 18 configurations, deduplicated by (document, section)
+`pool`: the union of every query's top 5 over all 18 configurations, deduplicated by (document, section)
 and shuffled within each query. No configuration, rank or existing label is written anywhere, so
 the judges cannot tell where a passage came from. Criteria and judges: evaluation/retrieval/v1/judging/criteria.md.
 
@@ -38,12 +38,14 @@ COLUMNS = [
 CELL_MAX = 32_000  # spreadsheet cell limit
 
 
-def build_pool(hits: Hits, queries: list[dict[str, Any]], seed: str) -> list[dict[str, str]]:
-    """One row per distinct (query, document, section); the longest text of the duplicates is kept."""
+def build_pool(
+    hits: Hits, queries: list[dict[str, Any]], seed: str, depth: int = 5
+) -> list[dict[str, str]]:
+    """One row per distinct (query, document, section) in any top `depth`; the longest text is kept."""
     best: dict[tuple[str, str, str], Any] = {}
     for by_q in hits.values():
         for q in queries:
-            for p in by_q[q["id"]]:
+            for p in by_q[q["id"]][:depth]:
                 key = (q["id"], p.doc_id, _ws(p.section_path or ""))
                 if key not in best or len(p.text) > len(best[key].text):
                     best[key] = p

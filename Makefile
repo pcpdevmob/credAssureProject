@@ -139,7 +139,7 @@ ingest:  ## Index data/corpus + synthetic KFS/policies: corpus.db, FTS5, Chroma 
 retrieval-eval:  ## KR-05 recall@5/@10 for 3 retrievers x 3 chunkings x rerank -> evaluation/reports/retrieval-<date>.md
 	uv run $(ENV_FILE) python -m credassure.evaluation.retrieval_eval
 
-retrieval-pool:  ## Blind pooled top-10 of all 18 configs -> evaluation/retrieval/v1/judging/ (E8 M1)
+retrieval-pool:  ## Blind pooled top-5 of all 18 configs -> evaluation/retrieval/v1/judging/ (E8 M1)
 	uv run $(ENV_FILE) python -m credassure.evaluation.retrieval_judging pool
 
 eval:  ## Run the 100-item test set through the API (Phase 11)

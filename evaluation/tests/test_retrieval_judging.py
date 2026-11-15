@@ -40,3 +40,9 @@ def test_KR05_pool_is_blind_and_deterministic(tmp_path: Path) -> None:
     assert sheet.splitlines()[0] == ",".join(COLUMNS)
     for leak in ("fixed512", "keyword", "dense", "rerank", "rank"):
         assert leak not in sheet
+
+
+def test_KR05_pool_takes_top5_only() -> None:
+    deep = [_p("A", "1", "a")] * 5 + [_p("Z", "9", "rank six")]
+    rows = build_pool({("fixed512", "keyword", False): {"Q01": deep, "Q02": []}}, QUERIES, "s")
+    assert [r["doc_id"] for r in rows] == ["A"]
