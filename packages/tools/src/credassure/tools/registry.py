@@ -62,6 +62,20 @@ def authorize(
         raise RegistryError(ApiErrorCode.CASE_REQUIRED)
 
 
+def authorize_fact(agent: AgentName | str, key: str) -> None:
+    """Raise ``RegistryError`` unless ``agent`` may read or write ledger fact ``key``.
+
+    Deny by default: an agent without a ``ledger_prefixes`` entry may touch no fact.
+    """
+    name = agent.value if isinstance(agent, AgentName) else agent
+    prefixes = _load().get("ledger_prefixes") or {}
+    if not isinstance(prefixes, dict):
+        raise RegistryError(ApiErrorCode.VALIDATION_FAILED)
+    allowed = prefixes.get(name) or []
+    if not any(key.startswith(str(p)) for p in allowed):
+        raise RegistryError(ApiErrorCode.TOOL_NOT_ALLOWED)
+
+
 def _allow(tool: str) -> dict[str, dict[str, list[str]]]:
     spec = _tools().get(tool)
     if not isinstance(spec, dict):
@@ -100,10 +114,16 @@ def rules_from_allow(raw: object) -> dict[str, dict[str, list[str]]]:
     return parsed
 
 
-def _tools() -> dict[str, Any]:
+def _load() -> dict[str, Any]:
     with _registry_file().open(encoding="utf-8") as handle:
         loaded: Any = yaml.safe_load(handle)
-    tools = loaded.get("tools") if isinstance(loaded, dict) else None
+    if not isinstance(loaded, dict):
+        raise RegistryError(ApiErrorCode.VALIDATION_FAILED)
+    return cast(dict[str, Any], loaded)
+
+
+def _tools() -> dict[str, Any]:
+    tools = _load().get("tools")
     if not isinstance(tools, dict):
         raise RegistryError(ApiErrorCode.VALIDATION_FAILED)
     return cast(dict[str, Any], tools)

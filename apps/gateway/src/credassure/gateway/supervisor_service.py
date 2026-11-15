@@ -17,8 +17,13 @@ from credassure.gateway.problems import ProblemError
 from credassure.ledger import reads
 from credassure.ledger.session import run_in_progress, transaction
 from credassure.observability.tracing import span
+from credassure.security import pii
 from credassure.security.auth import Principal
 
+PII_NOTICE = (
+    "Personal identifiers ({kinds}) are not accepted in chat; they were removed and not stored "
+    "(data-handling policy, DPDP Act 2023)."
+)
 UNAVAILABLE = (
     "The copilot is unavailable: cited, Critic-checked answers arrive with the copilot (Phase 9e)."
 )
@@ -85,11 +90,18 @@ class SupervisorService:
         check it (CP-01, VER-01), so this returns a fixed notice whether the model is on or off."""
         case = visible_case(self.svc, actor, case_id)
         trace_id = uuid.uuid4().hex
-        with span("chat", trace_id=trace_id, case_id=case.id):  # E11 N1: the id names a span
+        kinds = sorted({hit.kind for hit in pii.find(message)})  # ONB-06: refuse and redact
+        with span(  # E11 N1: the id names a span; only the redacted text is ever recorded
+            "chat", trace_id=trace_id, case_id=case.id, message=pii.redact(message)[:2000]
+        ):
             pass
-        return {
+        reply: dict[str, Any] = {
             "answer": UNAVAILABLE,
             "citations": [],
             "intent": "copilot_question",
             "trace_id": trace_id,
+            "pii_redacted": bool(kinds),
         }
+        if kinds:
+            reply["notice"] = PII_NOTICE.format(kinds=", ".join(kinds))
+        return reply

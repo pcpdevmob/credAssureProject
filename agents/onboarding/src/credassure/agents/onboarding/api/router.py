@@ -9,8 +9,10 @@ from typing import Annotated, Any
 from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException
 
 from credassure.agents.onboarding import __version__
+from credassure.agents.onboarding.agent import PROMPT
 from credassure.agents.onboarding.api.deps import get_principal, get_supervisor
 from credassure.core.ports import SupervisorPort
+from credassure.core.prompts import prompt_version
 
 router = APIRouter(tags=["onboarding"])
 SupervisorDep = Annotated[SupervisorPort, Depends(get_supervisor)]
@@ -21,8 +23,13 @@ STAGE = "onboarding"
 
 @router.get("/card")
 def card() -> dict[str, Any]:
-    """Agent card: name, version and the stage it runs (if any)."""
-    return {"name": "onboarding", "version": __version__, "stage": STAGE}
+    """Agent card: name, version, the stage it runs and its prompt versions (scope #25, #36)."""
+    return {
+        "name": "onboarding",
+        "version": __version__,
+        "stage": STAGE,
+        "prompts": {PROMPT: prompt_version(PROMPT)},
+    }
 
 
 @router.get("/health")

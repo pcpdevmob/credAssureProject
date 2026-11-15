@@ -19,12 +19,26 @@ from credassure.agents.onboarding import agent as onboarding
 from credassure.agents.supervisor.graph import Supervisor
 from credassure.agents.working_capital import agent as working_capital
 from credassure.core.enums import AgentName, Stage
+from credassure.engines.onboarding_rules import evaluate
 from credassure.ledger import migrate, reads, session, writes
 from credassure.ledger.store import SqlLedger
 from credassure.llm.fake import FakeLLM
 from credassure.tools.runner import ToolRunner
 
 CASE, T = "CA-2026-0001", "default"
+GO_PROFILE = {  # an authorised preparer with every rule current (Phase 9a real onboarding agent)
+    "emp_id": "E001",
+    "role": "senior_finance_analyst",
+    "trainings": [
+        {"code": c, "status": "completed", "expires_on": "2027-07-18"}
+        for c in ("AML-201", "DPDP-101", "FIN-101")
+    ],
+    "policy_ack_version": "v3",
+}
+ONB_TOOLS = {
+    "get_hr_profile": lambda case_id: GO_PROFILE,
+    "evaluate_onboarding_rules": lambda case_id, profile: evaluate(profile, date(2026, 11, 15)),
+}
 
 
 class _Clock:
@@ -69,7 +83,7 @@ def _supervisor(db: Path, llm: FakeLLM | None) -> tuple[Supervisor, Any]:
         },
         store=ledger,
         ledger=ledger,
-        tools=lambda agent: ToolRunner(agent, {}),
+        tools=lambda agent: ToolRunner(agent, ONB_TOOLS if agent is AgentName.ONBOARDING else {}),
         llm=llm,
         clock=_Clock(),
         checkpointer=saver,
@@ -96,7 +110,8 @@ def test_SUP01_placeholders_run_to_the_director_and_resume_from_disk(
         case = reads.get_case(s, T, CASE)
         assert case is not None and case.route == "director_finance"
         assert reads.verify_chain(s) == []
-    assert (llm is not None and len(llm.calls) >= 4) or (llm is None)
+    # onboarding GO needs no explanation, so its model call is skipped (Phase 9a)
+    assert (llm is not None and len(llm.calls) >= 3) or (llm is None)
 
     # A fresh Supervisor (new process after a restart) resumes the same interrupt from case.db.
     again, _ = _supervisor(db, llm)

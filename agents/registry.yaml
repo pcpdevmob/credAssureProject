@@ -53,3 +53,12 @@ tools:
   route_proposal:
     allow:
       supervisor: {}
+# Ledger keys an agent's stage may read or write through its StageContext (scope #24).
+# Deny by default: an agent missing here reads and writes nothing. "" = every key; Phases
+# 9b-9e narrow their own entry. Onboarding never sees case financials.
+ledger_prefixes:
+  onboarding: ["onb."]
+  working_capital: [""]
+  lendwise: [""]
+  critic: [""]
+  copilot: [""]

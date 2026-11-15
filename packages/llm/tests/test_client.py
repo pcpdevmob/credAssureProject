@@ -341,6 +341,8 @@ def test_NFR02_qwen3_thinking_off_is_requested_and_think_block_stripped() -> Non
     body = script.bodies[0]
     assert body["chat_template_kwargs"] == {"enable_thinking": False}
     assert body["max_tokens"] == 1024
+    # Ollama ignores chat_template_kwargs; Qwen3's soft switch turns thinking off there too
+    assert body["messages"][0]["content"].endswith("\n/no_think")
 
 
 def test_NFR02_defaults_send_neither_thinking_switch_nor_max_tokens() -> None:
@@ -349,3 +351,4 @@ def test_NFR02_defaults_send_neither_thinking_switch_nor_max_tokens() -> None:
     assert llm.complete("x", name="p") == "<think>kept</think>ok"
     assert "chat_template_kwargs" not in script.bodies[0]
     assert "max_tokens" not in script.bodies[0]
+    assert "/no_think" not in script.bodies[0]["messages"][0]["content"]

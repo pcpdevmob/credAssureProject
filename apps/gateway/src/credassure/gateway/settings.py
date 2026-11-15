@@ -59,6 +59,7 @@ class Settings(BaseSettings):
     langfuse_secret_key: SecretStr | None = None
 
     case_db: Path = Path("var/case.db")
+    hr_db: Path = Path("data/frozen/v1/hr.db")  # opened read-only (ONB-05)
     seed_password: SecretStr | None = None  # demo users only (make db); tests pass their own
     rate_limit: str = "120/minute"  # per user (JWT sub), else per client IP (NFR-04)
     token_quota: int = Field(default=2_000_000, gt=0)  # team quota; warnings at 70% / 90% (#16)

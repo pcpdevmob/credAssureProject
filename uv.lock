@@ -609,16 +609,18 @@ requires-dist = [
 
 [[package]]
 name = "credassure-agent-onboarding"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "agents/onboarding" }
 dependencies = [
     { name = "credassure-core" },
+    { name = "credassure-engines" },
     { name = "fastapi" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "credassure-core", editable = "packages/core" },
+    { name = "credassure-engines", editable = "packages/engines" },
     { name = "fastapi", specifier = ">=0.115" },
 ]
 
@@ -743,6 +745,7 @@ dependencies = [
     { name = "credassure-agent-onboarding" },
     { name = "credassure-agent-supervisor" },
     { name = "credassure-agent-working-capital" },
+    { name = "credassure-engines" },
     { name = "credassure-ledger" },
     { name = "credassure-llm" },
     { name = "credassure-observability" },
@@ -781,6 +784,7 @@ requires-dist = [
     { name = "credassure-agent-onboarding", editable = "agents/onboarding" },
     { name = "credassure-agent-supervisor", editable = "agents/supervisor" },
     { name = "credassure-agent-working-capital", editable = "agents/working-capital" },
+    { name = "credassure-engines", editable = "packages/engines" },
     { name = "credassure-ledger", editable = "packages/ledger" },
     { name = "credassure-llm", editable = "packages/llm" },
     { name = "credassure-observability", editable = "packages/observability" },

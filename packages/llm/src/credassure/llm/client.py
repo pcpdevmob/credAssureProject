@@ -78,7 +78,10 @@ class OpenAICompatLLM:
     def complete(
         self, prompt: str, *, name: str = "default", json_schema: Mapping[str, Any] | None = None
     ) -> str:
-        messages = [{"role": "user", "content": redact(prompt)}]
+        content = redact(prompt)
+        if self._no_think:  # Qwen3 soft switch: Ollama (local) ignores chat_template_kwargs
+            content += "\n/no_think"
+        messages = [{"role": "user", "content": content}]
         key = cache_key(self.model, name, prompt_version(name), messages, json_schema)
         if self._cache is not None and (hit := self._cache.get(key)) is not None:
             return hit

@@ -20,6 +20,7 @@ from langgraph.checkpoint.sqlite import SqliteSaver
 from limits import parse
 from limits.storage import MemoryStorage
 from limits.strategies import MovingWindowRateLimiter
+from sqlalchemy import Engine
 
 from credassure.agents.copilot.api import deps as copilot_deps
 from credassure.agents.copilot.api.router import router as copilot_router
@@ -34,21 +35,22 @@ from credassure.agents.onboarding.api import deps as onboarding_deps
 from credassure.agents.onboarding.api.router import router as onboarding_router
 from credassure.agents.supervisor.api import deps as supervisor_deps
 from credassure.agents.supervisor.api.router import router as supervisor_router
-from credassure.agents.supervisor.graph import Supervisor
+from credassure.agents.supervisor.graph import Supervisor, default_rechecks
 from credassure.agents.working_capital import agent as working_capital
 from credassure.agents.working_capital.api import deps as working_capital_deps
 from credassure.agents.working_capital.api.router import router as working_capital_router
 from credassure.core.enums import AgentName, Stage
 from credassure.core.errors import ApiErrorCode
 from credassure.core.ports import LLMPort, ToolPort
+from credassure.engines import onboarding_rules
 from credassure.gateway import problems, tracing
 from credassure.gateway.deps import Services, current_user
 from credassure.gateway.jobs import JobRunner
 from credassure.gateway.routers import admin, auth, cases, health, workflow
 from credassure.gateway.settings import Settings, get_settings
 from credassure.gateway.supervisor_service import SupervisorService
-from credassure.ledger import migrate, reads
-from credassure.ledger.session import case_engine, transaction
+from credassure.ledger import hr, migrate, reads
+from credassure.ledger.session import case_engine, hr_engine, transaction
 from credassure.ledger.store import SqlLedger
 from credassure.observability.log import configure_logging, log_context, set_redactor
 from credassure.security import pii
@@ -111,15 +113,45 @@ def _default_llm(settings: Settings) -> LLMPort | None:
     )
 
 
-def _tools(agent: AgentName) -> ToolPort:
-    # ponytail: no tool handlers yet; Phases 9a-9e register the engines per agent here.
-    return ToolRunner(agent, {})
+def _profile_loader(settings: Settings, engine: Engine) -> Callable[[str], dict[str, Any] | None]:
+    """Case -> its preparer's emp_id (login binding) -> hr.db profile (ONB-01, SUP-08)."""
+    hr_db = hr_engine(settings.hr_db)
+
+    def load(case_id: str) -> dict[str, Any] | None:
+        with transaction(engine) as s:
+            emp_id = reads.preparer_emp_id(s, settings.tenant_id, case_id)
+        return None if emp_id is None else hr.load_profile(hr_db, emp_id)
+
+    return load
+
+
+def _tool_factory(settings: Settings, engine: Engine) -> Callable[[AgentName], ToolPort]:
+    load = _profile_loader(settings, engine)
+    handlers: dict[AgentName, dict[str, Callable[..., Any]]] = {
+        AgentName.ONBOARDING: {  # read-only: no tool writes HR data (ONB-05)
+            "get_hr_profile": lambda case_id: load(case_id),
+            "evaluate_onboarding_rules": lambda case_id, profile: onboarding_rules.evaluate(
+                profile, settings.as_of_date
+            ),
+        },
+    }
+
+    # ponytail: other agents get no handlers until Phases 9b-9e register their engines here.
+    def tools(agent: AgentName) -> ToolPort:
+        return ToolRunner(agent, handlers.get(agent, {}))
+
+    return tools
 
 
 def build_services(settings: Settings, llm: LLMPort | None) -> Services:
     migrate.upgrade("case", settings.case_db)  # idempotent; seeds stay separate (#29)
     engine = case_engine(settings.case_db)
     ledger = SqlLedger(engine, settings.tenant_id)
+    rechecks = {  # SUP-05: the stage's own recomputation; other stages keep the default
+        Stage.ONBOARDING: onboarding.make_recheck(
+            _profile_loader(settings, engine), settings.as_of_date
+        ),
+    }
     with transaction(engine) as s:
         rule = reads.get_config(s, settings.tenant_id, "boundary_rule") or settings.boundary_rule
     saver = SqliteSaver(sqlite3.connect(settings.case_db, check_same_thread=False))
@@ -127,7 +159,8 @@ def build_services(settings: Settings, llm: LLMPort | None) -> Services:
         agents=_STAGE_AGENTS,
         store=ledger,
         ledger=ledger,
-        tools=_tools,
+        tools=_tool_factory(settings, engine),
+        rechecks={**default_rechecks(), **rechecks},
         llm=llm if settings.llm_enabled else None,
         clock=_Clock(settings.as_of_date),
         checkpointer=saver,

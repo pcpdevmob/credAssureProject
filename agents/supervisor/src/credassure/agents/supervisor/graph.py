@@ -29,6 +29,7 @@ from credassure.core.blockers import BlockerCode, BlockerEffect, blocker_effect
 from credassure.core.budget import stage_budget
 from credassure.core.enums import AgentName, Decision, Stage
 from credassure.core.errors import (
+    ApiErrorCode,
     BudgetExceeded,
     LLMError,
     LLMTimeout,
@@ -51,6 +52,7 @@ from credassure.core.results import AgentResult, Blocker
 from credassure.engines.routing import route as route_amount
 from credassure.observability.tracing import span
 from credassure.security.pii import redact
+from credassure.tools.registry import RegistryError, authorize_fact
 from credassure.tools.runner import LoopDetected
 
 Recheck = Callable[[AgentResult, LedgerPort], list[Blocker]]
@@ -89,6 +91,12 @@ class _State(TypedDict):
     results: NotRequired[dict[str, dict[str, Any]]]  # kept across runs by the checkpointer
 
 
+def _same_case(bound: str, case_id: str) -> None:
+    """SUP-08, BR-14: a stage reaches only the case the Supervisor injected."""
+    if case_id != bound:
+        raise RegistryError(ApiErrorCode.CASE_REQUIRED)
+
+
 def _check(cancel: threading.Event) -> None:
     if cancel.is_set():
         raise StageCancelledError("stage timed out")
@@ -123,12 +131,17 @@ class _TracedLLM:
 
 
 class _GuardedLedger:
-    """The stage's ledger; writes are refused once the stage has timed out (#23)."""
+    """The stage's ledger: only the agent's registry prefixes (scope #24), and writes are
+    refused once the stage has timed out (#23)."""
 
-    def __init__(self, ledger: LedgerPort, cancel: threading.Event) -> None:
-        self._ledger, self._cancel = ledger, cancel
+    def __init__(
+        self, ledger: LedgerPort, cancel: threading.Event, agent: AgentName, case_id: str
+    ) -> None:
+        self._ledger, self._cancel, self._agent, self._case = ledger, cancel, agent, case_id
 
     def get(self, case_id: str, key: str) -> str | None:
+        _same_case(self._case, case_id)
+        authorize_fact(self._agent, key)
         return self._ledger.get(case_id, key)
 
     def put_fact(
@@ -143,6 +156,8 @@ class _GuardedLedger:
         produced_by: str,
     ) -> int:
         _check(self._cancel)
+        _same_case(self._case, case_id)
+        authorize_fact(self._agent, key)
         return self._ledger.put_fact(
             case_id,
             key,
@@ -164,12 +179,14 @@ class _AuditedTools:
         agent: AgentName,
         trace_id: str,
         cancel: threading.Event,
+        case_id: str,
     ) -> None:
         self._tools, self._store, self._agent, self._trace_id = tools, store, agent, trace_id
-        self._cancel = cancel
+        self._cancel, self._case = cancel, case_id
 
     def call(self, name: str, case_id: str, args: Mapping[str, Any] | None = None) -> Any:
         _check(self._cancel)
+        _same_case(self._case, case_id)
         error: str | None = None
         try:
             with span("tool", tool=name, agent=self._agent.value, case_id=case_id):
@@ -495,9 +512,9 @@ class Supervisor:
                 tenant_id=self.tenant_id,
                 stage=stage,
                 trace_id=trace_id,
-                ledger=_GuardedLedger(self.ledger, cancel),
+                ledger=_GuardedLedger(self.ledger, cancel, agent_name, case_id),
                 tools=_AuditedTools(
-                    self.tools(agent_name), self.store, agent_name, trace_id, cancel
+                    self.tools(agent_name), self.store, agent_name, trace_id, cancel, case_id
                 ),
                 llm=traced,
                 clock=self.clock,
@@ -620,7 +637,17 @@ class Supervisor:
             )
         if result.decision is not Decision.GO or self.ablation == "A4":  # A4: model decides gates
             return result
-        failed = self.rechecks.get(result.stage, _evidence_and_gate_check)(result, self.ledger)
+        try:
+            failed = self.rechecks.get(result.stage, _evidence_and_gate_check)(result, self.ledger)
+        except Exception as exc:  # fail closed with an audited stage result (SUP-05)
+            _log.warning("recheck failed for %s: %s", result.stage.value, type(exc).__name__)
+            return self._error(
+                result.case_id,
+                result.stage,
+                result.trace_id,
+                BlockerCode.SUP_AGENT_ERROR,
+                "deterministic re-check failed",
+            )
         if not failed:
             return result
         self.store.audit(

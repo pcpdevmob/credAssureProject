@@ -301,7 +301,7 @@ export interface paths {
         };
         /**
          * Card
-         * @description Agent card: name, version and the stage it runs (if any).
+         * @description Agent card: name, version, the stage it runs and its prompt versions (scope #25, #36).
          */
         get: operations["card_v1_agents_onboarding_card_get"];
         put?: never;

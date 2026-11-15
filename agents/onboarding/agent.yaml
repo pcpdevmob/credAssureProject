@@ -1,7 +1,11 @@
 name: onboarding
-version: "0.1.0"
+version: "0.2.0"
 owner: "Tejas"
-requirement_ids: [ONB-01]
-tools: []
-readable_data: []
-gate: "set by code; placeholder until the agent phase"
+requirement_ids: [ONB-01, ONB-02, ONB-03, ONB-04, ONB-05, ONB-06, BR-03, BR-04]
+tools: [get_hr_profile, evaluate_onboarding_rules]  # read-only; enforced by agents/registry.yaml
+readable_data:
+  - hr_profile  # the case preparer's own record, found from the login binding (ONB-01)
+  - "onb.*"     # ledger facts; no case financials (registry ledger_prefixes, scope #24)
+prompts: [onb_explain]
+gate: "code: engines.onboarding_rules (all PASS -> GO; any FAIL -> NO_GO; else UNKNOWN -> NEEDS_INPUT)"
+recheck: "SUP-05: Supervisor recomputes readiness from hr.db on every GO"

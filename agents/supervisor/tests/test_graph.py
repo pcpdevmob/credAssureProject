@@ -429,3 +429,64 @@ def test_scope19_llm_proposes_without_a_model_falls_back_to_fixed(build: Build) 
         plan = h.sup.plan(CASE)
     assert plan.mode == "fixed"
     assert _plan_span(spans)["accepted"] is False
+
+
+def test_scope24_stage_ledger_refuses_keys_outside_the_agent_prefix() -> None:
+    import threading
+
+    import pytest
+
+    from credassure.agents.supervisor.graph import _GuardedLedger
+    from credassure.core.enums import AgentName
+    from credassure.tools.registry import RegistryError
+
+    class Store:
+        def get(self, case_id: str, key: str) -> str | None:
+            return "1"
+
+        def put_fact(self, *a: object, **k: object) -> int:
+            return 1
+
+    ledger = _GuardedLedger(Store(), threading.Event(), AgentName.ONBOARDING, "CA-1")  # type: ignore[arg-type]
+    assert ledger.get("CA-1", "onb.gate") == "1"
+    with pytest.raises(RegistryError):
+        ledger.get("CA-1", "wc.recommended_amount")
+    with pytest.raises(RegistryError):
+        ledger.put_fact("CA-1", "wc.x", 1, unit="", source_type="", source_ref="", produced_by="")
+
+
+def test_SUP08_stage_wrappers_refuse_another_case_id() -> None:
+    import threading
+
+    import pytest
+
+    from credassure.agents.supervisor.graph import _AuditedTools, _GuardedLedger
+    from credassure.core.enums import AgentName
+    from credassure.tools.registry import RegistryError
+
+    class Store:
+        def get(self, case_id: str, key: str) -> str | None:
+            return "1"
+
+        def put_fact(self, *a: object, **k: object) -> int:
+            return 1
+
+        def audit(self, *a: object, **k: object) -> None:
+            pass
+
+    class Tools:
+        def call(self, name: str, case_id: str, args: object = None) -> str:
+            return case_id
+
+    ev, onb = threading.Event(), AgentName.ONBOARDING
+    ledger = _GuardedLedger(Store(), ev, onb, "CA-1")  # type: ignore[arg-type]
+    tools = _AuditedTools(Tools(), Store(), onb, "t", ev, "CA-1")  # type: ignore[arg-type]
+    assert ledger.get("CA-1", "onb.gate") == "1" and tools.call("get_hr_profile", "CA-1") == "CA-1"
+    with pytest.raises(RegistryError):
+        ledger.get("CA-2", "onb.gate")
+    with pytest.raises(RegistryError):
+        ledger.put_fact(
+            "CA-2", "onb.gate", "GO", unit="", source_type="", source_ref="", produced_by=""
+        )
+    with pytest.raises(RegistryError):
+        tools.call("get_hr_profile", "CA-2")

@@ -80,3 +80,28 @@ def test_unknown_tool_is_rejected() -> None:
     with pytest.raises(RegistryError) as caught:
         authorize(AgentName.SUPERVISOR, "accept_offer")
     assert caught.value.code is ApiErrorCode.TOOL_NOT_ALLOWED
+
+
+def test_scope24_onboarding_cannot_call_financial_tools() -> None:
+    import pytest
+
+    from credassure.tools.registry import RegistryError, authorize
+
+    for tool in ("compute_cash_table", "compute_recommendation", "price_offer", "rank_offers"):
+        with pytest.raises(RegistryError) as err:
+            authorize("onboarding", tool)
+        assert err.value.code.value == "TOOL_NOT_ALLOWED"
+
+
+def test_scope24_onboarding_ledger_access_is_onb_facts_only() -> None:
+    import pytest
+
+    from credassure.tools.registry import RegistryError, authorize_fact
+
+    authorize_fact("onboarding", "onb.rule.FIN-101")
+    for key in ("wc.recommended_amount", "lw.OF-01-A.v1.apr", "onboarding.gate"):
+        with pytest.raises(RegistryError):
+            authorize_fact("onboarding", key)
+    authorize_fact("working_capital", "wc.recommended_amount")
+    with pytest.raises(RegistryError):
+        authorize_fact("unknown_agent", "wc.recommended_amount")  # deny by default

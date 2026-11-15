@@ -10,6 +10,7 @@ dependencies = [
     "credassure-agent-onboarding",
     "credassure-agent-supervisor",
     "credassure-agent-working-capital",
+    "credassure-engines",
     "credassure-observability",
     "credassure-tools",
     "credassure-llm",
@@ -45,6 +46,7 @@ credassure-agent-lendwise = { workspace = true }
 credassure-agent-onboarding = { workspace = true }
 credassure-agent-supervisor = { workspace = true }
 credassure-agent-working-capital = { workspace = true }
+credassure-engines = { workspace = true }
 credassure-observability = { workspace = true }
 credassure-tools = { workspace = true }
 credassure-llm = { workspace = true }

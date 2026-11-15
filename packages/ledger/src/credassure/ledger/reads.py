@@ -89,6 +89,20 @@ def get_user(s: Session, user_id: str) -> User | None:
     return s.get(User, user_id)
 
 
+def preparer_emp_id(s: Session, tenant_id: str, case_id: str) -> str | None:
+    """The case preparer's HR id, from the login binding, never from chat (ONB-01, SUP-08)."""
+    return s.scalar(
+        select(User.emp_id)
+        .join(Case, Case.preparer_id == User.id)
+        .where(
+            Case.tenant_id == tenant_id,
+            Case.id == case_id,
+            User.tenant_id == tenant_id,
+            User.active.is_(True),
+        )
+    )
+
+
 def user_by_name(s: Session, username: str) -> User | None:
     return s.scalar(select(User).where(User.username == username))
 
