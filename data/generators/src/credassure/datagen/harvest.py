@@ -569,11 +569,11 @@ def manual_markdown(
     )
     if junk:
         lines += [
-            f"## Junk-page replacements: {len(junk)} documents (`make corpus-junk`)",
+            f"## Junk-page replacements (optional): {len(junk)} documents (`make corpus-junk`)",
             "",
             "The saved file is a site homepage, menu, listing or empty page, so it is `needs_review` and not counted.",
-            "Save the real document over the same doc_id (`raw/<doc_id>.<pdf|html>`), fix `source_url` if the link",
-            "was an index page, then `make corpus-import`. A page with no real document behind it stays out.",
+            "**Optional:** none is needed for G1/G2 (the corpus is well over 500) and no test item or label cites them.",
+            "Only R-RBI-06 is worth doing (Q23 label in v2); every other row needs no replacement.",
             "",
             "| doc_id | Title | Link | Why |",
             "|---|---|---|---|",
@@ -581,7 +581,13 @@ def manual_markdown(
         for d in junk:
             why = lock[d["doc_id"]]["review_reason"]
             if d["doc_id"] == "R-RBI-06":
-                why += "; **first: save the actual PSL Directions 2025 PDF** (the link is the RBI home page)"
+                why += (
+                    "; the link is the RBI home page, do not use it. On rbi.org.in open Master Directions,"
+                    " find 'Priority Sector Lending - Targets and Classification' (24 Mar 2025), save that page"
+                    " as *Web page, HTML only* to raw/R-RBI-06.html, set `source_url` to it, `make corpus-import`"
+                )
+            else:
+                why += "; no replacement needed"
             title = str(d["title"])[:60].replace("|", "/")
             lines.append(f"| {d['doc_id']} | {title} | {d['source_url']} | {why} |")
         lines.append("")

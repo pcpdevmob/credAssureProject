@@ -516,7 +516,7 @@ def test_KR04_junk_pages_go_to_review_real_short_documents_stay(
         "review_reason": "junk_page:homepage",
     }
     assert junk_check(manifest, lock, text) == ([], kept)  # idempotent
-    assert "Junk-page replacements: 2 documents" in manual_markdown(manifest, lock)
+    assert "Junk-page replacements (optional): 2 documents" in manual_markdown(manifest, lock)
 
     apply_dates(manifest, lock, tmp_path / "raw", text)  # dates never undo a junk flag
     assert lock["CHROME"]["status"] == "needs_review"
