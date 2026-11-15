@@ -481,3 +481,50 @@ def test_KR01_committed_manual_list_has_no_home_page_rows() -> None:
     manifest = yaml.safe_load((corpus / "manifest.yaml").read_text(encoding="utf-8"))
     lock = json.loads((corpus / "manifest.lock.json").read_text(encoding="utf-8"))
     assert home_page_rows(sources, manifest, lock) == []
+
+
+def test_KR04_junk_pages_go_to_review_real_short_documents_stay(
+    tmp_path: Path, entry: Callable[..., dict[str, Any]]
+) -> None:
+    from credassure.datagen.corpus import import_raw
+    from credassure.datagen.dates import apply_dates
+    from credassure.datagen.harvest import junk_check
+
+    text = tmp_path / "text"
+    text.mkdir()
+    pages = {
+        "CHROME": "Loan Fees - Bank | Skip to Main Content | Hidden",
+        "CIRC": "Circular No.251/2024-25 reduction in annual guarantee fee " * 10,  # 70 words
+        "HOME": "Home | Official website of Reserve Bank of India\n" + "rates " * 400,
+        "R-RBI-09": "Skip to main content\n" + "Know Your Customer Directions " * 100,
+        "MD": "Master Directions - RBI\nSkip to main content\nHome\n" + "para " * 400,
+        "LONG": "Master Direction on lending " * 100,
+    }
+    for doc_id, body in pages.items():
+        (text / f"{doc_id}.txt").write_text(body, encoding="utf-8")
+    titles = {"R-RBI-09": "KYC Directions (notifications index)"}
+    manifest = {"documents": [entry(doc_id=d, title=titles.get(d, d)) for d in pages]}
+    lock: dict[str, dict[str, Any]] = {d: {"status": "ok_manual", "sha256": d} for d in pages}
+
+    flagged, kept = junk_check(manifest, lock, text)
+    assert [r[0] for r in flagged] == ["CHROME", "HOME"]
+    assert {r[0] for r in kept} == {"CIRC", "R-RBI-09"}  # LONG, MD: not candidates
+    assert lock["HOME"] == {
+        "status": "needs_review",
+        "sha256": "HOME",
+        "status_before_review": "ok_manual",
+        "review_reason": "junk_page:homepage",
+    }
+    assert junk_check(manifest, lock, text) == ([], kept)  # idempotent
+    assert "Junk-page replacements: 2 documents" in manual_markdown(manifest, lock)
+
+    apply_dates(manifest, lock, tmp_path / "raw", text)  # dates never undo a junk flag
+    assert lock["CHROME"]["status"] == "needs_review"
+    raw = tmp_path / "raw"
+    raw.mkdir()
+    (raw / "HOME.html").write_text("<p>same file</p>", encoding="utf-8")
+    import hashlib
+
+    lock["HOME"]["sha256"] = hashlib.sha256(b"<p>same file</p>").hexdigest()
+    import_raw(manifest["documents"], lock, tmp_path, date(2026, 11, 15))
+    assert lock["HOME"]["status"] == "needs_review"  # unchanged file is not re-imported

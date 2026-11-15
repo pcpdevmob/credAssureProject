@@ -23,6 +23,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from credassure.retrieval.sources import AVAILABLE
+
 from .gold.data import REPO
 from .retrieval_eval import Hits, _ws, label_match, load_queries, open_searcher, run_searches
 
@@ -291,8 +293,11 @@ def silver_main(env: Mapping[str, str]) -> int:
         return 1
     originals = {r["item_id"]: grades[r["item_id"]] for r in pool}
     queries = load_queries()
-    strict, s_added = widen(queries, pool, originals, 2)
-    lenient, l_added = widen(queries, pool, originals, 1)
+    lock = json.loads((REPO / "data/corpus/manifest.lock.json").read_text(encoding="utf-8"))
+    # real documents must still be available (make corpus-junk); synthetic ones are not in the lock
+    citable = [r for r in pool if lock.get(r["doc_id"], {}).get("status", "ok") in AVAILABLE]
+    strict, s_added = widen(queries, citable, originals, 2)  # junk pages never become labels
+    lenient, l_added = widen(queries, citable, originals, 1)
     write_jsonl(LABELS_DIR / "queries.v1.1-silver.jsonl", strict)
     write_jsonl(LABELS_DIR / "queries.v1.1-silver-lenient.jsonl", lenient)
     low = sum(r["confidence"] == "low" for r in raw if r["item_id"] in originals)

@@ -382,8 +382,10 @@ def import_raw(
         body = path.read_bytes()
         digest = hashlib.sha256(body).hexdigest()
         current = lock.get(path.stem, {})
-        if current.get("status") in OK and current.get("sha256") == digest:
-            continue  # already imported, unchanged
+        if current.get("sha256") == digest and (
+            current.get("status") in OK or current.get("review_reason")
+        ):
+            continue  # unchanged; a junk page stays flagged until a new file replaces it
         twin = next(
             (k for k, v in lock.items() if k != path.stem and v.get("sha256") == digest), None
         )

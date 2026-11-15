@@ -192,9 +192,11 @@
     "legal_basis": "L4",
     "raw_file": "R-BANK-S-001.html",
     "retrieved_on": "2026-11-05",
+    "review_reason": "junk_page:short",
     "sha256": "9b71acd0f97c3df884ea1dc5d69e6deacf26931d4c95b4d1f2375024192d4219",
     "source_url": "https://indianbank.bank.in/en/processing-fees/charges-for-loan-products",
-    "status": "ok",
+    "status": "needs_review",
+    "status_before_review": "ok",
     "text_sha256": "10a226209214b2a3758a9a49ca52713fe53204423cceb28c1a8d075018450c9b"
   },
   "R-BANK-S-002": {
@@ -466,9 +468,11 @@
     "legal_basis": "L4",
     "raw_file": "R-CG-03.html",
     "retrieved_on": "2026-11-05",
+    "review_reason": "junk_page:listing",
     "sha256": "5fdc79daa0e7608e77d3fa7c23c416c7afeed1d01dd28f644d2d7021b9c98b5d",
     "source_url": "https://www.cgtmse.in/Circulars",
-    "status": "ok",
+    "status": "needs_review",
+    "status_before_review": "ok",
     "text_sha256": "c93fe00629412a768e5194f2e71238d15b796bda4cb9cc394188aacc088f49cc"
   },
   "R-CG-04": {
@@ -3331,9 +3335,11 @@
     "legal_basis": "L4",
     "raw_file": "R-CG-C-308.pdf",
     "retrieved_on": "2026-11-05",
+    "review_reason": "junk_page:short",
     "sha256": "a1d8af0925ae077807b6cf9933d704b4a311cf8835459d1da0c53d8aae22a9b1",
     "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1617300602504_Circular%20no.%20176%20-%20NBFC.pdf&path=Circular",
-    "status": "ok",
+    "status": "needs_review",
+    "status_before_review": "ok",
     "text_sha256": "2afdd9c68c07fcee64316794580d73a065b7064799acf4787922368207bcdb40"
   },
   "R-CG-C-309": {
@@ -3485,9 +3491,11 @@
     "legal_basis": "L4",
     "raw_file": "R-CG-C-321.pdf",
     "retrieved_on": "2026-11-05",
+    "review_reason": "junk_page:short",
     "sha256": "28af01b66f39b6a7a238922363516ea61ee5898ccbf4a76b10cc89a1acad6519",
     "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1610534893423_Circular_No.174_Annuxure-I.pdf&path=Circular",
-    "status": "ok",
+    "status": "needs_review",
+    "status_before_review": "ok",
     "text_sha256": "159c5cefa524537d76500c55831088663008bf4ad8869d3e1df7631a5621e06c"
   },
   "R-CG-C-322": {
@@ -3509,9 +3517,11 @@
     "legal_basis": "L4",
     "raw_file": "R-CG-C-323.pdf",
     "retrieved_on": "2026-11-05",
+    "review_reason": "junk_page:short",
     "sha256": "ccc3e8179123bc8d3fba12f9ae11bd1677356bc832f723e085e2d8b0810c9590",
     "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1622571364238_Circular_No.174_Annexure-II.pdf&path=Circular",
-    "status": "ok",
+    "status": "needs_review",
+    "status_before_review": "ok",
     "text_sha256": "7c0b085a72835ec1decdbaaf157dd4d21577652c1982509758249bb6b493d7bb"
   },
   "R-CG-C-324": {
@@ -3543,9 +3553,11 @@
     "legal_basis": "L4",
     "raw_file": "R-CG-C-326.pdf",
     "retrieved_on": "2026-11-05",
+    "review_reason": "junk_page:short",
     "sha256": "77abb9be17d72489ec55559ba7b662cd96e5f5be4a0453e0103b0e8a8c2a06a5",
     "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1622573864948_Circular_No.174.pdf&path=Circular",
-    "status": "ok",
+    "status": "needs_review",
+    "status_before_review": "ok",
     "text_sha256": "2afdd9c68c07fcee64316794580d73a065b7064799acf4787922368207bcdb40"
   },
   "R-CG-C-327": {
@@ -3625,9 +3637,11 @@
     "legal_basis": "L4",
     "raw_file": "R-CG-C-333.pdf",
     "retrieved_on": "2026-11-05",
+    "review_reason": "junk_page:short",
     "sha256": "e62a1b41c3faa4702f8ea9e08c844e744993b2e9cd05103985a99e8da572ce83",
     "source_url": "https://www.cgtmse.in/Default/ViewFile/?id=1610534437312_Circular_No.169.pdf&path=Circular",
-    "status": "ok",
+    "status": "needs_review",
+    "status_before_review": "ok",
     "text_sha256": "2afdd9c68c07fcee64316794580d73a065b7064799acf4787922368207bcdb40"
   },
   "R-CG-C-334": {
@@ -6351,9 +6365,11 @@
     "raw_file": "R-RBI-06.html",
     "reason": "old portal link retired; on https://www.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx open the Priority Sector Lending – Targets and Classification Directions, 2025, save as Web page, HTML only, and put its BS_ViewMasDirections URL in source_url",
     "retrieved_on": "2026-11-05",
+    "review_reason": "junk_page:homepage+listing",
     "sha256": "c02175d57179d84e63af0bedd8dfd8b45b2294eacb9a6948436d8594cf54118e",
     "source_url": "https://website.rbi.org.in/web/rbi/financial-inclusion-and-development/master-directions",
-    "status": "ok",
+    "status": "needs_review",
+    "status_before_review": "ok",
     "text_sha256": "59d21eaeda665b6703e6f529ce3e012063522030985eeb97552688c33246ea59"
   },
   "R-RBI-08": {

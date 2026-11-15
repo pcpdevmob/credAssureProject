@@ -559,6 +559,32 @@ def manual_markdown(
         f"**{len(items)} documents pending** across six owners.",
         "",
     ]
+    junk = sorted(
+        (
+            d
+            for d in manifest["documents"]
+            if str(lock.get(d["doc_id"], {}).get("review_reason", "")).startswith("junk_page")
+        ),
+        key=lambda d: (d["doc_id"] != "R-RBI-06", d["doc_id"]),
+    )
+    if junk:
+        lines += [
+            f"## Junk-page replacements: {len(junk)} documents (`make corpus-junk`)",
+            "",
+            "The saved file is a site homepage, menu, listing or empty page, so it is `needs_review` and not counted.",
+            "Save the real document over the same doc_id (`raw/<doc_id>.<pdf|html>`), fix `source_url` if the link",
+            "was an index page, then `make corpus-import`. A page with no real document behind it stays out.",
+            "",
+            "| doc_id | Title | Link | Why |",
+            "|---|---|---|---|",
+        ]
+        for d in junk:
+            why = lock[d["doc_id"]]["review_reason"]
+            if d["doc_id"] == "R-RBI-06":
+                why += "; **first: save the actual PSL Directions 2025 PDF** (the link is the RBI home page)"
+            title = str(d["title"])[:60].replace("|", "/")
+            lines.append(f"| {d['doc_id']} | {title} | {d['source_url']} | {why} |")
+        lines.append("")
     for owner in OWNERS:
         section = sorted(
             (d for d in items if lock[d["doc_id"]]["owner"] == owner),
@@ -650,6 +676,60 @@ def record_hosts(
         else:
             record["retry_outcome"] = "not retried (permanent)"
         lock[key] = record
+
+
+JUNK_MIN_CHARS = 1500
+# The page title (first line) is a site home page; "Skip to main content" alone is chrome on real pages.
+HOMEPAGE = re.compile(r"\A\s*(home\b|welcome to (the )?official website)", re.I)
+LISTING = re.compile(r"\b(index|archive|listing|home ?page|circulars list)\b", re.I)
+# 2026-11-15 corpus: empty pages and address blocks have <= 45 words, real short documents >= 99
+JUNK_MAX_WORDS = 60
+# Listing-title hits reviewed by hand (2026-11-15): the page carries the full document.
+JUNK_KEEP = {
+    "R-RBI-09": "title says notifications index; the full KYC Directions text is on the page",
+    "R-RBI-HIST-159": "'Index' is the Data Quality Index circular title",
+}
+
+
+def junk_check(
+    manifest: dict[str, Any], lock: dict[str, dict[str, Any]], text_dir: Path
+) -> tuple[list[tuple[str, int, str, str]], list[tuple[str, int, str, str]]]:
+    """Flag site homepages, menus, listings and contentless short pages; set them to needs_review.
+
+    Returns (flagged, kept) rows of (doc_id, chars, reason, first 200 chars). A short page is kept
+    when it has more than JUNK_MAX_WORDS words (a one-page circular is still a document).
+    """
+    flagged, kept = [], []
+    for d in manifest["documents"]:
+        record = lock.get(d["doc_id"], {})
+        if record.get("status") not in OK:
+            continue
+        path = text_dir / f"{d['doc_id']}.txt"
+        text = path.read_text(encoding="utf-8", errors="ignore") if path.exists() else ""
+        reasons = [
+            r
+            for r, hit in (
+                ("short", len(text) < JUNK_MIN_CHARS),
+                ("homepage", bool(HOMEPAGE.search(text))),
+                ("listing", bool(LISTING.search(str(d.get("title") or "")))),
+            )
+            if hit
+        ]
+        if not reasons:
+            continue
+        head = " ".join(text[:200].split())
+        if d["doc_id"] in JUNK_KEEP:
+            kept.append((d["doc_id"], len(text), JUNK_KEEP[d["doc_id"]], head))
+        elif reasons == ["short"] and (words := len(text.split())) > JUNK_MAX_WORDS:
+            kept.append((d["doc_id"], len(text), f"short but real text ({words} words)", head))
+        else:
+            flagged.append((d["doc_id"], len(text), "+".join(reasons), head))
+            lock[d["doc_id"]] = record | {
+                "status": "needs_review",
+                "status_before_review": record["status"],
+                "review_reason": f"junk_page:{'+'.join(reasons)}",
+            }
+    return flagged, kept
 
 
 def status_screen(
@@ -755,6 +835,7 @@ def main(argv: list[str] | None = None) -> int:
             "status",
             "export",
             "curate",
+            "junk",
         ],
     )
     command = parser.parse_args(argv).command
@@ -804,6 +885,17 @@ def main(argv: list[str] | None = None) -> int:
         chained, undated, review = apply_dates(manifest, lock, CORPUS / "raw", CORPUS / "text")
         print(f"dates: {chained} dated by the chain, {undated} need a date, {review} need review")
         write_text(CORPUS / "DATE_REVIEW.md", review_markdown(manifest, lock))
+    if command == "junk":
+        flagged, kept = junk_check(manifest, lock, CORPUS / "text")
+        for title, rows in (("set to needs_review", flagged), ("kept", kept)):
+            print(f"\n## {len(rows)} {title}\n")
+            for doc_id, size, reason, head in rows:
+                print(f"- {doc_id} | {size} chars | {reason} | {head}")
+        real = sum(lock.get(d["doc_id"], {}).get("status") in OK for d in manifest["documents"])
+        print(f"\nreal available now: {real}")
+        write_text(MANUAL, manual_markdown(manifest, lock, sources))
+        save(manifest, lock)
+        return 0 if real >= 500 else 1
     if command == "status":
         print(status_screen(sources, manifest, lock, CORPUS / "text"))
     if command in {"status", "export"}:

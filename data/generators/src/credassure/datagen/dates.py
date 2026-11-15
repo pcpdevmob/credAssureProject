@@ -248,8 +248,8 @@ def apply_dates(
     for d in manifest["documents"]:
         record = lock.get(d["doc_id"], {})
         status = record.get("status")
-        if status not in OK | PENDING_DATE:
-            continue
+        if status not in OK | PENDING_DATE or record.get("review_reason"):
+            continue  # junk-page review (make corpus-junk) is not a date question
         base = record.get("status_before_date", status) if status in PENDING_DATE else status
         if d.get("effective_from") and not d.get("date_source"):
             d["date_source"] = _origin(d, base)

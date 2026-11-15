@@ -1,7 +1,7 @@
 # CredAssure — Progress (Claude Code reads this first and updates it last)
 
 ## Current phase
-Phase 7 is done and re-measured on the closed corpus (2026-11-15): 1,283 documents indexed (1,092 real); KR-05 stays OPEN (26/40 vs 34, all 40 queries answerable now); KR-04 0 violations. Earlier: Phase 4 (2026-11-05), Phase 3 follow-ups and Phase 5 (2026-11-06), Phases 8a, 8b and 6 (2026-11-07). **Next is Phase 9 (agents); 9e (copilot) needs the KFS date decision below first.** `openapi.json` and `packages/api-client` are current, so the UI lane can start U1. Still open:
+Phase 7 is done and re-measured on the closed corpus (2026-11-15): 1,275 documents indexed (1,084 real after the junk-page check); KR-05 stays OPEN (26/40 vs 34, all 40 queries answerable now); KR-04 0 violations. Earlier: Phase 4 (2026-11-05), Phase 3 follow-ups and Phase 5 (2026-11-06), Phases 8a, 8b and 6 (2026-11-07). **Next is Phase 9 (agents); 9e (copilot) needs the KFS date decision below first.** `openapi.json` and `packages/api-client` are current, so the UI lane can start U1. Still open:
 - **ADR 0018 freeze (human):** ADR 0018 (AgentResult, including `agent_version` and `tenant_id`) is Proposed and not frozen. Accept it before G1.
 - ~~KFS dates vs AS_OF_DATE~~ **closed by P2b (2026-11-15):** offers carry `issue_date` (po_date..AS_OF, own rng stream; v2 = AS_OF) and every case-scoped KFS uses it as `effective_from`; 111/111 in force; case isolation now tested live (E8 addendum).
 - **Retrieval labels — G1 labels v1.1-silver complete, human check pending (2026-11-15):** self-consistency 100/100; after the B1 section pass, strict +110 / lenient +204 labels; the 72 v1.0 labels disputed before it are kept and listed in `judging/human_pass_disputed_v1.0.md`; best recall@5 v1.0 24/40, strict 35, lenient 38 (section labels remove document-level inflation; was 26/37/38), pooling-biased, LLM-judged (E8 addenda 2–3). `make retrieval-eval` now fails only on KR-04 violations or isolation leaks; `make kappa` gives plain and weighted κ, verdict on weighted. **Next: `make judge JUDGE=pritish` on the 249-item stratified sample, then `make kappa JUDGE=pritish`.**
@@ -294,6 +294,21 @@ By owner (manual slots only; 5 assigned in total): [Name 2] 1, [Name 5] 1, [Name
 - [ ] Graded baseline S1–S3 on the course endpoint (`EVAL_BASE_URL`, `EVAL_NUM_CTX` set to its context window)
 - [ ] ADR 0018 accepted (AgentResult freeze)
 - [ ] then `/freeze-g1`
+
+## G1 eval notes (2026-11-15)
+- **Gold corrections (B1), with reasons:**
+  - **T005:** the gold said "GST 18%" as one rate. The source (R-GST-01, heading 9971(v)) sets CGST 9%; with SGST 9% that makes 18%. Key facts and evidence now name both halves.
+  - **T013:** it cited s.43B(h) of the 1961 Act, which is superseded. It now cites the Income-tax Act 2025 s.37(1)/(2)(g)/(3), and R-TAX-02 (1961 s.43B) moved to `must_not_cite` so the KR-04 date filter is tested.
+  - **T004:** the answer (CGTMSE covers micro and small enterprises only) had no document stating MSE eligibility. R-CG-04 is the only CGTMSE page that says it, so it was added.
+- **R-RBI-01 exemption:** the Nov 2025 consolidation press release is the `superseded_by` target for about 200 circulars. It is a withdrawal notice, not a predecessor document, so `check_corpus_refs` exempts it from the KR-04 supersession check (`WITHDRAWAL_NOTICES`).
+- **Reported finding, not patched:** three query × chunker pairs cannot hit the labelled section, because no passage carries it: Q06 and Q35 under fixed512, Q28 under semantic. This limits recall@5 for those configurations by design. Report it in the KR-05 write-up; do not relabel to suit a chunker.
+- **Q23 waits on R-RBI-06:** the saved file is the RBI home page, so Q23 has no PSL label in v1.0 or v1.1-silver (`retrieval-silver` now skips pool passages from documents that are not available). Label it in v2 once the real PSL Directions 2025 PDF is saved (MANUAL_DOWNLOADS.md, first row).
+- **Junk-page check (`make corpus-junk`):**
+  - **Candidates: 82.** These are documents with text under 1,500 chars, a page title that is a site home page, or a title that names an index or listing.
+  - **8 set to `needs_review`:** R-RBI-06 (RBI home page), R-CG-03 (CGTMSE circulars index), R-BANK-S-001 ("Skip to main content" only), R-CG-C-308/326/333 (CGTMSE address block), R-CG-C-321 (a heading only) and R-CG-C-323 (table digits only). None is cited by an item or v1.0 label.
+  - **74 kept:** 72 are short but real text (≥ 99 words: one-page circulars, Parliament answers, gazette notifications, charge tables). R-RBI-09 and R-RBI-HIST-159 are listing-title false positives.
+  - **Real available: 1,092 → 1,084.**
+  - **Safeguards:** the flag survives `corpus-dates` and `corpus-import` until a new file is saved. Replacements are listed in MANUAL_DOWNLOADS.md.
 
 ## Phase 4 evidence (re-run 2026-11-06)
 - Cash flow **15/15** and offers **15/15** match independent gold (`test_WC03_WC06_funding_matches_gold_to_one_rupee`, `test_LW05_LW11_offers_match_gold`).

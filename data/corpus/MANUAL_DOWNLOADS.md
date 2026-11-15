@@ -39,6 +39,23 @@ for that doc_id in `manifest.yaml`.
 
 **0 documents pending** across six owners.
 
+## Junk-page replacements: 8 documents (`make corpus-junk`)
+
+The saved file is a site homepage, menu, listing or empty page, so it is `needs_review` and not counted.
+Save the real document over the same doc_id (`raw/<doc_id>.<pdf|html>`), fix `source_url` if the link
+was an index page, then `make corpus-import`. A page with no real document behind it stays out.
+
+| doc_id | Title | Link | Why |
+|---|---|---|---|
+| R-RBI-06 | RBI Priority Sector Lending - Targets and Classification Dir | https://website.rbi.org.in/web/rbi/financial-inclusion-and-development/master-directions | junk_page:homepage+listing; **first: save the actual PSL Directions 2025 PDF** (the link is the RBI home page) |
+| R-BANK-S-001 | charges-for-loan-products | https://indianbank.bank.in/en/processing-fees/charges-for-loan-products | junk_page:short |
+| R-CG-03 | CGTMSE circulars (index) | https://www.cgtmse.in/Circulars | junk_page:listing |
+| R-CG-C-308 | View | https://www.cgtmse.in/Default/ViewFile/?id=1617300602504_Circular%20no.%20176%20-%20NBFC.pdf&path=Circular | junk_page:short |
+| R-CG-C-321 | View | https://www.cgtmse.in/Default/ViewFile/?id=1610534893423_Circular_No.174_Annuxure-I.pdf&path=Circular | junk_page:short |
+| R-CG-C-323 | View | https://www.cgtmse.in/Default/ViewFile/?id=1622571364238_Circular_No.174_Annexure-II.pdf&path=Circular | junk_page:short |
+| R-CG-C-326 | View | https://www.cgtmse.in/Default/ViewFile/?id=1622573864948_Circular_No.174.pdf&path=Circular | junk_page:short |
+| R-CG-C-333 | View | https://www.cgtmse.in/Default/ViewFile/?id=1610534437312_Circular_No.169.pdf&path=Circular | junk_page:short |
+
 ## Hosts missing terms of use (ADR 0020)
 
 Open the host's terms of use / copyright / hyperlinking policy page and fill, in `data/corpus/manifest.yaml`

@@ -8,7 +8,7 @@ ENV_FILE := $(if $(wildcard .env),--env-file .env,)
 PNPM := $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo "npx --yes pnpm@9.15.0")
 
 .PHONY: testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
-        db demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
+        db demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore eval-fast llm-probe retrieval-eval retrieval-pool retrieval-silver judge kappa
 
 help:  ## List targets
@@ -118,6 +118,9 @@ corpus-manual:  ## Regenerate MANUAL_DOWNLOADS.md (six owner sections)
 
 corpus-dates:  ## Extract effective dates for available docs; write DATE_REVIEW.md (10% human sample)
 	uv run python -m credassure.datagen.harvest dates
+
+corpus-junk:  ## Flag homepages, menus, listings and contentless short pages as needs_review; list replacements
+	uv run python -m credassure.datagen.harvest junk
 
 corpus-export:  ## Write data/corpus/CORPUS_INDEX.md and .xlsx (one row per manifest entry + summary)
 	uv run python -m credassure.datagen.harvest export
