@@ -447,3 +447,28 @@ def test_NFR01_course_embedder_batches_16_and_trusts_its_ca(tmp_path: Path) -> N
     assert embedder(env)._batch == 16  # course limit: at most 16 texts per request
     with pytest.raises(FileNotFoundError):  # the CA path is really used for TLS verification
         embedder(env | {"EMBED_CA_CERT": str(tmp_path / "missing.crt")})
+
+
+def test_KR02_local_embedder_runs_bge_small_in_process(monkeypatch: pytest.MonkeyPatch) -> None:
+    import types
+
+    from credassure.retrieval import cli
+
+    seen: dict[str, object] = {}
+
+    class FakeST:
+        def __init__(self, model: str, revision: str | None = None) -> None:
+            seen.update(model=model, revision=revision)
+
+        def encode(self, texts: list[str], normalize_embeddings: bool) -> list[list[float]]:
+            seen["normalized"] = normalize_embeddings
+            return [[0.6, 0.8] for _ in texts]
+
+    monkeypatch.setitem(
+        sys.modules, "sentence_transformers", types.SimpleNamespace(SentenceTransformer=FakeST)
+    )
+    env = {"EMBED_BASE_URL": "local", "EMBED_MODEL": "bge-small-en-v1.5"}
+    assert cli.embed_target(env) == ("local", "BAAI/bge-small-en-v1.5")
+    assert cli.endpoint("local") == "in-process sentence-transformers"
+    assert cli.embedder(env)(["a", "b"]) == [[0.6, 0.8], [0.6, 0.8]]
+    assert seen == {"model": "BAAI/bge-small-en-v1.5", "revision": None, "normalized": True}

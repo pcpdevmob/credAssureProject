@@ -3,7 +3,8 @@
 Reads its configuration from the environment like `make llm-probe` (packages never import the
 gateway's Settings): EMBED_BASE_URL, EMBED_MODEL, EMBED_API_KEY (else LLM_API_KEY for the same
 host), EMBED_CA_CERT (CA file for a self-signed endpoint), EMBED_BATCH (default 16, the course
-limit), CORPUS_DB, CASE_DB (audit), CHROMA_PATH, EMBED_CACHE_PATH, EMBED_RATE_PER_MINUTE, TENANT_ID.
+limit), EMBED_LOCAL_MODEL / EMBED_LOCAL_REVISION (EMBED_BASE_URL=local), CORPUS_DB, CASE_DB
+(audit), CHROMA_PATH, EMBED_CACHE_PATH, EMBED_RATE_PER_MINUTE, TENANT_ID.
 """
 
 import os
@@ -21,19 +22,27 @@ from credassure.ledger.store import SqlLedger
 from credassure.llm.cache import ResponseCache
 from credassure.llm.embed import OpenAIEmbedder
 from credassure.llm.resilience import RateLimiter
+from credassure.retrieval.chunking import Embed
 from credassure.retrieval.index import ingest, open_chroma
 from credassure.retrieval.sources import load_corpus
 
 TARGET_REAL = 500  # BRD G2
 LOCAL_EMBED = ("http://localhost:11434/v1", "nomic-embed-text")  # ADR 0017 default, as .env.example
+# EMBED_BASE_URL=local: the course model run in-process, same 384-dim space as the course endpoint.
+# The HF id differs from the course name "bge-small-en-v1.5", so cache and index keys stay apart.
+IN_PROCESS = "BAAI/bge-small-en-v1.5"
 
 
 def embed_target(env: Mapping[str, str]) -> tuple[str, str]:
+    if env.get("EMBED_BASE_URL") == "local":
+        return "local", env.get("EMBED_LOCAL_MODEL") or IN_PROCESS
     return env.get("EMBED_BASE_URL") or LOCAL_EMBED[0], env.get("EMBED_MODEL") or LOCAL_EMBED[1]
 
 
 def endpoint(url: str) -> str:
     """Scheme and host only: never print credentials or query strings from a URL."""
+    if url == "local":
+        return "in-process sentence-transformers"
     p = urlparse(url)
     return f"{p.scheme}://{p.hostname}" + (f":{p.port}" if p.port else "")
 
@@ -44,8 +53,22 @@ def api_key(env: Mapping[str, str], url: str) -> str | None:
     return env.get("EMBED_API_KEY") or (env.get("LLM_API_KEY") if same else None)
 
 
-def embedder(env: Mapping[str, str]) -> OpenAIEmbedder:
+def local_embedder(model: str, revision: str | None) -> Embed:
+    from sentence_transformers import SentenceTransformer  # lazy, like make_reranker (ADR 0013)
+
+    # ponytail: no embed cache here; local encoding is cheap. Set EMBED_LOCAL_REVISION to pin.
+    encoder = SentenceTransformer(model, revision=revision)  # remote code stays off (default)
+
+    def embed(texts: list[str]) -> list[list[float]]:
+        return [list(map(float, v)) for v in encoder.encode(texts, normalize_embeddings=True)]
+
+    return embed
+
+
+def embedder(env: Mapping[str, str]) -> Embed:
     url, model = embed_target(env)
+    if url == "local":
+        return local_embedder(model, env.get("EMBED_LOCAL_REVISION") or None)
     ca = env.get("EMBED_CA_CERT")
     return OpenAIEmbedder(
         url,
