@@ -63,123 +63,247 @@ def _offer_gold(case_id: str) -> dict[str, Any]:
     }
 
 
+Evidence = list[tuple[str, str]]  # (doc_id, verbatim quote)
+
+
 def regulatory() -> list[dict[str, Any]]:
+    """BRD §13 regulatory items. ``key_facts`` are short facts the answer must state (judge stub) and the
+    cited text contains; ``evidence`` are verbatim quotes, each found in its own cited document (G1
+    freeze, ``check_corpus_refs --strict``). ``must_not_cite`` holds every indexed predecessor whose
+    ``superseded_by`` is a cited document, plus non-applicable lender-type twins (KR-04)."""
     sfb_kyc, ucb_kyc = _manifest_id("id=13109"), _manifest_id("id=13014")
-    qs: list[tuple[str, list[str], list[str], list[str]]] = [
+    qs: list[tuple[str, list[str], list[str], list[str], Evidence, str]] = [
         (
             "How is the CGTMSE annual guarantee fee charged for facilities sanctioned on or after 1 April 2025?",
             ["guaranteed amount", "outstanding"],
             ["R-CG-02", "R-CG-01"],
             [],
+            [
+                (
+                    "R-CG-02",
+                    "charged on the guaranteed amount for the first year and on the outstanding"
+                    " amount for the remaining tenure",
+                )
+            ],
+            "",
         ),
         (
             "What annual guarantee fee rate applies under CGS-I to a guaranteed amount above ₹1 crore and up to ₹2 crore?",
             ["0.85"],
             ["R-CG-01"],
             [],
+            [("R-CG-01", "above 1crore -2 crore 0.85")],
+            "",
         ),
         (
             "What is the maximum credit facility per borrower covered by a CGTMSE guarantee?",
             ["10 crore"],
             ["R-CG-05"],
             [],
+            [("R-CG-05", "credit facilities up to ₹10 crore per eligible borrower")],
+            "",
         ),
         (
             "Can a medium enterprise get a CGTMSE credit guarantee?",
             ["micro and small"],
-            ["R-CG-01", "R-CG-05"],
+            ["R-CG-01", "R-CG-05", "R-CG-04"],
             [],
+            [
+                (
+                    "R-CG-04",
+                    "eligible borrowers/units : loans sanctioned to micro and small enterprises",
+                )
+            ],
+            "R-CG-04 added before G1: R-CG-01/05 name the Trust but never state who is eligible.",
         ),
         (
             "At what GST rate is a loan processing fee charged?",
             ["18"],
             ["R-GST-01", "R-GST-03"],
             [],
+            [
+                ("R-GST-01", "15 heading 9971"),
+                (
+                    "R-GST-01",
+                    "(v) financial and related services other than (i), (ii), (iii), and (iv) above. 9",
+                ),
+            ],
+            "R-GST-01 is the CGST notification: heading 9971(v) is 9% CGST; with 9% SGST the fee"
+            " bears 18%. R-GST-03 (15/2025-CT(R)) amends 11/2017 without changing 9971(v).",
         ),
-        ("Is GST charged on the interest on a loan?", ["exempt"], ["R-GST-02"], []),
+        (
+            "Is GST charged on the interest on a loan?",
+            ["exempt"],
+            ["R-GST-02"],
+            [],
+            [
+                (
+                    "R-GST-02",
+                    "extending deposits, loans or advances in so far as the consideration is"
+                    " represented by way of interest or discount nil",
+                )
+            ],
+            "",
+        ),
         (
             "Which benchmark must a floating-rate loan to a micro or small enterprise be linked to?",
             ["external benchmark"],
             ["R-RBI-05", "R-RBI-03"],
             ["R-RBI-12"],
+            [("R-RBI-05", "link loans to micro and small enterprises to an external benchmark")],
+            "",
         ),
         (
             "Must a bank give a Key Facts Statement for an MSME term loan, and under which current direction?",
             ["key facts statement"],
             ["R-RBI-02"],
             ["R-RBI-12", "R-RBI-13"],
+            [
+                ("R-RBI-02", "annex xiii- format of key facts statement"),
+                (
+                    "R-RBI-02",
+                    "key facts statement (kfs) means a statement of key facts of a loan agreement",
+                ),
+            ],
+            "",
         ),
         (
             "What does the annual percentage rate in a Key Facts Statement include?",
-            ["charges"],
+            ["all other charges"],
             ["R-RBI-02"],
             ["R-RBI-12"],
+            [
+                (
+                    "R-RBI-02",
+                    "annual percentage rate (apr) means the annual cost of credit to the borrower which"
+                    " includes interest rate and all other charges associated with the credit facility",
+                )
+            ],
+            "",
         ),
         (
             "What are the investment and turnover limits for a small enterprise?",
             ["25 crore", "100 crore"],
             ["R-MSME-02", _manifest_id("261838_220191.pdf")],
-            ["R-MSME-03"],
+            ["R-MSME-03", "R-MSME-G-005"],
+            [
+                ("R-MSME-02", "the words “25 crore” shall be substituted"),
+                ("R-MSME-02", "the words “100 crore” shall be substituted"),
+            ],
+            "",
         ),
         (
             "Within how many days must a buyer pay a micro or small enterprise supplier at the latest?",
-            ["45"],
+            ["45 days"],
             ["R-MSME-01"],
             [],
+            [("R-MSME-01", "shall exceed 45 days from the day of acceptance")],
+            "",
         ),
         (
             "What interest is due when a buyer pays a micro or small enterprise supplier late?",
             ["three times", "bank rate"],
             ["R-MSME-01"],
             [],
+            [
+                ("R-MSME-01", "compound interest"),
+                ("R-MSME-01", "three times of the bank rate notified by the reserve bank"),
+            ],
+            "",
         ),
         (
             "How does income tax treat an expense owed to a micro or small enterprise supplier that is paid late?",
-            ["actual"],
-            ["R-TAX-01", "R-TAX-02"],
-            [],
+            ["actually paid"],
+            ["R-TAX-01"],
+            ["R-TAX-02"],
+            [
+                ("R-TAX-01", "only in the tax year in which such sums are actually paid"),
+                (
+                    "R-TAX-01",
+                    "amount payable by the assessee to a micro or small enterprise beyond the time"
+                    " limit specified in section 15",
+                ),
+                ("R-TAX-01", "except the sum referred to in clause (g) thereof"),
+            ],
+            "Income-tax Act 2025 s.37(1), (2)(g), (3). R-TAX-02 (1961 Act s.43B) is superseded by"
+            " R-TAX-01, so it moved to must_not_cite before G1.",
         ),
         (
             "What is TReDS and what does it do for MSMEs?",
-            ["receivables"],
+            ["trade receivables"],
             ["R-RBI-08", _manifest_id("FAQView.aspx?Id=132")],
             ["R-RBI-08-DRAFT"],
+            [
+                (
+                    _manifest_id("FAQView.aspx?Id=132"),
+                    "electronic platform for facilitating the financing / discounting of trade"
+                    " receivables of micro, small and medium enterprises",
+                )
+            ],
+            "",
         ),
-        ("What is the RBI policy repo rate as of November 2026?", ["5.50"], ["R-RATE-02-REPO"], []),
+        (
+            "What is the RBI policy repo rate as of November 2026?",
+            ["5.50"],
+            ["R-RATE-02-REPO"],
+            [],
+            [("R-RATE-02-REPO", "policy repo rate by 25 basis points to 5.50 per cent")],
+            "",
+        ),
         (
             "Who approves a working-capital proposal above ₹1.5 crore under our approval matrix?",
-            ["vp"],
+            ["vp, finance"],
             ["POL-APPROVAL-MATRIX-v1"],
             ["POL-WC-POL-v1"],
+            [("POL-APPROVAL-MATRIX-v1", "validated amount above ₹1,50,00,000: vp, finance")],
+            "",
         ),
         (
             "How does our current working-capital policy size the recommended facility?",
-            ["peak"],
+            ["peak cumulative shortfall"],
             ["POL-WC-POL-v3"],
             ["POL-WC-POL-v1", "POL-WC-POL-v2"],
+            [
+                (
+                    "POL-WC-POL-v3",
+                    "recommended facility = peak cumulative shortfall + minimum cash buffer -"
+                    " undrawn sanctioned limits - confirmed mitigations",
+                )
+            ],
+            "",
         ),
         (
             "Which KYC directions apply to our commercial-bank lender?",
             ["know your customer"],
             ["R-RBI-09"],
             [sfb_kyc, ucb_kyc],
+            [("R-RBI-09", "(commercial banks \u2013 know your customer) directions, 2025")],
+            "",
         ),
         (
             "Do the NBFC Responsible Business Conduct Directions govern the KFS on our commercial-bank loan?",
             ["commercial bank"],
             ["R-RBI-02"],
-            ["R-RBI-13"],
+            ["R-RBI-13", "R-RBI-12"],
+            [("R-RBI-02", "these directions shall be applicable to commercial banks")],
+            "",
         ),
     ]
     items = [
         {
             "category": "regulatory",
             "input": {"case_id": "CA-2026-0001", "actor": "demo.preparer", "question": q},
-            "gold": {"key_facts": facts, "relevant_doc_ids": docs, "must_not_cite": bad},
+            "gold": {
+                "key_facts": facts,
+                "relevant_doc_ids": docs,
+                "must_not_cite": bad,
+                "evidence": [{"doc_id": d, "quote": quote} for d, quote in evidence],
+            },
             "scorer": "citation",
             "gold_source": "hand-written from the cited documents",
+            "notes": note,
         }
-        for q, facts, docs, bad in qs
+        for q, facts, docs, bad, evidence, note in qs
     ]
     abstain = [
         "What is Aravali Commercial Bank's internal credit-score cut-off for MSME loans?",

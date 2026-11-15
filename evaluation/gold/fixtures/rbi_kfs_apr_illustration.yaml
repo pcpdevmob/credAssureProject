@@ -1,5 +1,5 @@
 # S21 (docs/DATA_SPEC.md §8.4; ADR 0012). Transcription 1 of 2: needs a second independent team
-# transcription from the RBI PDF before G1. Money values are strings (exact).
+# transcription from the RBI PDF before G1: form for Tejas and Suresh in apr_transcription_sheet.md. Money values are strings (exact).
 version: 1
 status: draft_transcription_1
 source_doc_ids: [R-RBI-12, R-RBI-02, R-RBI-13]

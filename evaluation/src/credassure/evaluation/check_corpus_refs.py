@@ -5,7 +5,11 @@ Checks every doc_id in retrieval labels, KR-04 ``must_not_cite`` lists and regul
 - the document is available (lock status ok/ok_manual and extracted text present): else "awaiting corpus",
   which fails only with ``--strict`` (the G1 freeze);
 - for regulatory items whose cited documents are all available, each gold key fact appears in at least one
-  of them: else FAIL (while any is pending the item is only "awaiting corpus").
+  of them and each ``evidence`` quote appears in its own document: else FAIL (while any is pending the item
+  is only "awaiting corpus");
+- KR-04 (``--strict`` only): no relevant document is superseded by a replacement in force at the item's
+  as-of date, and every manifest predecessor of a relevant document (``superseded_by`` it) is listed in
+  ``must_not_cite``.
 
 ``make check`` runs it non-strict; ``freeze --write`` runs it strict and lists the items to replace.
 """
@@ -21,7 +25,16 @@ import yaml
 
 from .gold.data import DATA, REPO
 
-ASSETS = ("evaluation/testset/v1/items.jsonl", "evaluation/retrieval/v1/queries.jsonl")
+ASSETS = (
+    "evaluation/testset/v1/items.jsonl",
+    "evaluation/retrieval/v1/queries.jsonl",
+    "evaluation/retrieval/v1/queries.v1.1-silver.jsonl",  # the G1 label set
+    "evaluation/retrieval/v1/queries.v1.1-silver-lenient.jsonl",
+)
+AS_OF = "2026-11-15"  # AS_OF_DATE (DATA_SPEC §1); items without filters use it
+# Withdrawal notices: R-RBI-01 (the Nov 2025 consolidation press release) is `superseded_by` for ~200
+# withdrawn circulars that are not versions of it; the generic KR-04 passage check covers those.
+WITHDRAWAL_NOTICES = {"R-RBI-01"}
 SYNTHETIC = ("kfs", "policies")
 
 
@@ -35,9 +48,12 @@ class Corpus:
     def synthetic_files(self) -> dict[str, Path]:
         return {p.stem: p for folder in SYNTHETIC for p in (self.synthetic / folder).glob("*.md")}
 
-    def known(self) -> set[str]:
+    def documents(self) -> dict[str, dict[str, Any]]:
         docs = yaml.safe_load(self.manifest.read_text(encoding="utf-8"))["documents"]
-        return {d["doc_id"] for d in docs} | set(self.synthetic_files())
+        return {d["doc_id"]: d for d in docs}
+
+    def known(self) -> set[str]:
+        return set(self.documents()) | set(self.synthetic_files())
 
     def texts(self) -> dict[str, Path]:
         """doc_id -> text file, for available documents only."""
@@ -108,8 +124,30 @@ def _rows(repo: Path) -> list[dict[str, Any]]:
     return [
         json.loads(line)
         for path in ASSETS
+        if (repo / path).exists()
         for line in (repo / path).read_text(encoding="utf-8").splitlines()
     ]
+
+
+def kr04_gaps(
+    row: dict[str, Any], manifest: dict[str, dict[str, Any]], as_of: str = AS_OF
+) -> list[str]:
+    """Superseded documents cited as relevant, and predecessors of relevant documents not excluded."""
+    gold = row.get("gold", row)
+    relevant, excluded = gold.get("relevant_doc_ids", []), set(gold.get("must_not_cite", []))
+    as_of = row.get("filters", {}).get("as_of", as_of)
+    out = []
+    for d in relevant:
+        new = manifest.get(d, {}).get("superseded_by")
+        if new and str(manifest.get(new, {}).get("effective_from") or "") <= as_of:
+            out.append(f"{row['id']}: relevant {d} is superseded by {new} (move to must_not_cite)")
+    for d, doc in manifest.items():
+        new = doc.get("superseded_by")
+        if new in relevant and new not in WITHDRAWAL_NOTICES and d not in excluded | set(relevant):
+            out.append(
+                f"{row['id']}: predecessor {d} of {doc['superseded_by']} not in must_not_cite"
+            )
+    return out
 
 
 def check(
@@ -118,6 +156,7 @@ def check(
     corpus = corpus or Corpus()
     rows = _rows(REPO) if rows is None else rows
     known, texts, report = corpus.known(), corpus.texts(), Report()
+    manifest = corpus.documents() if strict else {}
     cache: dict[str, str] = {}
 
     def text(doc_id: str) -> str:
@@ -136,6 +175,8 @@ def check(
             (report.failures if strict else report.awaiting).append(
                 f"{row['id']}: awaiting corpus: {', '.join(pending)}"
             )
+        if strict:
+            report.failures += kr04_gaps(row, manifest)
         if row.get("category") != "regulatory" or not relevant:
             continue
         if any(d not in texts for d in relevant):
@@ -145,6 +186,13 @@ def check(
             if not any(_norm(fact) in text(d) for d in have):
                 report.failures.append(
                     f"{row['id']}: key fact {fact!r} not found in {', '.join(have)}"
+                )
+        for ev in gold.get("evidence", []):
+            if ev["doc_id"] not in relevant:
+                report.failures.append(f"{row['id']}: evidence from uncited {ev['doc_id']}")
+            elif _norm(ev["quote"]) not in text(ev["doc_id"]):
+                report.failures.append(
+                    f"{row['id']}: evidence {ev['quote'][:60]!r} not found in {ev['doc_id']}"
                 )
     return report
 

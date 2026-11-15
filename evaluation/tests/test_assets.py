@@ -5,6 +5,8 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+import pytest
+
 from credassure.evaluation import (
     build_assets,
     build_testset,
@@ -55,6 +57,34 @@ def test_KR05_forty_queries_with_valid_labels() -> None:
         assert q["relevant_doc_ids"], q["id"]
         assert set(q["relevant_doc_ids"]) <= known and set(q["must_not_cite"]) <= known
         assert not set(q["relevant_doc_ids"]) & set(q["must_not_cite"])
+
+
+def test_KR05_committed_queries_match_the_builder() -> None:
+    committed = (REPO / "evaluation/retrieval/v1/queries.jsonl").read_text(encoding="utf-8")
+    rebuilt = "".join(
+        json.dumps(q, sort_keys=True, ensure_ascii=False) + "\n" for q in build_assets.queries()
+    )
+    assert committed == rebuilt
+
+
+def test_KR05_every_label_names_a_section_or_is_an_exact_whole_document() -> None:
+    for q in QUERIES:
+        assert {s["doc_id"] for s in q["relevant_sections"]} == set(q["relevant_doc_ids"]), q["id"]
+        for s in q["relevant_sections"]:
+            assert s["section_path"] or s.get("exact") is True, (q["id"], s)
+
+
+def test_KR05_a_document_without_a_label_fails_the_builder() -> None:
+    with pytest.raises(ValueError, match="no section label"):
+        build_assets.labels("Q01", "R-NOT-LABELLED")
+
+
+def test_BRD13_regulatory_gold_has_evidence_from_its_cited_documents() -> None:
+    for item in ITEMS:
+        gold = item["gold"]
+        if item["category"] == "regulatory" and not gold.get("abstain"):
+            assert gold["key_facts"] and gold["evidence"], item["id"]
+            assert {e["doc_id"] for e in gold["evidence"]} <= set(gold["relevant_doc_ids"])
 
 
 def test_BRD14_VER02_redteam_and_bad_citation_fixtures() -> None:
@@ -236,6 +266,53 @@ def test_KR04_corpus_guard_unknown_awaiting_key_fact_and_strict(tmp_path: Path) 
     assert report.awaiting == ["Q1: awaiting corpus: B, C"]
     strict = check_corpus_refs.check(corpus, rows, strict=True)
     assert "Q1: awaiting corpus: B, C" in strict.failures and not strict.awaiting
+
+
+def test_KR04_corpus_guard_evidence_and_supersession_in_freeze_mode(tmp_path: Path) -> None:
+    (tmp_path / "text").mkdir()
+    (tmp_path / "syn").mkdir()
+    (tmp_path / "manifest.yaml").write_text(
+        "documents:\n"
+        "- {doc_id: NEW, effective_from: '2025-01-01'}\n"
+        "- {doc_id: OLD, superseded_by: NEW}\n"
+        "- {doc_id: FUTURE, effective_from: '2027-01-01'}\n"
+        "- {doc_id: PRE, superseded_by: FUTURE}\n"
+        "- {doc_id: R-RBI-01}\n"
+        "- {doc_id: CIRC, superseded_by: R-RBI-01}\n",
+        encoding="utf-8",
+    )
+    ids = ["NEW", "OLD", "FUTURE", "PRE", "R-RBI-01", "CIRC"]
+    (tmp_path / "lock.json").write_text(json.dumps({d: {"status": "ok"} for d in ids}))
+    for d in ids:
+        (tmp_path / "text" / f"{d}.txt").write_text(f"{d} text: fee is 0.85 per cent.")
+    corpus = check_corpus_refs.Corpus(
+        tmp_path / "manifest.yaml", tmp_path / "lock.json", tmp_path / "text", tmp_path / "syn"
+    )
+
+    def reg(i: str, rel: list[str], bad: list[str], ev: list[dict[str, str]]) -> dict[str, Any]:
+        gold = {"relevant_doc_ids": rel, "must_not_cite": bad, "key_facts": [], "evidence": ev}
+        return {"id": i, "category": "regulatory", "gold": gold}
+
+    rows = [
+        reg("T1", ["NEW"], ["OLD"], [{"doc_id": "NEW", "quote": "fee is 0.85  per cent"}]),
+        reg("T2", ["NEW"], ["OLD"], [{"doc_id": "NEW", "quote": "fee is 1.00 per cent"}]),
+        reg("T3", ["NEW"], ["OLD"], [{"doc_id": "OLD", "quote": "fee is 0.85 per cent"}]),
+        reg("T4", ["OLD"], [], []),  # superseded, replacement in force
+        reg("T5", ["NEW"], [], []),  # predecessor OLD not excluded
+        reg("T6", ["PRE"], [], []),  # replacement not yet in force: still current
+        reg("T7", ["R-RBI-01"], [], []),  # withdrawal notice: its circulars are not versions
+    ]
+    lenient = check_corpus_refs.check(corpus, rows)
+    assert lenient.failures == [
+        "T2: evidence 'fee is 1.00 per cent' not found in NEW",
+        "T3: evidence from uncited OLD",
+    ]
+    assert check_corpus_refs.check(corpus, rows, strict=True).failures == [
+        "T2: evidence 'fee is 1.00 per cent' not found in NEW",
+        "T3: evidence from uncited OLD",
+        "T4: relevant OLD is superseded by NEW (move to must_not_cite)",
+        "T5: predecessor OLD of NEW not in must_not_cite",
+    ]
 
 
 class DownChat:

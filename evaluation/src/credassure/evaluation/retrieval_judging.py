@@ -245,7 +245,9 @@ def diff_md(
         f"- **Lenient** (`queries.v1.1-silver-lenient.jsonl`) = v1.0 + grade ≥ 1: **+{nl}** section labels.",
         f"- v1.0 never shrinks. **{len(dispute)}** pool items under a v1.0 label were graded below 2:"
         " listed as disputed for a human decision, not removed.",
-        "- v1.0 labels with an empty section cover the whole document, so off-topic sections of"
+        "- The human pass works from the 72 items disputed before the G1 `section_path` pass"
+        " (`human_pass_disputed_v1.0.md`); the narrower v1.0 sections recompute fewer here.",
+        "- Before G1, v1.0 labels with an empty section covered the whole document, so off-topic sections of"
         " such a document can appear as disputed. A silver label on a passage before any heading is"
         " `exact`: it matches only unsectioned passages (for a document without headings, all of it).",
         "",

@@ -31,7 +31,9 @@ def queries() -> list[dict[str, Any]]:
         doc("id=13013"),
     )
     sfb_int, ucb_int, sfb_cf = doc("id=13117"), doc("id=13022"), doc("id=13124")
-    gj, ts = doc("Viksit-Gujarat"), doc("MSME%20Policy%20Booklet")
+    # Q27 distractors: the GJ and TS policies first chosen were scans with no text layer; replaced
+    # before G1 by other-state policies that index (PROGRESS.md, G1 checklist).
+    gj, ts = "R-STATE-003", "R-STATE-006"
     # Home-state policy (Q27): R-STATE-005 (2025 policy) was rejected as Marathi-only, so the label is
     # the English 2019 Industrial Policy and its Package Scheme of Incentives (both IN-MH, on main).
     mh = ["R-STATE-015", "R-STATE-014"]
@@ -44,9 +46,9 @@ def queries() -> list[dict[str, Any]]:
         ),
         ("CGTMSE annual guarantee fee slab for ₹1-2 crore", ["R-CG-01"], "fee structure table", []),
         ("maximum CGTMSE guarantee cover per borrower", ["R-CG-05"], "FAQ credit facilities", []),
-        (
+        (  # R-CG-04 added before G1: R-CG-01/05 never state who is eligible
             "Is a medium enterprise eligible for CGTMSE?",
-            ["R-CG-01", "R-CG-05"],
+            ["R-CG-01", "R-CG-05", "R-CG-04"],
             "eligible borrowers",
             [],
         ),
@@ -74,7 +76,7 @@ def queries() -> list[dict[str, Any]]:
             "small enterprise investment and turnover limit",
             ["R-MSME-02", doc("261838_220191.pdf")],
             "classification",
-            ["R-MSME-03"],
+            ["R-MSME-03", "R-MSME-G-005"],
         ),
         (
             "maximum days to pay a micro or small enterprise supplier",
@@ -85,9 +87,9 @@ def queries() -> list[dict[str, Any]]:
         ("interest on delayed payment to MSE supplier", ["R-MSME-01"], "section 16", []),
         (
             "tax deduction for payments to MSE suppliers made late",
-            ["R-TAX-01", "R-TAX-02"],
+            ["R-TAX-01"],  # R-TAX-02 (1961 s.43B) is superseded by R-TAX-01: KR-04 distractor
             "s.37(2)(g) / s.43B(h)",
-            [],
+            ["R-TAX-02"],
         ),
         (
             "what is TReDS",
@@ -113,7 +115,7 @@ def queries() -> list[dict[str, Any]]:
             "responsible business conduct rules for our bank loan",
             ["R-RBI-02"],
             "responsible lending",
-            ["R-RBI-13", sfb_rbc, ucb_rbc],
+            ["R-RBI-13", "R-RBI-12", sfb_rbc, ucb_rbc],
         ),
         (
             "interest rate rules on advances by commercial banks",
@@ -125,10 +127,12 @@ def queries() -> list[dict[str, Any]]:
             "credit facilities directions for commercial banks",
             ["R-RBI-10"],
             "credit facilities",
-            [sfb_cf],
+            [sfb_cf, "R-RBI-11"],
         ),
         ("lending to MSME sector master direction", ["R-RBI-04"], "MSME lending", []),
-        ("priority sector lending for MSMEs", ["R-RBI-06", doc("FAQView.aspx?Id=87")], "PSL", []),
+        # R-RBI-06 dropped before G1: the saved file is the RBI home page (no PSL text), so no passage
+        # of it can be relevant. Re-save the PDF by hand, then label it in v2.
+        ("priority sector lending for MSMEs", [doc("FAQView.aspx?Id=87")], "PSL", []),
         ("Udyam registration certificate for PSL benefits", [doc("SO1296.pdf")], "Udyam PSL", []),
         ("benefits of Udyam registration", [doc("Benefits_of_UR.pdf")], "benefits", []),
         (
@@ -145,13 +149,21 @@ def queries() -> list[dict[str, Any]]:
         ),
         ("SBI EBLR rate", ["R-RATE-02-SBI"], "EBLR", []),
         ("Bank of Baroda lending rate BRLLR", ["R-RATE-02-BOB"], "BRLLR", []),
-        ("Bandhan Bank SME loan processing fee", ["R-BANK-03"], "schedule of charges", []),
-        ("Indian Bank MSME service charges", ["R-BANK-05"], "service charges", ["R-BANK-04"]),
+        # R-BANK-03 (Bandhan PDF) is 404: labelled with the two Bandhan schedules that downloaded.
+        (
+            "Bandhan Bank SME loan processing fee",
+            ["R-BANK-S-016", "R-BANK-S-010"],
+            "schedule of charges",
+            [],
+        ),
+        # Indian Bank copies (R-BANK-04/05) were scans: retargeted to Canara Bank.
+        ("Canara Bank MSME service charges", ["R-BANK-08"], "service charges", []),
         ("SBI SME Smart Score processing fee", ["R-BANK-02"], "Smart Score", []),
         ("SIDBI working capital finance for MSMEs", ["R-SIDBI-01"], "working capital", []),
         ("DPDP Rules 2025 obligations", ["R-DPDP-02", "R-DPDP-01"], "rules", []),
         ("data protection act penalties", ["R-DPDP-01"], "penalties", []),
-        ("digital lending directions", ["R-RBI-11"], "digital lending", []),
+        # R-RBI-11 was withdrawn on 28 Nov 2025; its guidelines now sit in R-RBI-10 Chapter III.
+        ("digital lending directions", ["R-RBI-10"], "digital lending", ["R-RBI-11"]),
         (
             "consolidated master directions November 2025 press release",
             ["R-RBI-01"],
@@ -182,11 +194,7 @@ def queries() -> list[dict[str, Any]]:
             "id": f"Q{n:02d}",
             "query": q,
             "relevant_doc_ids": docs,
-            "relevant_sections": [
-                {"doc_id": d, "section_path": path}
-                for d in docs
-                for path in SECTIONS.get(f"Q{n:02d}", {}).get(d, [""])
-            ],
+            "relevant_sections": [x for d in docs for x in labels(f"Q{n:02d}", d)],
             "section_hint": hint,
             "must_not_cite": bad,
             "filters": FILTERS,
@@ -195,24 +203,103 @@ def queries() -> list[dict[str, Any]]:
     ]
 
 
-# Section labels (DATA_SPEC §7), read off the section chunker (CHUNKER_VERSION 3) and checked against the
-# text on 2026-11-14. A label matches the start of a passage's section_path or of one of its " > "
-# segments. A document not listed here is labelled "" (any section): it has no internal headings, or
-# the question asks about the document as a whole. Drafted in Phase 7; a non-copilot owner confirms
-# them before the G1 freeze.
+# Section labels (DATA_SPEC §7), read off the section chunker (CHUNKER_VERSION 3) and the document text,
+# never off retrieval results. A label matches the start of a passage's section_path or of one of its
+# " > " segments. Drafted in Phase 7 (2026-11-14); completed for all 40 queries before G1 (2026-11-15).
+# Some headings are noisy as extracted (OCR-damaged Gazette titles, bank-site menu text over the rate
+# table): the label is the heading the chunker actually wrote over the answering text. A non-copilot owner
+# confirms them before the G1 freeze.
+# "" in a list is an `exact` unsectioned label: added only where the answering text sits in a passage
+# before the first heading (fixed512/semantic chunks keep the heading in force where they start), checked
+# against the chunk text. Q06, Q35 (fixed512) and Q28 (semantic) have no such passage: a known chunker
+# limit, reported with the G1 labels, not patched.
 SECTIONS: dict[str, dict[str, list[str]]] = {
     "Q01": {"R-CG-02": ["1. How is this guarantee scheme operated"]},
-    "Q05": {"R-GST-01": ["15 Heading 9971"]},
+    "Q04": {"R-CG-04": ["BHIM UPI"]},  # site-menu heading over the eligible-borrowers text
+    "Q05": {"R-GST-01": ["15 Heading 9971"], "R-GST-03": ["NOTIFICATION"]},
     "Q06": {"R-GST-02": ["27 Heading 9971"]},
     "Q07": {"R-RBI-03": ["Chapter III - Benchmark", "Chapter IV - Other aspects of lending rates"]},
     "Q08": {"R-RBI-02": ["Annex XIII", "Chapter VIII \u2013 Responsible Lending Conduct"]},
     "Q09": {"R-RBI-02": ["Annex XIII", "Chapter I \u2013 Preliminary"]},
-    "Q10": {"R-MSME-02": ["1. In the said notification in paragraph 1"]},
-    "Q13": {"R-TAX-01": ["5. Hindu undivided"]},  # s.37(2)(g) sits under this noisy PDF heading
-    "Q14": {"R-RBI-FAQ-003": ["1. What is TReDS"]},
+    "Q10": {
+        "R-MSME-02": ["1. In the said notification in paragraph 1"],
+        "R-MSME-G-004": ["1. In the said notification in paragraph 1"],
+    },
+    "Q11": {"R-MSME-01": ["DELAYED PAYMENTS TO MICRO AND SMALL ENTERPRISES"]},  # Chapter V, s.15
+    "Q12": {"R-MSME-01": ["DELAYED PAYMENTS TO MICRO AND SMALL ENTERPRISES"]},  # Chapter V, s.16
+    "Q13": {
+        "R-TAX-01": ["5. Hindu undivided"],  # s.37(2)(g) sits under this noisy PDF heading
+    },
+    "Q14": {
+        "R-RBI-FAQ-003": ["1. What is TReDS", ""],
+        "R-RBI-08": ["", "Chapter I - Preliminary", "Chapter I \u2013 Preliminary"],  # both dashes
+    },
+    "Q16": {"POL-APPROVAL-MATRIX-v1": ["Approval matrix for working-capital proposals (v1)"]},
+    "Q17": {"POL-WC-POL-v3": ["Working-capital borrowing policy (v3)"]},
+    "Q18": {"R-RBI-09": ["Chapter I \u2013 Preliminary"]},  # applicability to commercial banks
     "Q19": {"R-RBI-02": ["Chapter VIII \u2013 Responsible Lending Conduct"]},
+    "Q20": {"R-RBI-03": ["Chapter I - Preliminary", "Chapter II - General guidelines"]},
+    "Q21": {"R-RBI-10": ["Chapter I - Preliminary"]},
+    "Q22": {
+        "R-RBI-04": ["PRELIMINARY", "CHAPTER - IV"]
+    },  # applicability; common MSME lending rules
+    "Q24": {"R-GZ-002": ["", "OTIFICATION"]},  # "NOTIFICATION" with the N lost in extraction
+    "Q26": {"R-JUD-001": ["M. R. SHAH, J.", "[M. R. SHAH AND B. V . NAGARATHNA, JJ.]"]},
+    "Q27": {
+        "R-STATE-015": ["9 Promotion of Micro, Small and Medium Enterprises"],
+        "R-STATE-014": ["RESOLUTION"],  # the Package Scheme of Incentives 2019 itself
+    },
+    "Q28": {"R-RATE-02-SBI": ["BHIM UPI"]},  # site-menu heading over the EBLR table
+    "Q29": {"R-RATE-02-BOB": ["1 Year MCLR"]},  # the BRLLR statement follows the MCLR table
+    "Q30": {"R-BANK-S-016": ["1. Processing Charges"]},
+    "Q31": {
+        "R-BANK-08": [
+            "",
+            "SERVICE CHARGES ON LOANS AND ADVANCES",
+            "ENTERPRISES (MSME)",
+            "SLAB WORKING CAPITAL",
+        ]
+    },
+    "Q32": {"R-BANK-02": ["BHIM UPI"]},  # site-menu heading over the 0.40% fee text
+    "Q34": {"R-DPDP-02": ["NOTIFICATION"], "R-DPDP-01": ["OBLIGATIONS OF DATA FIDUCIARY"]},
     "Q35": {"R-DPDP-01": ["PENALTIES AND ADJUDICATION", "Schedule"]},
+    "Q36": {"R-RBI-10": ["Chapter III - Digital Lending Guidelines"]},
+    "Q37": {
+        "R-RBI-01": [
+            "2. Against this backdrop",
+            "3. Under this consolidation",
+            "RESERVE BANK OF INDIA",  # para 6: the list of 244 Master Directions
+        ]
+    },
+    "Q39": {"POL-NEGOTIATION-v1": ["Negotiation conduct policy (v1)"]},
+    "Q40": {"POL-DATA-HANDLING-v1": ["Data-handling policy (v1)"]},
 }
+
+# Documents with no internal headings: the whole document is the label, stated explicitly as an `exact`
+# empty section (every passage of such a document is unsectioned).
+HEADINGLESS = {
+    "R-CG-01",
+    "R-CG-05",
+    "R-RBI-05",
+    "R-RATE-02-REPO",
+    "R-RBI-FAQ-001",
+    "R-MSME-G-003",
+    "R-BANK-S-010",
+    "R-SIDBI-01",
+    "R-RATE-01-2026-09",
+    "R-RBI-FAQ-005",
+}
+
+
+def labels(qid: str, doc_id: str) -> list[dict[str, Any]]:
+    """Section labels for one relevant document; fails when a document has neither."""
+    if paths := SECTIONS.get(qid, {}).get(doc_id):
+        return [
+            {"doc_id": doc_id, "section_path": p} | ({} if p else {"exact": True}) for p in paths
+        ]
+    if doc_id in HEADINGLESS:
+        return [{"doc_id": doc_id, "section_path": "", "exact": True}]
+    raise ValueError(f"{qid}: no section label for {doc_id}")
 
 
 def redteam() -> list[dict[str, Any]]:

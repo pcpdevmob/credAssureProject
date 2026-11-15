@@ -14,6 +14,7 @@ from .gold.data import REPO
 ASSETS = (
     "evaluation/testset/v1/items.jsonl",
     "evaluation/retrieval/v1/queries.jsonl",
+    "evaluation/retrieval/v1/queries.v1.1-silver.jsonl",  # G1 label set (v1.0 kept beside it)
     "evaluation/redteam/prompts.jsonl",
     "evaluation/fixtures/v1/bad_citations.jsonl",
     "evaluation/gold/fixtures/rbi_kfs_apr_illustration.yaml",
