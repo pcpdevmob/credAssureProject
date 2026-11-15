@@ -1,6 +1,6 @@
 # lendwise
 
-Owner: Pritish. Requirements: LW-01..11, LW-14 (9c-a); LW-12/13 negotiation arrives in 9c-b.
+Owner: Pritish. Requirements: LW-01..14.
 
 Gate 3 lender comparison. Never accepts, signs or submits an offer (BR-13).
 
@@ -15,4 +15,10 @@ Gate 3 lender comparison. Never accepts, signs or submits an offer (BR-13).
   `lw.reference_rate.<id>` (cited `R-RATE-02-*`).
 - **Gate:** GO with at least two comparable, affordable, on-time offers, or `NOT_REQUIRED` when the need is ₹0;
   else NO_GO with `LW_FEWER_THAN_TWO_ELIGIBLE`. The Supervisor recomputes every `lw.*` fact (SUP-05).
+- **Negotiation (LW-12/13):** `POST /v1/agents/lendwise/cases/{id}/negotiate`, one round per case, a separate
+  invocation through the Supervisor. Target and competing fee from `engines.negotiation.plan`, written as
+  `lw.negotiation.*` facts; `fee_waiver_v1` (code template) filled from those facts; `verify_claims` (interim
+  Critic: every figure in the ledger, no acceptance/urgency wording) before `lender_send_template`; the reply is
+  scanned (`lw.negotiation.reply_flags`) and never reused as text; a revision is re-audited and re-priced
+  before `lw.negotiation.concession_counts` and `lw.negotiation.revised.*` are written.
 - **API:** `GET /v1/agents/lendwise/cases/{id}/offers` (same view as `/v1/cases/{id}/offers`).

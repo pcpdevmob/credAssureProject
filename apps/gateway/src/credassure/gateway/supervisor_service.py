@@ -7,7 +7,7 @@ this service, which applies the same case policy and job runner as the core /v1 
 import re
 import uuid
 from collections.abc import Callable
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Any
 
 from credassure.core.enums import Stage
@@ -18,7 +18,7 @@ from credassure.gateway.deps import Services, own_case, visible_case
 from credassure.gateway.jobs import NOT_RUNNABLE, job_view
 from credassure.gateway.problems import ProblemError
 from credassure.ledger import reads
-from credassure.ledger.session import run_in_progress, transaction
+from credassure.ledger.session import RunInProgressError, run_in_progress, run_lock, transaction
 from credassure.observability.tracing import span
 from credassure.security import pii
 from credassure.security.auth import Principal
@@ -90,6 +90,70 @@ class SupervisorService:
             found = reads.get_latest(s, case.tenant_id, case.id, key)
         return None if found is None else found.value_text
 
+    def negotiate(self, actor: Principal, case_id: str) -> dict[str, Any]:
+        """LW-12/13: one fee-waiver round, a separate invocation through the Supervisor (caps,
+        case pinning, audit). The preparer only; one sent request per case, under the case run
+        lock so two calls cannot both send; never accepts an offer."""
+        case = own_case(self.svc, actor, case_id)
+        # The round changes neither the funding amount nor the route, so it may run while the
+        # proposal awaits approval; a decided case is closed.
+        if case.status in ("APPROVED", "REJECTED"):
+            raise ProblemError(409, f"case is {case.status}; closed", ApiErrorCode.CONFLICT)
+        from credassure.agents.lendwise.negotiate import negotiate
+
+        try:
+            with run_lock(self.svc.engine, case.tenant_id, case.id, uuid.uuid4().hex):
+                if self.fact(actor, case_id, "lw.negotiation.status") == "sent":
+                    raise ProblemError(
+                        409, "the negotiation round has already run", ApiErrorCode.CONFLICT
+                    )
+                result = self.svc.supervisor.invoke_extra(
+                    case.id, Stage.LENDWISE, negotiate, "negotiate"
+                )
+        except RunInProgressError as exc:
+            raise ProblemError(
+                409, "a run is in progress on this case", ApiErrorCode.RUN_IN_PROGRESS
+            ) from exc
+        return {"decision": result.decision.value, **self.negotiation(actor, case_id)}
+
+    def negotiation(self, actor: Principal, case_id: str) -> dict[str, Any]:
+        """The round as stored facts: what was asked, and a concession only after re-audit."""
+        case = visible_case(self.svc, actor, case_id)
+        with transaction(self.svc.engine) as s:
+            facts = reads.list_for_case(s, case.tenant_id, case.id)
+        latest = {x.key.removeprefix("lw.negotiation."): x for x in facts}
+        f = {k: x.value_text for k, x in latest.items()}
+        target = f.get("target")
+        if target in (None, "none"):
+            return {
+                "target_offer": None,
+                "competing_fee_pct": None,
+                "concession_counts": False,
+                "message": "",
+                "status": f.get("status"),
+                "revised": None,
+            }
+        revised = None
+        if "revised.version" in f:
+            apr, cost, flags = f.get("revised.apr"), f.get("revised.total_cost"), f["revised.flags"]
+            revised = {
+                "version": int(f["revised.version"]),
+                "comparable": f.get("revised.comparable") == "true",
+                "flags": [] if flags == "none" else flags.split(","),
+                "apr_pct": None if apr is None else _pct(apr),
+                "total_cost": None if cost is None else _money(to_paise(Decimal(cost))),
+            }
+        rate = latest["competing_fee"].unit == "rate"
+        return {
+            "target_offer": target,
+            "competing_fee_pct": _plain(Decimal(f["competing_fee"]) * 100) if rate else None,
+            "competing_fee": _money(to_paise(Decimal(f["competing_fee"]))) if not rate else None,
+            "concession_counts": f.get("concession_counts") == "true",
+            "message": f.get("message", ""),
+            "status": f.get("status"),
+            "revised": revised,
+        }
+
     def offers(self, actor: Principal, case_id: str) -> dict[str, Any]:
         """The offer comparison. After the LendWise stage: its stored facts. Before it, while
         the funding stage is not GO, a read-only audit preview (no affordability, no ranking)."""
@@ -99,7 +163,8 @@ class SupervisorService:
         latest = {f.key: f.value_text for f in facts}  # versions ascend per key
         stored = {k: v for k, v in latest.items() if k.startswith("lw.")}
         if "lw.gate" in stored:
-            return {"gate": stored["lw.gate"], "source": "ledger", **offer_view(stored)}
+            view = {"gate": stored["lw.gate"], "source": "ledger", **offer_view(stored)}
+            return view | {"negotiation": self.negotiation(actor, case_id)}
         wc_gate = latest.get("wc.gate")
         gate = wc_gate if wc_gate not in (None, "GO") else None
         preview = self.svc.offer_preview(case.id)
@@ -159,9 +224,22 @@ def offer_view(facts: dict[str, str]) -> dict[str, Any]:
                 "comparable": f.get("comparable") == "true",
                 "affordable": None if "affordable" not in f else f["affordable"] == "true",
                 "rank": int(f["rank"]) if "rank" in f else None,
-                "apr_pct": None if apr is None else str(apr.quantize(Decimal("0.01"))),
+                "apr_pct": None
+                if apr is None
+                else str(apr.quantize(Decimal("0.01"), ROUND_HALF_UP)),
                 **{k: _money(to_paise(Decimal(f[k]))) if k in f else None for k in _LW_MONEY},
             }
         )
     order = facts.get("lw.ranking", "none")
     return {"ranking": [] if order == "none" else order.split(","), "offers": out}
+
+
+def _pct(fraction: str) -> str:
+    return str((Decimal(fraction) * 100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
+
+
+PCT = Decimal("0.01")
+
+
+def _plain(value: Decimal) -> str:
+    return format(value.normalize(), "f")

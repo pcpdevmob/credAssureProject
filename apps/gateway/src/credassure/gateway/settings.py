@@ -76,6 +76,7 @@ class Settings(BaseSettings):
     gst_rate: Decimal = Decimal("0.18")
     # S22 reference rates (R-RATE-02), loaded once at startup; engines never read the file.
     reference_rates_file: Path = Path("data/reference/reference_rates.yaml")
+    lender_scripts_dir: Path = Path("data/frozen/v1/lender_scripts")  # S05, lender simulator
     apr_convention: Literal["nominal", "effective"] = "nominal"
     boundary_rule: Literal["hold", "director", "vp"] = "hold"
     approval_threshold_paise: int = Field(default=1_500_000_000, gt=0)

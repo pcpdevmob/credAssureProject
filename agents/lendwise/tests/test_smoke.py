@@ -4,4 +4,4 @@ from credassure.agents.lendwise.agent import version
 
 
 def test_smoke_version() -> None:
-    assert version() == "0.2.0"
+    assert version() == "0.3.0"

@@ -413,7 +413,8 @@ def narrative_slots(c: Comparison) -> dict[str, str]:
             continue
         reason = next((REASONS[BlockerCode(f)] for f in r.flags if BlockerCode(f) in REASONS), None)
         if reason:
-            out[f"excluded.{r.offer['offer_id']}"] = f"{r.offer['offer_id']}: {reason}"
+            oid = r.offer["offer_id"]
+            out[f"excluded.{oid}"] = f"{oid} is not ranked because {reason}"
     return out
 
 
@@ -441,11 +442,47 @@ def template(c: Comparison) -> str:
     return " ".join(parts)
 
 
+MEANINGS = {
+    "rank1.offer": "the first-ranked offer",
+    "rank1.apr": "the first offer's true annual cost (APR, fees and GST included)",
+    "rank1.total_cost": "the first offer's total cost",
+    "rank2.offer": "the second-ranked offer",
+    "rank2.apr": "the second offer's true annual cost",
+    "rank2.total_cost": "the second offer's total cost",
+    "cmp.rank1_vs_rank2": "the words comparing the first APR with the second, such as lower than",
+    "headline.offer": "an offer with the lowest advertised rate",
+    "headline.note": "a clause saying that offer costs more once fees count",
+}
+
+
+def _meaning(key: str) -> str:
+    if key.startswith("excluded."):
+        return "a complete clause naming an unranked offer and why; write it as its own sentence"
+    return MEANINGS[key]
+
+
+def _example(values: Mapping[str, str]) -> str:
+    """An example built from this case's placeholders only, so copying it is always valid."""
+    parts = []
+    if "rank1.offer" in values:
+        parts.append("{rank1.offer} ranks first, with a true annual cost of {rank1.apr}.")
+    if "cmp.rank1_vs_rank2" in values:
+        parts.append("That is {cmp.rank1_vs_rank2} the {rank2.apr} of {rank2.offer}.")
+    if "headline.offer" in values:
+        parts.append("{headline.offer} {headline.note}.")
+    parts += [f"{{{k}}}." for k in sorted(values) if k.startswith("excluded.")]
+    return " ".join(parts)
+
+
 def _explain(ctx: StageContext, c: Comparison) -> str | None:
     if ctx.llm is None or c.ranking is None or c.ranking.gate == "NOT_REQUIRED":
         return None
     values = narrative_slots(c)
-    prompt = prompts()[EXPLAIN].render(slots="\n".join(sorted(values)), gate=c.ranking.gate)
+    prompt = prompts()[EXPLAIN].render(
+        slots="\n".join(f"{{{k}}} = {_meaning(k)}" for k in sorted(values)),
+        example=_example(values),
+        gate=c.ranking.gate,
+    )
     try:
         reply = ctx.llm.complete(prompt, name=EXPLAIN).strip()
     except LLMError:

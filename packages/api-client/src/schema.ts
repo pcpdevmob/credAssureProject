@@ -206,7 +206,8 @@ export interface paths {
         put?: never;
         /**
          * Negotiate
-         * @description Arrives in Phase 9c. Never accepts an offer.
+         * @description One fee-waiver round (LW-12/13): the request is built from ledger facts, verified, sent to
+         *     the simulated lender; a revision counts only after re-audit. Never accepts an offer.
          */
         post: operations["negotiate_v1_agents_lendwise_cases__case_id__negotiate_post"];
         delete?: never;
@@ -1394,7 +1395,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */

@@ -498,10 +498,38 @@ class Supervisor:
         self.store.stage_finished(run_id, result)
         return result
 
+    def invoke_extra(self, case_id: str, stage: Stage, agent: StageAgent, name: str) -> AgentResult:
+        """A separate agent invocation outside the fixed plan (LW-12: the negotiation round).
+
+        Same wrappers as a stage (case pinning, registry, budget, timeout, tracing, audit) and
+        the same caps (SUP-07); it changes no workflow state and records no stage run, so the
+        stage's own result and gate are untouched. Audited as ``EXTRA_INVOCATION``."""
+        trace_id = uuid.uuid4().hex
+        with span("stage", case_id=case_id, stage=f"{stage.value}.{name}", trace_id=trace_id):
+            result = self._call_agent(case_id, stage, AgentName(stage.value), trace_id, agent)
+            result = self._gate(result, recheck=False)
+        self.store.audit(
+            case_id,
+            "EXTRA_INVOCATION",
+            {
+                "stage": stage.value,
+                "name": name,
+                "decision": result.decision.value,
+                "steps": result.steps_used,
+                "trace_id": trace_id,
+            },
+        )
+        return result
+
     def _call_agent(
-        self, case_id: str, stage: Stage, agent_name: AgentName, trace_id: str
+        self,
+        case_id: str,
+        stage: Stage,
+        agent_name: AgentName,
+        trace_id: str,
+        override: StageAgent | None = None,
     ) -> AgentResult:
-        agent = self.agents[stage]
+        agent = override or self.agents[stage]
         llm = self.llm
         if llm is not None and getattr(llm, "circuit_state", "closed") == "open":
             llm = None
@@ -619,7 +647,7 @@ class Supervisor:
             case_id, "LLM_FALLBACK", {"stage": stage.value, "reason": reason, "trace_id": trace_id}
         )
 
-    def _gate(self, result: AgentResult) -> AgentResult:
+    def _gate(self, result: AgentResult, *, recheck: bool = True) -> AgentResult:
         """Caps (SUP-07), then the deterministic re-check on every GO (SUP-05, BR-11)."""
         if result.decision is Decision.ERROR:
             return result
@@ -637,7 +665,7 @@ class Supervisor:
                     ],
                 }
             )
-        if result.decision is not Decision.GO or self.ablation == "A4":  # A4: model decides gates
+        if not recheck or result.decision is not Decision.GO or self.ablation == "A4":  # A4
             return result
         try:
             failed = self.rechecks.get(result.stage, _evidence_and_gate_check)(result, self.ledger)

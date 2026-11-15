@@ -1,7 +1,8 @@
 """Fee-waiver round 1: choose the target and the verified competing fee (LW-12/13, BR-09/10). Pure.
 
-The comparable offer with the highest processing fee asks for a waiver citing the lowest
-processing fee among the other comparable offers. Fewer than two comparable offers: no round.
+The comparable offer with the highest processing fee in rupees (fee x principal for a percentage
+fee, ADR 0021) asks for a waiver citing the lowest such fee among the other comparable offers.
+Fewer than two comparable offers: no round.
 A concession counts only when the received revision re-audits as comparable and is cheaper.
 """
 
@@ -39,6 +40,9 @@ class Plan:
     lender_id: str
     current_fee: Decimal
     competing_fee: Decimal
+    competing_offer: str = ""
+    current_basis: str = "pct_of_principal"
+    competing_basis: str = "pct_of_principal"
 
 
 def plan(comparable: Sequence[Mapping[str, Any]]) -> Plan | None:
@@ -51,7 +55,15 @@ def plan(comparable: Sequence[Mapping[str, Any]]) -> Plan | None:
         str(target["lender_id"]),
         processing_fee(target),
         processing_fee(competitor),
+        str(competitor["offer_id"]),
+        _basis(target),
+        _basis(competitor),
     )
+
+
+def _basis(offer: Mapping[str, Any]) -> str:
+    fee = next((f for f in offer.get("fees", []) if f["name"] == PROCESSING_FEE), None)
+    return "pct_of_principal" if fee is None else str(fee["basis"])
 
 
 def concession_counts(

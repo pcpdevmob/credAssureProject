@@ -63,8 +63,12 @@ them, and this ADR settles them. Gold and engines are still implemented independ
 - **Ranking ties:** APRs equal at 0.01 pp go to total cost, as gold ranks on the displayed APR.
 
 **Negotiation (LW-12/13, BR-09/10)**
-- **Target:** the comparable offer with the highest processing fee. It cites the lowest processing fee among the
-  other comparable offers. With fewer than two comparable offers there is no message.
+- **Target:** the comparable offer with the highest processing fee **in rupees** (fraction x principal for a
+  percentage fee; engine and gold both, pinned 2026-11-16). It cites the lowest such fee among the other comparable
+  offers. The message states each fee by its basis (percentage of the loan amount, or rupees).
+- **Once per case:** a request that was sent locks the round (`lw.negotiation.status = sent`, under the case run
+  lock); "no competitor" and a message blocked by verification can be retried. The revision is recorded as
+  `lw.negotiation.revised.*` facts; it changes the ranking only once the preparer uploads it and re-runs the stage. With fewer than two comparable offers there is no message.
 - **Concession:** counts only when the received revised version re-audits as comparable **and** its fee is lower.
 
 ## Consequences

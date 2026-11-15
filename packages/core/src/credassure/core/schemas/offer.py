@@ -76,7 +76,8 @@ class OfferUpload(Offer):
     lender_id: str = Field(pattern=LENDER_ID)
     kfs_doc_id: str = Field(pattern=KFS_DOC_ID)
     version: int = Field(ge=1, le=99)
-    lender_name: str = Field(min_length=1, max_length=120)
+    # plain words only: it is quoted in the negotiation message (LW-12)
+    lender_name: str = Field(pattern=r"^[A-Za-z][A-Za-z .,&()'-]{0,119}$")
 
     principal: Decimal | None = None  # type: ignore[assignment]
     rate_type: Literal["fixed", "floating"] | None = None  # type: ignore[assignment]

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import sqlite3
 import uuid
 from collections.abc import Awaitable, Callable
@@ -55,6 +56,7 @@ from credassure.engines import (
     onboarding_rules,
     ranking,
 )
+from credassure.engines.normaliser import find_all
 from credassure.gateway import problems, tracing
 from credassure.gateway.deps import Services, current_user
 from credassure.gateway.jobs import JobRunner
@@ -64,6 +66,7 @@ from credassure.gateway.supervisor_service import SupervisorService
 from credassure.ledger import hr, migrate, reads
 from credassure.ledger.session import case_engine, hr_engine, transaction
 from credassure.ledger.store import SqlLedger
+from credassure.lender_sim import ScriptedLender
 from credassure.observability.log import configure_logging, log_context, set_redactor
 from credassure.security import pii
 from credassure.security.auth import verify_token
@@ -198,10 +201,48 @@ def _offer_inputs(settings: Settings, engine: Engine) -> Callable[[str], lendwis
     return load
 
 
+_UNSAFE = re.compile(  # VER-03 interim, until the Critic (9d) owns verify_claims
+    r"\baccept|\bsign(ed|ing|ature)?\b|\bsubmit|\bbind|\bcommit|\bexecute|agree to the terms"
+    r"|approv|guaranteed|pre-approved|urgent|immediately|act now|last chance|hurry|deadline",
+    re.IGNORECASE,
+)
+
+
+def _verify_claims(settings: Settings, engine: Engine) -> Callable[..., list[dict[str, str]]]:
+    """Interim Critic (VER-01/03) for the negotiation message: every figure must equal a ledger
+    fact of this case, and no acceptance, approval, urgency or personal identifier appears."""
+
+    def verify(case_id: str, text: str, keys: list[str] | None = None) -> list[dict[str, str]]:
+        """``keys``: the facts the text may quote (all of the case's facts when omitted)."""
+        with transaction(engine) as s:
+            facts = reads.list_for_case(s, settings.tenant_id, case_id)
+        known = set()
+        for f in facts:
+            if keys is not None and f.key not in keys:
+                continue
+            try:
+                known.add(Decimal(f.value_text))
+            except ArithmeticError:
+                continue
+        findings = [
+            {"code": "VER_UNMATCHED_NUMBER", "detail": f"{text[h.start : h.end]!r} not in ledger"}
+            for h in find_all(text)
+            if not isinstance(h.value, Decimal) or h.value not in known
+        ]
+        if m := _UNSAFE.search(text):
+            findings.append({"code": "VER_BANNED_CONTENT", "detail": f"{m.group(0)!r}"})
+        if pii.find(text):
+            findings.append({"code": "VER_PII", "detail": "personal identifier"})
+        return findings
+
+    return verify
+
+
 def _lendwise_handlers(settings: Settings, engine: Engine) -> dict[str, Callable[..., Any]]:
     """LW engines as tools. Pure calls; only load_offers reads the case (SUP-08)."""
     load = _offer_inputs(settings, engine)
     gst, convention = settings.gst_rate, settings.apr_convention
+    lender = ScriptedLender(settings.lender_scripts_dir)
 
     def price(case_id: str, offers: list[dict[str, Any]], hidden: dict[str, Any]) -> Any:
         return {
@@ -246,6 +287,10 @@ def _lendwise_handlers(settings: Settings, engine: Engine) -> dict[str, Callable
         "price_offer": price,
         "check_affordability": afford,
         "rank_offers": lambda case_id, candidates, need: ranking.rank(candidates, need),
+        "verify_claims": _verify_claims(settings, engine),
+        # scope: simulated lender only; the tool sends a request and returns its reply (LW-13)
+        # stateless: it receives only this case's target offer and schedule (SUP-08)
+        "lender_send_template": lambda case_id, **kw: lender.send(**kw),
     }
 
 

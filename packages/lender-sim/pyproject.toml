@@ -1,11 +1,15 @@
 [project]
 name = "credassure-lender-sim"
 version = "0.1.0"
-description = "Deterministic lender simulator. Empty until Phase 9c."
+description = "Deterministic lender simulator (scripted fee-waiver replies)."
 requires-python = ">=3.12,<3.13"
 dependencies = [
-
+    "credassure-core",
+    "pyyaml>=6",
 ]
+
+[tool.uv.sources]
+credassure-core = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

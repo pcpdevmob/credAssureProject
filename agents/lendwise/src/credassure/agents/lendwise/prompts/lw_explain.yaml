@@ -1,26 +1,21 @@
 # LW-05/09/11: plain-language comparison of the offers. The model sees slot NAMES only, never
 # values: it writes {slot} placeholders and code renders every offer id, rate, amount and reason.
-# A draft with any digit, %, ₹, number word, unknown slot or approval wording is replaced by the
-# template. The ranking and gate are already decided by code.
+# Only the placeholders that apply to the case are listed, and the example uses exactly those.
+# A draft with any digit, %, ₹, number word, unknown slot, comparison word of its own or approval
+# wording is replaced by the template. The ranking and gate are already decided by code.
 name: lw_explain
-version: 1.0.0
+version: 1.1.0
 max_tokens: 220
 template: |
   You explain to a finance approver how the lender offers for a working-capital loan compare.
-  Code has already audited, priced and ranked them; the outcome is $gate. You never write a number:
-  you write placeholders in curly braces and code fills them in. Available placeholders:
-  <slots>
+  Code has already audited, priced and ranked them; the outcome is $gate. You never write a number
+  or an offer id: you write placeholders in curly braces and code fills them in.
+  The placeholders for this case (use no others):
   $slots
-  </slots>
-  Meaning (a placeholder missing from the list does not apply; do not mention it):
-  rank1.offer / rank2.offer = the first and second ranked offers; rank1.apr / rank2.apr = their
-  true annual cost including fees and GST; rank1.total_cost / rank2.total_cost = their total cost;
-  cmp.rank1_vs_rank2 = "lower than", "higher than" or "equal to"; headline.offer with headline.note =
-  an offer with the lowest advertised rate whose true annual cost is higher than the first's; excluded.<id> = an offer that is not
-  ranked and why.
-  Write 2 to 5 short sentences in plain English, for example:
-  "{rank1.offer} ranks first: its true annual cost of {rank1.apr} is {cmp.rank1_vs_rank2} that of
-  {rank2.offer}. {headline.offer} {headline.note}. {excluded.X}."
-  Rules: use {rank1.offer} if it is listed, and every {excluded....} placeholder once; write no
-  digits, no %, no ₹, no number words; never compare yourself, use the cmp placeholder; do not say
-  which offer to take, and do not mention approval, acceptance or signing.
+  Example using them:
+  $example
+  Rewrite the example in your own plain English, 2 to 5 short sentences, keeping every placeholder
+  exactly as written with its curly braces. Rules: write no digits, no %, no ₹ and no number words;
+  never write higher, lower, cheaper, dearer, more, less, before or after yourself (the placeholders
+  carry every comparison); add nothing to an {excluded...} placeholder, it is already a full reason;
+  do not say which offer to take, and do not mention approval, acceptance or signing.

@@ -594,7 +594,7 @@ requires-dist = [
 
 [[package]]
 name = "credassure-agent-lendwise"
-version = "0.2.0"
+version = "0.3.0"
 source = { editable = "agents/lendwise" }
 dependencies = [
     { name = "credassure-core" },
@@ -753,6 +753,7 @@ dependencies = [
     { name = "credassure-agent-working-capital" },
     { name = "credassure-engines" },
     { name = "credassure-ledger" },
+    { name = "credassure-lender-sim" },
     { name = "credassure-llm" },
     { name = "credassure-observability" },
     { name = "credassure-security" },
@@ -792,6 +793,7 @@ requires-dist = [
     { name = "credassure-agent-working-capital", editable = "agents/working-capital" },
     { name = "credassure-engines", editable = "packages/engines" },
     { name = "credassure-ledger", editable = "packages/ledger" },
+    { name = "credassure-lender-sim", editable = "packages/lender-sim" },
     { name = "credassure-llm", editable = "packages/llm" },
     { name = "credassure-observability", editable = "packages/observability" },
     { name = "credassure-security", editable = "packages/security" },
@@ -841,6 +843,16 @@ requires-dist = [
 name = "credassure-lender-sim"
 version = "0.1.0"
 source = { editable = "packages/lender-sim" }
+dependencies = [
+    { name = "credassure-core" },
+    { name = "pyyaml" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "credassure-core", editable = "packages/core" },
+    { name = "pyyaml", specifier = ">=6" },
+]
 
 [[package]]
 name = "credassure-llm"

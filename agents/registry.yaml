@@ -55,6 +55,7 @@ tools:
   verify_claims:
     allow:
       critic: {}
+      lendwise: {}  # the negotiation message is checked before it is sent (LW-12)
   route_proposal:
     allow:
       supervisor: {}

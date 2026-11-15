@@ -99,19 +99,13 @@ def test_scope19_supervisor_plan_lists_the_four_stages(
     assert r.json()["stages"] == ["onboarding", "working_capital", "lendwise", "critic"]
 
 
-@pytest.mark.parametrize(
-    ("user", "path"),
-    [
-        ("demo.preparer", "/v1/agents/lendwise/cases/{id}/negotiate"),
-        ("demo.evaluator", "/v1/agents/supervisor/cases/{id}/stages/onboarding/retry"),
-    ],
-)
-def test_LW12_negotiate_and_scope25_retry_are_501(
-    client: TestClient, login: Login, new_case: Callable[[TestClient], str], user: str, path: str
+def test_scope25_retry_is_501(
+    client: TestClient, login: Login, new_case: Callable[[TestClient], str]
 ) -> None:
+    """Negotiation (LW-12) is built in 9c-b (test_lw_items.py); stage retry is still to come."""
     case_id = new_case(client)
-    r = client.post(path.format(id=case_id), headers=login(client, user))
-    _problem(r, 501, "NOT_IMPLEMENTED")
+    path = f"/v1/agents/supervisor/cases/{case_id}/stages/onboarding/retry"
+    _problem(client.post(path, headers=login(client, "demo.evaluator")), 501, "NOT_IMPLEMENTED")
 
 
 def test_scope25_retry_is_evaluator_only(

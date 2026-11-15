@@ -28,7 +28,7 @@ _DIRECTIONS = re.compile(
     r"|dear\w*|costl\w*|affordabl\w*|unaffordabl\w*|before|after|earlier|later|above|under)\b",
     re.IGNORECASE,
 )
-_REPEAT = re.compile(r"\b(\w+)\s+\1\b", re.IGNORECASE)
+_REPEAT = re.compile(r"\b(\w+)\s+\1\b")  # case-sensitive: "of OF-01-A" is no repeat
 
 
 def money(amount: Decimal) -> str:

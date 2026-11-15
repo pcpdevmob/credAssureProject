@@ -1,7 +1,7 @@
 name: lendwise
-version: "0.2.0"
+version: "0.3.0"
 owner: "Pritish"
-requirement_ids: [LW-01, LW-02, LW-03, LW-04, LW-05, LW-06, LW-07, LW-08, LW-09, LW-10, LW-11, LW-14]
-tools: [load_offers, audit_offer, price_offer, check_affordability, rank_offers]
+requirement_ids: [LW-01, LW-02, LW-03, LW-04, LW-05, LW-06, LW-07, LW-08, LW-09, LW-10, LW-11, LW-12, LW-13, LW-14]
+tools: [load_offers, audit_offer, price_offer, check_affordability, rank_offers, verify_claims, lender_send_template]
 readable_data: ["case files: offer, kfs (read-only, own case)", "ledger: lw.* read/write, wc.* read"]
 gate: "set by code: GO iff >=2 comparable and affordable offers, or no funding need (LW-14)"

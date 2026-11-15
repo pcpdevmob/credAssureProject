@@ -1,6 +1,6 @@
 [project]
 name = "credassure-agent-lendwise"
-version = "0.2.0"
+version = "0.3.0"
 description = "Gate 3 lender comparison. Never accepts an offer."
 requires-python = ">=3.12,<3.13"
 dependencies = [

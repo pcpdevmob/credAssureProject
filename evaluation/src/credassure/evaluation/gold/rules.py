@@ -65,10 +65,19 @@ def negotiation(case_id: str) -> dict[str, Any]:
     def fee(o: dict[str, Any]) -> float:
         return next((float(f["value"]) for f in o["fees"] if f["name"] == "Processing fee"), 0.0)
 
+    def fee_inr(o: dict[str, Any]) -> float:
+        """ADR 0021: offers compare on the processing fee in rupees."""
+        f = next((f for f in o["fees"] if f["name"] == "Processing fee"), None)
+        if f is None:
+            return 0.0
+        return float(f["value"]) * (
+            float(o["principal"]) if f["basis"] == "pct_of_principal" else 1
+        )
+
     if len(v1) < 2:
         return {"message": None, "reason": "no verified competing fee"}
-    target = max(v1.values(), key=fee)
-    competitor = min((o for o in v1.values() if o is not target), key=fee)
+    target = max(v1.values(), key=fee_inr)
+    competitor = min((o for o in v1.values() if o is not target), key=fee_inr)
     script = lender_scripts()[target["lender_id"]]["responses"]["fee_waiver_v1"]
     v2 = next(
         (o for o in offers(case_id) if o["offer_id"] == target["offer_id"] and o["version"] == 2),

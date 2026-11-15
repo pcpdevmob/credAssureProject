@@ -61,6 +61,7 @@ def offers(case_id: str, who: Caller, supervisor: SupervisorDep) -> dict[str, An
 
 
 @router.post("/cases/{case_id}/negotiate")
-def negotiate(case_id: str, who: Caller) -> None:
-    """Arrives in Phase 9c. Never accepts an offer."""
-    raise HTTPException(status_code=501, detail="arrives in Phase 9c")
+def negotiate(case_id: str, who: Caller, supervisor: SupervisorDep) -> dict[str, Any]:
+    """One fee-waiver round (LW-12/13): the request is built from ledger facts, verified, sent to
+    the simulated lender; a revision counts only after re-audit. Never accepts an offer."""
+    return supervisor.negotiate(who, case_id)

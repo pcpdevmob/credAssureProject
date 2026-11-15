@@ -50,3 +50,10 @@ def test_formatters() -> None:
     assert slots.money(Decimal("14200000")) == "₹1,42,00,000"
     assert slots.compare(Decimal(1), Decimal(2)) == "lower than"
     assert slots.compare(Decimal(2), Decimal(2)) == "equal to"
+
+
+def test_offer_id_after_of_is_not_a_repeated_word() -> None:
+    from credassure.core import slots
+
+    assert slots.render("cost of {o}.", {"o": "OF-01-A"}) == "cost of OF-01-A."
+    assert slots.render("the {w} weeks", {"w": "10 weeks"}) is None  # real repeat still caught

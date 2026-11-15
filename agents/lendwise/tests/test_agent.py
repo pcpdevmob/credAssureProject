@@ -264,3 +264,77 @@ def test_scope24_stale_funding_need_is_not_compared_against() -> None:
     ledger = Ledger()
     ledger.facts["wc.recommended_amount"] = "1"
     assert lw.run(ctx("CA-2026-0001", ledger=ledger)).decision is Decision.NEEDS_INPUT
+
+
+def _negotiation_ctx(events: list[str], findings: list[dict[str, str]]) -> StageContext:
+    from credassure.lender_sim import ScriptedLender
+
+    ledger = Ledger()
+    lw.run(ctx("CA-2026-0001", ledger=ledger))  # the comparison has run
+    sim = ScriptedLender(DATA / "lender_scripts")
+
+    class NegTools(Tools):
+        def call(self, name: str, case_id: str, args: Any = None) -> Any:
+            events.append(name)
+            if name == "verify_claims":
+                return findings
+            if name == "lender_send_template":
+                return sim.send(**args)
+            return super().call(name, case_id, args)
+
+    class Recording(Ledger):
+        def put_fact(self, case_id: str, key: str, value: Any, **kw: Any) -> int:
+            events.append(key)
+            return super().put_fact(case_id, key, value, **kw)
+
+    rec = Recording()
+    rec.facts = dict(ledger.facts)
+    c = ctx("CA-2026-0001", ledger=rec)
+    c.tools.__class__ = NegTools  # type: ignore[assignment]
+    return c
+
+
+def test_LW13_BR09_concession_is_written_only_after_reaudit() -> None:
+    from credassure.agents.lendwise.negotiate import negotiate
+
+    events: list[str] = []
+    result = negotiate(_negotiation_ctx(events, []))
+    assert result.decision is Decision.GO and result.steps_used <= 10
+    sent = events.index("lender_send_template")
+    reaudit = events.index("audit_offer", sent)
+    assert events.index("lw.negotiation.concession_counts") > reaudit
+    assert events.index("lw.negotiation.revised.apr") > reaudit
+
+
+def test_LW12_message_failing_verification_is_never_sent() -> None:
+    from credassure.agents.lendwise.negotiate import negotiate
+
+    events: list[str] = []
+    bad = [{"code": "VER_UNMATCHED_NUMBER", "detail": "'9%' not in ledger"}]
+    result = negotiate(_negotiation_ctx(events, bad))
+    assert result.decision is Decision.NO_GO
+    assert "lender_send_template" not in events
+    assert "lw.negotiation.concession_counts" not in events
+
+
+def test_LW12_fee_is_worded_by_its_basis() -> None:
+    from credassure.agents.lendwise.negotiate import _fee
+    from credassure.engines import negotiation
+
+    assert _fee("0.0235", "rate") == "2.35% of the loan amount"
+    assert _fee("50000", "INR") == "₹50,000"
+    fixed = {
+        "offer_id": "OF-X-A",
+        "lender_id": "L1",
+        "principal": "10000000",
+        "fees": [{"name": "Processing fee", "basis": "fixed", "value": "500000"}],
+    }
+    pct = {
+        "offer_id": "OF-X-B",
+        "lender_id": "L2",
+        "principal": "10000000",
+        "fees": [{"name": "Processing fee", "basis": "pct_of_principal", "value": "0.002"}],
+    }
+    plan = negotiation.plan([fixed, pct])
+    assert plan is not None and plan.target_offer == "OF-X-A"  # ₹5,00,000 > ₹20,000
+    assert (plan.current_basis, plan.competing_basis) == ("fixed", "pct_of_principal")

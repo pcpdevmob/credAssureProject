@@ -16,6 +16,7 @@ dependencies = [
     "credassure-llm",
     "credassure-ledger",
     "credassure-security",
+    "credassure-lender-sim",
     "fastapi>=0.115",
     "uvicorn[standard]>=0.32",
     "pydantic>=2.9",
@@ -47,6 +48,7 @@ credassure-agent-onboarding = { workspace = true }
 credassure-agent-supervisor = { workspace = true }
 credassure-agent-working-capital = { workspace = true }
 credassure-engines = { workspace = true }
+credassure-lender-sim = { workspace = true }
 credassure-observability = { workspace = true }
 credassure-tools = { workspace = true }
 credassure-llm = { workspace = true }
