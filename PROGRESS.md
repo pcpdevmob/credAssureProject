@@ -292,6 +292,7 @@ By owner (manual slots only; 5 assigned in total): [Name 2] 1, [Name 5] 1, [Name
 - [ ] Second independent transcription of the RBI Annex B APR illustration (S21) — blind form ready for Tejas (A) and Suresh (B): `evaluation/gold/fixtures/apr_transcription_sheet.md`
 - [ ] Owner names for [Name 1]…[Name 6] and gold authors (no one writes gold for their own agent)
 - [ ] Graded baseline S1–S3 on the course endpoint (`EVAL_BASE_URL`, `EVAL_NUM_CTX` set to its context window)
+  - **PENDING (B2, 2026-11-15):** `make llm-probe` fails, and neither `LLM_BASE_URL` nor `EVAL_BASE_URL` is set in `.env`, so the course endpoint is unreachable from here. Set `LLM_BASE_URL`/`LLM_MODEL` (probe) and `EVAL_BASE_URL`/`EVAL_MODEL`/`EVAL_NUM_CTX` (baseline) to the course values, then run `make llm-probe && make baseline`.
 - [ ] ADR 0018 accepted (AgentResult freeze)
 - [ ] then `/freeze-g1`
 
