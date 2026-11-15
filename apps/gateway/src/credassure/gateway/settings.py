@@ -13,7 +13,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Literal, Self
 
-from pydantic import Field, SecretStr, field_validator, model_validator
+from pydantic import Field, FilePath, SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 MIN_JWT_SECRET_LENGTH = 32
@@ -35,7 +35,7 @@ class Settings(BaseSettings):
     llm_model: str | None = None
     llm_context_tokens: int = Field(default=8192, gt=0)
     llm_supports_guided_json: bool = False
-    llm_ca_cert: Path | None = None  # course endpoint: CA file of its self-signed certificate
+    llm_ca_cert: FilePath | None = None  # course CA file; must exist, empty = unset
     llm_max_tokens: int = Field(default=1024, gt=0, le=1024)  # course cap per call
     llm_disable_thinking: bool = False  # Qwen3: no <think> block (ADR 0017 amendment)
     # ADR 0008 / scope #22, #23, #48: model-call resilience
@@ -82,9 +82,9 @@ class Settings(BaseSettings):
     planner_mode: Literal["fixed", "llm_proposes"] = "fixed"
     ablation: Literal["A1", "A2", "A3", "A4", "A5"] | None = None
 
-    @field_validator("ablation", mode="before")
+    @field_validator("ablation", "llm_ca_cert", mode="before")
     @classmethod
-    def _empty_ablation_is_off(cls, value: object) -> object:
+    def _empty_is_unset(cls, value: object) -> object:
         return None if value == "" else value
 
     @model_validator(mode="after")

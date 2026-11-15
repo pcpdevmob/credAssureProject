@@ -124,7 +124,19 @@ def test_NFR07_model_profiles_load_and_hold_no_secrets(profile: str) -> None:
             continue
         if name.endswith("_API_KEY"):
             assert value in ("", "ollama"), f"{name}: keys belong in the dotenv file only"
-        assert not name.endswith("_CA_CERT"), "CA paths are machine-specific"
+        if name.endswith("_CA_CERT"):
+            assert value == "", "CA paths are machine-specific; profiles may only blank them"
     s = Settings(_env_file=path, jwt_secret=GOOD_SECRET)
     assert s.llm_disable_thinking and s.llm_max_tokens == 1024
     assert s.llm_model == {"local": "qwen3:8b", "course": "Qwen/Qwen3-8B"}[profile]
+    if profile == "local":
+        assert s.llm_ca_cert is None  # course CA in the dotenv file never reaches local mode
+
+
+def test_NFR07_empty_ca_cert_is_unset_and_a_missing_file_fails_startup(tmp_path: Path) -> None:
+    assert make(llm_ca_cert="").llm_ca_cert is None
+    with pytest.raises(ValidationError, match="llm_ca_cert"):
+        make(llm_ca_cert=str(tmp_path / "missing.crt"))
+    ca = tmp_path / "vm06-ca.crt"
+    ca.write_text("x", encoding="utf-8")
+    assert make(llm_ca_cert=str(ca)).llm_ca_cert == ca
