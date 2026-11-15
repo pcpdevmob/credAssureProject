@@ -15,6 +15,7 @@ from typing import Any, Protocol
 
 import httpx
 
+from credassure.llm.client import THINKING_OFF
 from credassure.llm.resilience import shared_limiter
 
 from ..gold.data import REPO
@@ -32,6 +33,13 @@ def _verify() -> ssl.SSLContext | bool:
 def _headers() -> dict[str, str]:
     key = os.environ.get("EVAL_API_KEY")
     return {"Authorization": f"Bearer {key}"} if key else {}
+
+
+def thinking_off() -> dict[str, Any]:
+    """The product's thinking-off body for this profile: ``reasoning_effort`` on local Ollama,
+    ``chat_template_kwargs`` on the course endpoint (the default), so the graded baseline runs with
+    the system's model settings."""
+    return dict(THINKING_OFF[os.environ.get("LLM_THINKING_SWITCH", "chat_template_kwargs")])
 
 
 class InfraError(RuntimeError):
@@ -75,8 +83,8 @@ class OpenAICompatible:
         if max_tokens := os.environ.get("EVAL_MAX_TOKENS"):
             payload["max_tokens"] = int(max_tokens)  # course endpoint: 512 default, 1024 max
         no_think = os.environ.get("EVAL_DISABLE_THINKING", "").lower() == "true"
-        if no_think:
-            payload["chat_template_kwargs"] = {"enable_thinking": False}
+        if no_think:  # same per-profile switch as the product client (models-*.env)
+            payload |= thinking_off()
         key = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
         cached = CACHE / f"{key}.json"
         if cached.exists():

@@ -43,7 +43,7 @@ _THINK = re.compile(r"<think>.*?</think>\s*", re.DOTALL)  # Qwen3 reasoning bloc
 # How each server turns Qwen3 thinking off. Probed 2026-11-15 on Ollama 0.40.16: `/no_think` text
 # and `think: false` on /v1 are ignored (148 tokens); `reasoning_effort: "none"` gives 2 tokens.
 ThinkingSwitch = Literal["reasoning_effort", "chat_template_kwargs"]
-_THINKING_OFF: dict[str, dict[str, Any]] = {
+THINKING_OFF: dict[str, dict[str, Any]] = {
     "reasoning_effort": {"reasoning_effort": "none"},  # Ollama OpenAI-compatible route
     "chat_template_kwargs": {"chat_template_kwargs": {"enable_thinking": False}},  # vLLM
 }
@@ -80,7 +80,7 @@ class OpenAICompatLLM:
         self._limiter = limiter
         self._cache, self._guided, self._sleep = cache, guided_json, sleep
         self._max_tokens = max_tokens
-        self._thinking_off = _THINKING_OFF[thinking_switch] if disable_thinking else None
+        self._thinking_off = THINKING_OFF[thinking_switch] if disable_thinking else None
 
     @property
     def circuit_state(self) -> str:
