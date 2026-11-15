@@ -14,6 +14,7 @@
   "first_repayment_date": "2026-12-18",
   "guarantee": null,
   "insurance": null,
+  "issue_date": "2026-11-12",
   "kfs_doc_id": "KFS-OF-04-B-v1",
   "lender_id": "L09",
   "lender_name": "Indravati Bank (synthetic)",

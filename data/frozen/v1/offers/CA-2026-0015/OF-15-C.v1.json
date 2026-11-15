@@ -27,6 +27,7 @@
     "scheme": "CGTMSE"
   },
   "insurance": null,
+  "issue_date": "2026-11-12",
   "kfs_doc_id": "KFS-OF-15-C-v1",
   "lender_id": "L08",
   "lender_name": "Hooghly Finance Ltd (synthetic)",

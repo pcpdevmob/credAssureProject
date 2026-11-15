@@ -16,7 +16,7 @@ import json
 import os
 import sqlite3
 import sys
-from collections.abc import Callable, Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from datetime import UTC, date, datetime
 from pathlib import Path
@@ -30,6 +30,7 @@ from .gold.data import REPO
 
 MODES = ("keyword", "dense", "hybrid")
 QUERIES = REPO / "evaluation" / "retrieval" / "v1" / "queries.jsonl"
+ISOLATION = REPO / "evaluation" / "retrieval" / "v1" / "isolation.jsonl"  # case-tied, not KR-05
 TARGET = 34
 
 
@@ -100,21 +101,25 @@ class Row:
     doc_hits5: set[str] = field(default_factory=set)
 
 
-def evaluate(
+Config = tuple[str, str, bool]  # (chunking, retriever, rerank)
+Hits = dict[Config, dict[str, list[Passage]]]
+
+
+def run_searches(
     searcher: Searcher,
     queries: list[dict[str, Any]],
-    docs: Mapping[str, Mapping[str, Any]],
     *,
     rerank_options: Iterable[bool] = (False,),
     progress: Callable[[str], None] | None = None,
-) -> tuple[list[Row], list[str]]:
-    rows, violations = [], []
+) -> Hits:
+    """One search pass (top 10) per configuration and query; scoring, isolation and the judging pool
+    all read it, so they see exactly the same results."""
+    hits: Hits = {}
     for strategy in STRATEGIES:
         for mode in MODES:
             for rerank in rerank_options:
-                row = Row(strategy, mode, rerank)
-                for q in queries:
-                    hits = searcher.search_knowledge(
+                hits[(strategy, mode, rerank)] = {
+                    q["id"]: searcher.search_knowledge(
                         q["query"],
                         case_id=q["filters"].get("case_id"),
                         tenant_id=q["filters"].get("tenant_id"),
@@ -124,19 +129,55 @@ def evaluate(
                         k=10,
                         rerank=rerank,
                     )
-                    if any(is_relevant(p, q, section=True) for p in hits[:5]):
-                        row.hits5.add(q["id"])
-                    if any(is_relevant(p, q, section=True) for p in hits):
-                        row.hits10.add(q["id"])
-                    if any(is_relevant(p, q, section=False) for p in hits[:5]):
-                        row.doc_hits5.add(q["id"])
-                    for p in hits:
-                        if why := kr04_violation(docs[p.doc_id], q, docs):
-                            violations.append(f"{q['id']} {strategy}/{mode}: {p.doc_id} ({why})")
-                rows.append(row)
+                    for q in queries
+                }
                 if progress:
-                    progress(f"{strategy}/{mode}/rerank={rerank}: {len(row.hits5)}/{len(queries)}")
+                    progress(f"{strategy}/{mode}/rerank={rerank}: searched")
+    return hits
+
+
+def score(
+    hits: Hits, queries: list[dict[str, Any]], docs: Mapping[str, Mapping[str, Any]]
+) -> tuple[list[Row], list[str]]:
+    rows, violations = [], []
+    for (strategy, mode, rerank), by_q in hits.items():
+        row = Row(strategy, mode, rerank)
+        for q in queries:
+            found = by_q[q["id"]]
+            if any(is_relevant(p, q, section=True) for p in found[:5]):
+                row.hits5.add(q["id"])
+            if any(is_relevant(p, q, section=True) for p in found):
+                row.hits10.add(q["id"])
+            if any(is_relevant(p, q, section=False) for p in found[:5]):
+                row.doc_hits5.add(q["id"])
+            for p in found:
+                if why := kr04_violation(docs[p.doc_id], q, docs):
+                    violations.append(f"{q['id']} {strategy}/{mode}: {p.doc_id} ({why})")
+        rows.append(row)
     return rows, violations
+
+
+def isolation(
+    hits: Hits, checks: list[dict[str, Any]], docs: Mapping[str, Mapping[str, Any]]
+) -> list[str]:
+    """SUP-08 / BR-14 live: in every configuration a case-tied query returns its own case's KFS in
+    the top 10 and no passage that fails KR-04 for it (another case's KFS above all)."""
+    fails = []
+    for (strategy, mode, rerank), by_q in hits.items():
+        cfg = f"{strategy}/{mode}/rerank={'on' if rerank else 'off'}"
+        for c in checks:
+            f, found = c["filters"], by_q[c["id"]]
+            own = (f["case_id"], f.get("tenant_id"))
+            if not any(
+                (docs[p.doc_id]["case_id"], docs[p.doc_id]["tenant_id"]) == own for p in found
+            ):
+                fails.append(f"{c['id']} {cfg}: no {f['case_id']} KFS in the top 10")
+            fails += [
+                f"{c['id']} {cfg}: {p.doc_id} ({why})"
+                for p in found
+                if (why := kr04_violation(docs[p.doc_id], c, docs))
+            ]
+    return fails
 
 
 def documents(corpus_db: Path) -> dict[str, dict[str, Any]]:
@@ -164,11 +205,17 @@ def report(
     awaiting: list[str],
     meta: Mapping[str, Any],
     rerank_note: str,
+    checks: Sequence[Mapping[str, Any]] = (),
+    isolation_fails: Sequence[str] = (),
 ) -> str:
     n = len(queries)
     answerable = {q["id"] for q in queries if set(q["relevant_doc_ids"]) & docs.keys()}
     real = sum(1 for d in docs.values() if d["legal_basis"] != "L5")
     best = max(rows, key=lambda r: (len(r.hits5), len(r.hits10)))
+    kfs = [d for d in docs.values() if d["case_id"]]
+    kfs_in_force = sum(
+        1 for d in kfs if d["effective_from"] and d["effective_from"] <= meta["as_of"]
+    )
     lines = [
         f"# Retrieval evaluation — {meta['date']}",
         "",
@@ -210,8 +257,28 @@ def report(
         + ", ".join(f"{k} {v}" for k, v in sorted(distractors(docs, meta["as_of"]).items()))
         + ".",
         "",
+        f"Case-scoped KFS in force on {meta['as_of']} (else the date filter hides them before the"
+        f" case filter is reached): {kfs_in_force}/{len(kfs)}.",
+        "",
         f"Passages checked: every top-10 result of every configuration. Violations: **{len(violations)}**.",
         *(f"- {v}" for v in violations[:50]),
+        "",
+        "## Live case isolation (SUP-08, BR-14)",
+        "",
+        "Case-tied checks, separate from the 40 KR-05 queries. Each must return its own case's KFS in"
+        f" the top 10 and nothing that fails KR-04 (another case's KFS above all), in all {len(rows)}"
+        " configurations.",
+        "",
+        "| Check | Case | Query | Result |",
+        "|---|---|---|---|",
+        *(
+            f"| {c['id']} | {c['filters']['case_id']} | {c['query']} | "
+            f"{'FAIL' if any(x.startswith(c['id'] + ' ') for x in isolation_fails) else 'PASS'} |"
+            for c in checks
+        ),
+        "",
+        f"Failures: **{len(isolation_fails)}**." if checks else "Not run (no isolation checks).",
+        *(f"- {x}" for x in isolation_fails[:50]),
         "",
         "## Items awaiting corpus documents",
         "",
@@ -222,14 +289,13 @@ def report(
     return "\n".join(lines)
 
 
-def main(env: Mapping[str, str] = os.environ) -> int:
-    from credassure.retrieval.cli import embed_target, embedder, endpoint, paths
+def open_searcher(env: Mapping[str, str]) -> tuple[Searcher, Path, bool, str]:
+    """The live index with the pinned cross-encoder when the `rerank` extra is installed (ADR 0013)."""
+    from credassure.retrieval.cli import embedder, paths
     from credassure.retrieval.index import open_chroma
-    from credassure.retrieval.search import RERANKER_REVISION, make_reranker
+    from credassure.retrieval.search import make_reranker
 
     corpus_db, _, chroma_path = paths(env)
-    queries = load_queries()
-    docs = documents(corpus_db)
     reranker, note = None, "Rerank on: not run."
     try:
         reranker = make_reranker(
@@ -241,13 +307,25 @@ def main(env: Mapping[str, str] = os.environ) -> int:
     except ImportError:
         note = "Rerank on: not run — install the `rerank` extra (ADR 0013)."
     searcher = Searcher(corpus_db, open_chroma(chroma_path), embedder(env), reranker=reranker)
-    rows, violations = evaluate(
+    return searcher, corpus_db, reranker is not None, note
+
+
+def main(env: Mapping[str, str] = os.environ) -> int:
+    from credassure.retrieval.cli import embed_target, endpoint
+    from credassure.retrieval.search import RERANKER_REVISION
+
+    searcher, corpus_db, reranker, note = open_searcher(env)
+    queries = load_queries()
+    checks = load_queries(ISOLATION)
+    docs = documents(corpus_db)
+    hits = run_searches(
         searcher,
-        queries,
-        docs,
+        queries + checks,
         rerank_options=(False, True) if reranker else (False,),
         progress=lambda line: print(line, file=sys.stderr, flush=True),
     )
+    rows, violations = score(hits, queries, docs)
+    isolation_fails = isolation(hits, checks, docs)
     refs = check()
     awaiting = [a for a in refs.awaiting if a.split(":")[0].startswith("Q")]
     today = datetime.now(UTC).date().isoformat()
@@ -266,9 +344,10 @@ def main(env: Mapping[str, str] = os.environ) -> int:
         "corpus db": str(corpus_db),
     }
     out = REPO / "evaluation" / "reports" / f"retrieval-{today}.md"
-    out.write_text(report(rows, violations, queries, docs, awaiting, meta, note), encoding="utf-8")
+    text = report(rows, violations, queries, docs, awaiting, meta, note, checks, isolation_fails)
+    out.write_text(text, encoding="utf-8")
     print(f"retrieval-eval: wrote {out.relative_to(REPO)}")
-    return 1 if violations else 0
+    return 1 if violations or isolation_fails else 0
 
 
 if __name__ == "__main__":

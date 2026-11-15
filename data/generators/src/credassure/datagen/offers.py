@@ -34,6 +34,7 @@ from credassure.core.money import MONEY
 from credassure.core.schemas.offer import Offer
 
 from .common import (
+    AS_OF_DATE,
     LAKH,
     OUT,
     REFERENCE,
@@ -203,6 +204,11 @@ def _offer(
         "moratorium_months": moratorium,
         "repayment": {"frequency": "monthly", "method": method},
         "stated_instalment": stated_instalment(principal, rate, tenure, moratorium, method),
+        # Own rng stream, so adding the date shifts no other draw (gold stays byte-identical).
+        "issue_date": case["po_date"]
+        + timedelta(
+            days=rng(f"issue:{no:02d}-{slot}").randint(0, (AS_OF_DATE - case["po_date"]).days)
+        ),
         "disbursal_date": disbursal,
         "first_repayment_date": add_months(disbursal, moratorium + 1),
         "fees": fees,
@@ -255,6 +261,7 @@ def _revision(offer: dict[str, Any]) -> tuple[dict[str, Any] | None, str]:
     v2 = {
         **offer,
         "version": 2,
+        "issue_date": AS_OF_DATE,
         "kfs_doc_id": offer["kfs_doc_id"][:-3] + "-v2",
         "fees": [
             {**f, "value": f["value"] * share} if f["name"] == "Processing fee" else f

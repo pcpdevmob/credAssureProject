@@ -395,6 +395,7 @@ def generate_case(spec: Spec) -> dict[str, Any]:
         else "GO",
         "design_peak_shortfall": peak,
         "design_peak_week": spec.peak_week,
+        "po_date": order["po_date"],
         "order_value": order["order_value"],
         "enterprise_class": spec.enterprise_class,
         "plants": list(spec.plants),

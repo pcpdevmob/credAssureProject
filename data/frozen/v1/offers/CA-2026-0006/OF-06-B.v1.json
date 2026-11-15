@@ -27,6 +27,7 @@
     "scheme": "CGTMSE"
   },
   "insurance": null,
+  "issue_date": "2026-11-12",
   "kfs_doc_id": "KFS-OF-06-B-v1",
   "lender_id": "L01",
   "lender_name": "Aravali Commercial Bank (synthetic)",

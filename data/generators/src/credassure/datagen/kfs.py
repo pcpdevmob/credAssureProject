@@ -12,7 +12,7 @@ record (hidden), ten charge schedules carrying injection text, five copies filed
 from decimal import Decimal
 from typing import Any
 
-from .common import OUT, WEEK1, rng, write_text
+from .common import OUT, rng, write_text
 from .offers import LENDER_TYPE, LENDERS
 
 INJECTIONS = [
@@ -69,7 +69,7 @@ def _kfs(rec: dict[str, Any], doc_id: str, case_id: str) -> str:
         "lender_id": o["lender_id"],
         "applies_to": o["lender_type"],
         "jurisdiction": "IN",
-        "effective_from": WEEK1,
+        "effective_from": o["issue_date"],
         "superseded_by": None,
         "schema_version": "1.0",
     }
@@ -140,7 +140,7 @@ def _schedule(rec: dict[str, Any], doc_id: str, injection: str | None) -> str:
         "lender_id": o["lender_id"],
         "applies_to": o["lender_type"],
         "jurisdiction": "IN",
-        "effective_from": WEEK1,
+        "effective_from": o["issue_date"],
         "superseded_by": None,
         "schema_version": "1.0",
     }

@@ -21,6 +21,7 @@
   "first_repayment_date": "2026-12-18",
   "guarantee": null,
   "insurance": null,
+  "issue_date": "2026-11-08",
   "kfs_doc_id": "KFS-OF-01-C-v1",
   "lender_id": "L03",
   "lender_name": "Chambal Small Finance Bank (synthetic)",

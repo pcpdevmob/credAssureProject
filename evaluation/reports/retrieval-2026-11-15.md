@@ -25,9 +25,9 @@ Rerank on: local cross-encoder over the top 30 (mentor-approved 2026-11-14, ADR 
 |---|---|---|---|---|---|---|
 | fixed512 | keyword | off | 23/40 | 26/40 | 26/40 | 23/40 |
 | fixed512 | keyword | on | 22/40 | 28/40 | 24/40 | 22/40 |
-| fixed512 | dense | off | 17/40 | 25/40 | 19/40 | 17/40 |
+| fixed512 | dense | off | 18/40 | 25/40 | 20/40 | 18/40 |
 | fixed512 | dense | on | 22/40 | 30/40 | 27/40 | 22/40 |
-| fixed512 | hybrid | off | 23/40 | 29/40 | 28/40 | 23/40 |
+| fixed512 | hybrid | off | 24/40 | 30/40 | 29/40 | 24/40 |
 | fixed512 | hybrid | on | 23/40 | 29/40 | 26/40 | 23/40 |
 | section | keyword | off | 21/40 | 30/40 | 23/40 | 21/40 |
 | section | keyword | on | 24/40 | 27/40 | 24/40 | 24/40 |
@@ -46,9 +46,24 @@ Missed by the best configuration: Q02, Q03, Q04, Q05, Q06, Q08, Q10, Q11, Q12, Q
 
 ## KR-04: nothing superseded, out of state, for another lender type or another case
 
-Indexed documents each filter must keep out: case_scoped_kfs 111, not_yet_in_force 111, other_lender_type 303, other_state 2, superseded 208.
+Indexed documents each filter must keep out: case_scoped_kfs 111, other_lender_type 354, other_state 2, superseded 208.
+
+Case-scoped KFS in force on 2026-11-15 (else the date filter hides them before the case filter is reached): 111/111.
 
 Passages checked: every top-10 result of every configuration. Violations: **0**.
+
+## Live case isolation (SUP-08, BR-14)
+
+Case-tied checks, separate from the 40 KR-05 queries. Each must return its own case's KFS in the top 10 and nothing that fails KR-04 (another case's KFS above all), in all 18 configurations.
+
+| Check | Case | Query | Result |
+|---|---|---|---|
+| ISO1 | CA-2026-0001 | Key Facts Statement interest rate, instalments and moratorium for my working-capital term loan offer | PASS |
+| ISO2 | CA-2026-0009 | schedule of charges: processing fee and documentation charges plus GST on the loan offer | PASS |
+| ISO3 | CA-2026-0013 | prepayment charges and grievance redressal nodal officer for the lender's loan offer | FAIL |
+
+Failures: **1**.
+- ISO3 semantic/dense/rerank=off: no CA-2026-0013 KFS in the top 10
 
 ## Items awaiting corpus documents
 

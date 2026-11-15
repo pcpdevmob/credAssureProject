@@ -24,7 +24,7 @@ from credassure.core.schemas.case_files import (
     ReceivableRow,
 )
 from credassure.core.schemas.offer import Offer
-from credassure.datagen.common import WEEK1
+from credassure.datagen.common import AS_OF_DATE, WEEK1
 
 DATA = Path(__file__).resolve().parents[2] / "frozen" / "v1"
 PLANTS = json.loads((DATA / "plants.json").read_text(encoding="utf-8"))
@@ -106,6 +106,18 @@ def test_KFS_and_policy_volumes() -> None:
     assert 60 <= len(list((DATA / "policies").glob("*.md"))) <= 90
     assert COUNTS[("S06 KFS", "injection_text")] == 10
     assert sum(n for (d, p), n in COUNTS.items() if p.startswith("cross_case_from_")) == 5
+
+
+def test_KR04_case_scoped_KFS_in_force_on_as_of() -> None:
+    """E8 S1: a KFS dated after AS_OF_DATE is filtered out before the case filter is reached."""
+    dates = {
+        f.name: re.search(r"^effective_from: (\S+)$", f.read_text(encoding="utf-8"), re.M)
+        for f in (DATA / "kfs").glob("*.md")
+        if not f.name.startswith("KFS-PROD-")
+    }
+    assert len(dates) == 111
+    late = [n for n, m in dates.items() if not m or date.fromisoformat(m[1]) > AS_OF_DATE]
+    assert not late, late
 
 
 def _amount(text: str) -> int:
@@ -292,3 +304,15 @@ def test_ADR0019_home_state_and_lender_type_are_set() -> None:
     for path in sorted((DATA / "offers").glob("*/*.json")):
         raw = json.loads(path.read_text(encoding="utf-8"))
         assert raw["lender_type"] in {"commercial_bank", "nbfc", "sfb", "coop_bank"}
+
+
+def test_offer_issue_date_between_po_date_and_as_of() -> None:
+    """v1 offers are issued after the PO and by AS_OF; a v2 revision is issued on AS_OF."""
+    for path in (DATA / "offers").glob("*/*.json"):
+        offer = json.loads(path.read_text(encoding="utf-8"))
+        po = json.loads((DATA / "cases" / path.parent.name / "order.json").read_text())["po_date"]
+        issued = date.fromisoformat(offer["issue_date"])
+        if offer["version"] == 2:
+            assert issued == AS_OF_DATE, path.name
+        else:
+            assert date.fromisoformat(po) <= issued <= AS_OF_DATE, path.name

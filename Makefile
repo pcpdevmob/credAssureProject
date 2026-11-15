@@ -9,7 +9,7 @@ PNPM := $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo "npx --yes 
 
 .PHONY: testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
-        langfuse-up langfuse-down ollama-pull backup restore eval-fast llm-probe retrieval-eval
+        langfuse-up langfuse-down ollama-pull backup restore eval-fast llm-probe retrieval-eval retrieval-pool
 
 help:  ## List targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -138,6 +138,9 @@ ingest:  ## Index data/corpus + synthetic KFS/policies: corpus.db, FTS5, Chroma 
 
 retrieval-eval:  ## KR-05 recall@5/@10 for 3 retrievers x 3 chunkings x rerank -> evaluation/reports/retrieval-<date>.md
 	uv run $(ENV_FILE) python -m credassure.evaluation.retrieval_eval
+
+retrieval-pool:  ## Blind pooled top-10 of all 18 configs -> evaluation/retrieval/v1/judging/ (E8 M1)
+	uv run $(ENV_FILE) python -m credassure.evaluation.retrieval_judging pool
 
 eval:  ## Run the 100-item test set through the API (Phase 11)
 	@echo "eval: not implemented until Phase 11"; exit 1

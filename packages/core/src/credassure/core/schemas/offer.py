@@ -51,6 +51,7 @@ class Offer(BaseModel):
     moratorium_months: int = 0
     repayment: Repayment
     stated_instalment: Decimal | None = None
+    issue_date: date | None = None  # offer/KFS issue date, on or before AS_OF_DATE
     disbursal_date: date
     first_repayment_date: date
     fees: list[OfferFee] = Field(default_factory=list)

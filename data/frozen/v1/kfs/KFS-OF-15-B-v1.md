@@ -7,7 +7,7 @@ offer_version: 1
 lender_id: L05
 applies_to: nbfc
 jurisdiction: IN
-effective_from: 2026-11-16
+effective_from: 2026-11-11
 superseded_by: null
 schema_version: 1.0
 ---

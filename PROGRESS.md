@@ -3,8 +3,8 @@
 ## Current phase
 Phase 7 is done and re-measured on the closed corpus (2026-11-15): 1,283 documents indexed (1,092 real); KR-05 stays OPEN (26/40 vs 34, all 40 queries answerable now); KR-04 0 violations. Earlier: Phase 4 (2026-11-05), Phase 3 follow-ups and Phase 5 (2026-11-06), Phases 8a, 8b and 6 (2026-11-07). **Next is Phase 9 (agents); 9e (copilot) needs the KFS date decision below first.** `openapi.json` and `packages/api-client` are current, so the UI lane can start U1. Still open:
 - **ADR 0018 freeze (human):** ADR 0018 (AgentResult, including `agent_version` and `tenant_id`) is Proposed and not frozen. Accept it before G1.
-- **KFS dates vs AS_OF_DATE (owner):** all 111 case-scoped KFS have `effective_from: 2026-11-16`, after `AS_OF_DATE` 2026-11-15, so KR-04 keeps every KFS out of search. Either date them on or before AS_OF in a v2 data set, or exempt case-scoped documents from the date filter by ADR. Never edit `data/frozen/v1`.
-- **Retrieval labels (non-copilot owner):** judge pooled top-10 results and widen `relevant_doc_ids` (E8 SHOULD 1), then sign off the `SECTIONS` labels in `build_assets.py`.
+- ~~KFS dates vs AS_OF_DATE~~ **closed by P2b (2026-11-15):** offers carry `issue_date` (po_date..AS_OF, own rng stream; v2 = AS_OF) and every case-scoped KFS uses it as `effective_from`; 111/111 in force; case isolation now tested live (E8 addendum).
+- **Retrieval labels (humans, P2b step 4 waits on this):** fill `evaluation/retrieval/v1/judging/judging_sheet.csv` per `criteria.md`: Judge A @credassure-owner-name2, Judge B @credassure-owner-name5, adjudicator @credassure-owner-name3. Then step 4: merge → `queries.v1.1.jsonl` (v1.0 kept), diff + kappa, re-run `make retrieval-eval` under both label sets; add v1.1 to `freeze.py` assets before `/freeze-g1`.
 
 ## Gates
 - [ ] G1 (end Week 1): test set + 40 retrieval queries frozen; synthetic data v1; baseline S1–S3; AgentResult frozen; endpoint limits confirmed
@@ -425,6 +425,14 @@ owner      assigned imported pending
 - Reranker none unless mentor approves · Judge J1 calibrated, kappa ≥ 0.7 else human scoring · Live demo with replay + video fallback · Boundary rule hold
 - Langfuse self-hosted in Compose (ADR 0016, approved by owner 2026-11-05)
 - Local dev and demo model: Ollama `llama3.1:8b` plus `nomic-embed-text`, context 8192 (ADR 0017). Graded eval stays on the course endpoint.
+
+## Retrieval v2 query backlog (P2b, after G1; never edit v1 after freeze)
+- One NBFC-perspective query (`lender_type=nbfc`), so the `applies_to` filter is tested both ways (E8 S2).
+- Case-tied queries inside the KR-05 set (`case_id` + `tenant_id`), not only the 3 isolation checks in `isolation.jsonl`.
+- More other-state distractors: only 2 are indexed (R-STATE-003 IN-UP, R-STATE-006 IN-KA).
+- **Copilot (9e) decision, found by P2b ISO3:** case-scoped KFS are also filtered by `applies_to`, so a case's own NBFC/co-op/SFB offer KFS are invisible from a `commercial_bank` query (CA-2026-0013 has only NBFC/co-op lenders). Decide in 9e: exempt case-scoped KFS from `applies_to`, or search per offer with that lender's type. ISO3 runs as `lender_type=nbfc` until then.
+- **9e/LendWise:** v1 and v2 KFS of a revised offer are both in force (`superseded_by: null` on v1, as before P2b). Either set `superseded_by` on v1 when v2 exists (v2 data) or have the copilot pick the latest version. ISO3 (`lender_type=nbfc`) proves no leak and some own KFS visible, not that every own KFS is reachable.
+- Known side effect of P2b: v2 revision KFS are in force (AS_OF) before the negotiation round runs. LW-13/BR-09 gate concessions by offer version in code, not by retrieval; revisit if the copilot quotes a v2 fee early.
 
 ## Decisions pending (human)
 - Accept ADR 0018 before G1 to freeze AgentResult, including `agent_version` (scope #25). The field is on the model. The stage-retry route stays in Phase 9

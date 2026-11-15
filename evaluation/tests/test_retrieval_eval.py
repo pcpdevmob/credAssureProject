@@ -8,6 +8,7 @@ import pytest
 from credassure.evaluation.retrieval_eval import (
     Row,
     is_relevant,
+    isolation,
     kr04_violation,
     report,
     section_match,
@@ -106,3 +107,20 @@ def test_SUP08_kfs_needs_the_same_tenant_and_case() -> None:
     other = Q | {"filters": Q["filters"] | {"case_id": "CA-2026-0001", "tenant_id": "default"}}
     assert kr04_violation(kfs, mine) is None
     assert kr04_violation(kfs, other) == "other_case"
+
+
+def test_SUP08_live_isolation_needs_own_kfs_and_no_other_case() -> None:
+    mine = DOC | {"doc_id": "K1", "case_id": "CA-1", "tenant_id": "demo"}
+    theirs = DOC | {"doc_id": "K2", "case_id": "CA-2", "tenant_id": "demo"}
+    docs = {"D": DOC, "K1": mine, "K2": theirs}
+    check = Q | {"id": "ISO1", "filters": Q["filters"] | {"case_id": "CA-1", "tenant_id": "demo"}}
+    hits = {
+        ("section", "hybrid", False): {"ISO1": [_p("D", None), _p("K1", None)]},  # pass
+        ("section", "dense", False): {"ISO1": [_p("D", None)]},  # own KFS missing
+        ("section", "keyword", True): {"ISO1": [_p("K1", None), _p("K2", None)]},  # leak
+    }
+    fails = isolation(hits, [check], docs)
+    assert fails == [
+        "ISO1 section/dense/rerank=off: no CA-1 KFS in the top 10",
+        "ISO1 section/keyword/rerank=on: K2 (other_case)",
+    ]

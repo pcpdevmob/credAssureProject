@@ -10,7 +10,8 @@
     "plants": [
       "director_route",
       "demo_case"
-    ]
+    ],
+    "po_date": "2026-11-04"
   },
   {
     "case_id": "CA-2026-0002",
@@ -22,7 +23,8 @@
     "order_value": 25600000,
     "plants": [
       "director_route"
-    ]
+    ],
+    "po_date": "2026-11-13"
   },
   {
     "case_id": "CA-2026-0003",
@@ -35,7 +37,8 @@
     "plants": [
       "director_route",
       "mse_payable_over_45d"
-    ]
+    ],
+    "po_date": "2026-11-12"
   },
   {
     "case_id": "CA-2026-0004",
@@ -48,7 +51,8 @@
     "plants": [
       "director_route",
       "mitigation"
-    ]
+    ],
+    "po_date": "2026-11-12"
   },
   {
     "case_id": "CA-2026-0005",
@@ -60,7 +64,8 @@
     "order_value": 40900000,
     "plants": [
       "director_route"
-    ]
+    ],
+    "po_date": "2026-11-13"
   },
   {
     "case_id": "CA-2026-0006",
@@ -72,7 +77,8 @@
     "order_value": 45500000,
     "plants": [
       "vp_route"
-    ]
+    ],
+    "po_date": "2026-11-11"
   },
   {
     "case_id": "CA-2026-0007",
@@ -85,7 +91,8 @@
     "plants": [
       "vp_route",
       "mitigation"
-    ]
+    ],
+    "po_date": "2026-11-10"
   },
   {
     "case_id": "CA-2026-0008",
@@ -98,7 +105,8 @@
     "plants": [
       "vp_route",
       "medium_enterprise"
-    ]
+    ],
+    "po_date": "2026-11-06"
   },
   {
     "case_id": "CA-2026-0009",
@@ -110,7 +118,8 @@
     "order_value": 63800000,
     "plants": [
       "vp_route"
-    ]
+    ],
+    "po_date": "2026-11-11"
   },
   {
     "case_id": "CA-2026-0010",
@@ -122,7 +131,8 @@
     "order_value": 39000000,
     "plants": [
       "boundary_exactly_1_5_cr"
-    ]
+    ],
+    "po_date": "2026-11-10"
   },
   {
     "case_id": "CA-2026-0011",
@@ -134,7 +144,8 @@
     "order_value": 14100000,
     "plants": [
       "need_far_below_2_cr"
-    ]
+    ],
+    "po_date": "2026-11-06"
   },
   {
     "case_id": "CA-2026-0012",
@@ -147,7 +158,8 @@
     "plants": [
       "need_far_below_2_cr",
       "mitigation"
-    ]
+    ],
+    "po_date": "2026-11-06"
   },
   {
     "case_id": "CA-2026-0013",
@@ -159,7 +171,8 @@
     "order_value": 28400000,
     "plants": [
       "missing_min_cash_buffer"
-    ]
+    ],
+    "po_date": "2026-11-05"
   },
   {
     "case_id": "CA-2026-0014",
@@ -172,7 +185,8 @@
     "plants": [
       "conflict_receipts_vs_order",
       "duplicate_invoice_id"
-    ]
+    ],
+    "po_date": "2026-11-08"
   },
   {
     "case_id": "CA-2026-0015",
@@ -184,6 +198,7 @@
     "order_value": 8000000,
     "plants": [
       "need_zero"
-    ]
+    ],
+    "po_date": "2026-11-04"
   }
 ]
