@@ -2,14 +2,18 @@
 
 Reads its configuration from the environment like `make llm-probe` (packages never import the
 gateway's Settings): EMBED_BASE_URL, EMBED_MODEL, EMBED_API_KEY (else LLM_API_KEY for the same
-host), CORPUS_DB, CASE_DB (audit), CHROMA_PATH, EMBED_CACHE_PATH, EMBED_RATE_PER_MINUTE, TENANT_ID.
+host), EMBED_CA_CERT (CA file for a self-signed endpoint), EMBED_BATCH (default 16, the course
+limit), CORPUS_DB, CASE_DB (audit), CHROMA_PATH, EMBED_CACHE_PATH, EMBED_RATE_PER_MINUTE, TENANT_ID.
 """
 
 import os
+import ssl
 import sys
 from collections.abc import Mapping
 from pathlib import Path
 from urllib.parse import urlparse
+
+import httpx2
 
 from credassure.ledger import migrate
 from credassure.ledger.session import case_engine
@@ -42,10 +46,13 @@ def api_key(env: Mapping[str, str], url: str) -> str | None:
 
 def embedder(env: Mapping[str, str]) -> OpenAIEmbedder:
     url, model = embed_target(env)
+    ca = env.get("EMBED_CA_CERT")
     return OpenAIEmbedder(
         url,
         api_key(env, url),
         model,
+        batch=int(env.get("EMBED_BATCH", "16")),  # course endpoint: at most 16 texts per request
+        http_client=httpx2.Client(verify=ssl.create_default_context(cafile=ca)) if ca else None,
         limiter=RateLimiter(float(env.get("EMBED_RATE_PER_MINUTE", "600"))),
         cache=ResponseCache(env.get("EMBED_CACHE_PATH", "var/embed_cache.db")),
     )

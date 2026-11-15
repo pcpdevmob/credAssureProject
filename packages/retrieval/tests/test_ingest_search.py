@@ -438,3 +438,12 @@ def test_BR15_injection_in_stripped_boilerplate_is_still_audited(
     )
     assert {p["doc_id"] for _, e, p in audit.events if e == "INJECTION_FLAGGED"} == set(ids)
     assert all("role_switch" in p["raw_rules"] for _, _, p in audit.events)
+
+
+def test_NFR01_course_embedder_batches_16_and_trusts_its_ca(tmp_path: Path) -> None:
+    from credassure.retrieval.cli import embedder
+
+    env = {"EMBED_CACHE_PATH": str(tmp_path / "c.db")}
+    assert embedder(env)._batch == 16  # course limit: at most 16 texts per request
+    with pytest.raises(FileNotFoundError):  # the CA path is really used for TLS verification
+        embedder(env | {"EMBED_CA_CERT": str(tmp_path / "missing.crt")})

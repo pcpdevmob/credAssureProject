@@ -13,6 +13,7 @@ NFR-01 says the product runs only on the course's ≤8B chat and embeddings endp
 - `LLM_API_KEY=ollama`. Ollama ignores the key; the OpenAI SDK refuses an empty one.
 - `LLM_SUPPORTS_GUIDED_JSON` stays `false` until Phase 6 probes Ollama's JSON mode.
 - Graded evaluation uses the course endpoint. Set `LLM_BASE_URL`, `LLM_MODEL`, `EMBED_BASE_URL` and `EMBED_MODEL` to the course values. No code change.
+- Amendment 2026-11-15: the course embeddings endpoint serves `bge-small-en-v1.5` (384 dimensions, at most 16 texts per request, 512 model tokens each) behind a self-signed CA. Set `EMBED_CA_CERT` to the CA file, keep `EMBED_BATCH=16` and index into a fresh `CHROMA_PATH`; KR-05 is reported on this embedder.
 
 ## Consequences
 - `make ollama-pull` downloads both models (about 5 GB). It is not part of `make check` or CI.

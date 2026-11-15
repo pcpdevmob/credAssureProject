@@ -8,6 +8,7 @@ dependencies = [
     "credassure-ledger",
     "credassure-llm",
     "credassure-security",
+    "httpx2>=2",  # CA-pinned client for the course embeddings endpoint
     "pyyaml>=6",
 ]
 

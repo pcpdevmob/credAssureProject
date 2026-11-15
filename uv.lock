@@ -874,6 +874,7 @@ dependencies = [
     { name = "credassure-ledger" },
     { name = "credassure-llm" },
     { name = "credassure-security" },
+    { name = "httpx2" },
     { name = "pyyaml" },
 ]
 
@@ -888,6 +889,7 @@ requires-dist = [
     { name = "credassure-ledger", editable = "packages/ledger" },
     { name = "credassure-llm", editable = "packages/llm" },
     { name = "credassure-security", editable = "packages/security" },
+    { name = "httpx2", specifier = ">=2" },
     { name = "pyyaml", specifier = ">=6" },
     { name = "sentence-transformers", marker = "extra == 'rerank'", specifier = ">=3.3" },
 ]
