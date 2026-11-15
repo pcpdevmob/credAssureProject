@@ -1,7 +1,7 @@
 # CredAssure — Progress (Claude Code reads this first and updates it last)
 
 ## Current phase
-Phase 7 is done (2026-11-14); KR-05 stays OPEN (23/40 vs 34, ceiling 33 today, see Phase 7 notes). Earlier: Phase 4 (2026-11-05), Phase 3 follow-ups and Phase 5 (2026-11-06), Phases 8a, 8b and 6 (2026-11-07). **Next is Phase 9 (agents); 9e (copilot) needs the KFS date decision below first.** `openapi.json` and `packages/api-client` are current, so the UI lane can start U1. Still open:
+Phase 7 is done and re-measured on the closed corpus (2026-11-15): 1,283 documents indexed (1,092 real); KR-05 stays OPEN (26/40 vs 34, all 40 queries answerable now); KR-04 0 violations. Earlier: Phase 4 (2026-11-05), Phase 3 follow-ups and Phase 5 (2026-11-06), Phases 8a, 8b and 6 (2026-11-07). **Next is Phase 9 (agents); 9e (copilot) needs the KFS date decision below first.** `openapi.json` and `packages/api-client` are current, so the UI lane can start U1. Still open:
 - **ADR 0018 freeze (human):** ADR 0018 (AgentResult, including `agent_version` and `tenant_id`) is Proposed and not frozen. Accept it before G1.
 - **KFS dates vs AS_OF_DATE (owner):** all 111 case-scoped KFS have `effective_from: 2026-11-16`, after `AS_OF_DATE` 2026-11-15, so KR-04 keeps every KFS out of search. Either date them on or before AS_OF in a v2 data set, or exempt case-scoped documents from the date filter by ADR. Never edit `data/frozen/v1`.
 - **Retrieval labels (non-copilot owner):** judge pooled top-10 results and widen `relevant_doc_ids` (E8 SHOULD 1), then sign off the `SECTIONS` labels in `build_assets.py`.
@@ -29,7 +29,7 @@ Phase 7 is done (2026-11-14); KR-05 stays OPEN (23/40 vs 34, ceiling 33 today, s
 | 8a Supervisor + jobs + anchor | done | SUP-01..08, APR-01..03 wiring, OBJ-08; scope #1 (A4), #4, #19, #22, #46, #47 | phase-8a | Supervisor graph, placeholders, adapters, audit_head, heartbeat lock, jobs table, ADR 0007. 546 tests. Reviews and evals run with 8b |
 | 8b Gateway + async runs + e2e | done | API-01, UI-01..08 (API side), SUP-02 (placeholder), SUP-03/08, APR-04/05, NFR-03/04/07, OBJ-08/09; scope #4 #15 #16 #28 #46 #47 #50 | phase-8b | /v1 routers, RFC 9457, rate and login limits, uploads, 202 + job + SSE, agent routers on `start_run`, health/quota, Langfuse exporter, e2e LLM on/off, openapi + TS client. 670 tests. E9 READY, E10 routes READY, E11 NOT READY → 2 MUST fixed. Reports in `evaluation/reports/` |
 | 6 Model layer + safeguards | done | NFR-03/04/05/07, ONB-06 (primitive), BR-15, SUP-04/07; scope #22 (limiter), #23, #36, #48; ADR 0008 | phase-6 | Client (30 s, transient-only retries ×2 with jitter, breaker 5→open 60 s with one half-open probe, shared limiter, SQLite cache, guided JSON), structured output (repair ×2), prompt registry + bump check + eval-fast CI, Verhoeff PII redaction, spotlighting, injection scanner, 5 min stage timeout with cancellation and template fallback. 787 tests. security-reviewer: no MUST; brd-conformance: 1 MUST (flaky test) fixed. E4 (scoped): READY. |
-| 7 Retrieval | done (KR-05 OPEN) | KR-01..05, BR-14, BR-15, SUP-08, NFR-04/05/07; ADR 0013, 0019 | phase-7 | 697 documents indexed (506 real). 3 chunkers, FTS5 + Chroma, RRF k=60, pinned cross-encoder, ADR 0019 filters, (tenant, case) KFS scoping. Recall@5 best 23/40 (section/dense/rerank = section/hybrid/off). KR-04 0 violations over 3,600 passages. security-reviewer: 1 MUST fixed. E8 (retrieval): NOT READY on KR-05 only |
+| 7 Retrieval | done (KR-05 OPEN) | KR-01..05, BR-14, BR-15, SUP-08, NFR-04/05/07; ADR 0013, 0019 | phase-7 | Re-measured 2026-11-15 on the clean re-ingest: 1,283 documents (1,092 real), recall@5 best 26/40, hybrid over keyword +2, KR-04 0/7,200; E8-2026-11-15 NOT READY on KR-05 only. First run: 697 documents indexed (506 real). 3 chunkers, FTS5 + Chroma, RRF k=60, pinned cross-encoder, ADR 0019 filters, (tenant, case) KFS scoping. Recall@5 best 23/40 (section/dense/rerank = section/hybrid/off). KR-04 0 violations over 3,600 passages. security-reviewer: 1 MUST fixed. E8 (retrieval): NOT READY on KR-05 only |
 | UI U0–U6 | in progress | UI-01..09 | | finbridge Next.js imported as apps/web (ADR 0022): services map the gateway, typecheck + `next build` pass; live walk-through, bridge security review and U6 hardening still open |
 
 ## Corpus CLOSED (2026-11-14)
@@ -39,7 +39,7 @@ Phase 7 is done (2026-11-14); KR-05 stays OPEN (23/40 vs 34, ceiling 33 today, s
 - **Dated (23):** 3 MSME Pulse editions from the month (`human`, first of month); 18 evergreen web pages/guidelines with no date of their own dated at retrieval 2026-11-14 (`date_source: human` plus `date_note`; the tool allows `retrieved` for bank charges only). Review these at the next date sample: R-AA-01, R-CG-C-001, 038, 039, 041, 409, 410, 413-420, R-MSME-05, R-TREDS-001/002.
 - **Rejected:** R-CG-C-325 and R-CG-C-337 are Word files saved as .html (no text). Quarantined; their replacement slots were dropped and the source 4 target set to 161.
 - **Unavailable, accepted:** R-BANK-03 (404) and R-STATE-002 (host blocked).
-- **Index is stale:** Phase 7 indexed 697 documents (506 real). Run `make ingest` before re-measuring KR-05.
+- **Index is current (2026-11-15):** clean re-ingest, 1,283 documents (1,092 real + 191 synthetic). See Phase 7 re-measure.
 
 | # | Source | Available | Rejected |
 |---|---|---|---|
@@ -61,6 +61,28 @@ Phase 7 is done (2026-11-14); KR-05 stays OPEN (23/40 vs 34, ceiling 33 today, s
 | | **Total** | **1,092** | **245** |
 
 By owner (manual slots only; 5 assigned in total): [Name 2] 1, [Name 5] 1, [Name 6] 4 (1 unavailable), others 0. Nothing is waiting on an owner.
+
+## Phase 7 re-measure on the closed corpus (2026-11-15)
+- **Clean re-ingest:** `var/corpus.db` deleted and the three Chroma collections dropped through the Chroma API (a hook blocks recursive deletes). `var/embed_cache.db` and `var/case.db` were kept. `make ingest` indexed 1,283 documents (1,092 real + 191 synthetic: kfs 129, policy 62), with 0 unchanged and 0 removed.
+  - Chunks: fixed512 15,499, section 59,478, semantic 40,797. Chroma equals SQL per strategy, and FTS5 has 115,774 rows.
+  - Filter metadata has 0 NULLs, and all 208 `superseded_by` values resolve.
+  - 57 documents have injection-flagged chunks (34 before).
+- **`make retrieval-eval`:** `evaluation/reports/retrieval-2026-11-15.md`. Recall@5, out of 40, with rerank off/on:
+
+  | Chunking | Keyword | Dense | Hybrid |
+  |---|---|---|---|
+  | fixed512 | 23/22 | 17/22 | 23/23 |
+  | section | 21/24 | 17/26 | 25/25 |
+  | semantic | 23/24 | 25/25 | 25/26 |
+
+  - The best is 26/40 (section/dense/rerank and semantic/hybrid/rerank). The target is 34, so KR-05 stays **OPEN**. All 40 queries are answerable now; the ceiling of 33 is gone.
+  - Hybrid gain over keyword at recall@5: +2 for best against best. With rerank off, per chunking: fixed512 +0, section +4, semantic +2.
+  - KR-04: 0 violations. Queries and labels were not tuned.
+- **E8 (retrieval part):** `evaluation/reports/E8-2026-11-15.md`.
+  - The independent recompute matches all 36 recall values, with 0 KR-04 violations over 7,200 passages.
+  - NOT READY on KR-05 only.
+  - S1: the KFS dates make the case-isolation filter vacuous at live level; it is covered by unit tests only.
+  - S2: add NBFC-lender and case-scoped queries in v2.
 
 ## Phase 7 notes (2026-11-14)
 - **Built:**
