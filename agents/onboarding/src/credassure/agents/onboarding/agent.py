@@ -242,7 +242,7 @@ def make_recheck(
             if got != want:
                 failed.append(
                     Blocker(
-                        code=BlockerCode.SUP_SCHEMA_INVALID,
+                        code=BlockerCode.SUP_RECHECK_MISMATCH,
                         message=f"recheck: ledger {key}={got}, recomputed {want}",
                     )
                 )

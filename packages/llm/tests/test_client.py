@@ -370,3 +370,21 @@ def test_NFR02_defaults_send_neither_thinking_switch_nor_max_tokens() -> None:
     assert "chat_template_kwargs" not in script.bodies[0]
     assert "reasoning_effort" not in script.bodies[0]
     assert "max_tokens" not in script.bodies[0]
+
+
+def test_NFR02_prompt_output_cap_wins_over_the_global_cap() -> None:
+    script = Script(_ok("ok"))
+    llm, _ = make(script, max_tokens=1024)
+    llm.complete("x", name="onb_explain")  # max_tokens: 200 in its YAML
+    llm.complete("x", name="unregistered")
+    assert [b["max_tokens"] for b in script.bodies] == [200, 1024]
+
+
+def test_NFR03_every_call_logs_tokens_and_latency(caplog: pytest.LogCaptureFixture) -> None:
+    llm, _ = make(Script(_ok("ok", tokens=7)))
+    with caplog.at_level("INFO", logger="credassure.llm"):
+        llm.complete("x", name="onb_explain")
+    rec = next(r for r in caplog.records if r.getMessage() == "llm call")
+    assert rec.prompt == "onb_explain" and rec.total_tokens == 7  # type: ignore[attr-defined]
+    assert rec.completion_tokens == 6 and rec.latency_ms >= 0  # type: ignore[attr-defined]
+    assert rec.cached is False  # type: ignore[attr-defined]

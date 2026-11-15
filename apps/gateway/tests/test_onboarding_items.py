@@ -111,7 +111,7 @@ def test_SUP05_E9S2_wrong_ledger_value_is_overridden_and_audited(
     sup.agents = {**sup.agents, Stage.ONBOARDING: lying}
     result = run_item(client, login, "prep.e001")
     assert result["decision"] == "NO_GO"
-    assert "SUP_SCHEMA_INVALID" in {b["code"] for b in result["blockers"]}
+    assert "SUP_RECHECK_MISMATCH" in {b["code"] for b in result["blockers"]}
     with session.transaction(session.case_engine(client.db)) as s:
         events = [e.event_type for e in reads.audit_events(s, "default", result["case_id"])]
     assert "GATE_OVERRIDE" in events

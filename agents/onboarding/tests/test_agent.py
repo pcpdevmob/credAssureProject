@@ -141,7 +141,7 @@ def test_SUP05_recheck_passes_on_honest_facts_and_flags_a_tampered_ledger() -> N
     check = make_recheck(lambda _case: PROFILES["E001"], AS_OF)
     assert check(result, ledger) == []
     ledger.facts["onb.rule.FIN-101"] = "FAIL"
-    assert [b.code.value for b in check(result, ledger)] == ["SUP_SCHEMA_INVALID"]
+    assert [b.code.value for b in check(result, ledger)] == ["SUP_RECHECK_MISMATCH"]
 
 
 def test_SUP05_recheck_blocks_a_forced_go_for_an_expired_profile() -> None:
@@ -149,7 +149,7 @@ def test_SUP05_recheck_blocks_a_forced_go_for_an_expired_profile() -> None:
     forced = run(ctx("E001", ledger=ledger))  # GO facts, but HR now says E009
     failed = make_recheck(lambda _case: PROFILES["E009"], AS_OF)(forced, ledger)
     codes = {b.code.value for b in failed}
-    assert "ONB_TRAINING_EXPIRED" in codes and "SUP_SCHEMA_INVALID" in codes
+    assert "ONB_TRAINING_EXPIRED" in codes and "SUP_RECHECK_MISMATCH" in codes
 
 
 def test_ONB04_bare_word_role_does_not_count_as_naming_the_role_rule() -> None:

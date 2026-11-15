@@ -2,7 +2,8 @@
 
 Every model prompt is a YAML file `<name>.yaml` in a `prompts/` folder of a `credassure.*` package
 (agents keep theirs beside their code): `name`, semantic `version`, `template` ($slot syntax),
-optional `examples`. The file's sha256 and version go on every `llm` span, into
+optional `examples`, optional `max_tokens` (output cap for this prompt). The file's sha256
+and version go on every `llm` span, into
 `AgentResult.prompt_versions` and into the eval reproducibility record.
 
 CI (`eval-fast.yml`) runs `python -m credassure.core.prompts check --base <ref>`: any prompt file
@@ -33,6 +34,7 @@ class Prompt:
     template: str
     examples: tuple[str, ...]
     sha256: str
+    max_tokens: int | None = None  # per-prompt output cap; the client also applies LLM_MAX_TOKENS
 
     def render(self, **slots: Any) -> str:
         return Template(self.template).substitute(slots)
@@ -48,12 +50,16 @@ def _parse(text: str, stem: str) -> Prompt:
         raise ValueError(f"{stem}: version must be MAJOR.MINOR.PATCH")
     if not isinstance(data.get("template"), str):
         raise ValueError(f"{stem}: template is required")
+    cap = data.get("max_tokens")
+    if cap is not None and (not isinstance(cap, int) or isinstance(cap, bool) or cap <= 0):
+        raise ValueError(f"{stem}: max_tokens must be a positive integer")
     return Prompt(
         name=stem,
         version=str(data["version"]),
         template=data["template"],
         examples=tuple(str(e) for e in data.get("examples") or ()),
         sha256=hashlib.sha256(text.encode()).hexdigest(),
+        max_tokens=cap,
     )
 
 
@@ -79,6 +85,11 @@ def registry() -> dict[str, Prompt]:
 def prompt_version(name: str) -> str:
     p = registry().get(name)
     return p.version if p else "unversioned"
+
+
+def prompt_max_tokens(name: str) -> int | None:
+    p = registry().get(name)
+    return p.max_tokens if p else None
 
 
 def prompt_sha(name: str) -> str | None:

@@ -4,12 +4,15 @@ Every case route goes through the Supervisor service with the authenticated call
 caps, case policy and audit always apply. No route accepts, signs or submits a lender offer.
 """
 
+import json
+from decimal import Decimal
 from typing import Annotated, Any
 
 from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException
 
 from credassure.agents.working_capital import __version__
 from credassure.agents.working_capital.api.deps import get_principal, get_supervisor
+from credassure.core.money import format_inr, to_paise
 from credassure.core.ports import SupervisorPort
 
 router = APIRouter(tags=["working_capital"])
@@ -54,6 +57,22 @@ def result(case_id: str, who: Caller, supervisor: SupervisorDep) -> dict[str, An
 
 
 @router.get("/cases/{case_id}/cash-table")
-def cash_table(case_id: str, who: Caller) -> None:
-    """Arrives in Phase 9b."""
-    raise HTTPException(status_code=501, detail="arrives in Phase 9b")
+def cash_table(case_id: str, who: Caller, supervisor: SupervisorDep) -> dict[str, Any]:
+    """The weekly cash table behind the funding need (WC-03/04); 404 before a GO run.
+
+    Money is `{paise, display}` like every API amount (ADR 0004)."""
+    rows = supervisor.fact(who, case_id, "wc.cash_table")
+    if rows is None or supervisor.fact(who, case_id, "wc.gate") != "GO":  # never a stale table
+        raise HTTPException(status_code=404, detail="no cash table yet")
+
+    def money(text: str) -> dict[str, Any]:
+        value = Decimal(text)
+        return {"paise": to_paise(value), "display": format_inr(value)}
+
+    return {
+        "case_id": case_id,
+        "rows": [
+            {"week": r["week"], **{k: money(r[k]) for k in ("inflow", "outflow", "cumulative")}}
+            for r in json.loads(rows)
+        ],
+    }

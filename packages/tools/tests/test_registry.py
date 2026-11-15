@@ -103,5 +103,8 @@ def test_scope24_onboarding_ledger_access_is_onb_facts_only() -> None:
         with pytest.raises(RegistryError):
             authorize_fact("onboarding", key)
     authorize_fact("working_capital", "wc.recommended_amount")
+    for key in ("onb.rule.FIN-101", "lw.OF-01-A.v1.apr", "wcx.other"):  # 9b narrowing
+        with pytest.raises(RegistryError):
+            authorize_fact("working_capital", key)
     with pytest.raises(RegistryError):
         authorize_fact("unknown_agent", "wc.recommended_amount")  # deny by default

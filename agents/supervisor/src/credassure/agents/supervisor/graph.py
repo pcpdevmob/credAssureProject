@@ -154,6 +154,7 @@ class _GuardedLedger:
         source_type: str,
         source_ref: str,
         produced_by: str,
+        input_hash: str | None = None,
     ) -> int:
         _check(self._cancel)
         _same_case(self._case, case_id)
@@ -166,6 +167,7 @@ class _GuardedLedger:
             source_type=source_type,
             source_ref=source_ref,
             produced_by=produced_by,
+            input_hash=input_hash,
         )
 
 
@@ -215,7 +217,7 @@ def _evidence_and_gate_check(result: AgentResult, ledger: LedgerPort) -> list[Bl
         if ref.kind == "ledger_fact" and ledger.get(result.case_id, ref.ref_id) is None:
             failed.append(
                 Blocker(
-                    code=BlockerCode.SUP_SCHEMA_INVALID,
+                    code=BlockerCode.SUP_RECHECK_MISMATCH,
                     message=f"evidence fact {ref.ref_id} is not in the ledger",
                 )
             )

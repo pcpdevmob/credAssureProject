@@ -6,6 +6,7 @@ budget → cache. Only transient errors (connection, timeout, 429, 5xx) are retr
 jitter. A call that fails after its retries counts once against the circuit breaker.
 """
 
+import logging
 import re
 import secrets
 import time
@@ -22,7 +23,7 @@ from openai import (
     RateLimitError,
 )
 
-from credassure.core.prompts import prompt_version
+from credassure.core.prompts import prompt_max_tokens, prompt_version
 from credassure.llm.cache import ResponseCache, cache_key
 from credassure.llm.resilience import (
     CircuitBreaker,
@@ -37,6 +38,7 @@ from credassure.security.pii import redact
 
 _TRANSIENT = (APIConnectionError, RateLimitError, InternalServerError)  # timeout ⊂ connection
 _jitter = secrets.SystemRandom()
+_log = logging.getLogger("credassure.llm")
 _THINK = re.compile(r"<think>.*?</think>\s*", re.DOTALL)  # Qwen3 reasoning block
 # How each server turns Qwen3 thinking off. Probed 2026-11-15 on Ollama 0.40.16: `/no_think` text
 # and `think: false` on /v1 are ignored (148 tokens); `reasoning_effort: "none"` gives 2 tokens.
@@ -87,17 +89,21 @@ class OpenAICompatLLM:
     def complete(
         self, prompt: str, *, name: str = "default", json_schema: Mapping[str, Any] | None = None
     ) -> str:
+        started = time.monotonic()
+        version = prompt_version(name)
         messages = [{"role": "user", "content": redact(prompt)}]
-        key = cache_key(self.model, name, prompt_version(name), messages, json_schema)
+        key = cache_key(self.model, name, version, messages, json_schema)
         if self._cache is not None and (hit := self._cache.get(key)) is not None:
+            _log.info("llm call", extra={"prompt": name, "prompt_version": version, "cached": True})
             return hit
         budget = current_budget()
         if budget is not None:
             budget.check()
         self.breaker.before_call()  # last check: a half-open probe slot is taken here
         extra: dict[str, Any] = {}
-        if self._max_tokens is not None:
-            extra["max_tokens"] = self._max_tokens
+        caps = [c for c in (self._max_tokens, prompt_max_tokens(name)) if c is not None]
+        if caps:
+            extra["max_tokens"] = min(caps)
         if self._thinking_off is not None:
             extra["extra_body"] = self._thinking_off
         if json_schema is not None and self._guided:
@@ -114,9 +120,22 @@ class OpenAICompatLLM:
             (message.model_extra or {}).get("reasoning") or ""
         )
         text = redact(_THINK.sub("", raw))
+        used = reply.usage.total_tokens if reply.usage else len(prompt + raw + thought) // 4
         if budget is not None:
-            used = reply.usage.total_tokens if reply.usage else len(prompt + raw + thought) // 4
             budget.charge(used)
+        _log.info(
+            "llm call",
+            extra={
+                "prompt": name,
+                "prompt_version": version,
+                "cached": False,
+                "prompt_tokens": reply.usage.prompt_tokens if reply.usage else None,
+                "completion_tokens": reply.usage.completion_tokens if reply.usage else None,
+                "total_tokens": used,
+                "thinking_tokens_est": len(thought) // 4,
+                "latency_ms": round((time.monotonic() - started) * 1000),
+            },
+        )
         if self._cache is not None:
             self._cache.put(key, text)
         return text

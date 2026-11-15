@@ -4,9 +4,12 @@ SUP-01 fixed order end to end, routing to the Director for ₹1.42 cr (APR-02), 
 interrupt survives a new Supervisor instance (checkpoint on disk), and the audit chain verifies.
 """
 
+import csv
+import json
 import sqlite3
 from collections.abc import Iterator
 from datetime import date
+from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
@@ -19,6 +22,7 @@ from credassure.agents.onboarding import agent as onboarding
 from credassure.agents.supervisor.graph import Supervisor
 from credassure.agents.working_capital import agent as working_capital
 from credassure.core.enums import AgentName, Stage
+from credassure.engines import cashflow
 from credassure.engines.onboarding_rules import evaluate
 from credassure.ledger import migrate, reads, session, writes
 from credassure.ledger.store import SqlLedger
@@ -39,6 +43,33 @@ ONB_TOOLS = {
     "get_hr_profile": lambda case_id: GO_PROFILE,
     "evaluate_onboarding_rules": lambda case_id, profile: evaluate(profile, date(2026, 11, 15)),
 }
+
+
+_DEMO = Path(__file__).resolve().parents[3] / "data/frozen/v1/cases" / CASE
+
+
+def _demo_inputs(case_id: str) -> working_capital.CaseInputs:
+    """The frozen demo case files (Phase 9b real WC agent; gold need ₹1,42,00,000)."""
+    stored = {
+        kind: (
+            kind,
+            json.loads((_DEMO / name).read_text())
+            if name.endswith(".json")
+            else list(csv.DictReader((_DEMO / name).open())),
+        )
+        for kind, name in working_capital.FILES.items()
+    }
+    return working_capital.load_inputs(stored, Decimal("20000000"))
+
+
+WC_TOOLS = {
+    "validate_case_files": _demo_inputs,
+    "compute_cash_table": lambda case_id, files, weeks: cashflow.cash_table(files, weeks),
+    "compute_recommendation": lambda case_id, files, table, indicative: cashflow.recommend(
+        files, table, indicative=indicative
+    ),
+}
+TOOLS = {AgentName.ONBOARDING: ONB_TOOLS, AgentName.WORKING_CAPITAL: WC_TOOLS}
 
 
 class _Clock:
@@ -83,7 +114,7 @@ def _supervisor(db: Path, llm: FakeLLM | None) -> tuple[Supervisor, Any]:
         },
         store=ledger,
         ledger=ledger,
-        tools=lambda agent: ToolRunner(agent, ONB_TOOLS if agent is AgentName.ONBOARDING else {}),
+        tools=lambda agent: ToolRunner(agent, TOOLS.get(agent, {})),
         llm=llm,
         clock=_Clock(),
         checkpointer=saver,

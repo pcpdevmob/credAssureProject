@@ -1,7 +1,8 @@
 # ONB-04: plain-language explanation of failed readiness rules. Input is the code's rule table
 # only (no HR record, no names). The gate is already decided by code; the model never changes it.
 name: onb_explain
-version: 1.0.0
+version: 1.1.0
+max_tokens: 200  # 2-5 sentences; caps a runaway reply
 template: |
   You explain why a loan-proposal preparer is not yet cleared to work on a case.
   The readiness decision is already made by code; do not change or predict it.

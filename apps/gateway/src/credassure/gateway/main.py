@@ -7,6 +7,7 @@ router at /v1/agents/<name>. Agent routers reach the Supervisor only through the
 
 from __future__ import annotations
 
+import json
 import logging
 import sqlite3
 import uuid
@@ -41,8 +42,9 @@ from credassure.agents.working_capital.api import deps as working_capital_deps
 from credassure.agents.working_capital.api.router import router as working_capital_router
 from credassure.core.enums import AgentName, Stage
 from credassure.core.errors import ApiErrorCode
+from credassure.core.money import from_paise
 from credassure.core.ports import LLMPort, ToolPort
-from credassure.engines import onboarding_rules
+from credassure.engines import cashflow, onboarding_rules
 from credassure.gateway import problems, tracing
 from credassure.gateway.deps import Services, current_user
 from credassure.gateway.jobs import JobRunner
@@ -126,8 +128,25 @@ def _profile_loader(settings: Settings, engine: Engine) -> Callable[[str], dict[
     return load
 
 
+def _case_inputs(settings: Settings, engine: Engine) -> Callable[[str], working_capital.CaseInputs]:
+    """Case -> its latest stored file per kind and indicative request (read-only, SUP-08)."""
+
+    def load(case_id: str) -> working_capital.CaseInputs:
+        with transaction(engine) as s:
+            case = reads.get_case(s, settings.tenant_id, case_id)
+            rows = reads.case_files(s, settings.tenant_id, case_id)  # ascending id: newest wins
+            stored = {r.kind: (r.sha256, json.loads(r.payload_json)) for r in rows}
+        if case is None:
+            raise LookupError("case not found")
+        indicative = from_paise(case.indicative_amount_paise)
+        return working_capital.load_inputs(stored, indicative, settings.forecast_weeks)
+
+    return load
+
+
 def _tool_factory(settings: Settings, engine: Engine) -> Callable[[AgentName], ToolPort]:
     load = _profile_loader(settings, engine)
+    inputs = _case_inputs(settings, engine)
     handlers: dict[AgentName, dict[str, Callable[..., Any]]] = {
         AgentName.ONBOARDING: {  # read-only: no tool writes HR data (ONB-05)
             "get_hr_profile": lambda case_id: load(case_id),
@@ -135,9 +154,16 @@ def _tool_factory(settings: Settings, engine: Engine) -> Callable[[AgentName], T
                 profile, settings.as_of_date
             ),
         },
+        AgentName.WORKING_CAPITAL: {  # case files are read here only; no tool writes them
+            "validate_case_files": lambda case_id: inputs(case_id),
+            "compute_cash_table": lambda case_id, files, weeks: cashflow.cash_table(files, weeks),
+            "compute_recommendation": lambda case_id, files, table, indicative: cashflow.recommend(
+                files, table, indicative=indicative
+            ),
+        },
     }
 
-    # ponytail: other agents get no handlers until Phases 9b-9e register their engines here.
+    # ponytail: other agents get no handlers until Phases 9c-9e register their engines here.
     def tools(agent: AgentName) -> ToolPort:
         return ToolRunner(agent, handlers.get(agent, {}))
 
@@ -152,6 +178,7 @@ def build_services(settings: Settings, llm: LLMPort | None) -> Services:
         Stage.ONBOARDING: onboarding.make_recheck(
             _profile_loader(settings, engine), settings.as_of_date
         ),
+        Stage.WORKING_CAPITAL: working_capital.make_recheck(_case_inputs(settings, engine)),
     }
     with transaction(engine) as s:
         rule = reads.get_config(s, settings.tenant_id, "boundary_rule") or settings.boundary_rule

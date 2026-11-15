@@ -81,6 +81,7 @@ class FakeLedger:
         source_type: str,
         source_ref: str,
         produced_by: str,
+        input_hash: str | None = None,
     ) -> int:
         self.facts[(case_id, key)] = str(value)
         self.versions[(case_id, key)] = self.versions.get((case_id, key), 0) + 1

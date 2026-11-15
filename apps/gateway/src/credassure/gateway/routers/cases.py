@@ -188,6 +188,8 @@ def _hostile(value: Any, path: str = "") -> list[dict[str, Any]]:
         not math.isfinite(value) or abs(Decimal(value)) > MONEY_LIMIT
     ):
         return [{"field": path, "row": None, "reason": "amount is not finite or out of range"}]
+    if isinstance(value, Decimal) and "E" in str(value).upper():  # "1E+7": engines refuse it
+        return [{"field": path, "row": None, "reason": "write the amount in plain digits"}]
     return []
 
 
@@ -204,7 +206,8 @@ def _validated(model: type[BaseModel], data: Any, row: int | None) -> dict[str, 
     bad = _hostile(parsed)
     if bad:
         raise ProblemError(422, "file failed validation", errors=[{**e, "row": row} for e in bad])
-    out: dict[str, Any] = parsed.model_dump(mode="json")
+    # None = absent: the WC validator then names the missing field (WC-01)
+    out: dict[str, Any] = parsed.model_dump(mode="json", exclude_none=True)
     return out
 
 
@@ -357,6 +360,9 @@ def funding(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
     case = visible_case(svc, who, case_id)
     facts = _facts(svc, case, "wc.")
     amount = next((f for f in facts if f["key"] == "wc.recommended_amount"), None)
+    gate = next((f["value"] for f in facts if f["key"] == "wc.gate"), None)
+    if gate != "GO":  # a later NEEDS_INPUT run makes earlier figures stale
+        amount = None
     return {
         "recommended_amount": money(to_paise(Decimal(amount["value"]))) if amount else None,
         "indicative_amount": money(case.indicative_amount_paise),

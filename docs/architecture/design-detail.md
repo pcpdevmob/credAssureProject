@@ -177,7 +177,7 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
 - **Pipeline:** load checkpoint → pick next stage from fixed plan (SUP-01) → check upstream gates GO + inputs validated (SUP-03) → invoke agent with `case_id` injected → validate `AgentResult` schema (repair ≤2, SUP-04) → on GO re-run that stage's deterministic checks (SUP-05) → advance / pause with one question (SUP-06) / reopen stage on Critic finding → after Critic GO call `route_proposal` → interrupt for approval.
 - **LLM calls:** `sup_intent v1` only — enum {copilot_question, data_correction, approval_action, out_of_scope} (SUP-02). Never decides stage order or gates.
 - **Writes:** `stage_runs`, audit events `STAGE_STARTED/COMPLETED/GATE_OVERRIDE/PAUSED/RESUMED/ROUTED`.
-- **Blockers:** `SUP_UPSTREAM_NOT_GO`, `SUP_BUDGET_EXCEEDED`, `SUP_SCHEMA_INVALID`, `SUP_ROUTE_HELD`.
+- **Blockers:** `SUP_UPSTREAM_NOT_GO`, `SUP_BUDGET_EXCEEDED`, `SUP_SCHEMA_INVALID`, `SUP_RECHECK_MISMATCH`, `SUP_ROUTE_HELD`.
 - **Tests:** isolation 3/3, routing 6/6, end-to-end ≥4/5; forced-GO agent outputs still blocked.
 
 #### 2.4.2 Employee Onboarding Agent — Gate 1 Readiness (owner: Tejas)

@@ -1,15 +1,17 @@
 [project]
 name = "credassure-agent-working-capital"
-version = "0.1.0"
+version = "0.2.0"
 description = "Gate 2 funding need from the weekly cash table."
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "credassure-core",
+    "credassure-engines",
     "fastapi>=0.115",
 ]
 
 [tool.uv.sources]
 credassure-core = { workspace = true }
+credassure-engines = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

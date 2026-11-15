@@ -495,7 +495,9 @@ export interface paths {
         };
         /**
          * Cash Table
-         * @description Arrives in Phase 9b.
+         * @description The weekly cash table behind the funding need (WC-03/04); 404 before a GO run.
+         *
+         *     Money is `{paise, display}` like every API amount (ADR 0004).
          */
         get: operations["cash_table_v1_agents_working_capital_cases__case_id__cash_table_get"];
         put?: never;
@@ -1815,7 +1817,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */

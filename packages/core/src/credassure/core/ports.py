@@ -41,6 +41,7 @@ class LedgerPort(Protocol):
         source_type: str,
         source_ref: str,
         produced_by: str,
+        input_hash: str | None = None,
     ) -> int: ...
 
 
@@ -103,6 +104,8 @@ class SupervisorPort(Protocol):
 
     def latest_result(self, actor: Any, case_id: str, stage: str | None) -> AgentResult | None: ...
 
+    def fact(self, actor: Any, case_id: str, key: str) -> str | None: ...
+
     def plan(self, actor: Any, case_id: str) -> dict[str, Any]: ...
 
     def chat(self, actor: Any, case_id: str, message: str) -> dict[str, Any]: ...
@@ -123,6 +126,9 @@ class UnavailableSupervisor:
         raise NotImplementedError("supervisor not wired")
 
     def latest_result(self, actor: Any, case_id: str, stage: str | None) -> AgentResult | None:
+        raise NotImplementedError("supervisor not wired")
+
+    def fact(self, actor: Any, case_id: str, key: str) -> str | None:
         raise NotImplementedError("supervisor not wired")
 
     def plan(self, actor: Any, case_id: str) -> dict[str, Any]:

@@ -1,7 +1,11 @@
 name: working_capital
-version: "0.1.0"
+version: "0.2.0"
 owner: "Suresh"
-requirement_ids: [WC-01]
-tools: []
-readable_data: []
-gate: "set by code; placeholder until the agent phase"
+requirement_ids: [WC-01, WC-02, WC-03, WC-04, WC-05, WC-06, WC-07, BR-01, BR-02, BR-05]
+tools: [validate_case_files, compute_cash_table, compute_recommendation]  # enforced by agents/registry.yaml
+readable_data:
+  - case_files  # the case's latest file per kind, read-only through validate_case_files
+  - "wc.*"      # ledger facts (registry ledger_prefixes, scope #24)
+prompts: [wc_explain]
+gate: "code: engines.validators blockers -> NEEDS_INPUT (one question); else engines.cashflow -> GO"
+recheck: "SUP-05: Supervisor recomputes every wc.* fact from the stored files on every GO"

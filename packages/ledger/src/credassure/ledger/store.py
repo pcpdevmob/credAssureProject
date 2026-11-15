@@ -39,6 +39,7 @@ class SqlLedger:
         source_type: str,
         source_ref: str,
         produced_by: str,
+        input_hash: str | None = None,
     ) -> int:
         with transaction(self.engine) as s:
             fact = writes.put_fact(
@@ -51,7 +52,8 @@ class SqlLedger:
                 source_type=source_type,
                 source_ref=source_ref,
                 produced_by=produced_by,
-                input_hash=hashlib.sha256(str(value).encode()).hexdigest(),
+                # lineage (#33): the stage's inputs when given, else the value itself
+                input_hash=input_hash or hashlib.sha256(str(value).encode()).hexdigest(),
                 actor=self.actor,
             )
             return fact.version

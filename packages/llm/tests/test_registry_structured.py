@@ -30,6 +30,8 @@ def test_scope36_prompt_file_loads_with_version_and_hash(tmp_path: Path) -> None
         "name: demo\nversion: 1.0\ntemplate: x\n",
         "name: other\nversion: 1.0.0\ntemplate: x\n",  # name must match the file
         "name: demo\nversion: 1.0.0\n",  # no template
+        "name: demo\nversion: 1.0.0\ntemplate: x\nmax_tokens: 0\n",  # cap must be positive
+        "name: demo\nversion: 1.0.0\ntemplate: x\nmax_tokens: lots\n",
     ],
 )
 def test_scope36_invalid_prompt_files_are_refused(tmp_path: Path, text: str) -> None:

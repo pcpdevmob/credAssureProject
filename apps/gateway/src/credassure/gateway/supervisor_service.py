@@ -80,6 +80,13 @@ class SupervisorService:
         latest = runs[-1].result_json if runs else None
         return AgentResult.model_validate_json(latest) if latest else None
 
+    def fact(self, actor: Principal, case_id: str, key: str) -> str | None:
+        """Latest value of one ledger fact, under the same case policy as every read."""
+        case = visible_case(self.svc, actor, case_id)
+        with transaction(self.svc.engine) as s:
+            found = reads.get_latest(s, case.tenant_id, case.id, key)
+        return None if found is None else found.value_text
+
     def plan(self, actor: Principal, case_id: str) -> dict[str, Any]:
         case = visible_case(self.svc, actor, case_id)
         plan: dict[str, Any] = self.svc.supervisor.plan(case.id).model_dump(mode="json")
