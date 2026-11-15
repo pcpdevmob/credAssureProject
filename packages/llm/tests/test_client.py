@@ -334,21 +334,39 @@ def test_scope36_bump_check_refuses_an_option_as_base() -> None:
         prompts.main(["check", "--base", "--output=x"])
 
 
-def test_NFR02_qwen3_thinking_off_is_requested_and_think_block_stripped() -> None:
+def test_NFR02_course_switch_sends_chat_template_kwargs_and_strips_think_block() -> None:
     script = Script(_ok('<think>\nweighing it\n</think>\n\n{"a": 1}'))
     llm, _ = make(script, disable_thinking=True, max_tokens=1024)
     assert llm.complete("x", name="p") == '{"a": 1}'
     body = script.bodies[0]
     assert body["chat_template_kwargs"] == {"enable_thinking": False}
-    assert body["max_tokens"] == 1024
-    # Ollama ignores chat_template_kwargs; Qwen3's soft switch turns thinking off there too
-    assert body["messages"][0]["content"].endswith("\n/no_think")
+    assert "reasoning_effort" not in body and body["max_tokens"] == 1024
+    assert body["messages"][0]["content"] == "x"  # no ignored /no_think suffix
+
+
+def test_NFR02_ollama_switch_sends_reasoning_effort_none() -> None:
+    script = Script(_ok("ok"))
+    llm, _ = make(script, disable_thinking=True, thinking_switch="reasoning_effort")
+    llm.complete("x", name="p")
+    assert script.bodies[0]["reasoning_effort"] == "none"
+    assert "chat_template_kwargs" not in script.bodies[0]
+
+
+def test_NFR03_leaked_thinking_is_stripped_and_charged_to_the_budget() -> None:
+    reply = _ok("<think>" + "w" * 400 + "</think>ok")
+    reply_json = json.loads(reply.content)
+    del reply_json["usage"]  # no usage block: the estimate must include the thinking text
+    reply_json["choices"][0]["message"]["reasoning"] = "r" * 400
+    llm, _ = make(Script(httpx.Response(200, json=reply_json)))
+    with stage_budget(10_000) as budget:
+        assert llm.complete("x", name="p") == "ok"
+    assert budget.used >= 200  # 800 chars of thinking / 4
 
 
 def test_NFR02_defaults_send_neither_thinking_switch_nor_max_tokens() -> None:
-    script = Script(_ok("<think>kept</think>ok"))
+    script = Script(_ok("<think>dropped</think>ok"))
     llm, _ = make(script)
-    assert llm.complete("x", name="p") == "<think>kept</think>ok"
+    assert llm.complete("x", name="p") == "ok"  # the strip is a safety net, always on
     assert "chat_template_kwargs" not in script.bodies[0]
+    assert "reasoning_effort" not in script.bodies[0]
     assert "max_tokens" not in script.bodies[0]
-    assert "/no_think" not in script.bodies[0]["messages"][0]["content"]

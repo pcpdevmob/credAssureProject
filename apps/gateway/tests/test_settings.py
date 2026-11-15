@@ -129,6 +129,9 @@ def test_NFR07_model_profiles_load_and_hold_no_secrets(profile: str) -> None:
     s = Settings(_env_file=path, jwt_secret=GOOD_SECRET)
     assert s.llm_disable_thinking and s.llm_max_tokens == 1024
     assert s.llm_model == {"local": "qwen3:8b", "course": "Qwen/Qwen3-8B"}[profile]
+    # Ollama ignores chat_template_kwargs; only reasoning_effort turns Qwen3 thinking off there
+    want = {"local": "reasoning_effort", "course": "chat_template_kwargs"}[profile]
+    assert s.llm_thinking_switch == want
     if profile == "local":
         assert s.llm_ca_cert is None  # course CA in the dotenv file never reaches local mode
 

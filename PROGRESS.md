@@ -64,6 +64,12 @@ Phase 7 is done and re-measured on the closed corpus (2026-11-15): 1,275 documen
 
 By owner (manual slots only; 5 assigned in total): Tejas 1, Abhishek 1, [Name 6] 4 (1 unavailable), others 0. Nothing is waiting on an owner.
 
+## Qwen3 thinking fix (2026-11-15)
+- **Probe on this machine (Ollama 0.40.16, qwen3:8b, "Reply with the single word OK."):** `/v1` + `think: false` → ignored (10.1 s, 148 completion tokens, 695 chars in `message.reasoning`); **`/v1` + `reasoning_effort: "none"` → 0.3 s, 2 tokens, no reasoning**; native `/api/chat` + `think: false` → 0.1 s, 2 tokens. The `/no_think` prompt suffix is ignored, and Ollama returns reasoning in `message.reasoning`, not as `<think>`.
+- **Change:** `LLM_THINKING_SWITCH` (`reasoning_effort` in `models-local.env`, `chat_template_kwargs` in `models-course.env`, the default). `/no_think` suffix removed. `<think>` stripped always; leaked thinking (inline or `reasoning`) is charged to the stage budget. Live smoke test `packages/llm/tests/test_live_ollama.py` (skipped without Ollama): <50 tokens, no reasoning.
+- **Onboarding explanation latency (`onb_explain`, 9 blocked HR profiles, local):** before 17–65 s (9a); same-session control with the old switch 13–25 s; **after 1.5–3.7 s**. Model wording used 7/9 (2 fell back to the template on the existing guards).
+- **Open:** confirm the course switch with `make llm-probe MODELS=course` (not called). The baseline client (`evaluation/.../baseline/client.py`, `EVAL_DISABLE_THINKING`) still sends only `chat_template_kwargs`, so local baseline runs still think; G1 baseline evidence is left as recorded.
+
 ## Phase 9a notes (2026-11-15)
 - **Built:**
   - `agents/onboarding` 0.2.0: `get_hr_profile` → `evaluate_onboarding_rules` (engine, `AS_OF_DATE`) → narrative → facts `onb.rule.<role|AML-201|DPDP-101|FIN-101|policy_ack>` + `onb.gate` (`source_type=hr_record`). Blockers name each rule as `[id]`; NEEDS_INPUT asks one question.

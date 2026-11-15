@@ -38,6 +38,10 @@ class Settings(BaseSettings):
     llm_ca_cert: FilePath | None = None  # course CA file; must exist, empty = unset
     llm_max_tokens: int = Field(default=1024, gt=0, le=1024)  # course cap per call
     llm_disable_thinking: bool = False  # Qwen3: no <think> block (ADR 0017 amendment)
+    # How thinking is turned off: Ollama /v1 honours reasoning_effort, vLLM chat_template_kwargs
+    llm_thinking_switch: Literal["reasoning_effort", "chat_template_kwargs"] = (
+        "chat_template_kwargs"
+    )
     # ADR 0008 / scope #22, #23, #48: model-call resilience
     llm_call_timeout_s: float = Field(default=30.0, gt=0)
     stage_timeout_s: float = Field(default=300.0, gt=0)

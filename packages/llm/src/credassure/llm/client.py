@@ -10,7 +10,7 @@ import re
 import secrets
 import time
 from collections.abc import Callable, Mapping
-from typing import Any
+from typing import Any, Literal
 
 import httpx2
 from openai import (
@@ -38,6 +38,13 @@ from credassure.security.pii import redact
 _TRANSIENT = (APIConnectionError, RateLimitError, InternalServerError)  # timeout ⊂ connection
 _jitter = secrets.SystemRandom()
 _THINK = re.compile(r"<think>.*?</think>\s*", re.DOTALL)  # Qwen3 reasoning block
+# How each server turns Qwen3 thinking off. Probed 2026-11-15 on Ollama 0.40.16: `/no_think` text
+# and `think: false` on /v1 are ignored (148 tokens); `reasoning_effort: "none"` gives 2 tokens.
+ThinkingSwitch = Literal["reasoning_effort", "chat_template_kwargs"]
+_THINKING_OFF: dict[str, dict[str, Any]] = {
+    "reasoning_effort": {"reasoning_effort": "none"},  # Ollama OpenAI-compatible route
+    "chat_template_kwargs": {"chat_template_kwargs": {"enable_thinking": False}},  # vLLM
+}
 
 
 class OpenAICompatLLM:
@@ -55,6 +62,7 @@ class OpenAICompatLLM:
         guided_json: bool = False,
         max_tokens: int | None = None,
         disable_thinking: bool = False,
+        thinking_switch: ThinkingSwitch = "chat_template_kwargs",
         http_client: httpx2.Client | None = None,
         sleep: Callable[[float], None] = time.sleep,
     ) -> None:
@@ -69,7 +77,8 @@ class OpenAICompatLLM:
         self.breaker = breaker or CircuitBreaker()
         self._limiter = limiter
         self._cache, self._guided, self._sleep = cache, guided_json, sleep
-        self._max_tokens, self._no_think = max_tokens, disable_thinking
+        self._max_tokens = max_tokens
+        self._thinking_off = _THINKING_OFF[thinking_switch] if disable_thinking else None
 
     @property
     def circuit_state(self) -> str:
@@ -78,10 +87,7 @@ class OpenAICompatLLM:
     def complete(
         self, prompt: str, *, name: str = "default", json_schema: Mapping[str, Any] | None = None
     ) -> str:
-        content = redact(prompt)
-        if self._no_think:  # Qwen3 soft switch: Ollama (local) ignores chat_template_kwargs
-            content += "\n/no_think"
-        messages = [{"role": "user", "content": content}]
+        messages = [{"role": "user", "content": redact(prompt)}]
         key = cache_key(self.model, name, prompt_version(name), messages, json_schema)
         if self._cache is not None and (hit := self._cache.get(key)) is not None:
             return hit
@@ -92,20 +98,25 @@ class OpenAICompatLLM:
         extra: dict[str, Any] = {}
         if self._max_tokens is not None:
             extra["max_tokens"] = self._max_tokens
-        if self._no_think:  # vLLM (course endpoint) honours it; Ollama ignores unknown fields
-            extra["extra_body"] = {"chat_template_kwargs": {"enable_thinking": False}}
+        if self._thinking_off is not None:
+            extra["extra_body"] = self._thinking_off
         if json_schema is not None and self._guided:
             extra["response_format"] = {
                 "type": "json_schema",
                 "json_schema": {"name": name, "schema": dict(json_schema)},
             }
         reply = self._send(messages, extra)
-        text = reply.choices[0].message.content or ""
-        if self._no_think:
-            text = _THINK.sub("", text)
-        text = redact(text)
+        message = reply.choices[0].message
+        raw = message.content or ""
+        # Safety net: thinking can still arrive inline (<think>) or as Ollama's `reasoning` field.
+        # Neither reaches the caller, but both are charged to the budget.
+        thought = "".join(_THINK.findall(raw)) + str(
+            (message.model_extra or {}).get("reasoning") or ""
+        )
+        text = redact(_THINK.sub("", raw))
         if budget is not None:
-            budget.charge(reply.usage.total_tokens if reply.usage else len(prompt + text) // 4)
+            used = reply.usage.total_tokens if reply.usage else len(prompt + raw + thought) // 4
+            budget.charge(used)
         if self._cache is not None:
             self._cache.put(key, text)
         return text

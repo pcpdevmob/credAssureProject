@@ -109,6 +109,7 @@ def _default_llm(settings: Settings) -> LLMPort | None:
         guided_json=settings.llm_supports_guided_json,
         max_tokens=settings.llm_max_tokens,
         disable_thinking=settings.llm_disable_thinking,
+        thinking_switch=settings.llm_thinking_switch,
         http_client=httpx2.Client(verify=ssl.create_default_context(cafile=ca)) if ca else None,
     )
 

@@ -29,6 +29,11 @@ def main() -> int:
         guided_json=True,
         max_tokens=int(os.environ.get("LLM_MAX_TOKENS", "1024")),
         disable_thinking=os.environ.get("LLM_DISABLE_THINKING", "").lower() == "true",
+        thinking_switch=(
+            "reasoning_effort"
+            if os.environ.get("LLM_THINKING_SWITCH") == "reasoning_effort"
+            else "chat_template_kwargs"
+        ),
         http_client=httpx2.Client(verify=ssl.create_default_context(cafile=ca)) if ca else None,
     )
     try:
