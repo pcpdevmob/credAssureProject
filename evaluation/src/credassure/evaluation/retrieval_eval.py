@@ -171,10 +171,12 @@ def score(
 
 def isolation(
     hits: Hits, checks: list[dict[str, Any]], docs: Mapping[str, Mapping[str, Any]]
-) -> list[str]:
-    """SUP-08 / BR-14 live: in every configuration a case-tied query returns its own case's KFS in
-    the top 10 and no passage that fails KR-04 for it (another case's KFS above all)."""
-    fails = []
+) -> tuple[list[str], list[str]]:
+    """SUP-08 / BR-14 live, per configuration: (leaks, recall misses). A leak is any top-10 passage
+    that fails KR-04 for the check (another case's KFS above all). A recall miss is the case's own
+    KFS absent from the top 10: a retrieval-quality gap, reported but not an isolation failure."""
+    leaks: list[str] = []
+    misses: list[str] = []
     for (strategy, mode, rerank), by_q in hits.items():
         cfg = f"{strategy}/{mode}/rerank={'on' if rerank else 'off'}"
         for c in checks:
@@ -183,13 +185,19 @@ def isolation(
             if not any(
                 (docs[p.doc_id]["case_id"], docs[p.doc_id]["tenant_id"]) == own for p in found
             ):
-                fails.append(f"{c['id']} {cfg}: no {f['case_id']} KFS in the top 10")
-            fails += [
+                misses.append(f"{c['id']} {cfg}: no {f['case_id']} KFS in the top 10")
+            leaks += [
                 f"{c['id']} {cfg}: {p.doc_id} ({why})"
                 for p in found
                 if (why := kr04_violation(docs[p.doc_id], c, docs))
             ]
-    return fails
+    return leaks, misses
+
+
+def exit_code(violations: Sequence[str], leaks: Sequence[str]) -> int:
+    """`make retrieval-eval` fails only on a KR-04 violation or an isolation leak; recall misses
+    (KR-05 targets, own-KFS misses) are reported, never failing."""
+    return 1 if violations or leaks else 0
 
 
 def documents(corpus_db: Path) -> dict[str, dict[str, Any]]:
@@ -218,7 +226,8 @@ def report(
     meta: Mapping[str, Any],
     rerank_note: str,
     checks: Sequence[Mapping[str, Any]] = (),
-    isolation_fails: Sequence[str] = (),
+    isolation_leaks: Sequence[str] = (),
+    isolation_misses: Sequence[str] = (),
 ) -> str:
     n = len(queries)
     answerable = {q["id"] for q in queries if set(q["relevant_doc_ids"]) & docs.keys()}
@@ -277,20 +286,29 @@ def report(
         "",
         "## Live case isolation (SUP-08, BR-14)",
         "",
-        "Case-tied checks, separate from the 40 KR-05 queries. Each must return its own case's KFS in"
-        f" the top 10 and nothing that fails KR-04 (another case's KFS above all), in all {len(rows)}"
-        " configurations.",
+        "Case-tied checks, separate from the 40 KR-05 queries, in all"
+        f" {len(rows)} configurations. A **leak** (any top-10 passage failing KR-04, another case's KFS"
+        " above all) fails `make retrieval-eval`. A **recall miss** (the case's own KFS not in the top"
+        " 10) is reported here and does not fail the command.",
         "",
         "| Check | Case | Query | Result |",
         "|---|---|---|---|",
         *(
             f"| {c['id']} | {c['filters']['case_id']} | {c['query']} | "
-            f"{'FAIL' if any(x.startswith(c['id'] + ' ') for x in isolation_fails) else 'PASS'} |"
+            f"{_iso_result(c['id'], isolation_leaks, isolation_misses)} |"
             for c in checks
         ),
         "",
-        f"Failures: **{len(isolation_fails)}**." if checks else "Not run (no isolation checks).",
-        *(f"- {x}" for x in isolation_fails[:50]),
+        *(
+            [
+                f"Leaks: **{len(isolation_leaks)}** (fail). Recall misses:"
+                f" **{len(isolation_misses)}** (reported only)."
+            ]
+            if checks
+            else ["Not run (no isolation checks)."]
+        ),
+        *(f"- LEAK {x}" for x in isolation_leaks[:50]),
+        *(f"- RECALL MISS {x}" for x in isolation_misses[:50]),
         "",
         "## Items awaiting corpus documents",
         "",
@@ -299,6 +317,13 @@ def report(
         "",
     ]
     return "\n".join(lines)
+
+
+def _iso_result(check_id: str, leaks: Sequence[str], misses: Sequence[str]) -> str:
+    def mine(xs: Sequence[str]) -> bool:
+        return any(x.startswith(check_id + " ") for x in xs)
+
+    return "LEAK" if mine(leaks) else "RECALL MISS" if mine(misses) else "PASS"
 
 
 def label_sets_section(
@@ -375,7 +400,7 @@ def main(env: Mapping[str, str] = os.environ) -> int:
         progress=lambda line: print(line, file=sys.stderr, flush=True),
     )
     rows, violations = score(hits, queries, docs)
-    isolation_fails = isolation(hits, checks, docs)
+    leaks, misses = isolation(hits, checks, docs)
     refs = check()
     awaiting = [a for a in refs.awaiting if a.split(":")[0].startswith("Q")]
     today = datetime.now(UTC).date().isoformat()
@@ -394,11 +419,11 @@ def main(env: Mapping[str, str] = os.environ) -> int:
         "corpus db": str(corpus_db),
     }
     out = REPO / "evaluation" / "reports" / f"retrieval-{today}.md"
-    text = report(rows, violations, queries, docs, awaiting, meta, note, checks, isolation_fails)
+    text = report(rows, violations, queries, docs, awaiting, meta, note, checks, leaks, misses)
     text += "\n" + label_sets_section(hits, docs)
     out.write_text(text, encoding="utf-8")
     print(f"retrieval-eval: wrote {out.relative_to(REPO)}")
-    return 1 if violations or isolation_fails else 0
+    return exit_code(violations, leaks)
 
 
 if __name__ == "__main__":

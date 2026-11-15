@@ -4,6 +4,8 @@ import json
 from datetime import date
 from pathlib import Path
 
+import pytest
+
 from credassure.evaluation.retrieval_eval import is_relevant
 from credassure.evaluation.retrieval_judging import (
     COLUMNS,
@@ -11,6 +13,8 @@ from credassure.evaluation.retrieval_judging import (
     cohen_kappa,
     disputed,
     judge,
+    kappa_main,
+    kappa_stats,
     load_judgments,
     self_consistency,
     stratified_sample,
@@ -151,3 +155,47 @@ def test_KR05_cohen_kappa() -> None:
     assert (
         round(cohen_kappa([True] * 3 + [False] * 7, [True] * 2 + [False] * 8), 3) == 0.737
     )  # po 0.9, pe 0.62
+
+
+def test_KR05_weighted_kappa_uniform_weights_equal_plain() -> None:
+    a, b = [True] * 3 + [False] * 7, [True] * 2 + [False] * 8
+    assert cohen_kappa(a, b, [2.5] * 10) == pytest.approx(cohen_kappa(a, b))
+
+
+def test_KR05_weighted_kappa_reweights_to_pool_grade_mix() -> None:
+    # 2 grade-2 items (pool 2, weight 1) agree R/R; 2 grade-0 items (pool 8, weight 4): one N/N,
+    # one silver N vs human R. Weighted: po 6/10, pa 0.2, pb 0.6, pe 0.44 -> (0.6-0.44)/0.56.
+    silver = {"A": 2, "B": 2, "C": 0, "D": 0}
+    human = {"A": 2, "B": 2, "C": 0, "D": 2}
+    pool = {"A": 2, "B": 2, **{f"P{i}": 0 for i in range(6)}, "C": 0, "D": 0}
+    plain, agreement, weighted = kappa_stats(["A", "B", "C", "D"], silver, human, pool)
+    assert plain == pytest.approx(0.5)  # po .75, pe .5
+    assert agreement == pytest.approx(0.6)
+    assert weighted == pytest.approx(0.16 / 0.56)
+
+
+def test_KR05_kappa_verdict_uses_weighted_kappa(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    # Plain kappa 0.75 (>= 0.7) but weighted 0.353 (po 34/44, pe 1256/1936): the grade-0 stratum is 10x larger in the pool.
+    from credassure.evaluation import retrieval_judging as rj
+
+    sample = [f"S2-{i}" for i in range(4)] + [f"S0-{i}" for i in range(4)]
+    pool = [{"item_id": i} for i in sample] + [{"item_id": f"P0-{i}"} for i in range(36)]
+    silver = {i: 2 if i.startswith("S2") else 0 for i in sample} | {f"P0-{i}": 0 for i in range(36)}
+    human = {i: 2 if i.startswith("S2") or i == "S0-3" else 0 for i in sample}
+
+    def jsonl(name: str, rows: list[dict[str, object]]) -> None:
+        (tmp_path / name).write_text("".join(json.dumps(r) + "\n" for r in rows))
+
+    jsonl("pool.jsonl", pool)
+    jsonl("silver.jsonl", [{"item_id": k, "judgment": v} for k, v in silver.items()])
+    jsonl("judgments_ann.jsonl", [{"item_id": k, "label": v} for k, v in human.items()])
+    (tmp_path / "sample.json").write_text(json.dumps({"item_ids": sample}))
+    monkeypatch.setattr(rj, "JUDGING", tmp_path)
+    monkeypatch.setattr(rj, "SILVER", tmp_path / "silver.jsonl")
+    monkeypatch.setattr(rj, "SAMPLE", tmp_path / "sample.json")
+    assert kappa_main(["--judge", "ann"]) == 0
+    out = capsys.readouterr().out
+    assert "plain κ = 0.750" in out and "weighted κ = 0.353" in out
+    assert "full human judging" in out

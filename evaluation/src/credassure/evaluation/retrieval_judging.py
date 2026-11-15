@@ -17,6 +17,7 @@ import os
 import random
 import re
 import sys
+from collections import Counter
 from collections.abc import Callable, Mapping
 from datetime import UTC, datetime
 from pathlib import Path
@@ -183,12 +184,29 @@ def stratified_sample(
     return [r["item_id"] for r in pool if r["item_id"] in picked]
 
 
-def cohen_kappa(a: list[bool], b: list[bool]) -> float:
-    n = len(a)
-    po = sum(x == y for x, y in zip(a, b, strict=True)) / n
-    pa, pb = sum(a) / n, sum(b) / n
+def cohen_kappa(a: list[bool], b: list[bool], w: list[float] | None = None) -> float:
+    """Cohen's kappa; with ``w``, every proportion is weighted (inverse sampling weights)."""
+    w = w or [1.0] * len(a)
+    n = sum(w)
+    po = sum(wi for x, y, wi in zip(a, b, w, strict=True) if x == y) / n
+    pa = sum(wi for x, wi in zip(a, w, strict=True) if x) / n
+    pb = sum(wi for y, wi in zip(b, w, strict=True) if y) / n
     pe = pa * pb + (1 - pa) * (1 - pb)
     return 1.0 if pe == 1 else (po - pe) / (1 - pe)
+
+
+def kappa_stats(
+    ids: list[str], silver: Mapping[str, int], human: Mapping[str, int], pool: Mapping[str, int]
+) -> tuple[float, float, float]:
+    """(plain kappa, weighted agreement, weighted kappa) over judged sample ``ids``, binary 2 = R.
+    Each item weighs N_g / n_g: its silver grade's pool count over that grade's judged count, so the
+    sample is re-weighted to the full pool's grade mix even while it is incomplete."""
+    judged = Counter(silver[i] for i in ids)
+    total = Counter(pool.values())
+    w = [total[silver[i]] / judged[silver[i]] for i in ids]
+    a, h = [silver[i] == 2 for i in ids], [human[i] == 2 for i in ids]
+    agreement = sum(wi for x, y, wi in zip(a, h, w, strict=True) if x == y) / sum(w)
+    return cohen_kappa(a, h), agreement, cohen_kappa(a, h, w)
 
 
 def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
@@ -312,18 +330,22 @@ def kappa_main(argv: list[str]) -> int:
         print("judge name: lowercase letters only", file=sys.stderr)
         return 2
     ids = json.loads(SAMPLE.read_text(encoding="utf-8"))["item_ids"]
-    silver = load_silver()
+    silver = load_silver(SILVER)
     human = load_judgments(JUDGING / f"judgments_{args.judge}.jsonl")
     both = [i for i in ids if i in human]
     if not both:
         print(f"kappa: no {args.judge} judgments on the sample yet", file=sys.stderr)
         return 1
-    a, h = [silver[i] == 2 for i in both], [human[i] == 2 for i in both]
-    k = cohen_kappa(a, h)
-    agree = sum(x == y for x, y in zip(a, h, strict=True))
+    pool = {r["item_id"]: silver[r["item_id"]] for r in load_pool(JUDGING / "pool.jsonl")}
+    plain, w_agree, w_k = kappa_stats(both, silver, human, pool)
+    agree = sum((silver[i] == 2) == (human[i] == 2) for i in both)
     print(
-        f"kappa silver vs {args.judge}: n {len(both)}/{len(ids)}, raw agreement {agree}/{len(both)},"
-        f" κ = {k:.3f} → {'confirmed (≥ 0.7)' if k >= KAPPA_MIN else 'full human judging (< 0.7)'}"
+        f"kappa silver vs {args.judge}: n {len(both)}/{len(ids)}\n"
+        f"  sample: agreement {agree}/{len(both)}, plain κ = {plain:.3f}\n"
+        f"  weighted to the pool's silver-grade mix: agreement {w_agree:.1%},"
+        f" weighted κ = {w_k:.3f}\n"
+        f"  verdict (weighted κ): "
+        f"{'confirmed (≥ 0.7)' if w_k >= KAPPA_MIN else 'full human judging (< 0.7)'}"
         + ("" if len(both) == len(ids) else " — sample incomplete, provisional")
     )
     return 0
