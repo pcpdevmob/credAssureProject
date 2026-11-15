@@ -32,6 +32,11 @@ MODES = ("keyword", "dense", "hybrid")
 QUERIES = REPO / "evaluation" / "retrieval" / "v1" / "queries.jsonl"
 ISOLATION = REPO / "evaluation" / "retrieval" / "v1" / "isolation.jsonl"  # case-tied, not KR-05
 TARGET = 34
+LABEL_SETS = {  # same 40 queries, wider labels (judging/README.md); v1.0 stays the headline
+    "v1.0": QUERIES,
+    "v1.1-silver strict": QUERIES.with_name("queries.v1.1-silver.jsonl"),
+    "v1.1-silver lenient": QUERIES.with_name("queries.v1.1-silver-lenient.jsonl"),
+}
 
 
 def load_queries(path: Path = QUERIES) -> list[dict[str, Any]]:
@@ -58,12 +63,19 @@ def section_match(path: str | None, label: str) -> bool:
     return norm.startswith(want) or any(seg.startswith(want) for seg in norm.split(" > "))
 
 
+def label_match(path: str | None, label: Mapping[str, Any]) -> bool:
+    """`exact` (silver labels on a passage before any heading) matches only unsectioned passages, so
+    one judged preamble does not label every section of its document."""
+    if label.get("exact"):
+        return _ws(path or "") == _ws(label["section_path"])
+    return section_match(path, label["section_path"])
+
+
 def is_relevant(p: Passage, q: Mapping[str, Any], *, section: bool) -> bool:
     if not section or not q.get("relevant_sections"):
         return p.doc_id in q["relevant_doc_ids"]
     return any(
-        p.doc_id == s["doc_id"] and section_match(p.section_path, s["section_path"])
-        for s in q["relevant_sections"]
+        p.doc_id == s["doc_id"] and label_match(p.section_path, s) for s in q["relevant_sections"]
     )
 
 
@@ -289,6 +301,44 @@ def report(
     return "\n".join(lines)
 
 
+def label_sets_section(
+    hits: Hits, docs: Mapping[str, Mapping[str, Any]], sets: Mapping[str, Path] = LABEL_SETS
+) -> str:
+    """recall@5 / @10 per configuration under each label set that exists, from the same search pass."""
+    scored = {
+        name: score(hits, load_queries(path), docs)[0]
+        for name, path in sets.items()
+        if path.exists()
+    }
+    n = len(load_queries(QUERIES))
+    names = list(scored)
+    lines = [
+        "## recall@k under label sets v1.0 and v1.1-silver",
+        "",
+        "Same search results, scored three ways. v1.1-silver = v1.0 plus pool items a blind LLM judge"
+        " graded 2 (strict) or ≥ 1 (lenient); **LLM-judged, human agreement pending**"
+        " (`evaluation/retrieval/v1/judging/labels_v1.1-silver_diff.md`).",
+        "",
+        "| Chunking | Retriever | Rerank | "
+        + " | ".join(f"{x} @5 | {x} @10" for x in names)
+        + " |",
+        "|---|---|---|" + "---|---|" * len(names),
+    ]
+    for i, r in enumerate(scored[names[0]]):
+        cells = " | ".join(
+            f"{len(scored[x][i].hits5)}/{n} | {len(scored[x][i].hits10)}/{n}" for x in names
+        )
+        lines.append(f"| {r.strategy} | {r.mode} | {'on' if r.rerank else 'off'} | {cells} |")
+    lines.append("")
+    for x in names:
+        best = max(scored[x], key=lambda r: (len(r.hits5), len(r.hits10)))
+        lines.append(
+            f"- **{x}:** best {best.strategy}/{best.mode}/rerank {'on' if best.rerank else 'off'}"
+            f" {len(best.hits5)}/{n} @5 (target ≥{TARGET}: {'MET' if len(best.hits5) >= TARGET else 'OPEN'})"
+        )
+    return "\n".join([*lines, ""])
+
+
 def open_searcher(env: Mapping[str, str]) -> tuple[Searcher, Path, bool, str]:
     """The live index with the pinned cross-encoder when the `rerank` extra is installed (ADR 0013)."""
     from credassure.retrieval.cli import embedder, paths
@@ -345,6 +395,7 @@ def main(env: Mapping[str, str] = os.environ) -> int:
     }
     out = REPO / "evaluation" / "reports" / f"retrieval-{today}.md"
     text = report(rows, violations, queries, docs, awaiting, meta, note, checks, isolation_fails)
+    text += "\n" + label_sets_section(hits, docs)
     out.write_text(text, encoding="utf-8")
     print(f"retrieval-eval: wrote {out.relative_to(REPO)}")
     return 1 if violations or isolation_fails else 0

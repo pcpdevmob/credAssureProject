@@ -25,9 +25,9 @@ Rerank on: local cross-encoder over the top 30 (mentor-approved 2026-11-14, ADR 
 |---|---|---|---|---|---|---|
 | fixed512 | keyword | off | 23/40 | 26/40 | 26/40 | 23/40 |
 | fixed512 | keyword | on | 22/40 | 28/40 | 24/40 | 22/40 |
-| fixed512 | dense | off | 18/40 | 25/40 | 20/40 | 18/40 |
+| fixed512 | dense | off | 17/40 | 25/40 | 19/40 | 17/40 |
 | fixed512 | dense | on | 22/40 | 30/40 | 27/40 | 22/40 |
-| fixed512 | hybrid | off | 24/40 | 30/40 | 29/40 | 24/40 |
+| fixed512 | hybrid | off | 23/40 | 29/40 | 28/40 | 23/40 |
 | fixed512 | hybrid | on | 23/40 | 29/40 | 26/40 | 23/40 |
 | section | keyword | off | 21/40 | 30/40 | 23/40 | 21/40 |
 | section | keyword | on | 24/40 | 27/40 | 24/40 | 24/40 |
@@ -68,3 +68,32 @@ Failures: **1**.
 ## Items awaiting corpus documents
 
 None.
+
+## recall@k under label sets v1.0 and v1.1-silver
+
+Same search results, scored three ways. v1.1-silver = v1.0 plus pool items a blind LLM judge graded 2 (strict) or ≥ 1 (lenient); **LLM-judged, human agreement pending** (`evaluation/retrieval/v1/judging/labels_v1.1-silver_diff.md`).
+
+| Chunking | Retriever | Rerank | v1.0 @5 | v1.0 @10 | v1.1-silver strict @5 | v1.1-silver strict @10 | v1.1-silver lenient @5 | v1.1-silver lenient @10 |
+|---|---|---|---|---|---|---|---|---|
+| fixed512 | keyword | off | 23/40 | 26/40 | 34/40 | 36/40 | 34/40 | 37/40 |
+| fixed512 | keyword | on | 22/40 | 28/40 | 35/40 | 37/40 | 36/40 | 38/40 |
+| fixed512 | dense | off | 17/40 | 25/40 | 30/40 | 36/40 | 32/40 | 37/40 |
+| fixed512 | dense | on | 22/40 | 30/40 | 35/40 | 37/40 | 37/40 | 37/40 |
+| fixed512 | hybrid | off | 23/40 | 29/40 | 33/40 | 36/40 | 35/40 | 38/40 |
+| fixed512 | hybrid | on | 23/40 | 29/40 | 36/40 | 38/40 | 37/40 | 38/40 |
+| section | keyword | off | 21/40 | 30/40 | 32/40 | 36/40 | 35/40 | 38/40 |
+| section | keyword | on | 24/40 | 27/40 | 36/40 | 36/40 | 37/40 | 37/40 |
+| section | dense | off | 17/40 | 23/40 | 27/40 | 31/40 | 29/40 | 34/40 |
+| section | dense | on | 26/40 | 30/40 | 35/40 | 36/40 | 36/40 | 37/40 |
+| section | hybrid | off | 25/40 | 30/40 | 35/40 | 37/40 | 38/40 | 38/40 |
+| section | hybrid | on | 25/40 | 30/40 | 36/40 | 37/40 | 37/40 | 37/40 |
+| semantic | keyword | off | 23/40 | 28/40 | 34/40 | 37/40 | 35/40 | 38/40 |
+| semantic | keyword | on | 24/40 | 29/40 | 35/40 | 37/40 | 36/40 | 37/40 |
+| semantic | dense | off | 25/40 | 30/40 | 35/40 | 36/40 | 38/40 | 38/40 |
+| semantic | dense | on | 25/40 | 29/40 | 37/40 | 38/40 | 37/40 | 39/40 |
+| semantic | hybrid | off | 25/40 | 30/40 | 36/40 | 38/40 | 37/40 | 40/40 |
+| semantic | hybrid | on | 26/40 | 29/40 | 36/40 | 37/40 | 36/40 | 37/40 |
+
+- **v1.0:** best section/dense/rerank on 26/40 @5 (target ≥34: OPEN)
+- **v1.1-silver strict:** best semantic/dense/rerank on 37/40 @5 (target ≥34: MET)
+- **v1.1-silver lenient:** best section/hybrid/rerank off 38/40 @5 (target ≥34: MET)

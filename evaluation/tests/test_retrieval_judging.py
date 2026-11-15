@@ -4,12 +4,17 @@ import json
 from datetime import date
 from pathlib import Path
 
+from credassure.evaluation.retrieval_eval import is_relevant
 from credassure.evaluation.retrieval_judging import (
     COLUMNS,
-    agreement_sample,
     build_pool,
+    cohen_kappa,
+    disputed,
     judge,
     load_judgments,
+    self_consistency,
+    stratified_sample,
+    widen,
     write_pool,
 )
 from credassure.retrieval.search import Passage
@@ -96,8 +101,53 @@ def test_KR05_judge_screen_is_blind_and_capped(tmp_path: Path) -> None:
         assert leak not in shown[0]
 
 
-def test_KR05_agreement_sample_is_seeded_quarter() -> None:
-    items = [{"item_id": f"J{i:04d}"} for i in range(1, 101)]
-    a = agreement_sample(items, "20261026", 0.25)
-    assert len(a) == 25 and a == agreement_sample(items, "20261026", 0.25)
-    assert a != agreement_sample(items, "other", 0.25)
+def test_KR05_self_consistency_is_binary_on_grade_2() -> None:
+    grades = {"J1": 2, "J2": 1, "J3": 0, "C1": 2, "C2": 0, "C3": 2}
+    assert self_consistency(grades, {"C1": "J1", "C2": "J2", "C3": "J3"}) == (2, 1, 3)
+
+
+LQ = [
+    {
+        "id": "Q01",
+        "relevant_doc_ids": ["A"],
+        "relevant_sections": [{"doc_id": "A", "section_path": "1. Fee"}],
+    }
+]
+POOL = [
+    {"item_id": "J0001", "query_id": "Q01", "doc_id": "A", "section_path": "1. Fee > (a)"},
+    {"item_id": "J0002", "query_id": "Q01", "doc_id": "B", "section_path": "2. Basis"},
+    {"item_id": "J0003", "query_id": "Q01", "doc_id": "C", "section_path": ""},
+    {"item_id": "J0004", "query_id": "Q01", "doc_id": "D", "section_path": "9"},
+]
+GRADES = {"J0001": 0, "J0002": 2, "J0003": 2, "J0004": 1}
+
+
+def test_KR05_silver_widens_never_shrinks_and_preamble_is_exact() -> None:
+    strict, added = widen(LQ, POOL, GRADES, 2)
+    q = strict[0]
+    assert q["relevant_doc_ids"] == ["A", "B", "C"] and LQ[0]["relevant_doc_ids"] == ["A"]
+    assert [r["item_id"] for r in added["Q01"]] == ["J0002", "J0003"]
+    assert {"doc_id": "A", "section_path": "1. Fee"} in q["relevant_sections"]  # v1.0 kept
+    assert is_relevant(_p("C", "", "t"), q, section=True)
+    assert not is_relevant(_p("C", "3. Other", "t"), q, section=True)  # exact: not whole document
+    lenient, _ = widen(LQ, POOL, GRADES, 1)
+    assert lenient[0]["relevant_doc_ids"] == ["A", "B", "C", "D"]
+    assert [r["item_id"] for r in disputed(LQ, POOL, GRADES)] == ["J0001"]
+
+
+def test_KR05_human_sample_is_seeded_stratified_and_blind() -> None:
+    pool = [{"item_id": f"J{i:04d}"} for i in range(1, 101)]
+    grades = {r["item_id"]: (2 if i < 20 else 1 if i < 30 else 0) for i, r in enumerate(pool)}
+    ids = stratified_sample(pool, grades, "20261026", 0.25)
+    assert len(ids) == 25 and ids == stratified_sample(pool, grades, "20261026", 0.25)
+    assert sorted(ids) == ids  # pool order, not grade order
+    assert [sum(grades[i] == g for i in ids) for g in (2, 1, 0)] == [5, 2, 18]  # 2.5 → 2 or 3
+    assert ids != stratified_sample(pool, grades, "other", 0.25)
+
+
+def test_KR05_cohen_kappa() -> None:
+    assert cohen_kappa([True, False, True, False], [True, False, True, False]) == 1.0
+    assert cohen_kappa([True, True, False, False], [True, False, True, False]) == 0.0
+    assert (
+        round(cohen_kappa([True] * 3 + [False] * 7, [True] * 2 + [False] * 8), 3) == 0.737
+    )  # po 0.9, pe 0.62

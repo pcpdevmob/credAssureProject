@@ -9,7 +9,7 @@ PNPM := $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo "npx --yes 
 
 .PHONY: testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
-        langfuse-up langfuse-down ollama-pull backup restore eval-fast llm-probe retrieval-eval retrieval-pool judge
+        langfuse-up langfuse-down ollama-pull backup restore eval-fast llm-probe retrieval-eval retrieval-pool retrieval-silver judge kappa
 
 help:  ## List targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -142,10 +142,16 @@ retrieval-eval:  ## KR-05 recall@5/@10 for 3 retrievers x 3 chunkings x rerank -
 retrieval-pool:  ## Blind pooled top-5 of all 18 configs -> evaluation/retrieval/v1/judging/ (E8 M1)
 	uv run $(ENV_FILE) python -m credassure.evaluation.retrieval_judging pool
 
+retrieval-silver:  ## Silver labels: self-consistency gate, v1.1-silver strict/lenient + diff, human sample
+	uv run python -m credassure.evaluation.retrieval_judging silver
+
 JUDGE ?= pritish
-SAMPLE ?=
-judge:  ## Judge the blind pool, one passage at a time, resumable (JUDGE=name, SAMPLE=0.25 = agreement subset)
-	uv run python -m credassure.evaluation.retrieval_judging judge --judge $(JUDGE) $(if $(SAMPLE),--sample $(SAMPLE))
+SAMPLE ?= 1
+judge:  ## Judge the blind human sample, one passage at a time, resumable (JUDGE=name; SAMPLE= for the whole pool)
+	uv run python -m credassure.evaluation.retrieval_judging judge --judge $(JUDGE) $(if $(SAMPLE),--sample)
+
+kappa:  ## Cohen's kappa, silver vs JUDGE on the human sample (run after make judge)
+	uv run python -m credassure.evaluation.retrieval_judging kappa --judge $(JUDGE)
 
 eval:  ## Run the 100-item test set through the API (Phase 11)
 	@echo "eval: not implemented until Phase 11"; exit 1

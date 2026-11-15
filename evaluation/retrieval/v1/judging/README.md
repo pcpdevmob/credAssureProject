@@ -28,11 +28,20 @@ labels, together with the share of `low`-confidence answers.
 The criteria are binary. **2 = R; 1 and 0 = N** ("would only help together with another passage" and "when unsure"
 are N in criteria.md). The 0–2 grade is kept for a later graded metric (nDCG) but does not change v1.1.
 
-## Human check (later)
-- The **25% random sample** (seeded `CREDASSURE_SEED:agreement`, 249 original items, fixed before judging) is
-  judged blind with `make judge SAMPLE=0.25`: **Pritish** first (`JUDGE=pritish`), then **Tejas or Abhishek**
+## Silver result (2026-11-15)
+`make retrieval-silver`: gate on self-consistency (stop < 85%; got 100/100), then
+`../queries.v1.1-silver.jsonl` (v1.0 + grade 2), `../queries.v1.1-silver-lenient.jsonl` (v1.0 + grade ≥ 1, for a
+lenient score), [labels_v1.1-silver_diff.md](labels_v1.1-silver_diff.md) and `human_sample.json`. Duplicates are
+excluded. A label on a passage before any heading is `exact` (matches unsectioned passages only).
+`make retrieval-eval` scores v1.0, strict and lenient from one search pass.
+
+## Human check (pending)
+- **Sample (changed 2026-11-15 from simple random to stratified):** 25% of the 995 originals (249), stratified by
+  silver grade with largest-remainder allocation, seeded `CREDASSURE_SEED:human-sample`.
+  `human_sample.json` holds ids only, in pool order, so judges stay blind to the grades.
+- `make judge JUDGE=pritish` judges the sample (`SAMPLE=` for the whole pool); then **Tejas or Abhishek**
   (`JUDGE=tejas` / `JUDGE=abhishek`). Human judges do not see the silver labels or each other's files.
-- Cohen's kappa on the binary label, silver vs human, over the sample:
+- `make kappa JUDGE=<name>`: Cohen's kappa on the binary label, silver vs that human, over the sample:
   - **κ ≥ 0.7** → silver labels confirmed; v1.1 drops "silver".
   - **κ < 0.7** → full human judging of all 995 items per criteria.md, with **Suresh adjudicating** the
     disagreements.
