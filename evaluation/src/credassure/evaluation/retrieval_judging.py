@@ -5,14 +5,18 @@ and shuffled within each query. No configuration, rank or existing label is writ
 the judges cannot tell where a passage came from. Criteria and judges: evaluation/retrieval/v1/judging/criteria.md.
 
 `make retrieval-pool` → evaluation/retrieval/v1/judging/{pool.jsonl,judging_sheet.csv}
+`make judge JUDGE=<name> [SAMPLE=0.25]` → judging/judgments_<name>.jsonl (method: judging/README.md)
 """
 
+import argparse
 import csv
 import json
 import os
 import random
+import re
 import sys
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -81,9 +85,131 @@ def write_pool(rows: list[dict[str, str]], out: Path = JUDGING) -> None:
         w.writerows(rows)
 
 
+LABELS = {"2": 2, "1": 1, "0": 0}  # relevant / partially relevant / not relevant
+PASSAGE_SHOWN = 1_200
+PROMPT = "[2] relevant  [1] partial  [0] not relevant  [s]kip  [b]ack  [c]riteria  [q]uit > "
+
+
+def load_pool(path: Path = JUDGING / "pool.jsonl") -> list[dict[str, str]]:
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+
+
+def agreement_sample(items: list[dict[str, str]], seed: str, frac: float) -> list[dict[str, str]]:
+    """Pre-registered subset for the second judge: same seed → same items, pool order kept."""
+    rng = random.Random(f"{seed}:agreement")  # noqa: S311  # nosec B311 — sampling only
+    picked = set(rng.sample(sorted(r["item_id"] for r in items), round(len(items) * frac)))
+    return [r for r in items if r["item_id"] in picked]
+
+
+def load_judgments(path: Path) -> dict[str, int]:
+    """Latest answer per item wins, so going back and re-answering only appends."""
+    latest: dict[str, int] = {}
+    if path.exists():
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                rec = json.loads(line)
+                latest[rec["item_id"]] = rec["label"]
+    return latest
+
+
+def screen(r: Mapping[str, str], i: int, n: int, judged: int, previous: int | None) -> str:
+    """Query, title, section and passage only: no configuration, rank or existing label."""
+    earlier = f"(your earlier answer: {previous})\n" if previous is not None else ""
+    return (
+        f"\n{'─' * 72}\nitem {i + 1} of {n} · judged {judged}\n\n"
+        f"QUERY:   {r['query']}\nDOC:     {r['title']}\nSECTION: {r['section_path'] or '—'}\n\n"
+        f"{r['passage'][:PASSAGE_SHOWN]}\n\n{earlier}{PROMPT}"
+    )
+
+
+def judge(
+    items: list[dict[str, str]],
+    out: Path,
+    judge_name: str,
+    read_key: Callable[[], str],
+    write: Callable[[str], object],
+    criteria: str = "",
+) -> int:
+    """Resumable single-judge loop; every answer is appended and flushed before the next item."""
+    done = load_judgments(out)
+    i = next((n for n, r in enumerate(items) if r["item_id"] not in done), len(items))
+    with out.open("a", encoding="utf-8") as f:
+        while i < len(items):
+            r = items[i]
+            judged = sum(x["item_id"] in done for x in items)
+            write(screen(r, i, len(items), judged, done.get(r["item_id"])))
+            key = read_key()
+            if key in LABELS:
+                rec = {
+                    "item_id": r["item_id"],
+                    "judge": judge_name,
+                    "label": LABELS[key],
+                    "ts": datetime.now(UTC).isoformat(timespec="seconds"),
+                }
+                f.write(json.dumps(rec) + "\n")
+                f.flush()
+                done[r["item_id"]] = LABELS[key]
+                i += 1
+            elif key == "s":
+                i += 1
+            elif key == "b":
+                i = max(0, i - 1)
+            elif key == "c":
+                write("\n" + criteria)
+            elif key == "q":
+                break
+    judged = sum(x["item_id"] in done for x in items)
+    write(f"\nsaved: {judged} of {len(items)} judged → {out}\n")
+    return judged
+
+
+def read_key() -> str:
+    """One keypress on a terminal; a line when piped (EOF → quit)."""
+    if not sys.stdin.isatty():
+        return sys.stdin.readline().strip()[:1] or "q"
+    import termios
+    import tty
+
+    fd = sys.stdin.fileno()
+    old = termios.tcgetattr(fd)
+    try:
+        tty.setcbreak(fd)
+        return sys.stdin.read(1)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old)
+
+
+def judge_main(argv: list[str], env: Mapping[str, str]) -> int:
+    ap = argparse.ArgumentParser(prog="make judge")
+    ap.add_argument("--judge", required=True)
+    ap.add_argument("--sample", type=float, help="agreement subset fraction, e.g. 0.25")
+    args = ap.parse_args(argv)
+    if not re.fullmatch(r"[a-z]+", args.judge):  # used in a file name
+        print("judge name: lowercase letters only", file=sys.stderr)
+        return 2
+    items = load_pool()
+    if args.sample:
+        items = agreement_sample(items, env.get("CREDASSURE_SEED", "20261026"), args.sample)
+    criteria = (JUDGING / "criteria.md").read_text(encoding="utf-8")
+    judge(
+        items,
+        JUDGING / f"judgments_{args.judge}.jsonl",
+        args.judge,
+        read_key,
+        lambda s: print(s, end="", flush=True),
+        criteria,
+    )
+    return 0
+
+
 def main(argv: list[str], env: Mapping[str, str] = os.environ) -> int:
+    if argv[:1] == ["judge"]:
+        return judge_main(argv[1:], env)
     if argv[:1] != ["pool"]:
-        print("usage: python -m credassure.evaluation.retrieval_judging pool", file=sys.stderr)
+        print(
+            "usage: python -m credassure.evaluation.retrieval_judging pool | judge --judge NAME",
+            file=sys.stderr,
+        )
         return 2
     searcher, _, reranker, _ = open_searcher(env)
     queries = load_queries()
