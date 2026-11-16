@@ -6,8 +6,8 @@ optional `examples`, optional `max_tokens` (output cap for this prompt). The fil
 and version go on every `llm` span, into
 `AgentResult.prompt_versions` and into the eval reproducibility record.
 
-CI (`eval-fast.yml`) runs `python -m credassure.core.prompts check --base <ref>`: any prompt file
-whose text changed without a higher version fails the build.
+`make eval-fast` runs `python -m credassure.core.prompts check --base <ref>`: any prompt file
+whose text changed without a higher version fails the check.
 """
 
 import argparse

@@ -613,6 +613,7 @@ Abhishek         82        0      82
 ## Decisions
 - See docs/adr/README.md
 - LLM_BASE_URL is required outside test mode only when LLM_ENABLED=true (template-fallback and demo-replay runs need no endpoint)
+- 2026-11-17: GitHub Actions CI (ci.yml, eval-fast.yml) removed at user request; run `make check` and `make eval-fast` locally before committing
 
 ## Scope items done (docs/BUILD_SCOPE.md)
 - #30 Config + feature flags (settings.py, README flag table)
