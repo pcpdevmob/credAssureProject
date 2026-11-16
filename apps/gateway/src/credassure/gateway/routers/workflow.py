@@ -23,6 +23,7 @@ from credassure.gateway.deps import Svc, User, case_ref, role, visible_case
 from credassure.gateway.jobs import job_view
 from credassure.gateway.problems import ProblemError
 from credassure.gateway.quota import quota
+from credassure.gateway.supervisor_service import approval_warnings
 from credassure.ledger import reads
 from credassure.ledger.session import run_in_progress, run_lock, transaction
 from credassure.security.auth import (
@@ -192,12 +193,18 @@ def inbox(who: User, svc: Svc) -> dict[str, Any]:
 def case_inbox(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
     case = visible_case(svc, who, case_id)
     return {
+        "warnings": _warnings(svc, case),
         "case_id": case.id,
         "status": case.status,
         "route": case.route,
         "row_version": case.row_version,
         "can_decide": can_decide(who, case_ref(case)),
     }
+
+
+def _warnings(svc: Svc, case: Any) -> list[str]:
+    with transaction(svc.engine) as s:
+        return approval_warnings(reads.list_for_case(s, case.tenant_id, case.id))
 
 
 class Decision(BaseModel):
@@ -235,6 +242,7 @@ def decide(case_id: str, body: Decision, who: Approver, svc: Svc) -> dict[str, A
             decision=body.decision,
             return_stage=body.return_stage,
             comment=redact(body.comment),
+            warnings=_warnings(svc, case),
         )
         try:
             svc.supervisor.decide(case.id, decision=body.decision, return_stage=back)

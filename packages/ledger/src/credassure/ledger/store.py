@@ -159,6 +159,7 @@ class SqlLedger:
         decision: str,
         return_stage: str | None,
         comment: str,
+        warnings: list[str] | None = None,
     ) -> Approval:
         with transaction(self.engine) as s:
             return writes.record_decision(
@@ -171,6 +172,7 @@ class SqlLedger:
                 decision=decision,
                 return_stage=return_stage,
                 comment=comment,
+                warnings=warnings,
             )
 
     def create_job(

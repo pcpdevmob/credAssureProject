@@ -197,6 +197,28 @@ class SupervisorService:
         return reply
 
 
+def approval_warnings(facts: Any) -> list[str]:
+    """APR-04 evidence for the approver (ADR 0023, BR-09), from ledger fact rows (all versions):
+    ``negotiation_in_progress`` — a sent round is newer than the comparison the case was verified
+    and routed on, so its revision is not in the ranking; ``revised_offer_not_reaudited`` — a
+    revised version arrived but did not pass re-audit, so no concession counts."""
+    latest: dict[str, Any] = {}
+    for f in facts:
+        if f.key not in latest or f.version > latest[f.key].version:
+            latest[f.key] = f
+    status, gate = latest.get("lw.negotiation.status"), latest.get("lw.gate")
+    out = []
+    if status is not None and status.value_text == "sent":
+        if gate is None or status.created_at > gate.created_at:
+            out.append("negotiation_in_progress")
+        counts = latest.get("lw.negotiation.concession_counts")
+        if "lw.negotiation.revised.version" in latest and (
+            counts is None or counts.value_text != "true"
+        ):
+            out.append("revised_offer_not_reaudited")
+    return out
+
+
 def _money(paise: int) -> dict[str, Any]:
     return {"paise": paise, "display": format_inr(from_paise(paise))}
 

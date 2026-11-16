@@ -73,7 +73,7 @@ credassure/
 │   │   └── prompts/registry.py
 │   ├── retrieval/ ingest.py chunking.py fts.py dense.py fusion.py rerank.py filters.py
 │   ├── security/ pii.py spotlight.py injection.py authz.py
-│   ├── tools/ registry.py         # 13 tools, typed signatures, per-agent allowlists
+│   ├── tools/ registry.py         # 14 tools, typed signatures, per-agent allowlists
 │   ├── lender_sim/ simulator.py scripts/*.yaml
 │   ├── agents/
 │   │   ├── supervisor/ graph.py state.py intent.py
@@ -163,10 +163,11 @@ routing: amount == ₹1.5cr and rule=="hold" → hold_for_human
 
 **Approval routing is code, not an agent:** `route_proposal` (engines/routing.py) is called by the Supervisor after Gate 4. **The copilot is on demand**, not a stage between the Critic and routing.
 
-**The 13 tools** (registry, typed, each logs a span and audit event): get_hr_profile,
+**The 14 tools** (registry, typed, each logs a span and audit event; `load_offers` added in 9c, ADR 0009): get_hr_profile,
 evaluate_onboarding_rules, validate_case_files, compute_cash_table, compute_recommendation,
 audit_offer, price_offer, check_affordability, rank_offers, lender_send_template,
-search_knowledge, verify_claims (normaliser+citations+banned content), route_proposal.
+search_knowledge, verify_claims (normaliser+citations+banned content), route_proposal,
+load_offers (read-only: the case's latest offer and KFS uploads plus the funding position, LendWise only).
 
 ### 2.4 Per-agent detail
 

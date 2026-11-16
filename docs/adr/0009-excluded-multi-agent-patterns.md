@@ -11,6 +11,8 @@ These patterns are out of the product:
 - No dynamic spawning of agents.
 
 The registry in `agents/registry.yaml` is a fixed allowlist. Code checks it. The model does not add tools or agents at runtime.
+It holds 14 tools: the 13 of design-detail §2.3 plus `load_offers` (read-only, LendWise only; added in Phase 9c so the
+agent reads its case's offers through the tool layer instead of directly).
 
 ## Consequences
 Import-linter already forbids one agent from importing another. The tool allowlist rejects a call that is not on the matrix. A later design that wants one of the excluded patterns needs a new ADR.

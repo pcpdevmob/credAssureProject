@@ -345,6 +345,8 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0016 | Langfuse self-hosted in Compose (amends BRD NFR-09) | Accepted |
 | 0017 | Local default model: Ollama, Llama 3.1 8B (course endpoint stays the graded path) | Accepted |
 | 0018 | AgentResult contract, including agent_version and tenant_id | Accepted (frozen at G1) |
+| 0023 | Ledger facts + audit are the record for offers, evaluations and negotiation | Accepted |
+| 0024 | chromadb advisories accepted (embedded mode only) | Accepted |
 
 Full index with phase and scope numbers: `docs/adr/README.md`.
 
