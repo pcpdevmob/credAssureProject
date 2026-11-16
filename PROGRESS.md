@@ -72,8 +72,15 @@ By owner (manual slots only; 5 assigned in total): Tejas 1, Abhishek 1, [Name 6]
 - **Built:** `docs/ui/design-plan.md`: six named colours from `tokens.js`, a dark theme from the same token names, Sora + Inter with tabular figures, ASCII wireframes (case workspace and approval screen, desktop and 360 px), provenance `<Figure>` and lineage drawer, gate encoding with ERROR added, four principles, screen → route map, self-review.
 - **Decisions (user):** follow finbridge closely (brief defaults accepted and listed in plan §9). npm workspaces, never pnpm: root `package.json` `workspaces`, and apps/web depends on `"@credassure/api-client": "*"`. The pnpm node_modules were moved to the session scratchpad (the hook blocks recursive deletes) and npm reinstalled them (root `package-lock.json`). Anyone still on pnpm must reinstall. `@playwright/test` 1.55.0 is pinned in apps/web.
 - **Contrast fixes in the plan:** emerald text uses brand-700, because brand-600 is 3.77 on white; control borders use ink-400 in both themes.
-- **Open, for the backend lane before U1:** `GET /v1/cases/{id}/facts/{key}/lineage` (scope #33). Planned shape is in design-plan §4.
+- **Done before U1 (2026-11-16):** `GET /v1/cases/{id}/facts/{key}/lineage` (scope #33). Final shape is in design-plan §4; see the #33 notes.
 - **Open:** `npm audit` reports next 14 (critical) and postcss (high). Fixing needs a Next major upgrade, so it is not done in U0.
+
+## Scope #33 lineage notes (2026-11-16, pulled forward from Phase 10)
+- **Built:** `GET /v1/cases/{id}/facts/{key}/lineage[?version=n]` (`apps/gateway/.../routers/lineage.py`, typed `Lineage` model). Access is `visible_case` (tenant, role, case policy; 404 when not visible). Agent ledger-prefix rules (#24) do not apply to reads. An unknown key or version → 404 problem+json. `source_ref` tokens resolve to `files` (case_files by sha prefix), `inputs` (fact / hr_record / ref) and `passages` (corpus.db chunk or doc id, case-scoped for KFS).
+- **Write side (user decision: record at write time):** `LedgerPort.put_fact(provenance=)` (ADR 0006 amendment). The Supervisor's `_GuardedLedger` injects `{agent, stage, trace_id}` into the FACT_WRITTEN payload, in the same transaction and hash chain; agents cannot set it.
+- **Ledger limits (told to the user):** `files[].name` is the upload label, because original filenames are not stored. No fact cites chunk ids yet; reference-rate facts cite a corpus doc id. `producer` is null for facts written before this change or outside a stage. No engine formula line. An identical re-write adds no version, so `producer` is the first write's, not the latest run's.
+- **Security review:** PASS. SHOULDs fixed: corpus passages are tenant-scoped like `retrieval.search`; `version` is capped at 2^31−1 (it returned 500 before; now 422). NICE fixed: a source file only matches on a full sha12 with a matching kind.
+- **Also:** Makefile `client` and web dev targets use npm (`npm run generate -w packages/api-client`); `PNPM` variable removed. openapi.json and `packages/api-client/src/schema.ts` regenerated.
 
 ## Phase 9d notes (2026-11-16)
 - **Housekeeping commit `0311df0`:** design-detail §2.3 + ADR 0009 (14 tools, `load_offers`); ADR 0023 (ledger is the record for offers; offer tables dropped in Phase 10); approval inbox `warnings` + `evidence_warnings` in `DECISION_RECORDED` (negotiation_in_progress / revised_offer_not_reaudited); ADR 0024 chromadb 1.5.9 accepted risk (4 advisories, not 5; no fixed release).
@@ -577,3 +584,4 @@ Abhishek         82        0      82
 - #27 tenant_id on every case table; reads are scoped by tenant and case
 - #29 Alembic for case.db and corpus.db; upgrade, downgrade and upgrade again tested; seeds separate (`credassure.ledger.seed`)
 - #49 Fact or decision commits together with its audit event; row_version on cases (version_id_col) and approvals
+- #33 Explainability endpoint `GET /v1/cases/{id}/facts/{key}/lineage` (pulled forward from Phase 10, 2026-11-16)

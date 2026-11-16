@@ -64,7 +64,7 @@ from credassure.engines import (
 from credassure.gateway import problems, tracing
 from credassure.gateway.deps import Services, current_user
 from credassure.gateway.jobs import JobRunner
-from credassure.gateway.routers import admin, auth, cases, health, workflow
+from credassure.gateway.routers import admin, auth, cases, health, lineage, workflow
 from credassure.gateway.settings import Settings, get_settings
 from credassure.gateway.supervisor_service import SupervisorService
 from credassure.ledger import hr, migrate, reads
@@ -509,7 +509,7 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
         allow_headers=["Authorization", "Content-Type", "Idempotency-Key"],
     )
 
-    for module in (health, auth, cases, workflow, admin):
+    for module in (health, auth, cases, lineage, workflow, admin):
         app.include_router(module.router)
     for name, agent_router, deps in _AGENT_ROUTERS:
         app.include_router(agent_router, prefix=f"/v1/agents/{name}")

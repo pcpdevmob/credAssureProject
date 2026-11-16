@@ -43,6 +43,7 @@ class LedgerPort(Protocol):
         source_ref: str,
         produced_by: str,
         input_hash: str | None = None,
+        provenance: Mapping[str, str] | None = None,  # #33: agent, stage, trace_id
     ) -> int: ...
 
 

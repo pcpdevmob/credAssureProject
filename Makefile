@@ -12,7 +12,6 @@ ifeq ($(wildcard $(MODELS_FILE)),)
 $(error MODELS=$(MODELS): no $(MODELS_FILE); use local or course)
 endif
 ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
-PNPM := $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo "npx --yes pnpm@9.15.0")
 
 .PHONY: testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
@@ -64,7 +63,7 @@ openapi:  ## Export openapi.json (ADR 0004)
 	uv run python -m credassure.gateway.openapi
 
 client: openapi  ## Generate the TypeScript API client from openapi.json
-	$(PNPM) --filter @credassure/api-client generate
+	npm run generate -w packages/api-client
 
 up: langfuse-env-check  ## Gateway, web, Ollama and Langfuse (dev profile)
 	$(COMPOSE) --profile dev --profile langfuse up --build
@@ -100,7 +99,7 @@ langfuse-down:
 	$(COMPOSE) --profile langfuse down
 
 run-ui:  ## Vite dev server for the React stub
-	$(PNPM) --filter @credassure/web dev
+	npm run dev -w apps/web
 
 data:  ## Seeded synthetic data -> data/frozen/v1 + hr.db (Phase 2, idempotent)
 	uv run python -m credassure.datagen

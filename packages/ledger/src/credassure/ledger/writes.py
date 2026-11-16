@@ -5,6 +5,7 @@ event together or neither (scope #49).
 """
 
 import uuid
+from collections.abc import Mapping
 from datetime import UTC, date, datetime
 from decimal import Decimal
 from typing import Any
@@ -33,6 +34,9 @@ from .models import (
 
 DECISIONS = {"approve": "APPROVED", "reject": "REJECTED", "return": "RETURNED"}
 FINAL = frozenset({"APPROVED", "REJECTED"})  # APR-04: nothing reopens these
+
+
+_PROVENANCE = frozenset({"agent", "stage", "trace_id"})
 
 
 def _now() -> datetime:
@@ -89,6 +93,7 @@ def put_fact(
     produced_by: str,
     input_hash: str,
     actor: str,
+    provenance: Mapping[str, str] | None = None,
 ) -> LedgerFact:
     """New version of a fact plus its FACT_WRITTEN audit event, in the caller's transaction."""
     if isinstance(value, float) or not isinstance(value, Decimal | int | str):
@@ -140,6 +145,8 @@ def put_fact(
             "source_ref": source_ref,
             "produced_by": produced_by,
             "input_hash": input_hash,
+            # lineage (#33): who wrote it; only these three keys, never free text
+            **{k: str(v) for k, v in (provenance or {}).items() if k in _PROVENANCE},
         },
     )
     return fact

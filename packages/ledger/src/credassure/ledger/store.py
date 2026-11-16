@@ -6,6 +6,7 @@ transaction, so a fact or a stage result commits together with its audit event (
 """
 
 import hashlib
+from collections.abc import Mapping
 from datetime import date
 from decimal import Decimal
 from typing import Any
@@ -40,6 +41,7 @@ class SqlLedger:
         source_ref: str,
         produced_by: str,
         input_hash: str | None = None,
+        provenance: Mapping[str, str] | None = None,
     ) -> int:
         with transaction(self.engine) as s:
             fact = writes.put_fact(
@@ -55,6 +57,7 @@ class SqlLedger:
                 # lineage (#33): the stage's inputs when given, else the value itself
                 input_hash=input_hash or hashlib.sha256(str(value).encode()).hexdigest(),
                 actor=self.actor,
+                provenance=provenance,
             )
             return fact.version
 

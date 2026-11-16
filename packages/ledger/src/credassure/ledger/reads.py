@@ -11,6 +11,8 @@ from .models import (
     AuditLog,
     Case,
     CaseFile,
+    Chunk,
+    Document,
     Job,
     LedgerFact,
     StageRun,
@@ -167,3 +169,56 @@ def job_by_key(s: Session, tenant_id: str, case_id: str, key: str) -> Job | None
             Job.tenant_id == tenant_id, Job.case_id == case_id, Job.idempotency_key == key
         )
     )
+
+
+def get_fact(
+    s: Session, tenant_id: str, case_id: str, key: str, version: int | None = None
+) -> LedgerFact | None:
+    """One version of a fact (latest when version is None) — lineage (#33)."""
+    if version is None:
+        return get_latest(s, tenant_id, case_id, key)
+    return s.scalar(
+        select(LedgerFact).where(
+            LedgerFact.tenant_id == tenant_id,
+            LedgerFact.case_id == case_id,
+            LedgerFact.key == key,
+            LedgerFact.version == version,
+        )
+    )
+
+
+def fact_event(s: Session, tenant_id: str, case_id: str, key: str, version: int) -> AuditLog | None:
+    """The FACT_WRITTEN event of one fact version (actor, time, agent, stage, trace)."""
+    events = s.scalars(
+        select(AuditLog)
+        .where(
+            AuditLog.tenant_id == tenant_id,
+            AuditLog.case_id == case_id,
+            AuditLog.event_type == "FACT_WRITTEN",
+        )
+        .order_by(AuditLog.seq.desc())
+    )
+    # ponytail: scans the case's FACT_WRITTEN events in Python (JSON payload, no index);
+    # add a (case_id, key, version) column on audit_log if a case ever holds many thousands.
+    return next(
+        (e for e in events if e.payload.get("key") == key and e.payload.get("version") == version),
+        None,
+    )
+
+
+def corpus_refs(
+    s: Session, ids: list[str], tenant_id: str, case_id: str
+) -> dict[str, tuple[str, str, str | None, str | None]]:
+    """id -> (doc_id, title, section, chunk_id) for corpus chunk or document ids; another
+    case's KFS never resolves (SUP-08)."""
+    out: dict[str, tuple[str, str, str | None, str | None]] = {}
+    visible = Document.case_id.is_(None) | (
+        (Document.case_id == case_id) & (Document.tenant_id == tenant_id)
+    )
+    for chunk, doc in s.execute(
+        select(Chunk, Document).join(Document).where(Chunk.chunk_id.in_(ids), visible)
+    ):
+        out[chunk.chunk_id] = (doc.doc_id, doc.title, chunk.section_path, chunk.chunk_id)
+    for doc in s.scalars(select(Document).where(Document.doc_id.in_(ids), visible)):
+        out[doc.doc_id] = (doc.doc_id, doc.title, None, None)
+    return out

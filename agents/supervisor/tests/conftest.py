@@ -82,6 +82,7 @@ class FakeLedger:
         source_ref: str,
         produced_by: str,
         input_hash: str | None = None,
+        provenance: Mapping[str, str] | None = None,
     ) -> int:
         self.facts[(case_id, key)] = str(value)
         self.versions[(case_id, key)] = self.versions.get((case_id, key), 0) + 1

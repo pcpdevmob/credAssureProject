@@ -693,6 +693,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/cases/{case_id}/facts/{key}/lineage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lineage */
+        get: operations["lineage_v1_cases__case_id__facts__key__lineage_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/cases/{case_id}/files": {
         parameters: {
             query?: never;
@@ -1005,6 +1022,15 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AuditRef */
+        AuditRef: {
+            /** Actor */
+            actor: string;
+            /** Seq */
+            seq: number;
+            /** Ts */
+            ts: string;
+        };
         /** Body_upload_v1_cases__case_id__files_post */
         Body_upload_v1_cases__case_id__files_post: {
             /** File */
@@ -1045,10 +1071,71 @@ export interface components {
             /** Return Stage */
             return_stage?: ("onboarding" | "working_capital" | "lendwise") | null;
         };
+        /** EngineRef */
+        EngineRef: {
+            /** Name */
+            name: string;
+            /** Version */
+            version: string | null;
+        };
+        /** FactValue */
+        FactValue: {
+            /** Display */
+            display: string;
+            /** Paise */
+            paise: number | null;
+            /** Text */
+            text: string;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /** Input */
+        Input: {
+            /** Fact Key */
+            fact_key: string | null;
+            /** Kind */
+            kind: string;
+            /** Ref */
+            ref: string;
+        };
+        /** Lineage */
+        Lineage: {
+            audit: components["schemas"]["AuditRef"] | null;
+            /** Case Id */
+            case_id: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            engine: components["schemas"]["EngineRef"];
+            /** Files */
+            files: components["schemas"]["SourceFile"][];
+            /** Input Hash */
+            input_hash: string;
+            /** Inputs */
+            inputs: components["schemas"]["Input"][];
+            /** Key */
+            key: string;
+            /** Latest Version */
+            latest_version: number;
+            /** Passages */
+            passages: components["schemas"]["Passage"][];
+            producer: components["schemas"]["Producer"];
+            /** Source Ref */
+            source_ref: string;
+            /** Source Type */
+            source_type: string;
+            /** Superseded By */
+            superseded_by: number | null;
+            /** Unit */
+            unit: string;
+            value: components["schemas"]["FactValue"];
+            /** Version */
+            version: number;
         };
         /** Login */
         Login: {
@@ -1072,6 +1159,40 @@ export interface components {
             order_ref: string;
             /** Order Value Paise */
             order_value_paise: number;
+        };
+        /** Passage */
+        Passage: {
+            /** Chunk Id */
+            chunk_id: string | null;
+            /** Doc Id */
+            doc_id: string;
+            /** Section */
+            section: string | null;
+            /** Title */
+            title: string | null;
+        };
+        /** Producer */
+        Producer: {
+            /** Agent */
+            agent: string | null;
+            /** Stage */
+            stage: string | null;
+            /** Trace Id */
+            trace_id: string | null;
+        };
+        /** SourceFile */
+        SourceFile: {
+            /** Kind */
+            kind: string;
+            /** Name */
+            name: string;
+            /** Sha256 */
+            sha256: string;
+            /**
+             * Uploaded At
+             * Format: date-time
+             */
+            uploaded_at: string;
         };
         /** ValidationError */
         ValidationError: {
@@ -2189,6 +2310,40 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    lineage_v1_cases__case_id__facts__key__lineage_get: {
+        parameters: {
+            query?: {
+                version?: number | null;
+            };
+            header?: never;
+            path: {
+                case_id: string;
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Lineage"];
                 };
             };
             /** @description Validation Error */

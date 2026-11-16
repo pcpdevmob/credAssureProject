@@ -490,3 +490,37 @@ def test_SUP08_stage_wrappers_refuse_another_case_id() -> None:
         )
     with pytest.raises(RegistryError):
         tools.call("get_hr_profile", "CA-2")
+
+
+def test_33_guarded_ledger_passes_agent_stage_trace() -> None:
+    import threading
+
+    from credassure.agents.supervisor.graph import _GuardedLedger
+    from credassure.core.enums import AgentName, Stage
+
+    seen: dict[str, object] = {}
+
+    class Store:
+        def get(self, case_id: str, key: str) -> str | None:
+            return None
+
+        def put_fact(self, *a: object, **k: object) -> int:
+            seen.update(k)
+            return 1
+
+    ledger = _GuardedLedger(
+        Store(),  # type: ignore[arg-type]
+        threading.Event(),
+        AgentName.WORKING_CAPITAL,
+        "CA-1",
+        stage=Stage.WORKING_CAPITAL,
+        trace_id="trace-1",
+    )
+    ledger.put_fact(
+        "CA-1", "wc.gate", "GO", unit="enum", source_type="", source_ref="", produced_by=""
+    )
+    assert seen["provenance"] == {
+        "agent": "working_capital",
+        "stage": "working_capital",
+        "trace_id": "trace-1",
+    }

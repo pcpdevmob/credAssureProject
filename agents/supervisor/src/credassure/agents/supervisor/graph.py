@@ -145,9 +145,19 @@ class _GuardedLedger:
     refused once the stage has timed out (#23)."""
 
     def __init__(
-        self, ledger: LedgerPort, cancel: threading.Event, agent: AgentName, case_id: str
+        self,
+        ledger: LedgerPort,
+        cancel: threading.Event,
+        agent: AgentName,
+        case_id: str,
+        *,
+        stage: Stage | None = None,
+        trace_id: str | None = None,
     ) -> None:
         self._ledger, self._cancel, self._agent, self._case = ledger, cancel, agent, case_id
+        # lineage (#33): set here, never by the agent, so a fact's producer cannot be spoofed
+        given = {"agent": agent.value, "stage": stage and stage.value, "trace_id": trace_id}
+        self._provenance = {k: v for k, v in given.items() if v}
 
     def get(self, case_id: str, key: str) -> str | None:
         _same_case(self._case, case_id)
@@ -165,6 +175,7 @@ class _GuardedLedger:
         source_ref: str,
         produced_by: str,
         input_hash: str | None = None,
+        provenance: Mapping[str, str] | None = None,  # ignored: the guard's own is used
     ) -> int:
         _check(self._cancel)
         _same_case(self._case, case_id)
@@ -180,6 +191,7 @@ class _GuardedLedger:
             source_ref=source_ref,
             produced_by=produced_by,
             input_hash=input_hash,
+            provenance=self._provenance,
         )
 
 
@@ -620,7 +632,9 @@ class Supervisor:
                 tenant_id=self.tenant_id,
                 stage=stage,
                 trace_id=trace_id,
-                ledger=_GuardedLedger(self.ledger, cancel, agent_name, case_id),
+                ledger=_GuardedLedger(
+                    self.ledger, cancel, agent_name, case_id, stage=stage, trace_id=trace_id
+                ),
                 tools=_AuditedTools(
                     self.tools(agent_name), self.store, agent_name, trace_id, cancel, case_id
                 ),

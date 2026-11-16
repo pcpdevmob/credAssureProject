@@ -416,3 +416,33 @@ def test_SUP08_new_case_ids_start_after_the_seeded_ones_across_tenants(tmp_path:
         )
     with session.transaction(engine) as s:
         assert writes.next_case_id(s, tenant_id="default", year=2026) == "CA-2026-0041"
+
+
+def test_33_fact_written_payload_carries_provenance_and_chain_verifies(engine: Engine) -> None:
+    """Lineage (#33): who wrote a fact is recorded with it, in the same hash-chained event."""
+    with session.transaction(engine) as s:
+        fact = writes.put_fact(
+            s,
+            tenant_id=T,
+            case_id="CA-2026-0001",
+            key="wc.recommended_amount",
+            value=Decimal("14200000"),
+            unit="INR",
+            source_type="case_file",
+            source_ref="case_files:order@abc",
+            produced_by="engines.cashflow@1",
+            input_hash="h",
+            actor="supervisor",
+            provenance={"agent": "working_capital", "stage": "working_capital", "trace_id": "t1"},
+        )
+    with session.transaction(engine) as s:
+        event = reads.fact_event(s, T, "CA-2026-0001", "wc.recommended_amount", fact.version)
+        assert event is not None
+        assert (event.payload["agent"], event.payload["stage"], event.payload["trace_id"]) == (
+            "working_capital",
+            "working_capital",
+            "t1",
+        )
+        assert reads.get_fact(s, T, "CA-2026-0001", "wc.recommended_amount", 1) is not None
+        assert reads.get_fact(s, T, "CA-2026-0001", "wc.recommended_amount", 2) is None
+        assert reads.verify_chain(s, T) == []

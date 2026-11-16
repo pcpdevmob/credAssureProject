@@ -94,9 +94,17 @@ API's `display` string and keeps `paise` only as the lookup key.
   3. inputs: each case file kind with its sha12 and upload time, and each other fact it used (each one clickable, so a figure's sources can be followed);
   4. sources: KFS passage or regulation chunk with title and section;
   5. audit event (seq, actor, time) and trace ID (copy button).
-- **Planned API shape** (backend lane, before U1): `GET /v1/cases/{id}/facts/{key}/lineage` →
-  `{key, version, value:{paise?, display}, unit, source_type, source_ref, produced_by, input_hash, inputs:[{kind, ref, sha12, fact_key?}], passages:[{chunk_id, title, section}], audit:{seq, actor, ts}, trace_id, superseded_by?}`.
-  Until it exists, U1 uses MSW mocks with this shape.
+- **API (built, scope #33):** `GET /v1/cases/{id}/facts/{key}/lineage[?version=n]` → `Lineage` in openapi.json:
+  `{case_id, key, version, latest_version, superseded_by|null, value:{text, paise|null, display}, unit, created_at, source_type,
+  source_ref, engine:{name, version|null}, input_hash, files:[{kind, name, sha256, uploaded_at}],
+  inputs:[{kind: fact|hr_record|ref, ref, fact_key|null}], passages:[{doc_id, title|null, section|null, chunk_id|null}],
+  producer:{agent|null, stage|null, trace_id|null}, audit:{seq, actor, ts}|null}`. The UI takes sha12 from `sha256[:12]` for display only.
+  Ledger limits the drawer must handle:
+  - `files[].name` is the upload label the agent cited (`order`, `offer:OF-01-A.v1`), not the original filename (not stored).
+  - No fact cites chunk ids yet; reference-rate facts cite a corpus doc id, so `section` and `chunk_id` are null there.
+  - `producer` is all null for facts written before #33 or outside a stage; show "not recorded", never blank.
+  - An identical re-run adds no version, so `producer.trace_id` is the first run that wrote this value, not the latest run.
+  - There is no engine formula line; step 2 shows `engine` only (a formula would be business logic in the UI).
 - **Motion:** the drawer slides in over 180 ms ease-out. With reduced motion it appears without the slide. This and the decision
   confirmation are the only motion in app screens.
 
@@ -305,7 +313,7 @@ CredAssure, and the wireframes above use CredAssure. U1 changes the wordmark tex
 
 | Need | Status |
 |---|---|
-| `GET /v1/cases/{id}/facts/{key}/lineage` | Missing. The backend lane adds it before U1; U1 mocks it (§4 shape). |
+| `GET /v1/cases/{id}/facts/{key}/lineage` | Available (#33, 2026-11-16); typed in `@credassure/api-client`. Shape in §4. |
 | Problem+json declared in openapi | Runtime only; the mapper reads the runtime body |
 | Typed responses | Free-form objects in openapi; `services/*` cast. Typing them is a gateway task (ADR 0022). |
 | Cash table, offers, readiness | Closed since ADR 0022 was written (9a, 9b, 9c): `/working-capital/cases/{id}/cash-table`, `/lendwise/cases/{id}/offers`, `/onboarding/cases/{id}/result` |
