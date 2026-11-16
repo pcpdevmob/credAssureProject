@@ -16,10 +16,11 @@ data and never chooses a rank, a gate or a tool (BR-15). Nothing here accepts an
 
 import contextvars
 import hashlib
+import json
 import re
 from collections.abc import Callable, Mapping, Sequence
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import date
 from decimal import ROUND_HALF_UP, Decimal
 from typing import Any, Literal
@@ -27,7 +28,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field
 
 from credassure.agents.lendwise import __version__
-from credassure.core import slots
+from credassure.core import narrative, slots
 from credassure.core.blockers import BlockerCode, BlockerEffect, blocker_effect
 from credassure.core.enums import AgentName, Decision
 from credassure.core.errors import LLMError
@@ -38,6 +39,7 @@ from credassure.core.results import AgentResult, Blocker, EvidenceRef
 from credassure.core.structured import complete_model
 from credassure.engines import affordability, cashflow, loancost, offer_audit, ranking
 from credassure.engines.loancost import Charge
+from credassure.engines.normaliser import find_all
 from credassure.security.spotlight import spotlight
 
 EXTRACT, EXPLAIN = "lw_kfs_extract", "lw_explain"
@@ -45,12 +47,7 @@ PAISE = Decimal("0.01")
 MAX_OFFERS = 4  # BRD §4.1 compares three; four still fits the 10-step cap (SUP-07)
 ENGINE = "engines.loancost"
 ENGINE_VERSION = "1"  # bump when an LW engine changes a result (lineage, scope #33)
-# VER-03 interim guard until the Critic (9d): no approval, acceptance or urgency wording.
-BANNED = re.compile(
-    r"(?-i:\bGO\b|\bNO_GO\b)|approv|accept|\bsign|sanction|guaranteed|urgent|immediately|hurry",
-    re.IGNORECASE,
-)
-REASONS = {  # plain words for each flag, rendered by code into narrative slots
+REASONS = {  # plain words for each flag; the narrative's reason slots add the computed detail
     BlockerCode.LW_MISSING_MATERIAL_TERM: "it is missing a material term, so it is not compared",
     BlockerCode.LW_INSTALMENT_MISMATCH: "its stated instalment does not match the recomputed one",
     BlockerCode.LW_SCHEDULE_DATE_MISMATCH: "its first repayment date does not match its schedule",
@@ -187,7 +184,11 @@ def complete(offer: Mapping[str, Any]) -> bool:
 
 
 def compare(
-    tools: ToolPort, case_id: str, inputs: Inputs, hidden: Mapping[str, Sequence[Charge]]
+    tools: ToolPort,
+    case_id: str,
+    inputs: Inputs,
+    hidden: Mapping[str, Sequence[Charge]],
+    apr_override: Mapping[str, Decimal] | None = None,
 ) -> Comparison:
     """Audit, price, check affordability and rank, all through the engine tools (4 calls).
 
@@ -221,6 +222,9 @@ def compare(
     priced: dict[str, tuple[loancost.Priced, Decimal]] = tools.call(
         "price_offer", case_id, {"offers": priceable, "hidden": hidden}
     )
+    for oid, apr in (apr_override or {}).items():  # ablation A1: the model's APR, not the engine's
+        if oid in priced:
+            priced[oid] = (replace(priced[oid][0], apr=apr), priced[oid][1])
     fits: dict[str, affordability.Fit] = {}
     order = None
     if inputs.position is not None:
@@ -287,6 +291,8 @@ def facts_for(c: Comparison, inputs: Inputs) -> dict[str, tuple[Decimal | int | 
             out[f"{k}.affordable"] = (str(r.fit.affordable).lower(), "bool")  # LW-09
             out[f"{k}.eligible"] = (str(r.eligible).lower(), "bool")  # + on time, enough
             out[f"{k}.lowest_cash"] = (r.fit.lowest_cash, "INR")
+            if r.fit.breach_week is not None:
+                out[f"{k}.breach_week"] = (r.fit.breach_week, "week")  # 9d reason code
         if r.offer["offer_id"] in rank_of:
             out[f"{k}.rank"] = (rank_of[r.offer["offer_id"]], "rank")
     if c.ranking is not None:
@@ -333,9 +339,12 @@ def verified(extraction: KfsChargeExtraction, schedule: str) -> set[Charge]:
     return out
 
 
-def _extract(llm: Any, doc_id: str, schedule: str) -> set[Charge] | None:
-    spot = spotlight([(doc_id, schedule)])
-    prompt = prompts()[EXTRACT].render(preamble=spot.preamble, document=spot.text)
+def _extract(llm: Any, doc_id: str, schedule: str, guard: bool = True) -> set[Charge] | None:
+    if guard:
+        spot = spotlight([(doc_id, schedule)])
+        prompt = prompts()[EXTRACT].render(preamble=spot.preamble, document=spot.text)
+    else:  # ablation A5: the document goes in raw, not marked as data
+        prompt = prompts()[EXTRACT].render(preamble="", document=schedule)
     try:
         return verified(complete_model(llm, EXTRACT, KfsChargeExtraction, prompt), schedule)
     except LLMError:  # slow or broken model: the code parse stands
@@ -348,7 +357,8 @@ def extract_all(
     """Hidden charges per offer and, per schedule, whether the model's reading was kept."""
     todo = [o for o in inputs.offers if complete(o)]
     model: dict[str, set[Charge] | None] = {}
-    if ctx.llm is not None and todo:
+    # A regeneration pass only redrafts the wording: the extraction is not repeated (NFR-03).
+    if ctx.llm is not None and todo and not ctx.findings and not ctx.template_only:
         with ThreadPoolExecutor(max_workers=3) as pool:  # scope #22: shared limiter in the client
             futures = {
                 o["offer_id"]: pool.submit(
@@ -357,6 +367,7 @@ def extract_all(
                     ctx.llm,
                     inputs.schedule_id(o),
                     inputs.schedules[inputs.schedule_id(o)],
+                    ctx.ablation != "A5",
                 )
                 for o in todo
             }
@@ -384,7 +395,35 @@ def code_hidden(inputs: Inputs) -> dict[str, list[Charge]]:
 
 
 # ---- narrative ---------------------------------------------------------------------------------
-def narrative_slots(c: Comparison) -> dict[str, str]:
+def _principal(r: OfferResult) -> Decimal:
+    return Decimal(str(r.offer["principal"]))
+
+
+def _why(r: OfferResult, position: Position | None) -> str | None:
+    """9d reason codes: why an offer is not ranked, with the figures code computed (week, amount).
+    The model may only repeat these clauses; any reason of its own is a Critic finding."""
+    fit = r.fit
+    for code in r.flags:  # sorted: the same priority the template has always used
+        if code == BlockerCode.LW_NOT_AFFORDABLE.value:
+            week = f" in week {fit.breach_week}" if fit and fit.breach_week else ""
+            return f"its repayments would push cash below the minimum buffer{week}"
+        if code == BlockerCode.LW_LATE_OR_SHORT.value and fit is not None and position is not None:
+            parts = []
+            if fit.late:
+                low = position.peak_week
+                parts.append(f"it is disbursed after the cash low point in week {low}")
+            if fit.short:
+                parts.append(
+                    f"it lends {slots.money(_principal(r))} against the "
+                    f"{slots.money(position.need)} needed"
+                )
+            return " and ".join(parts)
+        if code in REASONS:
+            return REASONS[BlockerCode(code)]
+    return None
+
+
+def narrative_slots(c: Comparison, position: Position | None = None) -> dict[str, str]:
     """LW: every value and reason the model may use, rendered by code (slots only)."""
     by_id = {r.offer["offer_id"]: r for r in c.offers}
     out: dict[str, str] = {}
@@ -396,9 +435,22 @@ def narrative_slots(c: Comparison) -> dict[str, str]:
             out[f"rank{n}.apr"] = slots.rate(p.apr)
             out[f"rank{n}.total_cost"] = slots.money(p.total_cost)
     if len(order) >= 2:
-        a, b = by_id[order[0]].priced, by_id[order[1]].priced
+        first, second = by_id[order[0]], by_id[order[1]]
+        a, b = first.priced, second.priced
         if a is not None and b is not None:
             out["cmp.rank1_vs_rank2"] = slots.compare(a.apr, b.apr)
+            more_cost = b.total_cost - a.total_cost
+            if more_cost > 0:
+                out["reason.rank2.total_cost"] = (
+                    f"{order[1]} costs {slots.money(more_cost)} more in total than {order[0]}"
+                )
+            upfront = (_principal(second) - b.amount_received) - (
+                _principal(first) - a.amount_received
+            )
+            if upfront > 0:
+                out["reason.rank2.upfront"] = (
+                    f"{order[1]} deducts {slots.money(upfront)} more upfront than {order[0]}"
+                )
     priced = [r for r in c.offers if r.priced is not None]
     if order and priced:
         headline = min(priced, key=lambda r: (Decimal(str(r.offer["annual_rate"])), r.key))
@@ -411,15 +463,15 @@ def narrative_slots(c: Comparison) -> dict[str, str]:
     for r in c.offers:
         if r.offer["offer_id"] in order:
             continue
-        reason = next((REASONS[BlockerCode(f)] for f in r.flags if BlockerCode(f) in REASONS), None)
+        reason = _why(r, position)
         if reason:
             oid = r.offer["offer_id"]
             out[f"excluded.{oid}"] = f"{oid} is not ranked because {reason}"
     return out
 
 
-def template(c: Comparison) -> str:
-    s = narrative_slots(c)
+def template(c: Comparison, position: Position | None = None) -> str:
+    s = narrative_slots(c, position)
     if c.ranking is None or c.ranking.gate == "NOT_REQUIRED":
         return "No new facility is needed for this case, so the offers are audited but not ranked."
     parts = []
@@ -432,6 +484,7 @@ def template(c: Comparison) -> str:
         parts.append(
             f"{s['rank2.offer']} follows at {s['rank2.apr']} (total cost {s['rank2.total_cost']})."
         )
+    parts += [s[k] + "." for k in ("reason.rank2.total_cost", "reason.rank2.upfront") if k in s]
     if "headline.offer" in s:
         parts.append(
             f"{s['headline.offer']} {s['headline.note']} once fees, GST and charges count."
@@ -456,8 +509,8 @@ MEANINGS = {
 
 
 def _meaning(key: str) -> str:
-    if key.startswith("excluded."):
-        return "a complete clause naming an unranked offer and why; write it as its own sentence"
+    if key.startswith(("excluded.", "reason.")):
+        return "a complete clause giving a reason; write it as its own sentence"
     return MEANINGS[key]
 
 
@@ -468,28 +521,31 @@ def _example(values: Mapping[str, str]) -> str:
         parts.append("{rank1.offer} ranks first, with a true annual cost of {rank1.apr}.")
     if "cmp.rank1_vs_rank2" in values:
         parts.append("That is {cmp.rank1_vs_rank2} the {rank2.apr} of {rank2.offer}.")
+    parts += [f"{{{k}}}." for k in sorted(values) if k.startswith("reason.")]
     if "headline.offer" in values:
         parts.append("{headline.offer} {headline.note}.")
     parts += [f"{{{k}}}." for k in sorted(values) if k.startswith("excluded.")]
     return " ".join(parts)
 
 
-def _explain(ctx: StageContext, c: Comparison) -> str | None:
-    if ctx.llm is None or c.ranking is None or c.ranking.gate == "NOT_REQUIRED":
-        return None
-    values = narrative_slots(c)
+def _explain(
+    ctx: StageContext, c: Comparison, position: Position | None
+) -> tuple[str | None, str | None]:
+    """(slot-rendered model draft or None for the template, prompt used); the Critic checks it."""
+    if c.ranking is None or c.ranking.gate == "NOT_REQUIRED":
+        return None, None
+    values = narrative_slots(c, position)
     prompt = prompts()[EXPLAIN].render(
         slots="\n".join(f"{{{k}}} = {_meaning(k)}" for k in sorted(values)),
         example=_example(values),
         gate=c.ranking.gate,
     )
-    try:
-        reply = ctx.llm.complete(prompt, name=EXPLAIN).strip()
-    except LLMError:
-        return None
+    reply, used = narrative.draft(ctx, EXPLAIN, prompt)
+    if reply is None:
+        return None, used
     required = ["rank1.offer"] if "rank1.offer" in values else []
     required += [k for k in values if k.startswith("excluded.")]
-    return slots.render(reply, values, required=required, banned=BANNED)
+    return slots.render(reply, values, required=required), used
 
 
 # ---- the stage ---------------------------------------------------------------------------------
@@ -520,22 +576,30 @@ def run(ctx: StageContext) -> AgentResult:
     ask = _missing(inputs)
     if ask is not None or inputs.position is None:
         q = ask or "Can you resolve the funding-need question first?"
-        return _result(ctx, Decision.NEEDS_INPUT, [], [], q, steps, {}, question=q)
+        return _asking(ctx, inputs, q, steps)
     need = ctx.ledger.get(ctx.case_id, "wc.recommended_amount")  # read-only wc.* (scope #24)
     if need is None or Decimal(need) != inputs.position.need:
         q = "The funding need has changed since it was calculated; can you re-run working capital?"
-        return _result(ctx, Decision.NEEDS_INPUT, [], [], q, steps, {}, question=q)
+        return _asking(ctx, inputs, q, steps)
     hidden, source = extract_all(ctx, inputs)
     versions: dict[str, str] = {}
     if ctx.llm is not None and source:
         steps += len(source)
         versions[EXTRACT] = prompt_version(EXTRACT)
-    c = compare(ctx.tools, ctx.case_id, inputs, hidden)
-    steps += 4
-    drafted = _explain(ctx, c)
-    if ctx.llm is not None and c.ranking is not None and c.ranking.gate != "NOT_REQUIRED":
+    override = None
+    if ctx.ablation == "A1":  # the model calculates the APRs (BRD §12); one call for all offers
+        override = _a1_aprs(ctx, inputs)
         steps += 1
-        versions[EXPLAIN] = prompt_version(EXPLAIN)
+        if override is None:
+            q = "Ablation A1 needs the model to calculate APRs, and it is unavailable."
+            return _asking(ctx, inputs, q, steps)
+        versions[A1_PROMPT] = prompt_version(A1_PROMPT)
+    c = compare(ctx.tools, ctx.case_id, inputs, hidden, override)
+    steps += 4
+    drafted, used = _explain(ctx, c, inputs.position)
+    if used is not None:
+        steps += 1
+        versions[used] = prompt_version(used)
     facts = facts_for(c, inputs)
     facts |= {f"lw.kfs.{doc}.extraction": (how, "enum") for doc, how in source.items()}
     evidence = []
@@ -548,21 +612,76 @@ def run(ctx: StageContext) -> AgentResult:
             unit=unit,
             source_type="reference" if rate else "case_file",
             source_ref=_cite(inputs, key) if rate else inputs.source_ref,
-            produced_by=f"{ENGINE}@{ENGINE_VERSION}",
+            produced_by=(  # lineage says who made the number (A1: the model, not the engine)
+                f"model:{A1_PROMPT}@{prompt_version(A1_PROMPT)}"
+                if override is not None and key.endswith(".apr")
+                else f"{ENGINE}@{ENGINE_VERSION}"
+            ),
             input_hash=inputs.input_hash,
         )
         evidence.append(EvidenceRef(kind="ledger_fact", ref_id=key))
     decision, blockers = gate(c)
+    text = drafted or template(c, inputs.position)
+    narrative.record(
+        ctx,
+        "lw.",
+        text,
+        model=drafted is not None,
+        slots=narrative_slots(c, inputs.position),
+        source_ref=inputs.source_ref,
+        produced_by=f"{ENGINE}@{ENGINE_VERSION}",
+        input_hash=inputs.input_hash,
+    )
     return _result(
         ctx,
         decision,
         blockers,
         evidence,
-        drafted or template(c),
+        text,
         steps,
         versions,
         output_ref="lw.ranking",
     )
+
+
+A1_PROMPT = "a1_lw_apr"
+
+
+def _a1_aprs(ctx: StageContext, inputs: Inputs) -> dict[str, Decimal] | None:
+    """Ablation A1 only: the model computes each offer's APR from its terms (no engine)."""
+    if ctx.llm is None:
+        return None
+    terms = json.dumps([_terms(o) for o in inputs.offers if complete(o)], default=str)
+    try:
+        reply = ctx.llm.complete(prompts()[A1_PROMPT].render(offers=terms), name=A1_PROMPT)
+    except LLMError:
+        return None
+    out: dict[str, Decimal] = {}
+    for line in reply.splitlines():
+        oid, _, rest = line.partition(":")
+        rates = [h.value for h in find_all(rest) if h.kind == "rate"]
+        if oid.strip() and rates and isinstance(rates[0], Decimal):
+            out[oid.strip()] = rates[0]
+    want = {o["offer_id"] for o in inputs.offers if complete(o)}
+    return out if want <= set(out) else None  # a missing or mislabelled offer is a model failure
+
+
+def _terms(o: Mapping[str, Any]) -> dict[str, Any]:
+    keys = ("offer_id", "principal", "annual_rate", "tenure_months", "moratorium_months", "fees")
+    return {k: o.get(k) for k in keys}
+
+
+def _asking(ctx: StageContext, inputs: Inputs, q: str, steps: int) -> AgentResult:
+    narrative.record(
+        ctx,
+        "lw.",
+        q,
+        model=False,
+        slots={},
+        source_ref=inputs.source_ref,
+        produced_by=f"agents.lendwise@{__version__}",
+    )
+    return _result(ctx, Decision.NEEDS_INPUT, [], [], q, steps, {}, question=q)
 
 
 def _cite(inputs: Inputs, key: str) -> str:

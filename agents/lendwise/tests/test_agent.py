@@ -11,6 +11,7 @@ from typing import Any
 import pytest
 
 from credassure.agents.lendwise import agent as lw
+from credassure.core.blockers import BlockerCode
 from credassure.core.enums import Decision, Stage
 from credassure.core.ports import StageContext
 from credassure.engines import affordability, calendar, cashflow, loancost, offer_audit, ranking
@@ -310,7 +311,15 @@ def test_LW12_message_failing_verification_is_never_sent() -> None:
     from credassure.agents.lendwise.negotiate import negotiate
 
     events: list[str] = []
-    bad = [{"code": "VER_UNMATCHED_NUMBER", "detail": "'9%' not in ledger"}]
+    from credassure.core.findings import CriticFinding, FindingSeverity
+
+    bad = [
+        CriticFinding(
+            severity=FindingSeverity.CRITICAL,
+            code=BlockerCode.VER_UNMATCHED_NUMBER,
+            message="'9%' is not a ledger fact",
+        )
+    ]
     result = negotiate(_negotiation_ctx(events, bad))
     assert result.decision is Decision.NO_GO
     assert "lender_send_template" not in events
@@ -338,3 +347,67 @@ def test_LW12_fee_is_worded_by_its_basis() -> None:
     plan = negotiation.plan([fixed, pct])
     assert plan is not None and plan.target_offer == "OF-X-A"  # ₹5,00,000 > ₹20,000
     assert (plan.current_basis, plan.competing_basis) == ("fixed", "pct_of_principal")
+
+
+def test_scope1_A1_model_aprs_replace_the_engine_and_rank() -> None:
+    """Ablation A1 (BRD §12): one model call gives every APR; ranking follows the model."""
+    reply = "OF-01-A: 9.00%\nOF-01-B: 30.00%\nOF-01-C: 31.00%"
+    llm = FakeLLM({lw.EXTRACT: '{"charges": []}', "a1_lw_apr": reply})
+    c = ctx("CA-2026-0001", llm)
+    from dataclasses import replace
+
+    ledger = c.ledger
+    result = lw.run(replace(c, ablation="A1"))
+    assert ledger.get("x", "lw.OF-01-A.v1.apr") == "0.09"
+    assert (ledger.get("x", "lw.ranking") or "").startswith("OF-01-A")
+    assert result.steps_used <= 10 and "a1_lw_apr" in result.prompt_versions
+
+
+def test_scope1_A5_document_goes_in_raw_and_the_reply_scanner_is_off() -> None:
+    seen: list[str] = []
+
+    class Probe(FakeLLM):
+        def complete(self, prompt: str, *, name: str, **kw: Any) -> str:
+            seen.append(prompt)
+            return super().complete(prompt, name=name, **kw)
+
+    from dataclasses import replace
+
+    lw.run(ctx("CA-2026-0001", Probe({lw.EXTRACT: '{"charges": []}'})))
+    assert any("<<" in p for p in seen)  # control: the product path spotlights the document
+    seen.clear()
+    lw.run(replace(ctx("CA-2026-0001", Probe({lw.EXTRACT: '{"charges": []}'})), ablation="A5"))
+    assert seen and not any("<<" in p for p in seen)
+
+
+def test_LW11_LW10_reason_slots_carry_code_computed_figures() -> None:
+    """9d reason codes: each reason the model may repeat is a clause rendered from engine values."""
+    from decimal import Decimal
+
+    from credassure.core import slots
+
+    c = lw.compare(
+        Tools(inputs("CA-2026-0003")),
+        "x",
+        inputs("CA-2026-0003"),
+        lw.code_hidden(inputs("CA-2026-0003")),
+    )
+    s = lw.narrative_slots(c, inputs("CA-2026-0003").position)
+    by = {r.offer["offer_id"]: r.priced for r in c.offers}
+    first, second = c.ranking.order[:2]  # type: ignore[union-attr]
+    more = by[second].total_cost - by[first].total_cost  # type: ignore[union-attr]
+    assert s["reason.rank2.total_cost"] == (
+        f"{second} costs {slots.money(more)} more in total than {first}"
+    )
+    for case, oid in [("CA-2026-0006", "OF-06-C"), ("CA-2026-0010", "OF-10-C")]:
+        loaded = inputs(case)
+        cc = lw.compare(Tools(loaded), "x", loaded, lw.code_hidden(loaded))
+        clause = lw.narrative_slots(cc, loaded.position)[f"excluded.{oid}"]
+        r = next(x for x in cc.offers if x.offer["offer_id"] == oid)
+        assert r.fit is not None and loaded.position is not None
+        if r.fit.late:
+            assert f"after the cash low point in week {loaded.position.peak_week}" in clause
+        if r.fit.short:
+            principal = slots.money(Decimal(str(r.offer["principal"])))
+            assert f"lends {principal} against the {slots.money(loaded.position.need)}" in clause
+        assert r.fit.late or r.fit.short

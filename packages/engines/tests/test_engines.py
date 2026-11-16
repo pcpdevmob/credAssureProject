@@ -544,6 +544,22 @@ def test_LW10_late_or_short_offer_is_flagged_and_unranked(offer_id: str) -> None
     assert offer_id not in result["ranking"]
 
 
+def test_LW09_breach_week_is_the_first_week_cash_falls_below_the_buffer() -> None:
+    """9d reason code "unaffordable in week N": computed by the engine, never by the model."""
+    week1 = date(2026, 1, 5)
+    cumulative = [Decimal(0)] * 8
+    # ₹1,00,000 received in week 1; ₹60,000 repaid one and two months after disbursal
+    flows = [Decimal(100000), Decimal(-60000), Decimal(-60000)]  # repayments are outflows
+    fit = affordability.assess(
+        cumulative, Decimal(0), Decimal(50000), flows, week1, week1, Decimal(1), Decimal(1), 8
+    )
+    assert not fit.affordable and fit.breach_week == 5 and fit.lowest_cash == Decimal(40000)
+    ok = affordability.assess(
+        cumulative, Decimal(0), Decimal(0), flows[:2], week1, week1, Decimal(1), Decimal(1), 8
+    )
+    assert ok.affordable and ok.breach_week is None
+
+
 def test_LW04_undeclared_row_code_cannot_read_is_flagged_never_dropped() -> None:
     offer = _plant_offer("OF-01-B")
     rows = offer_audit.parse_schedule("| Stamp duty | upfront | as per state law |")

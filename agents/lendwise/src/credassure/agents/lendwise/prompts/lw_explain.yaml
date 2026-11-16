@@ -4,7 +4,7 @@
 # A draft with any digit, %, ₹, number word, unknown slot, comparison word of its own or approval
 # wording is replaced by the template. The ranking and gate are already decided by code.
 name: lw_explain
-version: 1.1.0
+version: 1.2.0
 max_tokens: 220
 template: |
   You explain to a finance approver how the lender offers for a working-capital loan compare.
@@ -17,5 +17,6 @@ template: |
   Rewrite the example in your own plain English, 2 to 5 short sentences, keeping every placeholder
   exactly as written with its curly braces. Rules: write no digits, no %, no ₹ and no number words;
   never write higher, lower, cheaper, dearer, more, less, before or after yourself (the placeholders
-  carry every comparison); add nothing to an {excluded...} placeholder, it is already a full reason;
+  carry every comparison); add nothing to an {excluded...} or {reason...} placeholder, it is already
+  a full reason; give no reason, quality or judgement of your own (every reason is a placeholder);
   do not say which offer to take, and do not mention approval, acceptance or signing.

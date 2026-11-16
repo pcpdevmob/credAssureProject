@@ -11,6 +11,7 @@ never import each other (ADR 0005, ADR 0009); case_id is always the run's own (S
 import contextvars
 import json
 import logging
+import re
 import threading
 import uuid
 from collections.abc import Callable, Mapping
@@ -36,6 +37,7 @@ from credassure.core.errors import (
     ModelUnavailable,
     NoPendingApproval,
 )
+from credassure.core.findings import CriticFinding, FindingSeverity
 from credassure.core.plan import FIXED_STAGES, Plan
 from credassure.core.ports import (
     ClockPort,
@@ -60,6 +62,12 @@ _log = logging.getLogger("credassure.supervisor")
 MAX_REPAIRS = 2  # SUP-04: an invalid result is re-requested at most twice
 AMOUNT_KEY = "wc.recommended_amount"  # rupees, Decimal text (the threshold applies to it, Q-02)
 RETURNABLE = (Stage.ONBOARDING, Stage.WORKING_CAPITAL, Stage.LENDWISE)  # APR-05 named stages
+MAX_REGENERATIONS = 2  # VER-05: then the template
+MAX_REROUTES = 2  # ARCHITECTURE §6.3: Critic -> stage at most twice per run, then pause
+FINDINGS_KEY = "ver.findings"  # the Critic stage's findings (JSON list of CriticFinding)
+WITHHELD = "The explanation failed verification and is withheld; the figures stand."
+Critic = Callable[[AgentResult], list[CriticFinding]]
+A4_PROMPT = "sup_gate_a4"  # ablation A4 only
 
 
 class StageCancelledError(RuntimeError):
@@ -89,6 +97,8 @@ class _State(TypedDict):
     target: str | None
     outcome: dict[str, Any] | None
     results: NotRequired[dict[str, dict[str, Any]]]  # kept across runs by the checkpointer
+    reroutes: NotRequired[int]  # Critic -> stage re-routes in this run (MAX_REROUTES)
+    pending: NotRequired[dict[str, list[dict[str, Any]]]]  # stage -> Critic findings to fix
 
 
 def _same_case(bound: str, case_id: str) -> None:
@@ -159,6 +169,8 @@ class _GuardedLedger:
         _check(self._cancel)
         _same_case(self._case, case_id)
         authorize_fact(self._agent, key, write=True)
+        if key.endswith("narrative") and isinstance(value, str):
+            value = redact(value)  # NFR-07: free text is redacted before it is stored
         return self._ledger.put_fact(
             case_id,
             key,
@@ -248,6 +260,7 @@ class Supervisor:
         ablation: str | None = None,
         boundary_rule: Literal["hold", "director", "vp"] = "hold",
         stage_timeout: float = 300.0,
+        critic: Critic | None = None,
     ) -> None:
         self.agents, self.store, self.ledger = agents, store, ledger
         self.tools, self.llm, self.clock = tools, llm, clock
@@ -257,6 +270,7 @@ class Supervisor:
         self.stage_timeout = stage_timeout  # scope #23: 5 min per stage
         self.planner_mode, self.ablation = planner_mode, ablation
         self.boundary_rule: Literal["hold", "director", "vp"] = boundary_rule
+        self.critic = critic  # injected by the gateway (agents never import the Critic)
         self.graph = self._build().compile(checkpointer=checkpointer)
         # One run per case at a time (run lock), so a per-case cancel hook is safe to share.
         self._cancelled: dict[str, Callable[[], bool]] = {}
@@ -323,6 +337,8 @@ class Supervisor:
             "stages": [s.value for s in plan.stages],
             "target": stage.value if stage else None,
             "outcome": None,
+            "reroutes": 0,
+            "pending": {},
         }
         if "results" not in snapshot.values:
             state["results"] = {}
@@ -411,18 +427,65 @@ class Supervisor:
         def node(state: _State) -> dict[str, Any]:
             if self._cancelled.get(state["case_id"], lambda: False)():
                 return {"outcome": {"status": "ABANDONED", "stage": stage.value, "question": None}}
-            result = self._invoke(state["case_id"], stage, state["trace_id"])
+            pending = dict(state.get("pending") or {})
+            fix = tuple(CriticFinding.model_validate(f) for f in pending.pop(stage.value, []))
+            result = self._invoke(state["case_id"], stage, state["trace_id"], fix)
             results = {**state.get("results", {}), stage.value: result.model_dump(mode="json")}
             outcome: dict[str, Any] | None = None
+            if stage is Stage.CRITIC and result.decision is Decision.NO_GO:
+                back = self._reroute(state, result)
+                if back is not None:
+                    return back
             if result.decision is Decision.ERROR:
                 outcome = self._stop(result, "FAILED")
             elif result.decision is not Decision.GO:
                 outcome = self._stop(result, "PAUSED")
             elif state.get("target") is not None:
                 outcome = {"status": "IN_PROGRESS", "stage": stage.value, "question": None}
-            return {"results": results, "outcome": outcome}
+            return {"results": results, "outcome": outcome, "pending": pending}
 
         return node
+
+    def _reroute(self, state: _State, result: AgentResult) -> dict[str, Any] | None:
+        """ARCHITECTURE §6.3: a Critic finding reopens the earliest offending stage (and clears
+        the stages after it) with the findings to fix; at most MAX_REROUTES, then pause."""
+        case_id, done = state["case_id"], state.get("reroutes", 0)
+        try:
+            found = [
+                CriticFinding.model_validate(f)
+                for f in json.loads(self.ledger.get(case_id, FINDINGS_KEY) or "[]")
+            ]
+        except (ValueError, ValidationError):
+            return None  # unreadable findings: the NO_GO stands and the case pauses
+        stages = state["stages"]
+        upstream = stages[: stages.index(Stage.CRITIC.value)]
+        targets = [
+            f.target_stage.value
+            for f in found
+            if f.target_stage is not None and f.target_stage.value in upstream
+        ]
+        if not targets or done >= MAX_REROUTES:
+            return None
+        back = min(targets, key=stages.index)
+        self.store.audit(
+            case_id,
+            "CRITIC_REROUTE",
+            {"stage": back, "codes": sorted({f.code.value for f in found}), "attempt": done + 1},
+        )
+        keep = stages[: stages.index(back)]
+        results = {k: v for k, v in state.get("results", {}).items() if k in keep}
+        fix = [
+            f.model_dump(mode="json")
+            for f in found
+            if f.target_stage is not None and f.target_stage.value == back
+        ]
+        return {  # a targeted run becomes a resume: the plan continues from the reopened stage
+            "results": results,
+            "outcome": None,
+            "target": None,
+            "reroutes": done + 1,
+            "pending": {**(state.get("pending") or {}), back: fix},
+        }
 
     def _upstream_not_go(self, state: _State) -> dict[str, Any]:
         """SUP-03: the agent is never called; the stage is recorded NO_GO by the Supervisor."""
@@ -489,12 +552,22 @@ class Supervisor:
         return {"outcome": {"status": status, "stage": None, "question": None}}
 
     # ---- one stage --------------------------------------------------------------------------
-    def _invoke(self, case_id: str, stage: Stage, trace_id: str) -> AgentResult:
+    def _invoke(
+        self,
+        case_id: str,
+        stage: Stage,
+        trace_id: str,
+        findings: tuple[CriticFinding, ...] = (),
+    ) -> AgentResult:
         agent_name = AgentName(stage.value)
         run_id = self.store.stage_started(case_id, stage.value, trace_id)
         with span("stage", case_id=case_id, stage=stage.value, trace_id=trace_id):
-            result = self._call_agent(case_id, stage, agent_name, trace_id)
-            result = self._gate(result)
+            # SUP-05 first (code is the authority on figures), then the Critic on the wording;
+            # every regenerated result passes through the same gate again.
+            result = self._gate(
+                self._call_agent(case_id, stage, agent_name, trace_id, findings=findings)
+            )
+            result = self._criticise(case_id, stage, agent_name, trace_id, result)
         self.store.stage_finished(run_id, result)
         return result
 
@@ -507,6 +580,8 @@ class Supervisor:
         trace_id = uuid.uuid4().hex
         with span("stage", case_id=case_id, stage=f"{stage.value}.{name}", trace_id=trace_id):
             result = self._call_agent(case_id, stage, AgentName(stage.value), trace_id, agent)
+            # No _criticise here: an extra invocation has side effects (the negotiation round
+            # sends to the lender), so it is never re-run; it verifies its own message first.
             result = self._gate(result, recheck=False)
         self.store.audit(
             case_id,
@@ -528,6 +603,9 @@ class Supervisor:
         agent_name: AgentName,
         trace_id: str,
         override: StageAgent | None = None,
+        *,
+        findings: tuple[CriticFinding, ...] = (),
+        template_only: bool = False,
     ) -> AgentResult:
         agent = override or self.agents[stage]
         llm = self.llm
@@ -548,6 +626,9 @@ class Supervisor:
                 ),
                 llm=traced,
                 clock=self.clock,
+                findings=findings,
+                template_only=template_only,
+                ablation=self.ablation,
             )
             try:
                 with stage_budget(self.token_cap) as budget:
@@ -626,6 +707,60 @@ class Supervisor:
             f"invalid result after {MAX_REPAIRS} repairs",
         )
 
+    def _criticise(
+        self,
+        case_id: str,
+        stage: Stage,
+        agent_name: AgentName,
+        trace_id: str,
+        result: AgentResult,
+        override: StageAgent | None = None,
+    ) -> AgentResult:
+        """VER-05, scope #21: the Critic checks the stage's narrative. Critical findings send the
+        stage back with them (the agent drafts with ``regenerate``) at most MAX_REGENERATIONS
+        times, then once with ``template_only``; a template that still fails is withheld and the
+        stage is NO_GO. Each attempt is a new invocation with its own step cap (SUP-07)."""
+        if self.critic is None or self.ablation == "A2" or stage is Stage.CRITIC:
+            return result
+        tries = 0
+        while result.decision is not Decision.ERROR and result.narrative:
+            found = [f for f in self.critic(result) if f.severity is FindingSeverity.CRITICAL]
+            if not found:
+                return result
+            codes = sorted({f.code.value for f in found})
+            self.store.audit(
+                case_id,
+                "CRITIC_BLOCKED",
+                {"stage": stage.value, "attempt": tries + 1, "codes": codes, "trace_id": trace_id},
+            )
+            if self.llm is None or tries > MAX_REGENERATIONS:  # the template itself failed
+                blockers = [Blocker(code=f.code, message=f.message) for f in found[:5]]
+                return result.model_copy(
+                    update={
+                        "decision": Decision.NO_GO,
+                        "narrative": WITHHELD,
+                        "blockers": [*result.blockers, *blockers],
+                    }
+                )
+            tries += 1
+            last = tries > MAX_REGENERATIONS
+            if last:
+                self.store.audit(
+                    case_id, "CRITIC_FALLBACK", {"stage": stage.value, "trace_id": trace_id}
+                )
+            result = self._gate(
+                self._call_agent(
+                    case_id,
+                    stage,
+                    agent_name,
+                    trace_id,
+                    override,
+                    findings=tuple(found),
+                    template_only=last,
+                )
+            )
+        return result
+
     def _run_with_timeout(self, agent: StageAgent, ctx: StageContext, cancel: Any) -> Any:
         """scope #23: the agent runs in a worker thread (same trace and budget context). On
         timeout `cancel` is set, so the orphan's next model, tool or ledger call raises."""
@@ -665,7 +800,11 @@ class Supervisor:
                     ],
                 }
             )
-        if not recheck or result.decision is not Decision.GO or self.ablation == "A4":  # A4
+        if self.ablation == "A4" and self.llm is not None and recheck:  # model decides (BRD §12)
+            return self._a4_gate(result)
+        # A1: the engines are what the re-check runs, so with the model calculating there is none
+        a1 = self.ablation == "A1" and result.stage in (Stage.WORKING_CAPITAL, Stage.LENDWISE)
+        if not recheck or result.decision is not Decision.GO or a1 or self.ablation == "A4":
             return result
         try:
             failed = self.rechecks.get(result.stage, _evidence_and_gate_check)(result, self.ledger)
@@ -689,6 +828,24 @@ class Supervisor:
         return result.model_copy(
             update={"decision": Decision.NO_GO, "blockers": [*result.blockers, *new]}
         )
+
+    def _a4_gate(self, result: AgentResult) -> AgentResult:
+        """Ablation A4 only: the stage decision is read from the model's free-text verdict."""
+        if self.llm is None:
+            return result
+        summary = "\n".join(
+            [result.narrative or "", *[f"- {b.code.value}: {b.message}" for b in result.blockers]]
+        )
+        prompt = prompts()[A4_PROMPT].render(stage=result.stage.value, summary=redact(summary))
+        try:
+            verdict = self.llm.complete(prompt, name=A4_PROMPT).upper()
+        except LLMError:
+            return result
+        found = re.search(r"\b(NEEDS_INPUT|NO[_-]GO|GO)\b", verdict)
+        if found is None:
+            return result
+        word = found.group(1).replace("-", "_")
+        return result.model_copy(update={"decision": Decision(word)})
 
     def _error(
         self, case_id: str, stage: Stage, trace_id: str, code: BlockerCode, message: str

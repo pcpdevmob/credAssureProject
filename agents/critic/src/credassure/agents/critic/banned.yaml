@@ -1,0 +1,17 @@
+# S-VER-02 banned content (VER-03, BRD §14). Versioned: bump on any change; the version goes on
+# every finding's audit event. Patterns are case-insensitive Python regexes unless (?-i:...).
+# `all` applies to every text (code templates included); `model_only` applies to model drafts,
+# per stage, on top of `all`.
+version: 1.0.0
+all:
+  acceptance: '\baccept(s|ed|ing|ance)?\b|\bsign(s|ed|ing|ature)?\b|\bsubmit\w*|\bbind(s|ing)?\b|agree to the terms|\bexecute\b|\bcommit to\b'
+  approval_prediction: '\bapprov\w*|\bpre-approved|\bsanctioned\b|\blikely to be\b|\bchances? of\b|\bodds\b|\bguaranteed\b|\bwill be (granted|accepted|cleared)'
+  invented_rate: '\b(market|current|typical|average|standard|prevailing) (interest |lending )?rates?\b|\brates? (are|is) (rising|falling|expected)'
+  false_urgency: '\burgent\w*|\bimmediately\b|\bact now\b|\blast chance\b|\bhurry\b|\bdeadline\b|\blimited time\b|\bexpires? (soon|today)\b|\basap\b|\bright away\b'
+  lender_choice: '\b(we|i) (would )?(recommend|suggest|advise)\b|\byou should (take|choose|pick|go with|select)\b|\b(go|going) with\b'
+  gate_words: '(?-i:\bGO\b|\bNO_GO\b|\bNEEDS_INPUT\b)'
+model_only:
+  working_capital:
+    off_topic: '\blender\w*|\bbank\w*|\bsanction\w*|\bdisburs\w*|\binterest\b|\brates?\b|\bguarantee\w*|\bloan offer'
+  onboarding:
+    off_topic: '\blender\w*|\bloan\b|\brates?\b'

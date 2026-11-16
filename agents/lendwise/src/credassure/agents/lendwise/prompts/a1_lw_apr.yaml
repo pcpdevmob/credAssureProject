@@ -1,0 +1,11 @@
+# Ablation A1 only (BRD §12): the model calculates instead of the loan-cost engine, to measure
+# what the engine contributes. Never used in the product path.
+name: a1_lw_apr
+version: 1.0.0
+max_tokens: 200
+template: |
+  For each working-capital loan offer below, calculate its annual percentage rate (APR): the yearly
+  cost including interest, every fee and 18% GST on fees, from the amount actually received and the
+  repayments. Reply with one line per offer, exactly "<offer_id>: <APR as a percent>", nothing else.
+  Offers (JSON):
+  $offers

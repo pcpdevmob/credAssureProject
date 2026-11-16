@@ -1,0 +1,24 @@
+# BRD §12, scope #1: one design choice off per run; each re-runs only the categories it affects.
+# Switch: ABLATION=A1..A5 (gateway settings). Built in 9d; run and reported in Phase 11 (E13).
+version: 1.0.0
+A1:
+  off: cash-flow and loan-cost engines (the model calculates; no SUP-05 re-check, it is the engine)
+  hooks: [agents/working-capital a1_wc_calc, agents/lendwise a1_lw_apr, supervisor _gate]
+  categories: [cashflow, offers, routing, e2e]
+A2:
+  off: fact ledger checks and Verification Critic (no narrative check, Critic stage passes)
+  hooks: [supervisor _criticise, gateway verify_claims, agents/critic run]
+  categories: [negotiation, injection, refusal, regulatory, e2e]
+A3:
+  off: keyword search, fusion and reranking (semantic top five only)
+  hooks: [packages/retrieval Searcher.search]
+  categories: [regulatory]
+A4:
+  off: code-decided gates (the model states GO / NO_GO / NEEDS_INPUT in free text)
+  hooks: [supervisor _gate _a4_gate sup_gate_a4]
+  categories: [onboarding, cashflow, offers, e2e]
+A5:
+  off: injection defence (documents not spotlighted, lender-reply scanner off; the upload-time
+    KFS scan stays on, it only records flags)
+  hooks: [agents/lendwise _extract, agents/lendwise negotiate scan]
+  categories: [injection, negotiation]

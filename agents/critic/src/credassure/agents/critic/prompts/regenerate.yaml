@@ -1,0 +1,12 @@
+# scope #21: the Critic's findings go back to the owning agent, which drafts again (at most twice,
+# then the code template, VER-05). The original prompt is repeated in full so every rule still holds.
+name: regenerate
+version: 1.0.0
+max_tokens: 260
+template: |
+  $original
+
+  A checker rejected your previous reply for these reasons:
+  $findings
+  Write the reply again. Follow every rule above. Use only the placeholders listed, and give no
+  reason, judgement or quality that a placeholder does not already state.

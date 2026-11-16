@@ -7,16 +7,14 @@ rule or has any figure outside a slot falls back to the template (ONB-04).
 No tool writes HR data (ONB-05).
 """
 
-import re
 from collections.abc import Callable, Mapping
 from datetime import date
 from typing import Any
 
 from credassure.agents.onboarding import __version__
-from credassure.core import slots
+from credassure.core import narrative, slots
 from credassure.core.blockers import BlockerCode
 from credassure.core.enums import AgentName, Decision
-from credassure.core.errors import LLMError
 from credassure.core.ports import LedgerPort, StageContext
 from credassure.core.prompts import prompt_version
 from credassure.core.prompts import registry as prompts
@@ -24,8 +22,6 @@ from credassure.core.results import AgentResult, Blocker, EvidenceRef
 from credassure.engines.onboarding_rules import Readiness, evaluate
 
 PROMPT = "onb_explain"
-# VER-03 interim guard until the Critic (9d): no gate or approval wording from the model.
-BANNED = re.compile(r"(?-i:\bGO\b|\bNO_GO\b)|approv|accept|\bsign", re.IGNORECASE)
 ENGINE = "engines.onboarding_rules"
 GATES = {"GO": Decision.GO, "NO_GO": Decision.NO_GO, "NEEDS_INPUT": Decision.NEEDS_INPUT}
 RULE_NAMES = {
@@ -103,22 +99,21 @@ def narrative_slots(blockers: list[Blocker]) -> dict[str, str]:
     return out
 
 
-def _explain(ctx: StageContext, readiness: Readiness, blockers: list[Blocker]) -> str | None:
-    """Model wording with {rule.<id>} / {next.<id>} slots, or None to use the template (ONB-04)."""
-    if ctx.llm is None or not blockers:
-        return None
+def _explain(
+    ctx: StageContext, readiness: Readiness, blockers: list[Blocker]
+) -> tuple[str | None, str | None]:
+    """(model wording with {rule.<id>} / {next.<id>} slots or None for the template, prompt used).
+    The Critic checks whatever is shown (VER-01/03); its findings come back as ctx.findings."""
+    if not blockers:
+        return None, None
     failed = "\n".join(f"{{rule.{b.field}}}: {b.code.value}; {{next.{b.field}}}" for b in blockers)
-    prompt = prompts()[PROMPT].render(blockers=failed)
-    try:
-        reply = ctx.llm.complete(prompt, name=PROMPT).strip()
-    except LLMError:  # slow or down model: the gate is already decided, only wording is lost
-        return None
-    return slots.render(
-        reply,
-        narrative_slots(blockers),
-        required=[f"rule.{rule}" for rule in readiness.failed],
-        banned=BANNED,
+    reply, used = narrative.draft(ctx, PROMPT, prompts()[PROMPT].render(blockers=failed))
+    if reply is None:
+        return None, used
+    rendered = slots.render(
+        reply, narrative_slots(blockers), required=[f"rule.{rule}" for rule in readiness.failed]
     )
+    return rendered, used
 
 
 def run(ctx: StageContext) -> AgentResult:
@@ -131,12 +126,22 @@ def run(ctx: StageContext) -> AgentResult:
             field="hr_profile",
             next_action="Ask HR to create your employee record.",
         )
+        text = template([missing])
+        narrative.record(
+            ctx,
+            "onb.",
+            text,
+            model=False,
+            slots={},
+            source_ref="hr.db:employees:none",
+            produced_by=f"agents.onboarding@{__version__}",
+        )
         return _result(
             ctx,
             Decision.NEEDS_INPUT,
             [missing],
             [],
-            template([missing]),
+            text,
             steps,
             {},
             question="HR has no record for you; can HR confirm your employee record?",
@@ -146,11 +151,11 @@ def run(ctx: StageContext) -> AgentResult:
     )
     steps += 1
     blockers = _blockers(readiness)
-    drafted = _explain(ctx, readiness, blockers)
+    drafted, used = _explain(ctx, readiness, blockers)
     versions = {}
-    if ctx.llm is not None and blockers:
+    if used is not None:
         steps += 1
-        versions[PROMPT] = prompt_version(PROMPT)
+        versions[used] = prompt_version(used)
     # Facts after the model call: a ModelUnavailable retry (template path) writes them once.
     ref = f"hr.db:employees:{profile['emp_id']}"
     evidence = []
@@ -176,6 +181,16 @@ def run(ctx: StageContext) -> AgentResult:
         produced_by=ENGINE,
     )
     evidence.append(EvidenceRef(kind="ledger_fact", ref_id="onb.gate"))
+    text = drafted or template(blockers)
+    narrative.record(
+        ctx,
+        "onb.",
+        text,
+        model=drafted is not None,
+        slots=narrative_slots(blockers),
+        source_ref=ref,
+        produced_by=f"agents.onboarding@{__version__}",
+    )
     unknown = [b for b in blockers if b.code is BlockerCode.ONB_TRAINING_MISSING]
     question = (
         f"HR has no record of {RULE_NAMES[str(unknown[0].field)]}; can HR add it?"
@@ -187,7 +202,7 @@ def run(ctx: StageContext) -> AgentResult:
         GATES[readiness.gate],
         blockers,
         evidence,
-        drafted or template(blockers),
+        text,
         steps,
         versions,
         question=question,

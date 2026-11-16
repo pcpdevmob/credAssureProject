@@ -22,6 +22,7 @@ class Fit:
     affordable: bool
     late: bool
     short: bool
+    breach_week: int | None = None  # first week cash < buffer (the "unaffordable in week N" reason)
 
 
 def assess(
@@ -43,12 +44,14 @@ def assess(
             if 1 <= week <= weeks:
                 payments[week] -= flows[k]
         received_week = week_of(disbursal, week1)
-        lowest, paid = None, Decimal(0)
+        lowest, paid, breach = None, Decimal(0), None
         for week in range(1, weeks + 1):
             paid += payments[week]
             received = flows[0] if week >= received_week else Decimal(0)
             cash = cumulative[week - 1] + available + received - paid
             lowest = cash if lowest is None or cash < lowest else lowest
+            if breach is None and week >= received_week and cash < buffer:  # repayments' week
+                breach = week
     if lowest is None:
         raise ValueError("the cash table has no weeks")
-    return Fit(lowest, lowest >= buffer, received_week > peak_week, principal < need)
+    return Fit(lowest, lowest >= buffer, received_week > peak_week, principal < need, breach)

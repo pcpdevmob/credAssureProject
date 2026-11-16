@@ -23,8 +23,8 @@ from credassure.agents.lendwise.agent import (
     code_hidden,
     compare,
 )
-from credassure.core.blockers import BlockerCode
 from credassure.core.enums import Decision
+from credassure.core.findings import CriticFinding
 from credassure.core.money import format_inr
 from credassure.core.ports import StageContext
 from credassure.core.results import AgentResult, Blocker, EvidenceRef
@@ -96,12 +96,12 @@ def negotiate(ctx: StageContext) -> AgentResult:
         competing_fee=_fee(get("competing_fee"), _unit(plan.competing_basis)),
     )
     keys = [NS + "current_fee", NS + "competing_fee"]  # the only figures the message may carry
-    findings: list[dict[str, str]] = ctx.tools.call(
-        "verify_claims", ctx.case_id, {"text": message, "keys": keys}
+    findings: list[CriticFinding] = ctx.tools.call(
+        "verify_claims", ctx.case_id, {"text": message, "keys": keys, "stage": "lendwise"}
     )
     steps += 1
-    if findings:  # interim Critic (9d replaces the handler): blocked, never sent
-        blockers = [Blocker(code=BlockerCode(f["code"]), message=f["detail"]) for f in findings[:5]]
+    if findings:  # the Verification Critic (VER-01/03): blocked, never sent
+        blockers = [Blocker(code=f.code, message=f.message) for f in findings[:5]]
         _write(ctx, inputs, {NS + "status": ("blocked", "enum")})
         return _done(ctx, Decision.NO_GO, blockers, steps, "The message failed verification.")
     schedule = inputs.schedules[inputs.schedule_id(target)]
@@ -117,7 +117,8 @@ def negotiate(ctx: StageContext) -> AgentResult:
         },
     )
     steps += 1
-    flags = scan(reply.text)  # BR-15: the reply is data; a planted instruction is only recorded
+    # BR-15: the reply is data; a planted instruction is only recorded (A5: scanner off)
+    flags = [] if ctx.ablation == "A5" else scan(reply.text)
     after: dict[str, tuple[Any, str]] = {
         NS + "message": (message, "text"),
         NS + "status": ("sent", "enum"),

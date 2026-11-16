@@ -411,7 +411,7 @@
     },
     "/v1/agents/critic/cases/{case_id}/findings": {
       "get": {
-        "description": "Arrives in Phase 9d.",
+        "description": "VER-01..04: the latest Critic findings and the stage each one reopens (404 before a run).",
         "operationId": "findings_v1_agents_critic_cases__case_id__findings_get",
         "parameters": [
           {
@@ -428,7 +428,11 @@
           "200": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Findings V1 Agents Critic Cases  Case Id  Findings Get",
+                  "type": "object"
+                }
               }
             },
             "description": "Successful Response"

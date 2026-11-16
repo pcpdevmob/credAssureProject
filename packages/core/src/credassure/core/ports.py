@@ -11,6 +11,7 @@ from decimal import Decimal
 from typing import Any, Protocol
 
 from credassure.core.enums import Stage
+from credassure.core.findings import CriticFinding
 from credassure.core.results import AgentResult
 
 
@@ -65,6 +66,11 @@ class StageContext:
     tools: ToolPort
     llm: LLMPort | None  # None when LLM_ENABLED=false: narratives use templates
     clock: ClockPort
+    # scope #21: Critic findings on the previous narrative -> draft with `regenerate`, not the
+    # agent's own prompt; template_only after the last regeneration (VER-05).
+    findings: tuple[CriticFinding, ...] = ()
+    template_only: bool = False
+    ablation: str | None = None  # scope #1: A1..A5 or None (BRD §12)
 
 
 StageAgent = Callable[[StageContext], AgentResult]

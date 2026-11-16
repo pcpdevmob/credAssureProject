@@ -41,6 +41,7 @@ class Services:
     jobs: Any  # gateway.jobs.JobRunner (typed loosely to avoid an import cycle)
     service: Any = None  # gateway.supervisor_service.SupervisorService, set after construction
     offer_preview: Any = None  # case_id -> lw.* facts as text, computed and never stored (9c)
+    verify_claims: Any = None  # the Critic's check (9d): (case_id, text, ...) -> findings
 
 
 def services(request: Request) -> Services:

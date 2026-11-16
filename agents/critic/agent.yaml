@@ -1,7 +1,7 @@
 name: critic
-version: "0.1.0"
+version: "0.2.0"
 owner: "Abhishek"
-requirement_ids: [VER-01]
-tools: []
-readable_data: []
-gate: "set by code; placeholder until the agent phase"
+requirement_ids: [VER-01, VER-02, VER-03, VER-04, VER-05]
+tools: [verify_claims]
+readable_data: ["ledger: onb.*, wc.*, lw.* (read)", "ledger: ver.* (write)", "corpus (citations, read-only)"]
+gate: "GO iff zero critical findings (code); NO_GO re-routes to the owning stage, at most twice"

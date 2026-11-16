@@ -112,6 +112,19 @@ def test_OBJ08_fact_versions_append_and_latest_wins(engine: Engine) -> None:
         assert [f.version for f in reads.list_for_case(s, T, "CA-2026-0001")] == [1, 2]
 
 
+def test_OBJ08_identical_rewrite_keeps_the_version_and_writes_no_event(engine: Engine) -> None:
+    """9d: a stage re-run (Critic regeneration) that recomputes the same fact adds no version, so
+    lineage and proposal staleness (#6) see only real changes."""
+    with session.transaction(engine) as s:
+        first = _put(s)
+        again = _put(s)
+        changed = _put(s, value=Decimal("15000000"))
+    assert (first.version, again.version, changed.version) == (1, 1, 2)
+    with session.transaction(engine) as s:
+        events = [e.event_type for e in reads.audit_events(s, T, "CA-2026-0001")]
+        assert events.count("FACT_WRITTEN") == 2
+
+
 def test_BR05_fact_values_are_never_float(engine: Engine) -> None:
     with session.transaction(engine) as s, pytest.raises(TypeError):
         _put(s, value=0.1)

@@ -7,14 +7,15 @@ router at /v1/agents/<name>. Agent routers reach the Supervisor only through the
 
 from __future__ import annotations
 
+import functools
 import json
 import logging
-import re
 import sqlite3
 import uuid
 from collections.abc import Awaitable, Callable
 from datetime import date
 from decimal import Decimal
+from pathlib import Path
 from typing import Any
 
 import yaml
@@ -31,6 +32,7 @@ from credassure.agents.copilot.api.router import router as copilot_router
 from credassure.agents.critic import agent as critic
 from credassure.agents.critic.api import deps as critic_deps
 from credassure.agents.critic.api.router import router as critic_router
+from credassure.agents.critic.verify import Fact, Resolve, verify
 from credassure.agents.lendwise import agent as lendwise
 from credassure.agents.lendwise.api import deps as lendwise_deps
 from credassure.agents.lendwise.api.router import router as lendwise_router
@@ -43,10 +45,13 @@ from credassure.agents.supervisor.graph import Supervisor, default_rechecks
 from credassure.agents.working_capital import agent as working_capital
 from credassure.agents.working_capital.api import deps as working_capital_deps
 from credassure.agents.working_capital.api.router import router as working_capital_router
+from credassure.core import narrative
 from credassure.core.enums import AgentName, Stage
 from credassure.core.errors import ApiErrorCode
+from credassure.core.findings import CriticFinding
 from credassure.core.money import from_paise
 from credassure.core.ports import LLMPort, ToolPort
+from credassure.core.results import AgentResult
 from credassure.engines import (
     affordability,
     calendar,
@@ -56,7 +61,6 @@ from credassure.engines import (
     onboarding_rules,
     ranking,
 )
-from credassure.engines.normaliser import find_all
 from credassure.gateway import problems, tracing
 from credassure.gateway.deps import Services, current_user
 from credassure.gateway.jobs import JobRunner
@@ -68,6 +72,7 @@ from credassure.ledger.session import case_engine, hr_engine, transaction
 from credassure.ledger.store import SqlLedger
 from credassure.lender_sim import ScriptedLender
 from credassure.observability.log import configure_logging, log_context, set_redactor
+from credassure.retrieval.search import Filters, resolve
 from credassure.security import pii
 from credassure.security.auth import verify_token
 from credassure.tools.runner import ToolRunner
@@ -201,41 +206,98 @@ def _offer_inputs(settings: Settings, engine: Engine) -> Callable[[str], lendwis
     return load
 
 
-_UNSAFE = re.compile(  # VER-03 interim, until the Critic (9d) owns verify_claims
-    r"\baccept|\bsign(ed|ing|ature)?\b|\bsubmit|\bbind|\bcommit|\bexecute|agree to the terms"
-    r"|approv|guaranteed|pre-approved|urgent|immediately|act now|last chance|hurry|deadline",
-    re.IGNORECASE,
-)
+@functools.cache
+def _superseded_index(manifest: Path) -> dict[str, str | None]:
+    """Manifest doc_id -> superseded_by, parsed once per process and only when a text cites."""
+    if not manifest.exists():
+        return {}
+    data = yaml.safe_load(manifest.read_text(encoding="utf-8")) or {}
+    return {d["doc_id"]: d.get("superseded_by") for d in data.get("documents") or []}
 
 
-def _verify_claims(settings: Settings, engine: Engine) -> Callable[..., list[dict[str, str]]]:
-    """Interim Critic (VER-01/03) for the negotiation message: every figure must equal a ledger
-    fact of this case, and no acceptance, approval, urgency or personal identifier appears."""
+def _resolver(settings: Settings) -> Callable[[str], Resolve | None]:
+    """VER-02: a per-case citation resolver over the indexed corpus (None before `make ingest`;
+    the Critic then fails any citation closed)."""
+    filters = Filters(as_of=settings.as_of_date, home_state=settings.home_state)
 
-    def verify(case_id: str, text: str, keys: list[str] | None = None) -> list[dict[str, str]]:
-        """``keys``: the facts the text may quote (all of the case's facts when omitted)."""
-        with transaction(engine) as s:
-            facts = reads.list_for_case(s, settings.tenant_id, case_id)
-        known = set()
-        for f in facts:
-            if keys is not None and f.key not in keys:
-                continue
-            try:
-                known.add(Decimal(f.value_text))
-            except ArithmeticError:
-                continue
-        findings = [
-            {"code": "VER_UNMATCHED_NUMBER", "detail": f"{text[h.start : h.end]!r} not in ledger"}
-            for h in find_all(text)
-            if not isinstance(h.value, Decimal) or h.value not in known
-        ]
-        if m := _UNSAFE.search(text):
-            findings.append({"code": "VER_BANNED_CONTENT", "detail": f"{m.group(0)!r}"})
-        if pii.find(text):
-            findings.append({"code": "VER_PII", "detail": "personal identifier"})
-        return findings
+    def for_case(case_id: str) -> Resolve | None:
+        if not settings.corpus_db.exists():
+            return None
+        return lambda ids: resolve(
+            settings.corpus_db,
+            ids,
+            case_id=case_id,
+            tenant_id=settings.tenant_id,
+            filters=filters,
+            known=_superseded_index(settings.corpus_manifest),
+        )
 
-    return verify
+    return for_case
+
+
+def _facts(settings: Settings, engine: Engine, case_id: str) -> dict[str, Fact]:
+    with transaction(engine) as s:
+        rows = reads.list_for_case(s, settings.tenant_id, case_id)  # key, version order
+    return {f.key: Fact(f.value_text, f.unit) for f in rows}  # the last version wins
+
+
+def _verify_claims(settings: Settings, engine: Engine) -> Callable[..., list[CriticFinding]]:
+    """The Critic's verify_claims tool (VER-01..03): figures against this case's ledger, reasons
+    against code slots, citations against the corpus, banned wording and PII. A2: switched off."""
+    resolver = _resolver(settings)
+
+    def verify_claims(
+        case_id: str,
+        text: str,
+        slots: dict[str, str] | None = None,
+        model: bool = False,
+        stage: str | None = None,
+        keys: list[str] | None = None,
+    ) -> list[CriticFinding]:
+        """``keys``: the only facts the text may quote (all of the case's facts when omitted)."""
+        if settings.ablation == "A2":
+            return []
+        facts = _facts(settings, engine, case_id)
+        if keys is not None:
+            facts = {k: v for k, v in facts.items() if k in keys}
+        return verify(
+            text,
+            facts=facts,
+            slots=slots,
+            model=model,
+            stage=Stage(stage) if stage else None,
+            resolve=resolver(case_id),
+        )
+
+    return verify_claims
+
+
+_NARRATIVE_PREFIX = {Stage.ONBOARDING: "onb.", Stage.WORKING_CAPITAL: "wc.", Stage.LENDWISE: "lw."}
+
+
+def _stage_critic(
+    settings: Settings, engine: Engine
+) -> Callable[[AgentResult], list[CriticFinding]]:
+    """VER-05: the Supervisor's check of each stage narrative, with the slots it was recorded
+    with. A narrative stage whose text has no matching record fails closed: judged as model text
+    with no slots. Stages without a narrative record (critic) are code text."""
+    verify_claims = _verify_claims(settings, engine)
+
+    def check(result: AgentResult) -> list[CriticFinding]:
+        text = result.narrative or ""
+        prefix = _NARRATIVE_PREFIX.get(result.stage)
+        stored = None
+        if prefix is not None:
+            with transaction(engine) as s:
+                fact = reads.get_latest(s, settings.tenant_id, result.case_id, prefix + "narrative")
+            stored = narrative.parse(fact.value_text if fact else None)
+        slots: dict[str, str] = {}
+        model = prefix is not None  # fail closed for a narrative stage without its record
+        if stored is not None and stored[0] == pii.redact(text):  # records are stored redacted
+            _, model, slots = stored
+        return verify_claims(result.case_id, text, slots, model, result.stage.value)
+
+    return check
 
 
 def _lendwise_handlers(settings: Settings, engine: Engine) -> dict[str, Callable[..., Any]]:
@@ -329,9 +391,10 @@ def _tool_factory(settings: Settings, engine: Engine) -> Callable[[AgentName], T
             ),
         },
         AgentName.LENDWISE: _lendwise_handlers(settings, engine),  # no tool accepts an offer
+        AgentName.CRITIC: {"verify_claims": _verify_claims(settings, engine)},  # VER-01..03
     }
 
-    # ponytail: other agents get no handlers until Phases 9d-9e register their engines here.
+    # ponytail: the copilot gets no handlers until Phase 9e registers search_knowledge here.
     def tools(agent: AgentName) -> ToolPort:
         return ToolRunner(agent, handlers.get(agent, {}))
 
@@ -371,6 +434,7 @@ def build_services(settings: Settings, llm: LLMPort | None) -> Services:
         planner_mode=settings.planner_mode,
         ablation=settings.ablation,
         boundary_rule=rule,  # type: ignore[arg-type]  # validated on write (admin) and in settings
+        critic=_stage_critic(settings, engine),
     )
     svc = Services(
         settings=settings,
@@ -382,6 +446,7 @@ def build_services(settings: Settings, llm: LLMPort | None) -> Services:
     )
     svc.service = SupervisorService(svc)
     svc.offer_preview = _offer_preview(settings, engine)
+    svc.verify_claims = _verify_claims(settings, engine)
     return svc
 
 

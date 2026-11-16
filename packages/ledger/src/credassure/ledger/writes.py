@@ -93,11 +93,24 @@ def put_fact(
     """New version of a fact plus its FACT_WRITTEN audit event, in the caller's transaction."""
     if isinstance(value, float) or not isinstance(value, Decimal | int | str):
         raise TypeError("ledger values are Decimal, int or str, never float (BR-05)")
-    current = s.scalar(
-        select(func.max(LedgerFact.version)).where(
+    latest = s.scalar(
+        select(LedgerFact)
+        .where(
             LedgerFact.tenant_id == tenant_id, LedgerFact.case_id == case_id, LedgerFact.key == key
         )
+        .order_by(LedgerFact.version.desc())
+        .limit(1)
     )
+    current = latest.version if latest is not None else None
+    if latest is not None and (
+        latest.value_text,
+        latest.unit,
+        latest.source_type,
+        latest.source_ref,
+        latest.produced_by,
+        latest.input_hash,
+    ) == (str(value), unit, source_type, source_ref, produced_by, input_hash):
+        return latest  # 9d: an identical re-run adds no version and no event
     fact = LedgerFact(
         tenant_id=tenant_id,
         case_id=case_id,

@@ -1,10 +1,10 @@
 [project]
 name = "credassure-reports"
 version = "0.1.0"
-description = "Report templates. Empty until Phase 10."
+description = "Report templates and required sections (scope #10)."
 requires-python = ">=3.12,<3.13"
 dependencies = [
-
+    "pyyaml>=6",
 ]
 
 [build-system]

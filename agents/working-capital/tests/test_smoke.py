@@ -136,12 +136,10 @@ def test_WC07_code_renders_every_slot_and_direction_word() -> None:
     [
         DRAFT.replace("{wc.recommended_amount}", "₹1,45,00,000"),  # a figure of its own
         DRAFT.replace("{wc.recommended_amount}", "₹1,42,00,000"),  # even a right one
-        DRAFT + " Interest is {wc.min_buffer} a year.",  # lender talk
         DRAFT.replace("{wc.peak_week}", "11"),
         DRAFT.replace("{wc.undrawn_limits}", "{wc.mitigations}"),  # zero offset has no slot
         DRAFT.replace("{cmp.recommended_vs_request}", "higher than"),  # direction of its own
         DRAFT.replace("{wc.request}", "{wc.indicative}"),  # unknown slot
-        DRAFT + " Lenders will approve it.",
         "Cash is short in {wc.peak_week}.",  # never names the facility
     ],
 )
@@ -173,7 +171,8 @@ def test_WC01_missing_field_needs_input_with_one_question_naming_it() -> None:
         result.question
     )
     assert tools.called == ["validate_case_files"]  # no cash table on bad inputs
-    assert ledger.facts == {"wc.gate": "NEEDS_INPUT"}
+    assert set(ledger.facts) == {"wc.gate", "wc.narrative"}  # 9d: the shown text is recorded
+    assert ledger.facts["wc.gate"] == "NEEDS_INPUT"
 
 
 def test_WC01_missing_file_is_named_before_validation() -> None:
@@ -221,3 +220,27 @@ def test_WC07_zero_need_template_names_the_dip_and_what_covers_it() -> None:
     assert Decimal(ledger.facts["wc.recommended_amount"]) == 0
     assert "peak shortfall of ₹40,00,000 in week 7" in str(result.narrative)
     assert "no new facility" in str(result.narrative)
+
+
+def test_scope1_A1_model_calculates_the_recommendation_and_without_a_model_asks() -> None:
+    """Ablation A1 (BRD §12): the model's amount replaces the engine's; never in the product."""
+    from dataclasses import replace
+
+    inputs = agent.load_inputs(stored(), INDICATIVE)
+    ledger, tools = Ledger(), Tools(inputs)
+    base = StageContext(
+        case_id="CA-T",
+        tenant_id="default",
+        stage=Stage.WORKING_CAPITAL,
+        trace_id="t1",
+        ledger=ledger,
+        tools=tools,
+        llm=FakeLLM(replies={"a1_wc_calc": ["₹1,50,00,000"]}),
+        clock=Clock(),
+        ablation="A1",
+    )
+    result = agent.run(base)
+    assert ledger.facts["wc.recommended_amount"] == "15000000"  # the engine says 14200000
+    assert result.prompt_versions["a1_wc_calc"] == "1.0.0"
+    off = agent.run(replace(base, llm=None, ledger=Ledger()))
+    assert off.decision is Decision.NEEDS_INPUT and "A1" in (off.question or "")

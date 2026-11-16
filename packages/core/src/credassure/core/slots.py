@@ -1,4 +1,4 @@
-"""Slot-based narratives (BR-05, WC-07, ONB-04, VER-01 interim).
+"""Slot-based narratives (BR-05, WC-07, ONB-04; the Verification Critic checks the result).
 
 The model writes ``{key}`` placeholders, never a figure or a comparison. Code owns every value and
 every direction word: amounts, rates, dates, weeks and words such as "lower than" are rendered here.

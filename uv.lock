@@ -583,13 +583,21 @@ version = "0.1.0"
 source = { editable = "agents/critic" }
 dependencies = [
     { name = "credassure-core" },
+    { name = "credassure-engines" },
+    { name = "credassure-reports" },
+    { name = "credassure-security" },
     { name = "fastapi" },
+    { name = "pyyaml" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "credassure-core", editable = "packages/core" },
+    { name = "credassure-engines", editable = "packages/engines" },
+    { name = "credassure-reports", editable = "packages/reports" },
+    { name = "credassure-security", editable = "packages/security" },
     { name = "fastapi", specifier = ">=0.115" },
+    { name = "pyyaml", specifier = ">=6" },
 ]
 
 [[package]]
@@ -886,6 +894,12 @@ source = { editable = "packages/observability" }
 name = "credassure-reports"
 version = "0.1.0"
 source = { editable = "packages/reports" }
+dependencies = [
+    { name = "pyyaml" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pyyaml", specifier = ">=6" }]
 
 [[package]]
 name = "credassure-retrieval"

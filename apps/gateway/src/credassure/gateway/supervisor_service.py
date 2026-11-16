@@ -27,9 +27,8 @@ PII_NOTICE = (
     "Personal identifiers ({kinds}) are not accepted in chat; they were removed and not stored "
     "(data-handling policy, DPDP Act 2023)."
 )
-UNAVAILABLE = (
-    "The copilot is unavailable: cited, Critic-checked answers arrive with the copilot (Phase 9e)."
-)
+ABSTAIN = "I can't verify that from the available sources."  # CP-02, exact string
+UNAVAILABLE = "The copilot is unavailable; cited, Critic-checked answers arrive with the copilot."
 
 
 class SupervisorService:
@@ -176,8 +175,9 @@ class SupervisorService:
         return plan
 
     def chat(self, actor: Principal, case_id: str, message: str) -> dict[str, Any]:
-        """Placeholder copilot (Phase 9e). No model text reaches the user before the Critic can
-        check it (CP-01, VER-01), so this returns a fixed notice whether the model is on or off."""
+        """Chat (CP-01..03, VER-01..03). Every answer passes the Verification Critic before it is
+        returned; a failing answer becomes the abstention string (CP-02). Until the copilot
+        (Phase 9e) drafts answers, the answer is a fixed notice."""
         case = visible_case(self.svc, actor, case_id)
         trace_id = uuid.uuid4().hex
         kinds = sorted({hit.kind for hit in pii.find(message)})  # ONB-06: refuse and redact
@@ -185,8 +185,11 @@ class SupervisorService:
             "chat", trace_id=trace_id, case_id=case.id, message=pii.redact(message)[:2000]
         ):
             pass
+        answer = UNAVAILABLE
+        if self.svc.verify_claims is not None and self.svc.verify_claims(case.id, answer):
+            answer = ABSTAIN
         reply: dict[str, Any] = {
-            "answer": UNAVAILABLE,
+            "answer": answer,
             "citations": [],
             "intent": "copilot_question",
             "trace_id": trace_id,

@@ -10,14 +10,13 @@ draft with any figure outside a slot falls back to the template (WC-07).
 
 import hashlib
 import json
-import re
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from decimal import Decimal
 from typing import Any
 
 from credassure.agents.working_capital import __version__
-from credassure.core import slots
+from credassure.core import narrative, slots
 from credassure.core.blockers import BlockerCode, BlockerEffect, blocker_effect
 from credassure.core.enums import AgentName, Decision
 from credassure.core.errors import LLMError
@@ -28,16 +27,11 @@ from credassure.core.prompts import registry as prompts
 from credassure.core.results import AgentResult, Blocker, EvidenceRef
 from credassure.engines import cashflow, validators
 from credassure.engines.cashflow import CashTable, Recommendation
+from credassure.engines.normaliser import find_all
 
 PROMPT = "wc_explain"
 ENGINE = "engines.cashflow"
 ENGINE_VERSION = "1"  # bump when cashflow/validators change a result (lineage, scope #33)
-# VER-03 interim guard until the Critic (9d), as in onboarding.
-BANNED = re.compile(
-    r"(?-i:\bGO\b|\bNO_GO\b)|approv|accept|\bsign|guarantee|lender|\bbank|sanction|disburs"
-    r"|interest|\brate\b|urgent|immediately",
-    re.IGNORECASE,
-)
 FILES = {  # kind -> file name; inventory is information only (engines.cashflow)
     "order": "order.json",
     "opening_position": "opening_position.json",
@@ -203,21 +197,36 @@ def narrative_slots(rec: Recommendation, table: CashTable) -> dict[str, str]:
     return out
 
 
-def _explain(ctx: StageContext, rec: Recommendation, table: CashTable) -> str | None:
-    if ctx.llm is None:
-        return None
+def _explain(
+    ctx: StageContext, rec: Recommendation, table: CashTable
+) -> tuple[str | None, str | None]:
+    """(slot-rendered model draft or None for the template, prompt used); the Critic checks it."""
     names = "\n".join(sorted(narrative_slots(rec, table)))
-    prompt = prompts()[PROMPT].render(slots=names)
-    try:
-        reply = ctx.llm.complete(prompt, name=PROMPT).strip()
-    except LLMError:  # slow or down model: the gate and figures are already decided
+    reply, used = narrative.draft(ctx, PROMPT, prompts()[PROMPT].render(slots=names))
+    if reply is None:
+        return None, used
+    rendered = slots.render(reply, narrative_slots(rec, table), required=["wc.recommended_amount"])
+    return rendered, used
+
+
+A1_PROMPT = "a1_wc_calc"
+
+
+def _a1_amount(ctx: StageContext, inputs: CaseInputs, table: CashTable) -> Decimal | None:
+    """Ablation A1 only: the model turns the weekly flows into the recommended facility."""
+    if ctx.llm is None or inputs.files is None:
         return None
-    return slots.render(
-        reply,
-        narrative_slots(rec, table),
-        required=["wc.recommended_amount"],
-        banned=BANNED,
+    opening = inputs.files.opening
+    weeks = "\n".join(f"week {r.week}: in {r.inflow}, out {r.outflow}" for r in table.rows)
+    prompt = prompts()[A1_PROMPT].render(
+        opening=json.dumps(opening, default=str, sort_keys=True), weeks=weeks
     )
+    try:
+        reply = ctx.llm.complete(prompt, name=A1_PROMPT)
+    except LLMError:
+        return None
+    amounts = [h.value for h in find_all(reply) if h.kind == "money"]  # never a week number
+    return amounts[0] if amounts and isinstance(amounts[0], Decimal) else None
 
 
 def run(ctx: StageContext) -> AgentResult:
@@ -235,13 +244,25 @@ def run(ctx: StageContext) -> AgentResult:
             input_hash=inputs.input_hash,
         )
         blockers = [*inputs.blockers, *inputs.warnings]
+        text = "Funding need is waiting for case data:\n" + "\n".join(
+            f"- {b.message}" for b in inputs.blockers
+        )
+        narrative.record(  # validator messages are code-rendered from the case files
+            ctx,
+            "wc.",
+            text,
+            model=False,
+            slots={f"blocker.{i}": b.message for i, b in enumerate(inputs.blockers)},
+            source_ref=inputs.source_ref,
+            produced_by=f"engines.validators@{ENGINE_VERSION}",
+            input_hash=inputs.input_hash,
+        )
         return _result(
             ctx,
             Decision.NEEDS_INPUT,
             blockers,
             [EvidenceRef(kind="ledger_fact", ref_id="wc.gate")],
-            "Funding need is waiting for case data:\n"
-            + "\n".join(f"- {b.message}" for b in inputs.blockers),
+            text,
             steps,
             {},
             question=question(inputs.blockers),
@@ -255,12 +276,20 @@ def run(ctx: StageContext) -> AgentResult:
         {"files": inputs.files, "table": table, "indicative": inputs.indicative},
     )
     steps += 2
-    facts = facts_for(table, rec)
-    drafted = _explain(ctx, rec, table)
-    versions = {}
-    if ctx.llm is not None:
+    versions: dict[str, str] = {}
+    if ctx.ablation == "A1":  # the model calculates the recommendation (BRD §12); ablation only
+        amount = _a1_amount(ctx, inputs, table)
         steps += 1
-        versions[PROMPT] = prompt_version(PROMPT)
+        if amount is None:
+            q = "Ablation A1 needs the model to calculate the funding need, and it is unavailable."
+            return _result(ctx, Decision.NEEDS_INPUT, [], [], q, steps, {}, question=q)
+        rec = replace(rec, recommended_amount=amount)
+        versions[A1_PROMPT] = prompt_version(A1_PROMPT)
+    facts = facts_for(table, rec)
+    drafted, used = _explain(ctx, rec, table)
+    if used is not None:
+        steps += 1
+        versions[used] = prompt_version(used)
     # Facts after the model call: a ModelUnavailable retry (template path) writes them once.
     evidence = []
     for key, (value, unit) in [*facts.items(), ("wc.gate", ("GO", "enum"))]:
@@ -271,16 +300,31 @@ def run(ctx: StageContext) -> AgentResult:
             unit=unit,
             source_type="case_file",
             source_ref=inputs.source_ref,
-            produced_by=f"{ENGINE}@{ENGINE_VERSION}",
+            produced_by=(  # lineage says who made the number (A1: the model, not the engine)
+                f"model:{A1_PROMPT}@{prompt_version(A1_PROMPT)}"
+                if ctx.ablation == "A1" and key == "wc.recommended_amount"
+                else f"{ENGINE}@{ENGINE_VERSION}"
+            ),
             input_hash=inputs.input_hash,
         )
         evidence.append(EvidenceRef(kind="ledger_fact", ref_id=key))
+    text = drafted or template(rec, table)
+    narrative.record(
+        ctx,
+        "wc.",
+        text,
+        model=drafted is not None,
+        slots=narrative_slots(rec, table),
+        source_ref=inputs.source_ref,
+        produced_by=f"{ENGINE}@{ENGINE_VERSION}",
+        input_hash=inputs.input_hash,
+    )
     return _result(
         ctx,
         Decision.GO,
         list(inputs.warnings),  # D5 warnings never gate
         evidence,
-        drafted or template(rec, table),
+        text,
         steps,
         versions,
         output_ref="wc.cash_table",

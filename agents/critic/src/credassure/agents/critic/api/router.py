@@ -54,6 +54,15 @@ def result(case_id: str, who: Caller, supervisor: SupervisorDep) -> dict[str, An
 
 
 @router.get("/cases/{case_id}/findings")
-def findings(case_id: str, who: Caller) -> None:
-    """Arrives in Phase 9d."""
-    raise HTTPException(status_code=501, detail="arrives in Phase 9d")
+def findings(case_id: str, who: Caller, supervisor: SupervisorDep) -> dict[str, Any]:
+    """VER-01..04: the latest Critic findings and the stage each one reopens (404 before a run)."""
+    found = supervisor.latest_result(who, case_id, STAGE)
+    if found is None:
+        raise HTTPException(status_code=404, detail="no result yet")
+    return {
+        "decision": found.decision.value,
+        "findings": [
+            {"code": b.code.value, "message": b.message, "stage": b.field} for b in found.blockers
+        ],
+        "trace_id": found.trace_id,
+    }

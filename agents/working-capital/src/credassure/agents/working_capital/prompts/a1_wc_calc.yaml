@@ -1,0 +1,13 @@
+# Ablation A1 only (BRD §12): the model calculates instead of the cash-flow engine, to measure what
+# the engine contributes. Never used in the product path.
+name: a1_wc_calc
+version: 1.0.0
+max_tokens: 120
+template: |
+  A manufacturer's opening position and weekly cash flows over the forecast are below. Calculate the
+  recommended working-capital facility: the peak cumulative cash shortfall, plus the minimum cash
+  buffer, minus undrawn credit limits, minus confirmed mitigations; never below zero; rounded up to
+  the next ₹1,00,000. Reply with the amount in rupees only.
+  Opening position (JSON): $opening
+  Weekly flows:
+  $weeks

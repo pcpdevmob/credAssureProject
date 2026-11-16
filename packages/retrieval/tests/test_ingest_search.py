@@ -472,3 +472,72 @@ def test_KR02_local_embedder_runs_bge_small_in_process(monkeypatch: pytest.Monke
     assert cli.endpoint("local") == "in-process sentence-transformers"
     assert cli.embedder(env)(["a", "b"]) == [[0.6, 0.8], [0.6, 0.8]]
     assert seen == {"model": "BAAI/bge-small-en-v1.5", "revision": None, "normalized": True}
+
+
+# ---- VER-02: citation resolution for the Critic ----------------------------------------------
+def test_VER02_resolve_classifies_each_cited_id(env: dict[str, Any]) -> None:
+    from credassure.retrieval.search import resolve
+
+    ids = [
+        "CURRENT",
+        "MH",
+        "SUPERSEDED",
+        "FUTURE",
+        "GUJARAT",
+        "NBFC-ONLY",
+        "KFS-1",
+        "KFS-2",
+        "NOPE",
+        "UNINDEXED-OLD",
+        "UNINDEXED",
+        "CURRENT#section#0",
+    ]
+    got = resolve(
+        env["db"],
+        ids,
+        case_id="CA-1",
+        tenant_id="demo",
+        filters=Filters(as_of=AS_OF),
+        known={"UNINDEXED-OLD": "CURRENT", "UNINDEXED": None},
+    )
+    status = {k: v[0] for k, v in got.items()}
+    assert status == {
+        "CURRENT": "ok",
+        "MH": "ok",
+        "KFS-1": "ok",
+        "CURRENT#section#0": "ok",
+        "SUPERSEDED": "superseded",
+        "FUTURE": "superseded",
+        "UNINDEXED-OLD": "superseded",
+        "GUJARAT": "filtered",
+        "NBFC-ONLY": "filtered",
+        "KFS-2": "missing",  # no cross-case existence oracle
+        "NOPE": "missing",
+        "UNINDEXED": "missing",
+    }
+    assert "guaranteed amount" in got["CURRENT"][1]
+    assert got["GUJARAT"][1] == ""  # nothing is returned from a passage that may not be cited
+
+
+def test_scope1_A3_is_dense_top_five_without_keyword_or_rerank(
+    env: dict[str, Any], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    seen: list[str] = []
+    searcher = Searcher(
+        env["db"],
+        env["chroma"],
+        env["embed"],
+        as_of=AS_OF,
+        tenant_id="demo",
+        ablation="A3",
+        reranker=lambda q, texts: seen.append("rerank") or [0.0] * len(texts),
+    )
+    real_keyword = searcher.keyword
+    monkeypatch.setattr(
+        searcher, "keyword", lambda *a, **k: seen.append("keyword") or real_keyword(*a, **k)
+    )
+    assert 0 < len(searcher.search(FEE, None)) <= 5
+    assert seen == []
+    searcher.ablation = None
+    searcher.search(FEE, None)
+    assert seen == ["keyword", "rerank"]

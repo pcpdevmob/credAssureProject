@@ -77,6 +77,9 @@ class Settings(BaseSettings):
     # S22 reference rates (R-RATE-02), loaded once at startup; engines never read the file.
     reference_rates_file: Path = Path("data/reference/reference_rates.yaml")
     lender_scripts_dir: Path = Path("data/frozen/v1/lender_scripts")  # S05, lender simulator
+    corpus_db: Path = Path("var/corpus.db")  # Critic citation checks (VER-02), opened read-only
+    corpus_manifest: Path = Path("data/corpus/manifest.yaml")  # superseded but unindexed docs
+    home_state: str = "IN-MH"  # ADR 0019 jurisdiction filter
     apr_convention: Literal["nominal", "effective"] = "nominal"
     boundary_rule: Literal["hold", "director", "vp"] = "hold"
     approval_threshold_paise: int = Field(default=1_500_000_000, gt=0)

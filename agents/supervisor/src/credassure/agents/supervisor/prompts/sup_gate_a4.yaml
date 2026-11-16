@@ -1,0 +1,10 @@
+# Ablation A4 only (BRD §12): the model decides the stage gate in free text instead of code, to
+# measure what code-decided gates contribute. Never used in the product path.
+name: sup_gate_a4
+version: 1.0.0
+max_tokens: 60
+template: |
+  You review one stage ($stage) of a working-capital loan proposal. Its summary and any blockers:
+  $summary
+  Decide whether the stage passes. Answer in one short sentence that contains exactly one of GO,
+  NO_GO or NEEDS_INPUT.

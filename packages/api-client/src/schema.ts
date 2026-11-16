@@ -107,7 +107,7 @@ export interface paths {
         };
         /**
          * Findings
-         * @description Arrives in Phase 9d.
+         * @description VER-01..04: the latest Critic findings and the stage each one reopens (404 before a run).
          */
         get: operations["findings_v1_agents_critic_cases__case_id__findings_get"];
         put?: never;
@@ -1252,7 +1252,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */

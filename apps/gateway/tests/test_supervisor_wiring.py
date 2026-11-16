@@ -17,6 +17,7 @@ import pytest
 from langgraph.checkpoint.sqlite import SqliteSaver
 
 from credassure.agents.critic import agent as critic
+from credassure.agents.critic.verify import Fact, verify
 from credassure.agents.lendwise import agent as lendwise
 from credassure.agents.onboarding import agent as onboarding
 from credassure.agents.supervisor.graph import Supervisor
@@ -131,10 +132,26 @@ def db(tmp_path: Path) -> Iterator[Path]:
     yield path
 
 
+def _critic_tools(engine: Any) -> dict[str, Any]:
+    """verify_claims as the gateway wires it: the case's latest facts, no corpus (VER-01/03)."""
+
+    def verify_claims(case_id: str, text: str, **kw: Any) -> Any:
+        with session.transaction(engine) as s:
+            facts = {f.key: Fact(f.value_text, f.unit) for f in reads.list_for_case(s, T, case_id)}
+        keys = kw.pop("keys", None)
+        if keys is not None:
+            facts = {k: v for k, v in facts.items() if k in keys}
+        stage = kw.pop("stage", None)
+        return verify(text, facts=facts, stage=Stage(stage) if stage else None, **kw)
+
+    return {"verify_claims": verify_claims}
+
+
 def _supervisor(db: Path, llm: FakeLLM | None) -> tuple[Supervisor, Any]:
     engine = session.case_engine(db)
     ledger = SqlLedger(engine, T)
     saver = SqliteSaver(sqlite3.connect(db, check_same_thread=False))
+    tools = {**TOOLS, AgentName.CRITIC: _critic_tools(engine)}
     sup = Supervisor(
         agents={
             Stage.ONBOARDING: onboarding.run,
@@ -145,7 +162,7 @@ def _supervisor(db: Path, llm: FakeLLM | None) -> tuple[Supervisor, Any]:
         store=ledger,
         ledger=ledger,
         tools=lambda agent: ToolRunner(
-            agent, _lw_tools(db) if agent is AgentName.LENDWISE else TOOLS.get(agent, {})
+            agent, _lw_tools(db) if agent is AgentName.LENDWISE else tools.get(agent, {})
         ),
         llm=llm,
         clock=_Clock(),

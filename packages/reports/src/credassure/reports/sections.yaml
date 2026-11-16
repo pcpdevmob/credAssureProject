@@ -1,0 +1,14 @@
+# scope #10, VER-04, UI-08: every proposal report must have these sections (Markdown headings).
+# The Critic blocks a report missing any of them. Phase 10 renders the report against this list.
+version: 1.0.0
+sections:
+  - Case summary
+  - Preparer readiness
+  - Funding need
+  - Offer comparison
+  - Negotiation
+  - Verification
+  - Approval routing
+  - Decision history
+  - Trace IDs
+  - Approval is internal, not loan acceptance

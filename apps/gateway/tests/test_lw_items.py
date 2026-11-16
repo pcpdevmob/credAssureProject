@@ -377,7 +377,7 @@ def test_BR13_no_route_accepts_signs_or_submits_an_offer() -> None:
     assert not [o for o in ops if words.search(o)]
 
 
-def test_VER01_VER03_interim_verify_claims_blocks_invented_figures_and_acceptance(
+def test_VER01_VER03_critic_verify_claims_blocks_invented_figures_and_acceptance(
     client: Any, login: Login
 ) -> None:
     from credassure.gateway.main import _verify_claims
@@ -388,7 +388,9 @@ def test_VER01_VER03_interim_verify_claims_blocks_invented_figures_and_acceptanc
     answer = client.post(f"/v1/agents/lendwise/cases/{case_id}/negotiate", headers=h).json()
     verify = _verify_claims(client.app.state.settings, session.case_engine(client.db))
     assert verify(case_id, answer["message"]) == []  # the sent message: every figure in ledger
-    codes = {f["code"] for f in verify(case_id, answer["message"] + " Match 0.15% and we accept.")}
+    codes = {
+        f.code.value for f in verify(case_id, answer["message"] + " Match 0.15% and we accept.")
+    }
     assert codes == {"VER_UNMATCHED_NUMBER", "VER_BANNED_CONTENT"}
 
 
