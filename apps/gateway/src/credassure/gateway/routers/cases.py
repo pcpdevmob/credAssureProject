@@ -151,11 +151,40 @@ def create_case(body: NewCase, who: Preparer, svc: Svc) -> dict[str, Any]:
     return _summary(case)
 
 
+def _recommended(s: Any, case: Case) -> int | None:
+    """Validated need in paise; None until the latest WC gate is GO (NEEDS_INPUT makes it stale)."""
+    gate = reads.get_latest(s, case.tenant_id, case.id, "wc.gate")
+    amount = reads.get_latest(s, case.tenant_id, case.id, "wc.recommended_amount")
+    if gate is None or gate.value_text != "GO" or amount is None:
+        return None
+    return to_paise(Decimal(amount.value_text))
+
+
+def _with_need(s: Any, case: Case) -> dict[str, Any]:
+    need = _recommended(s, case)
+    return {**_summary(case), "recommended_amount": money(need) if need is not None else None}
+
+
 @router.get("/cases")
 def list_cases(who: User, svc: Svc) -> dict[str, Any]:
+    """Cases plus dashboard totals, summed here in integer paise so no client adds money (BR-05)."""
+    # ponytail: two fact reads per case; one grouped query if the list grows past a few hundred.
     with transaction(svc.engine) as s:
-        cases = reads.list_cases(s, who.tenant_id)
-    return {"items": [_summary(c) for c in cases if can_view_case(who, case_ref(c))]}
+        items = [
+            _with_need(s, c)
+            for c in reads.list_cases(s, who.tenant_id)
+            if can_view_case(who, case_ref(c))
+        ]
+    done = [i for i in items if i["recommended_amount"]]
+    need = sum(i["recommended_amount"]["paise"] for i in done)
+    asked = sum(i["indicative_amount"]["paise"] for i in done)
+    totals = {
+        "validated_cases": len(done),
+        "validated_need": money(need),
+        "requested_for_validated": money(asked),
+        "over_borrowing_avoided": money(asked - need),
+    }
+    return {"items": items, "totals": totals}
 
 
 @router.get("/cases/{case_id}")
@@ -163,8 +192,10 @@ def get_case(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
     case = visible_case(svc, who, case_id)
     stages = _stage_views(svc, case)
     paused = next((v for v in stages if v["decision"] not in ("GO", None)), None)
+    with transaction(svc.engine) as s:
+        head = _with_need(s, case)
     return {
-        **_summary(case),
+        **head,
         "stages": stages,
         "question": paused["question"] if paused and case.status == "PAUSED" else None,
         "next_action": _NEXT_ACTION.get(case.status, ""),
@@ -405,12 +436,10 @@ def _facts(svc: Svc, case: Case, prefix: str) -> list[dict[str, Any]]:
 def funding(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
     case = visible_case(svc, who, case_id)
     facts = _facts(svc, case, "wc.")
-    amount = next((f for f in facts if f["key"] == "wc.recommended_amount"), None)
-    gate = next((f["value"] for f in facts if f["key"] == "wc.gate"), None)
-    if gate != "GO":  # a later NEEDS_INPUT run makes earlier figures stale
-        amount = None
+    with transaction(svc.engine) as s:
+        need = _recommended(s, case)
     return {
-        "recommended_amount": money(to_paise(Decimal(amount["value"]))) if amount else None,
+        "recommended_amount": money(need) if need is not None else None,
         "indicative_amount": money(case.indicative_amount_paise),
         "facts": facts,
     }

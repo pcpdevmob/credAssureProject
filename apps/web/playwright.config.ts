@@ -13,6 +13,7 @@ export default defineConfig({
   timeout: 60_000,
   use: {
     baseURL: process.env.E2E_BASE_URL || 'http://localhost:3000',
+    actionTimeout: 60_000, // a missing control fails in a minute, not at the 30-minute test cap
     trace: 'off', // a trace would record the typed password and the bearer token
     channel: 'chrome', // the bundled chromium headless shell is incomplete on this machine (U0 notes)
   },
@@ -20,5 +21,6 @@ export default defineConfig({
     // Creates a fresh demo case through the live gateway so its facts carry producer {agent, stage, trace_id}.
     { name: 'demo-case', testMatch: /demo-case\.setup\.ts/, timeout: 15 * 60_000 },
     { name: 'u1', testMatch: /u1\.spec\.ts/, dependencies: ['demo-case'] },
+    { name: 'u2', testMatch: /u2\.spec\.ts/ }, // drives its own demo case through the UI
   ],
 });

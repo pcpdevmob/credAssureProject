@@ -252,3 +252,39 @@ def test_WC05_unsourced_offset_is_refused_at_upload(client: Any, login: Login) -
         headers=h,
     )
     assert r.status_code == 422 and "evidence_ref" in r.text
+
+
+def test_UI01_case_list_carries_validated_amounts_and_totals(client: Any, login: Login) -> None:
+    """Dashboard figures come from the API, never summed in the browser (BR-05, UI U2)."""
+    go, h = start(client, login, "CA-2026-0001")
+    assert run_wc(client, go, h)["decision"] == "GO"
+    paused, _ = start(client, login, "CA-2026-0013")
+    assert run_wc(client, paused, h)["decision"] == "NEEDS_INPUT"
+
+    body = client.get("/v1/cases", headers=h).json()
+    items = {i["case_id"]: i for i in body["items"]}
+    need = client.get(f"/v1/cases/{go}/funding", headers=h).json()["recommended_amount"]
+    demo = {"paise": 1_42_00_000_00, "display": "₹1,42,00,000"}
+    assert items[go]["recommended_amount"] == need == demo
+    assert items[paused]["recommended_amount"] is None
+    assert client.get(f"/v1/cases/{go}", headers=h).json()["recommended_amount"] == need
+
+    validated = [i for i in body["items"] if i["recommended_amount"]]
+    want = sum(i["recommended_amount"]["paise"] for i in validated)
+    asked = sum(i["indicative_amount"]["paise"] for i in validated)
+    assert body["totals"] == {
+        "validated_cases": len(validated),
+        "validated_need": {"paise": want, "display": format_inr(Decimal(want) / 100)},
+        "requested_for_validated": {"paise": asked, "display": format_inr(Decimal(asked) / 100)},
+        "over_borrowing_avoided": {
+            "paise": asked - want,
+            "display": format_inr(Decimal(asked - want) / 100),
+        },
+    }
+
+    opening = json.loads((CASES / "CA-2026-0001/opening_position.json").read_text())
+    del opening["min_cash_buffer"]
+    upload(client, h, go, "opening_position", json.dumps(opening).encode())
+    assert run_wc(client, go, h)["decision"] == "NEEDS_INPUT"
+    after = {i["case_id"]: i for i in client.get("/v1/cases", headers=h).json()["items"]}
+    assert after[go]["recommended_amount"] is None  # a later NEEDS_INPUT makes the old figure stale

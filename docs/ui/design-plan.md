@@ -13,7 +13,7 @@ gate states, approval wording and no silent rounding. Section 9 lists the brief 
 | Vite + React Router | Next.js 16.4.4 static export, app router, React 19.3.1 (ADR 0022; upgraded in U1 to clear npm audit) |
 | CSS Modules + `tokens.css` | Tailwind reading `src/styles/tokens.js`, emitted as `--fb-*` CSS variables (finbridge; one token source) |
 | pnpm | npm workspaces (`npm run dev -w apps/web`); root `package.json` lists `apps/web`, `packages/api-client` |
-| Radix, TanStack Query, react-hook-form + zod, Vitest + RTL + MSW, Playwright + axe | U1: Radix Dialog, Vitest + RTL + MSW (node, tests only), Playwright + axe. TanStack Query and react-hook-form + zod arrive in U2 with the first real forms and queries. |
+| Radix, TanStack Query, react-hook-form + zod, Vitest + RTL + MSW, Playwright + axe | U1: Radix Dialog, Vitest + RTL + MSW (node, tests only), Playwright + axe. TanStack Query and react-hook-form + zod are **deferred** (user decision 2026-11-16): U2's forms are small, so services + `useState`, one `MoneyInput` and the problem mapper cover them. Add them when a screen needs caching or refetch. |
 | SVG charting library | recharts (already in finbridge) |
 
 Already present and kept: lucide icons, framer-motion, `clsx` + `tailwind-merge`, generated `@credassure/api-client`, the
@@ -340,3 +340,28 @@ metadata, download filenames). Internal identifiers (`--fb-*` variables, the aut
 - **Gallery:** `/__gallery` (folder `app/%5F%5Fgallery`), dev only; a 404 in the production export.
 - **Deferred:** Funding view keeps only API figures (no browser maths); the 26-week chart is U3. Dashboard portfolio sums
   still add paise in the browser (U2 moves them to the API). Mobile case-list cards show figures as text (the card is a link).
+
+## 13. U2 as built (2026-11-16)
+
+- **Money input:** `lib/money.ts` `paiseFromInput` is the one rupees → paise conversion. It accepts ₹ or Rs., Indian or
+  western grouping, a `/-` suffix and lakh / L / crore / Cr, and uses BigInt only. It rejects a fraction of a paisa,
+  negatives and exponents. `components/MoneyInput.tsx` shows "Reads as ₹…" (plus the ≈ reading) beside every money field
+  before submit. Note: ₹1,42,00,000 = **1,420,000,000 paise**. The U1 doc comment and fixtures had 10× values (fixed).
+- **Dashboard:** `GET /v1/cases` items carry `recommended_amount` (null unless the latest `wc.gate` is GO, the same rule as
+  `/funding`), and the response carries `totals` summed by the gateway in integer paise. The browser adds no money.
+  Totals render as `<Figure>` without a ledger key ("source not available yet"). Counts (active, awaiting) are list filters.
+- **Upload:** seven labelled slots plus a Lender offers and KFS box. Multipart, with the part's type set from the
+  extension. A rejected file lists `Row n · field · reason`. Results are kept per case for the browser session, because
+  there is no file list endpoint.
+- **Run and question:** `components/case/RunPanel.tsx`. Run, or Resume with exactly one question card. The answer is the
+  corrected upload, and the server re-runs only the blocked stage. Live progress comes from the job's SSE stream, read
+  through the generated client (`parseAs: 'stream'`, because EventSource cannot send the bearer). It reconnects up to
+  5 times on the server's stream cap. Gates are overlaid live: IN PROGRESS, then the stage's decision. When the stream ends the log stays as "Last run", because fast stages finish in under a second. It also stays on locked cases, where Run and Resume are hidden.
+- **Approval:** the decision is a radio choice plus a comment (required to reject or return) and a return-stage select.
+  One button opens a Radix Dialog step-up (a bottom sheet under `sm`) that needs the typed case ID. "Approval is internal,
+  not loan acceptance." appears on the review screen and inside the confirm. The decision bar is sticky at the bottom on
+  phones.
+- **nginx (#52):** the headers live in `deploy/nginx/security-headers.conf`, included by the server block and by every
+  `location` that sets its own `add_header`. `tests/test_nginx_headers.py` enforces this.
+- **Dev server:** `next dev -p 3000` (the gateway CORS allows :3000).
+

@@ -1766,6 +1766,7 @@
     },
     "/v1/cases": {
       "get": {
+        "description": "Cases plus dashboard totals, summed here in integer paise so no client adds money (BR-05).",
         "operationId": "list_cases_v1_cases_get",
         "responses": {
           "200": {

@@ -1,3 +1,8 @@
 # CredAssure web
 
-React stub. It renders the product name and imports types from `@credassure/api-client`. No business logic, and no direct `fetch`.
+Next.js (static export) client for the CredAssure gateway (ADR 0022). No business logic: every figure comes from the API.
+
+- Dev server: `make run-ui` or `npm run dev -w apps/web` → **http://localhost:3000** (the gateway CORS allows :3000).
+- Checks: `npm run typecheck -w apps/web`, `npm test -w apps/web`, `npm run build -w apps/web`.
+- e2e: gateway on :8000, web on :3000, then `npm run e2e -w apps/web` (credentials from `E2E_PASSWORD` / `SEED_PASSWORD*`).
+- Design and screens: `docs/ui/design-plan.md`.

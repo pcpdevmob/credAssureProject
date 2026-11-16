@@ -591,7 +591,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List Cases */
+        /**
+         * List Cases
+         * @description Cases plus dashboard totals, summed here in integer paise so no client adds money (BR-05).
+         */
         get: operations["list_cases_v1_cases_get"];
         put?: never;
         /** Create Case */

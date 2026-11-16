@@ -8,6 +8,7 @@ import { Card, StageBadge, Tabs, Skeleton, Badge } from '@/components/ui';
 import { caseService, onboardingService, workingCapitalService, lendWiseService, supervisorService } from '@/services';
 import type { CaseRecord, ReadinessResult, FundingAssessment, LenderComparison, WorkflowGate } from '@/types';
 import Workflow from '@/components/case/Workflow';
+import RunPanel, { overlay, type Live } from '@/components/case/RunPanel';
 import Readiness from '@/components/case/Readiness';
 import Documents from '@/components/case/Documents';
 import Funding from '@/components/case/Funding';
@@ -28,7 +29,7 @@ function CaseView() {
   const sp = useSearchParams(); const router = useRouter(); const user = useUser();
   const id = sp.get('id') ?? ''; const tab = (sp.get('tab') as Tab) || 'workflow';
   const [c, setC] = useState<CaseRecord | null | undefined>(null);
-  const [r, setR] = useState<ReadinessResult>(); const [a, setA] = useState<FundingAssessment | null>(); const [cmp, setCmp] = useState<LenderComparison | null>(); const [g, setG] = useState<WorkflowGate[]>(); const [loadErr, setLoadErr] = useState('');
+  const [r, setR] = useState<ReadinessResult>(); const [a, setA] = useState<FundingAssessment | null>(); const [cmp, setCmp] = useState<LenderComparison | null>(); const [g, setG] = useState<WorkflowGate[]>(); const [loadErr, setLoadErr] = useState(''); const [live, setLive] = useState<Live | null>(null);
   const load = useCallback(async () => {
     try {
       const x = await caseService.get(id); setC(x); if (!x) return;
@@ -37,6 +38,7 @@ function CaseView() {
     } catch (e) { setLoadErr((e as Error).message); setC(c => c ?? undefined); }
   }, [id]);
   useEffect(() => { load(); }, [load]);
+  useEffect(() => setLive(null), [id]); // a run log belongs to one case
   const setTab = (t: Tab) => router.replace(`/case/?id=${id}&tab=${t}`, { scroll: false });
   if (c === undefined) return <Card className="p-10 text-center">Case not found. <Link href="/cases/" className="text-brand-600">Back to cases</Link></Card>;
   if (!c) return <div className="space-y-4"><Skeleton className="h-24" /><Skeleton className="h-96" /></div>;
@@ -56,7 +58,7 @@ function CaseView() {
       <div className="p-3"><Tabs tabs={TABS} value={tab} onChange={setTab} /></div>
     </Card>
     <div key={tab} className="animate-fadein">
-      {tab === 'workflow' && (g ? <Workflow gates={g} /> : <Skeleton className="h-96" />)}
+      {tab === 'workflow' && (g ? <><RunPanel c={c} gates={g} canRun={user.role === 'PREPARER'} live={live} setLive={setLive} onDone={load} /><Workflow gates={overlay(g, live)} /></> : <Skeleton className="h-96" />)}
       {tab === 'readiness' && (r ? <Readiness r={r} /> : <Skeleton className="h-96" />)}
       {loadErr && <p role="alert" className="mb-3 rounded-xl bg-rose-50 p-3 text-sm text-rose-700">{loadErr}</p>}
       {tab === 'documents' && <Documents caseId={c.id} canEdit={user.role === 'PREPARER'} />}

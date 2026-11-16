@@ -15,7 +15,7 @@ function group(digits: string): string {
   return `${digits.slice(0, -3).replace(/\B(?=(\d{2})+(?!\d))/g, ',')},${digits.slice(-3)}`;
 }
 
-/** ₹ with Indian grouping from integer paise, e.g. 14200000000 → "₹1,42,00,000", 105 → "₹1.05". */
+/** ₹ with Indian grouping from integer paise, e.g. 1420000000 → "₹1,42,00,000", 105 → "₹1.05". */
 export function inrFromPaise(paise: number | bigint): string {
   let p = BigInt(paise);
   const sign = p < 0n ? '-' : '';
@@ -32,6 +32,23 @@ export function paiseFromText(text: string): bigint | null {
   let p = BigInt(m[2]) * 100n + BigInt(frac.slice(0, 2)) + (Number(frac[2]) >= 5 ? 1n : 0n);
   if (m[1] && p !== 0n) p = -p;
   return p;
+}
+
+const UNIT: Record<string, bigint> = { '': 1n, l: 100_000n, lac: 100_000n, lakh: 100_000n, lakhs: 100_000n, cr: 10_000_000n, crore: 10_000_000n, crores: 10_000_000n };
+const INPUT = /^(?:₹|rs\.?)?\s*(\d{1,2}(?:,\d{2})*,\d{3}|\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d+))?\s*([a-z]*)\s*(?:\/-)?$/;
+
+/**
+ * What a person types in a money field → exact paise, or null. The one conversion every form uses (no `* 100` on a float).
+ * Accepts ₹ / Rs., Indian or western grouping, a "/-" suffix and lakh / L / crore / Cr; rejects anything that would leave a
+ * fraction of a paisa, negatives and exponents. 1420000000 paise = ₹1,42,00,000 = 142 lakh = 1.42 crore.
+ */
+export function paiseFromInput(text: string): bigint | null {
+  const m = INPUT.exec(text.trim().toLowerCase());
+  if (!m || !Object.hasOwn(UNIT, m[3])) return null;
+  const frac = m[2] ?? '';
+  const scale = 10n ** BigInt(frac.length);
+  const num = (BigInt(m[1].replace(/,/g, '') + frac)) * UNIT[m[3]] * 100n; // paise × scale
+  return num % scale === 0n ? num / scale : null;
 }
 
 /** "≈ ₹1.42 Cr" / "≈ ₹42.50 L", half-up to two places; null below ₹1 lakh. Only ever shown beside the exact amount. */

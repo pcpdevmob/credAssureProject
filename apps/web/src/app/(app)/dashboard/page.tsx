@@ -6,24 +6,23 @@ import { FolderKanban, Inbox, IndianRupee, TrendingDown, PlusCircle, ArrowRight,
 import { useUser } from '@/components/AppShell';
 import { Card, Stat, Button, Skeleton, Badge, StageBadge } from '@/components/ui';
 import { caseService } from '@/services';
+import type { CaseTotals } from '@/services/cases';
 import type { CaseRecord } from '@/types';
 import { ROLE_LABEL } from '@/types';
-import { approx, inrFromPaise } from '@/lib/money';
-// ponytail: portfolio sums are still added up in the browser (integer paise); U2 takes them from the API (BR-05).
-const short = (p: number) => approx(Math.round(p)) ?? inrFromPaise(Math.round(p));
-const pa = (f?: { paise?: number }) => f?.paise ?? 0;
+import { fig } from '@/lib/money';
+import { Figure } from '@/components/Figure';
+// Money totals come summed from the gateway (GET /v1/cases totals); the browser only renders them (BR-05).
+const pa = (f?: { paise?: number }) => f?.paise ?? 0; // bar height only, never a displayed number
 import { CountUp } from '@/components/fx/motion';
 import { cn } from '@/lib/utils';
 
 
 /** "Financing tracker": lollipop chart of validated need per assessed case (Twisty "Income Tracker" layout). */
-function FinancingTracker({ cases }: { cases: CaseRecord[] }) {
+function FinancingTracker({ cases, totals }: { cases: CaseRecord[]; totals: CaseTotals }) {
   const reduce = useReducedMotion();
   const data = cases.filter(c => c.recommendedAmount).slice(0, 7);
   const max = Math.max(...data.map(c => pa(c.recommendedAmount)), 1);
   const [sel, setSel] = useState(0);
-  const total = data.reduce((a, c) => a + pa(c.recommendedAmount), 0); const req = data.reduce((a, c) => a + pa(c.requestedAmount), 0);
-  const pct = req ? Math.round((1 - total / req) * 100) : 0;
   return (
     <Card className="p-6 sm:p-8">
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -33,8 +32,8 @@ function FinancingTracker({ cases }: { cases: CaseRecord[] }) {
       <p className="mt-3 max-w-md text-sm text-ink-500">Validated funding need for each assessed case, after the Working Capital agent nets off buffers and unused limits.</p>
       <div className="mt-6 grid gap-6 md:grid-cols-[minmax(0,13rem)_1fr] md:items-end">
         <div className="order-2 md:order-1">
-          <p className="font-display text-5xl font-light tracking-tight text-ink-950 num">−{pct}%</p>
-          <p className="mt-1 text-sm text-ink-500">Validated need vs. amount requested ({short(total)} of {short(req)})</p>
+          <Figure className="font-display text-3xl font-light tracking-tight text-ink-950" value={fig(totals.over_borrowing_avoided)} label="Over-borrowing avoided, all assessed cases" showApprox />
+          <p className="mt-1 text-sm text-ink-500">less than requested across {totals.validated_cases} assessed cases (<span className="num">{totals.validated_need.display}</span> validated of <span className="num">{totals.requested_for_validated.display}</span> requested)</p>
         </div>
         <div className="order-1 flex h-64 items-end justify-between gap-1 md:order-2" role="list" aria-label="Validated need by case">
           {data.map((c, i) => { const h = 18 + (pa(c.recommendedAmount) / max) * 72; const on = i === sel; return (
@@ -90,15 +89,13 @@ function Pipeline({ cases }: { cases: CaseRecord[] }) {
 
 
 export default function Dashboard() {
-  const u = useUser(); const [cases, setCases] = useState<CaseRecord[] | null>(null);
-  useEffect(() => { caseService.list().then(setCases); }, []);
-  if (!cases) return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32" />)}</div>;
+  const u = useUser(); const [data, setData] = useState<{ items: CaseRecord[]; totals: CaseTotals } | null>(null);
+  useEffect(() => { caseService.summary().then(setData); }, []);
+  if (!data) return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32" />)}</div>;
+  const { items: cases, totals } = data;
   const active = cases.filter(c => !['APPROVED', 'REJECTED'].includes(c.stage));
   const mine = cases.filter(c => c.stage === 'AWAITING_APPROVAL' && c.routedTo === u.role);
   const queue = u.role === 'PREPARER' ? cases.filter(c => c.stage === 'AWAITING_APPROVAL') : mine;
-  const validated = cases.filter(c => c.recommendedAmount);
-  const totalNeed = validated.reduce((a, c) => a + pa(c.recommendedAmount), 0);
-  const saved = validated.reduce((a, c) => a + pa(c.requestedAmount) - pa(c.recommendedAmount), 0);
   return (<>
     <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div><h1 className="font-display text-3xl tracking-tight text-ink-950 sm:text-4xl"><span className="font-light">Good day,</span> <span className="font-semibold">{u.name.split(' ')[0]}</span></h1><p className="mt-1.5 text-ink-500">Signed in as <Badge tone="blue">{ROLE_LABEL[u.role]}</Badge></p></div>
@@ -107,12 +104,12 @@ export default function Dashboard() {
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       <Stat label="Active cases" value={<CountUp value={active.length} />} sub={`${cases.length} total`} icon={<FolderKanban className="h-5 w-5" />} />
       <Stat label={u.role === 'PREPARER' ? 'Awaiting approval' : 'Awaiting your decision'} value={<CountUp value={queue.length} />} sub="Routed by ₹1.5 Cr threshold" icon={<Inbox className="h-5 w-5" />} tone="amber" />
-      <Stat label="Validated funding need" value={<CountUp value={totalNeed} format={short} />} sub={`across ${validated.length} assessed cases`} icon={<IndianRupee className="h-5 w-5" />} tone="violet" />
-      <Stat label="Over-borrowing avoided" value={<CountUp value={saved} format={short} />} sub="Requested − validated need" icon={<TrendingDown className="h-5 w-5" />} tone="green" />
+      <Stat label="Validated funding need" value={<Figure className="text-2xl" value={fig(totals.validated_need)} label="Validated funding need, all assessed cases" showApprox />} sub={`across ${totals.validated_cases} assessed cases`} icon={<IndianRupee className="h-5 w-5" />} tone="violet" />
+      <Stat label="Over-borrowing avoided" value={<Figure className="text-2xl" value={fig(totals.over_borrowing_avoided)} label="Over-borrowing avoided, all assessed cases" showApprox />} sub="Requested − validated need, by the gateway" icon={<TrendingDown className="h-5 w-5" />} tone="green" />
     </div>
     <div className="mt-6 grid gap-6 xl:grid-cols-[1.35fr_1fr]">
       <div className="space-y-6">
-        <FinancingTracker cases={cases} />
+        <FinancingTracker cases={cases} totals={totals} />
         <div className="grid gap-6 md:grid-cols-2">
           <div>
             <div className="mb-3 flex items-center justify-between"><h2 className="font-display text-xl text-ink-950">{u.role === 'PREPARER' ? 'Awaiting approval' : 'Your approvals'}</h2><Link href="/approvals/" className="underline-link border-b border-ink-300 text-sm text-ink-700 hover:text-ink-950">See all</Link></div>

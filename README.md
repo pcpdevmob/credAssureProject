@@ -32,6 +32,7 @@ OLLAMA_CONTEXT_LENGTH=8192 ollama serve   # host install; skip if you use Compos
 make ollama-pull             # qwen3:8b + nomic-embed-text (about 5 GB, once)
 make check                   # ruff, format, mypy --strict, pytest, bandit
 make run-api                 # http://localhost:8000/docs
+make run-ui                  # web app on http://localhost:3000 (the gateway CORS allows :3000)
 make langfuse-up             # self-hosted tracing (ADR 0016); needs deploy/env/langfuse.env
 ```
 Local chat model is Qwen3 8B (`qwen3:8b`, same family as the course `Qwen/Qwen3-8B`) and embeddings are `nomic-embed-text`, both on Ollama (ADR 0017). Graded eval points `LLM_BASE_URL`, `LLM_MODEL`, `EMBED_BASE_URL` and `EMBED_MODEL` at the course endpoint instead; that needs a re-index if the embeddings model changes. Switch all model settings at once with `MODELS=local` (default) or `MODELS=course`, e.g. `make ingest MODELS=course`. `EMBED_BASE_URL=local` runs the course embeddings model (`BAAI/bge-small-en-v1.5`) in-process instead of Ollama's `nomic-embed-text`.

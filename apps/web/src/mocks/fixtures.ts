@@ -38,6 +38,12 @@ export const LINEAGE: Record<string, Lineage> = { [lineageFull.key]: lineageFull
 const money = (paise: number, display: string) => ({ paise, display });
 export const caseSummary = {
   case_id: CASE_ID, msme_name: 'Demo Electronics Pvt Ltd', order_ref: 'PO-CA-2026-0001', status: 'AWAITING_APPROVAL', current_stage: 'approval',
-  route: 'director_finance', row_version: 7, order_value: money(32000000000, '₹3,20,00,000'), indicative_amount: money(20000000000, '₹2,00,00,000'),
+  route: 'director_finance', row_version: 7, order_value: money(3200000000, '₹3,20,00,000'), indicative_amount: money(2000000000, '₹2,00,00,000'),
+  recommended_amount: money(1420000000, '₹1,42,00,000'),
   due_date: '2027-05-15', question: null, next_action: 'Awaiting the Director, Finance decision.', stages: [],
+};
+// GET /v1/cases totals: summed by the gateway in paise (the browser never adds money).
+export const caseTotals = {
+  validated_cases: 1, validated_need: money(1420000000, '₹1,42,00,000'), requested_for_validated: money(2000000000, '₹2,00,00,000'),
+  over_borrowing_avoided: money(580000000, '₹58,00,000'),
 };

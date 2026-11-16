@@ -98,7 +98,7 @@ langfuse-up: langfuse-env-check  ## Self-hosted Langfuse only (ADR 0016)
 langfuse-down:
 	$(COMPOSE) --profile langfuse down
 
-run-ui:  ## Vite dev server for the React stub
+run-ui:  ## Next.js dev server for the web app on http://localhost:3000
 	npm run dev -w apps/web
 
 data:  ## Seeded synthetic data -> data/frozen/v1 + hr.db (Phase 2, idempotent)

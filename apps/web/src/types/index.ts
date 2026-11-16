@@ -27,7 +27,6 @@ export interface CaseRecord {
 export interface Prerequisite { id: string; name: string; category: 'Onboarding' | 'Training' | 'Policy' | 'Authorisation'; mandatory: boolean; status: 'COMPLETE' | 'INCOMPLETE' | 'UNKNOWN'; evidence?: string; completedOn?: string; owner: string }
 export interface ReadinessResult { employeeId: string; employeeName: string; role: string; buddy: string; manager: string; decision: GateDecision; prerequisites: Prerequisite[]; blockers: string[]; checkedAt: string }
 
-export interface UploadedDoc { id: string; caseId: string; name: string; kind: 'CSV' | 'JSON' | 'EXCEL' | 'PDF'; docType: string; sizeKb: number; status: 'UPLOADING' | 'EXTRACTING' | 'EXTRACTED' | 'NEEDS_REVIEW' | 'FLAGGED'; fields: number; warnings: string[]; uploadedAt: string }
 
 export interface FundingAssessment {
   caseId: string; requestedAmount: Fig; minCashBuffer: Fig; peakShortfall: Fig; peakPeriod: string; existingFacility: Fig;
