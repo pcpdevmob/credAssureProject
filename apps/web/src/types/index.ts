@@ -28,17 +28,24 @@ export interface Prerequisite { id: string; name: string; category: 'Onboarding'
 export interface ReadinessResult { employeeId: string; employeeName: string; role: string; buddy: string; manager: string; decision: GateDecision; prerequisites: Prerequisite[]; blockers: string[]; checkedAt: string }
 
 
+export interface CashRow { week: number; inflow: Fig; outflow: Fig; cumulative: Fig; shortfall: boolean; belowBuffer: boolean | null }
+export interface CashTable { buffer: Fig | null; peakWeek: number | null; rows: CashRow[] }
 export interface FundingAssessment {
-  caseId: string; requestedAmount: Fig; minCashBuffer: Fig; peakShortfall: Fig; peakPeriod: string; existingFacility: Fig;
-  recommendedAmount: Fig; drivers: { label: string; amount: Fig }[]; decision: GateDecision;
+  caseId: string; requestedAmount: Fig; minCashBuffer: Fig; peakShortfall: Fig; peakWeek: number | null; shortfallWeeks: number | null; existingFacility: Fig;
+  recommendedAmount: Fig; bridge: { code: string; amount: Fig }[]; decision: GateDecision; cash: CashTable | null;
 }
 
-export interface LenderOffer {
-  // Shape lands with the LendWise mapping in U3; figures are display strings + ledger keys, never floats.
-  lenderId: string; lenderName: string; annualRate: Fig; apr: Fig; netDisbursal: Fig; totalCost: Fig; flags: string[];
+/** One offer at its latest version, exactly as the gateway computed it. `affordable` and `rank` are null in the read-only preview. */
+export interface OfferRow {
+  id: string; version: number; flags: string[]; comparable: boolean; affordable: boolean | null; rank: number | null;
+  apr: Fig | null; aprPct: string | null; amountReceived: Fig | null; totalRepayment: Fig | null; totalCost: Fig | null;
 }
-export interface NegotiationEvent { round: number; lenderId: string; lenderName: string; ask: string; outcome: 'ACCEPTED' | 'PARTIAL' | 'REFUSED' | 'NO_RESPONSE' | 'INITIAL'; detail: string; at: string }
-export interface LenderComparison { caseId: string; offers: LenderOffer[]; history: NegotiationEvent[]; bestLenderId: string; roundsUsed: number; maxRounds: 3; decision: GateDecision }
+export interface Negotiation {
+  target: string | null; competingFee: Fig | null; countsAsConcession: boolean; message: string; status: string | null;
+  revised: { version: number; comparable: boolean; flags: string[]; apr: Fig | null; totalCost: Fig | null } | null;
+}
+/** `preview` = audit and pricing only; affordability and ranking have not been checked. */
+export interface OfferView { caseId: string; source: 'ledger' | 'preview'; offers: OfferRow[]; ranking: string[]; negotiation: Negotiation | null }
 
 export interface WorkflowGate { id: string; name: string; agent: string; decision: GateDecision; evidence: string; blockers: string[]; at?: string; next: string }
 

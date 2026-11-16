@@ -1,14 +1,20 @@
 // UI-07, APR-04..06: the routed approver decides with a step-up confirm (type the case ID). The server enforces the role
 // and maker-checker; the UI only hides controls it would refuse. Approval is internal, never loan acceptance.
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import type { CaseRecord, ApprovalDecision, User } from '@/types';
 import { Card, CardHeader, Button, Textarea, Badge, StageBadge, Input } from '../ui';
 import ErrorBanner from '../ErrorBanner';
-import { approvalService, type ReturnStage } from '@/services';
+import { approvalService, lendWiseService, type ReturnStage } from '@/services';
 import { Figure } from '../Figure';
 import type { Fig } from '@/lib/money';
-import { ShieldCheck, PauseCircle, Lock, Info } from 'lucide-react';
+import { ShieldCheck, PauseCircle, Lock, Info, Hourglass } from 'lucide-react';
+
+// APR-04, BR-09: what the approver must know about a negotiation round that is newer than the verified comparison.
+const WARNING: Record<string, string> = {
+  negotiation_in_progress: 'Negotiation in progress: a round was sent after this proposal was verified, so its result is not in the ranking.',
+  revised_offer_not_reaudited: 'Revised offer not re-audited: the lender replied, but no concession counts until the stage re-runs.',
+};
 
 const APPROVER = { VP_FINANCE: 'VP, Finance', DIRECTOR_FINANCE: 'Director, Finance', HELD_PENDING_POLICY: 'a human decision' } as const;
 export const INTERNAL = 'Approval is internal, not loan acceptance.';
@@ -25,6 +31,8 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
   const [comment, setComment] = useState(''); const [back, setBack] = useState<ReturnStage>('working_capital');
   const [open, setOpen] = useState(false); const [typed, setTyped] = useState('');
   const [busy, setBusy] = useState(false); const [err, setErr] = useState<unknown>(); const [done, setDone] = useState('');
+  const [warnings, setWarnings] = useState<string[]>([]); const [warnErr, setWarnErr] = useState(false);
+  useEffect(() => { lendWiseService.warnings(c).then(w => { setWarnings(w); setWarnErr(false); }).catch(() => setWarnErr(true)); }, [c.id, c.stage]); // the decision is enforced server-side either way, but say so when the check fails
   const can = approvalService.canDecide(c, user);
   const needsComment = choice !== 'APPROVED' && !comment.trim();
   const confirm = async () => {
@@ -35,6 +43,8 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
   };
   return (<div className="grid gap-6 pb-24 lg:grid-cols-3 lg:pb-0">
     <div className="space-y-6 lg:col-span-2">
+      {warnErr && <p role="alert" className="flex gap-2 rounded-xl bg-amber-50 p-3 text-sm font-medium text-amber-900 ring-1 ring-amber-200"><Hourglass aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />Could not check negotiation status. Reload before deciding.</p>}
+      {warnings.length > 0 && <ul aria-label="Negotiation status" className="space-y-2">{warnings.map(w => <li key={w} className="flex gap-2 rounded-xl bg-amber-50 p-3 text-sm font-medium text-amber-900 ring-1 ring-amber-200"><Hourglass aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />{WARNING[w] ?? w}</li>)}</ul>}
       <Card><CardHeader title="Proposal summary" sub="Numbers come from the fact ledger; the gateway routes by code" icon={<ShieldCheck className="h-4 w-4" />} />
         <div className="grid gap-4 p-5 sm:grid-cols-2">
           <div className="rounded-xl bg-sunken p-4"><p className="text-xs uppercase text-ink-600">Order</p><p className="mt-1 text-sm"><b>{c.msmeName}</b> · {c.orderRef} (<Figure value={c.orderValue} label="Order value" caseId={c.id} />), due {c.customerDueDate}</p></div>

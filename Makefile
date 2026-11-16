@@ -13,7 +13,7 @@ $(error MODELS=$(MODELS): no $(MODELS_FILE); use local or course)
 endif
 ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 
-.PHONY: testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
+.PHONY: e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore eval-fast llm-probe retrieval-eval retrieval-pool retrieval-silver judge kappa
 
@@ -58,6 +58,18 @@ ollama-pull:  ## Download qwen3:8b and nomic-embed-text (ADR 0017; not part of m
 
 run-api:  ## FastAPI on :8000 (docs at /docs)
 	uv run $(ENV_FILE) uvicorn credassure.gateway.main:app --factory --reload --port 8000
+
+E2E_DB := var/case-e2e.db
+e2e-db:  ## Fresh migrated + seeded e2e database (var/case-e2e.db); never touches var/case.db
+	rm -f $(E2E_DB) $(E2E_DB)-wal $(E2E_DB)-shm
+	uv run python -m credassure.ledger.migrate upgrade case $(E2E_DB)
+	CASE_DB=$(E2E_DB) uv run $(ENV_FILE) python -m credassure.gateway.seed
+
+run-api-e2e:  ## E2E gateway on :8001 using var/case-e2e.db (CORS for :3001)
+	CASE_DB=$(E2E_DB) UI_ORIGINS=http://localhost:3001 uv run $(ENV_FILE) uvicorn credassure.gateway.main:app --factory --port 8001
+
+run-ui-e2e:  ## E2E web dev server on :3001, talking to :8001
+	NEXT_PUBLIC_API_BASE_URL=http://localhost:8001 NEXT_DIST_DIR=.next-e2e npm run dev -w apps/web -- -p 3001
 
 openapi:  ## Export openapi.json (ADR 0004)
 	uv run python -m credassure.gateway.openapi

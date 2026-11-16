@@ -8,7 +8,7 @@ import { join } from 'node:path';
 import { E2E_USERNAME, e2ePassword } from './credentials';
 import { capture as shot, signIn } from './shot';
 
-const API = process.env.E2E_API_URL || 'http://localhost:8000';
+const API = process.env.E2E_API_URL || 'http://localhost:8001';
 const FROZEN = join(__dirname, '../../../data/frozen/v1');
 const CASE_DIR = join(FROZEN, 'cases/CA-2026-0001');
 const DIRECTOR = process.env.E2E_DIRECTOR || 'demo.director';

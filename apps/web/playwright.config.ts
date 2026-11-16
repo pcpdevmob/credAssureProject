@@ -8,11 +8,13 @@ try {
   /* no .env: rely on the shell environment */
 }
 
+// E2E runs against its own stack (make e2e-db, run-api-e2e, run-ui-e2e: :8001 + :3001 + var/case-e2e.db),
+// so test cases never reach the demo database or its dashboard totals.
 export default defineConfig({
   testDir: 'e2e',
   timeout: 60_000,
   use: {
-    baseURL: process.env.E2E_BASE_URL || 'http://localhost:3000',
+    baseURL: process.env.E2E_BASE_URL || 'http://localhost:3001',
     actionTimeout: 60_000, // a missing control fails in a minute, not at the 30-minute test cap
     trace: 'off', // a trace would record the typed password and the bearer token
     channel: 'chrome', // the bundled chromium headless shell is incomplete on this machine (U0 notes)
@@ -21,6 +23,7 @@ export default defineConfig({
     // Creates a fresh demo case through the live gateway so its facts carry producer {agent, stage, trace_id}.
     { name: 'demo-case', testMatch: /demo-case\.setup\.ts/, timeout: 15 * 60_000 },
     { name: 'u1', testMatch: /u1\.spec\.ts/, dependencies: ['demo-case'] },
+    { name: 'u3', testMatch: /u3\.spec\.ts/, dependencies: ['demo-case'], timeout: 5 * 60_000 },
     { name: 'u2', testMatch: /u2\.spec\.ts/ }, // drives its own demo case through the UI
   ],
 });

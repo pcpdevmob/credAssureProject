@@ -69,10 +69,31 @@ def cash_table(case_id: str, who: Caller, supervisor: SupervisorDep) -> dict[str
         value = Decimal(text)
         return {"paise": to_paise(value), "display": format_inr(value)}
 
+    buffer_text = supervisor.fact(who, case_id, "wc.min_buffer")
+    peak_text = supervisor.fact(who, case_id, "wc.peak_week")
     return {
         "case_id": case_id,
-        "rows": [
-            {"week": r["week"], **{k: money(r[k]) for k in ("inflow", "outflow", "cumulative")}}
-            for r in json.loads(rows)
-        ],
+        "buffer": money(buffer_text) if buffer_text is not None else None,
+        "peak_week": int(peak_text) if peak_text is not None else None,
+        "rows": flag_rows(json.loads(rows), buffer_text, money),
     }
+
+
+def flag_rows(
+    rows: list[dict[str, Any]], buffer_text: str | None, money: Any
+) -> list[dict[str, Any]]:
+    """Per-week flags decided here, never in the browser (BR-05): `shortfall` = cumulative cash
+    below zero (WC-04); `below_buffer` = below the minimum cash buffer (None when it is unknown)."""
+    buffer = Decimal(buffer_text) if buffer_text is not None else None
+    out = []
+    for r in rows:
+        cumulative = Decimal(r["cumulative"])
+        out.append(
+            {
+                "week": r["week"],
+                **{k: money(r[k]) for k in ("inflow", "outflow", "cumulative")},
+                "shortfall": cumulative < 0,
+                "below_buffer": None if buffer is None else cumulative < buffer,
+            }
+        )
+    return out

@@ -5,7 +5,7 @@ import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { DEMO_FILE, E2E_USERNAME, e2ePassword } from './credentials';
 
-const API = process.env.E2E_API_URL || 'http://localhost:8000';
+const API = process.env.E2E_API_URL || 'http://localhost:8001';
 const FROZEN = join(__dirname, '../../../data/frozen/v1');
 const CASE_DIR = join(FROZEN, 'cases/CA-2026-0001');
 

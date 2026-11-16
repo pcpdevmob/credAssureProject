@@ -365,3 +365,21 @@ metadata, download filenames). Internal identifiers (`--fb-*` variables, the aut
   `location` that sets its own `add_header`. `tests/test_nginx_headers.py` enforces this.
 - **Dev server:** `next dev -p 3000` (the gateway CORS allows :3000).
 
+## 14. U3 as built (2026-11-16)
+
+- **Funding view:** `components/case/CashChart.tsx` draws the 26 weeks from `GET /v1/agents/working-capital/cases/{id}/cash-table`,
+  requested only after a GO run so the browser never makes the expected 404. The gateway now sends per-row `shortfall` and
+  `below_buffer` plus `buffer` and `peak_week`; the UI compares no money. Shortfall weeks are hatched bars, the buffer is a dashed
+  line named in the key, the peak week is a labelled diamond. The chart has a text summary and a weekly table. The bridge uses a
+  fixed label map and ends in the recommended facility. Weekly rows are plain figures; aggregates are `<Figure>` with lineage.
+- **Offers view:** one card per offer (APR, total cost, amount received, total repayment, affordable, comparable, flags in words,
+  rank), labelled by offer id. An unaffordable or non-comparable offer with the lowest APR gets a solid alert banner, a bordered
+  card, a "NOT RANKED" pill and no rank (text, shape and colour). `source: "preview"` shows "Read-only preview: affordability and
+  ranking not yet checked" and no verdicts. Flag wording lives in `lib/flags.ts`.
+- **Negotiation:** "Round 1 of 1", the request, the competing fee, and the lender's reply as the re-audited revised offer (the API
+  stores no reply text). "Revised offer not re-audited" shows until `concession_counts`. The approval screen lists
+  `negotiation_in_progress` and `revised_offer_not_reaudited` from the inbox warnings.
+- **e2e isolation:** `make e2e-db`, `run-api-e2e` (:8001, `var/case-e2e.db`), `run-ui-e2e` (:3001, `.next-e2e`). Playwright defaults to
+  :3001 and :8001, so test cases never reach the demo database.
+- **Dev overlay:** added `app/icon.svg` (the `/favicon.ico` 404). u3 fails on any console error or 4xx/5xx.
+

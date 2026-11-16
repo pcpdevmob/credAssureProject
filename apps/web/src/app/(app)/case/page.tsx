@@ -6,7 +6,7 @@ import { ArrowLeft, GitBranch, UserCheck, Upload, LineChart, Scale, FileCheck2, 
 import { useUser } from '@/components/AppShell';
 import { Card, StageBadge, Tabs, Skeleton, Badge } from '@/components/ui';
 import { caseService, onboardingService, workingCapitalService, lendWiseService, supervisorService } from '@/services';
-import type { CaseRecord, ReadinessResult, FundingAssessment, LenderComparison, WorkflowGate } from '@/types';
+import type { CaseRecord, ReadinessResult, FundingAssessment, OfferView, WorkflowGate } from '@/types';
 import Workflow from '@/components/case/Workflow';
 import RunPanel, { overlay, type Live } from '@/components/case/RunPanel';
 import Readiness from '@/components/case/Readiness';
@@ -29,7 +29,7 @@ function CaseView() {
   const sp = useSearchParams(); const router = useRouter(); const user = useUser();
   const id = sp.get('id') ?? ''; const tab = (sp.get('tab') as Tab) || 'workflow';
   const [c, setC] = useState<CaseRecord | null | undefined>(null);
-  const [r, setR] = useState<ReadinessResult>(); const [a, setA] = useState<FundingAssessment | null>(); const [cmp, setCmp] = useState<LenderComparison | null>(); const [g, setG] = useState<WorkflowGate[]>(); const [loadErr, setLoadErr] = useState(''); const [live, setLive] = useState<Live | null>(null);
+  const [r, setR] = useState<ReadinessResult>(); const [a, setA] = useState<FundingAssessment | null>(); const [cmp, setCmp] = useState<OfferView | null>(); const [g, setG] = useState<WorkflowGate[]>(); const [loadErr, setLoadErr] = useState(''); const [live, setLive] = useState<Live | null>(null);
   const load = useCallback(async () => {
     try {
       const x = await caseService.get(id); setC(x); if (!x) return;
@@ -63,7 +63,7 @@ function CaseView() {
       {loadErr && <p role="alert" className="mb-3 rounded-xl bg-rose-50 p-3 text-sm text-rose-700">{loadErr}</p>}
       {tab === 'documents' && <Documents caseId={c.id} canEdit={user.role === 'PREPARER'} />}
       {tab === 'funding' && (a ? <Funding a={a} /> : <NotYet what="The validated funding assessment" />)}
-      {tab === 'lenders' && (cmp ? <Lenders cmp={cmp} /> : <NotYet what="The lender comparison" />)}
+      {tab === 'lenders' && (cmp ? <Lenders c={c} view={cmp} canNegotiate={user.role === 'PREPARER'} onChange={load} /> : <NotYet what="The lender comparison" />)}
       {tab === 'review' && <Review c={c} need={a?.recommendedAmount} user={user} onChange={load} />}
       {tab === 'audit' && (user.role === 'EVALUATOR' ? <AuditList caseId={c.id} /> : <NotYet what="The audit log (evaluators only)" />)}
     </div>
