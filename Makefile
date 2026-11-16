@@ -12,6 +12,8 @@ ifeq ($(wildcard $(MODELS_FILE)),)
 $(error MODELS=$(MODELS): no $(MODELS_FILE); use local or course)
 endif
 ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
+# The dev/demo database (var/case.db) is tenant "demo" (make demo-reset); an exported variable beats --env-file.
+DEMO_TENANT := TENANT_ID=demo
 
 .PHONY: e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
@@ -57,7 +59,7 @@ ollama-pull:  ## Download qwen3:8b and nomic-embed-text (ADR 0017; not part of m
 	fi
 
 run-api:  ## FastAPI on :8000 (docs at /docs)
-	uv run $(ENV_FILE) uvicorn credassure.gateway.main:app --factory --reload --port 8000
+	$(DEMO_TENANT) uv run $(ENV_FILE) uvicorn credassure.gateway.main:app --factory --reload --port 8000
 
 E2E_DB := var/case-e2e.db
 # The guard runs first, in the environment the gateway will see, and refuses var/case.db (the demo database).
@@ -203,7 +205,7 @@ testset:  ## Rebuild evaluation/testset/v1 and the retrieval/red-team/fixture as
 db:  ## Migrate var/case.db + var/corpus.db and seed users (needs SEED_PASSWORD; ADR 0005, scope #29)
 	uv run python -m credassure.ledger.migrate upgrade case var/case.db
 	uv run python -m credassure.ledger.migrate upgrade corpus var/corpus.db
-	uv run $(ENV_FILE) python -m credassure.gateway.seed  # SEED_PASSWORD via Settings, into CASE_DB
+	$(DEMO_TENANT) uv run $(ENV_FILE) python -m credassure.gateway.seed  # SEED_PASSWORD via Settings, into CASE_DB
 
-demo-reset:  ## Reset demo data and replay cache (Phase 12)
-	deploy/scripts/demo-reset.sh
+demo-reset:  ## Recreate the demo cases in var/case.db through the API (tenant demo; stop run-api first)
+	$(DEMO_TENANT) uv run $(ENV_FILE) python scripts/demo_reset.py
