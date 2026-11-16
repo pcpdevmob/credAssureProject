@@ -8,7 +8,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@credassure/api-client": "workspace:*",
+    "@credassure/api-client": "*",
     "@react-three/drei": "^9.114.0",
     "@react-three/fiber": "^8.17.10",
     "clsx": "2.1.1",
@@ -23,6 +23,7 @@
     "three": "^0.169.0"
   },
   "devDependencies": {
+    "@playwright/test": "1.55.0",
     "@types/node": "20.16.10",
     "@types/qrcode": "^1.5.5",
     "@types/react": "18.3.11",
