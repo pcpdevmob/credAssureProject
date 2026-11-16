@@ -8,7 +8,8 @@ import type { User, Role } from '@/types';
 import { ROLE_LABEL } from '@/types';
 import { cn } from '@/lib/utils';
 import { Logo } from './Logo';
-import { motion } from 'framer-motion';
+import ThemeToggle from './ThemeToggle';
+import { ProvenanceProvider } from './Figure';
 
 const Ctx = createContext<User | null>(null);
 export const useUser = () => useContext(Ctx)!;
@@ -41,14 +42,16 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }, [router, path]);
   const act = (r: Role) => { const u = authService.setActingRole(r); if (u) { setUser(u); router.refresh(); } };
   useEffect(() => setOpen(false), [path]);
+  useEffect(() => { const n = [...NAV].reverse().find(x => path.startsWith(x.href)); document.title = `${path.startsWith('/case/') ? 'Case' : n?.label ?? 'Workspace'} · CredAssure`; }, [path]);
   if (!user) return <div className="grid min-h-screen place-items-center text-slate-400">Loading…</div>;
   const items = [...NAV.filter(n => !n.roles || n.roles.includes(user.role)), ...(user.accountRole === 'global_admin' && authService.live ? [{ href: '/admin/users/', label: 'User management', icon: Users }, { href: '/admin/logs/', label: 'User logs', icon: ListChecks }] : [])];
   const Side = (
     <div className="flex h-full flex-col gap-1 p-4">
-      <div className="mb-6 flex items-center justify-between px-2"><Logo /><button className="lg:hidden" onClick={() => setOpen(false)}><X className="h-5 w-5 text-ink-300" /></button></div>
+      <div className="mb-6 flex items-center justify-between px-2"><Logo /><button className="lg:hidden" aria-label="Close menu" onClick={() => setOpen(false)}><X className="h-5 w-5 text-ink-300" /></button></div>
       {items.map(n => { const active = path === n.href || (n.href === '/cases/' && path.startsWith('/case') && path !== '/cases/new/'); return (
-        <Link key={n.href} href={n.href} className={cn('relative flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-medium transition', active ? 'text-ink-950' : 'text-ink-300 hover:bg-white/5 hover:text-white')}>{active && <motion.span layoutId="nav-pill" className="absolute inset-0 rounded-full bg-white" transition={{ type: 'spring', stiffness: 400, damping: 32 }}></motion.span>}<n.icon className="relative h-[18px] w-[18px]" /><span className="relative">{n.label}</span></Link>); })}
+        <Link key={n.href} href={n.href} aria-current={active ? 'page' : undefined} className={cn('relative flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-medium transition', active ? 'text-ink-950' : 'text-ink-300 hover:bg-white/5 hover:text-white')}>{active && <span aria-hidden className="absolute inset-0 rounded-full bg-white" />}<n.icon className="relative h-[18px] w-[18px]" /><span className="relative">{n.label}</span></Link>); })}
       <div className="mt-auto space-y-3">
+        <div className="flex items-center justify-between px-2"><span className="text-[11px] font-semibold uppercase tracking-wider text-ink-300">Theme</span><ThemeToggle /></div>
         <div className="rounded-2xl bg-white/[.05] p-4 text-xs text-slate-300 ring-1 ring-white/10">
           <p className="flex items-center gap-1.5 font-semibold text-white"><Sparkles className="h-4 w-4 text-gold-300" /> Prototype</p>
           <p className="mt-1">Synthetic data & simulated lenders only. </p>
@@ -70,19 +73,19 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     </div>
   );
   return (
-    <Ctx.Provider value={user}>
+    <Ctx.Provider value={user}><ProvenanceProvider>
       <div className="dot-canvas min-h-screen">
-        <aside className="fixed inset-y-3 left-3 z-30 hidden w-64 overflow-y-auto rounded-[28px] bg-ink-950 lg:block">{Side}</aside>
+        <aside className="fixed inset-y-3 left-3 z-30 hidden w-64 overflow-y-auto rounded-[28px] bg-ink-950 keep-light lg:block">{Side}</aside>
         {open && <div className="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm lg:hidden" onClick={() => setOpen(false)} />}
-        <aside className={cn('fixed inset-y-0 left-0 z-50 w-72 overflow-y-auto bg-ink-950 transition-transform lg:hidden', open ? 'translate-x-0' : '-translate-x-full')}>{Side}</aside>
+        <aside className={cn('fixed inset-y-0 left-0 z-50 w-72 overflow-y-auto bg-ink-950 keep-light transition-transform lg:hidden', open ? 'translate-x-0' : '-translate-x-full')}>{Side}</aside>
         <div className="lg:pl-[17.5rem]">
           <header className="sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-line bg-white/85 px-4 backdrop-blur lg:hidden">
-            <button onClick={() => setOpen(true)}><Menu className="h-5 w-5" /></button><Logo dark />
+            <button aria-label="Open menu" onClick={() => setOpen(true)}><Menu className="h-5 w-5" /></button><Logo dark />
           </header>
-          <motion.main key={user.role + path} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .4, ease: [0.16, 1, 0.3, 1] }} className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">{children}</motion.main>
-          <footer className="mx-auto max-w-7xl px-4 pb-6 text-center text-[11px] tracking-wide text-slate-400 sm:px-6 lg:px-8">FinBridge AI · Team IntelliCore · IIT Kharagpur Capstone</footer>
+          <main className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">{children}</main>
+          <footer className="mx-auto max-w-7xl px-4 pb-6 text-center text-[11px] tracking-wide text-slate-400 sm:px-6 lg:px-8">CredAssure · Team IntelliCore · IIT Kharagpur Capstone</footer>
         </div>
       </div>
-    </Ctx.Provider>
+    </ProvenanceProvider></Ctx.Provider>
   );
 }

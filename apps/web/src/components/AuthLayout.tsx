@@ -20,7 +20,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   ];
   return (
     <div className="grid min-h-screen lg:grid-cols-[1.1fr_1fr]">
-      <div className="mesh-midnight relative hidden overflow-hidden p-12 lg:flex lg:flex-col">
+      <div className="keep-light mesh-midnight relative hidden overflow-hidden p-12 lg:flex lg:flex-col">
         <div className="pointer-events-none absolute inset-0 opacity-[.07] [background-image:linear-gradient(rgba(255,255,255,.6)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.6)_1px,transparent_1px)] [background-size:44px_44px]" />
         <div className="relative z-10"><Logo /></div>
         <div className="absolute inset-x-0 top-6 h-[44%]" aria-hidden>{big && <Hero3D still={!!reduce} />}</div>
@@ -39,7 +39,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         </motion.div>
       </div>
       <div className="relative flex flex-col">
-        <div className="mesh-midnight overflow-hidden px-6 pb-8 pt-6 lg:hidden"><Logo /><BigTitle className="mt-5" /><p className="mt-4 text-[11px] font-semibold uppercase tracking-[.16em] text-gold-200">Capstone Project · IIT Kharagpur</p><p className="mt-1 font-display text-xl font-bold leading-tight text-white">MSME working capital, <span className="text-gold-grad">audited end-to-end.</span></p><p className="mt-2 text-xs text-slate-300">Designed & built by <span className="font-semibold text-gold-200">Team IntelliCore</span></p></div>
+        <div className="keep-light mesh-midnight overflow-hidden px-6 pb-8 pt-6 lg:hidden"><Logo /><BigTitle className="mt-5" /><p className="mt-4 text-[11px] font-semibold uppercase tracking-[.16em] text-gold-200">Capstone Project · IIT Kharagpur</p><p className="mt-1 font-display text-xl font-bold leading-tight text-white">MSME working capital, <span className="text-gold-grad">audited end-to-end.</span></p><p className="mt-2 text-xs text-slate-300">Designed & built by <span className="font-semibold text-gold-200">Team IntelliCore</span></p></div>
         <div className="flex flex-1 items-center justify-center p-6 sm:p-12"><motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .5 }} className="w-full max-w-md">{children}</motion.div></div>
       </div>
     </div>

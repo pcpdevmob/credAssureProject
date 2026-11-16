@@ -26,7 +26,7 @@ export default function UserLogs() {
   const csv = () => {
     const esc = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
     const body = [['Time (SAST)', 'Username', 'Action', 'Target', 'Detail', 'IP', 'User agent'], ...list.map(r => [sast(r.at), r.actor, r.action, r.target, r.detail, r.ip, r.ua])].map(x => x.map(esc).join(',')).join('\n');
-    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([body], { type: 'text/csv' })); a.download = `finbridge-user-logs-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([body], { type: 'text/csv' })); a.download = `credassure-user-logs-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
   };
   if (me.accountRole !== 'global_admin') return <Card className="p-10 text-center">Global Admin only.</Card>;
   const sel = 'h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm';

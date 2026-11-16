@@ -26,7 +26,7 @@ function Nav() {
       <div className="mx-auto grid h-16 max-w-[1400px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-6">
         <nav className="hidden gap-6 text-sm text-ink-600 md:flex">{NAV.map(([h, l]) => <a key={h} href={h} className="hover:text-ink-950">{l}</a>)}</nav>
         <span className="md:hidden" />
-        <Link href="/" className="flex items-center gap-2 font-display text-lg font-semibold tracking-[.12em] text-ink-950"><span className="grid h-7 w-7 place-items-center rounded-lg bg-ink-950 text-gold-300"><Landmark className="h-3.5 w-3.5" /></span>FINBRIDGE<span className="text-brand-600">AI</span></Link>
+        <Link href="/" className="flex items-center gap-2 font-display text-lg font-semibold tracking-[.12em] text-ink-950"><span className="grid h-7 w-7 place-items-center rounded-lg bg-ink-950 text-gold-300"><Landmark className="h-3.5 w-3.5" /></span>CRED<span className="text-brand-700">ASSURE</span></Link>
         <div className="flex items-center justify-end gap-2">
           <a href="#demo" className="hidden rounded-full px-3 py-2 text-sm text-ink-600 hover:text-ink-950 sm:inline">Watch demo flow</a>
           <Link href="/login/" className="hidden rounded-full bg-ink-950 px-4 py-2 text-sm font-medium text-white hover:bg-ink-800 sm:inline-flex">Sign in</Link>
@@ -88,7 +88,7 @@ function ProductMock() {
     <div className="relative mx-auto -mb-6 mt-14 max-w-5xl text-left">
       <div className="rounded-t-[28px] bg-gradient-to-b from-white/20 to-white/[.02] p-[1px] pb-0">
         <div className="overflow-hidden rounded-t-[27px] bg-ink-900 pb-6">
-          <div className="flex items-center gap-1.5 border-b border-white/5 px-4 py-3"><i className="h-2.5 w-2.5 rounded-full bg-rose-400/70" /><i className="h-2.5 w-2.5 rounded-full bg-amber-300/70" /><i className="h-2.5 w-2.5 rounded-full bg-emerald-400/70" /><span className="ml-3 truncate text-[11px] text-slate-500">finbridge · Case FB-2026-0142 · Shivneri Electronics, Pune</span></div>
+          <div className="flex items-center gap-1.5 border-b border-white/5 px-4 py-3"><i className="h-2.5 w-2.5 rounded-full bg-rose-400/70" /><i className="h-2.5 w-2.5 rounded-full bg-amber-300/70" /><i className="h-2.5 w-2.5 rounded-full bg-emerald-400/70" /><span className="ml-3 truncate text-[11px] text-slate-500">credassure · Case CA-2026-0142 · Shivneri Electronics, Pune</span></div>
           <div className="grid gap-4 p-4 sm:grid-cols-3 sm:p-6">
             {[['Requested', '₹2.00 Cr', 'text-slate-300'], ['Validated need', '₹1.74 Cr', 'text-emerald-400'], ['Best APR · Kshitij v3', '11.2%', 'text-gold-300']].map(([l, v, c]) => (
               <div key={l} className="rounded-2xl bg-white/[.03] p-4 ring-1 ring-white/5"><p className="text-[11px] uppercase tracking-wider text-slate-500">{l}</p><p className={`mt-1 font-display text-2xl font-semibold ${c}`}>{v}</p></div>))}
@@ -134,7 +134,7 @@ function Audiences() {
   return (
     <section id="how" className="scroll-mt-20 bg-white px-5 py-20">
       <div className="mx-auto max-w-6xl">
-        <Reveal className="text-center"><Tag>How it works</Tag><H2 a="One workflow," b="two sides of the table" className="mt-4" /><p className="mx-auto mt-4 max-w-xl text-slate-500">FinBridge prepares a lender-ready case for the MSME and gives approvers the evidence to say yes or no with confidence.</p></Reveal>
+        <Reveal className="text-center"><Tag>How it works</Tag><H2 a="One workflow," b="two sides of the table" className="mt-4" /><p className="mx-auto mt-4 max-w-xl text-slate-500">CredAssure prepares a lender-ready case for the MSME and gives approvers the evidence to say yes or no with confidence.</p></Reveal>
         <div className="mt-14 grid gap-6 lg:grid-cols-2">
           <C t="For MSMEs" d="Borrow what you need, not what you guess." pts={['Upload GST, bank and order documents', 'See your true monthly funding gap', 'Compare offers on APR, not headline rate']} cta="Sign in to start a case" href="/login/" primary
             art={<div className="h-full rounded-l-2xl bg-ink-800 p-4 ring-1 ring-white/10"><p className="font-display text-2xl text-white/90">Funding gap</p><p className="mt-1 text-[11px] text-emerald-300">● Peak ₹1.79 Cr · Jan-27</p><div className="mt-4 space-y-2">{[80, 64, 92, 48].map((w, i) => <div key={i} className="h-2 rounded-full bg-white/10"><div className="h-2 rounded-full bg-emerald-400/70" style={{ width: `${w}%` }} /></div>)}</div></div>} />
@@ -147,7 +147,7 @@ function Audiences() {
 }
 
 function Statements() {
-  const items = [['Over-borrowing', 'is expensive.', 'MSMEs often request a round number. FinBridge validates the real gap month by month.'], ['Headline rates', 'hide fees.', 'LendWise compares APR, fees and net disbursal across three lenders.'], ['Every decision', 'stays human.', 'The system never accepts a loan; a routed approver does, on the record.']];
+  const items = [['Over-borrowing', 'is expensive.', 'MSMEs often request a round number. CredAssure validates the real gap month by month.'], ['Headline rates', 'hide fees.', 'LendWise compares APR, fees and net disbursal across three lenders.'], ['Every decision', 'stays human.', 'The system never accepts a loan; a routed approver does, on the record.']];
   const ref = useRef<HTMLDivElement>(null); const [active, setActive] = useState(0);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start center', 'end center'] });
   useEffect(() => scrollYProgress.on('change', v => setActive(Math.min(2, Math.max(0, Math.floor(v * 3))))), [scrollYProgress]);
@@ -155,7 +155,7 @@ function Statements() {
   return (
     <section className="bg-white px-5 pb-28">
       <div className="mx-auto max-w-6xl">
-        <Reveal className="text-center"><Tag>Why FinBridge</Tag><WordFade words={['Size,', 'negotiate', 'and', 'approve']} /></Reveal>
+        <Reveal className="text-center"><Tag>Why CredAssure</Tag><WordFade words={['Size,', 'negotiate', 'and', 'approve']} /></Reveal>
         <div ref={ref} className="mt-16 grid items-center gap-12 lg:grid-cols-2">
           <div className="space-y-10">{items.map(([a, b, d], i) => <div key={a} className={`transition-all duration-500 ${active === i ? 'opacity-100' : 'opacity-30'}`}><p className="font-display text-3xl tracking-tight text-midnight-950"><span className="text-ink-950">{a}</span> <span className="text-ink-400">{b}</span></p><p className="mt-2 max-w-sm text-sm text-slate-500">{d}</p></div>)}</div>
           <motion.div style={{ y }} className="relative mx-auto w-full max-w-md">
@@ -250,7 +250,7 @@ function Problem() {
       <Reveal className="mx-auto max-w-4xl text-center">
         <p className="text-xs font-semibold uppercase tracking-[.2em] text-emerald-600">Problem statement</p>
         <blockquote className="mt-5 font-display text-[clamp(1.4rem,3.2vw,2.3rem)] font-light leading-snug tracking-tight text-midnight-950">“India’s MSMEs struggle to get the <span className="text-emerald-600">right amount</span> of working capital at the <span className="text-emerald-600">right cost</span>; proposals are slow, opaque and hard to audit.”</blockquote>
-        <p className="mt-4 text-sm text-slate-500">Why FinBridge: our capstone brief, paraphrased by the team</p>
+        <p className="mt-4 text-sm text-slate-500">Why CredAssure: our capstone brief, paraphrased by the team</p>
       </Reveal>
     </section>
   );
@@ -284,8 +284,8 @@ function Footer() {
   return (
     <footer className="bg-white px-5 pb-10 pt-6">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 border-t border-slate-200 pt-6 text-sm text-slate-500 sm:flex-row">
-        <p className="font-display font-semibold text-midnight-950">FinBridge<span className="text-emerald-600">AI</span></p>
-        <p className="text-center">FinBridge AI · Team IntelliCore · IIT Kharagpur Capstone</p>
+        <p className="font-display font-semibold text-midnight-950">Cred<span className="text-emerald-700">Assure</span></p>
+        <p className="text-center">CredAssure · Team IntelliCore · IIT Kharagpur Capstone</p>
         <p className="text-xs">Synthetic data & simulated lenders only</p>
       </div>
     </footer>
@@ -293,5 +293,5 @@ function Footer() {
 }
 
 export default function Landing() {
-  return <main className="min-h-screen overflow-x-clip bg-white"><Nav /><Hero /><Stats /><Audiences /><Statements /><Agents /><Features /><Security /><Problem /><Team /><CTA /><Footer /><SideToggle /></main>;
+  return <main className="keep-light min-h-screen overflow-x-clip bg-white"><Nav /><Hero /><Stats /><Audiences /><Statements /><Agents /><Features /><Security /><Problem /><Team /><CTA /><Footer /><SideToggle /></main>;
 }

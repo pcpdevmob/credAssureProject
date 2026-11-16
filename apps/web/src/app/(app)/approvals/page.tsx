@@ -8,7 +8,7 @@ import { Card, CardHeader, Badge, StageBadge, Button } from '@/components/ui';
 import { caseService } from '@/services';
 import type { CaseRecord } from '@/types';
 import { ROLE_LABEL } from '@/types';
-import { inr, d } from '@/lib/format';
+import { d } from '@/lib/format';
 export default function Approvals() {
   const u = useUser(); const [cases, setCases] = useState<CaseRecord[]>([]);
   useEffect(() => { caseService.list().then(setCases); }, []);
@@ -18,7 +18,7 @@ export default function Approvals() {
   const Row = ({ c }: { c: CaseRecord }) => (
     <Link href={`/case/?id=${c.id}&tab=review`} className="flex flex-wrap items-center gap-3 px-5 py-4 transition hover:bg-brand-50/40">
       <div className="min-w-0 flex-1"><p className="font-mono text-xs text-brand-700">{c.id}</p><p className="font-medium text-slate-900">{c.msmeName}</p><p className="text-xs text-slate-500">{c.preparerName} · updated {d(c.updatedAt)}</p></div>
-      <p className="num font-semibold">{inr(c.recommendedAmount ?? c.requestedAmount)}</p><StageBadge s={c.stage} /><ArrowRight className="h-4 w-4 text-slate-300" />
+      <p className="num font-semibold">{(c.recommendedAmount ?? c.requestedAmount).display}</p><StageBadge s={c.stage} /><ArrowRight className="h-4 w-4 text-slate-300" />
     </Link>);
   return (<>
     <PageHeader title="Approval inbox" sub={u.role === 'PREPARER' ? 'Your submitted proposals awaiting a decision' : <>Proposals routed to you as <Badge tone="blue">{ROLE_LABEL[u.role]}</Badge></>} />

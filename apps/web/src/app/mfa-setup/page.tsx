@@ -33,10 +33,10 @@ export default function MfaSetup() {
       <ol id="backup-codes" className="mt-5 grid grid-cols-2 gap-2 rounded-2xl bg-midnight-950 p-4 font-mono text-sm text-gold-200">{codes.map(c => <li key={c} className="rounded-lg bg-white/5 px-3 py-1.5 text-center">{c}</li>)}</ol>
       <div className="mt-3 flex gap-2">
         <Button type="button" variant="outline" size="sm" onClick={() => navigator.clipboard?.writeText(codes.join('\n'))}><Copy className="h-4 w-4" />Copy</Button>
-        <Button type="button" variant="outline" size="sm" onClick={() => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([`FinBridge AI backup codes for ${u.username}\n\n${codes.join('\n')}\n`], { type: 'text/plain' })); a.download = 'finbridge-backup-codes.txt'; a.click(); }}><Download className="h-4 w-4" />Download</Button>
+        <Button type="button" variant="outline" size="sm" onClick={() => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([`CredAssure backup codes for ${u.username}\n\n${codes.join('\n')}\n`], { type: 'text/plain' })); a.download = 'credassure-backup-codes.txt'; a.click(); }}><Download className="h-4 w-4" />Download</Button>
       </div>
       <label className="mt-5 flex items-center gap-2 text-sm text-slate-700"><input type="checkbox" checked={saved} onChange={e => setSaved(e.target.checked)} className="h-4 w-4 rounded" />I have saved my backup codes</label>
-      <Button className="mt-5 w-full" size="lg" disabled={!saved} onClick={() => r.replace('/dashboard/')}>Continue to FinBridge AI</Button>
+      <Button className="mt-5 w-full" size="lg" disabled={!saved} onClick={() => r.replace('/dashboard/')}>Continue to CredAssure</Button>
     </AuthLayout>
   );
   return (

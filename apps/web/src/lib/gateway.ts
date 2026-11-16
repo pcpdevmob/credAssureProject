@@ -2,6 +2,7 @@
 import { createClient, type paths } from '@credassure/api-client';
 import { API_BASE, AUTH_LIVE } from '@/services/config';
 import { http } from '@/services/http';
+import { toProblem } from './problem';
 
 let tok: { v: string; exp: number } | null = null;
 let actingRole = 'PREPARER';
@@ -21,12 +22,19 @@ async function bearer(): Promise<string | null> {
 export const gw = createClient<paths>({ baseUrl: API_BASE });
 gw.use({
   async onRequest({ request }) { const t = await bearer(); if (t) request.headers.set('Authorization', `Bearer ${t}`); return request; },
-  async onResponse({ response }) { if (response.status === 401) tok = null; return response; },
+  async onResponse({ request, response }) {
+    if (response.status === 401) {
+      tok = null;
+      // Gateway sign-in has no refresh endpoint: an expired token means signing in again (bridge mode re-fetches instead).
+      if (!AUTH_LIVE && typeof window !== 'undefined' && !request.url.endsWith('/v1/auth/token')) window.location.assign('/login/?expired=1');
+    }
+    return response;
+  },
 });
 
-/** Unwrap a gateway call: RFC 9457 problem+json becomes an Error with the server's detail. */
+/** Unwrap a gateway call: an RFC 9457 problem+json body becomes an ApiProblem (lib/problem.ts). */
 export async function ok<T>(p: Promise<{ data?: T; error?: unknown; response: Response }>): Promise<T> {
   const { data, error, response } = await p;
-  if (error !== undefined || !response.ok) { const e = error as { detail?: string; title?: string } | undefined; throw new Error(e?.detail || e?.title || `Request failed (${response.status})`); }
+  if (error !== undefined || !response.ok) throw toProblem(response.status, error);
   return data as T;
 }

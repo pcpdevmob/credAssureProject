@@ -14,7 +14,7 @@ import Funding from '@/components/case/Funding';
 import Lenders from '@/components/case/Lenders';
 import Review from '@/components/case/Review';
 import AuditList from '@/components/AuditList';
-import { inrShort } from '@/lib/format';
+import { Figure } from '@/components/Figure';
 
 type Tab = 'workflow' | 'readiness' | 'documents' | 'funding' | 'lenders' | 'review' | 'audit';
 const TABS = [
@@ -44,12 +44,12 @@ function CaseView() {
   return (<>
     <Link href="/cases/" className="mb-3 inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-900"><ArrowLeft className="h-4 w-4" />Cases</Link>
     <Card className="mb-6 overflow-hidden animate-fadein">
-      <div className="bg-gradient-to-r from-slate-950 via-brand-950 to-violet-950 p-5 text-white sm:p-6">
+      <div className="keep-light bg-gradient-to-r from-slate-950 via-brand-950 to-violet-950 p-5 text-white sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="font-mono text-xs text-brand-200">{c.id}</p><h1 className="mt-1 text-xl font-bold sm:text-2xl">{c.msmeName}</h1><p className="text-sm text-slate-300">Due {c.customerDueDate}</p></div><StageBadge s={c.stage} /></div>
         <div className="mt-5 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
-          <div><p className="text-xs text-slate-400">Order</p><p className="font-medium">{c.orderRef} · {inrShort(c.orderValue)}</p></div>
-          <div><p className="text-xs text-slate-400">Requested</p><p className="font-medium">{inrShort(c.requestedAmount)}</p></div>
-          <div><p className="text-xs text-slate-400">Validated need</p><p className="font-semibold text-emerald-300">{a ? inrShort(a.recommendedAmount) : '—'}</p></div>
+          <div><p className="text-xs text-slate-400">Order</p><p className="font-medium">{c.orderRef} · <Figure value={c.orderValue} label="Order value" caseId={c.id} /></p></div>
+          <div><p className="text-xs text-slate-400">Requested</p><Figure className="font-medium" value={c.requestedAmount} label="Requested amount" caseId={c.id} /></div>
+          <div><p className="text-xs text-slate-400">Validated need</p>{a ? <Figure className="font-semibold text-emerald-300" value={a.recommendedAmount} label="Validated need" caseId={c.id} showApprox /> : <p className="font-semibold">—</p>}</div>
           <div><p className="text-xs text-slate-400">Next action</p><p className="font-medium">{c.nextAction ?? '—'}</p></div>
         </div>
       </div>

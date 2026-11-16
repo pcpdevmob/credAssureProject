@@ -1,7 +1,7 @@
 import type { Role, User, ManagedUser, AccountRole, UserLogEvent } from '@/types';
 import { AUTH_LIVE } from './config';
 import { http } from './http';
-import { gw, ok, setToken, setActingRole } from '@/lib/gateway';
+import { gw, ok, setToken, setActingRole, hasToken } from '@/lib/gateway';
 
 export interface AuthService {
   live: boolean;
@@ -36,7 +36,8 @@ const direct: AuthService = {
     return save({ id: me.user_id, name: me.username ?? username, email: me.username ?? username, role, employeeId: '', username: me.username ?? username, stage: 'full' });
   },
   current: read,
-  async verify() { return read(); },
+  // The token lives only in memory, so after a reload there is none: the profile alone is not a session.
+  async verify() { if (hasToken()) return read(); clear(); return null; },
   setActingRole: () => read(),
   changePassword: noMfa, verifyMfa: noMfa, startMfaSetup: noMfa, enableMfa: noMfa,
   async logout() { clear(); },

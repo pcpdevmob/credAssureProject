@@ -10,10 +10,10 @@ gate states, approval wording and no silent rounding. Section 9 lists the brief 
 
 | Prompt says | Built (why) |
 |---|---|
-| Vite + React Router | Next.js 14 static export, app router (ADR 0022) |
+| Vite + React Router | Next.js 16.4.4 static export, app router, React 19.3.1 (ADR 0022; upgraded in U1 to clear npm audit) |
 | CSS Modules + `tokens.css` | Tailwind reading `src/styles/tokens.js`, emitted as `--fb-*` CSS variables (finbridge; one token source) |
 | pnpm | npm workspaces (`npm run dev -w apps/web`); root `package.json` lists `apps/web`, `packages/api-client` |
-| Radix, TanStack Query, react-hook-form + zod, Vitest + RTL + MSW, Playwright + axe | Added in U1 (none installed yet) |
+| Radix, TanStack Query, react-hook-form + zod, Vitest + RTL + MSW, Playwright + axe | U1: Radix Dialog, Vitest + RTL + MSW (node, tests only), Playwright + axe. TanStack Query and react-hook-form + zod arrive in U2 with the first real forms and queries. |
 | SVG charting library | recharts (already in finbridge) |
 
 Already present and kept: lucide icons, framer-motion, `clsx` + `tailwind-merge`, generated `@credassure/api-client`, the
@@ -45,7 +45,7 @@ The theme toggle sits in the sidebar footer. Tailwind classes read variables, so
 | emerald text / mark | `#047857` / `#059669` | `#34D399` (brand-400) |
 | champagne text | `#7A5A12` | `#EBCB7A` (gold-300) |
 | rose | `#BE123C` | `#FB7185` |
-| control border | `#647088` (ink-400) | `#647088` (ink-400) |
+| control border / caption | `#647088` (ink-400) | `#8592A8` (ink-400, lifted in U1: axe found 3.6:1 caption text) |
 
 ### Contrast checks (WCAG 2.2 AA, computed 2026-11-16)
 | Pair | Ratio | Result |
@@ -62,6 +62,7 @@ The theme toggle sits in the sidebar footer. Tailwind classes read variables, so
 | dark: ink-300 on card | 7.98 | pass |
 | dark: emerald-400 / gold-300 / rose-400 on card | 9.38 / 11.47 / 6.70 | pass |
 | dark: ink-500 border on card | **2.76** | **fail → ink-400** |
+| dark: ink-400 `#647088` caption text on card | **3.62** | **fail (U1 axe) → dark ink-400 `#8592A8`, 5.73** |
 
 ## 3. Type
 
@@ -272,10 +273,10 @@ The plan was compared with the brief's list of generic defaults. finbridge alrea
 | One accented / gradient word in a headline | `.text-gold-grad`, `.fb-shimmer` on the login wordmark | Accepted on landing and login only; not used on case screens |
 | All-caps eyebrow labels | sidebar "Acting role", table headers | Accepted |
 | Middle-dot meta strings | case header ("Order ref · value") | Accepted |
-| Decorative motion | `TiltCard` on stats, 3D hero, nav pill spring | Accepted. Reduced motion already disables it (globals.css). |
+| Decorative motion | `TiltCard` on stats, 3D hero, nav pill spring | Accepted on landing/login and `TiltCard`. **U1 removed the nav-pill spring and the page fade**: the shared `layoutId` across the two sidebar copies left the active item unpainted, and §4 limits app-screen motion to the drawer and decision confirm. |
 
-**Open for review:** the imported wordmark, login and landing still say "FinBridge AI". BRD v3.1 renamed the product to
-CredAssure, and the wireframes above use CredAssure. U1 changes the wordmark text only, unless told to keep FinBridge AI.
+**Resolved in U1 (user decision 2026-11-16):** CredAssure in every user-facing place (wordmark, login, landing, page titles,
+metadata, download filenames). Internal identifiers (`--fb-*` variables, the auth service's `X-Requested-With` value) are unchanged.
 
 **Changed after review**, because the brief requires it rather than for taste:
 
@@ -318,3 +319,24 @@ CredAssure, and the wireframes above use CredAssure. U1 changes the wordmark tex
 | Typed responses | Free-form objects in openapi; `services/*` cast. Typing them is a gateway task (ADR 0022). |
 | Cash table, offers, readiness | Closed since ADR 0022 was written (9a, 9b, 9c): `/working-capital/cases/{id}/cash-table`, `/lendwise/cases/{id}/offers`, `/onboarding/cases/{id}/result` |
 | Run progress | `/v1/jobs/{id}/events` (SSE) |
+
+## 12. U1 as built (2026-11-16)
+
+- **Themes:** `tokens.js` holds light values and a `dark` map. Tailwind colours read `rgb(var(--fbc-*) / <alpha-value>)`, so
+  opacity classes still work; plain CSS reads `--fb-*`. `.keep-light` pins the sidebar, midnight panels and the landing page
+  to the light values (they are designed dark-on-midnight). Toggle: system / light / dark in the sidebar; the choice is the
+  only thing kept in localStorage, applied before paint by an inline script.
+- **Money:** `lib/money.ts` (integer paise, BigInt, byte-identical to the gateway's `format_inr`, checked against it).
+  `approx` gives "≈ ₹1.42 Cr" / "≈ ₹42.50 L", half-up, null below ₹1 lakh. `inr` / `inrShort` / `pct` are gone; case create
+  converts typed rupees to paise from the decimal text, not `* 100`.
+- **`<Figure>` + drawer:** every case figure is a button (`<label>: <display>, show source`). Without a ledger key the drawer
+  says "Source not available yet". The drawer handles a null producer (one line, or "not recorded" per field), null
+  passages ("Untitled document", no section), no audit link, superseded versions, and has no formula line. Fact inputs are
+  clickable with a back button. Focus returns to the opening figure.
+- **Errors:** `lib/problem.ts` maps the runtime problem+json body to field errors or a banner with a fix (table shared with
+  `docs/help/error-messages.md`). 5xx detail is never shown.
+- **Auth:** the gateway token is memory-only, so a reload signs you out. A 401 from the gateway goes to `/login/?expired=1`.
+  The gateway has no refresh endpoint, so re-login is the refresh.
+- **Gallery:** `/__gallery` (folder `app/%5F%5Fgallery`), dev only; a 404 in the production export.
+- **Deferred:** Funding view keeps only API figures (no browser maths); the 26-week chart is U3. Dashboard portfolio sums
+  still add paise in the browser (U2 moves them to the API). Mobile case-list cards show figures as text (the card is a link).

@@ -1,11 +1,13 @@
 // Cases (UI-01). Gateway summaries are mapped to the screen-facing CaseRecord; money is paise on the wire.
 import type { CaseRecord, CaseStage, Approver, User } from '@/types';
 import { gw, ok } from '@/lib/gateway';
+import { fig, paiseFromText, type Money } from '@/lib/money';
+// Typed rupees → exact paise from the decimal text (no `* 100` float step); an unreadable value is rejected, never guessed.
+const toPaise = (rupees: number) => { const p = paiseFromText(String(rupees)); if (p === null) throw new Error('Enter the amount in rupees, for example 20000000.'); return Number(p); };
 
 export interface NewCaseInput { msmeName: string; orderRef: string; orderValue: number; customerDueDate: string; requestedAmount: number; sector?: string; gstinMasked?: string; customerName?: string }
 export interface CaseService { list(): Promise<CaseRecord[]>; get(id: string): Promise<CaseRecord | undefined>; create(i: NewCaseInput, by: User): Promise<CaseRecord> }
 
-type Money = { paise: number; display: string };
 export type Raw = { case_id: string; msme_name: string; order_ref: string; status: string; current_stage: string; route?: string | null; row_version: number; order_value: Money; indicative_amount: Money; due_date: string; question?: string | null; next_action?: string; stages?: RawStage[] };
 export type RawStage = { stage: string; decision: string | null; attempt: number; blockers: { code?: string; message?: string; next_action?: string }[]; question?: string | null; narrative?: string | null; trace_id?: string };
 
@@ -14,8 +16,8 @@ const BY_STATUS: Record<string, CaseStage> = { CREATED: 'DRAFT', AWAITING_APPROV
 const routed = (r?: string | null): Approver | undefined => r === 'vp_finance' ? 'VP_FINANCE' : r === 'director_finance' ? 'DIRECTOR_FINANCE' : r === 'HELD' ? 'HELD_PENDING_POLICY' : undefined;
 
 export const toCase = (r: Raw): CaseRecord => ({
-  id: r.case_id, msmeName: r.msme_name, sector: '—', gstinMasked: '—', customerName: '—', orderValue: r.order_value.paise / 100, orderRef: r.order_ref, customerDueDate: r.due_date,
-  currency: 'INR', requestedAmount: r.indicative_amount.paise / 100, preparerId: '', preparerName: '—', createdAt: '', updatedAt: '',
+  id: r.case_id, msmeName: r.msme_name, sector: '—', gstinMasked: '—', customerName: '—', orderValue: fig(r.order_value), orderRef: r.order_ref, customerDueDate: r.due_date,
+  currency: 'INR', requestedAmount: fig(r.indicative_amount), preparerId: '', preparerName: '—', createdAt: '', updatedAt: '',
   stage: BY_STATUS[r.status] ?? BY_STAGE[r.current_stage] ?? 'READINESS', routedTo: routed(r.route), rowVersion: r.row_version, question: r.question, nextAction: r.next_action,
 });
 
@@ -28,7 +30,7 @@ export const caseService: CaseService = {
     return toCase(data as unknown as Raw);
   },
   async create(i) {
-    const r = await ok(gw.POST('/v1/cases', { body: { msme_name: i.msmeName, order_ref: i.orderRef, order_value_paise: Math.round(i.orderValue * 100), indicative_amount_paise: Math.round(i.requestedAmount * 100), due_date: i.customerDueDate } as never }));
+    const r = await ok(gw.POST('/v1/cases', { body: { msme_name: i.msmeName, order_ref: i.orderRef, order_value_paise: toPaise(i.orderValue), indicative_amount_paise: toPaise(i.requestedAmount), due_date: i.customerDueDate } as never }));
     return toCase(r as unknown as Raw);
   },
 };

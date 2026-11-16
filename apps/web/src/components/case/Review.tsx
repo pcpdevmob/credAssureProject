@@ -3,12 +3,13 @@ import { useState } from 'react';
 import type { CaseRecord, ApprovalDecision, User } from '@/types';
 import { Card, CardHeader, Button, Textarea, Badge, StageBadge } from '../ui';
 import { approvalService, supervisorService, type ReturnStage } from '@/services';
-import { inr, inrShort } from '@/lib/format';
+import { Figure } from '../Figure';
+import type { Fig } from '@/lib/money';
 import { CheckCircle2, XCircle, Undo2, Send, ShieldCheck, PauseCircle, Lock } from 'lucide-react';
 
 const APPROVER = { VP_FINANCE: 'VP, Finance', DIRECTOR_FINANCE: 'Director, Finance', HELD_PENDING_POLICY: 'a human decision' } as const;
 
-export default function Review({ c, need, user, onChange }: { c: CaseRecord; need?: number; user: User; onChange: () => void }) {
+export default function Review({ c, need, user, onChange }: { c: CaseRecord; need?: Fig; user: User; onChange: () => void }) {
   const [comment, setComment] = useState(''); const [back, setBack] = useState<ReturnStage>('working_capital');
   const [busy, setBusy] = useState(''); const [err, setErr] = useState('');
   const can = approvalService.canDecide(c, user);
@@ -18,8 +19,8 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
     <div className="space-y-6 lg:col-span-2">
       <Card><CardHeader title="Proposal summary" sub="Numbers come from the fact ledger; the gateway routes by code" icon={<ShieldCheck className="h-4 w-4" />} />
         <div className="grid gap-4 p-5 sm:grid-cols-2">
-          <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs uppercase text-slate-500">Order</p><p className="mt-1 text-sm"><b>{c.msmeName}</b> · {c.orderRef} ({inrShort(c.orderValue)}), due {c.customerDueDate}</p></div>
-          <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs uppercase text-slate-500">Validated funding need</p><p className="num mt-1 text-xl font-bold">{need !== undefined ? inr(need) : '—'}</p><p className="text-xs text-slate-500">indicative request {inrShort(c.requestedAmount)}</p></div>
+          <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs uppercase text-slate-500">Order</p><p className="mt-1 text-sm"><b>{c.msmeName}</b> · {c.orderRef} (<Figure value={c.orderValue} label="Order value" caseId={c.id} />), due {c.customerDueDate}</p></div>
+          <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs uppercase text-slate-500">Validated funding need</p>{need ? <Figure className="mt-1 text-xl font-bold" value={need} label="Validated funding need" caseId={c.id} showApprox /> : <p className="mt-1 text-xl font-bold">—</p>}<p className="text-xs text-slate-500">indicative request <Figure value={c.requestedAmount} label="Requested amount" caseId={c.id} /></p></div>
         </div>
         {c.nextAction && <p className="border-t border-slate-100 p-5 text-sm text-slate-600">{c.nextAction}</p>}
       </Card>

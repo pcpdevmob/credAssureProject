@@ -6,7 +6,8 @@ import { useUser } from '@/components/AppShell';
 import { PageHeader } from '@/components/PageHeader';
 import { Card, CardHeader, Input, Label, Button } from '@/components/ui';
 import { caseService } from '@/services';
-import { inr, inrShort } from '@/lib/format';
+import { approx, inrFromPaise, paiseFromText } from '@/lib/money';
+const hint = (v: number) => { const p = paiseFromText(String(v)); return p === null ? undefined : approx(p) ?? undefined; };
 
 export default function NewCase() {
   const u = useUser(); const r = useRouter(); const [busy, setBusy] = useState(false); const [err, setErr] = useState('');
@@ -23,17 +24,17 @@ export default function NewCase() {
         </div></Card>
         <Card><CardHeader title="Order context" icon={<ShoppingCart className="h-4 w-4" />} /><div className="grid gap-4 p-5 sm:grid-cols-2">
           <div><Label>PO reference</Label><Input required value={f.orderRef} onChange={set('orderRef')} /></div>
-          <div><Label hint={inrShort(f.orderValue)}>Order value (₹)</Label><Input type="number" min={0} required value={f.orderValue} onChange={set('orderValue')} /></div>
+          <div><Label hint={hint(f.orderValue)}>Order value (₹)</Label><Input type="number" min={0} required value={f.orderValue} onChange={set('orderValue')} /></div>
           <div><Label>Customer due date</Label><Input type="date" required value={f.customerDueDate} onChange={set('customerDueDate')} /></div>
         </div></Card>
         <Card><CardHeader title="Indicative financing request" icon={<IndianRupee className="h-4 w-4" />} /><div className="grid gap-4 p-5 sm:grid-cols-2">
-          <div><Label hint={inrShort(f.requestedAmount)}>Requested amount (₹)</Label><Input type="number" min={0} required value={f.requestedAmount} onChange={set('requestedAmount')} /></div>
+          <div><Label hint={hint(f.requestedAmount)}>Requested amount (₹)</Label><Input type="number" min={0} required value={f.requestedAmount} onChange={set('requestedAmount')} /></div>
           <div><Label>Currency</Label><Input value="INR (₹)" disabled /></div>
         </div></Card>
       </div>
       <div className="space-y-4">
         <Card className="sticky top-20 p-5">
-          <p className="text-sm text-slate-500">Indicative request</p><p className="num mt-1 text-3xl font-bold text-slate-900">{inr(f.requestedAmount)}</p>
+          <p className="text-sm text-slate-500">Indicative request</p><p className="num mt-1 text-3xl font-bold text-slate-900">{(() => { const p = paiseFromText(String(f.requestedAmount)); return p === null ? '—' : inrFromPaise(p); })()}</p>
           <div className="mt-4 flex gap-2 rounded-xl bg-amber-50 p-3 text-xs text-amber-800"><Info className="h-4 w-4 shrink-0" />This is not the final loan amount. The Working Capital Advisory Agent calculates the actual need from validated cash-flow data, and approval routing uses that validated amount.</div>
           {err && <p role="alert" className="mt-3 rounded-xl bg-rose-50 p-3 text-sm text-rose-700">{err}</p>}
           <Button className="mt-5 w-full" size="lg" loading={busy}>Create case</Button>

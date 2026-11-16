@@ -3,7 +3,7 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 import type { GateDecision } from '@/types';
 import { TiltCard } from './fx/motion';
-import { CheckCircle2, XCircle, HelpCircle, Clock, Loader2, PauseCircle } from 'lucide-react';
+import { CheckCircle2, XCircle, HelpCircle, Clock, Loader2, PauseCircle, TriangleAlert } from 'lucide-react';
 
 export const Card = ({ className, ...p }: React.HTMLAttributes<HTMLDivElement>) => <div className={cn('rounded-[24px] border border-line bg-white shadow-[0_1px_2px_rgba(7,12,24,.04),0_10px_30px_-18px_rgba(7,12,24,.18)]', className)} {...p} />;
 export const CardHeader = ({ title, sub, right, icon }: { title: React.ReactNode; sub?: React.ReactNode; right?: React.ReactNode; icon?: React.ReactNode }) => (
@@ -23,19 +23,21 @@ export const Button = ({ className, variant = 'primary', size = 'md', loading, c
     {loading && <Loader2 className="h-4 w-4 animate-spin" />}{children}
   </button>
 );
-export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(({ className, ...p }, ref) => <input ref={ref} className={cn('h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none ring-brand-500/30 transition placeholder:text-slate-400 focus:border-brand-400 focus:ring-4', className)} {...p} />);
+export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(({ className, ...p }, ref) => <input ref={ref} className={cn('h-10 w-full rounded-xl border border-ink-400 bg-white px-3 text-sm outline-none ring-brand-500/30 transition placeholder:text-slate-400 focus:border-brand-400 focus:ring-4', className)} {...p} />);
 Input.displayName = 'Input';
-export const Textarea = (p: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => <textarea {...p} className={cn('min-h-[96px] w-full rounded-xl border border-slate-200 p-3 text-sm outline-none ring-brand-500/30 focus:border-brand-400 focus:ring-4', p.className)} />;
+export const Textarea = (p: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => <textarea {...p} className={cn('min-h-[96px] w-full rounded-xl border border-ink-400 bg-white p-3 text-sm outline-none ring-brand-500/30 focus:border-brand-400 focus:ring-4', p.className)} />;
 export const Label = ({ children, hint, htmlFor }: { children: React.ReactNode; hint?: string; htmlFor?: string }) => <label htmlFor={htmlFor} className="mb-1.5 block text-sm font-medium text-slate-700">{children}{hint && <span className="ml-1 font-normal text-slate-400">{hint}</span>}</label>;
 export const Badge = ({ className, children, tone = 'slate' }: { className?: string; children: React.ReactNode; tone?: 'slate' | 'green' | 'red' | 'amber' | 'blue' | 'violet' }) => (
   <span className={cn('inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset',
     { slate: 'bg-slate-50 text-slate-700 ring-slate-200', green: 'bg-emerald-50 text-emerald-700 ring-emerald-200', red: 'bg-rose-50 text-rose-700 ring-rose-200', amber: 'bg-amber-50 text-amber-800 ring-amber-200', blue: 'bg-brand-50 text-brand-700 ring-brand-200', violet: 'bg-violet-50 text-violet-700 ring-violet-200' }[tone], className)}>{children}</span>
 );
+// Gate states are shape + text + tone, never colour alone (design-plan §5).
 export const GateBadge = ({ d }: { d: GateDecision }) => {
-  const m: Record<GateDecision, [string, 'green' | 'red' | 'amber' | 'blue' | 'slate' | 'violet', React.ReactNode]> = {
+  if (d === 'ERROR') return <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-rose-700 px-2.5 py-0.5 text-xs font-semibold text-white"><TriangleAlert aria-hidden className="h-3.5 w-3.5" />ERROR</span>;
+  const m: Record<Exclude<GateDecision, 'ERROR'>, [string, 'green' | 'red' | 'amber' | 'blue' | 'slate' | 'violet', React.ReactNode]> = {
     GO: ['GO', 'green', <CheckCircle2 key="i" className="h-3.5 w-3.5" />], NO_GO: ['NO-GO', 'red', <XCircle key="i" className="h-3.5 w-3.5" />],
     NEEDS_INPUT: ['NEEDS INPUT', 'amber', <HelpCircle key="i" className="h-3.5 w-3.5" />], PENDING: ['PENDING', 'slate', <Clock key="i" className="h-3.5 w-3.5" />],
-    RUNNING: ['IN PROGRESS', 'blue', <Loader2 key="i" className="h-3.5 w-3.5 animate-spin" />], HELD: ['HELD', 'violet', <PauseCircle key="i" className="h-3.5 w-3.5" />],
+    RUNNING: ['IN PROGRESS', 'blue', <Loader2 key="i" className="h-3.5 w-3.5 animate-spin" />], HELD: ['HELD', 'slate', <PauseCircle key="i" className="h-3.5 w-3.5" />],
   };
   const [l, t, i] = m[d]; return <Badge tone={t}>{i}{l}</Badge>;
 };

@@ -1,13 +1,13 @@
 'use client';
 import { motion, useReducedMotion } from 'framer-motion';
 
-/** Big animated "FinBridge AI" wordmark: letter-by-letter reveal, gold→emerald shimmer, soft glow pulse. Static under reduced motion. */
+/** Big animated "CredAssure" wordmark: letter-by-letter reveal, gold→emerald shimmer, soft glow pulse. Static under reduced motion. */
 export default function BigTitle({ className = '' }: { className?: string }) {
   const reduce = useReducedMotion();
-  const words = ['FinBridge', 'AI'];
+  const words = ['CredAssure'];
   let i = 0;
   return (
-    <h1 aria-label="FinBridge AI" className={`relative font-display font-extrabold whitespace-nowrap leading-[.95] tracking-tight text-[clamp(2rem,10vw,4.25rem)] lg:text-[clamp(3rem,5.3vw,5.75rem)] ${className}`}>
+    <h1 aria-label="CredAssure" className={`relative font-display font-extrabold whitespace-nowrap leading-[.95] tracking-tight text-[clamp(2rem,10vw,4.25rem)] lg:text-[clamp(3rem,5.3vw,5.75rem)] ${className}`}>
       {!reduce && <motion.span aria-hidden className="pointer-events-none absolute -inset-x-6 -inset-y-4 -z-0 rounded-full bg-gold-400/20 blur-3xl" animate={{ opacity: [0.35, 0.8, 0.35] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }} />}
       <span aria-hidden className="relative flex gap-x-[.25em]">
         {words.map(w => (
