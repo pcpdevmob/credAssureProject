@@ -568,13 +568,17 @@ version = "0.1.0"
 source = { editable = "agents/copilot" }
 dependencies = [
     { name = "credassure-core" },
+    { name = "credassure-security" },
     { name = "fastapi" },
+    { name = "pydantic" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "credassure-core", editable = "packages/core" },
+    { name = "credassure-security", editable = "packages/security" },
     { name = "fastapi", specifier = ">=0.115" },
+    { name = "pydantic", specifier = ">=2" },
 ]
 
 [[package]]

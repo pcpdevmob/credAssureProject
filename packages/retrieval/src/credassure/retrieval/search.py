@@ -6,6 +6,9 @@ so a passage that is not in force for this case can never be returned:
   effective_from ≤ as_of · not superseded (a replacement in force on as_of; an unknown or undated
   replacement counts as in force) · jurisdiction ∈ {IN, home state} · applies_to ∈ {all, lender
   type} · case-scoped documents (KFS) only for their own (tenant, case) (BR-14, SUP-08).
+A case may also read the corpus KFS it uploaded itself (``Filters.own_kfs``: doc_id + content sha of
+its kfs case files), whatever their tagged case or lender type (9e, user decision 2026-11-16): the
+frozen KFS are tagged to CA-2026-0001..0015, while API cases get later ids.
 """
 
 import re
@@ -35,6 +38,16 @@ class Filters:
     home_state: str = "IN-MH"
     lender_type: str = "commercial_bank"  # ADR 0019: from the offer; case-free questions → this
     collections: tuple[str, ...] | None = None
+    own_kfs: frozenset[str] = frozenset()  # "doc_id@sha256" of the case's uploaded KFS
+
+
+def _own(f: Filters) -> tuple[str, dict[str, Any]]:
+    """SQL for "this KFS was uploaded to the case" (exact text: doc_id and sha both match)."""
+    if not f.own_kfs:
+        return "0", {}
+    names = {f"own{i}": v for i, v in enumerate(sorted(f.own_kfs))}
+    marks = ", ".join(":" + n for n in names)
+    return f"(d.collection = 'kfs' AND d.doc_id || '@' || d.sha256 IN ({marks}))", names
 
 
 @dataclass(frozen=True)
@@ -84,8 +97,8 @@ class Searcher:
     def __init__(
         self,
         corpus_db: Path | str,
-        chroma: ClientAPI,
-        embed: Embed,
+        chroma: ClientAPI | None,
+        embed: Embed | None,
         *,
         reranker: Reranker | None = None,
         strategy: str = "section",
@@ -112,13 +125,16 @@ class Searcher:
             "case_id": case_id,
             "tenant_id": tenant_id,
         }
+        own, own_params = _own(f)
+        params |= own_params
         sql = (
-            "d.effective_from IS NOT NULL AND d.effective_from <= :as_of"
+            "d.effective_from IS NOT NULL AND d.effective_from <= :as_of"  # noqa: S608  # nosec B608
             " AND (d.superseded_by IS NULL OR EXISTS (SELECT 1 FROM documents r"
             " WHERE r.doc_id = d.superseded_by AND r.effective_from > :as_of))"
             " AND d.jurisdiction IN ('IN', :home)"
-            " AND d.applies_to IN ('all', :lender)"
-            " AND (d.case_id IS NULL OR (d.case_id = :case_id AND d.tenant_id = :tenant_id))"
+            f" AND (d.applies_to IN ('all', :lender) OR {own})"
+            " AND (d.case_id IS NULL OR (d.case_id = :case_id AND d.tenant_id = :tenant_id)"
+            f" OR {own})"
         )
         if f.collections is not None:
             names = {f"c{i}": c for i, c in enumerate(f.collections)}
@@ -158,18 +174,20 @@ class Searcher:
         strategy: str,
         n: int,
     ) -> list[str]:
-        if not query.strip():
-            return []
-        clauses: list[dict[str, Any]] = [
+        if not query.strip() or self._chroma is None or self._embed is None:
+            return []  # keyword-only searcher (no vector store configured)
+        own_docs = sorted({o.split("@", 1)[0] for o in f.own_kfs})
+        mine: list[dict[str, Any]] = [{"doc_id": {"$in": own_docs}}] if own_docs else []
+        scope: list[dict[str, Any]] = [{"case_id": ""}, *mine]
+        if case_id and tenant_id:
+            scope.append({"$and": [{"case_id": case_id}, {"tenant_id": tenant_id}]})
+        lender: dict[str, Any] = {"applies_to": {"$in": ["all", f.lender_type]}}
+        clauses: list[dict[str, Any]] = [  # the SQL re-check below also matches the sha
             {"effective_from": {"$lte": date_key(f.as_of)}},
             {"superseded_from": {"$gt": date_key(f.as_of)}},
             {"jurisdiction": {"$in": ["IN", f.home_state]}},
-            {"applies_to": {"$in": ["all", f.lender_type]}},
-            {"case_id": ""}
-            if not (case_id and tenant_id)
-            else {
-                "$or": [{"case_id": ""}, {"$and": [{"case_id": case_id}, {"tenant_id": tenant_id}]}]
-            },
+            {"$or": [lender, *mine]} if mine else lender,
+            {"$or": scope} if len(scope) > 1 else scope[0],
         ]
         if f.collections is not None:
             clauses.append({"collection": {"$in": list(f.collections) or [""]}})
@@ -262,13 +280,11 @@ class Searcher:
 
 
 # Another case's KFS reads as missing: a citation cannot probe whether it exists (SUP-08).
-_DOC = (
-    "SELECT d.doc_id FROM documents d WHERE d.doc_id = :c"
-    " AND (d.case_id IS NULL OR (d.case_id = :case AND d.tenant_id = :tenant))"
-)
+_VISIBLE = " AND (d.case_id IS NULL OR (d.case_id = :case AND d.tenant_id = :tenant) OR {own})"
+_DOC = "SELECT d.doc_id FROM documents d WHERE d.doc_id = :c" + _VISIBLE  # noqa: S608  # nosec B608
 _CHUNK_DOC = (
-    "SELECT d.doc_id FROM documents d JOIN chunks c ON c.doc_id = d.doc_id WHERE c.chunk_id = :c"
-    " AND (d.case_id IS NULL OR (d.case_id = :case AND d.tenant_id = :tenant))"
+    "SELECT d.doc_id FROM documents d JOIN chunks c ON c.doc_id = d.doc_id WHERE c.chunk_id = :c"  # noqa: S608  # nosec B608
+    + _VISIBLE
 )
 
 
@@ -290,6 +306,7 @@ def resolve(
     superseded but unindexed document still reads as superseded.
     """
     where, params = Searcher._where(case_id, tenant_id, filters)
+    own, own_params = _own(filters)
     in_force = (
         "d.effective_from IS NOT NULL AND d.effective_from <= :as_of"
         " AND (d.superseded_by IS NULL OR EXISTS (SELECT 1 FROM documents r"
@@ -303,7 +320,8 @@ def resolve(
             # The chunk's own document (not parsed from the id); another case's KFS reads as
             # missing, so a citation cannot probe whether another case's document exists.
             exists = con.execute(
-                _CHUNK_DOC if chunk else _DOC, {"c": cid, "case": case_id, "tenant": tenant_id}
+                (_CHUNK_DOC if chunk else _DOC).format(own=own),
+                {"c": cid, "case": case_id, "tenant": tenant_id} | own_params,
             ).fetchone()
             doc_id = str(exists[0]) if exists else cid.split("#", 1)[0]
             if exists is None:

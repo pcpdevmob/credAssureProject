@@ -25,6 +25,10 @@ TOOL_NAMES: tuple[str, ...] = (
     "rank_offers",
     "lender_send_template",
     "search_knowledge",
+    "search_regulations",
+    "search_policies",
+    "get_case_facts",
+    "explain_blocker",
     "verify_claims",
     "route_proposal",
 )

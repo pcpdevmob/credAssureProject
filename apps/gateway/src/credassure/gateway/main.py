@@ -7,9 +7,11 @@ router at /v1/agents/<name>. Agent routers reach the Supervisor only through the
 
 from __future__ import annotations
 
+import dataclasses
 import functools
 import json
 import logging
+import os
 import sqlite3
 import uuid
 from collections.abc import Awaitable, Callable
@@ -72,9 +74,10 @@ from credassure.ledger.session import case_engine, hr_engine, transaction
 from credassure.ledger.store import SqlLedger
 from credassure.lender_sim import ScriptedLender
 from credassure.observability.log import configure_logging, log_context, set_redactor
-from credassure.retrieval.search import Filters, resolve
+from credassure.retrieval.search import Filters, Searcher, make_reranker, resolve
 from credassure.security import pii
 from credassure.security.auth import verify_token
+from credassure.tools.registry import RegistryError, authorize_fact
 from credassure.tools.runner import ToolRunner
 
 _log = logging.getLogger("credassure.gateway")
@@ -215,14 +218,21 @@ def _superseded_index(manifest: Path) -> dict[str, str | None]:
     return {d["doc_id"]: d.get("superseded_by") for d in data.get("documents") or []}
 
 
-def _resolver(settings: Settings) -> Callable[[str], Resolve | None]:
+def _filters(settings: Settings, engine: Engine, case_id: str, **kw: Any) -> Filters:
+    """ADR 0019 filters for this case, plus the corpus KFS it uploaded itself (9e)."""
+    with transaction(engine) as s:
+        own = reads.own_kfs(s, settings.tenant_id, case_id)
+    return Filters(as_of=settings.as_of_date, home_state=settings.home_state, own_kfs=own, **kw)
+
+
+def _resolver(settings: Settings, engine: Engine) -> Callable[[str], Resolve | None]:
     """VER-02: a per-case citation resolver over the indexed corpus (None before `make ingest`;
     the Critic then fails any citation closed)."""
-    filters = Filters(as_of=settings.as_of_date, home_state=settings.home_state)
 
     def for_case(case_id: str) -> Resolve | None:
         if not settings.corpus_db.exists():
             return None
+        filters = _filters(settings, engine, case_id)
         return lambda ids: resolve(
             settings.corpus_db,
             ids,
@@ -244,7 +254,7 @@ def _facts(settings: Settings, engine: Engine, case_id: str) -> dict[str, Fact]:
 def _verify_claims(settings: Settings, engine: Engine) -> Callable[..., list[CriticFinding]]:
     """The Critic's verify_claims tool (VER-01..03): figures against this case's ledger, reasons
     against code slots, citations against the corpus, banned wording and PII. A2: switched off."""
-    resolver = _resolver(settings)
+    resolver = _resolver(settings, engine)
 
     def verify_claims(
         case_id: str,
@@ -373,6 +383,91 @@ def _offer_preview(settings: Settings, engine: Engine) -> Callable[[str], dict[s
     return preview
 
 
+def _searcher(settings: Settings) -> Callable[[], Searcher]:
+    """Built on first use (the embedder and reranker load models). Same store and embedder as
+    `make ingest`; keyword mode needs neither."""
+
+    @functools.cache
+    def build() -> Searcher:
+        reranker = make_reranker(
+            settings.reranker, settings.reranker_model, settings.reranker_revision
+        )
+        if settings.copilot_search_mode == "keyword":
+            return Searcher(settings.corpus_db, None, None, reranker=reranker)
+        from credassure.retrieval.cli import embedder
+        from credassure.retrieval.index import open_chroma
+
+        return Searcher(
+            settings.corpus_db,
+            open_chroma(settings.chroma_path),
+            embedder(os.environ),
+            reranker=reranker,
+            tenant_id=settings.tenant_id,
+        )
+
+    return build
+
+
+def _copilot_handlers(settings: Settings, engine: Engine) -> dict[str, Callable[..., Any]]:
+    """The copilot's four fixed tools (scope #20) plus the Critic. case_id is injected by the
+    tool runner (SUP-08); collections and filters are fixed here, never chosen by the model."""
+    searcher = _searcher(settings)
+
+    def search(collections: tuple[str, ...]) -> Callable[..., list[dict[str, Any]]]:
+        def run(case_id: str, query: str) -> list[dict[str, Any]]:
+            if not settings.corpus_db.exists():
+                return []
+            hits = searcher().search_knowledge(
+                query,
+                case_id=case_id,
+                tenant_id=settings.tenant_id,
+                filters=_filters(settings, engine, case_id, collections=collections),
+                mode=settings.copilot_search_mode,
+                k=5,
+            )
+            return [
+                {
+                    **dataclasses.asdict(p),
+                    "effective_from": p.effective_from.isoformat() if p.effective_from else None,
+                }
+                for p in hits
+            ]
+
+        return run
+
+    def case_facts(case_id: str) -> dict[str, dict[str, str]]:
+        out = {}
+        for key, fact in _facts(settings, engine, case_id).items():
+            try:
+                authorize_fact(AgentName.COPILOT, key)  # registry read prefixes (#24)
+            except RegistryError:
+                continue
+            out[key] = {"value": fact.value, "unit": fact.unit}
+        return out
+
+    def explain_blocker(case_id: str) -> dict[str, Any]:
+        with transaction(engine) as s:
+            runs = reads.stage_runs(s, settings.tenant_id, case_id)
+        latest = {r.stage: r for r in runs}  # attempts ascend
+        blocked = [
+            AgentResult.model_validate_json(r.result_json)
+            for r in latest.values()
+            if r.result_json and r.decision not in ("GO", None)
+        ]
+        return {
+            "question": next((b.question for b in blocked if b.question), None),
+            "blockers": [b.model_dump(mode="json") for res in blocked for b in res.blockers],
+        }
+
+    return {
+        "search_regulations": search(("public",)),
+        "search_policies": search(("policy", "kfs")),
+        "get_case_facts": case_facts,
+        "explain_blocker": explain_blocker,
+        "verify_claims": _verify_claims(settings, engine),
+    }
+
+
 def _tool_factory(settings: Settings, engine: Engine) -> Callable[[AgentName], ToolPort]:
     load = _profile_loader(settings, engine)
     inputs = _case_inputs(settings, engine)
@@ -392,9 +487,9 @@ def _tool_factory(settings: Settings, engine: Engine) -> Callable[[AgentName], T
         },
         AgentName.LENDWISE: _lendwise_handlers(settings, engine),  # no tool accepts an offer
         AgentName.CRITIC: {"verify_claims": _verify_claims(settings, engine)},  # VER-01..03
+        AgentName.COPILOT: _copilot_handlers(settings, engine),  # 9e, on demand via chat
     }
 
-    # ponytail: the copilot gets no handlers until Phase 9e registers search_knowledge here.
     def tools(agent: AgentName) -> ToolPort:
         return ToolRunner(agent, handlers.get(agent, {}))
 
@@ -447,6 +542,8 @@ def build_services(settings: Settings, llm: LLMPort | None) -> Services:
     svc.service = SupervisorService(svc)
     svc.offer_preview = _offer_preview(settings, engine)
     svc.verify_claims = _verify_claims(settings, engine)
+    tools = _tool_factory(settings, engine)
+    svc.copilot_tools = lambda: tools(AgentName.COPILOT)  # a fresh runner per chat turn
     return svc
 
 

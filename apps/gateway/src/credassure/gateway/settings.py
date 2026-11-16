@@ -79,6 +79,10 @@ class Settings(BaseSettings):
     lender_scripts_dir: Path = Path("data/frozen/v1/lender_scripts")  # S05, lender simulator
     corpus_db: Path = Path("var/corpus.db")  # Critic citation checks (VER-02), opened read-only
     corpus_manifest: Path = Path("data/corpus/manifest.yaml")  # superseded but unindexed docs
+    # Copilot search (9e): the vector store and embedder are the ingest's (CHROMA_PATH, EMBED_*);
+    # "keyword" runs BM25 only (tests, or no vector store).
+    chroma_path: Path = Path("var/chroma")
+    copilot_search_mode: Literal["hybrid", "keyword"] = "hybrid"
     home_state: str = "IN-MH"  # ADR 0019 jurisdiction filter
     apr_convention: Literal["nominal", "effective"] = "nominal"
     boundary_rule: Literal["hold", "director", "vp"] = "hold"

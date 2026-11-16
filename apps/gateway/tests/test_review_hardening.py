@@ -94,14 +94,13 @@ def test_S4_sixth_failed_login_for_one_user_in_a_minute_is_429(client: Any) -> N
 # --- chat (S9 / BRD: no unverified model text) -----
 
 
-def test_S9_chat_with_llm_on_returns_placeholder_not_raw_model_text(
+def test_S9_chat_with_llm_on_never_returns_raw_model_text(
     make_client: Callable[..., Any],
     login: Callable[[TestClient, str], dict[str, str]],
     new_case: Callable[[TestClient], str],
 ) -> None:
-    c = make_client(llm_enabled=True)
+    c = make_client(llm_enabled=True, copilot_search_mode="keyword")
     case_id = new_case(c)
-    before = len(c.llm.calls)
     r = c.post(
         f"/v1/cases/{case_id}/chat",
         json={"message": "What is a KFS?"},
@@ -109,8 +108,9 @@ def test_S9_chat_with_llm_on_returns_placeholder_not_raw_model_text(
     )
     assert r.status_code == 200, r.text
     assert {"answer", "citations", "intent", "trace_id"} <= r.json().keys()
-    assert r.json()["answer"] != "ok"  # FakeLLM's default reply never reaches the user
-    assert len(c.llm.calls) == before
+    # FakeLLM's default "ok" is not valid output: it never reaches the user (CP-02)
+    assert r.json()["answer"] == "I can't verify that from the available sources."
+    assert any(name == "cp_answer" or name == "cp_tool" for name, _ in c.llm.calls)
 
 
 # --- report (S6, N7) -----

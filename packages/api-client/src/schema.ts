@@ -52,7 +52,7 @@ export interface paths {
         put?: never;
         /**
          * Chat
-         * @description Ask the copilot about this case (placeholder until Phase 9e).
+         * @description Ask the copilot about this case: refusal in code, cited answer or the abstention.
          */
         post: operations["chat_v1_agents_copilot_cases__case_id__chat_post"];
         delete?: never;

@@ -16,7 +16,7 @@ ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 DEMO_TENANT := TENANT_ID=demo
 
 .PHONY: e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
-        db demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
+        db demo-reset copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore eval-fast llm-probe retrieval-eval retrieval-pool retrieval-silver judge kappa
 
 help:  ## List targets
@@ -206,6 +206,9 @@ db:  ## Migrate var/case.db + var/corpus.db and seed users (needs SEED_PASSWORD;
 	uv run python -m credassure.ledger.migrate upgrade case var/case.db
 	uv run python -m credassure.ledger.migrate upgrade corpus var/corpus.db
 	$(DEMO_TENANT) uv run $(ENV_FILE) python -m credassure.gateway.seed  # SEED_PASSWORD via Settings, into CASE_DB
+
+copilot-live:  ## E8 live: the 44 copilot items through the API on the configured model (var/e8-live)
+	uv run $(ENV_FILE) python scripts/copilot_live.py $(ARGS)
 
 demo-reset:  ## Recreate the demo cases in var/case.db through the API (tenant demo; stop run-api first)
 	$(DEMO_TENANT) uv run $(ENV_FILE) python scripts/demo_reset.py

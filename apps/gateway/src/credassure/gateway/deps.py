@@ -42,6 +42,7 @@ class Services:
     service: Any = None  # gateway.supervisor_service.SupervisorService, set after construction
     offer_preview: Any = None  # case_id -> lw.* facts as text, computed and never stored (9c)
     verify_claims: Any = None  # the Critic's check (9d): (case_id, text, ...) -> findings
+    copilot_tools: Any = None  # () -> ToolPort for the copilot's fixed tools (9e)
 
 
 def services(request: Request) -> Services:

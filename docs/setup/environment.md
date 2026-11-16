@@ -10,3 +10,6 @@ TODO owner: [Name 1].
 
 ## Model
 ## Tracing
+| `TENANT_ID` | gateway, `make run-api`, `make db`, `make demo-reset` | Tenant of this gateway process. `make run-api`, `make db` and `make demo-reset` set `demo` (the dev/demo database `var/case.db`); an exported value wins over `--env-file`. |
+| `CHROMA_PATH` | `make ingest`, copilot search | Vector store directory (default `var/chroma`). The copilot uses the same store and `EMBED_*` embedder as the ingest. |
+| `COPILOT_SEARCH_MODE` | copilot search | `hybrid` (default: BM25 + dense, RRF) or `keyword` (BM25 only; tests, or no vector store). |

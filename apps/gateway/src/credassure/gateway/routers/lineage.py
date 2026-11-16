@@ -142,8 +142,10 @@ def lineage(
     # passage; the corpus only fills in title and section when it is ingested.
     refs: dict[str, tuple[str, str, str | None, str | None]] = {}
     if loose and svc.settings.corpus_db.exists():
+        with transaction(svc.engine) as s:
+            own = reads.own_kfs(s, case.tenant_id, case.id)
         with transaction(_corpus(svc.settings.corpus_db)) as s:
-            refs = reads.corpus_refs(s, loose, case.tenant_id, case.id)
+            refs = reads.corpus_refs(s, loose, case.tenant_id, case.id, own)
     passages = [
         Passage(doc_id=d, title=t, section=sec, chunk_id=c)
         for d, t, sec, c in (

@@ -1,6 +1,7 @@
 # Agent registry and data-access matrix (scope #24, design-detail §2.3).
-# Fourteen tools: the thirteen of design-detail §2.3 plus load_offers (Phase 9c), which reads the
-# case's uploaded offers and KFS schedules read-only, as validate_case_files does for WC.
+# Eighteen tools: the thirteen of design-detail §2.3, load_offers (Phase 9c), which reads the
+# case's uploaded offers and KFS schedules read-only, as validate_case_files does for WC, and the
+# copilot's four fixed tools (Phase 9e, scope #20): the model picks one, code validates and runs it.
 # An agent may call only the tools listed under its name.
 # search_knowledge also names the collections that agent may read.
 # same_case_collections require a case_id (KFS never crosses cases).
@@ -52,23 +53,36 @@ tools:
       copilot:
         collections: [public, policy, faq, kfs]
         same_case_collections: [kfs]
+  search_regulations:  # public collection; filters and case scope injected by code
+    allow:
+      copilot: {}
+  search_policies:  # policy + faq + this case's own uploaded KFS
+    allow:
+      copilot: {}
+  get_case_facts:  # read-only: this case's ledger facts within ledger_read_prefixes
+    allow:
+      copilot: {}
+  explain_blocker:  # read-only: the case's current blockers and its one question
+    allow:
+      copilot: {}
   verify_claims:
     allow:
       critic: {}
       lendwise: {}  # the negotiation message is checked before it is sent (LW-12)
+      copilot: {}  # every answer passes the Critic before it is returned (CP-01)
   route_proposal:
     allow:
       supervisor: {}
 # Ledger keys an agent's stage may read and write through its StageContext (scope #24).
-# Deny by default: an agent missing here reads and writes nothing. "" = every key; Phases
-# 9d-9e narrow their own entry. Onboarding never sees case financials.
+# Deny by default: an agent missing here reads and writes nothing. Onboarding never sees case financials.
 ledger_prefixes:
   onboarding: ["onb."]
   working_capital: ["wc."]  # case files only through its read-only tools
   lendwise: ["lw."]
   critic: ["ver."]  # 9d: writes only its findings
-  copilot: [""]
+  copilot: ["cp."]  # 9e: writes only its answer records (cp.answer.<trace_id>)
 # Extra keys an agent may read but never write.
 ledger_read_prefixes:
   lendwise: ["wc."]  # wc.recommended_amount: offers are compared against the validated need
   critic: ["onb.", "wc.", "lw."]  # 9d: re-reads every narrative and the negotiation message
+  copilot: ["onb.gate", "wc.", "lw.", "ver."]  # get_case_facts; never HR rule detail

@@ -513,7 +513,7 @@ def test_UI05_offers_route_returns_offers_and_facts(fx: SimpleNamespace) -> None
     assert r.json()["gate"] == "GO" and r.json()["source"] == "ledger"
 
 
-def test_UI06_chat_with_llm_off_says_unavailable(fx: SimpleNamespace) -> None:
+def test_UI06_CP02_chat_with_llm_off_abstains(fx: SimpleNamespace) -> None:
     case_id = fx.new_case()
     r = fx.client.post(
         f"/v1/cases/{case_id}/chat",
@@ -521,7 +521,7 @@ def test_UI06_chat_with_llm_off_says_unavailable(fx: SimpleNamespace) -> None:
         headers=fx.login("demo.preparer"),
     )
     assert r.status_code == 200, r.text
-    assert "unavailable" in r.json()["answer"].lower()
+    assert r.json()["answer"] == "I can't verify that from the available sources."  # model off
 
 
 def test_UI08_report_has_every_trace_id_and_internal_approval_wording(

@@ -8,7 +8,11 @@ the code-rendered slot values the text was built from, and a citation resolver.
   a ledger key must still equal the current fact (a stale narrative). Unparsed digits are critical.
 - Reason containment (model text only): every sentence carries a slot value, and what is left after
   removing the slot values has no causal connective and no quality claim. Reasons come only from
-  code-computed slots (e.g. "would push cash below the minimum buffer in week 12").
+  code-computed slots (e.g. "would push cash below the minimum buffer in week 12"). A sentence
+  that cites a passage is anchored by that passage instead (copilot, 9e).
+- Grounded wording (9e): inside a citing sentence, a banned or reason word is allowed only when the
+  same words appear in a passage it cites ("guaranteed amount" quoted from R-CG-02 passes; "will be
+  approved" is in no source, so it is still blocked).
 - VER-02 citations: each [R-…]/[KFS-…]/[POL-…]/[FAQ-…] resolves to an indexed passage that is in
   force, allowed and of this case; every figure in the citing sentence appears in the passage.
 - VER-03 banned content (banned.yaml, S-VER-02) and personal identifiers.
@@ -178,7 +182,12 @@ def _stale(
     return out
 
 
-def _reasons(text: str, slots: Mapping[str, str], stage: Stage | None) -> list[CriticFinding]:
+def _reasons(
+    text: str,
+    slots: Mapping[str, str],
+    stage: Stage | None,
+    grounded: Callable[[int, int, str], bool] = lambda a, b, w: False,
+) -> list[CriticFinding]:
     """Slot spans are found on the whole text first, so a sentence break never cuts inside a
     code-rendered value (a next action such as "finish the course; HR records the completion")."""
     spans = _spans(text, slots.values())
@@ -192,8 +201,9 @@ def _reasons(text: str, slots: Mapping[str, str], stage: Stage | None) -> list[C
         rest = "".join(
             " " if any(a <= i < b for a, b in spans) else ch for i, ch in enumerate(text[lo:hi], lo)
         )
-        has_anchor = any(lo <= a and b <= hi for a, b in anchor_spans)
-        if not has_anchor or CAUSAL.search(rest) or QUALITY.search(rest):
+        has_anchor = any(lo <= a and b <= hi for a, b in anchor_spans) or grounded(lo, hi, "")
+        words = [m for rx in (CAUSAL, QUALITY) for m in rx.finditer(rest)]
+        if not has_anchor or any(not grounded(lo + m.start(), lo + m.end(), m[0]) for m in words):
             out.append(
                 _finding(
                     BlockerCode.VER_UNSUPPORTED_REASON,
@@ -205,14 +215,31 @@ def _reasons(text: str, slots: Mapping[str, str], stage: Stage | None) -> list[C
     return out
 
 
-def _banned(text: str, *, model: bool, stage: Stage | None) -> list[CriticFinding]:
+_TERMS = re.compile(r"(?:guaranteed|sanctioned)\s+(?:amount|portion|limits?|cover)\b", re.I)
+
+
+def _banned(
+    text: str,
+    *,
+    model: bool,
+    stage: Stage | None,
+    grounded: Callable[[int, int, str], bool] = lambda a, b, w: False,
+) -> list[CriticFinding]:
     b = banned()
     rules = list(b.all)
     if model and stage is not None:
         rules += b.model_only.get(stage.value, ())
+
+    def excused(m: re.Match[str]) -> bool:
+        # Only a quoted noun term ("guaranteed amount") is excused, never a prediction or
+        # acceptance phrase, however common its word pair is in passages (9e security review).
+        term = _TERMS.match(text, m.start())
+        return term is not None and grounded(m.start(), term.end(), term[0])
+
     out = []
     for name, rx in rules:
-        if m := rx.search(text):
+        m = next((m for m in rx.finditer(text) if not excused(m)), None)
+        if m:
             out.append(
                 _finding(
                     BlockerCode.VER_BANNED_CONTENT,
@@ -224,13 +251,14 @@ def _banned(text: str, *, model: bool, stage: Stage | None) -> list[CriticFindin
     return out
 
 
-def _citations(text: str, resolve: Resolve | None, stage: Stage | None) -> list[CriticFinding]:
+def _citations(
+    text: str, found: Mapping[str, tuple[str, str]] | None, stage: Stage | None
+) -> list[CriticFinding]:
     cited = [(m.group(1), m.start()) for m in CITE.finditer(text)]
     if not cited:
         return []
-    if resolve is None:
+    if found is None:
         return [_finding(BlockerCode.VER_BAD_CITATION, "no source library to check", stage)]
-    found = resolve([c for c, _ in cited])
     out = []
     for cid, pos in cited:
         status, passage = found.get(cid, ("missing", ""))
@@ -260,6 +288,10 @@ def _citations(text: str, resolve: Resolve | None, stage: Stage | None) -> list[
                 )
                 break
     return out
+
+
+def _norm(text: str) -> str:
+    return " ".join(re.findall(r"[\w-]+", text.lower()))
 
 
 def _same(kind: str, a: object, b: object) -> bool:
@@ -296,13 +328,34 @@ def verify(
     # A citation id is not a figure (same-length blanking keeps offsets). A citing sentence's
     # figures are checked against its passage (VER-02), not the case ledger.
     plain = CITE.sub(lambda m: " " * len(m.group(0)), text)
-    cited = [(a, a + len(s)) for a, s in _sentences_with_offsets(text) if CITE.search(s)]
+    sentences = [(a, a + len(s), s) for a, s in _sentences_with_offsets(text) if CITE.search(s)]
+    cited = [(a, b) for a, b, _ in sentences]
+    ids = list(dict.fromkeys(CITE.findall(text)))
+    found = resolve(ids) if resolve is not None and ids else ({} if not ids else None)
+
+    def grounded(start: int, end: int, words: str) -> bool:
+        """Inside a citing sentence and, for a flagged word, said by a passage it cites: the word
+        with its neighbour on either side ("guaranteed amount", not just "approved")."""
+        for a, b, sentence in sentences:
+            if not (a <= start and end <= b):
+                continue
+            held = ((found or {}).get(c, ("missing", "")) for c in CITE.findall(sentence))
+            ok = [_norm(p) for status, p in held if status == "ok"]
+            if not words:
+                return bool(ok)
+            before = re.findall(r"[\w-]+", plain[a:start])[-1:]
+            after = re.findall(r"[\w-]+", plain[end:b])[:1]
+            pairs = [_norm(" ".join([*before, words])), _norm(" ".join([words, *after]))]
+            pairs = [x for x in pairs if " " in x]
+            return any(x in p for x in pairs for p in ok)
+        return False
+
     findings += _numbers(plain, facts, _spans(plain, slots.values()) + cited, stage, model=model)
     findings += _stale(slots, facts, stage)
     if model:
-        findings += _reasons(plain, slots, stage)
-    findings += _banned(plain, model=model, stage=stage)
-    findings += _citations(text, resolve, stage)
+        findings += _reasons(plain, slots, stage, grounded)
+    findings += _banned(plain, model=model, stage=stage, grounded=grounded)
+    findings += _citations(text, found, stage)
     return findings
 
 

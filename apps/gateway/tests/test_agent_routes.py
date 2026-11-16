@@ -127,4 +127,5 @@ def test_UI06_copilot_router_chat_matches_core_chat(
     )
     assert r.status_code == 200, r.text
     assert {"answer", "citations", "intent", "trace_id"} <= r.json().keys()
-    assert "unavailable" in r.json()["answer"].lower()  # client fixture has the LLM off
+    # LLM off: CP-02 abstention (9e decision 3)
+    assert r.json()["answer"] == "I can't verify that from the available sources."

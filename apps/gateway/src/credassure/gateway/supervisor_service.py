@@ -4,13 +4,16 @@ Agent routers never touch an agent or the database: they hand the authenticated 
 this service, which applies the same case policy and job runner as the core /v1 routes.
 """
 
+import json
 import re
 import uuid
 from collections.abc import Callable
 from decimal import ROUND_HALF_UP, Decimal
 from typing import Any
 
-from credassure.core.enums import Stage
+from credassure.agents.copilot import agent as copilot
+from credassure.agents.copilot import policy
+from credassure.core.enums import AgentName, Stage
 from credassure.core.errors import ApiErrorCode
 from credassure.core.money import format_inr, from_paise, to_paise
 from credassure.core.results import AgentResult
@@ -22,13 +25,19 @@ from credassure.ledger.session import RunInProgressError, run_in_progress, run_l
 from credassure.observability.tracing import span
 from credassure.security import pii
 from credassure.security.auth import Principal
+from credassure.tools.registry import authorize_fact
 
 PII_NOTICE = (
     "Personal identifiers ({kinds}) are not accepted in chat; they were removed and not stored "
     "(data-handling policy, DPDP Act 2023)."
 )
-ABSTAIN = "I can't verify that from the available sources."  # CP-02, exact string
-UNAVAILABLE = "The copilot is unavailable; cited, Critic-checked answers arrive with the copilot."
+ABSTAIN = policy.ABSTAIN  # CP-02, exact string
+CHAT_NOTICE = (
+    "Ask CredAssure drafts answers with a language model from cited sources and this case's "
+    "verified figures. It is general information, not legal, tax or credit advice, and it never "
+    "approves, accepts or signs anything. Do not enter personal identifiers."
+)
+MEMORY_TURNS = 4  # scope #2: the last turns of this user in this case
 
 
 class SupervisorService:
@@ -175,29 +184,90 @@ class SupervisorService:
         return plan
 
     def chat(self, actor: Principal, case_id: str, message: str) -> dict[str, Any]:
-        """Chat (CP-01..03, VER-01..03). Every answer passes the Verification Critic before it is
-        returned; a failing answer becomes the abstention string (CP-02). Until the copilot
-        (Phase 9e) drafts answers, the answer is a fixed notice."""
+        """Ask CredAssure (CP-01..03, scope #2, #20, #40). The copilot refuses in code first, then
+        answers only from cited passages or code-rendered case facts, and every model answer
+        passes the Critic; otherwise the reply is exactly ABSTAIN (CP-02). Only redacted text is
+        stored, traced or sent to the model (ONB-06); memory is this user's turns in this case."""
         case = visible_case(self.svc, actor, case_id)
         trace_id = uuid.uuid4().hex
         kinds = sorted({hit.kind for hit in pii.find(message)})  # ONB-06: refuse and redact
-        with span(  # E11 N1: the id names a span; only the redacted text is ever recorded
-            "chat", trace_id=trace_id, case_id=case.id, message=pii.redact(message)[:2000]
-        ):
-            pass
-        answer = UNAVAILABLE
-        if self.svc.verify_claims is not None and self.svc.verify_claims(case.id, answer):
-            answer = ABSTAIN
-        reply: dict[str, Any] = {
+        text = pii.redact(message)
+        with transaction(self.svc.engine) as s:
+            turns = reads.chat_history(s, case.tenant_id, case.id, actor.user_id, MEMORY_TURNS)
+            offer_ids = {
+                str(json.loads(f.payload_json).get("offer_id") or "")
+                for f in reads.case_files(s, case.tenant_id, case.id)
+                if f.kind == "offer"
+            } - {""}
+        with span("chat", trace_id=trace_id, case_id=case.id, message=text[:2000]) as rec:
+            reply = copilot.answer(
+                text,
+                case_id=case.id,
+                tools=self.svc.copilot_tools(),
+                llm=self.svc.llm,
+                history=[(t.role, t.redacted_text) for t in turns],
+                offer_ids=offer_ids,
+                as_of=self.svc.settings.as_of_date,
+            )
+            rec.update(  # scope #20 evidence: the chosen tool and whether code accepted it
+                tool=reply.tool,
+                tool_valid=reply.tool_valid,
+                refusal_code=reply.refusal_code,
+                injection_flagged=reply.injection_flagged,
+                dropped=reply.dropped,
+                findings=list(reply.findings),
+                abstained=reply.abstained,
+            )
+        answer = pii.redact(reply.answer)
+        chunk_ids = [str(c["chunk_id"]) for c in reply.citations]
+        fact_key = None
+        if reply.source == "model" and not reply.abstained:
+            fact_key = f"cp.answer.{trace_id}"
+            authorize_fact(AgentName.COPILOT, fact_key, write=True)  # registry prefixes (#24)
+            self.svc.ledger.put_fact(
+                case.id,
+                fact_key,
+                json.dumps({"question": text, "answer": answer}, ensure_ascii=False),
+                unit="json",
+                source_type="passage" if chunk_ids else "ledger_fact",
+                source_ref=",".join(chunk_ids or reply.facts),
+                produced_by=f"copilot@{copilot.version()}",
+                provenance={"agent": "copilot", "stage": "chat", "trace_id": trace_id},
+            )
+        self.svc.ledger.chat_turn(
+            case.id,
+            actor.user_id,
+            [("user", text, []), ("assistant", answer, chunk_ids)],
+            intent="copilot_question",
+            trace_id=trace_id,
+        )
+        notices = [CHAT_NOTICE] if not turns else []
+        if kinds:
+            notices.append(PII_NOTICE.format(kinds=", ".join(kinds)))
+        out: dict[str, Any] = {
             "answer": answer,
-            "citations": [],
+            "citations": [
+                {
+                    "chunk_id": c["chunk_id"],
+                    "doc_id": c["doc_id"],
+                    "title": c["title"],
+                    "section": c["section_path"],
+                    "effective_from": c["effective_from"],
+                }
+                for c in reply.citations
+            ],
+            "refused": reply.refused,
+            "refusal_code": reply.refusal_code,
+            "injection_flagged": reply.injection_flagged,
+            "ranking": list(reply.ranking) if reply.ranking is not None else None,
             "intent": "copilot_question",
             "trace_id": trace_id,
+            "fact_key": fact_key,
             "pii_redacted": bool(kinds),
         }
-        if kinds:
-            reply["notice"] = PII_NOTICE.format(kinds=", ".join(kinds))
-        return reply
+        if notices:
+            out["notice"] = " ".join(notices)
+        return out
 
 
 def approval_warnings(facts: Any) -> list[str]:

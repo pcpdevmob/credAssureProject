@@ -1,5 +1,7 @@
 """Tenant- and case-scoped reads (SUP-08, scope #27) and audit-chain verification (OBJ-08)."""
 
+import json
+
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -11,6 +13,7 @@ from .models import (
     AuditLog,
     Case,
     CaseFile,
+    ChatMessage,
     Chunk,
     Document,
     Job,
@@ -207,13 +210,16 @@ def fact_event(s: Session, tenant_id: str, case_id: str, key: str, version: int)
 
 
 def corpus_refs(
-    s: Session, ids: list[str], tenant_id: str, case_id: str
+    s: Session, ids: list[str], tenant_id: str, case_id: str, own_kfs: frozenset[str] = frozenset()
 ) -> dict[str, tuple[str, str, str | None, str | None]]:
     """id -> (doc_id, title, section, chunk_id) for corpus chunk or document ids; another
-    case's KFS never resolves (SUP-08)."""
+    case's KFS never resolves (SUP-08), except a KFS this case uploaded (``own_kfs``:
+    "doc_id@sha256", the retrieval rule)."""
     out: dict[str, tuple[str, str, str | None, str | None]] = {}
-    visible = Document.case_id.is_(None) | (
-        (Document.case_id == case_id) & (Document.tenant_id == tenant_id)
+    visible = (
+        Document.case_id.is_(None)
+        | ((Document.case_id == case_id) & (Document.tenant_id == tenant_id))
+        | ((Document.collection == "kfs") & (Document.doc_id + "@" + Document.sha256).in_(own_kfs))
     )
     for chunk, doc in s.execute(
         select(Chunk, Document).join(Document).where(Chunk.chunk_id.in_(ids), visible)
@@ -222,3 +228,37 @@ def corpus_refs(
     for doc in s.scalars(select(Document).where(Document.doc_id.in_(ids), visible)):
         out[doc.doc_id] = (doc.doc_id, doc.title, None, None)
     return out
+
+
+def chat_history(
+    s: Session, tenant_id: str, case_id: str, user_id: str, n: int
+) -> list[ChatMessage]:
+    """The last ``n`` redacted messages of this user in this case, oldest first (scope #2).
+    Keyed by (tenant, case, user): memory never crosses cases or people."""
+    rows = s.scalars(
+        select(ChatMessage)
+        .where(
+            ChatMessage.tenant_id == tenant_id,
+            ChatMessage.case_id == case_id,
+            ChatMessage.user_id == user_id,
+        )
+        .order_by(ChatMessage.id.desc())
+        .limit(n)
+    )
+    return list(reversed(list(rows)))
+
+
+def own_kfs(s: Session, tenant_id: str, case_id: str) -> frozenset[str]:
+    """ "doc_id@sha256" of every KFS uploaded to this case: the corpus KFS it may read (9e).
+    The sha is of the uploaded bytes, the same hash the corpus records for the synthetic KFS."""
+    rows = s.scalars(
+        select(CaseFile).where(
+            CaseFile.tenant_id == tenant_id, CaseFile.case_id == case_id, CaseFile.kind == "kfs"
+        )
+    )
+    out = set()
+    for f in rows:
+        doc = json.loads(f.payload_json).get("doc_id")
+        if isinstance(doc, str) and doc:
+            out.add(f"{doc}@{f.sha256}")
+    return frozenset(out)

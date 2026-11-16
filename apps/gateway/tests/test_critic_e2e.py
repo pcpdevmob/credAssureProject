@@ -106,7 +106,8 @@ def test_VER01_ARCH63_critic_stage_reopens_lendwise_for_an_altered_narrative(
 def test_CP02_VER01_chat_answer_passes_the_critic(client: Any, login: Any) -> None:
     case_id, h = start(client, login, "CA-2026-0001")
     r = client.post(f"/v1/cases/{case_id}/chat", json={"message": "What is a KFS?"}, headers=h)
-    assert r.status_code == 200 and "unavailable" in r.json()["answer"]
+    assert r.status_code == 200
+    assert r.json()["answer"] == "I can't verify that from the available sources."
     verify = client.app.state.services.verify_claims
     assert verify(case_id, r.json()["answer"]) == []
     assert verify(case_id, "Your loan is pre-approved at 7%.") != []

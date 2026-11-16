@@ -4,6 +4,7 @@ Every function takes the caller's Session; session.transaction() commits a write
 event together or neither (scope #49).
 """
 
+import json
 import uuid
 from collections.abc import Mapping
 from datetime import UTC, date, datetime
@@ -26,6 +27,7 @@ from .models import (
     AuditLog,
     Case,
     CaseFile,
+    ChatMessage,
     Job,
     LedgerFact,
     StageRun,
@@ -525,3 +527,31 @@ def set_password_hash(s: Session, *, user_id: str, password_hash: str) -> None:
         raise ConflictError(f"no user {user_id}")
     user.password_hash = password_hash
     s.flush()
+
+
+def add_chat_message(
+    s: Session,
+    *,
+    tenant_id: str,
+    case_id: str,
+    user_id: str,
+    role: str,
+    redacted_text: str,
+    intent: str | None,
+    citations: list[str],
+    trace_id: str,
+) -> None:
+    """Copilot memory (scope #2): the caller passes text already redacted (ONB-06, NFR-07)."""
+    s.add(
+        ChatMessage(
+            tenant_id=tenant_id,
+            case_id=case_id,
+            user_id=user_id,
+            role=role,
+            redacted_text=redacted_text,
+            intent=intent,
+            citations_json=json.dumps(citations),
+            trace_id=trace_id,
+            created_at=_now(),
+        )
+    )

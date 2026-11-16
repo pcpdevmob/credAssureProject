@@ -13,7 +13,7 @@ import pytest
 
 from credassure.ledger import migrate
 from credassure.retrieval.index import ingest, open_chroma
-from credassure.retrieval.search import Filters, Searcher, make_reranker, rrf
+from credassure.retrieval.search import Filters, Searcher, make_reranker, resolve, rrf
 from credassure.retrieval.sources import SourceDoc, real_docs, synthetic_docs
 
 Embed = Callable[[list[str]], list[list[float]]]
@@ -200,6 +200,40 @@ def test_SUP08_BR14_kfs_documents_only_for_their_own_case(env: dict[str, Any], m
     assert kfs("CA-1") == {"KFS-1"}
     assert kfs("CA-2") == {"KFS-2"}
     assert kfs(None) == set()
+
+
+@pytest.mark.parametrize("mode", ["keyword", "dense", "hybrid"])
+def test_SUP08_own_uploaded_kfs_visible_by_doc_and_sha_whatever_case_or_lender(
+    env: dict[str, Any], mode: str
+) -> None:
+    """9e decision 2: an API case (CA-2026-0016+) reads the corpus KFS it uploaded (doc_id + sha),
+    even though the corpus tags it to another case and an NBFC lender; nothing else crosses."""
+    with sqlite3.connect(env["db"]) as con:
+        con.execute("UPDATE documents SET applies_to='nbfc' WHERE doc_id='KFS-1'")
+        sha = con.execute("SELECT sha256 FROM documents WHERE doc_id='KFS-1'").fetchone()[0]
+    searcher = Searcher(env["db"], env["chroma"], env["embed"])
+
+    def kfs(own: frozenset[str]) -> set[str]:
+        f = Filters(as_of=AS_OF, own_kfs=own)
+        hits = searcher.search_knowledge(
+            FEE, case_id="CA-2026-0016", tenant_id="demo", filters=f, mode=mode, k=20
+        )
+        return {p.doc_id for p in hits if p.doc_id.startswith("KFS")}
+
+    assert kfs(frozenset({f"KFS-1@{sha}"})) == {"KFS-1"}
+    assert kfs(frozenset({"KFS-1@another-sha"})) == set()  # same id, different text: not ours
+    assert kfs(frozenset()) == set()
+    statuses = {
+        own: resolve(
+            env["db"], ["KFS-1", "KFS-1#section#0", "KFS-2"], case_id="CA-2026-0016",
+            tenant_id="demo", filters=Filters(as_of=AS_OF, own_kfs=own),
+        )
+        for own in (frozenset({f"KFS-1@{sha}"}), frozenset())
+    }  # fmt: skip
+    assert {k: v[0] for k, v in statuses[frozenset({f"KFS-1@{sha}"})].items()} == {
+        "KFS-1": "ok", "KFS-1#section#0": "ok", "KFS-2": "missing",
+    }  # fmt: skip
+    assert {v[0] for v in statuses[frozenset()].values()} == {"missing"}
 
 
 def test_KR02_reciprocal_rank_fusion_k60_hand_computed() -> None:

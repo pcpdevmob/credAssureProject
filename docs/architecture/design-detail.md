@@ -223,6 +223,14 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
 - **Writes:** `chat_messages` (redacted), citations, trace_id.
 - **Tests:** regulatory ≥20/25 with valid citation; refusal 8/8; injection 8/8; isolation 3/3; retrieval ≥34/40 in top 5.
 
+- **As built (9e, 2026-11-16):** the refusal policy is code only (`agents/copilot/policy.py`), and
+  `cp_tool` (a choice among the four fixed tools, scope #20) replaces `cp_qtype` and `cp_refusal_classify`.
+  `cp_answer` cites `[n]`, which code maps to chunk ids. Case figures appear only as `{key}` slots.
+  A case reads the corpus KFS it uploaded (doc_id + sha), exempt from `applies_to`. The Critic accepts
+  a cited sentence's wording when the same word pair appears in the cited passage. With the model off,
+  every non-refused question gets the abstention string. Memory keeps the last 4 redacted turns per
+  user and case. Each answer is recorded as `cp.answer.<trace_id>`, with chunk ids, for lineage.
+
 #### 2.4.7 LendWise step detail
 
 Pipeline per case:

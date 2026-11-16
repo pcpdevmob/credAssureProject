@@ -34,7 +34,7 @@ def health() -> dict[str, str]:
 def chat(
     case_id: str, body: dict[str, str], who: Caller, supervisor: SupervisorDep
 ) -> dict[str, Any]:
-    """Ask the copilot about this case (placeholder until Phase 9e)."""
+    """Ask the copilot about this case: refusal in code, cited answer or the abstention."""
     message = body.get("message", "")
     if not message or len(message) > 4000:
         raise HTTPException(status_code=422, detail="message must be 1-4000 characters")

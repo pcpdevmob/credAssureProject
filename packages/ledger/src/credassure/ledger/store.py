@@ -152,6 +152,31 @@ class SqlLedger:
                 sha256=sha256,
             )
 
+    def chat_turn(
+        self,
+        case_id: str,
+        user_id: str,
+        messages: list[tuple[str, str, list[str]]],
+        *,
+        intent: str,
+        trace_id: str,
+    ) -> None:
+        """Copilot memory (scope #2): (role, redacted text, cited chunk ids) per message, one
+        transaction for the question and its answer. Callers pass redacted text only."""
+        with transaction(self.engine) as s:
+            for role, text, citations in messages:
+                writes.add_chat_message(
+                    s,
+                    tenant_id=self.tenant_id,
+                    case_id=case_id,
+                    user_id=user_id,
+                    role=role,
+                    redacted_text=text,
+                    intent=intent,
+                    citations=citations,
+                    trace_id=trace_id,
+                )
+
     def record_decision(
         self,
         case_id: str,
