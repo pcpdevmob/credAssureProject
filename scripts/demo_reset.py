@@ -6,9 +6,9 @@
 2. First run on a database whose users are not in tenant "demo": purge every case (audited),
    online backup, then migrate a fresh database and seed the users in tenant "demo".
    Later runs: back up, then purge only the demo tenant's cases (audited, chain re-verified).
-3. Through the API (the real app in-process, same routers, auth and job runner):
-   - case A: CA-2026-0001 files, offers and KFS, run to AWAITING_APPROVAL (Director). Not approved.
-   - case B: CA-2026-0013 files (no min_cash_buffer, T048 pattern), run to PAUSED with a question.
+3. Through the API (the real app in-process, same routers, auth and job runner), one demo case per
+   row of DEMO_CASES (a mix of outcomes: Director, VP, held at the boundary, lender gate blocked,
+   paused for data); 10 cases. None is approved. Each lists which frozen case it copies.
 Case ids are max(id)+1, so after the purge every run gives the same ids and states (idempotent).
 Reads data/frozen/v1 only; never writes anything outside CASE_DB and its backups.
 """
@@ -40,6 +40,89 @@ FROZEN = ROOT / "data" / "frozen" / "v1"
 E2E_DB = ROOT / "var" / "case-e2e.db"
 TENANT = "demo"
 KINDS = ("order", "opening_position", "costs", "receipts", "receivables", "payables", "inventory")
+# (frozen case, MSME name, upload offers, expected status, expected route, why it is in the mix)
+DEMO_CASES: tuple[tuple[str, str, bool, str, str | None, str], ...] = (
+    (
+        "CA-2026-0001",
+        "Demo Electronics Pvt Ltd",
+        True,
+        "AWAITING_APPROVAL",
+        "director_finance",
+        "2 of 3 offers eligible; the unaffordable lender is dropped",
+    ),
+    (
+        "CA-2026-0003",
+        "Demo Circuits Pvt Ltd",
+        True,
+        "AWAITING_APPROVAL",
+        "director_finance",
+        "all 3 offers eligible (floating-rate flag, hidden charge caught)",
+    ),
+    (
+        "CA-2026-0006",
+        "Demo Assemblies Pvt Ltd",
+        True,
+        "AWAITING_APPROVAL",
+        "vp_finance",
+        "need above 1.5 crore, routed to the VP",
+    ),
+    (
+        "CA-2026-0010",
+        "Demo Boundary Pvt Ltd",
+        True,
+        "HELD",
+        "HELD",
+        "need exactly 1.5 crore, held by the boundary rule",
+    ),
+    (
+        "CA-2026-0007",
+        "Demo Sensors Pvt Ltd",
+        True,
+        "AWAITING_APPROVAL",
+        "vp_finance",
+        "VP route, all 3 offers eligible, a confirmed mitigation",
+    ),
+    (
+        "CA-2026-0008",
+        "Demo Mid-Size Pvt Ltd",
+        True,
+        "AWAITING_APPROVAL",
+        "vp_finance",
+        "medium enterprise: CGTMSE offer flagged ineligible",
+    ),
+    (
+        "CA-2026-0004",
+        "Demo Fees Pvt Ltd",
+        True,
+        "PAUSED",
+        None,
+        "only 1 eligible offer: lender gate blocks",
+    ),
+    (
+        "CA-2026-0005",
+        "Demo Rejects Pvt Ltd",
+        True,
+        "PAUSED",
+        None,
+        "no eligible offer: missing term, mismatch, unaffordable",
+    ),
+    (
+        "CA-2026-0013",
+        "Demo Paused Case Pvt Ltd",
+        False,
+        "PAUSED",
+        None,
+        "no min_cash_buffer: one question to the preparer",
+    ),
+    (
+        "CA-2026-0014",
+        "Demo Conflict Pvt Ltd",
+        False,
+        "PAUSED",
+        None,
+        "conflicting receipts and a duplicate invoice id",
+    ),
+)
 POLL_S = 15 * 60  # a live 8B model takes minutes for LendWise
 
 
@@ -121,12 +204,15 @@ def _upload(client: TestClient, h: dict[str, str], cid: str, kind: str, path: Pa
 
 
 def _case(client: TestClient, h: dict[str, str], frozen: str, name: str, offers: bool) -> str:
+    order_value = int(
+        json.loads((FROZEN / "cases" / frozen / "order.json").read_text())["order_value"]
+    )
     r = client.post(
         "/v1/cases",
         json={
             "msme_name": name,
             "order_ref": f"PO-{frozen}",
-            "order_value_paise": 3_20_00_000_00,
+            "order_value_paise": order_value * 100,
             "indicative_amount_paise": 2_00_00_000_00,
             "due_date": "2027-05-15",
         },
@@ -159,20 +245,17 @@ def _case(client: TestClient, h: dict[str, str], frozen: str, name: str, offers:
 
 
 def drive(settings: Settings) -> dict[str, dict[str, Any]]:
-    with TestClient(create_app(settings)) as client:
+    views: dict[str, dict[str, Any]] = {}
+    # the script is the only caller of its in-process app: lift the per-user NFR-04 limit for it
+    app = create_app(settings.model_copy(update={"rate_limit": "100000/minute"}))
+    with TestClient(app) as client:
         h = _login(client, settings, "demo.preparer")
-        a = _case(client, h, "CA-2026-0001", "Demo Electronics Pvt Ltd", offers=True)
-        b = _case(client, h, "CA-2026-0013", "Demo Paused Case Pvt Ltd", offers=False)
-        views = {c: client.get(f"/v1/cases/{c}", headers=h).json() for c in (a, b)}
-    if (views[a]["status"], views[a]["route"]) != ("AWAITING_APPROVAL", "director_finance"):
-        raise SystemExit(f"{a}: expected AWAITING_APPROVAL for the Director, got {views[a]}")
-    fields = [x["field"] for st in views[b]["stages"] for x in st["blockers"]]
-    if (
-        views[b]["status"] != "PAUSED"
-        or not views[b]["question"]
-        or ("opening_position.min_cash_buffer" not in fields)
-    ):
-        raise SystemExit(f"{b}: expected PAUSED on min_cash_buffer, got {views[b]}")
+        for frozen, name, offers, status, route, why in DEMO_CASES:
+            cid = _case(client, h, frozen, name, offers)
+            v = client.get(f"/v1/cases/{cid}", headers=h).json()
+            if (v["status"], v["route"]) != (status, route):
+                raise SystemExit(f"{cid} ({frozen}): expected {status}/{route} ({why}), got {v}")
+            views[cid] = v
     return views
 
 

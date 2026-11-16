@@ -1,10 +1,48 @@
 # Local development
 
-TODO owner: [Name 1].
+Prerequisites: [prerequisites.md](prerequisites.md). Settings: [environment.md](environment.md).
+Continuing someone's module with Claude Code, Cursor or another AI tool: [team-handoff.md](team-handoff.md).
 
 ## Install
+```bash
+make install                 # uv sync --all-packages (never a bare `uv sync`)
+npm install                  # apps/web + packages/api-client
+cp .env.example .env         # then set JWT_SECRET (32+ chars) and SEED_PASSWORD (12+ chars)
+make data && make db && make ingest
+```
+`make data` writes the synthetic set to `data/frozen/v1` (frozen files are hook-protected). `make db` migrates `var/case.db` and
+`var/corpus.db` and seeds users in tenant `demo`. `make ingest` builds the search index for the current `MODELS` profile.
+
 ## Run the API
+```bash
+OLLAMA_CONTEXT_LENGTH=8192 ollama serve    # skip with LLM_ENABLED=false
+make run-api                               # http://localhost:8000, Swagger at /docs
+curl -s localhost:8000/v1/health/ready     # databases, model circuit, quota
+```
+`make run-api` sets `TENANT_ID=demo` and reloads on code changes. For the course model add `MODELS=course`.
+
 ## Run the web app
 `make run-ui` starts the Next.js dev server on **http://localhost:3000** (`npm run dev -w apps/web`). The gateway's
-default CORS origins include `http://localhost:3000`; use that port so sign-in works. Playwright (`npm run e2e -w apps/web`)
-expects the web app on :3000 and the gateway on :8000 (`E2E_BASE_URL`, `E2E_API_URL` override them).
+default CORS origins include `http://localhost:3000` and `http://localhost:5173`; use one of them so sign-in works.
+Langfuse also uses :3000: run the UI on 5173 with `npm run dev -w apps/web -- -p 5173`.
+
+## Demo data
+Stop the API, then `make demo-reset` (10 demo cases through the real API, idempotent), then start the API again.
+Users and cases: [README §6–§7](../../README.md#6-data-databases-corpus-demo-cases).
+
+## After an API change
+```bash
+make openapi && make client     # openapi.json + generated TypeScript client
+```
+CI fails on a stale `openapi.json`.
+
+## Before every commit
+`make check` (ruff, format, mypy --strict, pytest, corpus refs, bandit, import-linter) must be green. `make check-fast` is the quick loop.
+
+## End-to-end tests
+They use their own database and ports, so they never touch the demo data:
+```bash
+make e2e-db && make run-api-e2e     # API on :8001 (second terminal)
+make run-ui-e2e                     # UI on :3001 (third terminal)
+make e2e                            # Playwright; PW_ARGS="--project=u3" for one project
+```

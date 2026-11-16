@@ -3,5 +3,6 @@
 const dev = process.env.NODE_ENV !== 'production';
 // NEXT_DIST_DIR lets the e2e dev server (:3001) run beside the demo one (:3000) without sharing .next.
 const nextConfig = { distDir: process.env.NEXT_DIST_DIR || '.next', output: 'export', trailingSlash: true, images: { unoptimized: true }, agentRules: false, devIndicators: false,
+  allowedDevOrigins: ['192.168.*.*'], // dev server serves /_next to LAN origins; without it the page never hydrates
   pageExtensions: dev ? ['dev.tsx', 'tsx', 'ts'] : ['tsx', 'ts'] };
 export default nextConfig;

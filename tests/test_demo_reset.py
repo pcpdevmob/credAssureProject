@@ -21,7 +21,7 @@ demo_reset = importlib.util.module_from_spec(SPEC)
 sys.modules["demo_reset"] = demo_reset
 SPEC.loader.exec_module(demo_reset)
 
-READ = ("cases/CA-2026-0001", "cases/CA-2026-0013", "offers/CA-2026-0001", "kfs")
+READ = ("cases", "offers", "kfs")
 
 
 def _settings(db: Path, tenant: str = "demo") -> Any:
@@ -83,9 +83,17 @@ def test_demo_reset_is_idempotent_and_audited(tmp_path: Path) -> None:
         assert set(s.execute(text("SELECT DISTINCT tenant_id FROM cases")).scalars()) == {"demo"}
     assert _state(first) == [
         ("CA-2026-0016", "AWAITING_APPROVAL", "director_finance"),
-        ("CA-2026-0017", "PAUSED", None),
+        ("CA-2026-0017", "AWAITING_APPROVAL", "director_finance"),
+        ("CA-2026-0018", "AWAITING_APPROVAL", "vp_finance"),
+        ("CA-2026-0019", "HELD", "HELD"),
+        ("CA-2026-0020", "AWAITING_APPROVAL", "vp_finance"),
+        ("CA-2026-0021", "AWAITING_APPROVAL", "vp_finance"),
+        ("CA-2026-0022", "PAUSED", None),
+        ("CA-2026-0023", "PAUSED", None),
+        ("CA-2026-0024", "PAUSED", None),
+        ("CA-2026-0025", "PAUSED", None),
     ]
-    assert first["CA-2026-0016"]["status"] != "APPROVED"  # never approved by the script
+    assert all(v["status"] != "APPROVED" for v in first.values())  # never approved by the script
     n = _purged(db)
 
     second = demo_reset.main(_settings(db), check_port=False)
