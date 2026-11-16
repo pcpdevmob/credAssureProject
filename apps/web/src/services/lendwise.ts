@@ -7,7 +7,7 @@ import { fig, type Fig, type Money } from '@/lib/money';
 type NegResp = { target_offer: string | null; competing_fee_pct?: string | null; competing_fee?: Money | null; concession_counts: boolean; message: string; status: string | null;
   revised: { version: number; comparable: boolean; flags: string[]; apr_pct: string | null; total_cost: Money | null } | null };
 type OfferResp = { source: 'ledger' | 'preview'; ranking: string[]; negotiation?: NegResp;
-  offers: { offer_id: string; version: number; flags: string[]; comparable: boolean; affordable: boolean | null; rank: number | null; apr_pct: string | null;
+  offers: { offer_id: string; version: number; flags: string[]; comparable: boolean; affordable: boolean | null; rank: number | null; apr_pct: string | null; cheapest_headline_rate?: boolean;
     amount_received: Money | null; total_repayment: Money | null; total_cost: Money | null }[] };
 
 const pct = (v: string | null, key: string): Fig | null => (v === null ? null : { display: `${v}%`, key });
@@ -24,7 +24,7 @@ export function mapOffers(caseId: string, r: OfferResp): OfferView | null {
   if (!r.offers.length) return null;
   return { caseId, source: r.source, ranking: r.ranking, negotiation: r.negotiation ? mapNegotiation(r.negotiation) : null,
     offers: r.offers.map(o => { const k = (f: string) => `lw.${o.offer_id}.v${o.version}.${f}`; const m = (v: Money | null, f: string) => (v ? fig(v, k(f)) : null);
-      return { id: o.offer_id, version: o.version, flags: o.flags, comparable: o.comparable, affordable: o.affordable, rank: o.rank, aprPct: o.apr_pct,
+      return { id: o.offer_id, version: o.version, flags: o.flags, comparable: o.comparable, affordable: o.affordable, rank: o.rank, cheapest: o.cheapest_headline_rate === true, aprPct: o.apr_pct,
         apr: pct(o.apr_pct, k('apr')), amountReceived: m(o.amount_received, 'amount_received'), totalRepayment: m(o.total_repayment, 'total_repayment'), totalCost: m(o.total_cost, 'total_cost') }; }) };
 }
 

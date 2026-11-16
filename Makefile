@@ -13,7 +13,7 @@ $(error MODELS=$(MODELS): no $(MODELS_FILE); use local or course)
 endif
 ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 
-.PHONY: e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
+.PHONY: e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore eval-fast llm-probe retrieval-eval retrieval-pool retrieval-silver judge kappa
 
@@ -60,13 +60,21 @@ run-api:  ## FastAPI on :8000 (docs at /docs)
 	uv run $(ENV_FILE) uvicorn credassure.gateway.main:app --factory --reload --port 8000
 
 E2E_DB := var/case-e2e.db
-e2e-db:  ## Fresh migrated + seeded e2e database (var/case-e2e.db); never touches var/case.db
+# The guard runs first, in the environment the gateway will see, and refuses var/case.db (the demo database).
+E2E_GUARD = CASE_DB=$(E2E_DB) uv run $(ENV_FILE) python scripts/e2e_guard.py
+
+e2e-db:  ## Fresh migrated + seeded e2e database (var/case-e2e.db); refuses the demo database
+	$(E2E_GUARD)
 	rm -f $(E2E_DB) $(E2E_DB)-wal $(E2E_DB)-shm
 	uv run python -m credassure.ledger.migrate upgrade case $(E2E_DB)
 	CASE_DB=$(E2E_DB) uv run $(ENV_FILE) python -m credassure.gateway.seed
 
-run-api-e2e:  ## E2E gateway on :8001 using var/case-e2e.db (CORS for :3001)
+run-api-e2e:  ## E2E gateway on :8001 using var/case-e2e.db (CORS for :3001); refuses the demo database
+	$(E2E_GUARD)
 	CASE_DB=$(E2E_DB) UI_ORIGINS=http://localhost:3001 uv run $(ENV_FILE) uvicorn credassure.gateway.main:app --factory --port 8001
+
+e2e:  ## Playwright on the isolated stack (explicit URLs win over any E2E_* in the env file); PW_ARGS="--project=u3"
+	E2E_BASE_URL=http://localhost:3001 E2E_API_URL=http://localhost:8001 npm run e2e -w apps/web -- $(PW_ARGS)
 
 run-ui-e2e:  ## E2E web dev server on :3001, talking to :8001
 	NEXT_PUBLIC_API_BASE_URL=http://localhost:8001 NEXT_DIST_DIR=.next-e2e npm run dev -w apps/web -- -p 3001

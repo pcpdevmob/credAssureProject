@@ -38,6 +38,8 @@ export interface FundingAssessment {
 /** One offer at its latest version, exactly as the gateway computed it. `affordable` and `rank` are null in the read-only preview. */
 export interface OfferRow {
   id: string; version: number; flags: string[]; comparable: boolean; affordable: boolean | null; rank: number | null;
+  /** Set by the gateway on the lowest-APR offer(s). The UI never compares APRs itself. */
+  cheapest: boolean;
   apr: Fig | null; aprPct: string | null; amountReceived: Fig | null; totalRepayment: Fig | null; totalCost: Fig | null;
 }
 export interface Negotiation {

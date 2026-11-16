@@ -10,11 +10,17 @@ try {
 
 // E2E runs against its own stack (make e2e-db, run-api-e2e, run-ui-e2e: :8001 + :3001 + var/case-e2e.db),
 // so test cases never reach the demo database or its dashboard totals.
+// A stale E2E_BASE_URL in the env file once pointed these tests at the demo web app. Refuse :3000 unless asked.
+const baseURL = process.env.E2E_BASE_URL || 'http://localhost:3001';
+if (new URL(baseURL).port === '3000' && process.env.E2E_ALLOW_DEMO !== '1') {
+  throw new Error(`E2E_BASE_URL is ${baseURL}, the demo web app. Use \`make e2e\` (:3001, isolated), or set E2E_ALLOW_DEMO=1.`);
+}
+
 export default defineConfig({
   testDir: 'e2e',
   timeout: 60_000,
   use: {
-    baseURL: process.env.E2E_BASE_URL || 'http://localhost:3001',
+    baseURL,
     actionTimeout: 60_000, // a missing control fails in a minute, not at the 30-minute test cap
     trace: 'off', // a trace would record the typed password and the bearer token
     channel: 'chrome', // the bundled chromium headless shell is incomplete on this machine (U0 notes)

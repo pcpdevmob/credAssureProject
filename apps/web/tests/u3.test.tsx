@@ -15,7 +15,7 @@ const offer = (id: string, apr: string, o: Record<string, unknown> = {}) => ({ o
 const demo = {
   source: 'ledger' as const, ranking: ['OF-01-B', 'OF-01-A'],
   offers: [offer('OF-01-A', '17.56', { rank: 2, flags: ['LW_HIDDEN_CHARGE'] }), offer('OF-01-B', '13.00', { rank: 1 }),
-    offer('OF-01-C', '11.87', { affordable: false, flags: ['LW_NOT_AFFORDABLE'] })],
+    offer('OF-01-C', '11.87', { affordable: false, flags: ['LW_NOT_AFFORDABLE'], cheapest_headline_rate: true })],
 };
 const c = { id: 'CA-2026-0001' } as CaseRecord;
 
@@ -42,6 +42,27 @@ describe('offers', () => {
     expect(screen.queryByRole('alert')).toBeNull();
     expect(screen.queryByText(/^Rank \d/)).toBeNull();
     expect(screen.queryByRole('button', { name: /Start negotiation/ })).toBeNull();
+  });
+});
+
+describe('cheapest flag comes from the API', () => {
+  const view = (flagged: string | null) => mapOffers(c.id, { ...demo, offers: demo.offers.map(o => ({ ...o, cheapest_headline_rate: o.offer_id === flagged })) })!;
+  it('maps the gateway flag and defaults to false when it is absent', () => {
+    expect(mapOffers(c.id, demo)!.offers.map(o => o.cheapest)).toEqual([false, false, true]);
+    expect(mapOffers(c.id, { ...demo, offers: [{ ...offer('OF-01-A', '17.56') }] })!.offers[0].cheapest).toBe(false);
+  });
+  it('follows the flag, not the APR strings: flag on OF-01-B (usable) means no alert, though OF-01-C shows a lower APR', () => {
+    render(<Lenders c={c} view={view('OF-01-B')} canNegotiate={false} onChange={() => undefined} />);
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(within(screen.getByRole('listitem', { name: 'Offer OF-01-B' })).getByText(/Lowest APR of these offers/)).toBeTruthy();
+    expect(within(screen.getByRole('listitem', { name: 'Offer OF-01-C' })).queryByText(/Lowest APR of these offers/)).toBeNull();
+  });
+  it('flag on the unaffordable offer raises the alert; no flag at all raises none', () => {
+    const { unmount } = render(<Lenders c={c} view={view('OF-01-C')} canNegotiate={false} onChange={() => undefined} />);
+    expect(screen.getByRole('alert').textContent).toContain('Offer OF-01-C has the lowest APR');
+    unmount();
+    render(<Lenders c={c} view={view(null)} canNegotiate={false} onChange={() => undefined} />);
+    expect(screen.queryByRole('alert')).toBeNull();
   });
 });
 

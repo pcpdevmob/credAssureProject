@@ -74,6 +74,14 @@ By owner (manual slots only; 5 assigned in total): Tejas 1, Abhishek 1, [Name 6]
 - **Dev overlay:** the 404 was most likely `/favicon.ico` (fixed with `icon.svg`); the second issue could not be reproduced without a browser overlay. u3 fails on any console error or 4xx/5xx.
 - **Verification:** `make check` green (1217 passed), typecheck, `next build`, vitest 87/87, e2e `u3` passed (real figures: peak ₹1,62,00,000 week 9, 10 shortfall weeks, need ₹1,42,00,000, OF-01-C 11.87% unaffordable and unranked, OF-01-B rank 1 at 13.00%, OF-01-A rank 2 at 17.56%), axe 0 serious in light, dark and 360 px.
 - **Open:** raw lender reply text is not stored (only the re-audited revision); agent narratives still show figures as plain text.
+- **Follow-ups (2026-11-16):**
+  - **Purge verified on `var/case.db`:** 0 cases left (all 7 were test cases, CA-2026-0016..0022, so the demo database now has no demo case until a seed/`demo-reset` exists), 0 facts, 0 approvals, 0 files. Audit chain intact (`verify_chain` returns no broken seqs, 948 rows). One `CASES_PURGED` event at seq 948 listing the 7 ids. All six append-only triggers are back.
+  - **Cheapest offer comes from the API:** `offer_view` sets `cheapest_headline_rate` on the lowest-APR offer(s) at full precision (every tie flagged). The name is historical: it is the lowest APR, not the lowest nominal rate. `Lenders.tsx` no longer compares anything. Tests: `apps/gateway/tests/test_offer_view.py`, plus web tests proving the UI follows the flag even when APR strings disagree.
+  - **e2e guard:** `scripts/e2e_guard.py` refuses a `CASE_DB` that resolves to `var/case.db` (any spelling, symlink, hard link, or unset). `make e2e-db` and `make run-api-e2e` run it first (in `e2e-db`, before the `rm`). `make e2e` passes explicit URLs. `playwright.config.ts` refuses :3000 unless `E2E_ALLOW_DEMO=1`. Tests: `tests/test_e2e_guard.py`.
+  - **Finding:** a bare `npx playwright test` went to :3000 although the config defaults to :3001, so the env file most likely sets `E2E_BASE_URL`. Use `make e2e`, or remove that line.
+
+## Phase 10 notes (carried forward)
+- **Negotiation history:** store the lender's reply text as a ledger fact, redacted (`security.pii.redact`) and injection-scanned (`security.injection`), so the Negotiation panel can show what the lender actually said. Today only the re-audited revision (`lw.negotiation.revised.*`) is stored and the UI says so.
 
 ## UI U2 notes (2026-11-16)
 - **Built:**

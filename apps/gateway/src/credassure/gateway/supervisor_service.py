@@ -238,9 +238,12 @@ def offer_view(facts: dict[str, str]) -> dict[str, Any]:
         if m:
             latest[m[1]] = max(latest.get(m[1], 0), int(m[2]))
     out = []
+    aprs: dict[str, Decimal] = {}
     for oid, ver in sorted(latest.items()):
         f = {k.rsplit(".", 1)[1]: v for k, v in facts.items() if k.startswith(f"lw.{oid}.v{ver}.")}
         apr = Decimal(f["apr"]) * 100 if "apr" in f else None
+        if apr is not None:
+            aprs[oid] = apr
         out.append(
             {
                 "offer_id": oid,
@@ -255,6 +258,11 @@ def offer_view(facts: dict[str, str]) -> dict[str, Any]:
                 **{k: _money(to_paise(Decimal(f[k]))) if k in f else None for k in _LW_MONEY},
             }
         )
+    # `cheapest_headline_rate` is the lowest APR (full precision; every tied offer is flagged). The
+    # name is historical: it is not the lowest nominal rate. The UI only displays it (BR-05).
+    lowest = min(aprs.values(), default=None)
+    for o in out:
+        o["cheapest_headline_rate"] = lowest is not None and aprs.get(str(o["offer_id"])) == lowest
     order = facts.get("lw.ranking", "none")
     return {"ranking": [] if order == "none" else order.split(","), "offers": out}
 
