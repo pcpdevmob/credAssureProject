@@ -62,6 +62,20 @@ class Passage:
     injection_flag: bool
 
 
+@dataclass(frozen=True)
+class PassageDetail:
+    """One cited chunk with what a reader needs to check it (UI-06)."""
+
+    chunk_id: str
+    doc_id: str
+    title: str
+    section_path: str | None
+    effective_from: date | None
+    legal_basis: str | None
+    source_url: str | None
+    text: str
+
+
 def rrf(rankings: Sequence[Sequence[str]], k: int = 60) -> list[str]:
     score: dict[str, float] = {}
     for ranking in rankings:
@@ -229,6 +243,26 @@ class Searcher:
             for r in rows
         }
         return [found[i] for i in ids if i in found]
+
+    def passage(
+        self, chunk_id: str, case_id: str | None, tenant_id: str | None, f: Filters
+    ) -> PassageDetail | None:
+        """The chunk if the ADR 0019 filter that governs search admits it for this case, else
+        None. Missing, superseded, other state or lender type, another case's or tenant's KFS all
+        read the same, so a caller cannot probe which documents exist (SUP-08)."""
+        where, params = self._where(case_id, tenant_id, f)
+        sql = (
+            "SELECT c.chunk_id, c.doc_id, d.title, c.section_path, d.effective_from,"  # noqa: S608  # nosec B608
+            " d.legal_basis, d.source_url, c.text FROM chunks c"
+            f" JOIN documents d ON d.doc_id = c.doc_id WHERE c.chunk_id = :chunk AND {where}"
+        )  # fixed text; every value is a bound parameter
+        with self._connect() as con:
+            r = con.execute(sql, params | {"chunk": chunk_id}).fetchone()
+        if r is None:
+            return None
+        return PassageDetail(
+            r[0], r[1], r[2], r[3], date.fromisoformat(r[4]) if r[4] else None, r[5], r[6], r[7]
+        )
 
     def search_knowledge(
         self,

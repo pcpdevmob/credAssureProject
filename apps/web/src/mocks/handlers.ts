@@ -9,7 +9,11 @@ export const problem = (status: number, code: string, detail: string, errors?: u
 
 export const reply = (o: Record<string, unknown> = {}) => ({ answer: 'A Key Facts Statement discloses the all-in cost of a loan [1].', citations: [{ chunk_id: 'R-RBI-02-c12', doc_id: 'R-RBI-02', title: 'Responsible Business Conduct Directions, 2025', section: 'Annex XIII', effective_from: '2025-11-28' }],
   refused: false, abstained: false, refusal_code: null, injection_flagged: false, pii_redacted: false, intent: 'copilot_question', trace_id: 't-1', fact_key: null, ...o });
+export const passage = (o: Record<string, unknown> = {}) => ({ chunk_id: 'R-RBI-02-c12', doc_id: 'R-RBI-02', title: 'Responsible Business Conduct Directions, 2025', section: 'Annex XIII',
+  effective_from: '2025-11-28', legal_basis: 'L4', source_url: 'https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13140', text: 'The Key Facts Statement shall disclose the annual percentage rate.',
+  text_format: 'plain', truncated: false, injection_flagged: false, injection_flags: [], ...o });
 export const handlers = [
+  http.get(`${API}/v1/cases/:id/citations/:chunk`, () => HttpResponse.json(passage())),
   http.post(`${API}/v1/cases/:id/chat`, () => HttpResponse.json(reply({ notice: 'Answers come from public sources and this case. Do not enter personal data.' }))),
   http.get(`${API}/v1/health/ready`, () => HttpResponse.json({ status: 'ok', checks: { db: 'ok', model: 'closed' } })),
   http.get(`${API}/v1/inbox`, () => HttpResponse.json({ items: [{ case_id: 'CA-2026-0016', msme_name: 'Demo Electronics', status: 'AWAITING_APPROVAL', route: 'director_finance' }, { case_id: 'CA-2026-0030', msme_name: 'Boundary Works', status: 'HELD', route: 'HELD' }] })),

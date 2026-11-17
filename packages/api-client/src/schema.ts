@@ -676,6 +676,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/cases/{case_id}/citations/{chunk_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Citation */
+        get: operations["citation_v1_cases__case_id__citations__chunk_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/cases/{case_id}/decision": {
         parameters: {
             query?: never;
@@ -1043,6 +1060,37 @@ export interface components {
         Chat: {
             /** Message */
             message: string;
+        };
+        /** CitationPassage */
+        CitationPassage: {
+            /** Chunk Id */
+            chunk_id: string;
+            /** Doc Id */
+            doc_id: string;
+            /** Effective From */
+            effective_from: string | null;
+            /** Injection Flagged */
+            injection_flagged: boolean;
+            /** Injection Flags */
+            injection_flags: string[];
+            /** Legal Basis */
+            legal_basis: string | null;
+            /** Section */
+            section: string | null;
+            /** Source Url */
+            source_url: string | null;
+            /** Text */
+            text: string;
+            /**
+             * Text Format
+             * @default plain
+             * @constant
+             */
+            text_format: "plain";
+            /** Title */
+            title: string;
+            /** Truncated */
+            truncated: boolean;
         };
         /** Config */
         Config: {
@@ -2276,6 +2324,40 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    citation_v1_cases__case_id__citations__chunk_id__get: {
+        parameters: {
+            query?: {
+                quote?: string | null;
+            };
+            header?: never;
+            path: {
+                case_id: string;
+                chunk_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CitationPassage"];
                 };
             };
             /** @description Validation Error */

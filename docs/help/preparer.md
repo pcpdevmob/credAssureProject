@@ -23,7 +23,8 @@ passed are kept.
 
 ## Ask CredAssure
 The **Ask CredAssure** tab answers questions about rules, policies and this case, and cites its sources. Open a citation
-to see the document, section and effective date. If CredAssure cannot find a verified source it says "I can't verify that
+to read the passage itself, with its document, section, effective date, legal basis and a link to the source. Some
+sources (Acts) are shown as a short excerpt of up to 600 characters; the link has the rest. If CredAssure cannot find a verified source it says "I can't verify that
 from the available sources", which is not an error. It does not predict approval, give legal or tax advice, accept offers,
 or reveal other cases. Do not type personal identifiers; they are redacted. If the language model is switched off the tab
 says so, and gates, calculations, routing and approval still work.
