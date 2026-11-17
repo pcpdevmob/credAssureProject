@@ -422,7 +422,8 @@ CredAssure/
 - Third-party documents keep their own terms and are not redistributed in this repo.
 
 ### Feature flags
-Validated at startup by `apps/gateway/src/credassure/gateway/settings.py`; defaults are fail-safe.
+Validated at startup by `apps/gateway/src/credassure/gateway/settings.py`; defaults are fail-safe. Every setting is in
+[docs/setup/environment.md](docs/setup/environment.md) and `.env.example` (kept in sync by `test_settings.py`).
 
 | Variable | Default | Values | Effect |
 |---|---|---|---|
@@ -432,6 +433,7 @@ Validated at startup by `apps/gateway/src/credassure/gateway/settings.py`; defau
 | `RERANKER` | `none` | none, local_cross_encoder, llm_pointwise | ADR 0013 |
 | `APR_CONVENTION` | `nominal` | nominal, effective | ADR 0012 |
 | `BOUNDARY_RULE` | `hold` | hold, director, vp | Exactly ₹1.5 crore routing (APR-03) |
+| `APPROVAL_STEP_UP` | `true` | bool | Approving above ₹1.5 crore asks for the password again (NFR-07) |
 | `PLANNER_MODE` | `fixed` | fixed, llm_proposes | Scope #19; code validates any proposal |
 | `COPILOT_SEARCH_MODE` | `hybrid` | hybrid, keyword | Copilot retrieval |
 | `FEATURE_STRETCH` | `false` | bool | BRD §4.2 stretch items |

@@ -55,6 +55,17 @@ so the model profile wins for model settings. `MODELS` itself is a make variable
 | `RERANKER` | `none` | `none`, `local_cross_encoder`, `llm_pointwise` (ADR 0013) |
 | `RERANKER_MODEL`, `RERANKER_REVISION` | `BAAI/bge-reranker-base`, pinned | Cross-encoder (needs the `rerank` extra) |
 
+## Data files
+Paths are relative to the repo root. The defaults point at the frozen synthetic data; change them only for tests.
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `HR_DB` | `data/frozen/v1/hr.db` | Synthetic HR store, opened read-only (ONB-01, ONB-05) |
+| `REFERENCE_RATES_FILE` | `data/reference/reference_rates.yaml` | Repo rate and bank EBLR/RLLR as of `AS_OF_DATE`; prices floating-rate offers (LW-08, S22) |
+| `LENDER_SCRIPTS_DIR` | `data/frozen/v1/lender_scripts` | Scripted lender replies for the negotiation round (S05, LW-13) |
+| `CORPUS_MANIFEST` | `data/corpus/manifest.yaml` | Lets the Critic and copilot call a cited document superseded even when it was never indexed (VER-02, KR-04) |
+| `HOME_STATE` | `IN-MH` | Home jurisdiction for the retrieval filter; other states' documents are never cited as current (ADR 0019, KR-04) |
+
 ## Tracing
 | Variable | Default | Meaning |
 |---|---|---|
@@ -66,7 +77,7 @@ so the model profile wins for model settings. `MODELS` itself is a make variable
 | Variable | Default | Meaning |
 |---|---|---|
 | `BOUNDARY_RULE` | `hold` | Exactly ₹1.5 crore: `hold`, `director` or `vp` (APR-03) |
-| `APPROVAL_THRESHOLD_PAISE` | 1,500,000,000 | ₹1.5 crore in paise |
+| `APPROVAL_THRESHOLD_PAISE` | 1,500,000,000 | ₹1.5 crore in paise. **Not read yet:** routing and step-up use `engines.routing.THRESHOLD` (one source for the number) |
 | `APPROVAL_STEP_UP` | true | Approving more than ₹1.5 crore needs the approver's password again (403 `STEP_UP_REQUIRED`) |
 | `GST_RATE` | 0.18 | GST on fees, never on interest |
 | `APR_CONVENTION` | `nominal` | `nominal` or `effective` (ADR 0012) |

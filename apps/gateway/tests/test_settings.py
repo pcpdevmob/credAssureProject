@@ -143,3 +143,27 @@ def test_NFR07_empty_ca_cert_is_unset_and_a_missing_file_fails_startup(tmp_path:
     ca = tmp_path / "vm06-ca.crt"
     ca.write_text("x", encoding="utf-8")
     assert make(llm_ca_cert=str(ca)).llm_ca_cert == ca
+
+
+def test_scope30_every_setting_is_documented_and_in_env_example() -> None:
+    """E17 SHOULD (Phase 10b item 11): Settings fields == the docs flag table == .env.example
+    keys; the README feature flags are real settings."""
+    import re
+    from pathlib import Path
+
+    from credassure.gateway.settings import Settings
+
+    root = Path(__file__).resolve().parents[3]
+    fields = {name.upper() for name in Settings.model_fields}
+    doc = (root / "docs/setup/environment.md").read_text(encoding="utf-8")
+    first_cells = re.findall(r"^\|([^|]*)\|", doc, re.M)
+    documented = {n for cell in first_cells for n in re.findall(r"`([A-Z][A-Z0-9_]+)`", cell)}
+    example = set(
+        re.findall(r"^#?\s*([A-Z][A-Z0-9_]+)=", (root / ".env.example").read_text(), re.M)
+    )
+    readme = (root / "README.md").read_text(encoding="utf-8")
+    flags = readme.split("### Feature flags", 1)[1].split("\n\n>", 1)[0]
+    readme_flags = set(re.findall(r"^\| `([A-Z][A-Z0-9_]+)`", flags, re.M))
+    assert fields - documented == set()
+    assert fields - example == set()
+    assert readme_flags and readme_flags <= fields
