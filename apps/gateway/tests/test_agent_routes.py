@@ -164,3 +164,18 @@ def test_UI06_copilot_router_chat_matches_core_chat(
     assert {"answer", "citations", "intent", "trace_id"} <= r.json().keys()
     # LLM off: CP-02 abstention (9e decision 3)
     assert r.json()["answer"] == "I can't verify that from the available sources."
+
+
+def test_scope25_SUP03_retry_never_skips_an_upstream_gate(
+    client: TestClient, login: Login, new_case: Callable[[TestClient], str]
+) -> None:
+    """A retried LendWise on a case whose earlier stages never ran is refused by the gate."""
+    case_id = new_case(client)
+    e = login(client, "demo.evaluator")
+    _fail(client, case_id, "lendwise")
+    r = client.post(f"/v1/agents/supervisor/cases/{case_id}/stages/lendwise/retry", headers=e)
+    assert r.status_code == 202, r.text
+    stages = {s["stage"]: s for s in client.get(f"/v1/cases/{case_id}", headers=e).json()["stages"]}
+    assert set(stages) == {"lendwise"}  # onboarding and WC never ran; LendWise did not run
+    assert stages["lendwise"]["decision"] == "NO_GO"
+    assert [b["code"] for b in stages["lendwise"]["blockers"]] == ["SUP_UPSTREAM_NOT_GO"]

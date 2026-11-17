@@ -111,3 +111,13 @@ def test_APR06_decision_schema_has_no_lender_acceptance(client: TestClient) -> N
     schema = client.get("/openapi.json").json()["components"]["schemas"]["Decision"]
     assert schema["properties"]["decision"]["enum"] == ["approve", "reject", "return"]
     assert schema["properties"]["password"]["anyOf"][0]["writeOnly"] is True  # never echoed
+
+
+def test_NFR07_step_up_required_when_validated_amount_unknown(
+    client: TestClient, login: Login, new_case: Callable[[TestClient], str]
+) -> None:
+    """Fail closed: no GO funding gate or no amount means the password is required."""
+    case_id = new_case(client)
+    client.app.state.services.ledger.route(case_id, "director_finance")  # type: ignore[attr-defined]
+    r = _approve(client, login(client, "demo.director"), case_id)
+    assert r.status_code == 403 and r.json()["code"] == "STEP_UP_REQUIRED"

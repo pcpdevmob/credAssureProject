@@ -239,7 +239,7 @@ def _step_up(
     if gate and gate.value_text == "GO" and need and Decimal(need.value_text) <= THRESHOLD:
         return
     limiter = request.app.state.login_limiter
-    key = (f"step-up:{who.user_id}", request.client.host if request.client else "unknown")
+    key = (f"step-up:{who.user_id}",)  # per user, not per IP: a stolen token cannot rotate IPs
     if not limiter.test(LOGIN_FAILURES, *key):
         raise ProblemError(
             429, "too many failed confirmations; wait a minute", ApiErrorCode.RATE_LIMITED

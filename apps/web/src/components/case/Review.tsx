@@ -77,7 +77,7 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
           </div>
         </Card>) : <Card className="p-5 text-sm text-ink-600"><Lock className="mb-2 h-5 w-5 text-ink-400" />Awaiting decision from <Badge tone="blue">{c.routedTo ? APPROVER[c.routedTo] : 'the routed approver'}</Badge>. {user.role === 'PREPARER' ? 'Preparers cannot approve.' : 'This case is routed to a different approver.'}</Card>)}
     </div>
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root open={open} onOpenChange={o => { setOpen(o); if (!o) setPw(''); }}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-ink-950/40" />
         <Dialog.Content className="fixed inset-x-0 bottom-0 z-50 rounded-t-3xl bg-card p-6 shadow-xl sm:inset-auto sm:left-1/2 sm:top-1/2 sm:w-[28rem] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-3xl">

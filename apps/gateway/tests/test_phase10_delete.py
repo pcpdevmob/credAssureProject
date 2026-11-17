@@ -97,3 +97,21 @@ def test_scope39_demo_reset_purge_still_removes_a_tombstone(
         assert mod.purge(s, [case_id], dry_run=False)["cases"] == 1
     with transaction(client.app.state.services.engine) as s:
         assert reads.verify_chain(s) == []
+
+
+def test_scope39_nothing_is_written_into_a_tombstone(
+    client: TestClient, login: Login, new_case: Callable[[TestClient], str]
+) -> None:
+    """A job claimed before the delete, or a racing upload, never writes to the tombstone."""
+    import pytest
+
+    from credassure.ledger.errors import ConflictError
+
+    case_id = new_case(client)
+    svc: Any = client.app.state.services  # type: ignore[attr-defined]
+    job = svc.ledger.create_job(case_id, kind="run", stage=None, idempotency_key=None, actor="t")
+    assert _delete(client, login(client, "demo.evaluator"), case_id).status_code == 200
+    svc.jobs.execute(job.id, case_id, None)
+    assert _count(client, "SELECT count(*) FROM stage_runs WHERE case_id=:c", case_id) == 0
+    with pytest.raises(ConflictError, match="deleted"):
+        svc.ledger.store_case_file(case_id, "costs", "[]", "t", sha256="0" * 64)

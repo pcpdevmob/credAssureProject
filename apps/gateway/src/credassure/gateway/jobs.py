@@ -84,6 +84,9 @@ class JobRunner:
                 thread = threading.Thread(target=beat, name=f"heartbeat-{job_id}", daemon=True)
                 thread.start()
                 try:
+                    if self._deleted(case_id):  # ADR 0025: claimed before a delete took the lock
+                        self.ledger.update_job(job_id, status="abandoned", error="case deleted")
+                        return
                     self._resume_recorded_return(case_id)
                     outcome = self.supervisor.run(case_id, stage=stage, cancelled=lost.is_set)
                     if outcome.status in ("AWAITING_APPROVAL", "HELD") and not lost.is_set():
@@ -98,6 +101,11 @@ class JobRunner:
         except Exception as exc:
             _log.exception("job %s failed", job_id)
             self.ledger.update_job(job_id, status="failed", error=type(exc).__name__)
+
+    def _deleted(self, case_id: str) -> bool:
+        with transaction(self.engine) as s:
+            case = reads.get_case(s, self.ledger.tenant_id, case_id)
+        return case is None or case.status == reads.DELETED
 
     def _report(self, case_id: str) -> None:
         with transaction(self.engine) as s:

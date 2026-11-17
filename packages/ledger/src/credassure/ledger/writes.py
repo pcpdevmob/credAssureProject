@@ -465,6 +465,9 @@ def store_case_file(
 
     `sha256` is the hash of the bytes as uploaded, so the file can be matched to its source.
     """
+    found = s.scalar(select(Case.status).where(Case.tenant_id == tenant_id, Case.id == case_id))
+    if found == DELETED:  # ADR 0025: nothing is written into a tombstone
+        raise ConflictError(f"case {case_id} is deleted")
     digest = sha256
     row = CaseFile(
         tenant_id=tenant_id,
