@@ -202,7 +202,7 @@ def test_scope29_phase8_migration_downgrades_one_step_and_upgrades_again(db: Pat
     migrate.upgrade("case", db)
     head = set(inspect(session.case_engine(db)).get_table_names())
     assert {"jobs", "audit_head"} <= head
-    migrate.downgrade("case", db, "-1")
+    migrate.downgrade("case", db, "37bd7037b99d")
     previous = set(inspect(session.case_engine(db)).get_table_names())
     assert "jobs" not in previous and "audit_head" not in previous
     assert "audit_log" in previous
@@ -318,3 +318,55 @@ def test_APR02_store_route_awaits_the_director(engine: Engine) -> None:
         case = reads.get_case(s, T, CASE)
         assert case is not None
         assert (case.status, case.route) == ("AWAITING_APPROVAL", "director_finance")
+
+
+# --- ADR 0023: offer tables dropped (Phase 10b, scope #29) ---------------------------------------
+
+OFFER_TABLES = {"offers", "offer_evaluations", "negotiation_messages"}
+
+
+def test_scope29_ADR0023_offer_tables_drop_up_down_up(db: Path) -> None:
+    migrate.upgrade("case", db)
+    assert not OFFER_TABLES & set(inspect(session.case_engine(db)).get_table_names())
+    migrate.downgrade("case", db, "-1")
+    restored = set(inspect(session.case_engine(db)).get_table_names())
+    assert restored >= OFFER_TABLES
+    with sqlite3.connect(db) as conn:  # recreated empty
+        assert all(
+            conn.execute(f"SELECT count(*) FROM {t}").fetchone()[0] == 0  # noqa: S608
+            for t in OFFER_TABLES
+        )
+    migrate.upgrade("case", db)
+    assert not OFFER_TABLES & set(inspect(session.case_engine(db)).get_table_names())
+
+
+def test_scope29_ADR0023_offer_table_drop_refuses_a_non_empty_table(db: Path) -> None:
+    migrate.upgrade("case", db)
+    migrate.downgrade("case", db, "-1")
+    eng = session.case_engine(db)
+    with session.transaction(eng) as s:
+        writes.add_user(
+            s, user_id="u", tenant_id=T, username="u", role="preparer", password_hash="x"
+        )
+        writes.create_case(
+            s,
+            tenant_id=T,
+            case_id=CASE,
+            msme_name="m",
+            order_ref="o",
+            order_value_paise=1,
+            indicative_amount_paise=1,
+            due_date=date(2026, 12, 1),
+            preparer_id="u",
+        )
+    with sqlite3.connect(db) as conn:
+        conn.execute(
+            "INSERT INTO negotiation_messages (tenant_id, case_id, offer_id, round, template_id, "
+            "slots_json, rendered_text, created_at) "
+            "VALUES (?, ?, 'O1', 1, 't', '{}', 'x', '2026-11-17')",
+            (T, CASE),
+        )
+    with pytest.raises(Exception, match="not empty"):
+        migrate.upgrade("case", db)
+    assert set(inspect(session.case_engine(db)).get_table_names()) >= OFFER_TABLES  # untouched
+

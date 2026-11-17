@@ -562,10 +562,9 @@ def add_chat_message(
 
 
 # ADR 0025: content tables a delete clears; ledger_facts, approvals and audit_log are append-only
-# and stay. Children first (foreign keys are ON); offer_evaluations hangs off offers.
+# and stay. Children first (foreign keys are ON).
 _CASE_CONTENT = (
     "chat_messages",
-    "negotiation_messages",
     "stage_runs",
     "jobs",
     "case_files",
@@ -588,15 +587,7 @@ def delete_case(
     if case.row_version != expected_version:
         raise ConflictError(f"case changed (version {case.row_version}, not {expected_version})")
     params = {"t": tenant_id, "c": case_id}
-    removed = {
-        "offer_evaluations": _rows(
-            s,
-            "DELETE FROM offer_evaluations WHERE offer_row_id IN "
-            "(SELECT id FROM offers WHERE tenant_id = :t AND case_id = :c)",
-            params,
-        ),
-        "offers": _rows(s, "DELETE FROM offers WHERE tenant_id = :t AND case_id = :c", params),
-    }
+    removed: dict[str, int] = {}
     for table in _CASE_CONTENT:  # constant names; ids are bound parameters
         sql = f"DELETE FROM {table} WHERE tenant_id = :t AND case_id = :c"  # noqa: S608  # nosec B608
         removed[table] = _rows(s, sql, params)

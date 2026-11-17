@@ -23,3 +23,8 @@ any model classes and reads that refer to them.
 - Reports, the offers view and the approval inbox read the ledger only; nothing can disagree with a second copy.
 - A table-shaped view (e.g. for the evaluator) is a query over facts, not a store.
 - design-detail §4 is superseded on these three tables by this ADR.
+
+## Implementation (Phase 10b, 2026-11-17)
+Alembic revision `7d2b9e4c1a30` drops the three tables and their model classes. The upgrade refuses to run while any of
+them holds a row, and the downgrade recreates them empty (`test_scope29_ADR0023_*`). `var/case.db` was backed up to
+`var/case.db.bak-2026-11-17` first; all three tables were empty.

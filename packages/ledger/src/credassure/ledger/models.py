@@ -111,50 +111,6 @@ class LedgerFact(CaseBase):
     created_at: Mapped[datetime] = mapped_column(DateTime)
 
 
-class Offer(CaseBase):
-    __tablename__ = "offers"
-    __table_args__ = (UniqueConstraint("case_id", "offer_id", "version"),)
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    tenant_id: Mapped[str] = mapped_column(TENANT, index=True)
-    case_id: Mapped[str] = mapped_column(ForeignKey("cases.id"), index=True)
-    lender_id: Mapped[str] = mapped_column(String(32))
-    offer_id: Mapped[str] = mapped_column(String(32))
-    version: Mapped[int] = mapped_column(Integer)
-    payload_json: Mapped[str] = mapped_column(Text)
-    kfs_doc_id: Mapped[str | None] = mapped_column(String(64))
-    created_at: Mapped[datetime] = mapped_column(DateTime)
-
-
-class OfferEvaluation(CaseBase):
-    __tablename__ = "offer_evaluations"
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    tenant_id: Mapped[str] = mapped_column(TENANT, index=True)
-    offer_row_id: Mapped[int] = mapped_column(ForeignKey("offers.id"), index=True)
-    comparable: Mapped[bool] = mapped_column(Boolean)
-    affordable: Mapped[bool | None] = mapped_column(Boolean)
-    amount_received_paise: Mapped[int | None] = mapped_column(BigInteger)
-    total_repayment_paise: Mapped[int | None] = mapped_column(BigInteger)
-    total_cost_paise: Mapped[int | None] = mapped_column(BigInteger)
-    apr_text: Mapped[str | None] = mapped_column(String(32))
-    flags_json: Mapped[str] = mapped_column(Text, default="[]")
-    rank: Mapped[int | None] = mapped_column(Integer)
-
-
-class NegotiationMessage(CaseBase):
-    __tablename__ = "negotiation_messages"
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    tenant_id: Mapped[str] = mapped_column(TENANT, index=True)
-    case_id: Mapped[str] = mapped_column(ForeignKey("cases.id"), index=True)
-    offer_id: Mapped[str] = mapped_column(String(32))
-    round: Mapped[int] = mapped_column(Integer)
-    template_id: Mapped[str] = mapped_column(String(64))
-    slots_json: Mapped[str] = mapped_column(Text)
-    rendered_text: Mapped[str] = mapped_column(Text)
-    critic_status: Mapped[str | None] = mapped_column(String(16))
-    response_version: Mapped[int | None] = mapped_column(Integer)
-    created_at: Mapped[datetime] = mapped_column(DateTime)
-
-
 class Approval(CaseBase):
     """Insert-only (APR-04). row_version = the case version the approver decided on (#49)."""
 
