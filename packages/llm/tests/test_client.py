@@ -427,7 +427,6 @@ def test_SUP07_parallel_calls_reserve_the_budget_before_sending() -> None:
 
 def test_SUP07_a_failed_call_releases_its_reservation() -> None:
     llm, _ = make(Script(httpx.Response(404)), max_tokens=400)
-    with stage_budget(700) as budget:
-        with pytest.raises(LLMError):
-            llm.complete("x")
+    with stage_budget(700) as budget, pytest.raises(LLMError):
+        llm.complete("x")
     assert (budget.used, budget.reserved) == (0, 0)

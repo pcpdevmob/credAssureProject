@@ -6,8 +6,9 @@ ledger facts, and fills the fixed ``fee_waiver_v1`` template from those facts on
 any part of the message. The message goes to ``verify_claims`` (every figure must equal a ledger
 fact; no acceptance, approval or urgency wording) before the simulated lender sees it. The lender's
 reply is scanned for injected instructions and stored masked as display-only text
-(``reply_text``, linked to its ``round``; no agent may read it back, registry ``display_only``). A revised version is
-re-audited and re-priced, and only then are the concession and the revised figures written.
+(``reply_text``, linked to its ``round``; no agent may read it back, registry ``display_only``).
+A revised version is re-audited and re-priced, and only then are the concession and the revised
+figures written.
 Nothing here accepts, signs or submits an offer (BR-13).
 """
 
