@@ -575,3 +575,28 @@ def test_scope1_A3_is_dense_top_five_without_keyword_or_rerank(
     searcher.ablation = None
     searcher.search(FEE, None)
     assert seen == ["keyword", "rerank"]
+
+
+@pytest.mark.parametrize("mode", ["keyword", "dense", "hybrid"])
+def test_SUP08_BR14_own_kfs_match_requires_the_same_tenant(
+    env: dict[str, Any], mode: str
+) -> None:
+    """Phase 10b item 3: same doc_id and same bytes, but the corpus copy belongs to tenant
+    demo; a case in tenant acme that uploaded those bytes still reads nothing."""
+    with sqlite3.connect(env["db"]) as con:
+        sha = con.execute("SELECT sha256 FROM documents WHERE doc_id='KFS-1'").fetchone()[0]
+    own = frozenset({f"KFS-1@{sha}"})
+    searcher = Searcher(env["db"], env["chroma"], env["embed"])
+    f = Filters(as_of=AS_OF, own_kfs=own)
+
+    def kfs(tenant: str) -> set[str]:
+        hits = searcher.search_knowledge(
+            FEE, case_id="CA-2026-0016", tenant_id=tenant, filters=f, mode=mode, k=20
+        )
+        return {p.doc_id for p in hits if p.doc_id.startswith("KFS")}
+
+    assert kfs("demo") == {"KFS-1"}
+    assert kfs("acme") == set()
+    got = resolve(env["db"], ["KFS-1", "KFS-1#section#0"], case_id="CA-2026-0016",
+                  tenant_id="acme", filters=f)  # fmt: skip
+    assert {v[0] for v in got.values()} == {"missing"}

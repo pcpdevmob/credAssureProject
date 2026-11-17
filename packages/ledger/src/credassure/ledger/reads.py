@@ -244,7 +244,11 @@ def corpus_refs(
     visible = (
         Document.case_id.is_(None)
         | ((Document.case_id == case_id) & (Document.tenant_id == tenant_id))
-        | ((Document.collection == "kfs") & (Document.doc_id + "@" + Document.sha256).in_(own_kfs))
+        | (
+            (Document.collection == "kfs")
+            & (Document.doc_id + "@" + Document.sha256).in_(own_kfs)
+            & (Document.tenant_id.is_(None) | (Document.tenant_id == tenant_id))
+        )
     )
     for chunk, doc in s.execute(
         select(Chunk, Document).join(Document).where(Chunk.chunk_id.in_(ids), visible)

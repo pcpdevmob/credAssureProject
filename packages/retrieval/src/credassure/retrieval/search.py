@@ -42,12 +42,17 @@ class Filters:
 
 
 def _own(f: Filters) -> tuple[str, dict[str, Any]]:
-    """SQL for "this KFS was uploaded to the case" (exact text: doc_id and sha both match)."""
+    """SQL for "this KFS was uploaded to the case" (exact text: doc_id and sha both match), and
+    the document is shared (tenant NULL) or this tenant's: another tenant's KFS never matches,
+    even with the same id and bytes (SUP-08, BR-14). Binds ``:tenant_id`` from the caller."""
     if not f.own_kfs:
         return "0", {}
     names = {f"own{i}": v for i, v in enumerate(sorted(f.own_kfs))}
     marks = ", ".join(":" + n for n in names)
-    return f"(d.collection = 'kfs' AND d.doc_id || '@' || d.sha256 IN ({marks}))", names
+    return (
+        f"(d.collection = 'kfs' AND d.doc_id || '@' || d.sha256 IN ({marks})"
+        " AND (d.tenant_id IS NULL OR d.tenant_id = :tenant_id))"
+    ), names
 
 
 @dataclass(frozen=True)
@@ -191,7 +196,12 @@ class Searcher:
         if not query.strip() or self._chroma is None or self._embed is None:
             return []  # keyword-only searcher (no vector store configured)
         own_docs = sorted({o.split("@", 1)[0] for o in f.own_kfs})
-        mine: list[dict[str, Any]] = [{"doc_id": {"$in": own_docs}}] if own_docs else []
+        tenants = ["", tenant_id] if tenant_id else [""]  # "" = shared (tenant NULL)
+        mine: list[dict[str, Any]] = (
+            [{"$and": [{"doc_id": {"$in": own_docs}}, {"tenant_id": {"$in": tenants}}]}]
+            if own_docs
+            else []
+        )
         scope: list[dict[str, Any]] = [{"case_id": ""}, *mine]
         if case_id and tenant_id:
             scope.append({"$and": [{"case_id": case_id}, {"tenant_id": tenant_id}]})
@@ -355,7 +365,8 @@ def resolve(
             # missing, so a citation cannot probe whether another case's document exists.
             exists = con.execute(
                 (_CHUNK_DOC if chunk else _DOC).format(own=own),
-                {"c": cid, "case": case_id, "tenant": tenant_id} | own_params,
+                {"c": cid, "case": case_id, "tenant": tenant_id, "tenant_id": tenant_id}
+                | own_params,
             ).fetchone()
             doc_id = str(exists[0]) if exists else cid.split("#", 1)[0]
             if exists is None:

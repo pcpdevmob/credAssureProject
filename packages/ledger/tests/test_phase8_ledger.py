@@ -370,3 +370,28 @@ def test_scope29_ADR0023_offer_table_drop_refuses_a_non_empty_table(db: Path) ->
         migrate.upgrade("case", db)
     assert set(inspect(session.case_engine(db)).get_table_names()) >= OFFER_TABLES  # untouched
 
+
+
+# --- own-KFS lineage refs carry the tenant term (Phase 10b item 3, SUP-08, BR-14) ---------------
+
+
+def test_SUP08_corpus_refs_own_kfs_requires_the_same_tenant(tmp_path: Path) -> None:
+    corpus = tmp_path / "corpus.db"
+    migrate.upgrade("corpus", corpus)
+    eng = session.case_engine(corpus)
+    with session.transaction(eng) as s:
+        s.add(
+            models.Document(
+                doc_id="KFS-9", title="k", collection="kfs", sha256="abc",
+                case_id="CA-2026-0001", tenant_id="demo",
+            )
+        )  # fmt: skip
+        s.flush()
+        s.add(models.Chunk(chunk_id="KFS-9#section#0", doc_id="KFS-9", strategy="section",
+                           ordinal=0, text="t"))  # fmt: skip
+    own = frozenset({"KFS-9@abc"})
+    with session.transaction(eng) as s:
+        mine = reads.corpus_refs(s, ["KFS-9#section#0"], "demo", "CA-2026-0016", own)
+        other = reads.corpus_refs(s, ["KFS-9#section#0"], "acme", "CA-2026-0016", own)
+    assert set(mine) == {"KFS-9#section#0"}
+    assert other == {}
