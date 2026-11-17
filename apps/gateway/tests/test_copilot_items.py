@@ -11,6 +11,7 @@ Model off and on (on: FakeLLM). Scored with the frozen scorers (evaluation/score
 
 import json
 import re
+import sqlite3
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
@@ -104,14 +105,14 @@ def _scored(answer: dict[str, Any]) -> dict[str, Any]:
     return answer | {"citations": sorted({c["doc_id"] for c in answer.get("citations", [])})}
 
 
-def _client(make_client: Callable[..., Any], llm_enabled: bool) -> Any:
+def _client(make_client: Callable[..., Any], llm_enabled: bool, **kw: Any) -> Any:
     client = make_client(
-        llm_enabled=False, rate_limit="10000/minute", copilot_search_mode="keyword"
+        llm_enabled=False, rate_limit="10000/minute", copilot_search_mode="keyword", **kw
     )
     if llm_enabled:
         llm = QuotingLLM()
         client = make_client(
-            llm_enabled=True, rate_limit="10000/minute", copilot_search_mode="keyword"
+            llm_enabled=True, rate_limit="10000/minute", copilot_search_mode="keyword", **kw
         )
         client.app.state.services.llm = llm
         client.app.state.services.supervisor.llm = llm
@@ -234,10 +235,15 @@ def test_scope2_40_memory_per_case_notice_once_stored_redacted_and_lineage_passa
 
 
 @pytest.mark.skipif(not (ROOT / "var/corpus.db").exists(), reason="needs make ingest (corpus.db)")
+@pytest.mark.parametrize("tenant", ["demo", "default"])
 def test_SUP08_own_uploaded_kfs_cited_never_another_cases(
-    make_client: Callable[..., Any], login: Login
+    make_client: Callable[..., Any], login: Login, tenant: str
 ) -> None:
-    client = _client(make_client, True)
+    """The ingested synthetic KFS belong to tenant demo (make ingest). Tenant demo reads the
+    KFS it uploaded; tenant default uploads the same bytes and reads none (Phase 10b item 3)."""
+    client = _client(make_client, True, tenant_id=tenant)
+    with sqlite3.connect(client.db) as con:  # the seeded users move to this test's tenant
+        con.execute("UPDATE users SET tenant_id = ?", (tenant,))
     a, _ = _case(client, login, "CA-2026-0001", run=False)
     own = {
         json.loads(p.read_text())["kfs_doc_id"]
@@ -252,4 +258,7 @@ def test_SUP08_own_uploaded_kfs_cited_never_another_cases(
         for c in answer["citations"]:
             if c["doc_id"].startswith("KFS-"):
                 seen.add(c["doc_id"].removesuffix("-SCH"))
-    assert seen and seen <= own, seen  # own KFS reachable (decision 2); no other case's
+    if tenant == "demo":
+        assert seen and seen <= own, seen  # own KFS reachable (decision 2); no other case's
+    else:
+        assert not seen & own, seen  # another tenant's copy never matches, same id and sha
