@@ -1,20 +1,18 @@
 // Ask CredAssure (UI-06, CP-01..03, #20, #40). Every state below is decided by the gateway reply; the browser only displays it.
 // The first-use notice (shown above the input before the first question), the abstention and refusals are neutral states, never errors.
-// "Seen" is held in memory for the session only (nothing in browser storage); storing the acknowledgement is #40, Phase 10.
+// #40: the notice text and the acknowledgement live on the gateway (per user and notice version). Asking the first question
+// also counts as acknowledging it (the gateway records that); nothing is kept in the browser.
 import { useEffect, useRef, useState } from 'react';
 import { Info, MessageCircleQuestion, ShieldAlert, Ban, PowerOff, Send } from 'lucide-react';
 import { Card, CardHeader, Button, Input } from '../ui';
 import ErrorBanner from '../ErrorBanner';
 import CitationPanel from './CitationPanel';
-import { copilotService, type ChatReply, type Citation } from '@/services/copilot';
+import { copilotService, type ChatNotice, type ChatReply, type Citation } from '@/services/copilot';
 
 const REFUSAL: Record<string, string> = {
   PROBE: 'Configuration and credentials', ACCEPTANCE: 'Accepting or signing an offer', APPROVAL_ODDS: 'Predicting approval or credit',
   GATE_OVERRIDE: 'Overriding a gate', LEGAL: 'Legal or tax advice', OTHER_CASE_WORDS: "Another case's data",
 };
-// Same wording as the gateway's CHAT_NOTICE (supervisor_service.py). The reply's own notice is not shown again.
-const FIRST_USE = "Ask CredAssure drafts answers with a language model from cited sources and this case's verified figures. It is general information, not legal, tax or credit advice, and it never approves, accepts or signs anything. Do not enter personal identifiers.";
-let noticeSeen = false; // module scope: lives until the page reloads (which also signs out), never persisted
 type Turn = { q: string; r: ChatReply };
 type Open = { c: Citation; quote: string };
 /** The sentence of the answer that carries marker [n]; the gateway centres an L3 excerpt on it. Display plumbing only. */
@@ -30,14 +28,15 @@ function Answer({ r, onOpen }: { r: ChatReply; onOpen: (o: Open) => void }) {
 export default function Copilot({ caseId }: { caseId: string }) {
   const [enabled, setEnabled] = useState<boolean | null>(null);
   const [turns, setTurns] = useState<Turn[]>([]); const [q, setQ] = useState(''); const [busy, setBusy] = useState(false); const [err, setErr] = useState<unknown>();
-  const [asked, setAsked] = useState(noticeSeen); const [open, setOpen] = useState<Open | null>(null); const opener = useRef<HTMLElement | null>(null); const end = useRef<HTMLDivElement>(null);
-  useEffect(() => { copilotService.llmEnabled().then(setEnabled); }, []);
+  const [notice, setNotice] = useState<ChatNotice | null>(null); const [open, setOpen] = useState<Open | null>(null); const opener = useRef<HTMLElement | null>(null); const end = useRef<HTMLDivElement>(null);
+  useEffect(() => { copilotService.llmEnabled().then(setEnabled); copilotService.notice().then(setNotice).catch(() => setNotice(null)); }, []);
+  const acknowledged = () => setNotice(n => n && { ...n, acknowledgedAt: n.acknowledgedAt ?? 'now' });
   useEffect(() => { end.current?.scrollIntoView?.({ block: 'nearest' }); }, [turns.length]);
   const off = enabled === false;
   const send = async (e: React.FormEvent) => {
     e.preventDefault(); const text = q.trim(); if (!text || busy) return;
-    setBusy(true); setErr(undefined); noticeSeen = true; setAsked(true);
-    try { const r = await copilotService.ask(caseId, text); setTurns(t => [...t, { q: text, r }]); setQ(''); }
+    setBusy(true); setErr(undefined);
+    try { const r = await copilotService.ask(caseId, text); setTurns(t => [...t, { q: text, r }]); setQ(''); acknowledged(); }
     catch (x) { setErr(x); }
     setBusy(false);
   };
@@ -55,7 +54,8 @@ export default function Copilot({ caseId }: { caseId: string }) {
       </div>
       {turns.length === 0 && !off && <p className="text-sm text-ink-600">Ask about a rule, a policy or a fact in this case, for example “What is a Key Facts Statement?”.</p>}
       {err !== undefined && <ErrorBanner error={err} />}
-      {!asked && <p role="note" className="flex gap-2 rounded-xl bg-ink-50 p-3 text-sm text-ink-900 ring-1 ring-line"><Info aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />{FIRST_USE}</p>}
+      {notice && !notice.acknowledgedAt && <div role="note" className="flex flex-wrap items-start gap-2 rounded-xl bg-ink-50 p-3 text-sm text-ink-900 ring-1 ring-line"><Info aria-hidden className="mt-0.5 h-4 w-4 shrink-0" /><span className="min-w-0 flex-1">{notice.text}</span>
+        <Button size="sm" variant="outline" onClick={() => copilotService.acknowledge().then(setNotice).catch(setErr)}>I understand</Button></div>}
       <form onSubmit={send} className="flex gap-2"><label className="sr-only" htmlFor="ask">Your question</label>
         <Input id="ask" value={q} onChange={e => setQ(e.target.value)} disabled={off} maxLength={4000} placeholder="Ask a question" />
         <Button type="submit" loading={busy} disabled={off || !q.trim()}><Send aria-hidden className="mr-1 h-4 w-4" />Ask</Button></form>

@@ -138,17 +138,28 @@ describe('citation passage', () => {
   });
 });
 
-describe('first-use notice', () => {
-  it('shows above the input before the first question, then not again this session', async () => {
-    vi.resetModules(); const { default: Fresh } = await import('@/components/case/Copilot'); // a new session: the seen flag is module state
-    const view = render(<Fresh caseId="CA-1" />);
+describe('first-use notice (#40)', () => {
+  it('shows the gateway notice above the input until the first question, which acknowledges it', async () => {
+    render(<Copilot caseId="CA-1" />);
     const note = await screen.findByRole('note');
     expect(note.textContent).toMatch(/Do not enter personal identifiers/);
     expect(note.compareDocumentPosition(screen.getByLabelText('Your question')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy(); // above the input
     await ask(); await screen.findByText(/Key Facts Statement discloses/);
     expect(screen.queryByRole('note')).toBeNull();
-    view.unmount(); render(<Fresh caseId="CA-2" />); // another case or tab, same session
-    await screen.findByLabelText('Your question'); expect(screen.queryByRole('note')).toBeNull();
+  });
+  it('stores the acknowledgement on the gateway when the user clicks I understand', async () => {
+    let acks = 0;
+    server.use(http.post(`${API}/v1/me/chat-notice/ack`, () => { acks += 1; return HttpResponse.json({ text: 'n', version: 'v', acknowledged_at: '2026-11-17T08:00:00+00:00' }); }));
+    render(<Copilot caseId="CA-1" />);
+    await userEvent.click(await screen.findByRole('button', { name: 'I understand' }));
+    await vi.waitFor(() => expect(screen.queryByRole('note')).toBeNull());
+    expect(acks).toBe(1);
+  });
+  it('is not shown once the gateway says it was acknowledged (another session or device)', async () => {
+    server.use(http.get(`${API}/v1/me/chat-notice`, () => HttpResponse.json({ text: 'n', version: 'v', acknowledged_at: '2026-11-16T08:00:00+00:00' })));
+    render(<Copilot caseId="CA-2" />);
+    await screen.findByLabelText('Your question'); await new Promise(r => setTimeout(r, 0));
+    expect(screen.queryByRole('note')).toBeNull();
   });
 });
 

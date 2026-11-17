@@ -4,6 +4,7 @@ Agent routers never touch an agent or the database: they hand the authenticated 
 this service, which applies the same case policy and job runner as the core /v1 routes.
 """
 
+import hashlib
 import json
 import re
 import uuid
@@ -39,6 +40,29 @@ CHAT_NOTICE = (
     "approves, accepts or signs anything. Do not enter personal identifiers."
 )
 MEMORY_TURNS = 4  # scope #2: the last turns of this user in this case
+
+
+def notice_version() -> str:
+    """Scope #40: a changed notice text is a new version that must be acknowledged again."""
+    return hashlib.sha256(CHAT_NOTICE.encode()).hexdigest()[:12]
+
+
+def notice_state(svc: Services, actor: Principal) -> dict[str, Any]:
+    version = notice_version()
+    with transaction(svc.engine) as s:
+        at = reads.notice_acknowledged(s, actor.tenant_id, actor.user_id, version)
+    return {"text": CHAT_NOTICE, "version": version, "acknowledged_at": at}
+
+
+def acknowledge_notice(svc: Services, actor: Principal) -> dict[str, Any]:
+    """Record the acknowledgement once per user and notice version (an audit event, OBJ-08)."""
+    state = notice_state(svc, actor)
+    if state["acknowledged_at"] is None:
+        svc.ledger.audit(
+            None, "CHAT_NOTICE_ACKNOWLEDGED", {"version": state["version"]}, actor=actor.user_id
+        )
+        state = notice_state(svc, actor)
+    return state
 
 
 class SupervisorService:
@@ -292,7 +316,10 @@ class SupervisorService:
             intent="copilot_question",
             trace_id=trace_id,
         )
-        notices = [CHAT_NOTICE] if not turns else []
+        # #40: the notice goes with the reply until this user has acknowledged it; asking the
+        # first question counts as the acknowledgement (user decision 2(a), Phase 10).
+        notices = [] if notice_state(self.svc, actor)["acknowledged_at"] else [CHAT_NOTICE]
+        acknowledge_notice(self.svc, actor)
         if kinds:
             notices.append(PII_NOTICE.format(kinds=", ".join(kinds)))
         out: dict[str, Any] = {

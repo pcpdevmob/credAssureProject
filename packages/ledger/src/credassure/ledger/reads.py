@@ -61,6 +61,22 @@ def audit_events(s: Session, tenant_id: str, case_id: str) -> list[AuditLog]:
     )
 
 
+def notice_acknowledged(s: Session, tenant_id: str, user_id: str, version: str) -> str | None:
+    """Scope #40: when this user acknowledged this notice version (ISO time), if ever."""
+    for event in s.scalars(
+        select(AuditLog)
+        .where(
+            AuditLog.tenant_id == tenant_id,
+            AuditLog.event_type == "CHAT_NOTICE_ACKNOWLEDGED",
+            AuditLog.actor == user_id,
+        )
+        .order_by(AuditLog.seq)
+    ):
+        if event.payload.get("version") == version:
+            return event.ts
+    return None
+
+
 def audit_head(s: Session, tenant_id: str) -> AuditHead | None:
     return s.get(AuditHead, tenant_id)
 

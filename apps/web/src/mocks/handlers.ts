@@ -12,6 +12,9 @@ export const reply = (o: Record<string, unknown> = {}) => ({ answer: 'A Key Fact
 export const passage = (o: Record<string, unknown> = {}) => ({ chunk_id: 'R-RBI-02-c12', doc_id: 'R-RBI-02', title: 'Responsible Business Conduct Directions, 2025', section: 'Annex XIII',
   effective_from: '2025-11-28', legal_basis: 'L4', source_url: 'https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13140', text: 'The Key Facts Statement shall disclose the annual percentage rate.',
   text_format: 'plain', truncated: false, injection_flagged: false, injection_flags: [], ...o });
+// Same wording as the gateway's CHAT_NOTICE (supervisor_service.py); the UI shows whatever GET /v1/me/chat-notice returns.
+export const NOTICE = "Ask CredAssure drafts answers with a language model from cited sources and this case's verified figures. It is general information, not legal, tax or credit advice, and it never approves, accepts or signs anything. Do not enter personal identifiers.";
+
 export const handlers = [
   http.get(`${API}/v1/cases/:id/citations/:chunk`, () => HttpResponse.json(passage())),
   http.post(`${API}/v1/cases/:id/chat`, () => HttpResponse.json(reply({ notice: 'Answers come from public sources and this case. Do not enter personal data.' }))),
@@ -22,6 +25,8 @@ export const handlers = [
     ? HttpResponse.json({ case_id: 'CA-2026-0016', version: 1, latest_version: 1, stale: false, reasons: [], sections: [
         { title: 'Case summary', text: 'Demo <script>x</script>. Validated need: ₹1,42,00,000.', figures: [{ key: 'wc.recommended_amount', version: 1, start: 41, end: 53, display: '₹1,42,00,000' }] }] })
     : new HttpResponse('# Proposal CA-2026-0016\n\n<script>x</script>\n', { headers: { 'Content-Type': 'text/markdown' } })),
+  http.get(`${API}/v1/me/chat-notice`, () => HttpResponse.json({ text: NOTICE, version: 'abc123def456', acknowledged_at: null })),
+  http.post(`${API}/v1/me/chat-notice/ack`, () => HttpResponse.json({ text: NOTICE, version: 'abc123def456', acknowledged_at: '2026-11-17T08:00:00+00:00' })),
   http.post(`${API}/v1/cases/:id/report`, () => HttpResponse.json({ version: 2, stale: false, reasons: [] }, { status: 201 })),
   http.post(`${API}/v1/auth/token`, () => HttpResponse.json({ access_token: 'test-token', token_type: 'bearer', expires_in: 1800 })),
   http.get(`${API}/v1/me`, () => HttpResponse.json({ user_id: 'u-1', username: 'demo.preparer', role: 'preparer' })),

@@ -91,13 +91,20 @@ class SqlLedger:
                 actor=self.actor,
             )
 
-    def audit(self, case_id: str | None, event_type: str, payload: dict[str, Any]) -> None:
+    def audit(
+        self,
+        case_id: str | None,
+        event_type: str,
+        payload: dict[str, Any],
+        *,
+        actor: str | None = None,
+    ) -> None:
         with transaction(self.engine) as s:
             writes.append_audit(
                 s,
                 tenant_id=self.tenant_id,
                 case_id=case_id,
-                actor=self.actor,
+                actor=actor or self.actor,
                 event_type=event_type,
                 payload=payload,
             )

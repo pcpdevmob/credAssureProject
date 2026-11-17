@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 from credassure.core.errors import ApiErrorCode
 from credassure.gateway.deps import Svc, User
 from credassure.gateway.problems import ProblemError
+from credassure.gateway.supervisor_service import acknowledge_notice, notice_state
 from credassure.ledger import reads
 from credassure.ledger.session import transaction
 from credassure.security.auth import (
@@ -68,3 +69,15 @@ def me(who: User, svc: Svc) -> dict[str, Any]:
         "username": user.username if user else None,
         "role": who.role.value,
     }
+
+
+@router.get("/me/chat-notice")
+def chat_notice(who: User, svc: Svc) -> dict[str, Any]:
+    """Scope #40: the copilot first-use notice and whether this user acknowledged this version."""
+    return notice_state(svc, who)
+
+
+@router.post("/me/chat-notice/ack")
+def ack_chat_notice(who: User, svc: Svc) -> dict[str, Any]:
+    """Scope #40: store the acknowledgement (once per user and notice version, audited)."""
+    return acknowledge_notice(svc, who)

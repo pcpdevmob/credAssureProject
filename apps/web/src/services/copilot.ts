@@ -24,7 +24,14 @@ type PassageWire = { chunk_id: string; doc_id: string; title: string; section: s
 /** Only web links are offered as links: a stored URL is data, never a script or other scheme. */
 export const safeUrl = (u: string | null): string | null => { try { return u && ['http:', 'https:'].includes(new URL(u).protocol) ? u : null; } catch { return null; } };
 
+export interface ChatNotice { text: string; version: string; acknowledgedAt: string | null }
+type NoticeWire = { text: string; version: string; acknowledged_at: string | null };
+const mapNotice = (w: NoticeWire): ChatNotice => ({ text: w.text, version: w.version, acknowledgedAt: w.acknowledged_at });
+
 export const copilotService = {
+  /** #40: the first-use notice and this user's stored acknowledgement (server-side, per notice version). */
+  async notice(): Promise<ChatNotice> { return mapNotice(await ok(gw.GET('/v1/me/chat-notice')) as unknown as NoticeWire); },
+  async acknowledge(): Promise<ChatNotice> { return mapNotice(await ok(gw.POST('/v1/me/chat-notice/ack')) as unknown as NoticeWire); },
   /** The text behind a citation, from the gateway under the filters the answer used. `quote` (the cited sentence) centres an L3 excerpt. */
   async passage(caseId: string, chunkId: string, quote?: string): Promise<CitedPassage> {
     const w = await ok(gw.GET('/v1/cases/{case_id}/citations/{chunk_id}', { params: { path: { case_id: caseId, chunk_id: chunkId }, query: quote ? { quote: quote.slice(0, 1000) } : {} } })) as unknown as PassageWire;

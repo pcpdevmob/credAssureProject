@@ -3341,6 +3341,64 @@
           "auth"
         ]
       }
+    },
+    "/v1/me/chat-notice": {
+      "get": {
+        "description": "Scope #40: the copilot first-use notice and whether this user acknowledged this version.",
+        "operationId": "chat_notice_v1_me_chat_notice_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Chat Notice V1 Me Chat Notice Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Chat Notice",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/v1/me/chat-notice/ack": {
+      "post": {
+        "description": "Scope #40: store the acknowledgement (once per user and notice version, audited).",
+        "operationId": "ack_chat_notice_v1_me_chat_notice_ack_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Ack Chat Notice V1 Me Chat Notice Ack Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Ack Chat Notice",
+        "tags": [
+          "auth"
+        ]
+      }
     }
   }
 }
