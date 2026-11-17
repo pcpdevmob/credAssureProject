@@ -7,6 +7,7 @@ and scanned."""
 from __future__ import annotations
 
 import hashlib
+import sqlite3
 from collections.abc import Callable
 from datetime import date
 from pathlib import Path
@@ -44,6 +45,10 @@ DOCS = [
     _doc("PUB", "The guarantee fee is charged on the guaranteed amount."),
     _doc("ACT", LONG + f" {NEEDLE} " + LONG, legal_basis="L3"),
     _doc("ACT-SHORT", "A short Act section.", legal_basis="L3"),
+    _doc("L4-LONG", LONG, legal_basis="L4"),
+    _doc("NO-BASIS", LONG),  # its legal_basis is set to NULL after ingest (the column is nullable)
+    _doc("OPEN-L1", LONG, legal_basis="L1"),
+    _doc("GAZETTE-L2", LONG, legal_basis="L2"),
     _doc("OLD", "Old rule.", superseded_by="PUB"),
     _doc("INJ", f"Fee text. {INJECTION}"),
     _doc("KFS-A", "Fees for A.", collection="kfs", case_id="CASE-A", tenant_id="default",
@@ -62,12 +67,12 @@ def corpus(tmp_path: Path) -> Path:
         embed=lambda texts: [[1.0, 0.0, 0.0, 0.0] for _ in texts], embed_model="stub",
         audit=lambda *_: None,
     )  # fmt: skip
+    with sqlite3.connect(db) as c:
+        c.execute("UPDATE documents SET legal_basis = NULL WHERE doc_id = 'NO-BASIS'")
     return db
 
 
 def _chunk(db: Path, doc_id: str) -> str:
-    import sqlite3
-
     with sqlite3.connect(db) as c:
         row = c.execute(
             "SELECT chunk_id FROM chunks WHERE doc_id=? AND strategy='section' ORDER BY ordinal",
@@ -155,6 +160,21 @@ def test_UI06_L3_text_is_a_600_character_window_around_the_quote(api: Any) -> No
     assert NEEDLE in b["text"] and b["source_url"] == "https://example.gov.in/ACT"
     top = _get(client, h, case, chunks[0]).json()  # no quote: the start of the chunk
     assert len(top["text"]) <= 600 and NEEDLE not in top["text"]
+
+
+def test_UI06_L4_and_unknown_basis_are_capped_but_L1_and_L2_are_returned_in_full(api: Any) -> None:
+    client, h, db = api
+    case = _new_case(client, h)
+    capped = {
+        d: _get(client, h, case, _chunk(db, d)).json() for d in ("L4-LONG", "NO-BASIS", "ACT")
+    }
+    for doc, b in capped.items():
+        assert b["truncated"] is True and len(b["text"]) <= 600, doc
+        assert b["source_url"] == f"https://example.gov.in/{doc}", doc  # the link always comes
+    assert capped["NO-BASIS"]["legal_basis"] is None  # an unknown basis fails closed
+    for doc in ("OPEN-L1", "GAZETTE-L2"):
+        b = _get(client, h, case, _chunk(db, doc)).json()
+        assert b["truncated"] is False and len(b["text"]) > 600, doc  # open data: shown in full
 
 
 def test_UI06_short_L3_passage_is_not_marked_truncated(api: Any) -> None:

@@ -4,7 +4,9 @@ The same ADR 0019 filter that governed the answer governs this read (`Searcher.p
 passage that was not in force for the case, another case's KFS or another tenant's document is a
 404 with one message for every cause: the route never confirms that a document exists (SUP-08).
 The text is data (BR-15): it is returned as plain text, scanned for injection, never as HTML.
-Legal basis L3 (Acts reproduced under s.52(1)(q)(ii)) is limited to a 600 character excerpt."""
+Only legal bases L1 (open data), L2 (Gazette matter) and L5 (team-owned) are shown in full.
+Every other basis, L3 and L4 included, and an unknown or missing one, is limited to a 600
+character excerpt."""
 
 from datetime import date
 from typing import Annotated, Literal
@@ -22,7 +24,8 @@ from credassure.retrieval.search import Filters, Searcher
 from credassure.security.injection import scan
 
 router = APIRouter(prefix="/v1", tags=["cases"])
-L3_LIMIT = 600  # characters of an L3 passage that may be shown
+FULL_TEXT_BASES = frozenset({"L1", "L2", "L5"})  # anything else is capped: fail closed
+EXCERPT_LIMIT = 600  # characters of a capped passage that may be shown
 
 
 class CitationPassage(BaseModel):
@@ -35,12 +38,12 @@ class CitationPassage(BaseModel):
     source_url: str | None
     text: str  # display-only plain text: never render it as HTML
     text_format: Literal["plain"] = "plain"
-    truncated: bool  # True when the text is a 600 character excerpt (legal basis L3)
+    truncated: bool  # True when the text is a 600 character excerpt (legal basis not L1, L2 or L5)
     injection_flagged: bool
     injection_flags: list[str]
 
 
-def excerpt(text: str, quote: str | None, limit: int = L3_LIMIT) -> str:
+def excerpt(text: str, quote: str | None, limit: int = EXCERPT_LIMIT) -> str:
     """At most ``limit`` characters, centred on the longest word of ``quote`` found in the text
     (else the start). A window, not a summary: the characters are the source's own."""
     if len(text) <= limit:
@@ -76,7 +79,7 @@ def citation(
         )
     if found is None:
         raise ProblemError(404, "no such passage for this case", ApiErrorCode.NOT_FOUND)
-    short = found.legal_basis == "L3" and len(found.text) > L3_LIMIT
+    short = found.legal_basis not in FULL_TEXT_BASES and len(found.text) > EXCERPT_LIMIT
     text = excerpt(found.text, quote) if short else found.text
     flags = scan(text)
     return CitationPassage(

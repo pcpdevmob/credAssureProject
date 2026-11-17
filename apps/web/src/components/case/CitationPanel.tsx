@@ -1,5 +1,5 @@
 // A cited source opens in a side panel (UI-06): the passage text from the gateway (plain text, never HTML), its document,
-// section, effective date, legal basis and source link. Legal basis L3 text arrives already shortened by the gateway.
+// section, effective date, legal basis and source link. Text under any basis other than L1, L2 or L5 arrives already shortened by the gateway.
 import { useEffect, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X, ShieldAlert } from 'lucide-react';
@@ -33,7 +33,7 @@ export default function CitationPanel({ caseId, c, quote, onClose, returnFocus }
       {c && !p && err === undefined && <Skeleton className="mt-4 h-32" />}
       {p?.injectionFlagged && <p className="mt-4 flex gap-2 rounded-xl bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200"><ShieldAlert aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />This text contains instructions aimed at an AI. They were ignored; it is shown only as a quotation.</p>}
       {p && <blockquote className="mt-4 whitespace-pre-wrap break-words rounded-xl bg-sunken p-3 text-sm text-ink-900">{p.text}</blockquote>}
-      {p?.truncated && <p className="mt-2 text-xs text-ink-700">Shortened to 600 characters (legal basis {p.legalBasis}). Read the rest at the source.</p>}
+      {p?.truncated && <p className="mt-2 text-xs text-ink-700">Shortened to 600 characters{p.legalBasis ? ` (legal basis ${p.legalBasis})` : ''}. Read the rest at the source.</p>}
       {link && <a href={link} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-sm font-medium text-brand-700 underline">Open the source document</a>}
     </Dialog.Content></Dialog.Portal></Dialog.Root>);
 }

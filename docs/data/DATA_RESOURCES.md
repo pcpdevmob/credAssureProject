@@ -28,7 +28,7 @@ Every former *verify* row now has a primary-publisher URL. Open points that must
 | L1 | Government Open Data License – India (data.gov.in) | Use, adapt, redistribute with attribution |
 | L2 | Copyright Act 1957 s.52(1)(q)(i): Official Gazette matter (except Acts) | Store, index, quote, redistribute |
 | L3 | s.52(1)(q)(ii): Acts reproducible with commentary | Store/index locally; quote short passages with citation; never commit raw text |
-| L4 | Public documents; research fair dealing s.52(1)(a); facts not copyrightable | Local research use; extract numeric facts; never redistribute files |
+| L4 | Public documents; research fair dealing s.52(1)(a); facts not copyrightable | Local research use; extract numeric facts; short quotes with citation in the app; files never redistributed |
 | L5 | Team-owned synthetic data, eval sets, code | Release: data CC BY 4.0, code MIT |
 
 Court judgments (Supreme Court, High Courts) are **L2**: Copyright Act 1957 s.52(1)(q)(iv) permits reproducing a judgment
