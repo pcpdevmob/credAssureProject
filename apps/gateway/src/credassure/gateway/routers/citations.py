@@ -58,7 +58,7 @@ def excerpt(text: str, quote: str | None, limit: int = L3_LIMIT) -> str:
 
 @router.get("/cases/{case_id}/citations/{chunk_id:path}", response_model=CitationPassage)
 def citation(
-    case_id: str,
+    case_id: Annotated[str, PathParam(min_length=1, max_length=32)],
     chunk_id: Annotated[str, PathParam(min_length=1, max_length=160)],
     who: User,
     svc: Svc,

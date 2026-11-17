@@ -2173,6 +2173,8 @@
             "name": "case_id",
             "required": true,
             "schema": {
+              "maxLength": 32,
+              "minLength": 1,
               "title": "Case Id",
               "type": "string"
             }
