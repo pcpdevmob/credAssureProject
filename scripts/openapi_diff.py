@@ -38,6 +38,11 @@ def _type(spec: dict[str, Any], s: Any) -> Any:
     return s.get("type")
 
 
+def _enum(spec: dict[str, Any], s: Any) -> set[str]:
+    s = _resolve(spec, s)
+    return {str(v) for v in s.get("enum", [])} if isinstance(s, dict) else set()
+
+
 def _props(spec: dict[str, Any], s: Any) -> tuple[dict[str, Any], set[str]]:
     s = _resolve(spec, s) or {}
     return s.get("properties", {}), set(s.get("required", []))
@@ -89,6 +94,9 @@ def diff(base: dict[str, Any], head: dict[str, Any]) -> list[str]:
                 for name in sorted(set(op) & set(np_)):
                     if _type(base, op[name]) != _type(head, np_[name]):
                         out.append(f"{where}: request property {name} changed type")
+                    gone = _enum(base, op[name]) - _enum(head, np_[name])
+                    if gone:  # a value clients may send is no longer accepted
+                        out.append(f"{where}: request property {name} drops {sorted(gone)}")
             # responses
             for code, resp in old.get("responses", {}).items():
                 if not code.startswith("2"):

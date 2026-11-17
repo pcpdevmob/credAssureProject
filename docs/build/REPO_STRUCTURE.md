@@ -115,7 +115,7 @@ credassure/
 │   └── build/                    # PHASE_PROMPTS.md, BUILD_SCOPE.md, REPO_STRUCTURE.md (this file)
 │
 ├── .github/
-│   ├── workflows/                # ci.yml (lint, types, tests, import-linter, licences, openapi diff), eval-fast.yml, release.yml
+│   ├── workflows/                # removed on purpose (cd57a3e); .githooks/pre-push runs the gates (ADR 0027)
 │   ├── CODEOWNERS                # one owner per agents/<x>/, shared packages need two reviewers
 │   └── pull_request_template.md  # requirement IDs, scope items, eval impact, screenshots for UI
 ├── .claude/                      # Claude Code settings, hooks, commands, subagents

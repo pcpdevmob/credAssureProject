@@ -34,7 +34,10 @@ BASE: dict[str, Any] = {
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "properties": {"comment": {"type": "string"}},
+                                "properties": {
+                                    "comment": {"type": "string"},
+                                    "rule": {"type": "string", "enum": ["hold", "director", "vp"]},
+                                },
                                 "required": [],
                             }
                         }
@@ -101,6 +104,12 @@ def test_scope28_identical_and_additive_changes_pass() -> None:
                 "application/json"
             ]["schema"].update(required=["comment"]),
             "new required request property comment",
+        ),
+        (
+            lambda h: h["paths"]["/v1/cases/{id}"]["post"]["requestBody"]["content"][
+                "application/json"
+            ]["schema"]["properties"]["rule"].update(enum=["hold", "director"]),
+            "request property rule drops ['vp']",
         ),
     ],
 )
