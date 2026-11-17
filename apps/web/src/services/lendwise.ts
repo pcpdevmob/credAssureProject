@@ -36,10 +36,11 @@ export interface LendWiseService {
   compare(c: CaseRecord): Promise<OfferView | null>;
   negotiate(c: CaseRecord): Promise<Negotiation>;
   /** Approver evidence (APR-04, BR-09): `negotiation_in_progress`, `revised_offer_not_reaudited`. */
-  warnings(c: CaseRecord): Promise<string[]>;
+  /** Plus the report version on screen, which approve echoes back (#6). */
+  warnings(c: CaseRecord): Promise<{ warnings: string[]; reportVersion: number | null }>;
 }
 export const lendWiseService: LendWiseService = {
   async compare(c) { return mapOffers(c.id, await ok(gw.GET('/v1/cases/{case_id}/offers', { params: { path: { case_id: c.id } } })) as unknown as OfferResp); },
   async negotiate(c) { return mapNegotiation(await ok(gw.POST('/v1/agents/lendwise/cases/{case_id}/negotiate', { params: { path: { case_id: c.id } } })) as unknown as NegResp); },
-  async warnings(c) { return (await ok(gw.GET('/v1/cases/{case_id}/inbox', { params: { path: { case_id: c.id } } })) as unknown as { warnings: string[] }).warnings; },
+  async warnings(c) { const r = await ok(gw.GET('/v1/cases/{case_id}/inbox', { params: { path: { case_id: c.id } } })) as unknown as { warnings: string[]; report_version: number | null }; return { warnings: r.warnings, reportVersion: r.report_version }; },
 };

@@ -121,6 +121,29 @@ def test_scope6_UI07_stale_report_blocks_approve_until_regenerated(
     assert client.post(f"/v1/cases/{case_id}/decision", json=body, headers=d).status_code == 200
 
 
+def test_scope6_approve_names_the_report_version_the_approver_saw(
+    client: TestClient, login: Login, run_case: Callable[[TestClient], str]
+) -> None:
+    """Security review S1: the Director saw v1; the preparer regenerates to v2; an approve that
+    still names v1 is refused, and one that names v2 goes through."""
+    case_id, d, inbox = _stale_inbox(client, login, run_case)
+    seen = inbox["report_version"]
+    assert (
+        client.post(f"/v1/cases/{case_id}/report", headers=login(client, "demo.preparer")).json()[
+            "version"
+        ]
+        == seen + 1
+    )
+    fresh = client.get(f"/v1/cases/{case_id}/inbox", headers=d).json()
+    body = {"decision": "approve", "comment": "ok", "expected_version": fresh["row_version"]}
+    old = client.post(
+        f"/v1/cases/{case_id}/decision", json={**body, "report_version": seen}, headers=d
+    )
+    assert old.status_code == 409 and old.json()["code"] == "REPORT_STALE"
+    new = {**body, "report_version": fresh["report_version"]}
+    assert client.post(f"/v1/cases/{case_id}/decision", json=new, headers=d).status_code == 200
+
+
 def test_scope6_UI07_stale_report_still_allows_reject_and_return(
     client: TestClient, login: Login, run_case: Callable[[TestClient], str]
 ) -> None:

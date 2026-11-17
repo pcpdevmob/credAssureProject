@@ -416,3 +416,12 @@ def test_LW12_negotiation_waits_for_the_case_run_lock(client: Any, login: Login)
     assert (
         client.post(f"/v1/agents/lendwise/cases/{case_id}/negotiate", headers=h).status_code == 200
     )
+
+
+def test_BR15_reply_shown_only_for_a_sent_round() -> None:
+    """Security review N4: a later round blocked by the Critic must not show the old reply."""
+    from credassure.gateway.supervisor_service import _reply
+
+    f = {"reply_text": "We waive the fee.", "round": "1", "reply_flags": "none", "status": "sent"}
+    assert _reply(f) == {"round": 1, "text": "We waive the fee.", "injection_flags": []}
+    assert _reply({**f, "status": "blocked"}) is None

@@ -449,6 +449,7 @@ def test_LW13_BR15_NFR07_lender_reply_is_stored_masked_flagged_and_display_only(
     assert facts["lw.negotiation.reply_flags"] != "none"
     assert str(facts["lw.negotiation.round"]) == "1"
     for agent in ("copilot", "critic", "lendwise"):
-        with pytest.raises(RegistryError):
-            authorize_fact(agent, "lw.negotiation.reply_text")
+        for key in ("lw.negotiation.reply_text", "lw.negotiation.r2.reply_text"):  # LW-15 rounds
+            with pytest.raises(RegistryError):
+                authorize_fact(agent, key)
     authorize_fact("lendwise", "lw.negotiation.reply_text", write=True)  # the owner writes it

@@ -88,4 +88,5 @@ ledger_read_prefixes:
   copilot: ["onb.gate", "wc.", "lw.", "ver."]  # get_case_facts; never HR rule detail
 # Display-only facts: written by their owner, shown to people by the API, never read by any agent
 # (so never put into a model prompt). The lender's reply is untrusted text (BR-15, Phase 10b).
-display_only: ["lw.negotiation.reply_text"]
+# Matched as a key suffix, so a later round's reply (LW-15, e.g. lw.negotiation.r2.reply_text) is covered.
+display_only: [".reply_text"]

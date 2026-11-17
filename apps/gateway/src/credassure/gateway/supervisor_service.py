@@ -432,7 +432,7 @@ def _plain(value: Decimal) -> str:
 def _reply(f: dict[str, str]) -> dict[str, Any] | None:
     """The lender's reply for people to read: masked at write time, plain text, never parsed
     or given to a model (BR-15). Flags are the injection scan of the original reply."""
-    if "reply_text" not in f:
+    if "reply_text" not in f or f.get("status") != "sent":  # a blocked later round shows none
         return None
     flags = f.get("reply_flags", "none")
     return {

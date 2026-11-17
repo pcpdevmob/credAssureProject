@@ -1176,6 +1176,8 @@ export interface components {
             expected_version: number;
             /** Password */
             password?: string | null;
+            /** Report Version */
+            report_version?: number | null;
             /** Return Stage */
             return_stage?: ("onboarding" | "working_capital" | "lendwise") | null;
         };

@@ -197,8 +197,11 @@ def inbox(who: User, svc: Svc) -> dict[str, Any]:
 @router.get("/cases/{case_id}/inbox")
 def case_inbox(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
     case = visible_case(svc, who, case_id)
+    with transaction(svc.engine) as s:
+        shown = report.state(s, case)["version"]
     return {
         "warnings": _warnings(svc, case),
+        "report_version": shown,  # the client echoes it on approve (Decision.report_version)
         "case_id": case.id,
         "status": case.status,
         "route": case.route,
@@ -224,6 +227,17 @@ class Decision(BaseModel):
     expected_version: int = Field(ge=0, le=2**31 - 1)
     # NFR-07 step-up: the approver's own password, required to approve above ₹1.5 crore.
     password: SecretStr | None = Field(default=None, max_length=256)
+    # #6: the report version the approver was shown; approve is refused if it is no longer current.
+    report_version: int | None = Field(default=None, ge=0, le=2**31 - 1)
+
+
+def _report_current(svc: Svc, case: Any, shown: int | None) -> None:
+    """#6, ADR 0003 §3: approve only a fresh report, and (when the client says which version it
+    displayed) only that version. Reject and return never call this."""
+    with transaction(svc.engine) as s:
+        st = report.state(s, case)
+    if st["stale"] or (shown is not None and shown != st["version"]):
+        raise ProblemError(409, "report stale, regenerate", ApiErrorCode.REPORT_STALE)
 
 
 def _step_up(
@@ -274,6 +288,8 @@ def decide(
             "return needs return_stage; approve and reject must not have one",
             errors=[{"field": "return_stage", "row": None, "reason": "inconsistent"}],
         )
+    if body.decision == "approve":  # cheap pre-check: no password prompt for a stale report
+        _report_current(svc, case, body.report_version)
     if body.decision == "approve" and svc.settings.approval_step_up:
         _step_up(svc, who, case, body.password, request)
     back = Stage(body.return_stage) if body.return_stage else None
@@ -283,11 +299,8 @@ def decide(
             # S1: fail closed. The return is not recorded as applied; the case is FAILED.
             svc.supervisor.fail_return(case.id, back)
             raise ProblemError(409, "no approval is pending for this case", ApiErrorCode.CONFLICT)
-        if body.decision == "approve":  # under the lock: nothing changes between check and record
-            with transaction(svc.engine) as s:
-                stale = report.state(s, case)["stale"]
-            if stale:  # #6: never approve figures the proposal the approver read does not show
-                raise ProblemError(409, "report stale, regenerate", ApiErrorCode.REPORT_STALE)
+        if body.decision == "approve":  # authoritative, under the lock: no change before the record
+            _report_current(svc, case, body.report_version)
         # NFR-07: the comment is redacted before it reaches the approval row and its audit event.
         approval = svc.ledger.record_decision(
             case.id,

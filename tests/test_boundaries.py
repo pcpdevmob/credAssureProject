@@ -34,9 +34,10 @@ def test_chroma_runs_embedded_only() -> None:
     ]
     assert code == []
     # ADR 0024: no Chroma network listener either (server module or the `chroma run` CLI).
-    listener = ("chromadb.server", "chromadb.app", "chroma run")
+    listener = ("chromadb.server", "chromadb.app", "chromadb.cli", "chroma run", "chroma-server")
     files = [ROOT / "Makefile", *(ROOT / "scripts").rglob("*"), *(ROOT / "deploy").rglob("*")]
-    files += [p for top in ("apps", "agents", "packages") for p in (ROOT / top).rglob("*.py")]
+    tops = ("apps", "agents", "packages", "evaluation", "data/generators")
+    files += [p for top in tops for p in (ROOT / top).rglob("*.py")]
     hits = [
         str(p.relative_to(ROOT))
         for p in files

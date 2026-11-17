@@ -78,7 +78,7 @@ from credassure.observability.log import configure_logging, log_context, set_red
 from credassure.retrieval.search import Filters, Searcher, make_reranker, resolve
 from credassure.security import pii
 from credassure.security.auth import verify_token
-from credassure.tools.registry import RegistryError, authorize_fact
+from credassure.tools.registry import RegistryError, authorize_fact, is_display_only
 from credassure.tools.runner import ToolRunner
 
 _log = logging.getLogger("credassure.gateway")
@@ -249,7 +249,8 @@ def _resolver(settings: Settings, engine: Engine) -> Callable[[str], Resolve | N
 def _facts(settings: Settings, engine: Engine, case_id: str) -> dict[str, Fact]:
     with transaction(engine) as s:
         rows = reads.list_for_case(s, settings.tenant_id, case_id)  # key, version order
-    return {f.key: Fact(f.value_text, f.unit) for f in rows}  # the last version wins
+    # the last version wins; display-only text (the lender's reply) never counts as a figure
+    return {f.key: Fact(f.value_text, f.unit) for f in rows if not is_display_only(f.key)}
 
 
 def _verify_claims(settings: Settings, engine: Engine) -> Callable[..., list[CriticFinding]]:

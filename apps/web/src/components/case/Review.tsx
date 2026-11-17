@@ -36,9 +36,9 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
   const [comment, setComment] = useState(''); const [back, setBack] = useState<ReturnStage>('working_capital');
   const [open, setOpen] = useState(false); const [typed, setTyped] = useState(''); const [pw, setPw] = useState(''); const [pwNeeded, setPwNeeded] = useState(false);
   const [busy, setBusy] = useState(false); const [err, setErr] = useState<unknown>(); const [done, setDone] = useState('');
-  const [warnings, setWarnings] = useState<string[]>([]); const [warnErr, setWarnErr] = useState(false);
+  const [warnings, setWarnings] = useState<string[]>([]); const [shown, setShown] = useState<number | null>(null); const [warnErr, setWarnErr] = useState(false);
   const [tick, setTick] = useState(0); const [regen, setRegen] = useState(false); const [regenErr, setRegenErr] = useState<unknown>();
-  useEffect(() => { lendWiseService.warnings(c).then(w => { setWarnings(w); setWarnErr(false); }).catch(() => setWarnErr(true)); }, [c.id, c.stage, tick]); // the decision is enforced server-side either way, but say so when the check fails
+  useEffect(() => { lendWiseService.warnings(c).then(w => { setWarnings(w.warnings); setShown(w.reportVersion); setWarnErr(false); }).catch(() => setWarnErr(true)); }, [c.id, c.stage, tick]); // the decision is enforced server-side either way, but say so when the check fails
   // #6, ADR 0003 §3: the gateway refuses approve with REPORT_STALE; the UI explains it and offers the preparer the fix.
   const stale = warnings.includes('report_stale');
   const regenerate = async () => { setRegen(true); setRegenErr(undefined); try { await reportService.regenerate(c.id); setTick(t => t + 1); onChange(); } catch (e) { setRegenErr(e); } setRegen(false); };
@@ -47,7 +47,7 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
   const needsComment = choice !== 'APPROVED' && !comment.trim();
   const confirm = async () => {
     setBusy(true); setErr(undefined);
-    try { await approvalService.decide(c, choice, comment, back, pwNeeded ? pw : undefined); setOpen(false); setPw(''); setDone(`${DONE[choice]}: ${c.id}.`); onChange(); }
+    try { await approvalService.decide(c, choice, comment, back, pwNeeded ? pw : undefined, shown); setOpen(false); setPw(''); setDone(`${DONE[choice]}: ${c.id}.`); onChange(); }
     catch (e) { setErr(e); if (e instanceof ApiProblem && e.code === 'STEP_UP_REQUIRED') { setPwNeeded(true); setPw(''); } }
     setBusy(false);
   };

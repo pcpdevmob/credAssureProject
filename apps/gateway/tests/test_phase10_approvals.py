@@ -126,7 +126,15 @@ def test_NFR07_step_up_required_when_validated_amount_unknown(
     client: TestClient, login: Login, new_case: Callable[[TestClient], str]
 ) -> None:
     """Fail closed: no GO funding gate or no amount means the password is required."""
+    from credassure.gateway import report
+    from credassure.ledger import reads
+    from credassure.ledger.session import transaction
+
     case_id = new_case(client)
-    client.app.state.services.ledger.route(case_id, "director_finance")  # type: ignore[attr-defined]
+    svc = client.app.state.services  # type: ignore[attr-defined]
+    svc.ledger.route(case_id, "director_finance")
+    with transaction(svc.engine) as s:
+        case = reads.get_case(s, svc.settings.tenant_id, case_id)
+    report.snapshot(svc.engine, case, svc.ledger.put_fact)  # current report: only step-up tested
     r = _approve(client, login(client, "demo.director"), case_id)
     assert r.status_code == 403 and r.json()["code"] == "STEP_UP_REQUIRED"

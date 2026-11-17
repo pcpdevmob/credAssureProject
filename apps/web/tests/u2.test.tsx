@@ -69,7 +69,7 @@ describe('stale report (ADR 0003 §3, Phase 10b)', () => {
   const c = { ...toCase(caseSummary as never), stage: 'AWAITING_APPROVAL', routedTo: 'DIRECTOR_FINANCE' } as never;
   it('disables Approve with the reason; reject and return stay available', async () => {
     const { lendWiseService } = await import('@/services/lendwise');
-    const w = vi.spyOn(lendWiseService, 'warnings').mockResolvedValue(['report_stale']);
+    const w = vi.spyOn(lendWiseService, 'warnings').mockResolvedValue({ warnings: ['report_stale'], reportVersion: 1 });
     render(<ProvenanceProvider><Review c={c} user={director} onChange={() => undefined} /></ProvenanceProvider>);
     expect(await screen.findByText(STALE_REASON)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Approve proposal' })).toBeDisabled();
@@ -82,7 +82,7 @@ describe('stale report (ADR 0003 §3, Phase 10b)', () => {
   it('offers the preparer Regenerate, which makes a new version and re-checks', async () => {
     const { lendWiseService } = await import('@/services/lendwise');
     const { reportService } = await import('@/services/report');
-    const w = vi.spyOn(lendWiseService, 'warnings').mockResolvedValueOnce(['report_stale']).mockResolvedValue([]);
+    const w = vi.spyOn(lendWiseService, 'warnings').mockResolvedValueOnce({ warnings: ['report_stale'], reportVersion: 1 }).mockResolvedValue({ warnings: [], reportVersion: 2 });
     const r = vi.spyOn(reportService, 'regenerate').mockResolvedValue({ version: 2, stale: false, reasons: [] });
     const onChange = vi.fn();
     render(<ProvenanceProvider><Review c={c} user={preparer} onChange={onChange} /></ProvenanceProvider>);

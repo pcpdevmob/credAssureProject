@@ -215,6 +215,19 @@
             ],
             "title": "Password"
           },
+          "report_version": {
+            "anyOf": [
+              {
+                "maximum": 2147483647.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Report Version"
+          },
           "return_stage": {
             "anyOf": [
               {

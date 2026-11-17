@@ -67,6 +67,11 @@ def authorize(
         raise RegistryError(ApiErrorCode.CASE_REQUIRED)
 
 
+def is_display_only(key: str) -> bool:
+    """True for a fact people may read but no agent may (registry ``display_only`` key suffixes)."""
+    return key.endswith(tuple(str(x) for x in _load().get("display_only") or []))
+
+
 def authorize_fact(agent: AgentName | str, key: str, *, write: bool = False) -> None:
     """Raise ``RegistryError`` unless ``agent`` may read (or, with ``write``, write) fact ``key``.
 
@@ -75,7 +80,7 @@ def authorize_fact(agent: AgentName | str, key: str, *, write: bool = False) -> 
     """
     name = agent.value if isinstance(agent, AgentName) else agent
     loaded = _load()
-    if not write and key in (loaded.get("display_only") or []):
+    if not write and is_display_only(key):
         raise RegistryError(ApiErrorCode.TOOL_NOT_ALLOWED)
     prefixes = loaded.get("ledger_prefixes") or {}
     reads = {} if write else loaded.get("ledger_read_prefixes") or {}
