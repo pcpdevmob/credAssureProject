@@ -388,3 +388,46 @@ def test_NFR03_every_call_logs_tokens_and_latency(caplog: pytest.LogCaptureFixtu
     assert rec.prompt == "onb_explain" and rec.total_tokens == 7  # type: ignore[attr-defined]
     assert rec.completion_tokens == 6 and rec.latency_ms >= 0  # type: ignore[attr-defined]
     assert rec.cached is False  # type: ignore[attr-defined]
+
+
+def test_SUP07_parallel_calls_reserve_the_budget_before_sending() -> None:
+    """Phase 10b item 6: two calls in flight hold 2 x 400 of a 700 cap, so a third is refused
+    before it reaches the model. Before the fix all three passed check() at used=0."""
+    import contextvars
+    import threading
+
+    inside, release = threading.Semaphore(0), threading.Event()
+
+    def blocking(request: httpx.Request) -> httpx.Response:
+        inside.release()
+        release.wait(5)
+        return _ok(tokens=300)
+
+    llm, _ = make(Script(_ok()), max_tokens=400)
+    llm._client = OpenAICompatLLM(  # same client, blocking transport
+        "http://model.test/v1", "k", "m",
+        http_client=httpx.Client(transport=httpx.MockTransport(blocking)),
+    )._client  # fmt: skip
+    with stage_budget(700) as budget:
+        threads = [
+            threading.Thread(target=contextvars.copy_context().run, args=(llm.complete, "x"))
+            for _ in range(2)
+        ]
+        for t in threads:
+            t.start()
+            assert inside.acquire(timeout=5)  # this call is in flight, its reservation held
+        assert budget.used == 0 and budget.reserved == 800
+        with pytest.raises(BudgetExceeded):
+            llm.complete("third")
+        release.set()
+        for t in threads:
+            t.join(5)
+    assert (budget.used, budget.reserved) == (600, 0)  # reservations swapped for real usage
+
+
+def test_SUP07_a_failed_call_releases_its_reservation() -> None:
+    llm, _ = make(Script(httpx.Response(404)), max_tokens=400)
+    with stage_budget(700) as budget:
+        with pytest.raises(LLMError):
+            llm.complete("x")
+    assert (budget.used, budget.reserved) == (0, 0)

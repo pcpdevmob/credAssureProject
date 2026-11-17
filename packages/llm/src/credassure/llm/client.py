@@ -96,10 +96,6 @@ class OpenAICompatLLM:
         if self._cache is not None and (hit := self._cache.get(key)) is not None:
             _log.info("llm call", extra={"prompt": name, "prompt_version": version, "cached": True})
             return hit
-        budget = current_budget()
-        if budget is not None:
-            budget.check()
-        self.breaker.before_call()  # last check: a half-open probe slot is taken here
         extra: dict[str, Any] = {}
         caps = [c for c in (self._max_tokens, prompt_max_tokens(name)) if c is not None]
         if caps:
@@ -111,18 +107,26 @@ class OpenAICompatLLM:
                 "type": "json_schema",
                 "json_schema": {"name": name, "schema": dict(json_schema)},
             }
-        reply = self._send(messages, extra)
-        message = reply.choices[0].message
-        raw = message.content or ""
-        # Safety net: thinking can still arrive inline (<think>) or as Ollama's `reasoning` field.
-        # Neither reaches the caller, but both are charged to the budget.
-        thought = "".join(_THINK.findall(raw)) + str(
-            (message.model_extra or {}).get("reasoning") or ""
-        )
-        text = redact(_THINK.sub("", raw))
-        used = reply.usage.total_tokens if reply.usage else len(prompt + raw + thought) // 4
-        if budget is not None:
-            budget.charge(used)
+        budget = current_budget()
+        # Reserve before the call so parallel calls see each other (SUP-07, scope #22): the
+        # estimate is the prompt plus the reply cap; settle swaps it for the real count.
+        held = budget.reserve(len(prompt) // 4 + min(caps, default=0)) if budget else 0
+        used = 0
+        try:
+            self.breaker.before_call()  # last check: a half-open probe slot is taken here
+            reply = self._send(messages, extra)
+            message = reply.choices[0].message
+            raw = message.content or ""
+            # Safety net: thinking can still arrive inline (<think>) or as Ollama's `reasoning`
+            # field. Neither reaches the caller, but both are charged to the budget.
+            thought = "".join(_THINK.findall(raw)) + str(
+                (message.model_extra or {}).get("reasoning") or ""
+            )
+            text = redact(_THINK.sub("", raw))
+            used = reply.usage.total_tokens if reply.usage else len(prompt + raw + thought) // 4
+        finally:
+            if budget is not None:
+                budget.settle(held, used)
         _log.info(
             "llm call",
             extra={
