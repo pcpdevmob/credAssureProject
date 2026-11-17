@@ -22,3 +22,12 @@ Keep chromadb 1.5.9 and accept the risk, because the vulnerable code is not reac
 - If a Chroma server is ever needed, this ADR is void: keep it on the internal Compose network with no published port and
   re-assess the advisories first.
 - Detail and owner: `docs/security/risk-register.md`.
+
+## Re-check (Phase 10b, 2026-11-17)
+- `uv lock --upgrade-package chromadb` still resolves **1.5.9**: no fixed release. `make audit` passes with exactly the four
+  accepted IDs ignored (pip-audit counts 5 because PYSEC-2026-311 is listed twice).
+- **No network listener:** Chroma runs only as the in-process `PersistentClient` on a local directory. No Chroma HTTP server,
+  no `chroma run`, no `chromadb.server` / `chromadb.app` import, no Compose service. `tests/test_boundaries.py::
+  test_chroma_runs_embedded_only` now also fails on any of those in code, the Makefile, `scripts/` or `deploy/`.
+- Next re-check: G3 sign-off, then G4.
+

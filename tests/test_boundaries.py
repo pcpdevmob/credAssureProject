@@ -33,3 +33,15 @@ def test_chroma_runs_embedded_only() -> None:
         and any(s in p.read_text(encoding="utf-8") for s in ("HttpClient(", "AsyncHttpClient("))
     ]
     assert code == []
+    # ADR 0024: no Chroma network listener either (server module or the `chroma run` CLI).
+    listener = ("chromadb.server", "chromadb.app", "chroma run")
+    files = [ROOT / "Makefile", *(ROOT / "scripts").rglob("*"), *(ROOT / "deploy").rglob("*")]
+    files += [p for top in ("apps", "agents", "packages") for p in (ROOT / top).rglob("*.py")]
+    hits = [
+        str(p.relative_to(ROOT))
+        for p in files
+        if p.is_file()
+        and ".venv" not in p.parts
+        and any(s in p.read_text(encoding="utf-8", errors="ignore") for s in listener)
+    ]
+    assert hits == []
