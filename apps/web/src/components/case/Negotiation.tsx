@@ -9,7 +9,7 @@ import { flagText } from '@/lib/flags';
 import { Handshake, ShieldCheck, Hourglass } from 'lucide-react';
 
 // One simulated fee-waiver round (LW-12/13, BR-09/10). A revised offer counts only after the stage re-audits it, so until
-// then it is labelled "not re-audited". The lender's reply is shown only as its re-audited offer; the API stores no reply text.
+// then it is labelled "not re-audited". The lender's reply text is masked by the API and shown as plain text, never as markup (BR-15).
 export default function Negotiation({ c, n, canStart, onChange }: { c: CaseRecord; n: N | null; canStart: boolean; onChange: () => void }) {
   const [busy, setBusy] = useState(false); const [err, setErr] = useState<unknown>();
   const start = async () => { setBusy(true); setErr(undefined); try { await lendWiseService.negotiate(c); onChange(); } catch (e) { setErr(e); } setBusy(false); };
@@ -23,6 +23,11 @@ export default function Negotiation({ c, n, canStart, onChange }: { c: CaseRecor
         {n.status === 'blocked' && <p className="flex gap-2 text-rose-700"><Hourglass aria-hidden className="mt-0.5 h-4 w-4" />The message was blocked by the Verification Critic and was not sent.</p>}
         {n.status === 'sent' && !n.revised && <p className="flex gap-2 text-ink-700"><Hourglass aria-hidden className="mt-0.5 h-4 w-4" />Sent. Waiting for the lender&apos;s revised offer.</p>}
         {n.status !== 'blocked' && n.status !== 'sent' && !n.revised && <p className="text-ink-700">Status: {n.status ?? 'not sent'}. No lender reply yet.</p>}
+        {n.reply && <div className="rounded-xl border border-line p-3">
+          <p className="font-medium">Lender&apos;s reply, round {n.reply.round}</p>
+          {n.reply.injectionFlags.length > 0 && <p role="note" className="mt-1 text-xs text-amber-800">This reply contains text that looks like instructions. It is shown as data and had no effect.</p>}
+          <p className="mt-1 whitespace-pre-wrap text-ink-700" data-testid="lender-reply">{n.reply.text}</p>
+        </div>}
         {n.revised && <div className="rounded-xl border border-line p-3">
           <p className="font-medium">Lender&apos;s reply: revised offer {n.target}, version {n.revised.version}</p>
           <p className="mt-1 text-ink-700">APR {n.revised.apr ? <Figure value={n.revised.apr} label="Revised APR" caseId={c.id} /> : '—'} · total cost {n.revised.totalCost ? <Figure value={n.revised.totalCost} label="Revised total cost" caseId={c.id} /> : '—'}</p>

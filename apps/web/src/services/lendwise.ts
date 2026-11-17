@@ -5,7 +5,8 @@ import { gw, ok } from '@/lib/gateway';
 import { fig, type Fig, type Money } from '@/lib/money';
 
 type NegResp = { target_offer: string | null; competing_fee_pct?: string | null; competing_fee?: Money | null; concession_counts: boolean; message: string; status: string | null;
-  revised: { version: number; comparable: boolean; flags: string[]; apr_pct: string | null; total_cost: Money | null } | null };
+  revised: { version: number; comparable: boolean; flags: string[]; apr_pct: string | null; total_cost: Money | null } | null;
+  reply?: { round: number; text: string; injection_flags: string[] } | null };
 type OfferResp = { source: 'ledger' | 'preview' | 'stale'; message?: string; ranking: string[]; negotiation?: NegResp;
   offers: { offer_id: string; version: number; flags: string[]; comparable: boolean; affordable: boolean | null; rank: number | null; apr_pct: string | null; cheapest_headline_rate?: boolean;
     amount_received: Money | null; total_repayment: Money | null; total_cost: Money | null }[] };
@@ -17,7 +18,8 @@ export function mapNegotiation(n: NegResp): Negotiation {
   const r = n.revised;
   return { target: n.target_offer, competingFee: fee, countsAsConcession: n.concession_counts, message: n.message, status: n.status,
     revised: r && { version: r.version, comparable: r.comparable, flags: r.flags, apr: pct(r.apr_pct, 'lw.negotiation.revised.apr'),
-      totalCost: r.total_cost ? fig(r.total_cost, 'lw.negotiation.revised.total_cost') : null } };
+      totalCost: r.total_cost ? fig(r.total_cost, 'lw.negotiation.revised.total_cost') : null },
+    reply: n.reply ? { round: n.reply.round, text: n.reply.text, injectionFlags: n.reply.injection_flags } : null };
 }
 
 export function mapOffers(caseId: string, r: OfferResp): OfferView | null {

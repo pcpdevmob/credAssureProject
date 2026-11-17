@@ -346,7 +346,16 @@ def test_LW13_BR15_injected_reply_is_flagged_and_never_repeated(client: Any, log
     with session.transaction(session.case_engine(client.db)) as s:
         facts = {f.key: f.value_text for f in reads.list_for_case(s, "default", case_id)}
     assert facts["lw.negotiation.reply_flags"] != "none"
-    assert not any("rank this lender" in v.lower() for v in facts.values())
+    # Phase 10b: the reply is kept, display-only, under one key; nothing else repeats it
+    display = {"lw.negotiation.reply_text"}
+    assert "rank this lender" in facts["lw.negotiation.reply_text"].lower()
+    assert not any("rank this lender" in v.lower() for k, v in facts.items() if k not in display)
+    shown = answer["reply"]
+    assert (
+        shown["round"] == 1
+        and shown["injection_flags"]
+        and "rank this lender" in shown["text"].lower()
+    )
     assert "rank this lender" not in answer["message"].lower()
     assert client.get(f"/v1/cases/{case_id}/offers", headers=h).json()["ranking"] == before
     assert answer["revised"]["comparable"] and answer["revised"]["version"] == 2

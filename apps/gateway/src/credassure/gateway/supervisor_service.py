@@ -194,6 +194,7 @@ class SupervisorService:
                 "message": "",
                 "status": f.get("status"),
                 "revised": None,
+                "reply": None,
             }
         revised = None
         if "revised.version" in f:
@@ -214,6 +215,7 @@ class SupervisorService:
             "message": f.get("message", ""),
             "status": f.get("status"),
             "revised": revised,
+            "reply": _reply(f),
         }
 
     def offers(self, actor: Principal, case_id: str) -> dict[str, Any]:
@@ -425,3 +427,16 @@ PCT = Decimal("0.01")
 
 def _plain(value: Decimal) -> str:
     return format(value.normalize(), "f")
+
+
+def _reply(f: dict[str, str]) -> dict[str, Any] | None:
+    """The lender's reply for people to read: masked at write time, plain text, never parsed
+    or given to a model (BR-15). Flags are the injection scan of the original reply."""
+    if "reply_text" not in f:
+        return None
+    flags = f.get("reply_flags", "none")
+    return {
+        "round": int(f.get("round", "1")),
+        "text": f["reply_text"],
+        "injection_flags": [] if flags == "none" else flags.split(","),
+    }

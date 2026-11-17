@@ -5,7 +5,8 @@ A separate invocation after the comparison. Code picks the target and the verifi
 ledger facts, and fills the fixed ``fee_waiver_v1`` template from those facts only; no model writes
 any part of the message. The message goes to ``verify_claims`` (every figure must equal a ledger
 fact; no acceptance, approval or urgency wording) before the simulated lender sees it. The lender's
-reply is scanned for injected instructions and never reused as text. A revised version is
+reply is scanned for injected instructions and stored masked as display-only text
+(``reply_text``, linked to its ``round``; no agent may read it back, registry ``display_only``). A revised version is
 re-audited and re-priced, and only then are the concession and the revised figures written.
 Nothing here accepts, signs or submits an offer (BR-13).
 """
@@ -30,8 +31,10 @@ from credassure.core.ports import StageContext
 from credassure.core.results import AgentResult, Blocker, EvidenceRef
 from credassure.engines import negotiation
 from credassure.security.injection import scan
+from credassure.security.pii import redact
 
 TEMPLATE_ID = "fee_waiver_v1"
+ROUND = 1  # core has one fee-waiver round (LW-12); LW-15 rounds 2-3 are stretch
 FEE_WAIVER_V1 = Template(
     "Dear $lender_name,\n\n"
     "Thank you for offer $offer_id. Its processing fee is $current_fee. "
@@ -123,6 +126,8 @@ def negotiate(ctx: StageContext) -> AgentResult:
         NS + "message": (message, "text"),
         NS + "status": ("sent", "enum"),
         NS + "reply_flags": (",".join(flags) or "none", "codes"),
+        NS + "round": (ROUND, "count"),
+        NS + "reply_text": (redact(reply.text), "text"),  # masked, display-only (BR-15)
     }
     counts = False
     if reply.offer is not None and reply.schedule is not None:

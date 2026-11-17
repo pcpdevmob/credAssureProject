@@ -71,10 +71,12 @@ def authorize_fact(agent: AgentName | str, key: str, *, write: bool = False) -> 
     """Raise ``RegistryError`` unless ``agent`` may read (or, with ``write``, write) fact ``key``.
 
     Deny by default: an agent without a ``ledger_prefixes`` entry may touch no fact.
-    ``ledger_read_prefixes`` adds keys it may only read.
+    ``ledger_read_prefixes`` adds keys it may only read. ``display_only`` keys are never read.
     """
     name = agent.value if isinstance(agent, AgentName) else agent
     loaded = _load()
+    if not write and key in (loaded.get("display_only") or []):
+        raise RegistryError(ApiErrorCode.TOOL_NOT_ALLOWED)
     prefixes = loaded.get("ledger_prefixes") or {}
     reads = {} if write else loaded.get("ledger_read_prefixes") or {}
     if not isinstance(prefixes, dict) or not isinstance(reads, dict):

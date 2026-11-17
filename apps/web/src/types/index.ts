@@ -45,6 +45,8 @@ export interface OfferRow {
 export interface Negotiation {
   target: string | null; competingFee: Fig | null; countsAsConcession: boolean; message: string; status: string | null;
   revised: { version: number; comparable: boolean; flags: string[]; apr: Fig | null; totalCost: Fig | null } | null;
+  /** The lender's reply, masked by the gateway; untrusted text, shown as plain text only (BR-15). */
+  reply: { round: number; text: string; injectionFlags: string[] } | null;
 }
 /** `preview` = audit and pricing only; affordability and ranking have not been checked. */
 export interface OfferView { caseId: string; source: 'ledger' | 'preview' | 'stale'; offers: OfferRow[]; ranking: string[]; negotiation: Negotiation | null; message?: string }
