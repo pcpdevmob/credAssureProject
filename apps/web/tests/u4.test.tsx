@@ -14,9 +14,8 @@ const ask = async (q = 'What is a KFS?') => { await userEvent.type(await screen.
 const chatReturns = (o: Record<string, unknown>) => server.use(http.post(`${API}/v1/cases/:id/chat`, () => HttpResponse.json(reply(o))));
 
 describe('copilot chat', () => {
-  it('shows the first-use notice and opens a citation in the side panel', async () => {
+  it('opens a citation in the side panel', async () => {
     render(<Copilot caseId="CA-1" />); await ask();
-    expect(await screen.findByText(/Do not enter personal data/)).toBeTruthy();
     await userEvent.click(await screen.findByRole('button', { name: /\[1\] Responsible Business Conduct/ }));
     const dlg = await screen.findByRole('dialog');
     expect(dlg.textContent).toMatch(/Annex XIII/); expect(dlg.textContent).toMatch(/28 Nov 2025/); expect(dlg.textContent).toMatch(/R-RBI-02/);
@@ -115,5 +114,19 @@ describe('citation passage', () => {
     await userEvent.click(chip); const dlg = await screen.findByRole('dialog');
     expect((await within(dlg).findByRole('alert')).textContent).toMatch(/no such passage/);
     await userEvent.keyboard('{Escape}'); await vi.waitFor(() => expect(document.activeElement).toBe(chip));
+  });
+});
+
+describe('first-use notice', () => {
+  it('shows above the input before the first question, then not again this session', async () => {
+    vi.resetModules(); const { default: Fresh } = await import('@/components/case/Copilot'); // a new session: the seen flag is module state
+    const view = render(<Fresh caseId="CA-1" />);
+    const note = await screen.findByRole('note');
+    expect(note.textContent).toMatch(/Do not enter personal identifiers/);
+    expect(note.compareDocumentPosition(screen.getByLabelText('Your question')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy(); // above the input
+    await ask(); await screen.findByText(/Key Facts Statement discloses/);
+    expect(screen.queryByRole('note')).toBeNull();
+    view.unmount(); render(<Fresh caseId="CA-2" />); // another case or tab, same session
+    await screen.findByLabelText('Your question'); expect(screen.queryByRole('note')).toBeNull();
   });
 });
