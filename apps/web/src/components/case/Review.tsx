@@ -7,6 +7,7 @@ import type { CaseRecord, ApprovalDecision, User } from '@/types';
 import { Card, CardHeader, Button, Textarea, Badge, StageBadge, Input } from '../ui';
 import ErrorBanner from '../ErrorBanner';
 import { approvalService, lendWiseService, type ReturnStage } from '@/services';
+import { reportService } from '@/services/report';
 import { Figure } from '../Figure';
 import { ApiProblem } from '@/lib/problem';
 import type { Fig } from '@/lib/money';
@@ -16,11 +17,12 @@ import { ShieldCheck, PauseCircle, Lock, Info, Hourglass } from 'lucide-react';
 const WARNING: Record<string, string> = {
   negotiation_in_progress: 'Negotiation in progress: a round was sent after this proposal was verified, so its result is not in the ranking.',
   revised_offer_not_reaudited: 'Revised offer not re-audited: the lender replied, but no concession counts until the stage re-runs.',
-  report_stale: 'Report stale: figures changed after this proposal was rendered. Open the Report tab to see what changed.',
+  report_stale: 'Report stale: figures changed after this proposal was rendered. The preparer must regenerate it before it can be approved; reject and return still work.',
 };
 
 const APPROVER = { VP_FINANCE: 'VP, Finance', DIRECTOR_FINANCE: 'Director, Finance', HELD_PENDING_POLICY: 'a human decision' } as const;
 export const INTERNAL = 'Approval is internal, not loan acceptance.';
+export const STALE_REASON = 'Approve is unavailable: the report is stale. Ask the preparer to regenerate it.';
 const ACTION: Record<ApprovalDecision['decision'], string> = { APPROVED: 'Approve proposal', REJECTED: 'Reject proposal', RETURNED: 'Return to stage' };
 const DONE: Record<ApprovalDecision['decision'], string> = { APPROVED: 'Proposal approved', REJECTED: 'Proposal rejected', RETURNED: 'Proposal returned' };
 const STAGE_LABEL: Record<ReturnStage, string> = { onboarding: 'Onboarding', working_capital: 'Working capital', lendwise: 'LendWise' };
@@ -35,7 +37,12 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
   const [open, setOpen] = useState(false); const [typed, setTyped] = useState(''); const [pw, setPw] = useState(''); const [pwNeeded, setPwNeeded] = useState(false);
   const [busy, setBusy] = useState(false); const [err, setErr] = useState<unknown>(); const [done, setDone] = useState('');
   const [warnings, setWarnings] = useState<string[]>([]); const [warnErr, setWarnErr] = useState(false);
-  useEffect(() => { lendWiseService.warnings(c).then(w => { setWarnings(w); setWarnErr(false); }).catch(() => setWarnErr(true)); }, [c.id, c.stage]); // the decision is enforced server-side either way, but say so when the check fails
+  const [tick, setTick] = useState(0); const [regen, setRegen] = useState(false); const [regenErr, setRegenErr] = useState<unknown>();
+  useEffect(() => { lendWiseService.warnings(c).then(w => { setWarnings(w); setWarnErr(false); }).catch(() => setWarnErr(true)); }, [c.id, c.stage, tick]); // the decision is enforced server-side either way, but say so when the check fails
+  // #6, ADR 0003 §3: the gateway refuses approve with REPORT_STALE; the UI explains it and offers the preparer the fix.
+  const stale = warnings.includes('report_stale');
+  const regenerate = async () => { setRegen(true); setRegenErr(undefined); try { await reportService.regenerate(c.id); setTick(t => t + 1); onChange(); } catch (e) { setRegenErr(e); } setRegen(false); };
+  const blocked = choice === 'APPROVED' && stale;
   const can = approvalService.canDecide(c, user);
   const needsComment = choice !== 'APPROVED' && !comment.trim();
   const confirm = async () => {
@@ -61,6 +68,10 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
       <Card className="p-5"><p className="text-sm text-ink-600">Status</p><p className="mt-1"><StageBadge s={c.stage} /></p>
         {c.routedTo && <p className="mt-3 text-sm text-ink-700">Routed to <Badge tone="blue">{APPROVER[c.routedTo]}</Badge></p>}
         {done && <p role="status" className="mt-3 text-sm font-medium text-brand-700">{done}</p>}</Card>
+      {stale && user.role === 'PREPARER' && (c.stage === 'AWAITING_APPROVAL' || c.stage === 'ROUTING_HELD') && <Card className="p-5 ring-1 ring-amber-300">
+        <p className="font-semibold text-ink-900">Report stale</p><p className="mt-1 text-sm text-ink-700">Figures changed after the report was made, so it cannot be approved. Regenerate it to make a new version from the current figures.</p>
+        {regenErr !== undefined && <ErrorBanner className="mt-3" error={regenErr} />}
+        <Button className="mt-3 w-full" loading={regen} onClick={regenerate}>Regenerate report</Button></Card>}
       {c.stage === 'ROUTING_HELD' && <Card className="p-5 ring-1 ring-ink-300"><p className="flex items-center gap-2 font-semibold text-ink-900"><PauseCircle className="h-5 w-5" />Routing held</p><p className="mt-2 text-sm text-ink-700">The validated amount is exactly ₹1.5 crore, so the configured rule holds it for a human decision (APR-03).</p></Card>}
       {c.stage === 'AWAITING_APPROVAL' && (can ? (
         <Card className="p-5 ring-2 ring-brand-500/40">
@@ -73,7 +84,8 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
           <label className="mt-3 block text-sm text-ink-700">Comment{choice !== 'APPROVED' && ' (required)'}<Textarea className="mt-1" value={comment} onChange={e => setComment(e.target.value)} /></label>
           {err !== undefined && !open && <ErrorBanner className="mt-3" error={err} />}
           <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-card p-3 lg:static lg:mt-4 lg:border-0 lg:bg-transparent lg:p-0">
-            <Button className="w-full" variant={choice === 'REJECTED' ? 'danger' : choice === 'RETURNED' ? 'outline' : 'success'} disabled={needsComment} onClick={() => { setTyped(''); setErr(undefined); setOpen(true); }}>{ACTION[choice]}</Button>
+            {blocked && <p id="stale-reason" className="mb-2 text-sm font-medium text-amber-900">{STALE_REASON}</p>}
+            <Button className="w-full" aria-describedby={blocked ? 'stale-reason' : undefined} variant={choice === 'REJECTED' ? 'danger' : choice === 'RETURNED' ? 'outline' : 'success'} disabled={needsComment || blocked} onClick={() => { setTyped(''); setErr(undefined); setOpen(true); }}>{ACTION[choice]}</Button>
           </div>
         </Card>) : <Card className="p-5 text-sm text-ink-600"><Lock className="mb-2 h-5 w-5 text-ink-400" />Awaiting decision from <Badge tone="blue">{c.routedTo ? APPROVER[c.routedTo] : 'the routed approver'}</Badge>. {user.role === 'PREPARER' ? 'Preparers cannot approve.' : 'This case is routed to a different approver.'}</Card>)}
     </div>

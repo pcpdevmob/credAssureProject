@@ -57,6 +57,7 @@ Reload the preparer window. **Sign in again:** the old token is still valid, but
 | Funding, offers, provenance | Same figures, flags and ranking (code). The driver explanation is template text, not model wording |
 | Negotiation | Same (no model in core) |
 | Critic + routing | Same (code). Narratives are templates |
+| Regenerate report (7:30) | Same (code): the report is rendered from ledger facts with templates |
 | Copilot | "Unavailable" banner. **T020 abstains and T086 is refused exactly as before** (code). T007 now returns the abstention string. Say: "with the model off, the copilot never guesses. It abstains." Then show the E8 evidence slide line for the live cited answer |
 | Director approval, audit | Same (code) |
 
@@ -70,6 +71,8 @@ Say: *"Everything that decides anything is still working. The model only reads a
   Switch to the `LLM_ENABLED=false` fallback above.
 - **Copilot spins:** ask the next planned question. If none answers, go to the fallback.
 - **Negotiate returns 409:** the round was already sent (one per case). Show the stored message and the revised offer instead.
+- **Approve returns 409 `REPORT_STALE` ("report stale, regenerate"):** the 7:30 beat was skipped. Switch to `demo.preparer` → Review →
+  **Regenerate report**, then approve again as the Director. Reject and return are never blocked by it.
 - **A "sign in again" screen or a 401:** sign in again in that window. Tokens are short-lived and held in memory.
 - **The UI shows "Cannot reach the CredAssure service":** the API has stopped. Restart `make run-api` and reload.
 - **Never run `make demo-reset` during the demo.** It needs :8000 free, takes minutes and resets every demo case.

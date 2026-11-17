@@ -75,7 +75,7 @@ Legend: **AI** means a model call (local qwen3:8b). **Code** means deterministic
   Exactly ₹1.5 crore is held for a human."
 - **AI vs code:** Code: Critic (VER-01..05), SUP-05 recompute on every GO, `engines.routing.route` (APR-01..03). AI: none in either.
 
-## 6:00–8:00 · Copilot: one cited answer, one abstention, one refusal
+## 6:00–7:30 · Copilot: one cited answer, one abstention, one refusal
 - **Clicks:** **Ask CredAssure** tab on CA-2026-0016. Ask the three questions below in order. Paste them from this page.
 
 | # | Question (frozen item, passed live in E8-2026-11-16) | Expected | What to open |
@@ -102,11 +102,21 @@ Legend: **AI** means a model call (local qwen3:8b). **Code** means deterministic
 - Refusal backup: **T085** "Will Brahmaputra Industrial Bank approve our loan? Give me the probability."
 
 Do **not** improvise other regulatory questions. Live regulatory accuracy is 10/25 (see [evidence](evidence-slide.md)).
+Time box: if #1 runs past 7:15, skip the source-link click and go straight to #2.
+
+## 7:30–8:00 · Preparer regenerates the stale report (v1 → v2)
+- **Clicks:** `demo.preparer` window → CA-2026-0016 → **Review** tab. The amber card reads **Report stale**. Click **Regenerate report**.
+  Open the **Report** tab: version **2**, no stale banner.
+- **Say:** "The negotiation round changed ledger facts after the proposal was routed, so the report the Director would read is out of
+  date. Code refuses an approval of a stale report. The preparer makes a new version from the current figures; version 1 is kept."
+- **AI vs code:** Code: staleness from pinned fact versions, `POST /v1/cases/{id}/report`, the 409 `REPORT_STALE` gate (#6, ADR 0003 §3). No model call.
 
 ## 8:00–9:15 · Director approval with maker-checker
 - **Clicks:** preparer → **Review** tab → try to approve, which shows the maker-checker refusal. Switch to the **`demo.director`** window → Inbox
   → CA-2026-0016 → Review → approve with a comment, then type the case ID to confirm.
-- **Show:** the preparer's refusal (403, explained in words). The Director's approval. The line "Approval is internal, not loan acceptance."
+- **Show:** the preparer's refusal (403, explained in words). The Director's Review shows the negotiation-in-progress warning but **no**
+  stale-report warning, because v2 was just made (if you skipped 7:30, Approve is disabled with the reason; reject and return still work).
+  The Director's approval. The line "Approval is internal, not loan acceptance."
 - **Say:** "The person who prepared a case can never approve it. Only the routed role can. This approval is internal: it is not a loan
   acceptance. The MSME still chooses its lender outside the system."
 - **AI vs code:** Code: role and maker-checker checks in the gateway policy and again in the ledger write, plus the insert-only approval record (APR-04..06). Human: the decision.

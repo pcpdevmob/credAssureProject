@@ -1,6 +1,6 @@
 """Phase 10 reports: rendering against sections.yaml (UI-08, VER-04, #10), versioning and staleness
-(#6, ADR 0003 §3), figures with ledger keys for the provenance drawer (#33), /offers after a
-re-upload (UI-05)."""
+(#6, ADR 0003 §3: a stale report blocks approve), figures with ledger keys for the provenance
+drawer (#33), /offers after a re-upload (UI-05)."""
 
 import json
 from collections.abc import Callable
@@ -91,17 +91,46 @@ def test_scope6_regenerating_a_fresh_report_keeps_its_version(
     assert client.post(f"/v1/cases/{case_id}/report", headers=h).json()["version"] == 1
 
 
-def test_scope6_UI07_stale_report_is_an_approval_warning_not_a_block(
-    client: TestClient, login: Login, run_case: Callable[[TestClient], str]
-) -> None:
-    """User decision 1(a): the Director still approves; the warning is shown and audited."""
+def _stale_inbox(client: Any, login: Login, run_case: Callable[[TestClient], str]) -> Any:
     case_id = run_case(client)
-    _put(client, case_id, "lw.negotiation.status", "sent")
+    _put(client, case_id, "lw.negotiation.status", "sent")  # a figure changed after routing
     d = login(client, "demo.director")
     inbox = client.get(f"/v1/cases/{case_id}/inbox", headers=d).json()
     assert "report_stale" in inbox["warnings"]
+    return case_id, d, inbox
+
+
+def test_scope6_UI07_stale_report_blocks_approve_until_regenerated(
+    client: TestClient, login: Login, run_case: Callable[[TestClient], str]
+) -> None:
+    """Phase 10b (ADR 0003 §3, superseding decision 1(a)): approve answers 409 problem+json;
+    the preparer regenerates (v2) and the same approval then goes through."""
+    case_id, d, inbox = _stale_inbox(client, login, run_case)
     body = {"decision": "approve", "comment": "ok", "expected_version": inbox["row_version"]}
+    r = client.post(f"/v1/cases/{case_id}/decision", json=body, headers=d)
+    assert r.status_code == 409, r.text
+    assert r.headers["content-type"].startswith("application/problem+json")
+    assert r.json()["code"] == "REPORT_STALE" and "regenerate" in r.json()["detail"]
+    assert client.get(f"/v1/cases/{case_id}", headers=d).json()["status"] == "AWAITING_APPROVAL"
+    p = login(client, "demo.preparer")
+    regen = client.post(f"/v1/cases/{case_id}/report", headers=p)
+    assert regen.status_code == 201 and regen.json()["version"] == 2
+    inbox = client.get(f"/v1/cases/{case_id}/inbox", headers=d).json()
+    assert "report_stale" not in inbox["warnings"]
+    body["expected_version"] = inbox["row_version"]
     assert client.post(f"/v1/cases/{case_id}/decision", json=body, headers=d).status_code == 200
+
+
+def test_scope6_UI07_stale_report_still_allows_reject_and_return(
+    client: TestClient, login: Login, run_case: Callable[[TestClient], str]
+) -> None:
+    for decision, stage in (("reject", None), ("return", "lendwise")):
+        case_id, d, inbox = _stale_inbox(client, login, run_case)
+        body = {"decision": decision, "comment": "no", "expected_version": inbox["row_version"]}
+        if stage:
+            body["return_stage"] = stage
+        r = client.post(f"/v1/cases/{case_id}/decision", json=body, headers=d)
+        assert r.status_code == 200, (decision, r.text)
 
 
 def test_UI05_offer_reupload_makes_offers_stale_not_the_old_comparison(

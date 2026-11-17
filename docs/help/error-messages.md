@@ -13,6 +13,7 @@ uses the same table as this page. Keep the two in step.
 | `UNAUTHENTICATED` | Your session expired | Sign in again to continue. |
 | `FORBIDDEN` | Your role cannot do this | Ask the person this case is routed to. |
 | `STEP_UP_REQUIRED` | Approving more than ₹1,50,00,000 needs your password again | Enter your own password in the confirm dialog. Five wrong tries lock it for a minute. |
+| `REPORT_STALE` | The report is stale: figures changed after it was made. Regenerate it before approving | The preparer opens the case and chooses Regenerate report (a new version). Reject and return still work. |
 | `NOT_FOUND` | The case or figure does not exist, or is not visible to you | Check the case ID, or open the case from the cases list. |
 | `TOOL_NOT_ALLOWED` | An agent asked for a tool outside its allowlist | Report it to the evaluator. |
 | `COLLECTION_NOT_ALLOWED` | A search touched a document collection this case cannot use | Rephrase the question. |

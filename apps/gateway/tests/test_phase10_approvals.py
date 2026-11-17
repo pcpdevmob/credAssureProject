@@ -11,13 +11,22 @@ Login = Callable[[TestClient, str], dict[str, str]]
 
 
 def _routed(client: Any, case_id: str, rupees: int, route: str) -> None:
-    """A case whose Working Capital gate is GO at `rupees`, routed to `route` (no graph run)."""
-    led = client.app.state.services.ledger
+    """A case whose Working Capital gate is GO at `rupees`, routed to `route` (no graph run),
+    with report v1 as the job runner writes it on routing (a missing report blocks approve)."""
+    from credassure.gateway import report
+    from credassure.ledger import reads
+    from credassure.ledger.session import transaction
+
+    svc = client.app.state.services
+    led = svc.ledger
     for key, value, unit in (("wc.gate", "GO", "enum"), ("wc.recommended_amount", rupees, "INR")):
         led.put_fact(
             case_id, key, value, unit=unit, source_type="test", source_ref="t", produced_by="t"
         )
     led.route(case_id, route)
+    with transaction(svc.engine) as s:
+        case = reads.get_case(s, svc.settings.tenant_id, case_id)
+    report.snapshot(svc.engine, case, led.put_fact)
 
 
 def _approve(client: TestClient, h: dict[str, str], case_id: str, **extra: Any) -> Any:

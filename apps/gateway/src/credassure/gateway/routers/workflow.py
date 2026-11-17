@@ -208,8 +208,8 @@ def case_inbox(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
 
 
 def _warnings(svc: Svc, case: Any) -> list[str]:
-    """APR-04 evidence for the approver; a stale report warns but never blocks (user decision
-    1(a), Phase 10): the figures changed after the routed proposal was rendered."""
+    """APR-04 evidence for the approver. ``report_stale``: the figures changed after the routed
+    proposal was rendered; it blocks approve (Phase 10b, ADR 0003 §3), not reject or return."""
     with transaction(svc.engine) as s:
         found = approval_warnings(reads.list_for_case(s, case.tenant_id, case.id))
         if report.state(s, case)["stale"]:
@@ -283,6 +283,11 @@ def decide(
             # S1: fail closed. The return is not recorded as applied; the case is FAILED.
             svc.supervisor.fail_return(case.id, back)
             raise ProblemError(409, "no approval is pending for this case", ApiErrorCode.CONFLICT)
+        if body.decision == "approve":  # under the lock: nothing changes between check and record
+            with transaction(svc.engine) as s:
+                stale = report.state(s, case)["stale"]
+            if stale:  # #6: never approve figures the proposal the approver read does not show
+                raise ProblemError(409, "report stale, regenerate", ApiErrorCode.REPORT_STALE)
         # NFR-07: the comment is redacted before it reaches the approval row and its audit event.
         approval = svc.ledger.record_decision(
             case.id,
