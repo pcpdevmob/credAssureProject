@@ -24,7 +24,7 @@ from credassure.ledger import reads
 from credassure.ledger.session import RunInProgressError, run_in_progress, run_lock, transaction
 from credassure.observability.tracing import span
 from credassure.security import pii
-from credassure.security.auth import Principal
+from credassure.security.auth import Principal, Role
 from credassure.tools.registry import authorize_fact
 
 PII_NOTICE = (
@@ -72,6 +72,35 @@ class SupervisorService:
             case.id,
             stage=Stage(stage) if stage else None,
             idempotency_key=idempotency_key,
+            actor=actor.user_id,
+            schedule=schedule,
+        )
+        view: dict[str, Any] = job_view(job)
+        return view
+
+    def retry_stage(
+        self, actor: Principal, case_id: str, stage: str, *, schedule: Callable[..., Any]
+    ) -> dict[str, Any]:
+        """Scope #25: an evaluator re-runs one stage of a FAILED case. It is an ordinary stage job
+        (run lock, upstream gates, caps, audit, SUP-03), never a way around a gate."""
+        if actor.role is not Role.EVALUATOR:
+            raise ProblemError(403, "only an evaluator may retry a stage", ApiErrorCode.FORBIDDEN)
+        case = visible_case(self.svc, actor, case_id)
+        if case.status != "FAILED":
+            raise ProblemError(
+                409, f"case is {case.status}; only a FAILED case is retried", ApiErrorCode.CONFLICT
+            )
+        if run_in_progress(self.svc.engine, case.id):
+            raise ProblemError(
+                409, "a run is in progress on this case", ApiErrorCode.RUN_IN_PROGRESS
+            )
+        self.svc.ledger.audit(
+            case.id, "STAGE_RETRY_REQUESTED", {"stage": stage, "by": actor.user_id}
+        )
+        job = self.svc.jobs.start(
+            case.id,
+            stage=Stage(stage),
+            idempotency_key=None,
             actor=actor.user_id,
             schedule=schedule,
         )

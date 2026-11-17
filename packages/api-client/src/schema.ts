@@ -442,7 +442,8 @@ export interface paths {
         put?: never;
         /**
          * Retry
-         * @description Evaluator only (scope #25); the retry itself arrives in Phase 9.
+         * @description Evaluator only (scope #25): re-run one stage of a FAILED case as a stage job (202 + job).
+         *     Upstream gates, caps and audit apply exactly as for any run (SUP-03, SUP-07).
          */
         post: operations["retry_v1_agents_supervisor_cases__case_id__stages__stage__retry_post"];
         delete?: never;
@@ -1914,19 +1915,21 @@ export interface operations {
             header?: never;
             path: {
                 case_id: string;
-                stage: string;
+                stage: "onboarding" | "working_capital" | "lendwise" | "critic";
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            200: {
+            202: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */

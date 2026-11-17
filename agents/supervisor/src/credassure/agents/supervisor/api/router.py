@@ -4,9 +4,9 @@ Every case route goes through the Supervisor service with the authenticated call
 caps, case policy and audit always apply. No route accepts, signs or submits a lender offer.
 """
 
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
-from fastapi import APIRouter, Depends, Header, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException
 
 from credassure.agents.supervisor import __version__
 from credassure.agents.supervisor.api.deps import get_principal, get_supervisor
@@ -45,9 +45,14 @@ def plan(case_id: str, who: Caller, supervisor: SupervisorDep) -> dict[str, Any]
     return supervisor.plan(who, case_id)
 
 
-@router.post("/cases/{case_id}/stages/{stage}/retry")
-def retry(case_id: str, stage: str, who: Caller) -> None:
-    """Evaluator only (scope #25); the retry itself arrives in Phase 9."""
-    if getattr(getattr(who, "role", None), "value", None) != "evaluator":
-        raise HTTPException(status_code=403, detail="only an evaluator may retry a stage")
-    raise HTTPException(status_code=501, detail="arrives in Phase 9")
+@router.post("/cases/{case_id}/stages/{stage}/retry", status_code=202)
+def retry(
+    case_id: str,
+    stage: Literal["onboarding", "working_capital", "lendwise", "critic"],
+    who: Caller,
+    supervisor: SupervisorDep,
+    background: BackgroundTasks,
+) -> dict[str, Any]:
+    """Evaluator only (scope #25): re-run one stage of a FAILED case as a stage job (202 + job).
+    Upstream gates, caps and audit apply exactly as for any run (SUP-03, SUP-07)."""
+    return supervisor.retry_stage(who, case_id, stage, schedule=background.add_task)

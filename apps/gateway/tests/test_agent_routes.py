@@ -99,13 +99,48 @@ def test_scope19_supervisor_plan_lists_the_four_stages(
     assert r.json()["stages"] == ["onboarding", "working_capital", "lendwise", "critic"]
 
 
-def test_scope25_retry_is_501(
+def _fail(client: TestClient, case_id: str, stage: str) -> None:
+    """Simulate a stage that ended in ERROR (the run left the case FAILED at that stage)."""
+    client.app.state.services.ledger.set_state(case_id, status="FAILED", current_stage=stage)  # type: ignore[attr-defined]
+
+
+def test_scope25_SUP07_retry_reruns_the_failed_stage_through_the_supervisor(
     client: TestClient, login: Login, new_case: Callable[[TestClient], str]
 ) -> None:
-    """Negotiation (LW-12) is built in 9c-b (test_lw_items.py); stage retry is still to come."""
+    case_id = new_case(client)
+    p, e = login(client, "demo.preparer"), login(client, "demo.evaluator")
+    client.post(f"/v1/cases/{case_id}/run", headers=p)  # onboarding GO, WC NEEDS_INPUT (no files)
+    _fail(client, case_id, "working_capital")
+    r = client.post(
+        f"/v1/agents/supervisor/cases/{case_id}/stages/working_capital/retry", headers=e
+    )
+    assert r.status_code == 202, r.text
+    job = client.get(r.json()["status_url"], headers=e).json()
+    assert job["stage"] == "working_capital"
+    assert job["status"] == "succeeded"
+    stages = client.get(f"/v1/cases/{case_id}", headers=e).json()["stages"]
+    attempts = {s["stage"]: s["attempt"] for s in stages}
+    assert attempts == {"onboarding": 1, "working_capital": 2}  # only the failed stage re-ran
+    audit = client.get(f"/v1/cases/{case_id}/audit", headers=e).json()
+    assert "STAGE_RETRY_REQUESTED" in {ev["event_type"] for ev in audit["events"]}
+    assert audit["chain_ok"]
+
+
+def test_scope25_retry_of_a_case_that_did_not_fail_is_409(
+    client: TestClient, login: Login, new_case: Callable[[TestClient], str]
+) -> None:
     case_id = new_case(client)
     path = f"/v1/agents/supervisor/cases/{case_id}/stages/onboarding/retry"
-    _problem(client.post(path, headers=login(client, "demo.evaluator")), 501, "NOT_IMPLEMENTED")
+    _problem(client.post(path, headers=login(client, "demo.evaluator")), 409, "CONFLICT")
+
+
+def test_scope25_retry_unknown_stage_is_422(
+    client: TestClient, login: Login, new_case: Callable[[TestClient], str]
+) -> None:
+    case_id = new_case(client)
+    _fail(client, case_id, "onboarding")
+    path = f"/v1/agents/supervisor/cases/{case_id}/stages/routing/retry"
+    assert client.post(path, headers=login(client, "demo.evaluator")).status_code == 422
 
 
 def test_scope25_retry_is_evaluator_only(

@@ -1548,7 +1548,7 @@
     },
     "/v1/agents/supervisor/cases/{case_id}/stages/{stage}/retry": {
       "post": {
-        "description": "Evaluator only (scope #25); the retry itself arrives in Phase 9.",
+        "description": "Evaluator only (scope #25): re-run one stage of a FAILED case as a stage job (202 + job).\nUpstream gates, caps and audit apply exactly as for any run (SUP-03, SUP-07).",
         "operationId": "retry_v1_agents_supervisor_cases__case_id__stages__stage__retry_post",
         "parameters": [
           {
@@ -1565,16 +1565,26 @@
             "name": "stage",
             "required": true,
             "schema": {
+              "enum": [
+                "onboarding",
+                "working_capital",
+                "lendwise",
+                "critic"
+              ],
               "title": "Stage",
               "type": "string"
             }
           }
         ],
         "responses": {
-          "200": {
+          "202": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Retry V1 Agents Supervisor Cases  Case Id  Stages  Stage  Retry Post",
+                  "type": "object"
+                }
               }
             },
             "description": "Successful Response"
