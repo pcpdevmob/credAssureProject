@@ -350,9 +350,10 @@ def test_LW13_BR15_injected_reply_is_flagged_and_never_repeated(client: Any, log
     assert "rank this lender" not in answer["message"].lower()
     assert client.get(f"/v1/cases/{case_id}/offers", headers=h).json()["ranking"] == before
     assert answer["revised"]["comparable"] and answer["revised"]["version"] == 2
-    # ADR 0023: the round post-dates the verified comparison, so the approver evidence says so
+    # ADR 0023: the round post-dates the verified comparison, so the approver evidence says so;
+    # it also changed lw.* facts after the routed report version (#6: a warning, never a block)
     inbox = client.get(f"/v1/cases/{case_id}/inbox", headers=h).json()
-    assert inbox["warnings"] == ["negotiation_in_progress"]
+    assert inbox["warnings"] == ["negotiation_in_progress", "report_stale"]
 
 
 def test_LW12_preparer_only_and_comparison_first(client: Any, login: Login) -> None:

@@ -17,6 +17,7 @@ dependencies = [
     "credassure-ledger",
     "credassure-security",
     "credassure-lender-sim",
+    "credassure-reports",
     "fastapi>=0.115",
     "uvicorn[standard]>=0.32",
     "pydantic>=2.9",
@@ -54,6 +55,7 @@ credassure-tools = { workspace = true }
 credassure-llm = { workspace = true }
 credassure-ledger = { workspace = true }
 credassure-security = { workspace = true }
+credassure-reports = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

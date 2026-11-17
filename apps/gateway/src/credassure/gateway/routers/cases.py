@@ -34,6 +34,7 @@ from credassure.core.schemas import (
 )
 from credassure.core.schemas.offer import KFS_DOC_ID, OFFER_ID
 from credassure.engines.normaliser import parse_money
+from credassure.gateway import report
 from credassure.gateway.deps import Svc, User, case_ref, own_case, role, visible_case
 from credassure.gateway.problems import ProblemError
 from credassure.ledger import reads
@@ -69,10 +70,6 @@ _SCHEMAS: dict[str, type[BaseModel]] = {
 _JSON_KINDS = frozenset({"order", "opening_position", "offer"})
 _KFS_ID, _OFFER_ID = re.compile(KFS_DOC_ID), re.compile(OFFER_ID)
 _LOCKED = frozenset({"AWAITING_APPROVAL", "HELD", "APPROVED", "REJECTED"})
-INTERNAL_APPROVAL = (
-    "Approval in CredAssure is an internal sign-off on this proposal only. It is not loan "
-    "acceptance: the MSME chooses its lender outside the system (APR-06, BR-13)."
-)
 
 
 def money(paise: int) -> dict[str, Any]:
@@ -467,48 +464,47 @@ REPORT_HEADERS = {  # N7: a stored report can never run script or be sniffed as 
     "X-Content-Type-Options": "nosniff",
     "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'",
 }
-_MD_SPECIAL = re.compile(r"([\\`*_{}\[\]()<>#!|])")
 
 
-def _md(text: str) -> str:
-    """S6: user text is literal in Markdown (no links, images or HTML)."""
-    return _MD_SPECIAL.sub(r"\\\1", text)
-
-
-@router.get("/cases/{case_id}/report", response_class=PlainTextResponse)
-def report(
-    case_id: str, who: User, svc: Svc, fmt: Annotated[Literal["md", "html"], Query()] = "md"
-) -> PlainTextResponse:
-    """Skeleton report (Phase 10 renders the full template): stages, decisions, trace IDs."""
+@router.get("/cases/{case_id}/report", response_model=None)
+def get_report(
+    case_id: str,
+    who: User,
+    svc: Svc,
+    fmt: Annotated[Literal["md", "html", "json"], Query()] = "md",
+    version: Annotated[int | None, Query(ge=1)] = None,
+) -> PlainTextResponse | dict[str, Any]:
+    """The proposal report (UI-08) at `version` (default: latest; a draft when none exists).
+    Rendered from the ledger fact versions it pinned; `stale` when the figures changed since
+    (scope #6). `fmt=json` gives each section's text with its figures' ledger keys (#33)."""
     case = visible_case(svc, who, case_id)
     with transaction(svc.engine) as s:
-        decisions = reads.approvals(s, case.tenant_id, case.id)
-    lines = [
-        f"# Proposal {case.id} — {_md(case.msme_name)}",
-        "",
-        f"Status: {case.status} · Route: {case.route or '—'}",
-        f"Indicative request: {money(case.indicative_amount_paise)['display']}",
-        "",
-        "## Stages",
-        *[
-            f"- {v['stage']}: {v['decision']} (attempt {v['attempt']}, trace {v['trace_id']})"
-            for v in _stage_views(svc, case)
-        ],
-        "",
-        "## Decision history",
-        *[f"- {a.created_at.isoformat()} {a.role}: {a.decision}" for a in decisions],
-        "",
-        "## Approval scope",
-        INTERNAL_APPROVAL,
-    ]
-    text = "\n".join(lines) + "\n"
+        found = report.render(s, case, version)
+    if found is None:
+        raise ProblemError(404, f"no report version {version}", ApiErrorCode.NOT_FOUND)
+    if fmt == "json":
+        return found
+    text = report.markdown(found)
+    headers = {**REPORT_HEADERS, "X-Report-Stale": str(found["stale"]).lower()}
     if fmt == "html":
         return PlainTextResponse(
             f"<!doctype html><meta charset='utf-8'><pre>{html.escape(text)}</pre>",
             media_type="text/html",
-            headers=REPORT_HEADERS,
+            headers=headers,
         )
-    return PlainTextResponse(text, media_type="text/markdown")
+    return PlainTextResponse(text, media_type="text/markdown", headers=headers)
+
+
+@router.post("/cases/{case_id}/report", status_code=201)
+def new_report(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
+    """A new report version from the current figures (scope #6). The case preparer only. A
+    report that is current keeps its version; one stale on an upload stays stale until the
+    stage re-runs on the new file."""
+    case = own_case(svc, who, case_id)
+    report.snapshot(svc.engine, case, svc.ledger.put_fact)
+    with transaction(svc.engine) as s:
+        st = report.state(s, case)
+    return {k: st[k] for k in ("version", "stale", "reasons")}
 
 
 @router.get("/cases/{case_id}/audit")

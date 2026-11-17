@@ -18,7 +18,11 @@ export const handlers = [
   http.get(`${API}/v1/health/ready`, () => HttpResponse.json({ status: 'ok', checks: { db: 'ok', model: 'closed' } })),
   http.get(`${API}/v1/inbox`, () => HttpResponse.json({ items: [{ case_id: 'CA-2026-0016', msme_name: 'Demo Electronics', status: 'AWAITING_APPROVAL', route: 'director_finance' }, { case_id: 'CA-2026-0030', msme_name: 'Boundary Works', status: 'HELD', route: 'HELD' }] })),
   http.post(`${API}/v1/cases/:id/decision`, () => HttpResponse.json({ status: 'APPROVED', approval_id: 1 })),
-  http.get(`${API}/v1/cases/:id/report`, () => new HttpResponse('# Proposal CA-2026-0016\n\n<script>x</script>\n', { headers: { 'Content-Type': 'text/markdown' } })),
+  http.get(`${API}/v1/cases/:id/report`, ({ request }) => new URL(request.url).searchParams.get('fmt') === 'json'
+    ? HttpResponse.json({ case_id: 'CA-2026-0016', version: 1, latest_version: 1, stale: false, reasons: [], sections: [
+        { title: 'Case summary', text: 'Demo <script>x</script>. Validated need: ₹1,42,00,000.', figures: [{ key: 'wc.recommended_amount', version: 1, start: 41, end: 53, display: '₹1,42,00,000' }] }] })
+    : new HttpResponse('# Proposal CA-2026-0016\n\n<script>x</script>\n', { headers: { 'Content-Type': 'text/markdown' } })),
+  http.post(`${API}/v1/cases/:id/report`, () => HttpResponse.json({ version: 2, stale: false, reasons: [] }, { status: 201 })),
   http.post(`${API}/v1/auth/token`, () => HttpResponse.json({ access_token: 'test-token', token_type: 'bearer', expires_in: 1800 })),
   http.get(`${API}/v1/me`, () => HttpResponse.json({ user_id: 'u-1', username: 'demo.preparer', role: 'preparer' })),
   http.get(`${API}/v1/cases`, () => HttpResponse.json({ items: [caseSummary], totals: caseTotals })),

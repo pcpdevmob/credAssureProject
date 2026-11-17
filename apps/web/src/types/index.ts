@@ -47,7 +47,7 @@ export interface Negotiation {
   revised: { version: number; comparable: boolean; flags: string[]; apr: Fig | null; totalCost: Fig | null } | null;
 }
 /** `preview` = audit and pricing only; affordability and ranking have not been checked. */
-export interface OfferView { caseId: string; source: 'ledger' | 'preview'; offers: OfferRow[]; ranking: string[]; negotiation: Negotiation | null }
+export interface OfferView { caseId: string; source: 'ledger' | 'preview' | 'stale'; offers: OfferRow[]; ranking: string[]; negotiation: Negotiation | null; message?: string }
 
 export interface WorkflowGate { id: string; name: string; agent: string; decision: GateDecision; evidence: string; blockers: string[]; at?: string; next: string }
 

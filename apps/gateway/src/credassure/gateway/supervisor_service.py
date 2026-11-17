@@ -20,6 +20,7 @@ from credassure.core.results import AgentResult
 from credassure.gateway.deps import Services, own_case, visible_case
 from credassure.gateway.jobs import NOT_RUNNABLE, job_view
 from credassure.gateway.problems import ProblemError
+from credassure.gateway.report import superseded_uploads
 from credassure.ledger import reads
 from credassure.ledger.session import RunInProgressError, run_in_progress, run_lock, transaction
 from credassure.observability.tracing import span
@@ -200,12 +201,33 @@ class SupervisorService:
         latest = {f.key: f.value_text for f in facts}  # versions ascend per key
         stored = {k: v for k, v in latest.items() if k.startswith("lw.")}
         if "lw.gate" in stored:
-            view = {"gate": stored["lw.gate"], "source": "ledger", **offer_view(stored)}
+            gate_fact = next(f for f in reversed(facts) if f.key == "lw.gate")
+            with transaction(self.svc.engine) as s:
+                files = reads.case_files(s, case.tenant_id, case.id)
+            if changed := sorted(superseded_uploads(gate_fact, files)):
+                # UI-05, scope #6: never show a comparison of files that have been replaced.
+                return {
+                    "gate": None,
+                    "source": "stale",
+                    "stale": True,
+                    "changed": changed,
+                    "message": f"New {', '.join(changed)} upload since the last comparison: "
+                    "stale, re-run LendWise.",
+                    "ranking": [],
+                    "offers": [],
+                    "negotiation": self.negotiation(actor, case_id),
+                }
+            view = {
+                "gate": stored["lw.gate"],
+                "source": "ledger",
+                "stale": False,
+                **offer_view(stored),
+            }
             return view | {"negotiation": self.negotiation(actor, case_id)}
         wc_gate = latest.get("wc.gate")
         gate = wc_gate if wc_gate not in (None, "GO") else None
         preview = self.svc.offer_preview(case.id)
-        return {"gate": gate, "source": "preview", **offer_view(preview)}
+        return {"gate": gate, "source": "preview", "stale": False, **offer_view(preview)}
 
     def plan(self, actor: Principal, case_id: str) -> dict[str, Any]:
         case = visible_case(self.svc, actor, case_id)

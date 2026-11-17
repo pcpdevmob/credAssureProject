@@ -69,7 +69,7 @@ function CaseView() {
       {tab === 'lenders' && (cmp ? <Lenders c={c} view={cmp} canNegotiate={user.role === 'PREPARER'} onChange={load} /> : <NotYet what="The lender comparison" />)}
       {tab === 'review' && <Review c={c} need={a?.recommendedAmount} user={user} onChange={load} />}
       {tab === 'copilot' && <Copilot caseId={c.id} />}
-      {tab === 'report' && <Report caseId={c.id} a={a} offers={cmp} stamp={c.stage} />}
+      {tab === 'report' && <Report caseId={c.id} stamp={c.stage} canRegenerate={user.role === 'PREPARER'} />}
       {tab === 'audit' && (user.role === 'EVALUATOR' ? <AuditList caseId={c.id} /> : <NotYet what="The audit log (evaluators only)" />)}
     </div>
   </>);

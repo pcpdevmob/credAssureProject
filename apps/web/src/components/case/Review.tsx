@@ -16,6 +16,7 @@ import { ShieldCheck, PauseCircle, Lock, Info, Hourglass } from 'lucide-react';
 const WARNING: Record<string, string> = {
   negotiation_in_progress: 'Negotiation in progress: a round was sent after this proposal was verified, so its result is not in the ranking.',
   revised_offer_not_reaudited: 'Revised offer not re-audited: the lender replied, but no concession counts until the stage re-runs.',
+  report_stale: 'Report stale: figures changed after this proposal was rendered. Open the Report tab to see what changed.',
 };
 
 const APPROVER = { VP_FINANCE: 'VP, Finance', DIRECTOR_FINANCE: 'Director, Finance', HELD_PENDING_POLICY: 'a human decision' } as const;

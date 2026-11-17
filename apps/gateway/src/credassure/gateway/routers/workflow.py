@@ -21,6 +21,7 @@ from pydantic import BaseModel, Field, SecretStr
 from credassure.core.enums import Stage
 from credassure.core.errors import ApiErrorCode, NoPendingApproval
 from credassure.engines.routing import THRESHOLD
+from credassure.gateway import report
 from credassure.gateway.deps import Svc, User, case_ref, role, visible_case
 from credassure.gateway.jobs import job_view
 from credassure.gateway.problems import ProblemError
@@ -207,8 +208,13 @@ def case_inbox(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
 
 
 def _warnings(svc: Svc, case: Any) -> list[str]:
+    """APR-04 evidence for the approver; a stale report warns but never blocks (user decision
+    1(a), Phase 10): the figures changed after the routed proposal was rendered."""
     with transaction(svc.engine) as s:
-        return approval_warnings(reads.list_for_case(s, case.tenant_id, case.id))
+        found = approval_warnings(reads.list_for_case(s, case.tenant_id, case.id))
+        if report.state(s, case)["stale"]:
+            found.append("report_stale")
+    return found
 
 
 class Decision(BaseModel):

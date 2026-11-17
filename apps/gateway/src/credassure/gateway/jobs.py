@@ -15,6 +15,7 @@ from sqlalchemy import Engine
 
 from credassure.agents.supervisor.graph import Supervisor
 from credassure.core.enums import Stage
+from credassure.gateway import report
 from credassure.ledger import reads
 from credassure.ledger.models import Job
 from credassure.ledger.session import (
@@ -85,6 +86,8 @@ class JobRunner:
                 try:
                     self._resume_recorded_return(case_id)
                     outcome = self.supervisor.run(case_id, stage=stage, cancelled=lost.is_set)
+                    if outcome.status in ("AWAITING_APPROVAL", "HELD") and not lost.is_set():
+                        self._report(case_id)  # scope #6: the proposal that was routed is v1
                 finally:
                     stop.set()
                     thread.join()
@@ -95,6 +98,12 @@ class JobRunner:
         except Exception as exc:
             _log.exception("job %s failed", job_id)
             self.ledger.update_job(job_id, status="failed", error=type(exc).__name__)
+
+    def _report(self, case_id: str) -> None:
+        with transaction(self.engine) as s:
+            case = reads.get_case(s, self.ledger.tenant_id, case_id)
+        if case is not None:
+            report.snapshot(self.engine, case, self.ledger.put_fact)
 
     def _resume_recorded_return(self, case_id: str) -> None:
         """The ledger is the authority (APR-04): if it holds a return the graph never received

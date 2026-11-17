@@ -29,7 +29,7 @@ export function Figure({ value, label, caseId, showApprox, className }: { value:
   const sourced = !!(caseId && value.key);
   return (
     <span className={cn('inline-flex flex-col', className)}>
-      <button type="button" onClick={() => open({ caseId, key: value.key, label, display: value.display })}
+      <button type="button" onClick={() => open({ caseId, key: value.key, version: value.version, label, display: value.display })}
         aria-label={`${label}: ${value.display}, ${sourced ? 'show source' : 'source not available yet'}`}
         className="num group inline-flex items-baseline gap-1 whitespace-nowrap rounded-sm text-left underline decoration-brand-600/50 decoration-dotted decoration-2 underline-offset-4 hover:decoration-brand-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600">
         <span>{value.display}</span>

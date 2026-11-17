@@ -6,7 +6,7 @@ import { fig, type Fig, type Money } from '@/lib/money';
 
 type NegResp = { target_offer: string | null; competing_fee_pct?: string | null; competing_fee?: Money | null; concession_counts: boolean; message: string; status: string | null;
   revised: { version: number; comparable: boolean; flags: string[]; apr_pct: string | null; total_cost: Money | null } | null };
-type OfferResp = { source: 'ledger' | 'preview'; ranking: string[]; negotiation?: NegResp;
+type OfferResp = { source: 'ledger' | 'preview' | 'stale'; message?: string; ranking: string[]; negotiation?: NegResp;
   offers: { offer_id: string; version: number; flags: string[]; comparable: boolean; affordable: boolean | null; rank: number | null; apr_pct: string | null; cheapest_headline_rate?: boolean;
     amount_received: Money | null; total_repayment: Money | null; total_cost: Money | null }[] };
 
@@ -21,6 +21,8 @@ export function mapNegotiation(n: NegResp): Negotiation {
 }
 
 export function mapOffers(caseId: string, r: OfferResp): OfferView | null {
+  // scope #6: an offer or KFS re-upload after the last LendWise run; the gateway withholds the old comparison.
+  if (r.source === 'stale') return { caseId, source: 'stale', message: r.message, offers: [], ranking: [], negotiation: r.negotiation ? mapNegotiation(r.negotiation) : null };
   if (!r.offers.length) return null;
   return { caseId, source: r.source, ranking: r.ranking, negotiation: r.negotiation ? mapNegotiation(r.negotiation) : null,
     offers: r.offers.map(o => { const k = (f: string) => `lw.${o.offer_id}.v${o.version}.${f}`; const m = (v: Money | null, f: string) => (v ? fig(v, k(f)) : null);

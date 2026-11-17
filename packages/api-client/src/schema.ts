@@ -851,12 +851,20 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Report
-         * @description Skeleton report (Phase 10 renders the full template): stages, decisions, trace IDs.
+         * Get Report
+         * @description The proposal report (UI-08) at `version` (default: latest; a draft when none exists).
+         *     Rendered from the ledger fact versions it pinned; `stale` when the figures changed since
+         *     (scope #6). `fmt=json` gives each section's text with its figures' ledger keys (#33).
          */
-        get: operations["report_v1_cases__case_id__report_get"];
+        get: operations["get_report_v1_cases__case_id__report_get"];
         put?: never;
-        post?: never;
+        /**
+         * New Report
+         * @description A new report version from the current figures (scope #6). The case preparer only. A
+         *     report that is current keeps its version; one stale on an upload stays stale until the
+         *     stage re-runs on the new file.
+         */
+        post: operations["new_report_v1_cases__case_id__report_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2655,10 +2663,11 @@ export interface operations {
             };
         };
     };
-    report_v1_cases__case_id__report_get: {
+    get_report_v1_cases__case_id__report_get: {
         parameters: {
             query?: {
-                fmt?: "md" | "html";
+                fmt?: "md" | "html" | "json";
+                version?: number | null;
             };
             header?: never;
             path: {
@@ -2674,7 +2683,40 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "text/plain": string;
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    new_report_v1_cases__case_id__report_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */

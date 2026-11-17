@@ -60,8 +60,24 @@ describe('inbox and decision', () => {
 
 describe('report', () => {
   it('shows report text as plain text, never as HTML', async () => {
-    const { container } = render(<Report caseId="CA-1" stamp="x" />);
+    const { container } = render(<Report caseId="CA-1" stamp="x" canRegenerate={false} />);
     expect(await screen.findByText(/<script>x<\/script>/)).toBeTruthy(); expect(container.querySelector('script')).toBeNull();
+  });
+  it('makes figures inside the report text open their provenance (#33)', async () => {
+    render(<Report caseId="CA-1" stamp="x" canRegenerate={false} />);
+    expect(await screen.findByRole('button', { name: /Case summary: wc.recommended_amount: ₹1,42,00,000, show source/ })).toBeTruthy();
+  });
+  it('says a version is stale, why, and lets the preparer create a new one (#6)', async () => {
+    let posted = 0;
+    server.use(
+      http.get(`${API}/v1/cases/:id/report`, () => HttpResponse.json({ case_id: 'CA-1', version: 1, latest_version: 1, stale: posted === 0, reasons: posted === 0 ? ['upload:offer', 'lendwise'] : [], sections: [] })),
+      http.post(`${API}/v1/cases/:id/report`, () => { posted += 1; return HttpResponse.json({ version: 2, stale: false, reasons: [] }, { status: 201 }); }),
+    );
+    render(<Report caseId="CA-1" stamp="x" canRegenerate />);
+    expect(await screen.findByText(/New offer upload/)).toBeTruthy();
+    await userEvent.click(screen.getByRole('button', { name: /Create new version/ }));
+    await vi.waitFor(() => expect(screen.queryByText(/Stale:/)).toBeNull());
+    expect(posted).toBe(1);
   });
 });
 
@@ -133,5 +149,13 @@ describe('first-use notice', () => {
     expect(screen.queryByRole('note')).toBeNull();
     view.unmount(); render(<Fresh caseId="CA-2" />); // another case or tab, same session
     await screen.findByLabelText('Your question'); expect(screen.queryByRole('note')).toBeNull();
+  });
+});
+
+describe('stale offers (#6)', () => {
+  it('maps a stale comparison to its message, never to the old offers', async () => {
+    const { mapOffers } = await import('@/services/lendwise');
+    const v = mapOffers('CA-1', { source: 'stale', message: 'New offer upload since the last comparison: stale, re-run LendWise.', ranking: [], offers: [] } as never);
+    expect(v).toMatchObject({ source: 'stale', offers: [], message: expect.stringMatching(/re-run LendWise/) });
   });
 });

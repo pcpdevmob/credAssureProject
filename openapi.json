@@ -2764,8 +2764,8 @@
     },
     "/v1/cases/{case_id}/report": {
       "get": {
-        "description": "Skeleton report (Phase 10 renders the full template): stages, decisions, trace IDs.",
-        "operationId": "report_v1_cases__case_id__report_get",
+        "description": "The proposal report (UI-08) at `version` (default: latest; a draft when none exists).\nRendered from the ledger fact versions it pinned; `stale` when the figures changed since\n(scope #6). `fmt=json` gives each section's text with its figures' ledger keys (#33).",
+        "operationId": "get_report_v1_cases__case_id__report_get",
         "parameters": [
           {
             "in": "path",
@@ -2784,19 +2784,83 @@
               "default": "md",
               "enum": [
                 "md",
-                "html"
+                "html",
+                "json"
               ],
               "title": "Fmt",
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "version",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Version"
             }
           }
         ],
         "responses": {
           "200": {
             "content": {
-              "text/plain": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Report",
+        "tags": [
+          "cases"
+        ]
+      },
+      "post": {
+        "description": "A new report version from the current figures (scope #6). The case preparer only. A\nreport that is current keeps its version; one stale on an upload stays stale until the\nstage re-runs on the new file.",
+        "operationId": "new_report_v1_cases__case_id__report_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response New Report V1 Cases  Case Id  Report Post",
+                  "type": "object"
                 }
               }
             },
@@ -2818,7 +2882,7 @@
             "HTTPBearer": []
           }
         ],
-        "summary": "Report",
+        "summary": "New Report",
         "tags": [
           "cases"
         ]
