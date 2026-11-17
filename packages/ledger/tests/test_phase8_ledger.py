@@ -371,7 +371,6 @@ def test_scope29_ADR0023_offer_table_drop_refuses_a_non_empty_table(db: Path) ->
     assert set(inspect(session.case_engine(db)).get_table_names()) >= OFFER_TABLES  # untouched
 
 
-
 # --- own-KFS lineage refs carry the tenant term (Phase 10b item 3, SUP-08, BR-14) ---------------
 
 

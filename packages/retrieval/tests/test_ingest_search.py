@@ -578,9 +578,7 @@ def test_scope1_A3_is_dense_top_five_without_keyword_or_rerank(
 
 
 @pytest.mark.parametrize("mode", ["keyword", "dense", "hybrid"])
-def test_SUP08_BR14_own_kfs_match_requires_the_same_tenant(
-    env: dict[str, Any], mode: str
-) -> None:
+def test_SUP08_BR14_own_kfs_match_requires_the_same_tenant(env: dict[str, Any], mode: str) -> None:
     """Phase 10b item 3: same doc_id and same bytes, but the corpus copy belongs to tenant
     demo; a case in tenant acme that uploaded those bytes still reads nothing."""
     with sqlite3.connect(env["db"]) as con:
