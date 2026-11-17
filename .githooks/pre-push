@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# CI was removed on purpose (cd57a3e, at the user's request); these local checks run before every push.
+# Skip once with --no-verify only when you know why.
+set -euo pipefail
+make check-fast
+make openapi-diff

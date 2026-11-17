@@ -152,20 +152,20 @@ def api_schema(fuzz_app: Any) -> Any:
 schema = schemathesis.pytest.from_fixture("api_schema")
 
 
-@pytest.mark.slow
-@schema.parametrize()
-@settings(
+FUZZ = settings(
     max_examples=8,
     deadline=None,
     derandomize=True,  # same examples every run: CI is reproducible
     database=None,
     suppress_health_check=list(HealthCheck),
 )
-def test_scope51_schemathesis_fuzz(case: Any, fuzz_app: Any) -> None:
-    with TestClient(fuzz_app) as c:
-        token = c.post(
-            "/v1/auth/token", json={"username": "demo.preparer", "password": PASSWORD}
-        ).json()["access_token"]
+
+
+def _fuzz(case: Any, app: Any, username: str) -> None:
+    with TestClient(app) as c:
+        token = c.post("/v1/auth/token", json={"username": username, "password": PASSWORD}).json()[
+            "access_token"
+        ]
     case.call_and_validate(
         headers={"Authorization": f"Bearer {token}"},
         excluded_checks=[
@@ -173,3 +173,27 @@ def test_scope51_schemathesis_fuzz(case: Any, fuzz_app: Any) -> None:
             schemathesis.specs.openapi.checks.negative_data_rejection,
         ],
     )
+
+
+@pytest.mark.slow
+@schema.parametrize()
+@FUZZ
+def test_scope51_schemathesis_fuzz(case: Any, fuzz_app: Any) -> None:
+    _fuzz(case, fuzz_app, "demo.preparer")
+
+
+# E10 SHOULD (Phase 10b): as each other role too, so approver and evaluator routes run past 403.
+@pytest.mark.slow
+@schema.parametrize()
+@FUZZ
+def test_scope51_schemathesis_fuzz_as_director(case: Any, fuzz_app: Any) -> None:
+    _fuzz(case, fuzz_app, "demo.director")
+
+
+@pytest.mark.slow
+@schema.parametrize()
+@FUZZ
+def test_scope51_schemathesis_fuzz_as_evaluator(case: Any, fuzz_app: Any) -> None:
+    if case.path.startswith("/v1/eval/runs"):  # deliberate 501 stub until Phase 11 builds it
+        pytest.skip("eval runs return 501 until Phase 11")
+    _fuzz(case, fuzz_app, "demo.evaluator")

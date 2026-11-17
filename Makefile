@@ -17,7 +17,7 @@ DEMO_TENANT := TENANT_ID=demo
 
 .PHONY: e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
-        langfuse-up langfuse-down ollama-pull backup restore eval-fast llm-probe retrieval-eval retrieval-pool retrieval-silver judge kappa
+        langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe retrieval-eval retrieval-pool retrieval-silver judge kappa
 
 help:  ## List targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -83,6 +83,9 @@ run-ui-e2e:  ## E2E web dev server on :3001, talking to :8001
 
 openapi:  ## Export openapi.json (ADR 0004)
 	uv run python -m credassure.gateway.openapi
+
+openapi-diff:  ## Fail on a breaking openapi.json change against main (BASE=<ref> to override)
+	uv run python scripts/openapi_diff.py $(or $(BASE),main)
 
 client: openapi  ## Generate the TypeScript API client from openapi.json
 	npm run generate -w packages/api-client
