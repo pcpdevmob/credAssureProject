@@ -366,8 +366,9 @@ def test_scope29_ADR0023_offer_table_drop_refuses_a_non_empty_table(db: Path) ->
             "VALUES (?, ?, 'O1', 1, 't', '{}', 'x', '2026-11-17')",
             (T, CASE),
         )
-    with pytest.raises(Exception, match="not empty"):
+    with pytest.raises(Exception, match="not empty") as refused:
         migrate.upgrade("case", db)
+    assert type(refused.value).__name__ == "OfferTablesNotEmptyError"  # alembic loads it by path
     assert set(inspect(session.case_engine(db)).get_table_names()) >= OFFER_TABLES  # untouched
 
 

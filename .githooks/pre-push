@@ -2,5 +2,7 @@
 # CI was removed on purpose (cd57a3e, at the user's request); these local checks run before every push.
 # Skip once with --no-verify only when you know why.
 set -euo pipefail
-make check-fast
+make check-fast    # includes test_openapi_current, so openapi.json is fresh before the diff below
 make openapi-diff
+# Scope #51: the Schemathesis fuzz is marked slow, so check-fast skips it; ~4 min for the three roles.
+uv run pytest -q -m slow apps/gateway/tests/test_phase10_contract.py
