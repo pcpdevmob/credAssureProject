@@ -617,7 +617,13 @@ export interface paths {
         get: operations["get_case_v1_cases__case_id__get"];
         put?: never;
         post?: never;
-        delete?: never;
+        /**
+         * Delete Case
+         * @description Scope #39, ADR 0025 (evaluator only): remove the case content, keep the append-only record
+         *     (facts, approvals, audit) as a tombstone; the hash chain still verifies. Under the run lock,
+         *     at the case version the caller saw.
+         */
+        delete: operations["delete_case_v1_cases__case_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -2215,6 +2221,41 @@ export interface operations {
     get_case_v1_cases__case_id__get: {
         parameters: {
             query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_case_v1_cases__case_id__delete: {
+        parameters: {
+            query: {
+                expected_version: number;
+            };
             header?: never;
             path: {
                 case_id: string;

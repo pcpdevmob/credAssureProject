@@ -1965,6 +1965,64 @@
       }
     },
     "/v1/cases/{case_id}": {
+      "delete": {
+        "description": "Scope #39, ADR 0025 (evaluator only): remove the case content, keep the append-only record\n(facts, approvals, audit) as a tombstone; the hash chain still verifies. Under the run lock,\nat the case version the caller saw.",
+        "operationId": "delete_case_v1_cases__case_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "expected_version",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "title": "Expected Version",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Delete Case V1 Cases  Case Id  Delete",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Delete Case",
+        "tags": [
+          "cases"
+        ]
+      },
       "get": {
         "operationId": "get_case_v1_cases__case_id__get",
         "parameters": [

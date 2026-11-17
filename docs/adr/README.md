@@ -30,3 +30,4 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | [0022](0022-ui-finbridge-nextjs.md) | Web UI is the finbridge Next.js app, API-only (amends 0005) | Accepted | UI | — |
 | [0023](0023-ledger-is-record-for-offers.md) | Ledger facts + audit are the record for offers, evaluations and negotiation; offer tables dropped in Phase 10 | Accepted | 9c, 10 | 33 |
 | [0024](0024-chromadb-accepted-risk.md) | chromadb 1.5.9 advisories accepted: embedded PersistentClient only, re-check at G3/G4 | Accepted | 7, 9c | 41 |
+| [0025](0025-case-deletion-tombstone.md) | Case deletion: content removed, append-only record kept as a tombstone | Accepted | 10 | 39 |

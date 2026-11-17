@@ -101,11 +101,15 @@ def case_ref(case: Case) -> CaseRef:
     return CaseRef(case.id, case.tenant_id, case.preparer_id, case.route, case.status)
 
 
-def visible_case(svc: Services, who: Principal, case_id: str) -> Case:
-    """The case if this caller may see it (tenant + role + attribute policy), else 404."""
+def visible_case(
+    svc: Services, who: Principal, case_id: str, *, include_deleted: bool = False
+) -> Case:
+    """The case if this caller may see it (tenant + role + attribute policy), else 404. A DELETED
+    tombstone (ADR 0025) is 404 too, unless the caller asks for it (the evaluator's audit view)."""
     with transaction(svc.engine) as s:
         case = reads.get_case(s, who.tenant_id, case_id)
-    if case is None or not can_view_case(who, case_ref(case)):
+    hidden = case is not None and case.status == reads.DELETED and not include_deleted
+    if case is None or hidden or not can_view_case(who, case_ref(case)):
         raise ProblemError(404, f"no case {case_id}", ApiErrorCode.NOT_FOUND)
     return case
 

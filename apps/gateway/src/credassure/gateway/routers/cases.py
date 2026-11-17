@@ -10,6 +10,7 @@ import io
 import json
 import math
 import re
+import uuid
 from datetime import UTC, date, datetime
 from decimal import Decimal
 from typing import Annotated, Any, Literal, get_args
@@ -39,7 +40,7 @@ from credassure.gateway.deps import Svc, User, case_ref, own_case, role, visible
 from credassure.gateway.problems import ProblemError
 from credassure.ledger import reads
 from credassure.ledger.models import Case
-from credassure.ledger.session import run_in_progress, transaction
+from credassure.ledger.session import run_in_progress, run_lock, transaction
 from credassure.security.auth import Principal, Role, can_view_case
 from credassure.security.injection import scan
 from credassure.security.pii import find as pii_find
@@ -507,9 +508,24 @@ def new_report(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
     return {k: st[k] for k in ("version", "stale", "reasons")}
 
 
+@router.delete("/cases/{case_id}")
+def delete_case(
+    case_id: str, who: Evaluator, svc: Svc, expected_version: Annotated[int, Query(ge=0)]
+) -> dict[str, Any]:
+    """Scope #39, ADR 0025 (evaluator only): remove the case content, keep the append-only record
+    (facts, approvals, audit) as a tombstone; the hash chain still verifies. Under the run lock,
+    at the case version the caller saw."""
+    case = visible_case(svc, who, case_id)
+    with run_lock(svc.engine, case.tenant_id, case.id, f"delete-{uuid.uuid4().hex}"):
+        removed = svc.ledger.delete_case(
+            case.id, expected_version=expected_version, actor=who.user_id
+        )
+    return {"case_id": case.id, "status": "DELETED", "removed": removed}
+
+
 @router.get("/cases/{case_id}/audit")
 def audit(case_id: str, who: Evaluator, svc: Svc) -> dict[str, Any]:
-    case = visible_case(svc, who, case_id)
+    case = visible_case(svc, who, case_id, include_deleted=True)  # the tombstone stays auditable
     with transaction(svc.engine) as s:
         events = reads.audit_events(s, case.tenant_id, case.id)
         broken = reads.verify_chain(s, who.tenant_id)

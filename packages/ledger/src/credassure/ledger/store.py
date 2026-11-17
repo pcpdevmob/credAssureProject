@@ -203,6 +203,16 @@ class SqlLedger:
                 warnings=warnings,
             )
 
+    def delete_case(self, case_id: str, *, expected_version: int, actor: str) -> dict[str, int]:
+        with transaction(self.engine) as s:
+            return writes.delete_case(
+                s,
+                tenant_id=self.tenant_id,
+                case_id=case_id,
+                expected_version=expected_version,
+                actor=actor,
+            )
+
     def create_job(
         self, case_id: str, *, kind: str, stage: str | None, idempotency_key: str | None, actor: str
     ) -> Job:

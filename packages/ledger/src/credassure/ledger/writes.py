@@ -11,7 +11,7 @@ from datetime import UTC, date, datetime
 from decimal import Decimal
 from typing import Any
 
-from sqlalchemy import func, select
+from sqlalchemy import CursorResult, func, select, text
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import StaleDataError
 
@@ -33,6 +33,7 @@ from .models import (
     StageRun,
     User,
 )
+from .reads import DELETED, verify_chain
 
 DECISIONS = {"approve": "APPROVED", "reject": "REJECTED", "return": "RETURNED"}
 FINAL = frozenset({"APPROVED", "REJECTED"})  # APR-04: nothing reopens these
@@ -555,3 +556,67 @@ def add_chat_message(
             created_at=_now(),
         )
     )
+
+
+# ADR 0025: content tables a delete clears; ledger_facts, approvals and audit_log are append-only
+# and stay. Children first (foreign keys are ON); offer_evaluations hangs off offers.
+_CASE_CONTENT = (
+    "chat_messages",
+    "negotiation_messages",
+    "stage_runs",
+    "jobs",
+    "case_files",
+)
+
+
+def _rows(s: Session, sql: str, params: dict[str, str]) -> int:
+    result: CursorResult[Any] = s.execute(text(sql), params)  # type: ignore[assignment]
+    return int(result.rowcount)
+
+
+def delete_case(
+    s: Session, *, tenant_id: str, case_id: str, expected_version: int, actor: str
+) -> dict[str, int]:
+    """Scope #39, ADR 0025: remove the case content, keep the append-only record, leave a
+    tombstone, append CASE_DELETED, and re-verify the chain before commit (fail closed)."""
+    case = s.scalar(select(Case).where(Case.tenant_id == tenant_id, Case.id == case_id))
+    if case is None or case.status == DELETED:
+        raise ConflictError(f"no case {case_id}")
+    if case.row_version != expected_version:
+        raise ConflictError(f"case changed (version {case.row_version}, not {expected_version})")
+    params = {"t": tenant_id, "c": case_id}
+    removed = {
+        "offer_evaluations": _rows(
+            s,
+            "DELETE FROM offer_evaluations WHERE offer_row_id IN "
+            "(SELECT id FROM offers WHERE tenant_id = :t AND case_id = :c)",
+            params,
+        ),
+        "offers": _rows(s, "DELETE FROM offers WHERE tenant_id = :t AND case_id = :c", params),
+    }
+    for table in _CASE_CONTENT:  # constant names; ids are bound parameters
+        sql = f"DELETE FROM {table} WHERE tenant_id = :t AND case_id = :c"  # noqa: S608  # nosec B608
+        removed[table] = _rows(s, sql, params)
+    present = set(s.execute(text("SELECT name FROM sqlite_master WHERE type='table'")).scalars())
+    for table in ("checkpoints", "writes"):  # LangGraph state for the case thread, if it ran
+        if table in present:
+            sql = f"DELETE FROM {table} WHERE thread_id = :th"  # noqa: S608  # nosec B608
+            removed[table] = _rows(s, sql, {"th": f"{tenant_id}:{case_id}"})
+    case.status, case.current_stage = DELETED, None
+    case.msme_name = case.order_ref = "[deleted]"
+    try:
+        s.flush()
+    except StaleDataError as exc:
+        raise ConflictError("case changed concurrently") from exc
+    append_audit(
+        s,
+        tenant_id=tenant_id,
+        case_id=case_id,
+        actor=actor,
+        event_type="CASE_DELETED",
+        payload={"case_version": expected_version, "removed": removed},
+    )
+    s.flush()
+    if broken := verify_chain(s, tenant_id):
+        raise ConflictError(f"audit chain broken at {broken[:5]}; nothing deleted")
+    return removed

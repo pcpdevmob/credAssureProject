@@ -22,6 +22,8 @@ from .models import (
     User,
 )
 
+DELETED = "DELETED"  # ADR 0025 tombstone status
+
 
 def get_case(s: Session, tenant_id: str, case_id: str) -> Case | None:
     return s.scalar(select(Case).where(Case.tenant_id == tenant_id, Case.id == case_id))
@@ -113,7 +115,14 @@ def user_by_name(s: Session, username: str) -> User | None:
 
 
 def list_cases(s: Session, tenant_id: str) -> list[Case]:
-    return list(s.scalars(select(Case).where(Case.tenant_id == tenant_id).order_by(Case.id)))
+    """Live cases only: a DELETED tombstone (ADR 0025) is never listed."""
+    return list(
+        s.scalars(
+            select(Case)
+            .where(Case.tenant_id == tenant_id, Case.status != DELETED)
+            .order_by(Case.id)
+        )
+    )
 
 
 def stage_runs(s: Session, tenant_id: str, case_id: str) -> list[StageRun]:
