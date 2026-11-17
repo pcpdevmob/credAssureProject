@@ -5,7 +5,7 @@ import { ApiProblem } from '@/lib/problem';
 
 export interface InboxItem { caseId: string; msmeName: string; status: string; route: string | null; held: boolean }
 export type ReturnStage = 'onboarding' | 'working_capital' | 'lendwise';
-export interface ApprovalService { decide(c: CaseRecord, decision: ApprovalDecision['decision'], comment: string, returnStage?: ReturnStage): Promise<void>; canDecide(c: CaseRecord, u: User): boolean }
+export interface ApprovalService { decide(c: CaseRecord, decision: ApprovalDecision['decision'], comment: string, returnStage?: ReturnStage, password?: string): Promise<void>; canDecide(c: CaseRecord, u: User): boolean }
 const WIRE = { APPROVED: 'approve', REJECTED: 'reject', RETURNED: 'return' } as const;
 
 export const approvalService: ApprovalService & { inbox(): Promise<InboxItem[]> } = {
@@ -15,11 +15,11 @@ export const approvalService: ApprovalService & { inbox(): Promise<InboxItem[]> 
     return r.items.map(i => ({ caseId: i.case_id, msmeName: i.msme_name, status: i.status, route: i.route, held: i.status === 'HELD' }));
   },
   canDecide: (c, u) => c.stage === 'AWAITING_APPROVAL' && c.routedTo === u.role, // UX hint only; the server enforces the role (APR-05)
-  async decide(c, decision, comment, returnStage) {
+  async decide(c, decision, comment, returnStage, password) {
     if (decision !== 'APPROVED' && !comment.trim()) throw new Error('A comment is required to reject or return a proposal.');
-    try { await ok(gw.POST('/v1/cases/{case_id}/decision', { params: { path: { case_id: c.id } }, body: { decision: WIRE[decision], return_stage: decision === 'RETURNED' ? returnStage ?? 'working_capital' : null, comment, expected_version: c.rowVersion ?? 0 } as never })); }
+    try { await ok(gw.POST('/v1/cases/{case_id}/decision', { params: { path: { case_id: c.id } }, body: { decision: WIRE[decision], return_stage: decision === 'RETURNED' ? returnStage ?? 'working_capital' : null, comment, expected_version: c.rowVersion ?? 0, ...(password ? { password } : {}) } as never })); }
     catch (e) { // APR-05: say why, in plain words (the gateway's detail is generic)
-      if (e instanceof ApiProblem && e.status === 403) throw new ApiProblem(403, e.code, { what: 'You cannot decide this case.', fix: `${e.banner.what}. The person who prepared a proposal cannot approve it, and only the routed approver can decide.` }, []);
+      if (e instanceof ApiProblem && e.status === 403 && e.code !== 'STEP_UP_REQUIRED') throw new ApiProblem(403, e.code, { what: 'You cannot decide this case.', fix: `${e.banner.what}. The person who prepared a proposal cannot approve it, and only the routed approver can decide.` }, []);
       throw e;
     }
   },

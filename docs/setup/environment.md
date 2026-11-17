@@ -67,6 +67,7 @@ so the model profile wins for model settings. `MODELS` itself is a make variable
 |---|---|---|
 | `BOUNDARY_RULE` | `hold` | Exactly ₹1.5 crore: `hold`, `director` or `vp` (APR-03) |
 | `APPROVAL_THRESHOLD_PAISE` | 1,500,000,000 | ₹1.5 crore in paise |
+| `APPROVAL_STEP_UP` | true | Approving more than ₹1.5 crore needs the approver's password again (403 `STEP_UP_REQUIRED`) |
 | `GST_RATE` | 0.18 | GST on fees, never on interest |
 | `APR_CONVENTION` | `nominal` | `nominal` or `effective` (ADR 0012) |
 | `FORECAST_WEEKS` | 26 | Cash-flow horizon |

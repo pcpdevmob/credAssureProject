@@ -87,6 +87,7 @@ class Settings(BaseSettings):
     apr_convention: Literal["nominal", "effective"] = "nominal"
     boundary_rule: Literal["hold", "director", "vp"] = "hold"
     approval_threshold_paise: int = Field(default=1_500_000_000, gt=0)
+    approval_step_up: bool = True  # NFR-07: approving above ₹1.5 crore re-checks the password
     forecast_weeks: int = Field(default=26, gt=0)
     agent_max_steps: int = Field(default=10, gt=0, le=10)
     token_cap_per_stage: int = Field(default=6000, gt=0)

@@ -1,4 +1,5 @@
-// UI-07, APR-04..06: the routed approver decides with a step-up confirm (type the case ID). The server enforces the role
+// UI-07, APR-04..06: the routed approver decides with a step-up confirm (type the case ID; the password too when the
+// gateway answers STEP_UP_REQUIRED, which it does for approvals above ₹1.5 crore, NFR-07). The server enforces the role
 // and maker-checker; the UI only hides controls it would refuse. Approval is internal, never loan acceptance.
 import { useEffect, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -7,6 +8,7 @@ import { Card, CardHeader, Button, Textarea, Badge, StageBadge, Input } from '..
 import ErrorBanner from '../ErrorBanner';
 import { approvalService, lendWiseService, type ReturnStage } from '@/services';
 import { Figure } from '../Figure';
+import { ApiProblem } from '@/lib/problem';
 import type { Fig } from '@/lib/money';
 import { ShieldCheck, PauseCircle, Lock, Info, Hourglass } from 'lucide-react';
 
@@ -29,7 +31,7 @@ function Internal() {
 export default function Review({ c, need, user, onChange }: { c: CaseRecord; need?: Fig; user: User; onChange: () => void }) {
   const [choice, setChoice] = useState<ApprovalDecision['decision']>('APPROVED');
   const [comment, setComment] = useState(''); const [back, setBack] = useState<ReturnStage>('working_capital');
-  const [open, setOpen] = useState(false); const [typed, setTyped] = useState('');
+  const [open, setOpen] = useState(false); const [typed, setTyped] = useState(''); const [pw, setPw] = useState(''); const [pwNeeded, setPwNeeded] = useState(false);
   const [busy, setBusy] = useState(false); const [err, setErr] = useState<unknown>(); const [done, setDone] = useState('');
   const [warnings, setWarnings] = useState<string[]>([]); const [warnErr, setWarnErr] = useState(false);
   useEffect(() => { lendWiseService.warnings(c).then(w => { setWarnings(w); setWarnErr(false); }).catch(() => setWarnErr(true)); }, [c.id, c.stage]); // the decision is enforced server-side either way, but say so when the check fails
@@ -37,8 +39,8 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
   const needsComment = choice !== 'APPROVED' && !comment.trim();
   const confirm = async () => {
     setBusy(true); setErr(undefined);
-    try { await approvalService.decide(c, choice, comment, back); setOpen(false); setDone(`${DONE[choice]}: ${c.id}.`); onChange(); }
-    catch (e) { setErr(e); }
+    try { await approvalService.decide(c, choice, comment, back, pwNeeded ? pw : undefined); setOpen(false); setPw(''); setDone(`${DONE[choice]}: ${c.id}.`); onChange(); }
+    catch (e) { setErr(e); if (e instanceof ApiProblem && e.code === 'STEP_UP_REQUIRED') { setPwNeeded(true); setPw(''); } }
     setBusy(false);
   };
   return (<div className="grid gap-6 pb-24 lg:grid-cols-3 lg:pb-0">
@@ -84,10 +86,12 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
           <div className="mt-3"><Internal /></div>
           <label htmlFor="stepup" className="mt-4 block text-sm font-medium text-ink-900">Type the case ID to confirm</label>
           <Input id="stepup" className="mt-1 font-mono" autoComplete="off" value={typed} onChange={e => setTyped(e.target.value)} placeholder={c.id} />
+          {pwNeeded && <><label htmlFor="stepup-pw" className="mt-4 block text-sm font-medium text-ink-900">Your password</label>
+            <Input id="stepup-pw" type="password" className="mt-1" autoComplete="current-password" value={pw} onChange={e => setPw(e.target.value)} /></>}
           {err !== undefined && <ErrorBanner className="mt-3" error={err} />}
           <div className="mt-5 flex justify-end gap-2">
             <Dialog.Close asChild><Button variant="outline">Cancel</Button></Dialog.Close>
-            <Button variant={choice === 'REJECTED' ? 'danger' : 'success'} disabled={typed.trim() !== c.id} loading={busy} onClick={confirm}>Confirm: {ACTION[choice].toLowerCase()}</Button>
+            <Button variant={choice === 'REJECTED' ? 'danger' : 'success'} disabled={typed.trim() !== c.id || (pwNeeded && !pw)} loading={busy} onClick={confirm}>Confirm: {ACTION[choice].toLowerCase()}</Button>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

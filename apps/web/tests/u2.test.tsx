@@ -41,4 +41,24 @@ describe('approval step-up', () => {
     await userEvent.type(screen.getByLabelText('Type the case ID to confirm'), CASE_ID);
     expect(confirm).toBeEnabled();
   });
+  it('asks for the password only when the gateway answers STEP_UP_REQUIRED, then sends it (NFR-07)', async () => {
+    const c = { ...toCase(caseSummary as never), stage: 'AWAITING_APPROVAL', routedTo: 'DIRECTOR_FINANCE' } as never;
+    const { approvalService } = await import('@/services/approvals');
+    const { ApiProblem } = await import('@/lib/problem');
+    const decide = vi.spyOn(approvalService, 'decide')
+      .mockRejectedValueOnce(new ApiProblem(403, 'STEP_UP_REQUIRED', { what: 'needs your password again', fix: '' }, []))
+      .mockResolvedValueOnce(undefined);
+    render(<ProvenanceProvider><Review c={c} user={director} onChange={() => undefined} /></ProvenanceProvider>);
+    await userEvent.click(screen.getByRole('button', { name: 'Approve proposal' }));
+    expect(screen.queryByLabelText('Your password')).toBeNull();
+    await userEvent.type(screen.getByLabelText('Type the case ID to confirm'), CASE_ID);
+    const confirm = screen.getByRole('button', { name: /Confirm: approve proposal/ });
+    await userEvent.click(confirm);
+    expect(decide.mock.calls[0][4]).toBeUndefined();
+    expect(confirm).toBeDisabled(); // password now required
+    await userEvent.type(screen.getByLabelText('Your password'), 'pw-123');
+    await userEvent.click(confirm);
+    expect(decide.mock.calls[1][4]).toBe('pw-123');
+    decide.mockRestore();
+  });
 });

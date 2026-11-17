@@ -200,6 +200,20 @@
             "title": "Expected Version",
             "type": "integer"
           },
+          "password": {
+            "anyOf": [
+              {
+                "format": "password",
+                "maxLength": 256,
+                "type": "string",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Password"
+          },
           "return_stage": {
             "anyOf": [
               {

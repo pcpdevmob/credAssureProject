@@ -9,6 +9,7 @@ export const FIX: Record<string, string> = {
   VALIDATION_FAILED: 'Correct the fields marked below and submit again.',
   UNAUTHENTICATED: 'Sign in again to continue.',
   FORBIDDEN: 'Your role cannot do this. Ask the person this case is routed to.',
+  STEP_UP_REQUIRED: 'Enter your password to confirm this approval.',
   NOT_FOUND: 'Check the case ID, or open the case from the cases list.',
   TOOL_NOT_ALLOWED: 'This agent cannot use that tool. Report it to the evaluator.',
   COLLECTION_NOT_ALLOWED: 'This search is not allowed for the case. Rephrase the question.',

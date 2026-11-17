@@ -1120,6 +1120,8 @@ export interface components {
             decision: "approve" | "reject" | "return";
             /** Expected Version */
             expected_version: number;
+            /** Password */
+            password?: string | null;
             /** Return Stage */
             return_stage?: ("onboarding" | "working_capital" | "lendwise") | null;
         };
