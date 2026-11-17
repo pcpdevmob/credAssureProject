@@ -24,7 +24,7 @@ def _delete(client: TestClient, h: dict[str, str], case_id: str, version: int | 
     return client.delete(f"/v1/cases/{case_id}", params={"expected_version": version}, headers=h)
 
 
-def test_scope39_delete_keeps_record_removes_content_and_chain_verifies(
+def test_scope39_OBJ08_BR14_delete_keeps_record_removes_content_and_chain_verifies(
     client: TestClient, login: Login, run_case: Callable[[TestClient], str]
 ) -> None:
     case_id = run_case(client)
@@ -45,6 +45,9 @@ def test_scope39_delete_keeps_record_removes_content_and_chain_verifies(
     assert _count(client, tomb, case_id) == 1
     with transaction(client.app.state.services.engine) as s:
         assert reads.verify_chain(s) == []
+        thread = f"{client.app.state.services.settings.tenant_id}:{case_id}"
+        left = s.execute(text("SELECT count(*) FROM checkpoints WHERE thread_id=:t"), {"t": thread})
+        assert left.scalar_one() == 0  # LangGraph state for the case is gone too
 
     # invisible everywhere, except the evaluator's audit view of the tombstone
     for h in (p, e):

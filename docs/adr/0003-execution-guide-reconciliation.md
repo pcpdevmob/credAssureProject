@@ -24,6 +24,10 @@ the BRD wins because Track B grading requires it. Where the guide is better on H
 1. **Integrate the UI early.** A walking skeleton visible in the UI by end of Week 1, not mid-Week 2.
 2. **LLM-unavailable mode.** `LLM_ENABLED=false` runs every gate, calculation, routing and approval; narratives fall back to templates; copilot returns "unavailable". Demo and tests must pass in this mode.
 3. **Proposal versioning.** Any change to an upstream ledger fact marks the proposal stale and requires regeneration (new version).
+   *Amended 2026-11-17 (Phase 10, user decision):* a stale report is shown to the approver as the warning `report_stale`
+   (recorded in `DECISION_RECORDED.evidence_warnings`); it does **not** block the approval. Regeneration is
+   `POST /v1/cases/{id}/report` (preparer). Reason: the live negotiation round runs after routing, and blocking would add a
+   step to the approval story without changing any validated figure that routing used.
 4. **Gates enforced server-side.** Navigation or direct API calls cannot skip a gate.
 5. **Demo reset.** `make demo-reset` restores the seeded cases, the blocked case and the happy-path case.
 6. **Daily discipline.** One concrete output per day; test in Swagger before wiring the UI; commit daily; switch to the documented fallback after 60–90 minutes blocked.

@@ -11,7 +11,7 @@ Login = Callable[[TestClient, str], dict[str, str]]
 URL = "/v1/me/chat-notice"
 
 
-def test_scope40_notice_starts_unacknowledged_and_ack_persists_per_user(
+def test_scope40_CP03_notice_starts_unacknowledged_and_ack_persists_per_user(
     client: TestClient, login: Login
 ) -> None:
     p, d = login(client, "demo.preparer"), login(client, "demo.director")
@@ -27,7 +27,7 @@ def test_scope40_notice_starts_unacknowledged_and_ack_persists_per_user(
     assert client.post(f"{URL}/ack", headers=p).json() == r.json()  # idempotent: one event
 
 
-def test_scope40_first_question_records_the_acknowledgement(
+def test_scope40_CP03_first_question_records_the_acknowledgement(
     client: TestClient, login: Login, new_case: Callable[[TestClient], str]
 ) -> None:
     p = login(client, "demo.preparer")
@@ -40,7 +40,7 @@ def test_scope40_first_question_records_the_acknowledgement(
     assert "notice" not in reply.json()
 
 
-def test_scope40_changed_notice_asks_again(
+def test_scope40_CP03_changed_notice_asks_again(
     client: TestClient, login: Login, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     p = login(client, "demo.preparer")
@@ -51,7 +51,7 @@ def test_scope40_changed_notice_asks_again(
     assert client.get(URL, headers=p).json()["acknowledged_at"] is None
 
 
-def test_scope40_ack_is_audited_and_needs_auth(client: TestClient, login: Login) -> None:
+def test_scope40_CP03_ack_is_audited_and_needs_auth(client: TestClient, login: Login) -> None:
     assert client.post(f"{URL}/ack").status_code == 401
     client.post(f"{URL}/ack", headers=login(client, "demo.preparer"))
     from sqlalchemy import text

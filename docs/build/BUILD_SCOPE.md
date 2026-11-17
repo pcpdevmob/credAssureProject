@@ -37,7 +37,7 @@ Block → phase map: A=0, B=1, C=2, D=3, E=8 then 5, F=4, G=6, H=7, I1..I5=9a..9
 | 22 | Concurrency | SQLite WAL, busy_timeout 5000, one active run per case, harness concurrency ≤ rate limit, LendWise per-offer calls in parallel under shared limiter | 5, 6 |
 | 23 | Timeouts and cancellation | 30 s per model call, 5 min per stage, state saved, TIMEOUT blocker | 6 |
 | 24 | Agent registry + data-access matrix | agents/registry.yaml enforced in tool layer | 1 |
-| 25 | Agent versioning + stage retry | agent_version in AgentResult (ADR — contract change); POST /v1/cases/{id}/stages/{stage}/retry (evaluator) | 1, 9 |
+| 25 | Agent versioning + stage retry | agent_version in AgentResult (ADR — contract change); POST /v1/agents/supervisor/cases/{id}/stages/{stage}/retry (evaluator, FAILED case only) | 1, 9 |
 | 26 | ADR on excluded patterns | no agent-to-agent messaging, no inter-agent bus, no cross-case memory, no dynamic spawning | 1 |
 
 ## C. Enterprise practices at capstone scale

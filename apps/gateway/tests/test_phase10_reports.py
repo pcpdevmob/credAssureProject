@@ -91,7 +91,7 @@ def test_scope6_regenerating_a_fresh_report_keeps_its_version(
     assert client.post(f"/v1/cases/{case_id}/report", headers=h).json()["version"] == 1
 
 
-def test_scope6_stale_report_is_an_approval_warning_not_a_block(
+def test_scope6_UI07_stale_report_is_an_approval_warning_not_a_block(
     client: TestClient, login: Login, run_case: Callable[[TestClient], str]
 ) -> None:
     """User decision 1(a): the Director still approves; the warning is shown and audited."""
@@ -168,3 +168,22 @@ def test_UI08_html_report_is_escaped_and_locked_down(
     assert r.headers["content-security-policy"].startswith("default-src 'none'")
     assert "<script" not in r.text.lower()
     assert "## Approval is internal" in r.text  # Markdown inside an escaped <pre>
+
+
+def test_VER04_missing_section_blocks_the_report(
+    client: TestClient,
+    login: Login,
+    run_case: Callable[[TestClient], str],
+    monkeypatch: Any,
+) -> None:
+    """VER-04, #10: a report that lacks a required section is never served (fail closed)."""
+    case_id = run_case(client)
+    from credassure.gateway import report
+
+    monkeypatch.setattr(
+        report, "required_sections", lambda: (*required_sections(), "Covenant schedule")
+    )
+    r = client.get(f"/v1/cases/{case_id}/report", headers=login(client, "demo.preparer"))
+    assert r.status_code == 500
+    assert r.headers["content-type"].startswith("application/problem+json")
+    assert "Covenant" not in r.text  # no internals in the problem body

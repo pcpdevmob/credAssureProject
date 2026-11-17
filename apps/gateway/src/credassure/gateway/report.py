@@ -16,7 +16,9 @@ from typing import Any
 from sqlalchemy import Engine
 from sqlalchemy.orm import Session
 
+from credassure.core.errors import ApiErrorCode
 from credassure.core.money import format_inr, from_paise, to_paise
+from credassure.gateway.problems import ProblemError
 from credassure.ledger import reads
 from credassure.ledger.models import Case, CaseFile, LedgerFact
 from credassure.ledger.session import transaction
@@ -257,7 +259,7 @@ def _sections(s: Session, case: Case, values: dict[str, LedgerFact]) -> list[_Se
     internal = sec("Approval is internal, not loan acceptance").put(INTERNAL_APPROVAL)
     out = [summary, ready, funding, offers, nego, verify, routing, history, traces, internal]
     if [x.title for x in out] != list(required_sections()):  # VER-04: fail closed
-        raise RuntimeError("report sections do not match sections.yaml")
+        raise ProblemError(500, "the report is incomplete", ApiErrorCode.INTERNAL_ERROR)
     return out
 
 
