@@ -77,6 +77,9 @@ By owner (manual slots only; 5 assigned in total): Tejas 1, Abhishek 1, [Name 6]
 - **Open:** CP-01 10/25 live → after human-checked retrieval labels; tag outdated-limits docs `superseded_by` (R-SIDBI-P-008 2020 MSME limits, R-CG-C-274 old ₹200 lakh cap; KR-04 corpus gap); then consider ≤2 `cp_answer` regenerations. Own-KFS clause has no tenant term (security SHOULD 4); public search assumes `lender_type=commercial_bank`; A3/A5 ablations not wired to the copilot (Phase 11); embedder from `os.environ`, not Settings (NIT). #40 acknowledgement storage stays in Phase 10.
 - **Live run:** `make copilot-live ARGS="--only regulatory --out-dir var/e8-live/reg2"` (throwaway db under `var/e8-live`).
 
+## Demo pack (2026-11-17)
+- `docs/demo/`: demo-script (10 min), demo-runbook, evidence-slide, qa. Docs only. **Case IDs:** the 10-case demo-reset gives CA-2026-0016 = main Director case and **CA-2026-0024** = paused on `min_cash_buffer` (CA-2026-0017 is now "Demo Circuits", all 3 eligible; the 2-case notes below are out of date). Not rehearsed yet: demo-reset not run on `var/case.db` with the 10-case script.
+
 ## demo-reset notes (2026-11-16)
 - **Not yet run on `var/case.db`:** the guard refused because the gateway was listening on :8000. Stop it, then `make demo-reset`. The first run backs up `var/case.db`, purges (audited) and re-seeds the users as tenant `demo`; later runs purge the demo cases and recreate CA-2026-0016 (Director approval-pending) and CA-2026-0017 (paused on `opening_position.min_cash_buffer`).
 - Replay cache, blocked-onboarding case and an approved case stay in Phase 12.
