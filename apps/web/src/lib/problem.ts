@@ -1,5 +1,5 @@
-// RFC 9457 problem+json → what the UI shows (design-plan §8). Reads the RUNTIME body, because openapi.json still declares
-// free-form error responses. Never surfaces raw JSON: a field error goes to its field, everything else becomes a banner.
+// RFC 9457 problem+json → what the UI shows (design-plan §8). openapi.json declares every 4XX/5XX as problem+json (Phase 10,
+// scope #51). Never surfaces raw JSON: a field error goes to its field, everything else becomes a banner.
 
 export type FieldError = { field: string; row?: number | null; reason: string };
 export type Banner = { what: string; fix: string };

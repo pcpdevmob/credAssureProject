@@ -221,7 +221,7 @@ class Decision(BaseModel):
     decision: Literal["approve", "reject", "return"]
     return_stage: Literal["onboarding", "working_capital", "lendwise"] | None = None
     comment: str = Field(default="", max_length=2000)
-    expected_version: int = Field(ge=0)
+    expected_version: int = Field(ge=0, le=2**31 - 1)
     # NFR-07 step-up: the approver's own password, required to approve above ₹1.5 crore.
     password: SecretStr | None = Field(default=None, max_length=256)
 

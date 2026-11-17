@@ -23,6 +23,7 @@ from typing import Any
 import yaml
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.utils import get_openapi
 from langgraph.checkpoint.sqlite import SqliteSaver
 from limits import parse
 from limits.storage import MemoryStorage
@@ -589,6 +590,23 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
         )
 
     @app.middleware("http")
+    async def upload_cap(
+        request: Request, call_next: Callable[[Request], Awaitable[Response]]
+    ) -> Response:
+        """E10 SHOULD-1: refuse an oversized upload from its Content-Length, before multipart
+        parsing. The route still checks the file itself (chunked bodies have no length)."""
+        size = request.headers.get("content-length", "")
+        cap = settings.max_upload_bytes + _MULTIPART_OVERHEAD
+        if request.url.path.endswith("/files") and size.isdigit() and int(size) > cap:
+            return problems.problem_response(
+                request,
+                413,
+                f"file is larger than {settings.max_upload_bytes} bytes",
+                ApiErrorCode.PAYLOAD_TOO_LARGE,
+            )
+        return await call_next(request)
+
+    @app.middleware("http")
     async def request_id(
         request: Request, call_next: Callable[[Request], Awaitable[Response]]
     ) -> Response:
@@ -612,7 +630,68 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
         app.include_router(agent_router, prefix=f"/v1/agents/{name}")
         app.dependency_overrides[deps.get_supervisor] = lambda: svc.service
         app.dependency_overrides[deps.get_principal] = current_user
+    app.openapi = lambda: _openapi(app)  # type: ignore[method-assign]
     return app
+
+
+_MULTIPART_OVERHEAD = 64 * 1024  # boundaries and part headers around one file
+_PROBLEM = {
+    "type": "object",
+    "required": ["type", "title", "status", "detail", "code"],
+    "properties": {
+        "type": {"type": "string"},
+        "title": {"type": "string"},
+        "status": {"type": "integer"},
+        "detail": {"type": "string"},
+        "code": {"type": "string"},
+        "instance": {"type": "string"},
+        "errors": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "field": {"type": ["string", "null"]},
+                    "row": {"type": ["integer", "null"]},
+                    "reason": {"type": "string"},
+                },
+            },
+        },
+    },
+}
+
+
+def _openapi(app: FastAPI) -> dict[str, Any]:
+    """E10 SHOULD-2, scope #51: the schema says what the runtime does. Every error is RFC 9457
+    problem+json (4XX, 5XX, and 422 in place of FastAPI's default), and the agent routers' case
+    routes need the same bearer token as the core routes (their auth is a gateway override, which
+    FastAPI cannot see)."""
+    if app.openapi_schema:
+        return app.openapi_schema
+    schema = get_openapi(title=app.title, version=app.version, routes=app.routes)
+    components = schema.setdefault("components", {})
+    components.setdefault("securitySchemes", {})["HTTPBearer"] = {
+        "type": "http",
+        "scheme": "bearer",
+    }
+    components.setdefault("schemas", {})["Problem"] = _PROBLEM
+    problem = {
+        "content": {
+            "application/problem+json": {"schema": {"$ref": "#/components/schemas/Problem"}}
+        }
+    }
+    for path, item in schema["paths"].items():
+        for op in item.values():
+            responses = op.setdefault("responses", {})
+            if "422" in responses:
+                responses["422"] = {"description": "Validation error", **problem}
+            responses["4XX"] = {"description": "Client error", **problem}
+            responses["5XX"] = {"description": "Server error", **problem}
+            if path.startswith("/v1/agents/") and "/cases/" in path:
+                op.setdefault("security", [{"HTTPBearer": []}])
+    schema["components"]["schemas"].pop("HTTPValidationError", None)
+    schema["components"]["schemas"].pop("ValidationError", None)
+    app.openapi_schema = schema
+    return schema
 
 
 def app() -> FastAPI:

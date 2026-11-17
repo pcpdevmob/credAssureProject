@@ -73,6 +73,10 @@ _KFS_ID, _OFFER_ID = re.compile(KFS_DOC_ID), re.compile(OFFER_ID)
 _LOCKED = frozenset({"AWAITING_APPROVAL", "HELD", "APPROVED", "REJECTED"})
 
 
+MAX_PAISE = 10**15  # ₹1,00,00,00,00,00,000: far above any MSME order; fits SQLite INTEGER (#51)
+MAX_INT = 2**31 - 1  # versions and counters (same bound as the lineage route)
+
+
 def money(paise: int) -> dict[str, Any]:
     return {"paise": paise, "display": format_inr(from_paise(paise))}
 
@@ -80,8 +84,8 @@ def money(paise: int) -> dict[str, Any]:
 class NewCase(BaseModel):
     msme_name: str = Field(min_length=1, max_length=200)
     order_ref: str = Field(min_length=1, max_length=64)
-    order_value_paise: int = Field(gt=0)
-    indicative_amount_paise: int = Field(ge=0)
+    order_value_paise: int = Field(gt=0, le=MAX_PAISE)
+    indicative_amount_paise: int = Field(ge=0, le=MAX_PAISE)
     due_date: date
 
 
@@ -473,7 +477,7 @@ def get_report(
     who: User,
     svc: Svc,
     fmt: Annotated[Literal["md", "html", "json"], Query()] = "md",
-    version: Annotated[int | None, Query(ge=1)] = None,
+    version: Annotated[int | None, Query(ge=1, le=MAX_INT)] = None,
 ) -> PlainTextResponse | dict[str, Any]:
     """The proposal report (UI-08) at `version` (default: latest; a draft when none exists).
     Rendered from the ledger fact versions it pinned; `stale` when the figures changed since
@@ -510,7 +514,10 @@ def new_report(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
 
 @router.delete("/cases/{case_id}")
 def delete_case(
-    case_id: str, who: Evaluator, svc: Svc, expected_version: Annotated[int, Query(ge=0)]
+    case_id: str,
+    who: Evaluator,
+    svc: Svc,
+    expected_version: Annotated[int, Query(ge=0, le=MAX_INT)],
 ) -> dict[str, Any]:
     """Scope #39, ADR 0025 (evaluator only): remove the case content, keep the append-only record
     (facts, approvals, audit) as a tombstone; the hash chain still verifies. Under the run lock,

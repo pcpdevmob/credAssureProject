@@ -5,6 +5,7 @@ errors never leak exception text to the client; the request ID ties the reply to
 """
 
 import logging
+import re
 from typing import Any
 
 from fastapi import FastAPI, Request
@@ -39,6 +40,7 @@ _TITLES = {
     401: "Unauthenticated",
     403: "Forbidden",
     404: "Not found",
+    405: "Method not allowed",
     409: "Conflict",
     413: "Payload too large",
     415: "Unsupported media type",
@@ -84,13 +86,32 @@ def problem_response(
     return JSONResponse(body, status_code=status, media_type=MEDIA_TYPE)
 
 
+def _allowed(request: Request) -> str:
+    """The methods the OpenAPI schema documents for this path (what clients and fuzzers check)."""
+    methods: set[str] = set()
+    for template, ops in request.app.openapi()["paths"].items():
+        pattern = re.sub(
+            r"\{[^}]+\}", "[^/]+", re.escape(template).replace(r"\{", "{").replace(r"\}", "}")
+        )
+        if re.fullmatch(pattern, request.url.path):
+            methods |= {m.upper() for m in ops if m in _HTTP_METHODS}
+    return ", ".join(sorted(methods))
+
+
+_HTTP_METHODS = frozenset({"get", "post", "put", "patch", "delete", "head", "options"})
+
+
 async def handle(request: Request, exc: Exception) -> JSONResponse:
     """One dispatcher for every error type (fail closed: unknown → 500 with no detail)."""
     if isinstance(exc, ProblemError):
         return problem_response(request, exc.status, exc.detail, exc.code, exc.errors)
     if isinstance(exc, StarletteHTTPException):
         code = _BY_STATUS.get(exc.status_code, ApiErrorCode.VALIDATION_FAILED)
-        return problem_response(request, exc.status_code, str(exc.detail), code)
+        response = problem_response(request, exc.status_code, str(exc.detail), code)
+        response.headers.update(exc.headers or {})  # e.g. WWW-Authenticate
+        if exc.status_code == 405:  # RFC 9110: every method of every route on this path (#51)
+            response.headers["Allow"] = _allowed(request)
+        return response
     if isinstance(exc, RequestValidationError):
         errors = [
             {
