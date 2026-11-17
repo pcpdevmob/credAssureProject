@@ -30,6 +30,7 @@ export default defineConfig({
     { name: 'demo-case', testMatch: /demo-case\.setup\.ts/, timeout: 15 * 60_000 },
     { name: 'u1', testMatch: /u1\.spec\.ts/, dependencies: ['demo-case'] },
     { name: 'u3', testMatch: /u3\.spec\.ts/, dependencies: ['demo-case'], timeout: 5 * 60_000 },
+    { name: 'u4', testMatch: /u4\.spec\.ts/, dependencies: ['demo-case'], timeout: 5 * 60_000 },
     { name: 'u2', testMatch: /u2\.spec\.ts/ }, // drives its own demo case through the UI
   ],
 });

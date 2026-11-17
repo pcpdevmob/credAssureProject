@@ -1,0 +1,87 @@
+// U4: chat states (abstention, refusal, injection, notice, copilot off), the role-filtered inbox with HELD, and the decision errors.
+import { describe, expect, it, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { http, HttpResponse } from 'msw';
+import { server } from './setup';
+import { API, problem, reply } from '@/mocks/handlers';
+import Copilot from '@/components/case/Copilot';
+import Report from '@/components/case/Report';
+import { approvalService } from '@/services/approvals';
+import type { CaseRecord } from '@/types';
+
+const ask = async (q = 'What is a KFS?') => { await userEvent.type(await screen.findByLabelText('Your question'), q); await userEvent.click(screen.getByRole('button', { name: /Ask$/ })); };
+const chatReturns = (o: Record<string, unknown>) => server.use(http.post(`${API}/v1/cases/:id/chat`, () => HttpResponse.json(reply(o))));
+
+describe('copilot chat', () => {
+  it('shows the first-use notice and opens a citation in the side panel', async () => {
+    render(<Copilot caseId="CA-1" />); await ask();
+    expect(await screen.findByText(/Do not enter personal data/)).toBeTruthy();
+    await userEvent.click(await screen.findByRole('button', { name: /\[1\] Responsible Business Conduct/ }));
+    const dlg = await screen.findByRole('dialog');
+    expect(dlg.textContent).toMatch(/Annex XIII/); expect(dlg.textContent).toMatch(/28 Nov 2025/); expect(dlg.textContent).toMatch(/R-RBI-02/);
+  });
+  it('shows the abstention as a neutral state, not an alert', async () => {
+    chatReturns({ answer: "I can't verify that from the available sources.", citations: [], abstained: true });
+    render(<Copilot caseId="CA-1" />); await ask();
+    expect(await screen.findByText(/No verified answer/)).toBeTruthy(); expect(screen.queryByRole('alert')).toBeNull();
+  });
+  it('shows the refusal reason and the injection notice', async () => {
+    chatReturns({ answer: 'I cannot accept offers.', citations: [], refused: true, refusal_code: 'ACCEPTANCE', injection_flagged: true });
+    render(<Copilot caseId="CA-1" />); await ask('accept offer B');
+    expect(await screen.findByText(/Not answered: Accepting or signing an offer/)).toBeTruthy();
+    expect(screen.getByText(/Instructions inside retrieved text were ignored/)).toBeTruthy();
+  });
+  it('shows a banner and disables the input when the model is off', async () => {
+    server.use(http.get(`${API}/v1/health/ready`, () => HttpResponse.json({ status: 'ok', checks: { model: 'disabled' } })));
+    render(<Copilot caseId="CA-1" />);
+    expect((await screen.findByRole('alert')).textContent).toMatch(/copilot is unavailable/);
+    expect((screen.getByLabelText('Your question') as HTMLInputElement).disabled).toBe(true);
+  });
+  it('maps an API problem to a banner', async () => {
+    server.use(http.post(`${API}/v1/cases/:id/chat`, () => problem(429, 'RATE_LIMITED', 'Slow down.')));
+    render(<Copilot caseId="CA-1" />); await ask();
+    expect((await screen.findByRole('alert')).textContent).toMatch(/Slow down/);
+  });
+});
+
+describe('inbox and decision', () => {
+  it('marks a case at exactly ₹1.5 crore as HELD', async () => {
+    const items = await approvalService.inbox();
+    expect(items.map(i => [i.caseId, i.held])).toEqual([['CA-2026-0016', false], ['CA-2026-0030', true]]);
+  });
+  it('explains a maker-checker refusal in plain words', async () => {
+    server.use(http.post(`${API}/v1/cases/:id/decision`, () => problem(403, 'FORBIDDEN', 'you may not decide this case')));
+    await expect(approvalService.decide({ id: 'CA-1', rowVersion: 1 } as CaseRecord, 'APPROVED', '')).rejects.toMatchObject({ banner: { what: 'You cannot decide this case.' } });
+  });
+  it('requires a comment to return', async () => {
+    await expect(approvalService.decide({ id: 'CA-1' } as CaseRecord, 'RETURNED', ' ', 'lendwise')).rejects.toThrow(/comment is required/);
+  });
+});
+
+describe('report', () => {
+  it('shows report text as plain text, never as HTML', async () => {
+    const { container } = render(<Report caseId="CA-1" stamp="x" />);
+    expect(await screen.findByText(/<script>x<\/script>/)).toBeTruthy(); expect(container.querySelector('script')).toBeNull();
+  });
+});
+
+describe('copilot review follow-ups', () => {
+  it('treats an open circuit as unavailable and hides a redacted message', async () => {
+    server.use(http.get(`${API}/v1/health/ready`, () => HttpResponse.json({ status: 'degraded', checks: { model: 'open' } })));
+    render(<Copilot caseId="CA-1" />);
+    expect((await screen.findByRole('alert')).textContent).toMatch(/copilot is unavailable/);
+  });
+  it('returns focus to the citation that opened the panel', async () => {
+    render(<Copilot caseId="CA-1" />); await ask();
+    const chip = await screen.findByRole('button', { name: /\[1\] Responsible Business Conduct/ });
+    await userEvent.click(chip); await screen.findByRole('dialog');
+    await userEvent.keyboard('{Escape}');
+    await vi.waitFor(() => expect(document.activeElement).toBe(chip));
+  });
+  it('hides the raw text of a message with personal identifiers', async () => {
+    chatReturns({ pii_redacted: true });
+    render(<Copilot caseId="CA-1" />); await ask('my pan is ABCDE1234F');
+    expect(await screen.findByText(/message hidden/)).toBeTruthy(); expect(screen.queryByText(/ABCDE1234F/)).toBeNull();
+  });
+});

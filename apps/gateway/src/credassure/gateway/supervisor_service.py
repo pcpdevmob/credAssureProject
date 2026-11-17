@@ -257,6 +257,7 @@ class SupervisorService:
                 for c in reply.citations
             ],
             "refused": reply.refused,
+            "abstained": reply.abstained,
             "refusal_code": reply.refusal_code,
             "injection_flagged": reply.injection_flagged,
             "ranking": list(reply.ranking) if reply.ranking is not None else None,

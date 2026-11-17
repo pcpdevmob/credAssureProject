@@ -522,6 +522,7 @@ def test_UI06_CP02_chat_with_llm_off_abstains(fx: SimpleNamespace) -> None:
     )
     assert r.status_code == 200, r.text
     assert r.json()["answer"] == "I can't verify that from the available sources."  # model off
+    assert r.json()["abstained"] is True and r.json()["refused"] is False
 
 
 def test_UI08_report_has_every_trace_id_and_internal_approval_wording(

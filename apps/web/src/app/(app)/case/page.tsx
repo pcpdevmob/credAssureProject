@@ -2,7 +2,7 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, GitBranch, UserCheck, Upload, LineChart, Scale, FileCheck2, ScrollText } from 'lucide-react';
+import { ArrowLeft, GitBranch, UserCheck, Upload, LineChart, Scale, FileCheck2, ScrollText, MessageCircleQuestion, FileText } from 'lucide-react';
 import { useUser } from '@/components/AppShell';
 import { Card, StageBadge, Tabs, Skeleton, Badge } from '@/components/ui';
 import { caseService, onboardingService, workingCapitalService, lendWiseService, supervisorService } from '@/services';
@@ -13,15 +13,18 @@ import Readiness from '@/components/case/Readiness';
 import Documents from '@/components/case/Documents';
 import Funding from '@/components/case/Funding';
 import Lenders from '@/components/case/Lenders';
+import Copilot from '@/components/case/Copilot';
+import Report from '@/components/case/Report';
 import Review from '@/components/case/Review';
 import AuditList from '@/components/AuditList';
 import { Figure } from '@/components/Figure';
 
-type Tab = 'workflow' | 'readiness' | 'documents' | 'funding' | 'lenders' | 'review' | 'audit';
+type Tab = 'workflow' | 'readiness' | 'documents' | 'funding' | 'lenders' | 'review' | 'copilot' | 'report' | 'audit';
 const TABS = [
   { id: 'workflow', label: 'Workflow', icon: <GitBranch className="h-4 w-4" /> }, { id: 'readiness', label: 'Readiness', icon: <UserCheck className="h-4 w-4" /> },
   { id: 'documents', label: 'Documents', icon: <Upload className="h-4 w-4" /> }, { id: 'funding', label: 'Funding gap', icon: <LineChart className="h-4 w-4" /> },
   { id: 'lenders', label: 'Lender offers', icon: <Scale className="h-4 w-4" /> }, { id: 'review', label: 'Review & approval', icon: <FileCheck2 className="h-4 w-4" /> },
+  { id: 'copilot', label: 'Ask CredAssure', icon: <MessageCircleQuestion className="h-4 w-4" /> }, { id: 'report', label: 'Report', icon: <FileText className="h-4 w-4" /> },
   { id: 'audit', label: 'Audit', icon: <ScrollText className="h-4 w-4" /> },
 ] as { id: Tab; label: string; icon: React.ReactNode }[];
 
@@ -65,6 +68,8 @@ function CaseView() {
       {tab === 'funding' && (a ? <Funding a={a} /> : <NotYet what="The validated funding assessment" />)}
       {tab === 'lenders' && (cmp ? <Lenders c={c} view={cmp} canNegotiate={user.role === 'PREPARER'} onChange={load} /> : <NotYet what="The lender comparison" />)}
       {tab === 'review' && <Review c={c} need={a?.recommendedAmount} user={user} onChange={load} />}
+      {tab === 'copilot' && <Copilot caseId={c.id} />}
+      {tab === 'report' && <Report caseId={c.id} a={a} offers={cmp} stamp={c.stage} />}
       {tab === 'audit' && (user.role === 'EVALUATOR' ? <AuditList caseId={c.id} /> : <NotYet what="The audit log (evaluators only)" />)}
     </div>
   </>);

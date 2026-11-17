@@ -20,3 +20,10 @@ then routing. **Live progress** shows each stage's result as it finishes.
 If a stage needs data, the case stops with one question, for example a missing minimum cash buffer. Upload the
 corrected file in the question card and press **Resume**. Only the blocked stage runs again. Stages that already
 passed are kept.
+
+## Ask CredAssure
+The **Ask CredAssure** tab answers questions about rules, policies and this case, and cites its sources. Open a citation
+to see the document, section and effective date. If CredAssure cannot find a verified source it says "I can't verify that
+from the available sources", which is not an error. It does not predict approval, give legal or tax advice, accept offers,
+or reveal other cases. Do not type personal identifiers; they are redacted. If the language model is switched off the tab
+says so, and gates, calculations, routing and approval still work.
