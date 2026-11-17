@@ -29,7 +29,7 @@ class OfferTablesNotEmptyError(RuntimeError):
 def upgrade() -> None:
     conn = op.get_bind()
     counts = {  # constant table names, no input
-        t: conn.execute(sa.text(f"SELECT count(*) FROM {t}")).scalar_one()  # noqa: S608
+        t: conn.execute(sa.text(f"SELECT count(*) FROM {t}")).scalar_one()  # noqa: S608  # nosec B608
         for t in TABLES
     }
     if any(counts.values()):
