@@ -317,6 +317,7 @@ SUFFIX_MONEY = [
 ]
 SUFFIX_RATE = [
     ("12.50 % p.a.", "0.125"),
+    ("11.5% p.a.", "0.115"),  # Phase 10b item 5, the user's example
     ("12.50%p.a.", "0.125"),
     ("12% pa", "0.12"),
     ("12 % per annum", "0.12"),
@@ -359,3 +360,10 @@ def test_VER01_find_all_spans_cover_suffixes(text: str, expected: list[tuple[str
 @pytest.mark.parametrize("text", ["12% p.m.", "1.5 % per month", "3% p.q.", "2% pm"])
 def test_VER01_non_annual_rate_is_unparsed_not_read_as_annual(text: str) -> None:
     assert [p.kind for p in find_all(text)] == ["unparsed"]
+
+
+def test_VER01_csv_cell_with_rupee_suffix_reaches_the_cash_engine() -> None:
+    """Phase 10b item 5 (E4 S1): a CSV amount cell written "1,42,00,000/-" is read, not refused."""
+    from credassure.engines.cashflow import money
+
+    assert money("1,42,00,000/-") == Decimal("14200000")
