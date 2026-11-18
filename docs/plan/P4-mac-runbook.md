@@ -5,6 +5,8 @@ without a corpus. These steps need the ingested corpus, Ollama embeddings and th
 the Mac. Prerequisite: the 20 dev-split labels are confirmed (`evaluation/retrieval/dev/README.md`).
 Never read the frozen 40 labels to choose a setting; the ladder reports them only.
 
+Or run everything at once: `bash scripts/p4_mac_run.sh` (logs to `var/p4-run.log`).
+
 ```bash
 git pull                                   # on feature/LendWise after #5 and the P4 PR merge
 uv sync --all-packages --locked --extra rerank
