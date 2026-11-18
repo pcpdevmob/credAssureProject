@@ -69,7 +69,7 @@ flowchart LR
 | Quality goal | Strategy | Where |
 |---|---|---|
 | Correctness | Pure deterministic engines with Decimal/paise; independent gold; property tests | `packages/engines`, `evaluation/gold` |
-| Safety | Layered guardrails (input → context → output → action); Verification Critic; documents as data | `packages/security`, `agents/critic` |
+| Safety | Layered guardrails R1–R5 (input → retrieval → tool → output → telemetry); Verification Critic; documents as data | `packages/guardrails`, `agents/critic` |
 | Accountability | Fact ledger with lineage; hash-chained audit in the same transaction as each write | `packages/ledger` |
 | Modifiability | Modular monolith in a monorepo; hexagonal agents (ports and adapters); API-first; import-linter | ADR 0005, ADR 0006 |
 | Reproducibility | Frozen data with hashes; seeded generators; versions recorded per result | `data/`, `evaluation/` |
@@ -88,7 +88,7 @@ flowchart TB
     GW["apps/gateway — FastAPI: auth, /v1 routers, job runner, SSE"]
     SUP["agents/supervisor — LangGraph workflow + Plan"]
     AG["agents/onboarding · working-capital · lendwise · critic · copilot"]
-    PK["packages — core, engines, ledger, llm, retrieval, security, tools, reports, lender-sim, observability"]
+    PK["packages — core, guardrails, engines, ledger, llm, retrieval, security, tools, reports, lender-sim, observability"]
   end
   subgraph Stores
     CDB[("case.db — SQLite WAL")]
@@ -140,7 +140,8 @@ fakes (`FakeLLM`, in-memory ledger, fixed clock). No agent imports another agent
 | ledger | Models, migrations, repositories, unit of work, fact ledger, hash-chained audit | `LedgerPort`, `AuditLog` |
 | llm | Client, structured output + repair, cache, rate limiter, timeouts, circuit breaker (registry and budget contract in core, ADR 0008) | `LLMPort` |
 | retrieval | Chunkers, FTS5, Chroma, RRF fusion, reranker, filters | `RetrievalPort` |
-| security | JWT, roles/attributes policy, PII redaction, spotlighting, injection scanner | Policy functions |
+| guardrails | Rails R1–R5 (ADR 0029): PII v2 (Presidio pattern recognisers, no NER; regex fallback), injection scanner, spotlighting, refusal rules, excerpt cap, `guardrail_event`, data classes C1–C4, policy `config/guardrails.yaml` | `pii.find/redact`, `events.record`, `policy.load` |
+| security | JWT, roles/attributes policy; re-exports the guardrails modules at their Phase 6 paths | Policy functions |
 | tools | Tool registry, per-agent allowlists and data-access matrix | `ToolPort` |
 | reports | Templates, required sections, versioning/staleness | Renderer |
 | lender-sim | Deterministic lender replies | `LenderGateway` |
@@ -287,7 +288,7 @@ in a new major version. Contract tests per route plus schema-based fuzzing (Sche
 | Model abstraction | OpenAI-compatible `LLMPort`; model name and capabilities in config (context window, guided JSON) |
 | Prompt management | YAML prompts with semantic versions and hashes; changes trigger the fast eval subset in CI |
 | Structured output | Schema in prompt + examples; Pydantic validation; repair ≤2; else ERROR with blocker |
-| Guardrails | Input (PII, refusal, injection scan) → context (spotlighting, filters) → output (Critic) → action (no side-effect tools) |
+| Guardrails | Five rails in `packages/guardrails` (ADR 0029): R1 input (uploads, chat: PII refuse/redact, injection flags), R2 retrieval (filters, datamarking, excerpt cap), R3 tools (allowlist, loop detection), R4 output (Critic, PII re-scan), R5 telemetry (mask before export, `gen_ai.*` attributes). Every decision is a `guardrail` span; blocks, redactions, flags and caps are also `GUARDRAIL_EVENT` audit rows (or the existing dedicated event the span names). Policy in `config/guardrails.yaml`, versioned and hashed. Data classes C1–C4 (ADR 0030) |
 | Tool use | Allowlist per agent; data-access matrix; copilot chooses from a fixed tool list, code validates |
 | Autonomy limits | ≤10 steps, token caps, wall-clock timeouts, loop detection; human approval for every consequential decision |
 | Evaluation | Frozen test set, independent gold, baseline S1–S3, ablations A1–A5, calibrated judge (J1), red-team |

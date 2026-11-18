@@ -1,4 +1,5 @@
 'use client';
+import { toCsv } from '@/lib/csv';
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import type { AuditEvent } from '@/types';
@@ -12,7 +13,7 @@ export default function AuditList({ caseId }: { caseId?: string }) {
   const [ev, setEv] = useState<AuditEvent[]>([]); const [q, setQ] = useState(''); const [t, setT] = useState('ALL');
   useEffect(() => { auditService.list(caseId).then(setEv); }, [caseId]);
   const list = useMemo(() => ev.filter(e => (t === 'ALL' || e.actorType === t) && (e.action + e.detail + e.actor + e.caseId).toLowerCase().includes(q.toLowerCase())), [ev, q, t]);
-  const csv = () => { const rows = [['at', 'caseId', 'actorType', 'actor', 'action', 'detail', 'severity'], ...list.map(e => [e.at, e.caseId, e.actorType, e.actor, e.action, e.detail, e.severity])]; const b = new Blob([rows.map(r => r.map(x => `"${String(x).replace(/"/g, '""')}"`).join(',')).join('\n')], { type: 'text/csv' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `audit${caseId ? '-' + caseId : ''}.csv`; a.click(); };
+  const csv = () => { const rows = [['at', 'caseId', 'actorType', 'actor', 'action', 'detail', 'severity'], ...list.map(e => [e.at, e.caseId, e.actorType, e.actor, e.action, e.detail, e.severity])]; const b = new Blob([toCsv(rows)], { type: 'text/csv' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `audit${caseId ? '-' + caseId : ''}.csv`; a.click(); };
   return (<Card>
     <div className="flex flex-col gap-3 border-b border-slate-100 p-4 sm:flex-row sm:items-center">
       <div className="relative flex-1"><Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" /><Input className="pl-9" placeholder="Search events…" value={q} onChange={e => setQ(e.target.value)} /></div>
