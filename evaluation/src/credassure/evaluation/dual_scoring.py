@@ -135,7 +135,7 @@ def human_sample(
     must = [r for r in judged if r.get("supported") and not r.get("strict")]
     rest = [r for r in judged if r not in must]
     k = round(len(rest) * fraction)
-    extra = random.Random(seed).sample(rest, k) if k else []  # noqa: S311 - sampling, not security
+    extra = random.Random(seed).sample(rest, k) if k else []  # noqa: S311  # nosec B311 - seeded sampling, not security
     return must + extra
 
 
