@@ -92,6 +92,8 @@ Paths are relative to the repo root. The defaults point at the frozen synthetic 
 | `PLANNER_MODE` | `fixed` | `fixed` or `llm_proposes` (code validates) |
 | `FEATURE_STRETCH` | `false` | BRD §4.2 stretch items |
 | `ABLATION` | unset | A1 to A5; evaluation only |
+| `EVAL_DIR` | `var/eval` | Harness run folders the evaluator scorecard reads (P9 U5) |
+| `BASELINE_DIR` | `evaluation/baseline/results` | Baseline S1–S3 result files the scorecard reads (P9 U5) |
 
 ## End-to-end tests
 `E2E_USERNAME`, `E2E_PASSWORD`, `E2E_BASE_URL`, `E2E_API_URL`: read by Playwright. The `make e2e*` targets set the URLs themselves, so don't put `E2E_*` URLs in `.env`.

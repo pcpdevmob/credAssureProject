@@ -49,6 +49,8 @@ def _decide(
     client: TestClient, h: dict[str, str], case_id: str, decision: str, version: int, **extra: Any
 ) -> Response:
     body = {"decision": decision, "comment": "test", "expected_version": version, **extra}
+    if decision == "approve":
+        body.setdefault("attested", True)  # P9 approver attestation
     return client.post(f"/v1/cases/{case_id}/decision", json=body, headers=h)
 
 
