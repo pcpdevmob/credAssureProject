@@ -16,6 +16,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from credassure.core.errors import ApiErrorCode
 from credassure.ledger.errors import ConflictError
 from credassure.ledger.session import RunInProgressError
+from credassure.observability.log import log_context
 from credassure.security.auth import AuthError, ForbiddenError
 from credassure.tools.registry import RegistryError
 
@@ -81,9 +82,15 @@ def problem_response(
         "code": code.value,
         "instance": request.url.path,
     }
+    rid = getattr(request.state, "request_id", None)
+    if rid:
+        body["request_id"] = rid  # quote it when reporting a problem; matches X-Request-ID
     if errors is not None:
         body["errors"] = errors
-    return JSONResponse(body, status_code=status, media_type=MEDIA_TYPE)
+    response = JSONResponse(body, status_code=status, media_type=MEDIA_TYPE)
+    if rid:
+        response.headers["X-Request-ID"] = rid  # a 500 is answered outside the middleware
+    return response
 
 
 def _allowed(request: Request) -> str:
@@ -138,7 +145,12 @@ async def handle(request: Request, exc: Exception) -> JSONResponse:
         return problem_response(request, 409, str(exc), ApiErrorCode.CONFLICT)
     if isinstance(exc, RegistryError):
         return problem_response(request, 403, "tool not allowed", exc.code)
-    _log.exception("unhandled error", exc_info=exc)
+    rid = getattr(request.state, "request_id", None)
+    with log_context(request_id=rid):  # the 500 is handled outside the request middleware
+        _log.exception("unhandled error", exc_info=exc)
+    metrics = getattr(request.app.state, "metrics", None)
+    if metrics is not None:
+        metrics.unhandled_error()
     return problem_response(request, 500, "internal error", ApiErrorCode.INTERNAL_ERROR)
 
 
