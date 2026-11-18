@@ -1,7 +1,27 @@
 # CredAssure model card
 
-Status: started 2026-11-05. The full card (intended use, models, evaluation results, limitations, ethics) is
-completed in Phase 12 (BUILD_SCOPE #3).
+Status: v1.0.0, 2026-11-18 (scope #3). Intended use, users, out-of-scope uses, refusal policy, evaluation results,
+fairness, limitations and the Sutra mapping are in the system card: [../SYSTEM_CARD.md](../SYSTEM_CARD.md). This page keeps
+the model and data details.
+
+## Models
+| Role | Model | Notes |
+|---|---|---|
+| Chat, all agents | Qwen3-8B (course endpoint `Qwen/Qwen3-8B`, local Ollama `qwen3:8b`) | ≤ 8B, no fine-tuning, no vision; thinking turned off; temperature 0; every call cached (NFR-05) |
+| Embeddings | bge-small-en-v1.5 | Course endpoint or local |
+| Reranker | BAAI/bge-reranker-base at a pinned revision | Scores for the answerability gate only (`RERANK_ORDER=false`) |
+| Judge J1 | Same chat model | Calibrated on a 20% human sample; humans score free text if kappa < 0.7 (ADR 0014) |
+
+Swapping the model is configuration only (`MODELS=local|course`, quality scenario Q7). Prompts are versioned, hashed YAML files
+(`prompts/*.yaml` in each package, `credassure.core.prompts`); a version bump is a cache miss, so a changed prompt is never answered from an old reply.
+
+## What the model does and does not do
+| Does | Does not |
+|---|---|
+| Draft stage narratives from ledger slots | Decide any gate, figure, route or ranking |
+| Extract charges from one KFS per call (code keeps only verbatim spans) | See another offer's KFS in the same call |
+| Pick one copilot tool from a fixed list | Add a tool, call a tool for another case, or run code |
+| Write cited answers; code removes sentences without a valid span | Approve, accept, sign or submit anything |
 
 ## Data provenance
 CredAssure's retrieval corpus is built only from public, official Indian sources: RBI, CGTMSE, the Gazette, CBIC and the
@@ -19,7 +39,3 @@ Collection follows ADR 0020:
   committed.
 - **Court judgments:** used only for legal points, never for person-centric features.
 - **Ingestion safety:** ingestion is size-limited and text-only (pypdf, no rendering). Rejected files are quarantined.
-
-## To complete in Phase 12
-Intended use and users · models and endpoints · evaluation results (BRD §13) · known limitations · refusal policy ·
-fairness and safety considerations · contacts.
