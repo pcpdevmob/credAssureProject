@@ -33,6 +33,7 @@ export const handlers = [
   http.get(`${API}/v1/citations/:chunk`, () => HttpResponse.json(passage())),
   http.get(`${API}/v1/cases/:id/safety`, ({ params }) => HttpResponse.json({ case_id: String(params.id), counts: {}, events: [] })),
   http.get(`${API}/v1/eval/scorecard`, () => HttpResponse.json({ baseline: null, full: null, ablations: {}, target: 92 })),
+  http.post(`${API}/v1/client-errors`, () => new HttpResponse(null, { status: 204 })),
   http.get(`${API}/v1/health/ready`, () => HttpResponse.json({ status: 'ok', checks: { db: 'ok', model: 'closed' } })),
   http.get(`${API}/v1/inbox`, () => HttpResponse.json({ items: [{ case_id: 'CA-2026-0016', msme_name: 'Demo Electronics', status: 'AWAITING_APPROVAL', route: 'director_finance' }, { case_id: 'CA-2026-0030', msme_name: 'Boundary Works', status: 'HELD', route: 'HELD' }] })),
   http.post(`${API}/v1/cases/:id/decision`, () => HttpResponse.json({ status: 'APPROVED', approval_id: 1 })),

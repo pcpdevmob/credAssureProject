@@ -21,7 +21,8 @@ paise must never be put in a prompt.
 """
 
 import re
-from collections.abc import Mapping
+import threading
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from typing import Any
 
@@ -96,6 +97,35 @@ _PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
 )
 
 
+MIN_NAME_LENGTH = 5  # shorter "names" would mask ordinary words
+_names_lock = threading.Lock()
+_names: re.Pattern[str] | None = None
+
+
+def set_known_names(names: Iterable[str]) -> int:
+    """H13 (ADR 0030 §2): mask these exact names (the employees in hr.db), case-insensitively and
+    only as whole words. The gateway loads them at startup; returns how many are active."""
+    global _names
+    clean = sorted(
+        {" ".join(n.split()) for n in names if len(" ".join(n.split())) >= MIN_NAME_LENGTH},
+        key=len,
+        reverse=True,
+    )  # longest first, so one name never cuts another short
+    pattern = (
+        re.compile(
+            r"(?<![\w-])(?:"
+            + "|".join(r"\s+".join(re.escape(w) for w in n.split()) for n in clean)
+            + r")(?![\w-])",
+            re.I,
+        )  # any run of spaces or a line break between the words of a name
+        if clean
+        else None
+    )
+    with _names_lock:
+        _names = pattern
+    return len(clean)
+
+
 @dataclass(frozen=True)
 class Hit:
     kind: str
@@ -111,8 +141,17 @@ def find(text: str) -> list[Hit]:
     def free(a: int, b: int) -> bool:
         return all(b <= s or a >= e for s, e in taken)
 
+    names = _names
+    if names is not None:  # employee names first: exact strings, never digits
+        for m in names.finditer(text):
+            hits.append(Hit("EMPLOYEE_NAME", m.start(), m.end()))
+            taken.append(m.span())
     for m in _AADHAAR.finditer(text):
-        if verhoeff_valid(re.sub(r"\D", "", m.group())) and not _is_money(text, *m.span()):
+        if (
+            free(*m.span())
+            and verhoeff_valid(re.sub(r"\D", "", m.group()))
+            and not _is_money(text, *m.span())
+        ):
             hits.append(Hit("AADHAAR", m.start(), m.end()))
             taken.append(m.span())
     _engine, v2 = recognisers.spans(text)  # PII v2 (ADR 0030): GSTIN, UDYAM, UPI, CARD

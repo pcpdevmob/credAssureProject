@@ -87,7 +87,14 @@ def verify_password(digest: str, password: str) -> bool:
         return False
 
 
-def issue_token(who: Principal, secret: str, minutes: int, now: datetime | None = None) -> str:
+def issue_token(
+    who: Principal,
+    secret: str,
+    minutes: int,
+    now: datetime | None = None,
+    auth_time: datetime | None = None,
+) -> str:
+    """`auth_time` is when the user last typed their password; a refresh keeps it (H12)."""
     if len(secret) < MIN_SECRET:
         raise AuthError("JWT secret too short")
     if not 0 < minutes <= MAX_MINUTES:
@@ -101,8 +108,26 @@ def issue_token(who: Principal, secret: str, minutes: int, now: datetime | None 
         "tenant": who.tenant_id,
         "iat": now,
         "exp": now + timedelta(minutes=minutes),
+        "auth_time": int((auth_time or now).timestamp()),
     }
     return jwt.encode(claims, secret, algorithm=ALGORITHM)
+
+
+def token_auth_time(token: str, secret: str, now: datetime | None = None) -> datetime:
+    """When the password behind a valid token was typed (its `auth_time`, else `iat`)."""
+    verify_token(token, secret, now)  # signature, issuer, audience and expiry first
+    claims = jwt.decode(
+        token,
+        secret,
+        algorithms=[ALGORITHM],
+        issuer=ISSUER,
+        audience=AUDIENCE,
+        options={"verify_exp": False, "verify_iat": False},
+    )
+    stamp = claims.get("auth_time", claims.get("iat"))
+    if not isinstance(stamp, int | float):
+        raise AuthError("invalid token")
+    return datetime.fromtimestamp(stamp, UTC)
 
 
 def verify_token(token: str, secret: str, now: datetime | None = None) -> Principal:

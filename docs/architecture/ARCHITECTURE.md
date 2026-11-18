@@ -304,6 +304,8 @@ timeout, internal — each with a stable code and user-facing message (`packages
 Structured JSON logs (request_id, tenant_id, case_id, trace_id, agent, stage), OpenTelemetry-style tracing with Langfuse for model
 spans (aligned to the OpenTelemetry GenAI semantic conventions where practical), RED metrics per endpoint, per-stage tokens, latency,
 cost and Critic fallback rate. Health: `/health/live`, `/health/ready` (checks DB, Chroma, model circuit state).
+As built: `GET /v1/metrics` (Prometheus text, evaluator), `request_id` in every problem+json body, browser crash reports
+through `POST /v1/client-errors` into the same redacted log; no third-party tracker (`docs/deployment/observability.md`).
 
 ### 8.9 Configuration
 12-factor: all settings from environment via one validated settings class per app; flags documented in a table
