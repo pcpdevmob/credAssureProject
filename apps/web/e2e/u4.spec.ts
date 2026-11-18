@@ -48,6 +48,7 @@ test('U4 chat, inbox, decision, report', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Return to stage' })).toBeDisabled(); // comment required
   await page.getByRole('radio', { name: 'Approve proposal' }).check();
   await capture(page, 'decision');
+  await page.getByLabel(/I reviewed the Critic findings/).check(); // P9 attestation
   await page.getByRole('button', { name: 'Approve proposal' }).click();
   await expect(page.getByRole('button', { name: /^Confirm/ })).toBeDisabled(); // type the case ID first
   await page.keyboard.press('Escape');
