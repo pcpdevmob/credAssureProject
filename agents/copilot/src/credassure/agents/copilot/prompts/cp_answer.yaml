@@ -1,8 +1,10 @@
 # CP-01: cited answer from at most five spotlighted passages, or case figures as {key} slots
-# that code fills in. Code maps [n] to chunk ids and the Critic checks every citation, figure and
-# claim; anything else becomes the exact abstention string (CP-02).
+# that code fills in. 2.0.0 (P5, scope #64): every passage sentence carries a span id [n.m]; the
+# model ends each answer sentence with the span ids that support it, code cuts any sentence
+# without a valid one and maps the rest to chunk ids; the Critic checks every citation, figure and
+# claim. Nothing left becomes the exact abstention string (CP-02).
 name: cp_answer
-version: 1.0.0
+version: 2.0.0
 max_tokens: 300
 template: |
   You answer a question from a finance team about an Indian MSME working-capital loan, using ONLY
@@ -17,8 +19,11 @@ template: |
   $history
   Rules:
   - Answer in 1 to 3 short sentences in plain English.
-  - End every sentence that uses a passage with its number, e.g. [1]. Copy figures and key terms
-    from the passage exactly as written there.
+  - Each passage sentence starts with its span id [n.m]: passage n, sentence m.
+  - End EVERY sentence of your answer with the span id(s) of the passage sentence(s) that support
+    it, e.g. "... first year [2.3]." or "[1.2, 1.3]". A sentence without a valid span id is
+    deleted before anyone sees it. A sentence that only states a case placeholder needs no id.
+  - Copy figures and key terms from the cited sentence exactly as written there.
   - Do not give opinions, reasons or advice the passages do not state. Do not predict approval,
     do not recommend a lender, do not accept or sign anything.
   - If the passages do not answer the question, set abstain to true and leave answer empty.

@@ -2,9 +2,11 @@
 
     refusal policy (code) → injection check on the message (code) → model off? abstain →
     the model picks one of 4 fixed tools (code validates; invalid → search_regulations) →
-    ≤5 passages, injection-scanned and spotlighted → the model answers citing [n] and writing case
-    figures only as {fact.key} slots → code maps [n] to [chunk_id] and renders the slots →
-    the Critic (verify_claims) → the answer, or exactly ABSTAIN.
+    ≤5 passages, injection-scanned, split into numbered sentence spans [n.m] and spotlighted →
+    the model answers citing a span after every sentence and writing case figures only as
+    {fact.key} slots → code cuts every sentence without a valid span id (P5, scope #64), maps
+    span ids to [chunk_id] and renders the slots → the Critic (verify_claims) → the answer, or
+    exactly ABSTAIN when nothing is left.
 
 case_id comes from the gateway, never from the model (SUP-08). The model never sees a figure it
 could copy into an answer: case figures exist only as slot names, filled in by code.
@@ -19,7 +21,7 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict
 
-from credassure.agents.copilot import policy
+from credassure.agents.copilot import policy, spans
 from credassure.agents.copilot.policy import ABSTAIN
 from credassure.core import slots as slot_fmt
 from credassure.core.errors import LLMError
@@ -40,7 +42,6 @@ INJECTION_REPLY = (
 )
 NO_RANKING = "no ranking has been calculated for this case yet"
 NO_BLOCKER = "Nothing is blocked on this case right now."
-_REF = re.compile(r"\[(\d+(?:\s*,\s*\d+)*)\]")
 _SLOT = re.compile(r"\{([\w.\-]+)\}")
 
 
@@ -63,7 +64,7 @@ TOOL_EXAMPLES = (
 )
 ANSWER_EXAMPLES = (
     '{"abstain": false, "answer": "The fee is charged on the guaranteed amount in the first '
-    'year [2]."}',
+    'year [2.3]. After that it is charged on the outstanding amount [2.4]."}',
     '{"abstain": true, "answer": ""}',
 )
 
@@ -82,6 +83,8 @@ class Reply:
     source: str = "code"  # model | code
     findings: tuple[str, ...] = field(default=())
     facts: tuple[str, ...] = ()  # ledger keys rendered as slots (lineage inputs)
+    cut: int = 0  # answer sentences cut for lacking a valid span id (P5)
+    span_ids: tuple[str, ...] = ()  # "n.m" spans cited by the kept sentences
 
     @property
     def abstained(self) -> bool:
@@ -208,8 +211,13 @@ def answer(
         if not passages:
             return _abstain(tool, valid, dropped, "no passages")
 
+    numbered = {
+        n: spans.number(n, str(p.get("section_path") or ""), str(p["text"]))
+        for n, p in enumerate(passages, start=1)
+    }
     lit = spotlight(
-        [(p["chunk_id"], f"{p.get('section_path') or ''}\n{p['text']}") for p in passages]
+        [(p["chunk_id"], numbered[n].text) for n, p in enumerate(passages, start=1)],
+        cite_as="[n.m], the passage and sentence number",
     )
     prompt = registry()["cp_answer"].render(
         question=message,
@@ -225,45 +233,34 @@ def answer(
     if draft.abstain or not draft.answer.strip() or ABSTAIN in draft.answer:
         return _abstain(tool, valid, dropped, "model abstained")
 
-    cited: list[int] = []
-    bad = False
-
-    def cite(m: re.Match[str]) -> str:
-        nonlocal bad
-        out = ""
-        for n in (int(x) for x in m.group(1).split(",")):
-            if n not in lit.source_map:
-                bad = True
-                continue
-            if n not in cited:
-                cited.append(n)
-            out += f"[{lit.source_map[n]}]"
-        return out
-
-    used: dict[str, str] = {}
-
-    def fill(m: re.Match[str]) -> str:
-        nonlocal bad
-        key = m.group(1)
-        if key not in values:
-            bad = True
-            return m.group(0)
-        used[key] = values[key]
-        return values[key]
-
-    text = _SLOT.sub(fill, _REF.sub(cite, draft.answer.strip()))
-    if bad or (passages and not cited) or (not passages and not used):
-        return _abstain(tool, valid, dropped, "unknown citation or slot, or nothing cited")
+    kept = spans.cut(
+        draft.answer.strip(),
+        {n: s.spans for n, s in numbered.items()},
+        lit.source_map,
+        values,
+    )
+    if not kept.kept:  # every sentence lacked a valid span id or used an unknown slot
+        return _abstain(tool, valid, dropped, f"no supported sentence (cut {kept.cut})")
+    used = {k: values[k] for k in kept.slots}
+    text = _SLOT.sub(lambda m: values[m.group(1)], kept.text)
+    if (passages and not kept.cited) or (not passages and not used):
+        return _abstain(tool, valid, dropped, "nothing cited")
     findings = tools.call("verify_claims", case_id, {"text": text, "slots": used, "model": True})
     if findings:
         return _abstain(tool, valid, dropped, *(f.code.value for f in findings))
     meta = ("chunk_id", "doc_id", "title", "section_path", "effective_from", "collection")
     return Reply(
         text,
-        citations=tuple({k: passages[n - 1].get(k) for k in meta} for n in cited),
+        citations=tuple(
+            {k: passages[n - 1].get(k) for k in meta}
+            | {"span_ids": [i for i in kept.span_ids if i.split(".")[0] == str(n)]}
+            for n in kept.cited
+        ),
         tool=tool,
         tool_valid=valid,
         dropped=dropped,
         source="model",
         facts=tuple(used),
+        cut=kept.cut,
+        span_ids=kept.span_ids,
     )

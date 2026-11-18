@@ -40,7 +40,7 @@ PASSAGE = re.compile(r"(<<[0-9a-f]{16}>>) \[1\]\n(.*?)\n\1", re.DOTALL)
 
 
 class QuotingLLM(FakeLLM):
-    """cp_tool: search with the question; cp_answer: sentence 1 of passage [1], verbatim."""
+    """cp_tool: search with the question; cp_answer: span [1.1] of passage [1], verbatim (P5)."""
 
     def complete(self, prompt: str, *, name: str = "default", json_schema: Any = None) -> str:
         if name == "cp_tool":
@@ -53,9 +53,11 @@ class QuotingLLM(FakeLLM):
             m = PASSAGE.search(prompt)
             if not m:
                 return json.dumps({"abstain": True, "answer": ""})
-            text = m.group(2).split("\n", 1)[-1].replace("^", " ")  # drop section line
-            first = re.split(r"(?<=[.!?])\s", text.strip(), maxsplit=1)[0].rstrip(".")
-            return json.dumps({"abstain": False, "answer": f"{first} [1]."})
+            span = re.search(r"\[1\.1\]\^(.*?)(?:\^\[1\.2\]|$)", m.group(2), re.DOTALL)
+            if not span:
+                return json.dumps({"abstain": True, "answer": ""})
+            first = span.group(1).replace("^", " ").strip().rstrip(".")
+            return json.dumps({"abstain": False, "answer": f"{first} [1.1]."})
         return super().complete(prompt, name=name, json_schema=json_schema)
 
 
