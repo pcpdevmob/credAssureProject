@@ -15,9 +15,15 @@ ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 # The dev/demo database (var/case.db) is tenant "demo" (make demo-reset); an exported variable beats --env-file.
 DEMO_TENANT := TENANT_ID=demo
 
-.PHONY: hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
+.PHONY: progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe retrieval-eval retrieval-pool retrieval-silver judge kappa
+
+progress:  ## Regenerate PROGRESS.md from docs/progress/ (never edit PROGRESS.md by hand; README §12)
+	uv run python scripts/progress.py
+
+progress-check:  ## Fail if PROGRESS.md is stale or a progress entry is invalid
+	uv run python scripts/progress.py --check
 
 help:  ## List targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -25,8 +31,9 @@ help:  ## List targets
 install:  ## Sync the uv workspace (all members + dev group)
 	uv sync --all-packages
 
-check:  ## ruff, ruff format, mypy --strict, pytest, bandit
+check:  ## ruff, ruff format, mypy --strict, pytest, bandit, PROGRESS.md check
 	uv run ruff check .
+	uv run python scripts/progress.py --check
 	uv run ruff format --check .
 	uv run mypy --strict $(PY_SRC)
 	uv run pytest -q
@@ -34,8 +41,9 @@ check:  ## ruff, ruff format, mypy --strict, pytest, bandit
 	uv run bandit -q -c pyproject.toml -r $(PY_SRC)
 	uv run lint-imports
 
-check-fast:  ## ruff + fast tests (used by the Claude stop hook)
+check-fast:  ## ruff + PROGRESS.md check + fast tests (used by the Claude stop hook)
 	uv run ruff check .
+	uv run python scripts/progress.py --check
 	uv run pytest -q -m "not slow"
 
 test:  ## Full test suite with coverage

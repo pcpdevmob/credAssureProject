@@ -40,5 +40,5 @@ The same steps run automatically with `/build-all`; use these files when you wan
 - **Numbers look wrong:** `Use money-auditor on the last commit; recompute case <id> independently and show the week-by-week difference.`
 - **Small model breaks JSON:** `Show the last 5 StructuredOutputError traces; propose prompt or schema changes; do not loosen validation.`
 - **Scope creep:** `Compare the diff to BRD §4 and docs/BUILD_SCOPE.md; revert anything out of scope or put it behind FEATURE_STRETCH=false.`
-- **Blocked:** `Write the blocker, what you tried and two options into PROGRESS.md, then stop.`
+- **Blocked:** `Write the blocker, what you tried and two options into a progress entry with status: blocked (make progress), then stop.`
 - **Context too long:** `/compact` keeping the current plan, failing tests and open questions; or `/clear` then re-paste the step file.

@@ -8,6 +8,6 @@
 
 ```markdown
 Run /gate G1. If every criterion passes, run /freeze-g1 and stop for my confirmation before writing FROZEN markers.
-Follow CLAUDE.md rules: plan first, tests first, make check green, reviewer subagents, update PROGRESS.md, commit.
-Done when: G1 ticked in PROGRESS.md; FROZEN markers exist.
+Follow CLAUDE.md rules: plan first, tests first, make check green, reviewer subagents, add one progress entry in docs/progress/entries/ (from TEMPLATE.md) and update your module file in docs/progress/modules/, run make progress (never edit PROGRESS.md by hand), commit.
+Done when: G1 ticked in docs/progress/gates.md (then make progress); FROZEN markers exist.
 ```
