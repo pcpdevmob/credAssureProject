@@ -16,7 +16,7 @@ ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 DEMO_TENANT := TENANT_ID=demo
 
 .PHONY: load-smoke eval-judge eval-kappa eval-report eval-ablations progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
-        db demo-reset copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
+        db demo-reset live-run copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe retrieval-eval retrieval-ladder retrieval-pool retrieval-silver judge kappa
 
 progress:  ## Regenerate PROGRESS.md from docs/progress/ (never edit PROGRESS.md by hand; README §12)
@@ -241,6 +241,9 @@ db:  ## Migrate var/case.db + var/corpus.db and seed users (needs SEED_PASSWORD;
 	uv run python -m credassure.ledger.migrate upgrade case var/case.db
 	uv run python -m credassure.ledger.migrate upgrade corpus var/corpus.db
 	$(DEMO_TENANT) uv run $(ENV_FILE) python -m credassure.gateway.seed  # SEED_PASSWORD via Settings, into CASE_DB
+
+live-run:  ## Live full-feature run on the configured model: every feature through the API (var/live-run/); see scripts/live_run.sh
+	APP_ENV=dev LLM_ENABLED=true LOG_LEVEL=WARNING uv run $(ENV_FILE) python scripts/live_run.py $(ARGS)
 
 copilot-live:  ## E8 live: the 44 copilot items through the API on the configured model (var/e8-live)
 	uv run $(ENV_FILE) python scripts/copilot_live.py $(ARGS)

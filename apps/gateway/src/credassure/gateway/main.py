@@ -70,6 +70,7 @@ from credassure.gateway.jobs import JobRunner
 from credassure.gateway.routers import admin, auth, cases, citations, health, lineage, workflow
 from credassure.gateway.settings import Settings, get_settings
 from credassure.gateway.supervisor_service import SupervisorService
+from credassure.guardrails import switch as rail_switch
 from credassure.ledger import hr, migrate, reads
 from credassure.ledger.session import case_engine, hr_engine, transaction
 from credassure.ledger.store import SqlLedger
@@ -572,11 +573,21 @@ def _rate_key(settings: Settings, request: Request) -> str:
     return "ip:" + (request.client.host if request.client else "unknown")
 
 
+API_SECURITY_HEADERS = {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'",
+    "Referrer-Policy": "no-referrer",
+    "Cache-Control": "no-store",  # case data and tokens are never cached by a browser or proxy
+}
+
+
 def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) -> FastAPI:
     settings = settings or get_settings()
     configure_logging(settings.log_level)
     set_redactor(pii.redact)  # NFR-07: Verhoeff-aware redaction for every log line
     tracing.configure(settings)
+    rail_switch.set_off(rail_switch.SWITCHABLE if settings.ablation == "A6" else ())  # P8.5
     svc = build_services(settings, llm if llm is not None else _default_llm(settings))
     app = FastAPI(title="CredAssure API", version="0.2.0")
     app.state.settings = settings
@@ -623,6 +634,9 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
         with log_context(request_id=rid, tenant_id=settings.tenant_id):
             response = await call_next(request)
         response.headers["X-Request-ID"] = rid
+        if request.url.path.startswith("/v1/"):  # P8.4 (scope #52, OWASP API8): JSON API only;
+            for name, value in API_SECURITY_HEADERS.items():  # /docs keeps Swagger's own assets
+                response.headers.setdefault(name, value)  # a route's own CSP/cache header wins
         return response
 
     # Added last, so outermost: 429s and 500s still carry CORS headers for the web app (N2).

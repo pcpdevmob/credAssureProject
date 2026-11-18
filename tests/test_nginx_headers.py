@@ -16,7 +16,11 @@ REQUIRED = (
     "X-Frame-Options",
     "Referrer-Policy",
     "X-Robots-Tag",
+    "Permissions-Policy",
+    "Cross-Origin-Opener-Policy",
 )
+CONFS = ("finbridge.conf", "web-container.conf")
+DOCKERFILE = NGINX.parents[0] / "docker" / "Dockerfile.web"
 
 
 def blocks(conf: str) -> list[tuple[str, list[str]]]:
@@ -51,11 +55,25 @@ def blocks(conf: str) -> list[tuple[str, list[str]]]:
 
 
 def test_scope52_every_block_with_own_add_header_reincludes_the_snippet() -> None:
-    parsed = blocks((NGINX / "finbridge.conf").read_text())
-    own = [(head, st) for head, st in parsed if any(s.startswith("add_header") for s in st)]
-    assert own, "parser found no add_header blocks"
-    for head, st in own:
-        assert any(s.startswith("include") and s.endswith(SNIPPET) for s in st), head
+    for conf in CONFS:
+        parsed = blocks((NGINX / conf).read_text())
+        own = [(head, st) for head, st in parsed if any(s.startswith("add_header") for s in st)]
+        assert own, f"parser found no add_header blocks in {conf}"
+        for head, st in own:
+            assert any(s.startswith("include") and s.endswith(SNIPPET) for s in st), (conf, head)
+
+
+def test_P8_web_container_serves_the_snippet() -> None:
+    """The compose `web` image replaces nginx's default.conf with ours and installs the snippet,
+    so the container is not the one path that serves the SPA without CSP."""
+    servers = [
+        st for head, st in blocks((NGINX / "web-container.conf").read_text()) if head == "server"
+    ]
+    assert len(servers) == 1
+    assert any(s.endswith(SNIPPET) for s in servers[0] if s.startswith("include"))
+    docker = DOCKERFILE.read_text()
+    assert f"deploy/nginx/security-headers.conf /etc/nginx/snippets/{SNIPPET}" in docker
+    assert "deploy/nginx/web-container.conf /etc/nginx/conf.d/default.conf" in docker
 
 
 def test_scope52_tls_server_includes_the_snippet() -> None:

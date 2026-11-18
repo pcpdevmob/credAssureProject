@@ -1,6 +1,6 @@
 # BRD §12, scope #1: one design choice off per run; each re-runs only the categories it affects.
-# Switch: ABLATION=A1..A5 (gateway settings). Built in 9d; run and reported in Phase 11 (E13).
-version: 1.0.0
+# Switch: ABLATION=A1..A6 (gateway settings). Built in 9d; run and reported in Phase 11 (E13).
+version: 1.1.0
 A1:
   off: cash-flow and loan-cost engines (the model calculates; no SUP-05 re-check, it is the engine)
   hooks: [agents/working-capital a1_wc_calc, agents/lendwise a1_lw_apr, supervisor _gate]
@@ -22,3 +22,9 @@ A5:
     KFS scan stays on, it only records flags)
   hooks: [agents/lendwise _extract, agents/lendwise negotiate scan]
   categories: [injection, negotiation]
+A6:
+  off: guardrail rails R1 (upload refusal, protected-attribute denylist, chat PII redaction),
+    R2 (citation excerpt cap) and R4 (model-output PII re-scan); the Critic stays on (that is A2),
+    R3 tool allowlist and R5 trace masking never switch off. Refused in the demo profile.
+  hooks: [packages/guardrails switch, gateway validate_file, gateway chat, gateway citations]
+  categories: [safety_v2]
