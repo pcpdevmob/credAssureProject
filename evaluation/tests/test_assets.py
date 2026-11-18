@@ -243,6 +243,10 @@ def test_BRD12_parse_json_takes_the_last_object() -> None:
     assert parse_json("no json here") is None
 
 
+@pytest.mark.skipif(
+    "R-CG-02" not in check_corpus_refs.Corpus().texts(),
+    reason="corpus text not extracted locally (data/corpus is gitignored; fresh clone or CI)",
+)
 def test_G1_readiness_lists_items_without_an_available_document() -> None:
     blocked = freeze.readiness()
     assert all(": " in b for b in blocked)  # reported, and --write refuses while any remain
