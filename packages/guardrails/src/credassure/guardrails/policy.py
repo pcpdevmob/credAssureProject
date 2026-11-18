@@ -32,6 +32,8 @@ class Policy:
     excerpt_limit: int
     full_text_bases: frozenset[str]
     refuse_pii_kinds: frozenset[str]
+    protected_tokens: frozenset[str] = frozenset()
+    protected_exact: frozenset[str] = frozenset()
 
 
 def parse(text: str) -> Policy:
@@ -52,6 +54,8 @@ def parse(text: str) -> Policy:
         excerpt_limit=int(data["excerpt"]["limit"]),
         full_text_bases=frozenset(data["excerpt"]["full_text_bases"]),
         refuse_pii_kinds=frozenset(data["upload"]["refuse_pii_kinds"]),
+        protected_tokens=frozenset(data.get("protected_attributes", {}).get("tokens", [])),
+        protected_exact=frozenset(data.get("protected_attributes", {}).get("exact", [])),
     )
 
 
