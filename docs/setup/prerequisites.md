@@ -8,7 +8,7 @@ Quick path: [README §2](../../README.md#2-prerequisites). This page adds the ch
 | git | any recent | `git --version` |
 | uv | latest | `uv --version` |
 | Python | 3.12 (managed by uv) | `uv python install 3.12` |
-| Node.js + npm | Node 20 LTS | `node -v && npm -v` |
+| Node.js + npm | Node 22 LTS (≥ 22.12) | `node -v && npm -v` |
 | make, openssl, sqlite3 | system | `make -v` |
 | Docker + Compose | optional (Langfuse, containers) | `docker compose version` |
 | Ollama | latest (local model) | `ollama --version` |
