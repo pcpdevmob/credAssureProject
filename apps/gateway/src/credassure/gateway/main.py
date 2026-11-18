@@ -395,10 +395,11 @@ def _searcher(settings: Settings) -> Callable[[], Searcher]:
             settings.reranker, settings.reranker_model, settings.reranker_revision
         )
         rewrite, gate = settings.retrieval_query_rewrite, settings.answerability_threshold
+        order = settings.rerank_order
         if settings.copilot_search_mode == "keyword":
             return Searcher(
                 settings.corpus_db, None, None, reranker=reranker, query_rewrite=rewrite,
-                min_score=gate,
+                min_score=gate, rerank_order=order,
             )  # fmt: skip
         from credassure.retrieval.cli import embedder
         from credassure.retrieval.index import open_chroma
@@ -411,6 +412,7 @@ def _searcher(settings: Settings) -> Callable[[], Searcher]:
             tenant_id=settings.tenant_id,
             query_rewrite=rewrite,
             min_score=gate,
+            rerank_order=order,
         )
 
     return build

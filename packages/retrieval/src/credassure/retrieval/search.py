@@ -127,13 +127,17 @@ class Searcher:
         ablation: str | None = None,
         query_rewrite: bool = False,
         min_score: float | None = None,
+        rerank_order: bool = True,
     ) -> None:
         self._db, self._chroma, self._embed = Path(corpus_db), chroma, embed
         self.reranker, self.strategy, self.as_of = reranker, strategy, as_of
         self.tenant_id = tenant_id
         self.ablation = ablation  # A3: semantic top five only (BRD §12)
         self.query_rewrite = query_rewrite  # scope #62: glossary expansion, no model call
-        self.min_score = min_score  # scope #63: answerability gate on the top reranker score
+        self.min_score = min_score  # scope #63: answerability gate on the best reranker score
+        # P4 ladder (2026-11-18): reranking cut dev recall@5 from 17/20 to 11/20, so with this off
+        # the reranker only scores (for the gate) and the hybrid order is kept (user decision).
+        self.rerank_order = rerank_order
 
     def _connect(self) -> sqlite3.Connection:
         return sqlite3.connect(f"file:{self._db}?mode=ro", uri=True)
@@ -300,12 +304,13 @@ class Searcher:
             filters=filters,
             strategy=strategy,
             mode=mode,
-            k=k,
+            k=DEPTH,  # the gate reads the best score over every candidate, as the curve measured
             rerank=rerank,
         )
-        top = scored[0][1] if scored else None
-        if self.min_score is not None and top is not None and top < self.min_score:
+        scores = [score for _, score in scored if score is not None]
+        if self.min_score is not None and scores and max(scores) < self.min_score:
             return []
+        scored = scored[:k]
         return [p for p, _ in scored]
 
     def scored(
@@ -333,6 +338,8 @@ class Searcher:
         if rerank and self.reranker and passages:
             scores = self.reranker(query, [p.text for p in passages])
             order = sorted(range(len(passages)), key=lambda i: -scores[i])
+            if not self.rerank_order:  # score only: keep the hybrid order, carry the scores
+                order = list(range(len(passages)))
             ranked: list[tuple[Passage, float | None]] = [(passages[i], scores[i]) for i in order]
             return ranked[:k]
         return [(p, None) for p in passages[:k]]

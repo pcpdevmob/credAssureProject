@@ -56,6 +56,7 @@ so the model profile wins for model settings. `MODELS` itself is a make variable
 | `RERANKER_MODEL`, `RERANKER_REVISION` | `BAAI/bge-reranker-base`, pinned | Cross-encoder (needs the `rerank` extra) |
 | `RETRIEVAL_CONTEXT_HEADERS` | `false` | Ingest only: embed section chunks with a "publisher · title · section · date" header; chunk text and ids unchanged; a toggle re-indexes (P4, scope #61) |
 | `RETRIEVAL_QUERY_REWRITE` | `false` | Glossary expansion of the query before keyword and dense search (`config/glossary.yaml`, scope #62) |
+| `RERANK_ORDER` | `true` | `false`: the reranker only scores (for the gate) and the hybrid order is kept; the P4 ladder chose this (dev recall@5 17/20 vs 11/20 reranked) |
 | `ANSWERABILITY_THRESHOLD` | unset | Abstain when the top reranker score is below it; chosen on the dev split only (`make retrieval-ladder CURVE=1`, scope #63) |
 
 ## Data files

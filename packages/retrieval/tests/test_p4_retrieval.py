@@ -120,3 +120,31 @@ def test_scope63_answerability_gate_abstains_below_the_threshold(
     assert off.search_knowledge("fee tenure", filters=Filters(as_of=AS_OF))
     unranked = Searcher(db, chroma, embed, min_score=0.5)  # no reranker: the gate does not apply
     assert unranked.search_knowledge("fee tenure", filters=Filters(as_of=AS_OF))
+
+
+def test_scope63_score_only_keeps_the_hybrid_order_and_still_gates(
+    tmp_path: Path, embed: Embed
+) -> None:
+    """P4 ladder decision: reranking cut dev recall@5 (17 -> 11/20), so RERANK_ORDER=false keeps
+    the hybrid order while the gate still reads the best reranker score over all candidates."""
+    db = _ingest(tmp_path, embed, headers=False)
+    chroma = open_chroma(tmp_path / "chroma")
+
+    def rerank(query: str, texts: list[str]) -> list[float]:
+        base = 0.9 if "guarantee" in query else 0.1
+        return [base + i / 1000 for i in range(len(texts))]  # would reverse the order if used
+
+    hybrid = Searcher(db, chroma, embed)
+    plain = [
+        p.chunk_id for p in hybrid.search_knowledge("guarantee fee", filters=Filters(as_of=AS_OF))
+    ]
+    only = Searcher(db, chroma, embed, reranker=rerank, rerank_order=False, min_score=0.5)
+    kept = only.search_knowledge("guarantee fee", filters=Filters(as_of=AS_OF))
+    assert [p.chunk_id for p in kept] == plain  # same order as without a reranker
+    assert only.search_knowledge("fee tenure", filters=Filters(as_of=AS_OF)) == []  # gate holds
+    reordered = Searcher(db, chroma, embed, reranker=rerank)
+    got = [
+        p.chunk_id
+        for p in reordered.search_knowledge("guarantee fee", filters=Filters(as_of=AS_OF))
+    ]
+    assert got != plain or len(plain) < 2
