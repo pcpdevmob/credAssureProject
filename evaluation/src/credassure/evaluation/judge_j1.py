@@ -73,7 +73,7 @@ def judge_run(run: Path, complete: Grade, *, seed: int = 20261118) -> list[dict[
         )
     (run / "j1.jsonl").write_text("".join(json.dumps(j, ensure_ascii=False) + "\n" for j in judged))
     k = max(1, round(len(judged) * SAMPLE_FRACTION)) if judged else 0
-    sample = random.Random(seed).sample(judged, k) if k else []  # noqa: S311 - sampling only
+    sample = random.Random(seed).sample(judged, k) if k else []  # noqa: S311  # nosec B311 - seeded sampling only
     with (run / "j1-human-sample.csv").open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["id", "question", "key_facts", "answer", "human_correct (y/n)"])
