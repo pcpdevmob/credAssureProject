@@ -23,6 +23,11 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P0 | 0.3 | Copilot | in_progress | Pritish | 2026-11-18 | b4eb8dd | — | [2026-11-18-p0-0.3-retrieval-dev-split-pritish.md](docs/progress/entries/2026-11-18-p0-0.3-retrieval-dev-split-pritish.md) |
 | P2 | 2.1 | AI Security and Guardrails | done | Pritish | 2026-11-18 | 009ba5f | — | [2026-11-18-p2-2.1-injection-pattern-tests-pritish.md](docs/progress/entries/2026-11-18-p2-2.1-injection-pattern-tests-pritish.md) |
 | P2 | 2.2 | Evaluation | done | Pritish | 2026-11-18 | a7b8511 | G3, E18 | [2026-11-18-p2-2.2-gate-g3-e18-pritish.md](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md) |
+| P3 | 3.1 | AI Security and Guardrails | done | Pritish | 2026-11-18 | f7f344b | — | [2026-11-18-p3-3.1-guardrails-package-pritish.md](docs/progress/entries/2026-11-18-p3-3.1-guardrails-package-pritish.md) |
+| P3 | 3.2 | AI Security and Guardrails | done | Pritish | 2026-11-18 | fe5c26a | — | [2026-11-18-p3-3.2-rails-events-policy-pritish.md](docs/progress/entries/2026-11-18-p3-3.2-rails-events-policy-pritish.md) |
+| P3 | 3.3 | AI Security and Guardrails | done | Pritish | 2026-11-18 | b43d80d | — | [2026-11-18-p3-3.3-pii-v2-pritish.md](docs/progress/entries/2026-11-18-p3-3.3-pii-v2-pritish.md) |
+| P3 | 3.4 | AI Security and Guardrails | done | Pritish | 2026-11-18 | b43d80d | E4 | [2026-11-18-p3-3.4-money-gate-pritish.md](docs/progress/entries/2026-11-18-p3-3.4-money-gate-pritish.md) |
+| P3 | 3.5 | AI Security and Guardrails | done | Pritish | 2026-11-18 | b831d29 | — | [2026-11-18-p3-3.5-trace-leak-data-classes-pritish.md](docs/progress/entries/2026-11-18-p3-3.5-trace-leak-data-classes-pritish.md) |
 
 ## Modules
 
@@ -32,7 +37,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | [Copilot](docs/progress/modules/copilot.md) | [Name 6] (TODO: name); plan v3.4: Suresh (retrieval, P4), Tejas (answering, P5) | P0 (dev split), P4 (CP2-R), P5 (CP2-A), P6 (course re-run) | 9e done except CP-01 (regulatory 10/25 live, OPEN); KR-05 recall@5 24/40 (v1.0) OPEN |
 | [Authentication](docs/progress/modules/auth.md) | TODO: owner | P8 (SEC) | JWT + roles + maker-checker + step-up above ₹1.5 cr done (Phases 5, 10a); hardening in P8 |
 | [Responsible AI](docs/progress/modules/rai.md) | Pritish | P8 (fairness), P9 (RAI UI), P10 (system card, Sutra mapping) | Human-in-the-loop, no accept tool, audit, kill switch done; documentation and fairness evidence pending |
-| [AI Security and Guardrails](docs/progress/modules/guardrails.md) | Pritish (GR); Abhishek (red-team, SEC) | P2 (pattern tests), P3 (GR), P8 (SEC), P10 (threat model) | Phase 6 safeguards done (PII masking, injection scanner, breaker, caps); ADR 0033 pattern tests in make check (P2, 2026-11-18); consolidation into packages/guardrails pending (P3) |
+| [AI Security and Guardrails](docs/progress/modules/guardrails.md) | Pritish (GR); Abhishek (red-team, SEC) | P2 (pattern tests), P3 (GR), P8 (SEC), P10 (threat model) | Phase 6 safeguards done (PII masking, injection scanner, breaker, caps); ADR 0033 pattern tests in make check (P2); **P3 done 2026-11-18**: packages/guardrails (R1–R5, guardrail_event, config/guardrails.yaml), PII v2 (Presidio patterns + GSTIN/UPI/card/Udyam), money gate, trace-leak test 0 hits, data classes, CSV escaping, gen_ai.* export |
 | [Deployment](docs/progress/modules/deployment.md) | [Name 1] (TODO: name) | P6 (course switch, deferred), P10 (Phase 12) | Local run + isolated e2e + demo-reset done; CI restored (ADR 0028); course endpoint deferred (under discussion) |
 | [Documentation](docs/progress/modules/docs.md) | Pritish | P0 (plan + ADRs), P10 (RUNBOOK, MODEL_CARD, CONTRIBUTIONS), P12 (report) | S1 progress tracking, S2 base files and prompts 27–39 done; P0 ADRs 0029–0033 written (0032 Accepted, others Proposed); mentor questions 2–3 open |
 | [Evaluation](docs/progress/modules/evaluation.md) | Abhishek (Phase 11); Tejas (test set) | P1 (close G1), P2 (G3), P6 (course baseline, deferred), P7 (Phase 11), P11 (G4) | G1 provisionally frozen 2026-11-15; G2 passed; **G3 passed 2026-11-18** (G3 + E18 READY); G1-final checklist open |
@@ -47,6 +52,9 @@ From the latest entry of each step. Module-level items live in each module file.
 ### AI Security and Guardrails
 
 - P2 2.1: injection scanner misses Hinglish object-verb order ("checks skip karo") under ignore_instructions; fix in P3. ([entry](docs/progress/entries/2026-11-18-p2-2.1-injection-pattern-tests-pritish.md))
+- P3 3.1: ADR 0029 and 0030 are still Proposed: the team accepts them. ([entry](docs/progress/entries/2026-11-18-p3-3.1-guardrails-package-pritish.md))
+- P3 3.3: Employee names are not matched against hr.db yet (ADR 0030 §2) - P8. ([entry](docs/progress/entries/2026-11-18-p3-3.3-pii-v2-pritish.md))
+- P3 3.4: Full /eval E4 with the citation plants runs on the Mac at P4. ([entry](docs/progress/entries/2026-11-18-p3-3.4-money-gate-pritish.md))
 
 ### Documentation
 
