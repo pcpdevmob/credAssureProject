@@ -179,3 +179,22 @@ def test_CP12_feedback_only_on_my_own_answer_and_fixed_reasons(
         headers=h,
     )
     assert free_text.status_code == 422
+
+
+def test_VER02_help_citations_resolve_and_a_made_up_one_is_blocked(
+    make_client: Callable[..., Any],
+) -> None:
+    client = _client(make_client)
+    verify = client.app.state.services.verify_claims
+    ok = "Identifiers are removed before the question is stored [HELP-ai-safety#personal-data]."
+    assert verify("", ok) == []
+    bad = verify("", "Nothing is ever logged [HELP-ai-safety#made-up-section].")
+    assert [f.code.value for f in bad] == ["VER_BAD_CITATION"]
+
+
+def test_ADR0035_a_passage_outside_a_case_is_404_when_it_is_not_in_the_library(
+    make_client: Callable[..., Any], login: Login
+) -> None:
+    client = _client(make_client)
+    r = client.get("/v1/citations/KFS-OF-01-A-v1#section#1", headers=login(client, "demo.preparer"))
+    assert r.status_code == 404

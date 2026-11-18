@@ -43,7 +43,10 @@ def test_ADR0035_sections_get_stable_unique_help_ids() -> None:
 
 def test_ADR0035_a_faq_page_splits_on_its_bold_questions() -> None:
     heads = [p.section_path for p in parse("faq", FAQ)]
-    assert heads == ["Why is the cheapest lender not ranked first?", "Does approval accept the loan?"]
+    assert heads == [
+        "Why is the cheapest lender not ranked first?",
+        "Does approval accept the loan?",
+    ]
 
 
 def test_ADR0035_search_ranks_the_matching_section_first_and_resolve_is_closed() -> None:

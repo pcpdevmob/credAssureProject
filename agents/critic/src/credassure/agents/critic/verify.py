@@ -14,7 +14,8 @@ the code-rendered slot values the text was built from, and a citation resolver.
   same words appear in a passage it cites ("guaranteed amount" quoted from R-CG-02 passes; "will be
   approved" is in no source, so it is still blocked).
 - VER-02 citations: each [R-…]/[KFS-…]/[POL-…]/[FAQ-…]/[HELP-…] (help, ADR 0035) resolves to an
-  indexed passage that is in force, allowed and of this case; every figure in the citing sentence appears in the passage.
+  indexed passage that is in force, allowed and of this case; every figure in the citing sentence
+  appears in the passage.
 - VER-03 banned content (banned.yaml, S-VER-02) and personal identifiers.
 - VER-04 report sections (``report_completeness``).
 """
