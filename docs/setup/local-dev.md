@@ -5,7 +5,7 @@ Continuing someone's module with Claude Code, Cursor or another AI tool: [team-h
 
 ## Install
 ```bash
-make install                 # uv sync --all-packages (never a bare `uv sync`)
+make install                 # uv sync --all-packages --all-extras (never a bare `uv sync`: it drops the rerank extra)
 npm install                  # apps/web + packages/api-client
 cp .env.example .env         # then set JWT_SECRET (32+ chars) and SEED_PASSWORD (12+ chars)
 make hr-db && make db && make ingest
