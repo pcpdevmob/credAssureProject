@@ -24,6 +24,30 @@ from credassure.gateway.main import _default_llm, _searcher, create_app
 from credassure.gateway.settings import Settings
 from credassure.retrieval.search import Filters
 
+
+class Recorder:
+    """ToolPort wrapper: passes every call through and keeps each Critic check with its findings."""
+
+    def __init__(self, inner: Any) -> None:
+        self.inner = inner
+        self.checks: list[dict[str, Any]] = []
+
+    def call(self, name: str, case_id: str, args: Any = None) -> Any:
+        out = (
+            self.inner.call(name, case_id, args)
+            if args is not None
+            else self.inner.call(name, case_id)
+        )
+        if name == "verify_claims":
+            self.checks.append(
+                {
+                    "text": str((args or {}).get("text", "")),
+                    "findings": [f"{f.code.value}: {f.message} [{f.span or ''}]" for f in out],
+                }
+            )
+        return out
+
+
 ROOT = Path(__file__).resolve().parents[1]
 ITEMS = ROOT / "evaluation" / "testset" / "v1" / "items.jsonl"
 
@@ -49,9 +73,9 @@ def main() -> int:
     llm = _default_llm(settings) if args.answer else None
     if args.answer and llm is None:
         sys.exit("--answer needs LLM_ENABLED=true and a reachable model")
-    tools = None
+    tools: Recorder | None = None
     if args.answer:
-        tools = create_app(settings, llm=llm).state.services.copilot_tools()
+        tools = Recorder(create_app(settings, llm=llm).state.services.copilot_tools())
 
     out = ROOT / "var" / "diagnose-copilot.jsonl"
     print(f"reranker={settings.reranker} gate={gate} rewrite={settings.retrieval_query_rewrite}")
@@ -73,6 +97,7 @@ def main() -> int:
                 "route": (r.intent if (r := route(q, has_case=True)) else "model"),
             }
             if tools is not None:
+                tools.checks.clear()
                 rep = copilot.answer(
                     q,
                     case_id=None,
@@ -89,6 +114,8 @@ def main() -> int:
                     "cut": rep.cut,
                     "findings": list(rep.findings),
                     "answer": rep.answer[:300],
+                    # what the Critic saw and why it blocked it (draft text + finding messages)
+                    "critic": tools.checks,
                 }
             f.write(json.dumps(row) + "\n")
             ans = ""
@@ -96,6 +123,11 @@ def main() -> int:
                 ans = "ABSTAIN " + ",".join(row["findings"]) if row["abstained"] else "answered"
                 ans += f" cut={row['cut']} dropped={row['dropped']}"
             top_s = f"{top:.3f}" if top is not None else "-"
+            for c in row.get("critic") or []:
+                if c["findings"]:
+                    print(f"      draft: {c['text'][:400]}")
+                    for msg in c["findings"]:
+                        print(f"      finding: {msg}")
             print(
                 f"{row['id']:5} {row['gold_in_top5']!s:6} {top_s:>6}"
                 f" {row['gate_passes']!s:5} {row['route']:10} {ans}"
