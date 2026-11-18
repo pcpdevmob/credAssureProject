@@ -28,6 +28,8 @@ Before anything is replaced:
   (OBJ-08), so a data file edited together with its MANIFEST hash is still refused;
 - every live store must be free: the restore takes each one out of WAL mode with no wait, which SQLite refuses while
   another process (a running gateway) has it open. "is in use; stop make run-api first" means nothing was changed.
+  The check relies on WAL mode, which the gateway always sets on its connections; a store already in rollback mode
+  (for example right after a restore, before the gateway starts) is replaced under SQLite's exclusive lock instead.
 
 The current files are then copied to `var/backups/pre-restore-<time>/`, so a restore can be undone with another
 `make restore`. Each store is replaced in one step through SQLite's backup API; if a later store fails, the ones already
