@@ -238,6 +238,14 @@ Sign in with your `SEED_PASSWORD`:
 
 Maker-checker: whoever prepares a case can't approve it. `prep.e0xx` users map to the 20 HR profiles, so some fail onboarding by design (expired training, wrong role and so on).
 
+### Author a case in Excel
+```bash
+make case-from-xlsx FILE=my_case.xlsx OUT=var/my_case   # validated like an upload; errors by tab, row, column
+make case-template                                      # regenerate data/templates/case_template.xlsx
+```
+Copy `data/templates/case_template.xlsx` (the shaded rows are the CA-2026-0016 demo example), fill it in, convert it,
+then upload the files from OUT. OUT can't be under `data/frozen/`. Details: [docs/help/case-authoring.md](docs/help/case-authoring.md).
+
 ### Tracing (Langfuse, self-hosted)
 ```bash
 cp deploy/env/langfuse.env.example deploy/env/langfuse.env   # replace every CHANGEME

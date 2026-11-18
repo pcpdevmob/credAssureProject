@@ -12,6 +12,8 @@ receivables, payables and inventory (CSV). Lender offers (JSON) and their KFS do
 reason. Fix those and upload the file again. Text that looks like an instruction is flagged and ignored, because
 documents are data.
 
+To write a new case in Excel and convert it to these files, see [case-authoring.md](case-authoring.md).
+
 ## Run
 On **Workflow**, press **Run**. Stages run in a fixed order: readiness, funding need, lender comparison, verification,
 then routing. **Live progress** shows each stage's result as it finishes.

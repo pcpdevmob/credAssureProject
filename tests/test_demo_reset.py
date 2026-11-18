@@ -2,6 +2,7 @@
 
 import hashlib
 import importlib.util
+import sqlite3
 import sys
 from datetime import date
 from pathlib import Path
@@ -100,6 +101,30 @@ def test_demo_reset_is_idempotent_and_audited(tmp_path: Path) -> None:
     assert _state(second) == _state(first)
     assert _purged(db) == n + 1  # one audited purge per rerun, chain intact
     assert _frozen_hash() == before
+
+
+def test_demo_reset_rebuilds_unknown_revision(tmp_path: Path) -> None:
+    db = tmp_path / "case.db"
+    con = sqlite3.connect(db)
+    con.execute("CREATE TABLE alembic_version (version_num VARCHAR(32) NOT NULL)")
+    con.execute("INSERT INTO alembic_version (version_num) VALUES ('7d2b9e4c1a30')")
+    con.commit()
+    con.close()
+
+    demo_reset.reset_db(_settings(db))
+
+    assert list(tmp_path.glob("case.db.bak-*"))
+    with transaction(case_engine(db)) as s:
+        assert (
+            s.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
+            == "5c1e0a8f2d47"
+        )
+        assert (
+            s.execute(
+                text("SELECT name FROM sqlite_master WHERE type='table' AND name='offers'")
+            ).scalar_one()
+            == "offers"
+        )
 
 
 def test_demo_reset_refuses_e2e_db_and_other_tenant(tmp_path: Path) -> None:

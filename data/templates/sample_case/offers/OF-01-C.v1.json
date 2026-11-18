@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "lender_id": "L03",
+  "lender_name": "Chambal Small Finance Bank (synthetic)",
+  "offer_id": "OF-01-C",
+  "version": 1,
+  "product": "wc_term_loan",
+  "principal": "14200000",
+  "rate_type": "fixed",
+  "annual_rate": "0.107",
+  "tenure_months": 6,
+  "moratorium_months": 0,
+  "repayment": {
+    "frequency": "monthly",
+    "method": "emi"
+  },
+  "stated_instalment": "2441073",
+  "issue_date": "2026-11-08",
+  "disbursal_date": "2026-11-18",
+  "first_repayment_date": "2026-12-18",
+  "fees": [
+    {
+      "name": "Processing fee",
+      "basis": "pct_of_principal",
+      "value": "0.002",
+      "timing": "upfront",
+      "gst_applicable": true
+    },
+    {
+      "name": "Documentation charges",
+      "basis": "fixed",
+      "value": "12000",
+      "timing": "upfront",
+      "gst_applicable": true
+    }
+  ],
+  "prepayment_terms": "0% of the principal prepaid (R-BANK-03 range)",
+  "kfs_doc_id": "KFS-OF-01-C-v1",
+  "lender_type": "sfb"
+}

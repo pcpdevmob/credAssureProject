@@ -15,7 +15,7 @@ ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 # The dev/demo database (var/case.db) is tenant "demo" (make demo-reset); an exported variable beats --env-file.
 DEMO_TENANT := TENANT_ID=demo
 
-.PHONY: e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
+.PHONY: case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe retrieval-eval retrieval-pool retrieval-silver judge kappa
 
@@ -212,6 +212,16 @@ db:  ## Migrate var/case.db + var/corpus.db and seed users (needs SEED_PASSWORD;
 
 copilot-live:  ## E8 live: the 44 copilot items through the API on the configured model (var/e8-live)
 	uv run $(ENV_FILE) python scripts/copilot_live.py $(ARGS)
+
+case-template:  ## Regenerate data/templates/case_template.xlsx and sample_case/ from the upload schemas
+	uv run python scripts/case_xlsx.py template
+	uv run python scripts/case_xlsx.py convert data/templates/case_template.xlsx data/templates/sample_case
+	mkdir -p data/templates/sample_case/kfs
+	cp data/frozen/v1/kfs/KFS-OF-01-[ABC]-v1.md data/frozen/v1/kfs/KFS-OF-01-[ABC]-v1-SCH.md data/templates/sample_case/kfs/
+
+case-from-xlsx:  ## Filled template -> case CSV/JSON + offers, validated like an upload: FILE=... OUT=...
+	@test -n "$(FILE)" -a -n "$(OUT)" || { echo "usage: make case-from-xlsx FILE=case.xlsx OUT=var/my_case"; exit 2; }
+	uv run python scripts/case_xlsx.py convert "$(FILE)" "$(OUT)"
 
 demo-reset:  ## Recreate the demo cases in var/case.db through the API (tenant demo; stop run-api first)
 	$(DEMO_TENANT) uv run $(ENV_FILE) python scripts/demo_reset.py
