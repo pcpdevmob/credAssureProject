@@ -15,7 +15,7 @@ import os
 import sqlite3
 import time
 import uuid
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Mapping, Sequence
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
@@ -74,6 +74,7 @@ from credassure.gateway.routers import (
     auth,
     cases,
     citations,
+    copilot,
     health,
     lineage,
     telemetry,
@@ -88,6 +89,8 @@ from credassure.ledger.session import case_engine, hr_engine, transaction
 from credassure.ledger.store import SqlLedger
 from credassure.lender_sim import ScriptedLender
 from credassure.observability.log import configure_logging, log_context, set_redactor
+from credassure.retrieval.help import PREFIX as HELP_PREFIX
+from credassure.retrieval.help import HelpIndex
 from credassure.retrieval.search import Filters, Searcher, make_reranker, resolve
 from credassure.security import pii
 from credassure.security.auth import verify_token
@@ -240,22 +243,42 @@ def _filters(settings: Settings, engine: Engine, case_id: str, **kw: Any) -> Fil
     return Filters(as_of=settings.as_of_date, home_state=settings.home_state, own_kfs=own, **kw)
 
 
+@functools.cache
+def _help_index(directory: Path) -> HelpIndex:
+    """ADR 0035: product help, parsed once per process (docs/help is read-only at run time)."""
+    return HelpIndex.load(directory)
+
+
 def _resolver(settings: Settings, engine: Engine) -> Callable[[str], Resolve | None]:
-    """VER-02: a per-case citation resolver over the indexed corpus (None before `make ingest`;
-    the Critic then fails any citation closed)."""
+    """VER-02: a per-case citation resolver over the indexed corpus and product help. Corpus ids
+    are None-resolved before `make ingest` (the Critic then fails them closed); HELP- ids always
+    resolve against docs/help (ADR 0035)."""
+    help_index = _help_index(settings.help_dir)
 
     def for_case(case_id: str) -> Resolve | None:
-        if not settings.corpus_db.exists():
-            return None
-        filters = _filters(settings, engine, case_id)
-        return lambda ids: resolve(
-            settings.corpus_db,
-            ids,
-            case_id=case_id,
-            tenant_id=settings.tenant_id,
-            filters=filters,
-            known=_superseded_index(settings.corpus_manifest),
-        )
+        corpus: Resolve | None = None
+        if settings.corpus_db.exists():
+            filters = _filters(settings, engine, case_id)
+
+            def corpus(ids: Sequence[str]) -> Mapping[str, tuple[str, str]]:
+                return resolve(
+                    settings.corpus_db,
+                    ids,
+                    case_id=case_id,
+                    tenant_id=settings.tenant_id,
+                    filters=filters,
+                    known=_superseded_index(settings.corpus_manifest),
+                )
+
+        def both(ids: Sequence[str]) -> Mapping[str, tuple[str, str]]:
+            helps = [i for i in ids if i.startswith(HELP_PREFIX)]
+            rest = [i for i in ids if not i.startswith(HELP_PREFIX)]
+            out = dict(help_index.resolve(helps))
+            if rest:
+                out |= corpus(rest) if corpus else {i: ("missing", "") for i in rest}
+            return out
+
+        return both
 
     return for_case
 
@@ -433,19 +456,26 @@ def _searcher(settings: Settings) -> Callable[[], Searcher]:
 
 
 def _copilot_handlers(settings: Settings, engine: Engine) -> dict[str, Callable[..., Any]]:
-    """The copilot's four fixed tools (scope #20) plus the Critic. case_id is injected by the
-    tool runner (SUP-08); collections and filters are fixed here, never chosen by the model."""
+    """The copilot's fixed tools (scope #20, ADR 0035) plus the Critic. case_id is injected by the
+    tool runner (SUP-08); "" means no case is open, and then no case's KFS is searchable and the
+    case tools are never reached (the agent refuses them first). Collections and filters are fixed
+    here, never chosen by the model."""
     searcher = _searcher(settings)
+    help_index = _help_index(settings.help_dir)
 
     def search(collections: tuple[str, ...]) -> Callable[..., list[dict[str, Any]]]:
         def run(case_id: str, query: str) -> list[dict[str, Any]]:
             if not settings.corpus_db.exists():
                 return []
+            if not case_id:  # no open case: never another case's KFS (BR-14)
+                collections_ = tuple(c for c in collections if c != "kfs")
+            else:
+                collections_ = collections
             hits = searcher().search_knowledge(
                 query,
                 case_id=case_id,
                 tenant_id=settings.tenant_id,
-                filters=_filters(settings, engine, case_id, collections=collections),
+                filters=_filters(settings, engine, case_id, collections=collections_),
                 mode=settings.copilot_search_mode,
                 k=5,
             )
@@ -469,6 +499,27 @@ def _copilot_handlers(settings: Settings, engine: Engine) -> dict[str, Callable[
             out[key] = {"value": fact.value, "unit": fact.unit}
         return out
 
+    def case_status(case_id: str) -> dict[str, Any]:
+        """CP-10: workflow state only (status, stage decisions, route); no figure, no HR detail."""
+        with transaction(engine) as s:
+            case = reads.get_case(s, settings.tenant_id, case_id)
+            runs = reads.stage_runs(s, settings.tenant_id, case_id)
+        if case is None:
+            return {"status": None, "stages": []}
+        latest = {r.stage: r for r in runs}  # attempts ascend
+        order = [st.value for st in Stage]
+        return {
+            "status": case.status,
+            "current_stage": case.current_stage,
+            "route": case.route,
+            "stages": [
+                {"stage": st, "decision": latest[st].decision}
+                for st in order
+                if st in latest and latest[st].decision
+            ],
+            "blockers": any(r.decision not in ("GO", None) for r in latest.values()),
+        }
+
     def explain_blocker(case_id: str) -> dict[str, Any]:
         with transaction(engine) as s:
             runs = reads.stage_runs(s, settings.tenant_id, case_id)
@@ -486,7 +537,9 @@ def _copilot_handlers(settings: Settings, engine: Engine) -> dict[str, Callable[
     return {
         "search_regulations": search(("public",)),
         "search_policies": search(("policy", "kfs")),
+        "search_help": lambda case_id, query: help_index.search(query),
         "get_case_facts": case_facts,
+        "get_case_status": case_status,
         "explain_blocker": explain_blocker,
         "verify_claims": _verify_claims(settings, engine),
     }
@@ -630,6 +683,7 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
     limiter, rate = MovingWindowRateLimiter(MemoryStorage()), parse(settings.rate_limit)
     app.state.login_limiter = MovingWindowRateLimiter(MemoryStorage())  # S4, routers/auth.py
     app.state.client_error_limiter = MovingWindowRateLimiter(MemoryStorage())  # telemetry.py
+    app.state.copilot_limiter = MovingWindowRateLimiter(MemoryStorage())  # routers/copilot.py
 
     @app.middleware("http")
     async def rate_limit(
@@ -694,7 +748,7 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
         allow_headers=["Authorization", "Content-Type", "Idempotency-Key"],
     )
 
-    for module in (health, auth, cases, citations, lineage, workflow, admin, telemetry):
+    for module in (health, auth, cases, citations, lineage, workflow, admin, telemetry, copilot):
         app.include_router(module.router)
     for name, agent_router, deps in _AGENT_ROUTERS:
         app.include_router(agent_router, prefix=f"/v1/agents/{name}")

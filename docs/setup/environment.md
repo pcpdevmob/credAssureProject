@@ -54,6 +54,8 @@ so the model profile wins for model settings. `MODELS` itself is a make variable
 | `CORPUS_DB` | `var/corpus.db` | Corpus and FTS5 index; the Critic opens it read-only |
 | `CHROMA_PATH` | `var/chroma` (profiles: `var/chroma-local-bge`, `var/chroma-course-bge`) | Vector store directory. The copilot uses the same store and `EMBED_*` embedder as `make ingest` |
 | `COPILOT_SEARCH_MODE` | `hybrid` | `hybrid` (BM25 + dense, RRF) or `keyword` (BM25 only; tests, or no vector store) |
+| `HELP_DIR` | `docs/help` | Product help the copilot cites (ADR 0035); indexed in memory at start |
+| `COPILOT_MEMORY_MESSAGES` | `8` | Redacted messages per user and case replayed to the model (CP-11); `0` turns memory off |
 | `RERANKER` | `none` | `none`, `local_cross_encoder`, `llm_pointwise` (ADR 0013) |
 | `RERANKER_MODEL`, `RERANKER_REVISION` | `BAAI/bge-reranker-base`, pinned | Cross-encoder (needs the `rerank` extra) |
 | `RETRIEVAL_CONTEXT_HEADERS` | `false` | Ingest only: embed section chunks with a "publisher · title · section · date" header; chunk text and ids unchanged; a toggle re-indexes (P4, scope #61) |

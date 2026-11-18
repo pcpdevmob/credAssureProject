@@ -238,6 +238,14 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
   Scoring is dual (ADR 0032 §4): strict (the frozen scorer) is the headline; supported = valid,
   current, allowed citations that judge J1 says support the answer, with a human sample.
 
+- **P13 (2026-11-18, ADR 0035, product assistant):** the copilot also runs without a case (`POST /v1/copilot/chat`,
+  `/stream`) on every page. Sources: product help (`docs/help`, ids `HELP-<page>#<slug>`, in-memory BM25), regulations,
+  policies and, only inside a visible case, case figures (slots), status (`get_case_status`, code text) and blockers.
+  Code routes the intent (CP-07, `intent.py`) after the refusal policy; `cp_tool` 1.1.0 is asked only when code is
+  unsure, and a case tool without a case is invalid. Memory is the user's last 8 redacted messages in the case since
+  their reset marker (CP-11). The stream sends stage events, then the Critic-passed text, then the reply (CP-12);
+  follow-ups are a fixed list per intent; feedback is a fixed reason code from the answer's own recipient.
+
 #### 2.4.7 LendWise step detail
 
 Pipeline per case:

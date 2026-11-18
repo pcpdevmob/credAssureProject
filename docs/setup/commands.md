@@ -6,7 +6,7 @@
 ## Setup and quality
 | Command | What it does |
 |---|---|
-| `make install` | `uv sync --all-packages`: all workspace members and the dev group |
+| `make install` | `uv sync --all-packages --all-extras`: all workspace members, the dev group and extras (`rerank`: sentence-transformers for embeddings and the reranker) |
 | `make check` | ruff, ruff format, mypy --strict, pytest, corpus refs, bandit, import-linter. **Green before every commit** |
 | `make check-fast` | ruff + tests not marked slow (the Claude stop hook runs it) |
 | `make test` | Full suite with coverage |

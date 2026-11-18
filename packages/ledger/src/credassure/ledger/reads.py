@@ -262,19 +262,57 @@ def corpus_refs(
 def chat_history(
     s: Session, tenant_id: str, case_id: str, user_id: str, n: int
 ) -> list[ChatMessage]:
-    """The last ``n`` redacted messages of this user in this case, oldest first (scope #2).
-    Keyed by (tenant, case, user): memory never crosses cases or people."""
+    """The last ``n`` redacted messages of this user in this case since their last reset, oldest
+    first (scope #2, CP-11). Keyed by (tenant, case, user): memory never crosses cases or people.
+    A reset is a stored marker row (role ``reset``); nothing before it is returned."""
+    if n <= 0:
+        return []
+    scope = (
+        ChatMessage.tenant_id == tenant_id,
+        ChatMessage.case_id == case_id,
+        ChatMessage.user_id == user_id,
+    )
+    last_reset = s.scalar(
+        select(func.max(ChatMessage.id)).where(*scope, ChatMessage.role == "reset")
+    )
     rows = s.scalars(
         select(ChatMessage)
-        .where(
-            ChatMessage.tenant_id == tenant_id,
-            ChatMessage.case_id == case_id,
-            ChatMessage.user_id == user_id,
-        )
+        .where(*scope, ChatMessage.id > (last_reset or 0), ChatMessage.role != "reset")
         .order_by(ChatMessage.id.desc())
         .limit(n)
     )
     return list(reversed(list(rows)))
+
+
+def feedback_given(s: Session, tenant_id: str, user_id: str, trace_id: str) -> bool:
+    """CP-12: has this user already rated the answer ``trace_id``? (one rating per answer)"""
+    return (
+        s.scalar(
+            select(AuditLog.seq)
+            .where(
+                AuditLog.tenant_id == tenant_id,
+                AuditLog.actor == user_id,
+                AuditLog.event_type == "COPILOT_FEEDBACK",
+                func.json_extract(AuditLog.payload, "$.trace_id") == trace_id,
+            )
+            .limit(1)
+        )
+        is not None
+    )
+
+
+def chat_turn_by_trace(
+    s: Session, tenant_id: str, user_id: str, trace_id: str
+) -> ChatMessage | None:
+    """CP-12: this user's stored answer with ``trace_id`` (never another person's)."""
+    return s.scalar(
+        select(ChatMessage).where(
+            ChatMessage.tenant_id == tenant_id,
+            ChatMessage.user_id == user_id,
+            ChatMessage.trace_id == trace_id,
+            ChatMessage.role == "assistant",
+        )
+    )
 
 
 def own_kfs(s: Session, tenant_id: str, case_id: str) -> frozenset[str]:

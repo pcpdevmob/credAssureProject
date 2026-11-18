@@ -114,7 +114,7 @@ Rules:
 ## 4. Install
 
 ```bash
-make install     # uv sync --all-packages: every workspace member + dev group
+make install     # uv sync --all-packages --all-extras: every member, dev group, extras (rerank)
 npm ci           # npm workspaces from package-lock.json (npm install would rewrite the lock)
 uv run pre-commit install   # optional: ruff, mypy, bandit, gitleaks on commit
 ```

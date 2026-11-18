@@ -6,7 +6,7 @@ import { Card } from '@/components/ui';
 import { Markdown } from '@/lib/markdown';
 
 const DIR = join(process.cwd(), '..', '..', 'docs', 'help');
-const ORDER = ['getting-started', 'preparer', 'approver', 'evaluator', 'case-authoring', 'error-messages', 'faq', 'glossary'];
+const ORDER = ['getting-started', 'preparer', 'approver', 'evaluator', 'ask-credassure', 'ai-safety', 'case-authoring', 'error-messages', 'faq', 'glossary'];
 
 function pages() {
   const names = readdirSync(DIR).filter(f => f.endsWith('.md')).map(f => f.slice(0, -3));

@@ -28,8 +28,8 @@ progress-check:  ## Fail if PROGRESS.md is stale or a progress entry is invalid
 help:  ## List targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
 
-install:  ## Sync the uv workspace (all members + dev group)
-	uv sync --all-packages
+install:  ## Sync the uv workspace (all members, dev group and extras such as rerank)
+	uv sync --all-packages --all-extras
 
 check:  ## ruff, ruff format, mypy --strict, pytest, bandit, PROGRESS.md check
 	uv run ruff check .

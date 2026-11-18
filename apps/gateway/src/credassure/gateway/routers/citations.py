@@ -53,14 +53,37 @@ def citation(
     quote: Annotated[str | None, Query(max_length=1000)] = None,
 ) -> CitationPassage:
     case = visible_case(svc, who, case_id)  # 404 for a case this caller cannot see
+    with transaction(svc.engine) as s:
+        own = reads.own_kfs(s, case.tenant_id, case.id)
+    return _passage(svc, case.id, case.tenant_id, own, chunk_id, quote)
+
+
+@router.get("/citations/{chunk_id:path}", response_model=CitationPassage)
+def citation_outside_a_case(
+    chunk_id: Annotated[str, PathParam(min_length=1, max_length=160)],
+    who: User,
+    svc: Svc,
+    quote: Annotated[str | None, Query(max_length=1000)] = None,
+) -> CitationPassage:
+    """A passage cited by an answer given outside a case (ADR 0035): the same filter with no
+    case, so every case's KFS is a 404 here."""
+    return _passage(svc, None, who.tenant_id, frozenset(), chunk_id, quote)
+
+
+def _passage(
+    svc: Svc,
+    case_id: str | None,
+    tenant_id: str,
+    own: frozenset[str],
+    chunk_id: str,
+    quote: str | None,
+) -> CitationPassage:
     settings = svc.settings
     found = None
     if settings.corpus_db.exists():
-        with transaction(svc.engine) as s:
-            own = reads.own_kfs(s, case.tenant_id, case.id)
         filters = Filters(as_of=settings.as_of_date, home_state=settings.home_state, own_kfs=own)
-        found = Searcher(settings.corpus_db, None, None, tenant_id=case.tenant_id).passage(
-            chunk_id, case.id, case.tenant_id, filters
+        found = Searcher(settings.corpus_db, None, None, tenant_id=tenant_id).passage(
+            chunk_id, case_id, tenant_id, filters
         )
     if found is None:
         raise ProblemError(404, "no such passage for this case", ApiErrorCode.NOT_FOUND)
@@ -73,9 +96,9 @@ def citation(
     flags = scan(text)
     # ADR 0029 R2: a read, so the events stay in the trace (no audit row per citation view)
     if short:
-        guardrail("R2", "R2.citation_excerpt_capped", "cap", case_id=case.id, chunk_id=chunk_id)
+        guardrail("R2", "R2.citation_excerpt_capped", "cap", case_id=case_id, chunk_id=chunk_id)
     if flags:
-        guardrail("R2", "R2.passage_injection_flagged", "flag", case_id=case.id, flags=flags)
+        guardrail("R2", "R2.passage_injection_flagged", "flag", case_id=case_id, flags=flags)
     return CitationPassage(
         chunk_id=found.chunk_id,
         doc_id=found.doc_id,

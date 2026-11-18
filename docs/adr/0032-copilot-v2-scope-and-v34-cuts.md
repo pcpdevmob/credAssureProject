@@ -20,3 +20,4 @@ Copilot regulatory accuracy is 10/25 live against a BRD target of ≥ 20/25. Ret
 
 ## Log
 - 2026-11-18: accepted with reranker on and strict ≥ 16/25.
+- 2026-11-18: §6 amended by [ADR 0035](0035-copilot-v3-product-assistant.md): CP-07, CP-10, CP-11 and CP-12 built (user decision); CP-08 full, A7 and the adaptive round stay deferred.

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Live full-feature run on the Mac (no demo mode): real model (Ollama qwen3:8b), real corpus and
 # vector store, dev profile. Run from the repo root in your own Terminal:
-#     bash scripts/live_run.sh                 # branch feature/security-p8 (default)
-#     BRANCH=feature/LendWise bash scripts/live_run.sh
+#     bash scripts/live_run.sh                 # branch feature/LendWise (default)
+#     BRANCH=feature/<other> bash scripts/live_run.sh
 #     SKIP_UI=1 bash scripts/live_run.sh       # backend only
 # Steps: update branch -> sync -> check Ollama -> API live run -> copilot-live (44 items) -> web UI
 # Playwright suite on the isolated e2e stack. Never touches var/case.db (demo data).
@@ -15,7 +15,7 @@ LOG=var/live-run.log
 exec > >(tee -a "$LOG") 2>&1
 step() { echo; echo "=== $(date '+%H:%M:%S') $* ==="; }
 fail() { echo "LIVE_RUN_ABORTED: $*"; exit 1; }
-BRANCH=${BRANCH:-feature/security-p8}
+BRANCH=${BRANCH:-feature/LendWise}
 ENVS="--env-file deploy/env/models-local.env"
 [ -f .env ] && ENVS="--env-file .env $ENVS"
 export APP_ENV=dev LLM_ENABLED=true LOG_LEVEL=WARNING   # exported values beat the env files

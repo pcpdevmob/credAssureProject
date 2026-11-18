@@ -19,6 +19,11 @@ and affordability, verify every figure and citation, and route the proposal to t
 | Director, Finance / VP, Finance | Read the verified proposal and decide: approve, reject or return to a stage |
 | Evaluator | Read the audit log, safety events and evaluation scorecard |
 
+**Ask CredAssure** (ADR 0035) is on every page. It answers from four cited or code-written sources: product help
+(`docs/help`), the regulatory library, company policies and, only inside a case the person may see, that case's status,
+blockers and verified figures. It gives no uncited, open-domain answers: when nothing supports an answer it says "I
+can't verify that from the available sources".
+
 ## 2. Out-of-scope uses
 - Credit underwriting, credit scores or predicting whether a lender will approve.
 - Accepting, signing or submitting a lender offer: no such path exists (`apps/gateway/tests/test_lw_items.py::test_BR13_no_route_accepts_signs_or_submits_an_offer`).
@@ -175,6 +180,9 @@ This maps each to the controls above: alignment by design for a prototype, not a
 - **English only**; Hinglish injection text is tested, Hinglish answers are not.
 - **Prototype operations:** one gateway, SQLite; tokens renew while you work but a session ends 4 hours after sign-in,
   with no server-side revocation before then.
+- **Copilot routing and help (ADR 0035).** Code routing rules were written on a 40-question dev split, not a held-out
+  set. A help page that is wrong produces a wrong but cited answer; help pages are reviewed like code. Feedback on an
+  answer outside a case is accepted only until the gateway restarts.
 
 ## 14. Contact
 Team CredAssure, IIT Kharagpur Executive PG Programme in Generative AI and Agentic AI. Owners per module:

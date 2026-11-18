@@ -13,8 +13,9 @@ the code-rendered slot values the text was built from, and a citation resolver.
 - Grounded wording (9e): inside a citing sentence, a banned or reason word is allowed only when the
   same words appear in a passage it cites ("guaranteed amount" quoted from R-CG-02 passes; "will be
   approved" is in no source, so it is still blocked).
-- VER-02 citations: each [R-…]/[KFS-…]/[POL-…]/[FAQ-…] resolves to an indexed passage that is in
-  force, allowed and of this case; every figure in the citing sentence appears in the passage.
+- VER-02 citations: each [R-…]/[KFS-…]/[POL-…]/[FAQ-…]/[HELP-…] (help, ADR 0035) resolves to an
+  indexed passage that is in force, allowed and of this case; every figure in the citing sentence
+  appears in the passage.
 - VER-03 banned content (banned.yaml, S-VER-02) and personal identifiers.
 - VER-04 report sections (``report_completeness``).
 """
@@ -40,7 +41,7 @@ Resolve = Callable[[Sequence[str]], Mapping[str, tuple[str, str]]]
 
 MONEY_TOL = Decimal("1")  # VER-01: amounts to ₹1
 RATE_TOL = Decimal("0.00005")  # half of 0.01 pp: a two-decimal display of the fact
-CITE = re.compile(r"\[((?:R|KFS|POL|FAQ)-[A-Za-z0-9][\w.#:\-]*)\]")
+CITE = re.compile(r"\[((?:R|KFS|POL|FAQ|HELP)-[A-Za-z0-9][\w.#:\-]*)\]")
 SENTENCE = re.compile(r"(?<=[.!?;])\s+|\n+")
 CAUSAL = re.compile(
     r"\b(?:because|due to|since|as a result|owing to|given that|thanks to|which means|means that"

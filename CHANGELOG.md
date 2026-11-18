@@ -3,6 +3,15 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow semver.
 
 ## [Unreleased]
+### Added
+- Ask CredAssure on every page (ADR 0035): product help as a cited source, code intent routing (CP-07), case status from
+  code (CP-10), per-case memory with "New conversation" (CP-11), Critic-first streaming, fixed follow-ups and answer
+  ratings (CP-12). New help pages: *Ask CredAssure*, *AI safety and your data*.
+- `POST /v1/copilot/chat`, `POST /v1/copilot/chat/stream`, `GET /v1/cases/{id}/chat`, `POST /v1/cases/{id}/chat/reset`,
+  `POST /v1/copilot/feedback`, `GET /v1/citations/{chunk_id}`.
+### Changed
+- `cp_tool` 1.1.0 (six tools); the chat notice names product help, so users acknowledge it once more.
+- No demo or replay mode: H19 (demo recording) dropped; `scripts/live_run.sh` defaults to `feature/LendWise`.
 
 ## [1.0.0] - 2026-11-18
 First complete release for the IIT KGP Track B capstone. Synthetic data only; approval is internal, never loan acceptance.

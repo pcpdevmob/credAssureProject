@@ -6,6 +6,8 @@ COPY pyproject.toml uv.lock ./
 COPY apps/gateway apps/gateway
 COPY packages packages
 COPY config config
+# ADR 0035: the copilot cites product help (HELP_DIR, default docs/help).
+COPY docs/help docs/help
 RUN uv sync --frozen --no-dev --all-packages
 
 FROM python:3.12-slim-bookworm

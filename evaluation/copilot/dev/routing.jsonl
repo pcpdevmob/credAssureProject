@@ -1,0 +1,40 @@
+{"id": "R001", "question": "How do I upload a corrected receipts file?", "has_case": false, "expected": "help"}
+{"id": "R002", "question": "Where do I see the approval inbox?", "has_case": false, "expected": "help"}
+{"id": "R003", "question": "How does CredAssure handle my personal data?", "has_case": false, "expected": "help"}
+{"id": "R004", "question": "Is my Aadhaar stored anywhere?", "has_case": false, "expected": "help"}
+{"id": "R005", "question": "Does the AI decide whether the loan is approved?", "has_case": false, "expected": "help"}
+{"id": "R006", "question": "What guardrails stop prompt injection?", "has_case": false, "expected": "help"}
+{"id": "R007", "question": "What does the AI-generated draft badge mean?", "has_case": false, "expected": "help"}
+{"id": "R008", "question": "Can I change my acting role?", "has_case": false, "expected": "help"}
+{"id": "R009", "question": "How do I write a case in Excel and convert it?", "has_case": false, "expected": "help"}
+{"id": "R010", "question": "What does the error VALIDATION_FAILED mean?", "has_case": true, "expected": "help"}
+{"id": "R011", "question": "How do I regenerate the report?", "has_case": true, "expected": "help"}
+{"id": "R012", "question": "What can Ask CredAssure help with?", "has_case": false, "expected": "help"}
+{"id": "R013", "question": "Why must the approver attest before approving?", "has_case": true, "expected": "help"}
+{"id": "R014", "question": "What happens when the language model is switched off?", "has_case": false, "expected": "help"}
+{"id": "R015", "question": "How is the CGTMSE annual guarantee fee charged?", "has_case": false, "expected": "regulatory"}
+{"id": "R016", "question": "Is GST charged on loan processing fees?", "has_case": true, "expected": "regulatory"}
+{"id": "R017", "question": "What does the MSMED Act say about paying micro suppliers within 45 days?", "has_case": true, "expected": "regulatory"}
+{"id": "R018", "question": "What is TReDS?", "has_case": false, "expected": "regulatory"}
+{"id": "R019", "question": "Which benchmark must a floating rate loan to a small enterprise use under RBI rules?", "has_case": true, "expected": "regulatory"}
+{"id": "R020", "question": "What are the Udyam classification limits for a small enterprise?", "has_case": false, "expected": "regulatory"}
+{"id": "R021", "question": "What does section 37(2)(g) of the Income-tax Act 2025 cover?", "has_case": true, "expected": "regulatory"}
+{"id": "R022", "question": "What does our working-capital policy say about the minimum cash buffer?", "has_case": true, "expected": "policy"}
+{"id": "R023", "question": "Who approves a proposal above ₹1.5 crore under our approval matrix?", "has_case": true, "expected": "policy"}
+{"id": "R024", "question": "What does the delegation of authority policy cover?", "has_case": false, "expected": "policy"}
+{"id": "R025", "question": "What is the status of this case?", "has_case": true, "expected": "case_status"}
+{"id": "R026", "question": "Which stage is my case at?", "has_case": true, "expected": "case_status"}
+{"id": "R027", "question": "Who approves this case?", "has_case": true, "expected": "case_status"}
+{"id": "R028", "question": "What's next for this proposal?", "has_case": true, "expected": "case_status"}
+{"id": "R029", "question": "Why is this case blocked?", "has_case": true, "expected": "blocker"}
+{"id": "R030", "question": "My case is stuck, what should I fix?", "has_case": true, "expected": "blocker"}
+{"id": "R031", "question": "What is the recommended amount for this case?", "has_case": true, "expected": "case_figures"}
+{"id": "R032", "question": "What is the peak shortfall in this case?", "has_case": true, "expected": "case_figures"}
+{"id": "R033", "question": "Which offer is ranked first for this case?", "has_case": true, "expected": "case_figures"}
+{"id": "R034", "question": "What is the status of this case?", "has_case": false, "expected": "open_case"}
+{"id": "R035", "question": "Why is my case blocked?", "has_case": false, "expected": "open_case"}
+{"id": "R036", "question": "What is the recommended amount for my case?", "has_case": false, "expected": "open_case"}
+{"id": "R037", "question": "How does invoice financing differ from a term loan?", "has_case": true, "expected": null}
+{"id": "R038", "question": "What is a Key Facts Statement?", "has_case": false, "expected": null}
+{"id": "R039", "question": "Explain the difference between APR and the headline rate", "has_case": false, "expected": null}
+{"id": "R040", "question": "And in later years?", "has_case": true, "expected": null}
