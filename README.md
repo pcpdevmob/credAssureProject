@@ -14,6 +14,8 @@ Code then routes the proposal: above ₹1.5 crore to the VP, Finance; below to t
 
 Requirements: [docs/requirements/BRD.md](docs/requirements/BRD.md) · Architecture: [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md) · Progress: [PROGRESS.md](PROGRESS.md)
 
+Responsible AI and security: [System card](docs/SYSTEM_CARD.md) · [Threat model](docs/THREAT_MODEL.md) · [OWASP LLM + ASI mapping](docs/security/owasp-asi-mapping.md) · Operations: [Runbook](docs/deployment/RUNBOOK.md) · Team: [CONTRIBUTIONS.md](CONTRIBUTIONS.md) · Changes: [CHANGELOG.md](CHANGELOG.md)
+
 ---
 
 ## Contents
@@ -264,6 +266,17 @@ make compose-demo            # gateway in demo mode + Langfuse
 make ollama-pull             # pulls into the Ollama container when it is running
 ```
 
+### Operations
+```bash
+make backup                          # online SQLite backup → var/backups/<time>/ (safe while the API runs)
+make restore FROM=var/backups/<dir>  # stop run-api first; verifies hashes, keeps a pre-restore copy
+make demo-reset                      # recreate the demo cases (stop run-api first)
+REPLAY_MODE=true make run-api        # demo fallback: recorded model replies only, endpoint never called
+make release VERSION=1.0.0           # var/release/v1.0.0/: RELEASE.json, CycloneDX SBOM, eval reports
+make pin-images ARGS=--check         # list images not pinned to a digest (make pin-images pins them)
+```
+Incidents (endpoint down, quota, locked DB, corpus missing, demo reset): [docs/deployment/RUNBOOK.md](docs/deployment/RUNBOOK.md).
+
 ---
 
 ## 8. Tests and quality checks
@@ -308,7 +321,11 @@ make openapi && make client       # regenerates openapi.json and packages/api-cl
 | `make baseline` | Prompting strategies S1–S3 on the frozen 100-item test set |
 | `make copilot-live` | The 44 copilot items through the API on the configured model |
 | `make eval-fast` | Prompt change control: version-bump check + offline prompt subset |
-| `make eval` | Full 100-item harness (Phase 11, not yet implemented) |
+| `make eval` | Full 100-item harness through the API (`ARGS="--fake"` checks mechanics only) |
+| `make eval-ablations` | Ablations A1–A6 on the categories each affects |
+| `make eval-judge` / `make eval-kappa` | Judge J1 on free-text answers, then κ against the human-labelled 20% sample |
+| `make eval-report` | E13 report: full system vs best baseline, ablation effects (BRD §12 claim rule), failure taxonomy, cost |
+| `make load-smoke` | 10 concurrent demo cases; p95 per stage (Q6: funding < 60 s) |
 | `/eval E1 … E18` | Claude Code evaluation reports, saved to `evaluation/reports/` |
 | `/freeze-g1` | Writes `evaluation/FROZEN.sha256`, **only after** the human checks are done |
 
@@ -317,8 +334,9 @@ Frozen artefacts: the 100-item test set (25/10/15/15/5/6/8/8/3/5 by BRD §13 cat
 Current numbers (local `qwen3:8b`):
 - Onboarding **10/10**, cash flow **15/15**, LendWise offers **15/15**, negotiation **5/5**.
 - Copilot safety: refusal **8/8**, injection **8/8**, isolation **3/3**.
-- Retrieval recall@5: v1.0 **24/40**; silver strict **35/40**.
-- Copilot regulatory: **10/25**, limited by retrieval.
+- Retrieval recall@5: v1.0 **25/40** after contextual headers (P4 ladder); silver strict **35/40**.
+- Copilot regulatory: **10/25** before P5 (span-cited answers); the P5 strict and supported scores come from the next `make copilot-live`.
+- The 100-item score, ablations and safety_v2 are measured at Gate G4 (`make eval`, live model).
 
 The silver figure is high partly because silver labels and the retriever share signals; the human κ check measures that.
 
@@ -479,9 +497,12 @@ CredAssure/
 - **G2:** passed (2026-11-15).
 - **G3, G4:** pending.
 
-**Done:** Phases 1–9e (Copilot CP-01 open on retrieval quality) and UI U1–U3.
+**Done:** Phases 1–10b, UI U0–U6 (U6 live checks pending: H15, H16), and plan v3.4 P0–P5 and P7–P10 (guardrails, copilot v2, evaluation harness,
+security and fairness, RAI UI, ship and RAI documents). Version **1.0.0** (`CHANGELOG.md`).
 
-**Next:** UI U4 and the demo pack, Phase 10 and G3, the course-endpoint switch, Phase 11, U5–U6, Phase 12, G4, the report.
+**Next:** the live runs on the model (E13 full evaluation, ablations, J1 κ, safety_v2 after its freeze, load smoke) for
+Gate G4 (P11), then the report, slides and demo (P12). P6 (course endpoint) waits for agreement. Open team decisions:
+[docs/plan/human-review.md](docs/plan/human-review.md).
 
 **Data**
 - All case, HR, offer and KFS data is **synthetic**.
@@ -506,13 +527,14 @@ Validated at startup by `apps/gateway/src/credassure/gateway/settings.py`; defau
 | `APP_ENV` | `dev` | dev, test, demo | `test` relaxes the required-secret checks only |
 | `LLM_ENABLED` | `true` | bool | `false` = template fallbacks; `LLM_BASE_URL` then not required |
 | `TRACING_ENABLED` | `true` | bool | Langfuse tracing on/off (PII mask always applies) |
-| `RERANKER` | `none` | none, local_cross_encoder, llm_pointwise | ADR 0013 |
+| `RERANKER` | `none` | none, local_cross_encoder, llm_pointwise | ADR 0013, 0032 |
 | `APR_CONVENTION` | `nominal` | nominal, effective | ADR 0012 |
 | `BOUNDARY_RULE` | `hold` | hold, director, vp | Exactly ₹1.5 crore routing (APR-03) |
 | `APPROVAL_STEP_UP` | `true` | bool | Approving above ₹1.5 crore asks for the password again (NFR-07) |
 | `PLANNER_MODE` | `fixed` | fixed, llm_proposes | Scope #19; code validates any proposal |
 | `COPILOT_SEARCH_MODE` | `hybrid` | hybrid, keyword | Copilot retrieval |
 | `FEATURE_STRETCH` | `false` | bool | BRD §4.2 stretch items |
-| `ABLATION` | empty | A1..A5 | Evaluation only (BRD §12) |
+| `ABLATION` | empty | A1..A6 | Evaluation only (BRD §12); A6 (guardrails off) is refused in the demo profile |
+| `REPLAY_MODE` | `false` | bool | Demo fallback: recorded model replies only (ADR 0015) |
 
 > **Not financial or legal advice.** CredAssure is an academic prototype. Every proposal requires human approval, and the system never commits a business to a lender.
