@@ -15,7 +15,7 @@ ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 # The dev/demo database (var/case.db) is tenant "demo" (make demo-reset); an exported variable beats --env-file.
 DEMO_TENANT := TENANT_ID=demo
 
-.PHONY: case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
+.PHONY: hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe retrieval-eval retrieval-pool retrieval-silver judge kappa
 
@@ -128,6 +128,9 @@ run-ui:  ## Next.js dev server for the web app on http://localhost:3000
 
 data:  ## Seeded synthetic data -> data/frozen/v1 + hr.db (Phase 2, idempotent)
 	uv run python -m credassure.datagen
+
+hr-db:  ## Rebuild the gitignored hr.db from frozen hr/profiles.json (fresh clone, CI; allowed after G1)
+	uv run python -m credassure.datagen hr-db
 
 corpus-audit:  ## Legal-basis and schema audit of data/corpus/manifest.yaml (scope #14, ADR 0019)
 	uv run python -m credassure.datagen.harvest audit

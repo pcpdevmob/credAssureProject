@@ -8,9 +8,10 @@ Continuing someone's module with Claude Code, Cursor or another AI tool: [team-h
 make install                 # uv sync --all-packages (never a bare `uv sync`)
 npm install                  # apps/web + packages/api-client
 cp .env.example .env         # then set JWT_SECRET (32+ chars) and SEED_PASSWORD (12+ chars)
-make data && make db && make ingest
+make hr-db && make db && make ingest
 ```
-`make data` writes the synthetic set to `data/frozen/v1` (frozen files are hook-protected). `make db` migrates `var/case.db` and
+`data/frozen/v1` is committed and frozen (G1), so `make data` refuses to regenerate it; `make hr-db` rebuilds the gitignored
+`data/frozen/v1/hr.db` from the frozen `hr/profiles.json`. `make db` migrates `var/case.db` and
 `var/corpus.db` and seeds users in tenant `demo`. `make ingest` builds the search index for the current `MODELS` profile.
 
 ## Run the API

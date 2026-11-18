@@ -316,3 +316,29 @@ def test_offer_issue_date_between_po_date_and_as_of() -> None:
             assert issued == AS_OF_DATE, path.name
         else:
             assert date.fromisoformat(po) <= issued <= AS_OF_DATE, path.name
+
+
+def test_ONB05_hr_db_rebuilds_from_frozen_profiles(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """`make hr-db` works after the freeze and writes only the gitignored hr.db."""
+    import sqlite3
+
+    from credassure.datagen import __main__ as datagen_main
+    from credassure.datagen import hr
+
+    (tmp_path / "hr").mkdir()
+    profiles = json.loads((DATA / "hr" / "profiles.json").read_text(encoding="utf-8"))
+    (tmp_path / "hr" / "profiles.json").write_text(json.dumps(profiles), encoding="utf-8")
+    (tmp_path / "FROZEN").write_text("status: provisional\n", encoding="utf-8")
+    monkeypatch.setattr(datagen_main, "OUT", tmp_path)
+    monkeypatch.setattr(hr, "OUT", tmp_path)
+
+    assert datagen_main.build_hr_db() == 0
+    con = sqlite3.connect(tmp_path / "hr.db")
+    try:
+        assert con.execute("SELECT COUNT(*) FROM employees").fetchone()[0] == len(profiles) == 20
+    finally:
+        con.close()
+    assert sorted(p.name for p in tmp_path.iterdir()) == ["FROZEN", "hr", "hr.db"]
+    assert "hr.db" in datagen_main.HASHED_EXCLUDE
