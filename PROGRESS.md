@@ -19,8 +19,8 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 |---|---|---|---|---|---|---|---|---|
 | S1 | 1 | Documentation | done | Pritish | 2026-11-18 | 9969751, 9b63b13 | — | [2026-11-18-s1-1-progress-tracking-pritish.md](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md) |
 | S2 | 1 | Documentation | done | Pritish | 2026-11-18 | 07ea5b7 | — | [2026-11-18-s2-1-plan-v34-base-files-pritish.md](docs/progress/entries/2026-11-18-s2-1-plan-v34-base-files-pritish.md) |
-| P0 | 0.2 | Documentation | done | Pritish | 2026-11-18 | — | — | [2026-11-18-p0-0.2-plan-v34-adrs-pritish.md](docs/progress/entries/2026-11-18-p0-0.2-plan-v34-adrs-pritish.md) |
-| P0 | 0.3 | Copilot | in_progress | Pritish | 2026-11-18 | — | — | [2026-11-18-p0-0.3-retrieval-dev-split-pritish.md](docs/progress/entries/2026-11-18-p0-0.3-retrieval-dev-split-pritish.md) |
+| P0 | 0.2 | Documentation | done | Pritish | 2026-11-18 | b4eb8dd | — | [2026-11-18-p0-0.2-plan-v34-adrs-pritish.md](docs/progress/entries/2026-11-18-p0-0.2-plan-v34-adrs-pritish.md) |
+| P0 | 0.3 | Copilot | in_progress | Pritish | 2026-11-18 | b4eb8dd | — | [2026-11-18-p0-0.3-retrieval-dev-split-pritish.md](docs/progress/entries/2026-11-18-p0-0.3-retrieval-dev-split-pritish.md) |
 
 ## Modules
 
