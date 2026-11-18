@@ -29,7 +29,7 @@ def test_unhandled_error_is_500_with_request_id_logged_and_counted(
 
     client.app.add_api_route("/v1/__crash", boom)
     raw = TestClient(client.app, raise_server_exceptions=False)
-    with caplog.at_level(logging.ERROR, logger="credassure.problems"):
+    with caplog.at_level(logging.ERROR, logger="credassure.gateway"):
         r = raw.get("/v1/__crash")
     assert r.status_code == 500
     rid = r.json()["request_id"]

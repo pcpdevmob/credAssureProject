@@ -25,3 +25,7 @@ Please don't. They are removed before the question is stored or sent to the mode
 **Why can't I approve this case?**
 Only the routed approver can decide, and the person who prepared a case can never approve it. If the report changed
 since you opened it, reload and read the new version first.
+
+**Something broke. What do I send?**
+The error banner shows a **Request ID** and a crashed page shows a **Reference**. Send that, with what you were doing.
+The error is already recorded; the ID lets the team find it.
