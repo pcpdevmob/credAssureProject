@@ -107,7 +107,7 @@ def test_demo_reset_rebuilds_unknown_revision(tmp_path: Path) -> None:
     db = tmp_path / "case.db"
     con = sqlite3.connect(db)
     con.execute("CREATE TABLE alembic_version (version_num VARCHAR(32) NOT NULL)")
-    con.execute("INSERT INTO alembic_version (version_num) VALUES ('7d2b9e4c1a30')")
+    con.execute("INSERT INTO alembic_version (version_num) VALUES ('0f0f0f0f0f0f')")
     con.commit()
     con.close()
 
@@ -117,13 +117,13 @@ def test_demo_reset_rebuilds_unknown_revision(tmp_path: Path) -> None:
     with transaction(case_engine(db)) as s:
         assert (
             s.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
-            == "5c1e0a8f2d47"
+            == "7d2b9e4c1a30"
         )
         assert (
             s.execute(
-                text("SELECT name FROM sqlite_master WHERE type='table' AND name='offers'")
+                text("SELECT name FROM sqlite_master WHERE type='table' AND name='users'")
             ).scalar_one()
-            == "offers"
+            == "users"
         )
 
 

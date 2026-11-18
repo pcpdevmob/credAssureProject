@@ -184,7 +184,7 @@ def reset_db(settings: Settings) -> None:
     if db.exists():
         stamped = _stamped(db)
         if stamped is not None and stamped not in _known_case_revisions():
-            # foreign branch (e.g. 7d2b9e4c1a30); do not purge a schema this code does not own
+            # foreign branch (no migration here for it); don't purge a schema we don't own
             print(f"backup (unknown revision {stamped}): {_backup(db)}")
             _drop_db(db)
         else:
