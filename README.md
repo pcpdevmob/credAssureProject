@@ -36,7 +36,7 @@ Responsible AI and security: [System card](docs/SYSTEM_CARD.md) · [Threat model
 
 **Quick start** (after §2–§3):
 ```bash
-make install && npm install
+make install && npm ci
 make hr-db && make db && make ingest          # data/frozen/v1 is committed (frozen); hr-db rebuilds hr.db
 OLLAMA_CONTEXT_LENGTH=8192 ollama serve      # terminal 1
 make run-api                                 # terminal 2 → http://localhost:8000/docs
@@ -115,7 +115,7 @@ Rules:
 
 ```bash
 make install     # uv sync --all-packages: every workspace member + dev group
-npm install      # npm workspaces: apps/web and packages/api-client
+npm ci           # npm workspaces from package-lock.json (npm install would rewrite the lock)
 uv run pre-commit install   # optional: ruff, mypy, bandit, gitleaks on commit
 ```
 
@@ -271,7 +271,7 @@ make ollama-pull             # pulls into the Ollama container when it is runnin
 make backup                          # online SQLite backup → var/backups/<time>/ (safe while the API runs)
 make restore FROM=var/backups/<dir>  # stop run-api first; verifies hashes, keeps a pre-restore copy
 make demo-reset                      # recreate the demo cases (stop run-api first)
-REPLAY_MODE=true make run-api        # demo fallback: recorded model replies only, endpoint never called
+REPLAY_MODE=true make run-api        # demo fallback: recorded chat replies only, chat endpoint never called
 make release VERSION=1.0.0           # var/release/v1.0.0/: RELEASE.json, CycloneDX SBOM, eval reports
 make pin-images ARGS=--check         # list images not pinned to a digest (make pin-images pins them)
 ```

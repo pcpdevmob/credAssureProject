@@ -22,13 +22,19 @@ IMAGE = re.compile(r"^(\s*image:\s*)(?P<ref>[^\s#]+)(?P<rest>.*)$", re.M)
 
 
 def files(root: Path) -> list[Path]:
-    return sorted((root / "deploy/docker").glob("Dockerfile*")) + sorted((root / "deploy/compose").glob("*.yaml"))
+    return sorted((root / "deploy/docker").glob("Dockerfile*")) + sorted(
+        (root / "deploy/compose").glob("*.yaml")
+    )
 
 
 def docker_digest(ref: str) -> str:
-    out = subprocess.run(  # nosec B603 B607 - fixed argv
-        ["docker", "buildx", "imagetools", "inspect", ref, "--format", "{{json .Manifest.Digest}}"],
-        check=True, capture_output=True, text=True, timeout=120,
+    argv = ["docker", "buildx", "imagetools", "inspect", "--format", "{{json .Manifest.Digest}}"]
+    out = subprocess.run(  # noqa: S603  # nosec B603 B607 - fixed argv; ref after "--"
+        [*argv, "--", ref],  # docker from PATH, as the Makefile runs it
+        check=True,
+        capture_output=True,
+        text=True,
+        timeout=120,
     ).stdout
     digest = out.strip().strip('"')
     if not re.fullmatch(r"sha256:[0-9a-f]{64}", digest):

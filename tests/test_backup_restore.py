@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-import backup_db  # noqa: E402
+import backup_db
 
 
 def _db(path: Path, rows: int) -> None:
@@ -75,3 +75,50 @@ def test_scope38_restore_refuses_paths_outside_the_store_list(tmp_path: Path) ->
 def test_scope38_backup_needs_the_case_db(tmp_path: Path) -> None:
     with pytest.raises(SystemExit, match="nothing to back up"):
         backup_db.backup(tmp_path, tmp_path / "var/backups/b0")
+
+
+def test_scope38_restore_refuses_a_store_that_is_open_elsewhere(tmp_path: Path) -> None:
+    case = tmp_path / "var/case.db"
+    _db(case, 2)
+    out = tmp_path / "var/backups/b1"
+    backup_db.backup(tmp_path, out)
+    _db(case, 3)
+    gateway = sqlite3.connect(case)  # an idle pooled connection, as a running gateway holds
+    gateway.execute("SELECT count(*) FROM t").fetchone()
+    try:
+        with pytest.raises(SystemExit, match="in use"):
+            backup_db.restore(tmp_path, out, stamp="T4")
+    finally:
+        gateway.close()
+    assert _count(case) == 5  # untouched
+
+
+def test_scope38_failed_second_store_puts_the_first_back(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _db(tmp_path / "var/case.db", 2)
+    _db(tmp_path / "var/corpus.db", 2)
+    out = tmp_path / "var/backups/b1"
+    backup_db.backup(tmp_path, out)
+    _db(tmp_path / "var/case.db", 5)
+    real = backup_db._write_into
+    calls = []
+
+    def flaky(src: Path, dest: sqlite3.Connection) -> None:
+        calls.append(src.name)
+        if len(calls) == 2:  # case.db done, corpus.db fails
+            raise OSError("disk full")
+        real(src, dest)
+
+    monkeypatch.setattr(backup_db, "_write_into", flaky)
+    with pytest.raises(OSError):
+        backup_db.restore(tmp_path, out, stamp="T5")
+    assert _count(tmp_path / "var/case.db") == 7  # put back, not left at the backup's 2
+
+
+def test_scope38_backups_are_owner_only(tmp_path: Path) -> None:
+    _db(tmp_path / "var/case.db", 1)
+    out = tmp_path / "var/backups/b1"
+    backup_db.backup(tmp_path, out)
+    assert (out.stat().st_mode & 0o777) == 0o700
+    assert ((out / "case.db").stat().st_mode & 0o777) == 0o600

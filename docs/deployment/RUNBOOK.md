@@ -43,6 +43,7 @@ Before a rehearsal or the demo:
 3. Record replies for the fallback: run the demo once live with `LLM_CACHE_PATH` set (the default). Every model reply
    is now in `var/llm_cache.db`.
 4. If the endpoint is slow on the day: restart with `REPLAY_MODE=true`. Recorded calls are answered from the cache; any
-   other call falls back to templates. The endpoint is never called. `/v1/health/ready` shows `model: replay`.
+   other call falls back to templates. The chat endpoint is never called; a copilot question whose embedding is not
+   cached still calls the embeddings endpoint (or abstains if it is down). `/v1/health/ready` shows `model: replay`.
 5. Last resort: the recorded video (ADR 0015).
 Script: `docs/demo/demo-script.md`.

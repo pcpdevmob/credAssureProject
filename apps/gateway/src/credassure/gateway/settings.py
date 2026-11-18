@@ -51,7 +51,7 @@ class Settings(BaseSettings):
     llm_rate_per_minute: float = Field(default=60.0, gt=0)  # shared per team (NFR-04)
     llm_cache_path: str | None = "var/llm_cache.db"  # unset/empty turns the response cache off
     llm_enabled: bool = True
-    # Scope #17, ADR 0015: answer only from recorded replies in LLM_CACHE_PATH (record with a live run)
+    # Scope #17, ADR 0015: answer only from replies recorded in LLM_CACHE_PATH by a live run
     replay_mode: bool = False
     embed_base_url: str | None = None
     embed_model: str | None = None

@@ -30,7 +30,7 @@ and affordability, verify every figure and citation, and route the proposal to t
 | Role | Model | Where |
 |---|---|---|
 | Chat (all agents) | Qwen3-8B (≤ 8B, no fine-tuning, thinking off) | Course endpoint (`MODELS=course`) or local Ollama `qwen3:8b` (`MODELS=local`, ADR 0017) |
-| Embeddings | bge-small-en-v1.5 | Course endpoint or local |
+| Embeddings | bge-small-en-v1.5 (`MODELS=local|course`; a plain `.env` without a profile defaults to `nomic-embed-text`) | Course endpoint or local |
 | Reranker | BAAI/bge-reranker-base, pinned revision; scores only for the answerability gate | Local (ADR 0013, 0032) |
 | Judge J1 | The same chat model, calibrated against human labels (ADR 0014) | Evaluation only |
 
@@ -100,7 +100,7 @@ Injection is contained by architecture first (plan-then-execute, map-reduce, con
 `GUARDRAIL_EVENT` in the audit log and appears, as a code without text, on the approver's safety panel.
 
 Kill switches: `LLM_ENABLED=false` runs every gate, figure, route and approval on templates; `REPLAY_MODE=true` serves
-only recorded replies; `ABLATION=A6` (guardrails off, evaluation only) is refused in the demo profile.
+only recorded chat replies (the chat endpoint is never called); `ABLATION=A6` (guardrails off, evaluation only) is refused in the demo profile.
 
 ## 8. OWASP LLM and ASI mapping
 All ten OWASP LLM (2026) and ten Agentic ASI (2026) risks map to controls and tests in
@@ -111,8 +111,8 @@ Measured so far (reports in `evaluation/reports/`):
 
 | Check | Result | Evidence |
 |---|---|---|
-| Cash-flow known answers (to ₹1) | 15/15 | Engines vs independent gold (Phase 4) |
-| Offer APR, cost and ranking known answers | 15/15 | Engines vs independent gold (Phase 4) |
+| Cash-flow known answers (to ₹1) | 15/15 | `evaluation/reports/E6-2026-11-15.md` (engines and the agent vs independent gold) |
+| Offer APR, cost and ranking known answers | 15/15 | `evaluation/reports/E7-2026-11-16.md` |
 | Onboarding decisions | 10/10 | `evaluation/reports/E5-2026-11-15.md` |
 | Normaliser formats | 146 tests | `evaluation/reports/E4-2026-11-16.md` |
 | Planted bad citations blocked | 12/12 | `agents/critic/tests/test_bad_citations.py::test_VER02_S24_every_planted_bad_citation_is_blocked` |
@@ -146,7 +146,7 @@ breach reporting and retention, commence in phases up to about May 2027 (`docs/d
 |---|---|---|
 | Notice and consent | Chat notice with stored acknowledgement (scope #40); no real data | Purpose-specific notice and consent records for every data principal (preparers, MSME promoters) |
 | Purpose limitation and minimisation | Uploads refuse identifiers and protected attributes; PII redacted before the model | Data inventory and per-purpose retention schedule |
-| Security safeguards | PII v2, encryption in transit outside local dev, audit, role checks | Encryption at rest, key management, access reviews, a tested incident process |
+| Security safeguards | PII v2, audit, role checks; services bound to loopback; TLS only to the course endpoint | TLS termination for every client, encryption at rest, key management, access reviews, a tested incident process |
 | Breach notification | None needed | Board and data-principal notification workflow within the Rules' time limits |
 | Erasure and rights | Case deletion keeps an audit tombstone (ADR 0025) | Rights-request handling and a lawful-retention exception record |
 | Processors and transfers | Course endpoint or local model | Processor contracts; cross-border transfer review for any hosted model |

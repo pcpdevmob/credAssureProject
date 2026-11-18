@@ -101,7 +101,9 @@ class OpenAICompatLLM:
             _log.info("llm call", extra={"prompt": name, "prompt_version": version, "cached": True})
             return hit
         if self.replay:  # never reaches the endpoint; callers fall back as with the model off
-            _log.info("llm call", extra={"prompt": name, "prompt_version": version, "replay_miss": True})
+            _log.info(
+                "llm call", extra={"prompt": name, "prompt_version": version, "replay_miss": True}
+            )
             raise ModelUnavailable("replay mode: no recorded reply for this call")
         extra: dict[str, Any] = {}
         caps = [c for c in (self._max_tokens, prompt_max_tokens(name)) if c is not None]

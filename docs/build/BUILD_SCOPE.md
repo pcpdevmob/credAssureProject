@@ -11,7 +11,7 @@ Block → phase map: A=0, B=1, C=2, D=3, E=8 then 5, F=4, G=6, H=7, I1..I5=9a..9
 |---|---|---|---|
 | 1 | Ablation switch paths | eval/ablation_modes.py + hooks behind ABLATION=A1..A5 (A1 model calculates, A4 model decides gates) | 11 (built in 4/8 hooks) |
 | 2 | Copilot conversation state | agents/copilot/memory.py: last N redacted turns per case, never cross-case | 9e |
-| 3 | Model card / responsible AI | docs/MODEL_CARD.md | 12 |
+| 3 | Model card / responsible AI | docs/security/model-card.md + docs/SYSTEM_CARD.md (P10) | 12 |
 | 4 | Loop detection | repeated identical tool call (name+args hash) → ERROR | 8 |
 | 5 | Cost per query | tokens × configurable notional price, per stage and item | 11 |
 | 6 | Proposal versioning / staleness | reports/versioning.py stores ledger fact versions | 10 |

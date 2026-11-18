@@ -75,6 +75,7 @@ All 20 risks, each with its control and tests: [security/owasp-asi-mapping.md](s
 |---|---|---|
 | Model fooled into a misleading (not numeric) narrative | Critic blocks numbers, citations, banned content; wording is not judged | Human review stays mandatory; consider a calibrated qualitative check (VER-06, cut) |
 | Copilot answers a regulatory question wrongly but with a valid citation | Strict and supported scores reported; abstains when ungrounded | Wider labelled set and a qualified reviewer for regulatory answers |
+| Plain HTTP between browser, nginx and gateway | Services bound to 127.0.0.1; TLS only on the outbound course-endpoint call | TLS termination (and HSTS) in front of the web app and API |
 | Single gateway process and SQLite | One machine; online backup and restore | PostgreSQL, a durable workflow engine, HA (ARCHITECTURE §11) |
 | No token refresh | 30-minute sessions, then sign in again (human review H12) | Refresh tokens with rotation and revocation |
 | Base images pinned only after `make pin-images` runs with network access | Unpinned tags until then (human review H17) | Digests pinned in git; image signing |

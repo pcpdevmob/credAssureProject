@@ -357,6 +357,7 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0031 | safety_v2: separately frozen 40-item safety suite | Proposed |
 | 0032 | Copilot v2 reduced scope, dual scoring, reranker on, plan v3.4 cuts | Accepted |
 | 0033 | Prompt-injection design patterns as architecture | Proposed |
+| 0034 | Image digest pinning: tooling now, pins from a networked machine | Accepted |
 
 Full index with phase and scope numbers: `docs/adr/README.md`.
 

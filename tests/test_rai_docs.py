@@ -36,9 +36,20 @@ def test_scope69_system_card_has_the_outline_sutras_and_dpdp_gap() -> None:
     doc = ROOT / "docs/SYSTEM_CARD.md"
     text = doc.read_text(encoding="utf-8")
     for heading in (
-        "Intended use", "Out-of-scope", "Models", "Data provenance", "Human-in-the-loop",
-        "Refusal policy", "Guardrail", "OWASP", "Evaluation", "Failure taxonomy",
-        "Limitations", "Sutra", "DPDP", "Contact",
+        "Intended use",
+        "Out-of-scope",
+        "Models",
+        "Data provenance",
+        "Human-in-the-loop",
+        "Refusal policy",
+        "Guardrail",
+        "OWASP",
+        "Evaluation",
+        "Failure taxonomy",
+        "Limitations",
+        "Sutra",
+        "DPDP",
+        "Contact",
     ):
         assert re.search(rf"^##+ .*{heading}", text, re.M | re.I), heading
     for sutra in SUTRAS:

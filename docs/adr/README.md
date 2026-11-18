@@ -39,3 +39,4 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | [0031](0031-safety-v2-suite.md) | safety_v2: separately frozen 40-item safety suite | Proposed | P0 → P8 | 65, 66 |
 | [0032](0032-copilot-v2-scope-and-v34-cuts.md) | Copilot v2 reduced scope, dual scoring, reranker on, plan v3.4 cuts (amends 0013) | Accepted | P0 → P4, P5 | 60–64 |
 | [0033](0033-injection-design-patterns.md) | Prompt-injection design patterns as architecture | Proposed | P0 → P2 | 54 |
+| [0034](0034-image-digest-pinning-deferred.md) | Image digest pinning: tooling now, pins from a networked machine | Accepted | P10 | 41 |

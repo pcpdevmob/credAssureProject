@@ -41,7 +41,7 @@ so the model profile wins for model settings. `MODELS` itself is a make variable
 | `LLM_CIRCUIT_FAILURES` / `LLM_CIRCUIT_OPEN_S` | 5 / 60 | Circuit breaker, then template fallbacks |
 | `LLM_RATE_PER_MINUTE` | 60 | Shared limiter (profiles: local 600, course 55) |
 | `LLM_CACHE_PATH` | `var/llm_cache.db` | Response cache; empty turns it off |
-| `REPLAY_MODE` | `false` | Demo fallback (ADR 0015): answer only from replies recorded in `LLM_CACHE_PATH`; a miss falls back to templates and the endpoint is never called |
+| `REPLAY_MODE` | `false` | Demo fallback (ADR 0015): answer only from replies recorded in `LLM_CACHE_PATH`; a miss falls back to templates and the chat endpoint is never called (embeddings still use their cache, then the endpoint) |
 | `TOKEN_QUOTA` | 2,000,000 | Team quota; warnings at 70% and 90% |
 | `EVAL_BASE_URL`, `EVAL_MODEL`, `EVAL_API_KEY`, `EVAL_MAX_TOKENS`, `EVAL_NUM_CTX` | profile | Model used by baselines and evaluation scripts |
 

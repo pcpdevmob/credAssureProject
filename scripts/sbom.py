@@ -47,8 +47,17 @@ def npm_components(lock: dict[str, Any]) -> list[dict[str, Any]]:
             continue
         seen.add(key)
         scope, _, base = name.rpartition("/")
-        purl = f"pkg:npm/{scope.replace('@', '%40')}/{base}@{p['version']}" if scope else f"pkg:npm/{name}@{p['version']}"
-        comp: dict[str, Any] = {"type": "library", "name": name, "version": p["version"], "purl": purl}
+        purl = (
+            f"pkg:npm/{scope.replace('@', '%40')}/{base}@{p['version']}"
+            if scope
+            else f"pkg:npm/{name}@{p['version']}"
+        )
+        comp: dict[str, Any] = {
+            "type": "library",
+            "name": name,
+            "version": p["version"],
+            "purl": purl,
+        }
         if p.get("dev"):
             comp["scope"] = "excluded"  # build and test only, not shipped in the web bundle
         out.append(comp)

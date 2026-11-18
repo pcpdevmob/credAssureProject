@@ -21,11 +21,11 @@ First complete release for the IIT KGP Track B capstone. Synthetic data only; ap
   protected-attribute denylist (P3, P8).
 - React web app: case workflow, funding and offer views, copilot chat, approval inbox with approver attestation,
   safety panel, AI-generated labels, audit chain badge, evaluation scorecard, help centre (P9).
-- Evaluation: frozen 100-item test set, baseline S1–S3, harness through the API, ablations A1–A6, judge J1 with kappa
-  calibration, E13 report, degradation matrix, load smoke (P7).
-- Ship (P10): `REPLAY_MODE` demo fallback, online backup/restore, release bundle with CycloneDX SBOM, image pinning,
-  runbook, system card, threat model, Sutra mapping and DPDP gap note.
-### Added
+- Evaluation tooling: frozen 100-item test set, baseline S1–S3, harness through the API, ablation switches A1–A6, judge
+  J1 with kappa calibration, E13 report generator, degradation matrix, load smoke (P7). The live measurements (E13,
+  ablations, κ, load smoke, safety_v2) are not yet run; the system card claims none of them.
+- Ship (P10): `REPLAY_MODE` demo fallback, online backup/restore, release bundle with CycloneDX SBOM, image-pinning
+  tooling (pins pending, ADR 0034), runbook, system card, threat model, Sutra mapping and DPDP gap note.
 - Phase 0 scaffold: uv workspace (gateway, observability), validated settings, structured JSON logging with PII masking,
   `/v1/health/live`, Makefile, pre-commit, CI, Compose profiles (dev, test, demo, langfuse), CODEOWNERS, PR template.
 - ADRs 0001 (stack), 0002 (threat model), 0016 (self-hosted Langfuse) and the ADR index.
