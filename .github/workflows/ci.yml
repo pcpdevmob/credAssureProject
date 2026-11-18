@@ -58,6 +58,12 @@ jobs:
       - run: uv python install 3.12
       - run: uv sync --locked --all-packages
       - run: make audit
+      - run: make sbom  # scope #41: CycloneDX SBOM from the lock files
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sbom-cyclonedx
+          path: var/release/sbom.cdx.json
+          retention-days: 30
       - uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
