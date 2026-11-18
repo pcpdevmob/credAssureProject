@@ -349,7 +349,8 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0024 | chromadb advisories accepted (embedded mode only) | Accepted |
 | 0025 | Case deletion: content removed, append-only record kept as a tombstone | Accepted |
 | 0026 | KR-04 data correction: three outdated documents tagged superseded | Accepted |
-| 0027 | Local pre-push gates replace GitHub Actions CI | Accepted |
+| 0027 | Local pre-push gates replace GitHub Actions CI | Accepted (amended by 0028) |
+| 0028 | GitHub Actions CI restored alongside the pre-push gates | Accepted |
 
 Full index with phase and scope numbers: `docs/adr/README.md`.
 

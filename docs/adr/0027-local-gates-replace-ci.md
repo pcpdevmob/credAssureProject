@@ -1,6 +1,6 @@
 # ADR 0027 — Local pre-push gates replace GitHub Actions CI
 
-Status: Accepted · Date: 2026-11-17 · Phase 10b · Amends ADR 0004 (line "CI fails if it is stale"),
+Status: Accepted (amended by [ADR 0028](0028-ci-restored.md): CI restored alongside these gates) · Date: 2026-11-17 · Phase 10b · Amends ADR 0004 (line "CI fails if it is stale"),
 BUILD_SCOPE #28, #36, #41 and #51, and docs/build/REPO_STRUCTURE.md (`.github/workflows/`)
 
 ## Context

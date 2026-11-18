@@ -26,15 +26,16 @@ Requirements: [docs/requirements/BRD.md](docs/requirements/BRD.md) · Architectu
 7. [Run the app](#7-run-the-app)
 8. [Tests and quality checks](#8-tests-and-quality-checks)
 9. [Evaluation](#9-evaluation)
-10. [Working with Claude Code](#10-working-with-claude-code)
-11. [Troubleshooting](#11-troubleshooting)
-12. [Repository layout](#12-repository-layout)
-13. [Status, data and licences](#13-status-data-and-licences)
+10. [Working with Claude Code](#10-working-with-claude-code-cursor-or-other-ai-tools)
+11. [Team workflow: branches, PRs and progress](#11-team-workflow-branches-prs-and-progress)
+12. [Troubleshooting](#12-troubleshooting)
+13. [Repository layout](#13-repository-layout)
+14. [Status, data and licences](#14-status-data-and-licences)
 
 **Quick start** (after §2–§3):
 ```bash
 make install && npm install
-make data && make db && make ingest
+make hr-db && make db && make ingest          # data/frozen/v1 is committed (frozen); hr-db rebuilds hr.db
 OLLAMA_CONTEXT_LENGTH=8192 ollama serve      # terminal 1
 make run-api                                 # terminal 2 → http://localhost:8000/docs
 make run-ui                                  # terminal 3 → http://localhost:3000
@@ -64,7 +65,7 @@ Shared code: `packages/core` (contracts, `AgentResult` per ADR 0018, ports, erro
 | git | any recent | Xcode CLT | |
 | uv | latest | `curl -LsSf https://astral.sh/uv/install.sh \| sh` | Manages Python and the workspace |
 | Python | 3.12 | `uv python install 3.12` | Don't use the system Python |
-| Node.js + **npm** | Node 20 LTS | `brew install node@20` or nvm | The Makefile uses npm workspaces. Don't use yarn, and don't run `corepack enable` |
+| Node.js + **npm** | Node 22 LTS (≥ 22.12; vitest 5 needs it) | `brew install node@22` or nvm | The Makefile uses npm workspaces. Don't use yarn, and don't run `corepack enable` |
 | Ollama | latest | https://ollama.com/download | Local model (default) |
 | Docker + Compose | optional | Docker Desktop | Langfuse tracing and the containerised stack |
 | make, openssl, sqlite3 | system | preinstalled on macOS | |
@@ -74,7 +75,7 @@ Hardware: a 16 GB Apple Silicon Mac runs `qwen3:8b` fully on the GPU at an 8K co
 | Port | Service |
 |---|---|
 | 8000 | Gateway API (`make run-api`), Swagger at `/docs` |
-| 3000 | Web app (`make run-ui`) **and** Langfuse (Compose). They clash; see §11 |
+| 3000 | Web app (`make run-ui`) **and** Langfuse (Compose). They clash; see §12 |
 | 5173 | Web container (`make up`), or the UI's second dev port |
 | 11434 | Ollama |
 | 8001 / 3001 | Isolated e2e API / web |
@@ -167,7 +168,7 @@ Add `MODELS=course` to **every** target that touches the model. Only set `LLM_SU
 ## 6. Data: databases, corpus, demo cases
 
 ```bash
-make data         # seeded synthetic data -> data/frozen/v1 + hr.db (idempotent; frozen files are hook-protected)
+make hr-db        # rebuild the gitignored hr.db from frozen hr/profiles.json (data/frozen/v1 is committed; `make data` refuses once frozen)
 make db           # migrate var/case.db + var/corpus.db, seed users into tenant "demo"
 make ingest       # chunk + embed the corpus into var/corpus.db (FTS5) + Chroma; re-runnable
 make demo-reset   # rebuild the demo cases. STOP `make run-api` FIRST
@@ -252,7 +253,7 @@ cp deploy/env/langfuse.env.example deploy/env/langfuse.env   # replace every CHA
 make langfuse-up             # UI on http://localhost:3000; create a project, put its keys in .env
 make langfuse-down
 ```
-Langfuse takes :3000, so run the web UI on 5173 meanwhile (§11). `TRACING_ENABLED=false` turns tracing off.
+Langfuse takes :3000, so run the web UI on 5173 meanwhile (§12). `TRACING_ENABLED=false` turns tracing off.
 
 ### Everything in Docker
 ```bash
@@ -268,8 +269,8 @@ make ollama-pull             # pulls into the Ollama container when it is runnin
 ## 8. Tests and quality checks
 
 ```bash
-make check-fast    # ruff + tests not marked slow (the Claude stop hook runs this)
-make check         # ruff, ruff format, mypy --strict, pytest, corpus refs, bandit, import-linter. Must be green before commit
+make check-fast    # ruff + PROGRESS.md check + tests not marked slow (the Claude stop hook runs this)
+make check         # ruff, ruff format, mypy --strict, pytest (incl. the slow Schemathesis fuzz), corpus refs, bandit, import-linter, PROGRESS.md check. Must be green before commit
 make test          # full suite with coverage
 make audit         # pip-audit (accepted advisories: docs/security/risk-register.md)
 ```
@@ -337,7 +338,7 @@ Open Claude Code in the repo root; it loads `CLAUDE.md` automatically.
 
 - **Build prompts:** `prompts/00–26` (phases), `CLAUDE_CODE_UI_PROMPT.md` (UI U0–U6), [docs/build/PHASE_PROMPTS.md](docs/build/PHASE_PROMPTS.md). One phase per session; stop at its gate.
 - **Commands:** `/status`, `/next`, `/phase <n>`, `/gate <G>`, `/eval <E#>`, `/review`, `/ui U<n>`, `/freeze-g1`.
-- **Progress:** `PROGRESS.md` is the single source of truth for done, open and deferred work.
+- **Progress:** read `PROGRESS.md` first; it is **generated**. Claude Code adds one entry file in `docs/progress/entries/`, updates the module file and runs `make progress`; `.claude/settings.json` denies hand edits of `PROGRESS.md` (§11).
 - **Subagents** (`.claude/agents/`): `brd-conformance`, `security-reviewer`, `money-auditor`, `test-writer`, `eval-analyst`.
 - **Hooks** (`.claude/hooks/`): `guard_paths.py` (blocks `.env`, certificates, raw corpus, frozen sets), `guard_bash.py` (blocks `git push`, recursive force delete, printing `.env`), `format_python.py`, `check_before_stop.py` (runs `make check-fast`).
 
@@ -351,7 +352,74 @@ Working rules:
 
 ---
 
-## 11. Troubleshooting
+## 11. Team workflow: branches, PRs and progress
+
+Six people work on different modules at the same time. Two rules keep that conflict-free: **everyone works on their own branch**, and **nobody edits `PROGRESS.md` by hand**.
+
+### Branches and pull requests
+| Rule | How |
+|---|---|
+| One branch per person and phase | `feature/<module>-<phase>`, e.g. `feature/copilot-p4`, created from an up-to-date `main` |
+| One PR per phase | Raised at the phase's stop point, after `make check` and the reviewer subagents pass |
+| Merge commits only | Squash and rebase are disabled in GitHub settings: evaluation reports and progress entries cite commit hashes, and squash or rebase would change them |
+| CI on every PR | `.github/workflows/ci.yml` (ADR 0028) runs `make check`, openapi-diff, eval-fast on prompt changes, audit and the web build — the same gates as `.githooks/pre-push` (ADR 0027) |
+| Resync after every merge | `git switch <your-branch> && git pull origin main` |
+| Claude Code never pushes | You review the diff, push, and open the PR |
+| Code owners review their module | `.github/CODEOWNERS` requires the module owner's approval |
+
+### Where progress lives
+| What | Where | Who edits |
+|---|---|---|
+| Live task status (who is doing what now) | **CredAssure Post-10b Plan** Sheet | Each owner, their own rows |
+| Evidence: commits, eval reports, decisions, open items | `docs/progress/` in the repo | Each owner, through their PR |
+| The combined view | `PROGRESS.md` | **Nobody: generated by `make progress`** |
+
+```
+docs/progress/
+  HISTORY.md          # everything up to 18 Nov 2026, frozen
+  modules/            # one file per module: owner, phases, status, open items
+    ui.md  copilot.md  auth.md  rai.md  guardrails.md  deployment.md  docs.md  evaluation.md
+  entries/            # one new file per PR, never edited by anyone else
+    TEMPLATE.md
+    2026-11-18-s1-1-progress-tracking-pritish.md
+  gates.md            # gate checklist, edited only when a gate is decided
+PROGRESS.md           # GENERATED — do not edit
+```
+
+### Entry file (one per PR)
+Name: `YYYY-MM-DD-<phase>-<step>-<slug>-<owner>.md`, copied from `entries/TEMPLATE.md`:
+```markdown
+---
+phase: P4
+step: "4.1"
+module: Copilot            # UI | Copilot | Authentication | Responsible AI |
+                           # AI Security and Guardrails | Deployment | Documentation | Evaluation
+owner: Suresh
+commits: [abc1234]
+evals: [E8]
+status: done               # done | in_progress | blocked
+---
+- Built: contextual headers on section chunks; one re-ingest; chunk_ids unchanged
+- Decisions: ADR 0028
+- Open: reranker waits for mentor approval
+```
+
+### Every PR, in order
+1. `git pull origin main` into your branch.
+2. Add **one** entry file in `docs/progress/entries/` and update **your own** module file in `docs/progress/modules/`.
+3. `make progress` to regenerate `PROGRESS.md`.
+4. `make check-fast`. It (and CI) fails if `PROGRESS.md` doesn't match the generated output, or if an entry's front matter is invalid.
+5. Commit, push, open the PR, and update your rows in the plan Sheet.
+
+### If `PROGRESS.md` conflicts during a merge
+Don't resolve it by hand. Take either side, run `make progress`, and commit the regenerated file. Entry and module files can't conflict, because each one is written by only one person.
+
+### Claude Code
+`CLAUDE.md` and every `prompts/*.md` tell Claude Code to write an entry file and update the module file, never `PROGRESS.md` itself. Each phase report it gives you should name the entry file it created.
+
+---
+
+## 12. Troubleshooting
 
 | Symptom | Cause | Fix |
 |---|---|---|
@@ -374,7 +442,7 @@ Working rules:
 
 ---
 
-## 12. Repository layout
+## 13. Repository layout
 
 ```
 CredAssure/
@@ -399,12 +467,12 @@ CredAssure/
 ├── deploy/                 # env profiles, Dockerfiles, compose, nginx, backup/restore scripts
 ├── docs/                   # requirements, architecture, adr, data, setup, security, ui, build
 ├── .claude/  .cursor/  .github/
-└── CLAUDE.md  PROGRESS.md  Makefile  pyproject.toml  package.json  openapi.json
+└── CLAUDE.md  PROGRESS.md (generated)  Makefile  pyproject.toml  package.json  openapi.json
 ```
 
 ---
 
-## 13. Status, data and licences
+## 14. Status, data and licences
 
 **Gates**
 - **G1:** provisionally frozen. Final after human judging and κ, the gold hand check, the APR second transcription, remaining owner names and the course baseline.

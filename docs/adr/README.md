@@ -32,4 +32,5 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | [0024](0024-chromadb-accepted-risk.md) | chromadb 1.5.9 advisories accepted: embedded PersistentClient only, re-check at G3/G4 | Accepted | 7, 9c | 41 |
 | [0025](0025-case-deletion-tombstone.md) | Case deletion: content removed, append-only record kept as a tombstone | Accepted | 10 | 39 |
 | [0026](0026-kr04-superseded-data-correction.md) | KR-04 data correction: R-CG-C-274, R-SIDBI-P-008, R-CG-C-237 tagged superseded from their own text | Accepted | 10b | — |
-| [0027](0027-local-gates-replace-ci.md) | Local pre-push gates replace GitHub Actions CI (#28, #36, #51) | Accepted | 10b | 28, 36, 41, 51 |
+| [0027](0027-local-gates-replace-ci.md) | Local pre-push gates replace GitHub Actions CI (#28, #36, #51) | Accepted (amended by 0028) | 10b | 28, 36, 41, 51 |
+| [0028](0028-ci-restored.md) | GitHub Actions CI restored alongside the pre-push gates; `make hr-db` | Accepted | S1 | 28, 36, 51 |

@@ -11,7 +11,7 @@ Run Phase 4 (or /phase 4) in packages/engines, including engines/calendar.py wit
 and the CGTMSE basis 'guaranteed amount in year 1, then outstanding'. Add test_apr_rbi_annex_b.py reproducing the RBI KFS Annex B
 worked example to 0.01 pp under APR_CONVENTION=nominal (ADR 0012); if it fails, stop and report both conventions.
 Also build scope items: 7 (docs/BUILD_SCOPE.md).
-Follow CLAUDE.md rules: plan first, tests first, make check green, reviewer subagents, update PROGRESS.md, commit.
+Follow CLAUDE.md rules: plan first, tests first, make check green, reviewer subagents, add one progress entry in docs/progress/entries/ (from TEMPLATE.md) and update your module file in docs/progress/modules/, run make progress (never edit PROGRESS.md by hand), commit.
 When done, run the evaluation(s): E3 (.claude/commands/eval.md) and fix every MUST finding.
 Done when: 15/15 cash-flow, 15/15 offers; money-auditor PASS; commit phase-4.
 ```

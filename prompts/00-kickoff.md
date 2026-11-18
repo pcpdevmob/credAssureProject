@@ -13,6 +13,6 @@ docs/DATA_RESOURCES.md, CLAUDE_CODE_MASTER_PROMPT.md, CLAUDE_CODE_REPO_PROMPT.md
 2. The ordered list of prompt files in prompts/ you expect to run, with the gate each feeds.
 3. Every conflict or ambiguity across BRD, ADRs, architecture, data docs and BUILD_SCOPE, each with a proposed resolution.
 4. What you need from humans before prompt 01.
-Follow CLAUDE.md rules: plan first, tests first, make check green, reviewer subagents, update PROGRESS.md, commit.
-Done when: Conflicts resolved in PROGRESS.md 'Decisions'.
+Follow CLAUDE.md rules: plan first, tests first, make check green, reviewer subagents, add one progress entry in docs/progress/entries/ (from TEMPLATE.md) and update your module file in docs/progress/modules/, run make progress (never edit PROGRESS.md by hand), commit.
+Done when: Conflicts resolved in an ADR and recorded in a progress entry's Decisions.
 ```
