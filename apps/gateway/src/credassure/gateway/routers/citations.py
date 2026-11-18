@@ -20,6 +20,7 @@ from credassure.gateway.deps import Svc, User, visible_case
 from credassure.gateway.problems import ProblemError
 from credassure.guardrails.events import record as guardrail
 from credassure.guardrails.excerpt import EXCERPT_LIMIT, FULL_TEXT_BASES, excerpt
+from credassure.guardrails.switch import on as rail_on
 from credassure.ledger import reads
 from credassure.ledger.session import transaction
 from credassure.retrieval.search import Filters, Searcher
@@ -63,7 +64,11 @@ def citation(
         )
     if found is None:
         raise ProblemError(404, "no such passage for this case", ApiErrorCode.NOT_FOUND)
-    short = found.legal_basis not in FULL_TEXT_BASES and len(found.text) > EXCERPT_LIMIT
+    short = (  # R2 excerpt cap; off only under the A6 ablation (guardrails.switch)
+        rail_on("R2")
+        and found.legal_basis not in FULL_TEXT_BASES
+        and len(found.text) > EXCERPT_LIMIT
+    )
     text = excerpt(found.text, quote) if short else found.text
     flags = scan(text)
     # ADR 0029 R2: a read, so the events stay in the trace (no audit row per citation view)

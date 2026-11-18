@@ -42,6 +42,7 @@ from credassure.guardrails.events import AuditSink
 from credassure.guardrails.events import record as guardrail
 from credassure.guardrails.policy import load as guardrail_policy
 from credassure.guardrails.protected import find as find_protected
+from credassure.guardrails.switch import on as rail_on
 from credassure.ledger import reads
 from credassure.ledger.models import Case
 from credassure.ledger.session import run_in_progress, run_lock, transaction
@@ -349,7 +350,7 @@ def validate_file(
     scripts/case_xlsx.py so authored files are validated by exactly this code."""
     # NFR-07: personal identifiers are refused, never stored. IFSC, phone and email are not
     # checked here: the IFSC shape matches ordinary IDs (see guardrails.pii).
-    refuse = guardrail_policy().refuse_pii_kinds
+    refuse = guardrail_policy().refuse_pii_kinds if rail_on("R1") else frozenset()  # A6
     ids = [h for h in pii_find(text) if h.kind in refuse]
     if ids:  # ADR 0029 R1: a block, audited with the kinds and count only, never the text
         guardrail(
@@ -374,7 +375,8 @@ def validate_file(
                 for h in ids[:20]
             ],
         )
-    if kind != "kfs":  # P8.3 scope #67: no protected-attribute field reaches a gate or prompt
+    # P8.3 scope #67: no protected-attribute field reaches a gate or prompt (R1; A6 turns it off)
+    if kind != "kfs" and rail_on("R1"):
         protected = find_protected(text, is_json=kind in _JSON_KINDS)
         if protected:
             guardrail(

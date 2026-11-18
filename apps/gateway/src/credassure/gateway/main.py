@@ -70,6 +70,7 @@ from credassure.gateway.jobs import JobRunner
 from credassure.gateway.routers import admin, auth, cases, citations, health, lineage, workflow
 from credassure.gateway.settings import Settings, get_settings
 from credassure.gateway.supervisor_service import SupervisorService
+from credassure.guardrails import switch as rail_switch
 from credassure.ledger import hr, migrate, reads
 from credassure.ledger.session import case_engine, hr_engine, transaction
 from credassure.ledger.store import SqlLedger
@@ -586,6 +587,7 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
     configure_logging(settings.log_level)
     set_redactor(pii.redact)  # NFR-07: Verhoeff-aware redaction for every log line
     tracing.configure(settings)
+    rail_switch.set_off(rail_switch.SWITCHABLE if settings.ablation == "A6" else ())  # P8.5
     svc = build_services(settings, llm if llm is not None else _default_llm(settings))
     app = FastAPI(title="CredAssure API", version="0.2.0")
     app.state.settings = settings
