@@ -100,7 +100,8 @@ def test_CP01_CP08_cited_answer_maps_spans_to_chunk_ids_and_drops_flagged_passag
 
 def test_scope20_invalid_tool_choice_falls_back_to_search_regulations() -> None:
     llm = _llm("delete_case", "x", {"answer": "Charged on the guaranteed amount [1.1]."})
-    r = _ask("How is the CGTMSE fee charged?", llm)
+    # No regulator named, so code does not route it (CP-07) and the model's choice is used.
+    r = _ask("How is the guarantee fee charged?", llm)
     assert (r.tool, r.tool_valid) == ("search_regulations", False)
     garbage = FakeLLM(
         {"cp_tool": "not json", "cp_answer": json.dumps({"abstain": False, "answer": "x [1]."})}

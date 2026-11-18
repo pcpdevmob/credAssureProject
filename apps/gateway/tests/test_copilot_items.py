@@ -240,7 +240,8 @@ def test_scope2_40_memory_per_case_notice_once_stored_redacted_and_lineage_passa
     tool_prompts = [p for n, p in client.llm.calls if n == "cp_tool"]
     assert "How^is^the^CGTMSE" in tool_prompts[-1]  # #2: earlier turn, spotlit as data
     assert "ABCDE1234F" not in "".join(tool_prompts)  # ONB-06: never sent to the model
-    _chat(client, login, "demo.preparer", b, "What is TReDS?")
+    # A question code does not route (CP-07), so the model is asked and its prompt is checked.
+    _chat(client, login, "demo.preparer", b, "How does invoice financing work?")
     other = [p for n, p in client.llm.calls if n == "cp_tool"][-1]
     assert "How^is^the^CGTMSE" not in other and "(none)" in other  # memory never crosses cases
     with session.transaction(session.case_engine(client.db)) as s:

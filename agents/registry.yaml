@@ -1,7 +1,8 @@
 # Agent registry and data-access matrix (scope #24, design-detail §2.3).
-# Eighteen tools: the thirteen of design-detail §2.3, load_offers (Phase 9c), which reads the
+# Twenty tools: the thirteen of design-detail §2.3, load_offers (Phase 9c), which reads the
 # case's uploaded offers and KFS schedules read-only, as validate_case_files does for WC, and the
-# copilot's four fixed tools (Phase 9e, scope #20): the model picks one, code validates and runs it.
+# copilot's fixed tools (Phase 9e, scope #20; search_help and get_case_status added by ADR 0035):
+# code routes or the model picks one, code validates and runs it.
 # An agent may call only the tools listed under its name.
 # search_knowledge also names the collections that agent may read.
 # same_case_collections require a case_id (KFS never crosses cases).
@@ -59,7 +60,13 @@ tools:
   search_policies:  # policy + faq + this case's own uploaded KFS
     allow:
       copilot: {}
+  search_help:  # product help (docs/help, L5), in memory; no case data (ADR 0035)
+    allow:
+      copilot: {}
   get_case_facts:  # read-only: this case's ledger facts within ledger_read_prefixes
+    allow:
+      copilot: {}
+  get_case_status:  # read-only: status, stage decisions, route, staleness; no figures (CP-10)
     allow:
       copilot: {}
   explain_blocker:  # read-only: the case's current blockers and its one question

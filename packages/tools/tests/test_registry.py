@@ -8,7 +8,7 @@ from credassure.tools.registry import TOOL_NAMES, RegistryError, authorize, rule
 
 
 def test_registry_lists_the_thirteen_tools_plus_load_offers() -> None:
-    assert len(TOOL_NAMES) == 18 and "load_offers" in TOOL_NAMES
+    assert len(TOOL_NAMES) == 20 and {"load_offers", "search_help", "get_case_status"} <= set(TOOL_NAMES)
     assert "get_hr_profile" in TOOL_NAMES
     assert "verify_claims" in TOOL_NAMES
     assert "route_proposal" in TOOL_NAMES

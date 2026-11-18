@@ -24,7 +24,8 @@ corrected file in the question card and press **Resume**. Only the blocked stage
 passed are kept.
 
 ## Ask CredAssure
-The **Ask CredAssure** tab answers questions about rules, policies and this case, and cites its sources. Open a citation
+The **Ask CredAssure** tab, and the **Ask CredAssure** button on every page, answer questions about using
+CredAssure, rules, policies and this case, and cite their sources ([ask-credassure.md](ask-credassure.md)). Open a citation
 to read the passage itself, with its document, section, effective date, legal basis and a link to the source. Some
 sources (Acts) are shown as a short excerpt of up to 600 characters; the link has the rest. If CredAssure cannot find a verified source it says "I can't verify that
 from the available sources", which is not an error. It does not predict approval, give legal or tax advice, accept offers,

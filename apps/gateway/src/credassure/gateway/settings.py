@@ -93,6 +93,11 @@ class Settings(BaseSettings):
     eval_dir: Path = Path("var/eval")  # P9 scorecards: `make eval` run folders (read-only)
     baseline_dir: Path = Path("evaluation/baseline/results")  # `make baseline` S1-S3 results
     copilot_search_mode: Literal["hybrid", "keyword"] = "hybrid"
+    # ADR 0035: product help the copilot cites (docs/help, L5), indexed in memory at start.
+    help_dir: Path = Path("docs/help")
+    # CP-11: redacted messages replayed to the model, per user and case (a question and its
+    # answer are two). 0 turns memory off. Never crosses cases or people.
+    copilot_memory_messages: int = Field(default=8, ge=0, le=20)
     home_state: str = "IN-MH"  # ADR 0019 jurisdiction filter
     apr_convention: Literal["nominal", "effective"] = "nominal"
     boundary_rule: Literal["hold", "director", "vp"] = "hold"
