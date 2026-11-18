@@ -21,6 +21,7 @@ from typing import Any, Literal
 
 from chromadb.api import ClientAPI
 
+from credassure.retrieval import glossary
 from credassure.retrieval.chunking import Embed
 from credassure.retrieval.index import collection, date_key
 from credassure.security.pii import redact
@@ -124,11 +125,15 @@ class Searcher:
         as_of: date | None = None,
         tenant_id: str | None = None,
         ablation: str | None = None,
+        query_rewrite: bool = False,
+        min_score: float | None = None,
     ) -> None:
         self._db, self._chroma, self._embed = Path(corpus_db), chroma, embed
         self.reranker, self.strategy, self.as_of = reranker, strategy, as_of
         self.tenant_id = tenant_id
         self.ablation = ablation  # A3: semantic top five only (BRD §12)
+        self.query_rewrite = query_rewrite  # scope #62: glossary expansion, no model call
+        self.min_score = min_score  # scope #63: answerability gate on the top reranker score
 
     def _connect(self) -> sqlite3.Connection:
         return sqlite3.connect(f"file:{self._db}?mode=ro", uri=True)
@@ -286,18 +291,51 @@ class Searcher:
         k: int = 5,
         rerank: bool = True,
     ) -> list[Passage]:
+        """Top passages. With an answerability threshold set and the reranker on, a result whose
+        best score is below the threshold is empty, so the copilot abstains (CP-02, scope #63)."""
+        scored = self.scored(
+            query,
+            case_id=case_id,
+            tenant_id=tenant_id,
+            filters=filters,
+            strategy=strategy,
+            mode=mode,
+            k=k,
+            rerank=rerank,
+        )
+        top = scored[0][1] if scored else None
+        if self.min_score is not None and top is not None and top < self.min_score:
+            return []
+        return [p for p, _ in scored]
+
+    def scored(
+        self,
+        query: str,
+        *,
+        case_id: str | None = None,
+        tenant_id: str | None = None,
+        filters: Filters,
+        strategy: str | None = None,
+        mode: Mode = "hybrid",
+        k: int = 5,
+        rerank: bool = True,
+    ) -> list[tuple[Passage, float | None]]:
+        """(passage, reranker score or None) in rank order. Search reads the glossary-expanded
+        query when rewrite is on; the reranker always scores the user's own words."""
         strategy = strategy or self.strategy
+        expanded = glossary.rewrite(query) if self.query_rewrite else query
         rankings = []
         if mode in ("keyword", "hybrid"):
-            rankings.append(self.keyword(query, case_id, tenant_id, filters, strategy, DEPTH))
+            rankings.append(self.keyword(expanded, case_id, tenant_id, filters, strategy, DEPTH))
         if mode in ("dense", "hybrid"):
-            rankings.append(self.dense(query, case_id, tenant_id, filters, strategy, DEPTH))
+            rankings.append(self.dense(expanded, case_id, tenant_id, filters, strategy, DEPTH))
         passages = self._passages(rrf(rankings)[:DEPTH], case_id, tenant_id, filters)
         if rerank and self.reranker and passages:
             scores = self.reranker(query, [p.text for p in passages])
             order = sorted(range(len(passages)), key=lambda i: -scores[i])
-            passages = [passages[i] for i in order]
-        return passages[:k]
+            ranked: list[tuple[Passage, float | None]] = [(passages[i], scores[i]) for i in order]
+            return ranked[:k]
+        return [(p, None) for p in passages[:k]]
 
     def resolve(
         self, ids: Sequence[str], case_id: str | None, filters: Filters

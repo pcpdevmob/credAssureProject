@@ -56,6 +56,9 @@ class Settings(BaseSettings):
     reranker: Literal["none", "local_cross_encoder", "llm_pointwise"] = "none"
     reranker_model: str = "BAAI/bge-reranker-base"
     reranker_revision: str = "2cfc18c9415c912f9d8155881c133215df768a70"  # pinned (ADR 0013)
+    # Plan v3.4 P4 (scope #62, #63): off until tuned on the retrieval dev split
+    retrieval_query_rewrite: bool = False  # deterministic glossary expansion (config/glossary.yaml)
+    answerability_threshold: float | None = None  # abstain when the top reranker score is lower
 
     tracing_enabled: bool = True
     langfuse_host: str = "http://localhost:3000"

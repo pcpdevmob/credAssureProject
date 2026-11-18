@@ -1,0 +1,17 @@
+# Domain glossary for the deterministic query rewrite (scope #62, plan v3.4 §7.1).
+# Built from the corpus domain (RBI directions, CGTMSE, CBIC, Ministry of MSME, TReDS), never from
+# test or dev queries. Each acronym maps to the expansions the corpus uses.
+version: 1.0.0
+terms:
+  AGF: [annual guarantee fee]
+  APR: [annual percentage rate]
+  CGTMSE: [Credit Guarantee Fund Trust for Micro and Small Enterprises]
+  EBLR: [external benchmark based lending rate, external benchmark lending rate]
+  GST: [goods and services tax]
+  KFS: [key facts statement, key fact statement]
+  MCLR: [marginal cost of funds based lending rate]
+  MSE: [micro and small enterprises]
+  MSME: [micro, small and medium enterprises]
+  NBFC: [non-banking financial company]
+  TReDS: [Trade Receivables Discounting System, trade receivables electronic discounting system]
+  Udyam: [Udyam registration, MSME registration]
