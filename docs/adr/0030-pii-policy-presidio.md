@@ -17,3 +17,10 @@ Phase 6 masks Aadhaar (only when the Verhoeff checksum is valid), PAN, IFSC, acc
 ## Consequences
 - A production version is a DPDP data fiduciary with obligations phasing in to May 2027; the report states this as a production gap, not a compliance claim.
 - Presidio adds a dependency; pinned in `uv.lock` and audited like the rest.
+
+## Implementation notes (P3, 2026-11-18)
+- Presidio Analyzer 2.2.366 runs **pattern recognisers only** (`nlp_artifacts=None`): no spaCy model is downloaded. If it fails to import or raises, the same regexes and validators run directly (`guardrails/recognisers.py`), so every kind is still scanned.
+- Placeholders keep the Phase 6 spelling `[REDACTED_<KIND>]` (typed and irreversible, as decided); renaming to `[PAN]` would change stored text and every caller's tests for no safety gain.
+- UPI, GSTIN and Udyam run before the Phase 6 patterns (a UPI ID's digits are not a phone); cards run after them; no kind takes a rupee amount.
+- Adding spaCy (a Presidio dependency) moves numpy from 2.5.4 to 2.4.6 in `uv.lock`.
+- Not built here: exact-match masking of employee names against hr.db (open item for P8).
