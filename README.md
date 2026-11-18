@@ -65,7 +65,7 @@ Shared code: `packages/core` (contracts, `AgentResult` per ADR 0018, ports, erro
 | git | any recent | Xcode CLT | |
 | uv | latest | `curl -LsSf https://astral.sh/uv/install.sh \| sh` | Manages Python and the workspace |
 | Python | 3.12 | `uv python install 3.12` | Don't use the system Python |
-| Node.js + **npm** | Node 20 LTS | `brew install node@20` or nvm | The Makefile uses npm workspaces. Don't use yarn, and don't run `corepack enable` |
+| Node.js + **npm** | Node 22 LTS (≥ 22.12; vitest 5 needs it) | `brew install node@22` or nvm | The Makefile uses npm workspaces. Don't use yarn, and don't run `corepack enable` |
 | Ollama | latest | https://ollama.com/download | Local model (default) |
 | Docker + Compose | optional | Docker Desktop | Langfuse tracing and the containerised stack |
 | make, openssl, sqlite3 | system | preinstalled on macOS | |
