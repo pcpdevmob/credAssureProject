@@ -50,6 +50,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P10 | 10.1 | Deployment | done | Pritish | 2026-11-18 | f17e087, d4cd99f, 5b2cca6, fb8aa5f | — | [2026-11-18-p10-10.1-ship-pritish.md](docs/progress/entries/2026-11-18-p10-10.1-ship-pritish.md) |
 | P10 | 10.2 | Responsible AI | done | Pritish | 2026-11-18 | d6e63c2, fb8aa5f | — | [2026-11-18-p10-10.2-rai-docs-pritish.md](docs/progress/entries/2026-11-18-p10-10.2-rai-docs-pritish.md) |
 | P10 | 10.3 | Documentation | in_progress | Pritish | 2026-11-18 | 6fa8740, fb8aa5f | — | [2026-11-18-p10-10.3-contributions-release-pritish.md](docs/progress/entries/2026-11-18-p10-10.3-contributions-release-pritish.md) |
+| P11 | 11.0 | Deployment | done | Pritish | 2026-11-18 | f1e2f04, 630d93f, 049f782 | — | [2026-11-18-p11-11.0-observability-pritish.md](docs/progress/entries/2026-11-18-p11-11.0-observability-pritish.md) |
 
 ## Modules
 
