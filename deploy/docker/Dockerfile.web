@@ -5,6 +5,7 @@ RUN corepack enable && corepack prepare pnpm@9.15.0 --activate
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web apps/web
 COPY packages/api-client packages/api-client
+COPY docs/help docs/help
 RUN pnpm install --frozen-lockfile && pnpm --filter @credassure/web build
 
 FROM nginxinc/nginx-unprivileged:1.27-alpine

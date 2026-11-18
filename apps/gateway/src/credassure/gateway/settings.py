@@ -88,6 +88,8 @@ class Settings(BaseSettings):
     # Copilot search (9e): the vector store and embedder are the ingest's (CHROMA_PATH, EMBED_*);
     # "keyword" runs BM25 only (tests, or no vector store).
     chroma_path: Path = Path("var/chroma")
+    eval_dir: Path = Path("var/eval")  # P9 scorecards: `make eval` run folders (read-only)
+    baseline_dir: Path = Path("evaluation/baseline/results")  # `make baseline` S1-S3 results
     copilot_search_mode: Literal["hybrid", "keyword"] = "hybrid"
     home_state: str = "IN-MH"  # ADR 0019 jurisdiction filter
     apr_convention: Literal["nominal", "effective"] = "nominal"

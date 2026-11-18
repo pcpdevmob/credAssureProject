@@ -4361,6 +4361,55 @@
         ]
       }
     },
+    "/v1/eval/scorecard": {
+      "get": {
+        "description": "U5 (P9): baseline vs system vs ablations from the newest `make eval` runs and `make\nbaseline` results on this machine. Read-only; runs start from the command line (make eval).",
+        "operationId": "scorecard_v1_eval_scorecard_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Scorecard V1 Eval Scorecard Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Scorecard",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
     "/v1/health/live": {
       "get": {
         "operationId": "live_v1_health_live_get",
