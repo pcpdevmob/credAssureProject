@@ -33,13 +33,15 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P4 | 4.3 | Copilot | done | Pritish | 2026-11-18 | 16c38a4 | — | [2026-11-18-p4-4.3-answerability-gate-pritish.md](docs/progress/entries/2026-11-18-p4-4.3-answerability-gate-pritish.md) |
 | P4 | 4.4 | Copilot | done | Pritish | 2026-11-18 | 8cc011e | retrieval-ladder | [2026-11-18-p4-4.4-ladder-pritish.md](docs/progress/entries/2026-11-18-p4-4.4-ladder-pritish.md) |
 | P4 | 4.5 | Copilot | done | Pritish | 2026-11-18 | d9fdedc | — | [2026-11-18-p4-4.5-dev-labels-fix-pritish.md](docs/progress/entries/2026-11-18-p4-4.5-dev-labels-fix-pritish.md) |
+| P5 | 5.1 | Copilot | in_progress | Pritish | 2026-11-18 | 344a016 | — | [2026-11-18-p5-5.1-span-cited-answers-pritish.md](docs/progress/entries/2026-11-18-p5-5.1-span-cited-answers-pritish.md) |
+| P5 | 5.2 | Evaluation | in_progress | Pritish | 2026-11-18 | 9d73457 | — | [2026-11-18-p5-5.2-dual-scoring-pritish.md](docs/progress/entries/2026-11-18-p5-5.2-dual-scoring-pritish.md) |
 
 ## Modules
 
 | Module | Owner | Phases | Status |
 |---|---|---|---|
 | [UI](docs/progress/modules/ui.md) | UI lead (TODO: name) | P9 (U5, U6) | U0–U4 done (U4 + follow-ups 2026-11-17); next U5–U6 (P9) |
-| [Copilot](docs/progress/modules/copilot.md) | [Name 6] (TODO: name); plan v3.4: Suresh (retrieval, P4), Tejas (answering, P5) | P0 (dev split), P4 (CP2-R), P5 (CP2-A), P6 (course re-run) | 9e done except CP-01 (regulatory 10/25 live, OPEN); KR-05 recall@5 24/40 (v1.0) OPEN. **P4 code done 2026-11-18** (contextual headers, glossary rewrite, answerability gate, ladder script); Mac run done: frozen recall@5 23 -> 25/40 (headers), dev 13 -> 17/20 (headers + glossary); reranker only scores for the abstain gate (threshold 0.4066); `evaluation/reports/retrieval-ladder-2026-11-18.md` |
+| [Copilot](docs/progress/modules/copilot.md) | [Name 6] (TODO: name); plan v3.4: Suresh (retrieval, P4), Tejas (answering, P5) | P0 (dev split), P4 (CP2-R), P5 (CP2-A), P6 (course re-run) | 9e done except CP-01 (regulatory 10/25 live, OPEN); KR-05 recall@5 24/40 (v1.0) OPEN. **P4 code done 2026-11-18** (contextual headers, glossary rewrite, answerability gate, ladder script); Mac run done: frozen recall@5 23 -> 25/40 (headers), dev 13 -> 17/20 (headers + glossary); reranker only scores for the abstain gate (threshold 0.4066); `evaluation/reports/retrieval-ladder-2026-11-18.md`. **P5 code done 2026-11-18**: span-cited answers (cp_answer 2.0.0, unsupported sentences cut) and dual strict/supported scoring in copilot-live; live re-run pending on the Mac |
 | [Authentication](docs/progress/modules/auth.md) | TODO: owner | P8 (SEC) | JWT + roles + maker-checker + step-up above ₹1.5 cr done (Phases 5, 10a); hardening in P8 |
 | [Responsible AI](docs/progress/modules/rai.md) | Pritish | P8 (fairness), P9 (RAI UI), P10 (system card, Sutra mapping) | Human-in-the-loop, no accept tool, audit, kill switch done; documentation and fairness evidence pending |
 | [AI Security and Guardrails](docs/progress/modules/guardrails.md) | Pritish (GR); Abhishek (red-team, SEC) | P2 (pattern tests), P3 (GR), P8 (SEC), P10 (threat model) | Phase 6 safeguards done (PII masking, injection scanner, breaker, caps); ADR 0033 pattern tests in make check (P2); **P3 done 2026-11-18**: packages/guardrails (R1–R5, guardrail_event, config/guardrails.yaml), PII v2 (Presidio patterns + GSTIN/UPI/card/Udyam), money gate, trace-leak test 0 hits, data classes, CSV escaping, gen_ai.* export |
@@ -56,6 +58,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - P4 4.3: False-abstain on the 25 regulatory items (exit check <= 3/25) is measured with the live copilot in P5. ([entry](docs/progress/entries/2026-11-18-p4-4.3-answerability-gate-pritish.md))
 - P4 4.4: Exit check recall@5 >= 30/40 on frozen v1.0 NOT met (best 25/40). Gap: v1.0 labels are pooling-biased (silver strict labels scored 35/40 earlier); headers and the glossary were tuned on dev only, never on the frozen 40. ([entry](docs/progress/entries/2026-11-18-p4-4.4-ladder-pritish.md))
 - P4 4.5: A person still confirms the 20 labels (P0 0.3). ([entry](docs/progress/entries/2026-11-18-p4-4.5-dev-labels-fix-pritish.md))
+- P5 5.1: Live re-run on the Mac (make copilot-live): citation coverage 100% on answered items, regulatory strict >= 16/25 with supported, refusal 8/8, injection 8/8, isolation 3/3; save the report. ([entry](docs/progress/entries/2026-11-18-p5-5.1-span-cited-answers-pritish.md))
 
 ### AI Security and Guardrails
 
@@ -76,6 +79,7 @@ From the latest entry of each step. Module-level items live in each module file.
 
 - P2 2.2: re-record one live-model demo run with a Langfuse trace at P4 (Mac). ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
 - P2 2.2: E18 SHOULDs S1/S2 (ARCHITECTURE says React SPA/nginx; §6.3 omits RETURNED) — P10 docs. ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
+- P5 5.2: Human review of the J1 sample after the live run (human review list H14). ([entry](docs/progress/entries/2026-11-18-p5-5.2-dual-scoring-pritish.md))
 
 ## History
 
