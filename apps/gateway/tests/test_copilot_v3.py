@@ -170,9 +170,8 @@ def test_CP12_feedback_only_on_my_own_answer_and_fixed_reasons(
         )
         assert ok.status_code == 200 and ok.json()["recorded"], ok.text
     other = login(client, "demo.director")
-    stolen = client.post(
-        "/v1/copilot/feedback", json={"trace_id": in_case["trace_id"], "rating": "up"}, headers=other
-    )
+    body = {"trace_id": in_case["trace_id"], "rating": "up"}
+    stolen = client.post("/v1/copilot/feedback", json=body, headers=other)
     assert stolen.status_code == 404
     free_text = client.post(
         "/v1/copilot/feedback",
