@@ -368,6 +368,7 @@ class SupervisorService:
             "trace_id": trace_id,
             "fact_key": fact_key,
             "pii_redacted": bool(kinds),
+            "source": reply.source,  # P9 AI badge: "model" drafted it, "code" = fixed text
         }
         if notices:
             out["notice"] = " ".join(notices)

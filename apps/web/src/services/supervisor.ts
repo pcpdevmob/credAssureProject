@@ -28,7 +28,7 @@ export const supervisorService: SupervisorService = {
     const by = new Map<string, RawStage>((raw.stages ?? []).map(s => [s.stage, s]));
     const g: WorkflowGate[] = STAGES.map(s => {
       const r = by.get(s.id);
-      return { id: s.id, name: s.name, agent: s.agent, decision: gate(r?.decision), evidence: r?.narrative ?? (r ? `Attempt ${r.attempt}` : 'Not run yet'), blockers: (r?.blockers ?? []).map(b => b.message ?? b.code ?? 'Blocked'), at: undefined, next: r?.question ?? s.next };
+      return { id: s.id, name: s.name, agent: s.agent, decision: gate(r?.decision), evidence: r?.narrative ?? (r ? `Attempt ${r.attempt}` : 'Not run yet'), blockers: (r?.blockers ?? []).map(b => b.message ?? b.code ?? 'Blocked'), at: undefined, next: r?.question ?? s.next, aiDrafted: r?.narrative_source === 'model' };
     });
     const held = c.stage === 'ROUTING_HELD';
     g.push({ id: 'routing', name: 'Approval routing', agent: 'Supervisor (code)', decision: held ? 'HELD' : ['AWAITING_APPROVAL', 'APPROVED', 'REJECTED'].includes(c.stage) ? 'GO' : 'PENDING', evidence: c.routedTo ? `Routed to ${c.routedTo.replace(/_/g, ' ').toLowerCase()}` : '—', blockers: held ? ['Exactly ₹1.5 crore: held for a human decision (APR-03)'] : [], next: 'Human decision' });

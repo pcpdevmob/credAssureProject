@@ -95,6 +95,7 @@ test('U2 preparer flow, question and resume, Director approval', async ({ page, 
   await expect(page.getByText('Director, Finance').first()).toBeVisible();
   await expect(page.getByRole('button', { name: 'Validated funding need: ₹1,42,00,000, show source' })).toBeVisible();
   await capture(page, 'review');
+  await page.getByLabel(/I reviewed the Critic findings/).check(); // P9 attestation
   await page.getByRole('button', { name: 'Approve proposal' }).click();
   const confirm = page.getByRole('dialog');
   await expect(confirm.getByText('Approval is internal, not loan acceptance.')).toBeVisible();

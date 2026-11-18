@@ -47,7 +47,12 @@ def test_OBJ08_demo_case_run_and_approval_share_one_trace(
         director = login(client, "demo.director")
         r = client.post(
             f"/v1/cases/{case_id}/decision",
-            json={"decision": "approve", "comment": "ok", "expected_version": version},
+            json={
+                "decision": "approve",
+                "attested": True,
+                "comment": "ok",
+                "expected_version": version,
+            },
             headers=director,
         )
         assert r.status_code == 200, r.text

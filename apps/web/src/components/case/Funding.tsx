@@ -2,7 +2,10 @@
 import type { FundingAssessment } from '@/types';
 import { Card, CardHeader, GateBadge } from '../ui';
 import { Figure } from '../Figure';
-import CashChart from './CashChart';
+import dynamic from 'next/dynamic';
+import { Skeleton } from '@/components/ui';
+// U6 budget: recharts (~105 kB gzip) loads only when the funding tab shows a chart, not with the case page.
+const CashChart = dynamic(() => import('./CashChart'), { ssr: false, loading: () => <Skeleton className="h-72" /> });
 import { LineChart } from 'lucide-react';
 
 // Every figure is a ledger fact from the gateway (BR-05); this view only displays it. The bridge sums to the recommendation in code.

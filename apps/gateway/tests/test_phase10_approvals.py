@@ -31,7 +31,13 @@ def _routed(client: Any, case_id: str, rupees: int, route: str) -> None:
 
 def _approve(client: TestClient, h: dict[str, str], case_id: str, **extra: Any) -> Any:
     version = client.get(f"/v1/cases/{case_id}", headers=h).json()["row_version"]
-    body = {"decision": "approve", "comment": "ok", "expected_version": version, **extra}
+    body = {
+        "decision": "approve",
+        "attested": True,
+        "comment": "ok",
+        "expected_version": version,
+        **extra,
+    }
     return client.post(f"/v1/cases/{case_id}/decision", json=body, headers=h)
 
 

@@ -76,3 +76,4 @@ jobs:
       - run: npm run typecheck -w apps/web
       - run: npm run test -w apps/web
       - run: npm run build -w apps/web
+      - run: npm run budget -w apps/web  # U6: initial JS ≤ 250 kB gzip per route

@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState, createContext, useContext } from 'react';
-import { LayoutDashboard, FolderKanban, PlusCircle, Inbox, ScrollText, LogOut, Menu, X, Sparkles, RotateCcw, Users, KeyRound, ListChecks, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, PlusCircle, Inbox, ScrollText, LogOut, Menu, X, Sparkles, RotateCcw, Users, KeyRound, ListChecks, ShieldCheck, BarChart3, LifeBuoy } from 'lucide-react';
 import { authService } from '@/services';
 import type { User, Role } from '@/types';
 import { ROLE_LABEL } from '@/types';
@@ -20,6 +20,8 @@ const NAV = [
   { href: '/cases/new/', label: 'New case', icon: PlusCircle, roles: ['PREPARER'] },
   { href: '/approvals/', label: 'Approval inbox', icon: Inbox },
   { href: '/audit/', label: 'Audit log', icon: ScrollText },
+  { href: '/evaluation/', label: 'Evaluation', icon: BarChart3, roles: ['EVALUATOR'] },
+  { href: '/help/', label: 'Help', icon: LifeBuoy },
 ];
 
 export default function AppShell({ children }: { children: React.ReactNode }) {

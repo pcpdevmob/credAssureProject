@@ -33,7 +33,12 @@ def test_NFR07_approver_comment_is_redacted_in_row_and_audit(
     comment = f"ok. preparer PAN {PAN}, Aadhaar {AADHAAR}, call 9876543210"
     r = client.post(
         f"/v1/cases/{case_id}/decision",
-        json={"decision": "approve", "comment": comment, "expected_version": version},
+        json={
+            "decision": "approve",
+            "attested": True,
+            "comment": comment,
+            "expected_version": version,
+        },
         headers=h,
     )
     assert r.status_code == 200, r.text

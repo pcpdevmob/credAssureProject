@@ -4,7 +4,7 @@
 // also counts as acknowledging it (the gateway records that); nothing is kept in the browser.
 import { useEffect, useRef, useState } from 'react';
 import { Info, MessageCircleQuestion, ShieldAlert, Ban, PowerOff, Send } from 'lucide-react';
-import { Card, CardHeader, Button, Input } from '../ui';
+import { Card, CardHeader, Button, Input, AiBadge } from '../ui';
 import ErrorBanner from '../ErrorBanner';
 import CitationPanel from './CitationPanel';
 import { copilotService, type ChatNotice, type ChatReply, type Citation } from '@/services/copilot';
@@ -21,7 +21,7 @@ const sentenceWith = (answer: string, n: number) => answer.split(/(?<=[.!?])\s+/
 function Answer({ r, onOpen }: { r: ChatReply; onOpen: (o: Open) => void }) {
   if (r.abstained) return <p className="flex gap-2 rounded-xl bg-sunken p-3 text-sm text-ink-800 ring-1 ring-line"><Info aria-hidden className="mt-0.5 h-4 w-4 shrink-0" /><span><b>No verified answer.</b> {r.answer}</span></p>;
   if (r.refused) return <p className="flex gap-2 rounded-xl bg-sunken p-3 text-sm text-ink-800 ring-1 ring-line"><Ban aria-hidden className="mt-0.5 h-4 w-4 shrink-0" /><span><b>Not answered: {REFUSAL[r.refusalCode ?? ''] ?? 'outside what this copilot does'}.</b> {r.answer}</span></p>;
-  return <div className="rounded-xl bg-white p-3 text-sm ring-1 ring-line"><p className="whitespace-pre-wrap">{r.answer}</p>
+  return <div className="rounded-xl bg-white p-3 text-sm ring-1 ring-line">{r.aiDrafted && <AiBadge className="mb-2" />}<p className="whitespace-pre-wrap">{r.answer}</p>
     {r.citations.length > 0 && <ul aria-label="Citations" className="mt-2 flex flex-wrap gap-2">{r.citations.map((c, i) => <li key={c.chunkId}><button type="button" onClick={() => onOpen({ c, quote: sentenceWith(r.answer, i + 1) })} className="rounded-lg border border-line px-2 py-1 text-xs font-medium text-brand-700 hover:bg-brand-50">[{i + 1}] {c.title ?? c.docId}</button></li>)}</ul>}</div>;
 }
 

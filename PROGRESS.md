@@ -44,15 +44,18 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P8 | 8.3 | Responsible AI | done | Pritish | 2026-11-18 | 8be5ef0 | — | [2026-11-18-p8-8.3-fairness-pritish.md](docs/progress/entries/2026-11-18-p8-8.3-fairness-pritish.md) |
 | P8 | 8.4 | AI Security and Guardrails | done | Pritish | 2026-11-18 | b09d62f | — | [2026-11-18-p8-8.4-headers-pritish.md](docs/progress/entries/2026-11-18-p8-8.4-headers-pritish.md) |
 | P8 | 8.5 | Evaluation | in_progress | Pritish | 2026-11-18 | c40d155 | — | [2026-11-18-p8-8.5-a6-switch-pritish.md](docs/progress/entries/2026-11-18-p8-8.5-a6-switch-pritish.md) |
+| P9 | 9.1 | Responsible AI | done | Pritish | 2026-11-18 | 5572aa0, 02d045d | — | [2026-11-18-p9-9.1-rai-ui-pritish.md](docs/progress/entries/2026-11-18-p9-9.1-rai-ui-pritish.md) |
+| P9 | 9.2 | UI | done | Pritish | 2026-11-18 | d57e07a | — | [2026-11-18-p9-9.2-scorecard-help-pritish.md](docs/progress/entries/2026-11-18-p9-9.2-scorecard-help-pritish.md) |
+| P9 | 9.3 | UI | in_progress | Pritish | 2026-11-18 | — | — | [2026-11-18-p9-9.3-u6-budget-pritish.md](docs/progress/entries/2026-11-18-p9-9.3-u6-budget-pritish.md) |
 
 ## Modules
 
 | Module | Owner | Phases | Status |
 |---|---|---|---|
-| [UI](docs/progress/modules/ui.md) | UI lead (TODO: name) | P9 (U5, U6) | U0–U4 done (U4 + follow-ups 2026-11-17); next U5–U6 (P9) |
+| [UI](docs/progress/modules/ui.md) | UI lead (TODO: name) | P9 (U5, U6) | U0–U5 done; U6 built, live run pending (H15 Lighthouse, H16 e2e) |
 | [Copilot](docs/progress/modules/copilot.md) | [Name 6] (TODO: name); plan v3.4: Suresh (retrieval, P4), Tejas (answering, P5) | P0 (dev split), P4 (CP2-R), P5 (CP2-A), P6 (course re-run) | 9e done except CP-01 (regulatory 10/25 live, OPEN); KR-05 recall@5 24/40 (v1.0) OPEN. **P4 code done 2026-11-18** (contextual headers, glossary rewrite, answerability gate, ladder script); Mac run done: frozen recall@5 23 -> 25/40 (headers), dev 13 -> 17/20 (headers + glossary); reranker only scores for the abstain gate (threshold 0.4066); `evaluation/reports/retrieval-ladder-2026-11-18.md`. **P5 code done 2026-11-18**: span-cited answers (cp_answer 2.0.0, unsupported sentences cut) and dual strict/supported scoring in copilot-live; live re-run pending on the Mac |
 | [Authentication](docs/progress/modules/auth.md) | TODO: owner | P8 (SEC) | JWT + roles + maker-checker + step-up above ₹1.5 cr done (Phases 5, 10a); hardening in P8 |
-| [Responsible AI](docs/progress/modules/rai.md) | Pritish | P8 (fairness), P9 (RAI UI), P10 (system card, Sutra mapping) | Human-in-the-loop, no accept tool, audit, kill switch done; documentation and fairness evidence pending |
+| [Responsible AI](docs/progress/modules/rai.md) | Pritish | P8 (fairness), P9 (RAI UI), P10 (system card, Sutra mapping) | Human-in-the-loop, no accept tool, audit, kill switch, RAI UI (P9) done; documentation and fairness evidence pending |
 | [AI Security and Guardrails](docs/progress/modules/guardrails.md) | Pritish (GR); Abhishek (red-team, SEC) | P2 (pattern tests), P3 (GR), P8 (SEC), P10 (threat model) | Phase 6 safeguards done (PII masking, injection scanner, breaker, caps); ADR 0033 pattern tests in make check (P2); **P3 done 2026-11-18**: packages/guardrails (R1–R5, guardrail_event, config/guardrails.yaml), PII v2 (Presidio patterns + GSTIN/UPI/card/Udyam), money gate, trace-leak test 0 hits, data classes, CSV escaping, gen_ai.* export; **P8 2026-11-18**: OWASP LLM + ASI mapping with a test per row, fairness invariance + protected-attribute denylist, API and web-container security headers, A6 switch; safety_v2 drafted (unfrozen) |
 | [Deployment](docs/progress/modules/deployment.md) | [Name 1] (TODO: name) | P6 (course switch, deferred), P10 (Phase 12) | Local run + isolated e2e + demo-reset done; CI restored (ADR 0028); course endpoint deferred (under discussion) |
 | [Documentation](docs/progress/modules/docs.md) | Pritish | P0 (plan + ADRs), P10 (RUNBOOK, MODEL_CARD, CONTRIBUTIONS), P12 (report) | S1 progress tracking, S2 base files and prompts 27–39 done; P0 ADRs 0029–0033 written (0032 Accepted, others Proposed); mentor questions 2–3 open |
@@ -60,6 +63,10 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 
 ## Open items
 From the latest entry of each step. Module-level items live in each module file.
+
+### UI
+
+- P9 9.3: H15 Lighthouse ≥ 95 and H16 first `make e2e` run of u6 on the Mac. ([entry](docs/progress/entries/2026-11-18-p9-9.3-u6-budget-pritish.md))
 
 ### Copilot
 

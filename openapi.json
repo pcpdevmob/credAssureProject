@@ -180,6 +180,11 @@
       },
       "Decision": {
         "properties": {
+          "attested": {
+            "default": false,
+            "title": "Attested",
+            "type": "boolean"
+          },
           "comment": {
             "default": "",
             "maxLength": 2000,
@@ -4090,6 +4095,76 @@
         ]
       }
     },
+    "/v1/cases/{case_id}/safety": {
+      "get": {
+        "description": "Blocks, redactions, injection flags, Critic blocks and fallbacks for a case member.",
+        "operationId": "safety_v1_cases__case_id__safety_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Safety V1 Cases  Case Id  Safety Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Safety",
+        "tags": [
+          "cases"
+        ]
+      }
+    },
     "/v1/cases/{case_id}/verify": {
       "post": {
         "description": "Run only the critic stage; earlier stages must be GO (SUP-03).",
@@ -4281,6 +4356,55 @@
           }
         ],
         "summary": "Get Eval",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/eval/scorecard": {
+      "get": {
+        "description": "U5 (P9): baseline vs system vs ablations from the newest `make eval` runs and `make\nbaseline` results on this machine. Read-only; runs start from the command line (make eval).",
+        "operationId": "scorecard_v1_eval_scorecard_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Scorecard V1 Eval Scorecard Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Scorecard",
         "tags": [
           "admin"
         ]

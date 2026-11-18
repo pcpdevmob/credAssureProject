@@ -113,7 +113,9 @@ Time box: if #1 runs past 7:15, skip the source-link click and go straight to #2
 
 ## 8:00–9:15 · Director approval with maker-checker
 - **Clicks:** preparer → **Review** tab → try to approve, which shows the maker-checker refusal. Switch to the **`demo.director`** window → Inbox
-  → CA-2026-0016 → Review → approve with a comment, then type the case ID to confirm.
+  → CA-2026-0016 → Review → read the **Safety events** panel, tick *I reviewed the Critic findings and the safety
+  events* (P9 attestation; Approve stays disabled until it is ticked) → approve with a comment, then type the case ID to confirm.
+  Point at the violet **AI-generated draft** label on the Workflow narratives: only model-written text carries it.
 - **Show:** the preparer's refusal (403, explained in words). The Director's Review shows the negotiation-in-progress warning but **no**
   stale-report warning, because v2 was just made (if you skipped 7:30, Approve is disabled with the reason; reject and return still work).
   The Director's approval. The line "Approval is internal, not loan acceptance."
@@ -126,8 +128,9 @@ Time box: if #1 runs past 7:15, skip the source-link click and go straight to #2
   → `CA-2026-0016` → Execute.
 - **Show:** the events from STAGE_STARTED through FACT_WRITTEN, ROUTED and DECISION_RECORDED. In the JSON: **`"chain_ok": true`, `"broken": []`**.
 - **Say:** "Every fact, gate and decision is an append-only event. Each event's hash includes the previous one, and database triggers
-  refuse updates and deletes. The evaluator can verify the whole chain at any time." (The web Audit tab lists the events;
-  the chain check result is shown by the API, which is why we use /docs here.)
+  refuse updates and deletes. The evaluator can verify the whole chain at any time." (The web Audit tab shows the same
+  check as the **Hash chain verified** badge; /docs shows the raw `chain_ok` field.)
+- **Optional (20 s):** **Evaluation** in the menu → the scorecard (full system vs best baseline vs ablations, target ≥ 92/100).
 - **AI vs code:** Code only (OBJ-08).
 
 **Close (5 s):** "The model reads and drafts. Code calculates, checks and routes. A person approves. Nothing reaches a person unverified."

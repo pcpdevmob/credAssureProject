@@ -195,6 +195,7 @@ class SqlLedger:
         return_stage: str | None,
         comment: str,
         warnings: list[str] | None = None,
+        attested: bool = False,
     ) -> Approval:
         with transaction(self.engine) as s:
             return writes.record_decision(
@@ -208,6 +209,7 @@ class SqlLedger:
                 return_stage=return_stage,
                 comment=comment,
                 warnings=warnings,
+                attested=attested,
             )
 
     def delete_case(self, case_id: str, *, expected_version: int, actor: str) -> dict[str, int]:

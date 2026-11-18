@@ -258,6 +258,7 @@ def record_decision(
     return_stage: str | None,
     comment: str,
     warnings: list[str] | None = None,
+    attested: bool = False,
 ) -> Approval:
     """APR-04: insert-only approval + case status + audit, at the case version the approver saw.
 
@@ -316,6 +317,7 @@ def record_decision(
             "comment": comment,
             "case_version": expected_version,
             "evidence_warnings": warnings or [],  # what the approver was shown (ADR 0023)
+            "attested": attested,  # P9: "I reviewed the Critic findings" (plan v3.4 §6, ASI09)
         },
     )
     return approval

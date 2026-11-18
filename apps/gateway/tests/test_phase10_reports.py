@@ -106,7 +106,12 @@ def test_scope6_UI07_stale_report_blocks_approve_until_regenerated(
     """Phase 10b (ADR 0003 §3, superseding decision 1(a)): approve answers 409 problem+json;
     the preparer regenerates (v2) and the same approval then goes through."""
     case_id, d, inbox = _stale_inbox(client, login, run_case)
-    body = {"decision": "approve", "comment": "ok", "expected_version": inbox["row_version"]}
+    body = {
+        "decision": "approve",
+        "attested": True,
+        "comment": "ok",
+        "expected_version": inbox["row_version"],
+    }
     r = client.post(f"/v1/cases/{case_id}/decision", json=body, headers=d)
     assert r.status_code == 409, r.text
     assert r.headers["content-type"].startswith("application/problem+json")
@@ -135,7 +140,12 @@ def test_scope6_approve_names_the_report_version_the_approver_saw(
         == seen + 1
     )
     fresh = client.get(f"/v1/cases/{case_id}/inbox", headers=d).json()
-    body = {"decision": "approve", "comment": "ok", "expected_version": fresh["row_version"]}
+    body = {
+        "decision": "approve",
+        "attested": True,
+        "comment": "ok",
+        "expected_version": fresh["row_version"],
+    }
     old = client.post(
         f"/v1/cases/{case_id}/decision", json={**body, "report_version": seen}, headers=d
     )
