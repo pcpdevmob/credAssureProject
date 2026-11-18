@@ -1,8 +1,7 @@
 # Risk register
 
-TODO owner: Abhishek.
-
-See the OWASP table in docs/adr/0002-threat-model.md.
+Owner: Abhishek. Risks, controls and residual risks: [../THREAT_MODEL.md](../THREAT_MODEL.md) (§3 STRIDE, §6 residual
+risks) and [owasp-asi-mapping.md](owasp-asi-mapping.md). This page keeps the accepted dependency advisories.
 
 ## Accepted dependency advisories
 | Advisory | Package | Why it is not reachable | Review |

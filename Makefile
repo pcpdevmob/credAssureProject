@@ -17,7 +17,7 @@ DEMO_TENANT := TENANT_ID=demo
 
 .PHONY: load-smoke eval-judge eval-kappa eval-report eval-ablations progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset live-run copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
-        langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe retrieval-eval retrieval-ladder retrieval-pool retrieval-silver judge kappa
+        langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe retrieval-eval retrieval-ladder retrieval-pool retrieval-silver judge kappa release sbom pin-images
 
 progress:  ## Regenerate PROGRESS.md from docs/progress/ (never edit PROGRESS.md by hand; README §12)
 	uv run python scripts/progress.py
@@ -104,11 +104,20 @@ up: langfuse-env-check  ## Gateway, web, Ollama and Langfuse (dev profile)
 down:  ## Stop the dev stack
 	$(COMPOSE) --profile dev --profile langfuse down
 
-backup:  ## Database backup (Phase 12)
+backup:  ## Online backup of case.db, corpus.db, llm_cache.db to var/backups/<time>/
 	deploy/scripts/backup.sh
 
-restore:  ## Database restore (Phase 12)
-	deploy/scripts/restore.sh
+release:  ## Release bundle var/release/v$(VERSION)/ (RELEASE.json, SBOM, eval reports): VERSION=1.0.0
+	uv run python scripts/release.py --version "$(VERSION)"
+
+sbom:  ## CycloneDX SBOM from uv.lock and package-lock.json -> var/release/sbom.cdx.json
+	uv run python scripts/sbom.py
+
+pin-images:  ## Pin Dockerfile and Compose images to registry digests (needs Docker + network); ARGS=--check
+	uv run python scripts/pin_images.py $(ARGS)
+
+restore:  ## Restore a backup: FROM=var/backups/<dir> (stop run-api first)
+	deploy/scripts/restore.sh "$(FROM)"
 
 LANGFUSE_ENV := deploy/env/langfuse.env
 

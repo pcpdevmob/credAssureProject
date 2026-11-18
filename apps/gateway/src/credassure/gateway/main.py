@@ -136,6 +136,7 @@ def _default_llm(settings: Settings) -> LLMPort | None:
         disable_thinking=settings.llm_disable_thinking,
         thinking_switch=settings.llm_thinking_switch,
         http_client=httpx2.Client(verify=ssl.create_default_context(cafile=ca)) if ca else None,
+        replay=settings.replay_mode,
     )
 
 

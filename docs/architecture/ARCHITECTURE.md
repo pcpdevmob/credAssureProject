@@ -280,7 +280,7 @@ in a new major version. Contract tests per route plus schema-based fuzzing (Sche
 | Transport and web | TLS outside local dev; CORS allowlist; CSP and security headers on the web app; no tokens in localStorage |
 | Data | Synthetic only; PII redaction before model, storage, logs and traces; HR store read-only |
 | Supply chain | Locked dependencies, pip-audit, pnpm audit, bandit, SBOM, pinned image digests, licence check |
-| Threat model | STRIDE and OWASP LLM Top 10 (2025) risk register in `docs/adr/0002-threat-model.md` (moves to `docs/security/threat-model.md` in Phase 0b) |
+| Threat model | STRIDE with tests, injection design patterns and OWASP LLM + ASI (2026) in `docs/THREAT_MODEL.md` (P10); system card `docs/SYSTEM_CARD.md`; 2025 history in ADR 0002 |
 
 ### 8.6 AI-specific concepts
 | Concern | Approach |
@@ -357,6 +357,7 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0031 | safety_v2: separately frozen 40-item safety suite | Proposed |
 | 0032 | Copilot v2 reduced scope, dual scoring, reranker on, plan v3.4 cuts | Accepted |
 | 0033 | Prompt-injection design patterns as architecture | Proposed |
+| 0034 | Image digest pinning: tooling now, pins from a networked machine | Accepted |
 
 Full index with phase and scope numbers: `docs/adr/README.md`.
 

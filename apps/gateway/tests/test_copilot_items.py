@@ -36,6 +36,25 @@ NEW_CASE = {
     "due_date": "2027-05-15",
 }
 Login = Callable[[TestClient, str], dict[str, str]]
+
+
+def _ingested() -> bool:
+    """`make db` creates an empty corpus.db on a fresh clone; these tests need `make ingest`."""
+    path = ROOT / "var/corpus.db"
+    if not path.exists():
+        return False
+    import sqlite3
+
+    c = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+    try:
+        return bool(c.execute("SELECT 1 FROM chunks LIMIT 1").fetchone())
+    except sqlite3.Error:
+        return False
+    finally:
+        c.close()
+
+
+INGESTED = _ingested()
 PASSAGE = re.compile(r"(<<[0-9a-f]{16}>>) \[1\]\n(.*?)\n\1", re.DOTALL)
 
 
@@ -178,7 +197,7 @@ def test_BR15_injection_8_kfs_reply_and_chat_through_the_api(
     assert len(passed) == 8
 
 
-@pytest.mark.skipif(not (ROOT / "var/corpus.db").exists(), reason="needs make ingest (corpus.db)")
+@pytest.mark.skipif(not INGESTED, reason="needs make ingest (corpus.db with chunks)")
 @pytest.mark.parametrize("llm_enabled", [False, True])
 def test_CP01_CP02_KR04_regulatory_25_plumbing_and_safety(
     make_client: Callable[..., Any], login: Login, llm_enabled: bool
@@ -236,7 +255,7 @@ def test_scope2_40_memory_per_case_notice_once_stored_redacted_and_lineage_passa
         }
 
 
-@pytest.mark.skipif(not (ROOT / "var/corpus.db").exists(), reason="needs make ingest (corpus.db)")
+@pytest.mark.skipif(not INGESTED, reason="needs make ingest (corpus.db with chunks)")
 @pytest.mark.parametrize("tenant", ["demo", "default"])
 def test_SUP08_own_uploaded_kfs_cited_never_another_cases(
     make_client: Callable[..., Any], login: Login, tenant: str

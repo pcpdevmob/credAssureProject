@@ -6,5 +6,5 @@
 
 ## Open items
 - Team to accept ADRs 0029, 0030, 0031, 0033 (Proposed); mentor questions 2–3 open (`docs/plan/mentor-questions.md`).
-- Owner names [Name 1], [Name 6], UI lead; CODEOWNERS handles are placeholders (HISTORY "Open questions").
+- Owner names [Name 1], [Name 6], UI lead; CODEOWNERS handles are placeholders; members' CONTRIBUTIONS sections (H18).
 - BRD NFR-09 should be amended to match ADR 0016 (HISTORY "Open questions").

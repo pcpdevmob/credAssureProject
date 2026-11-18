@@ -47,6 +47,9 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P9 | 9.1 | Responsible AI | done | Pritish | 2026-11-18 | 5572aa0, 02d045d | — | [2026-11-18-p9-9.1-rai-ui-pritish.md](docs/progress/entries/2026-11-18-p9-9.1-rai-ui-pritish.md) |
 | P9 | 9.2 | UI | done | Pritish | 2026-11-18 | d57e07a | — | [2026-11-18-p9-9.2-scorecard-help-pritish.md](docs/progress/entries/2026-11-18-p9-9.2-scorecard-help-pritish.md) |
 | P9 | 9.3 | UI | in_progress | Pritish | 2026-11-18 | — | — | [2026-11-18-p9-9.3-u6-budget-pritish.md](docs/progress/entries/2026-11-18-p9-9.3-u6-budget-pritish.md) |
+| P10 | 10.1 | Deployment | done | Pritish | 2026-11-18 | f17e087, d4cd99f, 5b2cca6, fb8aa5f | — | [2026-11-18-p10-10.1-ship-pritish.md](docs/progress/entries/2026-11-18-p10-10.1-ship-pritish.md) |
+| P10 | 10.2 | Responsible AI | done | Pritish | 2026-11-18 | d6e63c2, fb8aa5f | — | [2026-11-18-p10-10.2-rai-docs-pritish.md](docs/progress/entries/2026-11-18-p10-10.2-rai-docs-pritish.md) |
+| P10 | 10.3 | Documentation | in_progress | Pritish | 2026-11-18 | 6fa8740, fb8aa5f | — | [2026-11-18-p10-10.3-contributions-release-pritish.md](docs/progress/entries/2026-11-18-p10-10.3-contributions-release-pritish.md) |
 
 ## Modules
 
@@ -55,9 +58,9 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | [UI](docs/progress/modules/ui.md) | UI lead (TODO: name) | P9 (U5, U6) | U0–U5 done; U6 built, live run pending (H15 Lighthouse, H16 e2e) |
 | [Copilot](docs/progress/modules/copilot.md) | [Name 6] (TODO: name); plan v3.4: Suresh (retrieval, P4), Tejas (answering, P5) | P0 (dev split), P4 (CP2-R), P5 (CP2-A), P6 (course re-run) | 9e done except CP-01 (regulatory 10/25 live, OPEN); KR-05 recall@5 24/40 (v1.0) OPEN. **P4 code done 2026-11-18** (contextual headers, glossary rewrite, answerability gate, ladder script); Mac run done: frozen recall@5 23 -> 25/40 (headers), dev 13 -> 17/20 (headers + glossary); reranker only scores for the abstain gate (threshold 0.4066); `evaluation/reports/retrieval-ladder-2026-11-18.md`. **P5 code done 2026-11-18**: span-cited answers (cp_answer 2.0.0, unsupported sentences cut) and dual strict/supported scoring in copilot-live; live re-run pending on the Mac |
 | [Authentication](docs/progress/modules/auth.md) | TODO: owner | P8 (SEC) | JWT + roles + maker-checker + step-up above ₹1.5 cr done (Phases 5, 10a); hardening in P8 |
-| [Responsible AI](docs/progress/modules/rai.md) | Pritish | P8 (fairness), P9 (RAI UI), P10 (system card, Sutra mapping) | Human-in-the-loop, no accept tool, audit, kill switch, RAI UI (P9) done; documentation and fairness evidence pending |
+| [Responsible AI](docs/progress/modules/rai.md) | Pritish | P8 (fairness), P9 (RAI UI), P10 (system card, Sutra mapping) | Human-in-the-loop, no accept tool, audit, kill switch, RAI UI (P9), fairness invariance (P8), system card, threat model, Sutra mapping and DPDP gap note (P10) done; live evaluation numbers pending (P11) |
 | [AI Security and Guardrails](docs/progress/modules/guardrails.md) | Pritish (GR); Abhishek (red-team, SEC) | P2 (pattern tests), P3 (GR), P8 (SEC), P10 (threat model) | Phase 6 safeguards done (PII masking, injection scanner, breaker, caps); ADR 0033 pattern tests in make check (P2); **P3 done 2026-11-18**: packages/guardrails (R1–R5, guardrail_event, config/guardrails.yaml), PII v2 (Presidio patterns + GSTIN/UPI/card/Udyam), money gate, trace-leak test 0 hits, data classes, CSV escaping, gen_ai.* export; **P8 2026-11-18**: OWASP LLM + ASI mapping with a test per row, fairness invariance + protected-attribute denylist, API and web-container security headers, A6 switch; safety_v2 drafted (unfrozen) |
-| [Deployment](docs/progress/modules/deployment.md) | [Name 1] (TODO: name) | P6 (course switch, deferred), P10 (Phase 12) | Local run + isolated e2e + demo-reset done; CI restored (ADR 0028); course endpoint deferred (under discussion) |
+| [Deployment](docs/progress/modules/deployment.md) | [Name 1] (TODO: name) | P6 (course switch, deferred), P10 (Phase 12) | Local run, isolated e2e, demo-reset, replay mode, backup/restore, release bundle + SBOM, runbook done (P10); clean-machine run passed; course endpoint deferred |
 | [Documentation](docs/progress/modules/docs.md) | Pritish | P0 (plan + ADRs), P10 (RUNBOOK, MODEL_CARD, CONTRIBUTIONS), P12 (report) | S1 progress tracking, S2 base files and prompts 27–39 done; P0 ADRs 0029–0033 written (0032 Accepted, others Proposed); mentor questions 2–3 open |
 | [Evaluation](docs/progress/modules/evaluation.md) | Abhishek (Phase 11); Tejas (test set) | P1 (close G1), P2 (G3), P6 (course baseline, deferred), P7 (Phase 11), P11 (G4) | G1 provisionally frozen 2026-11-15; G2 passed; **G3 passed 2026-11-18** (G3 + E18 READY); G1-final checklist open; **P7 code done 2026-11-18**: make eval harness, J1 + kappa, E13 report, A1-A5 runner, degradation matrix, load smoke (live runs pending on the Mac) |
 
@@ -76,6 +79,10 @@ From the latest entry of each step. Module-level items live in each module file.
 - P4 4.5: A person still confirms the 20 labels (P0 0.3). ([entry](docs/progress/entries/2026-11-18-p4-4.5-dev-labels-fix-pritish.md))
 - P5 5.1: Live re-run on the Mac (make copilot-live): citation coverage 100% on answered items, regulatory strict >= 16/25 with supported, refusal 8/8, injection 8/8, isolation 3/3; save the report. ([entry](docs/progress/entries/2026-11-18-p5-5.1-span-cited-answers-pritish.md))
 
+### Responsible AI
+
+- P10 10.2: add the P11 results (E13, ablations, safety_v2) to SYSTEM_CARD §9. ([entry](docs/progress/entries/2026-11-18-p10-10.2-rai-docs-pritish.md))
+
 ### AI Security and Guardrails
 
 - P2 2.1: injection scanner misses Hinglish object-verb order ("checks skip karo") under ignore_instructions; fix in P3. ([entry](docs/progress/entries/2026-11-18-p2-2.1-injection-pattern-tests-pritish.md))
@@ -87,6 +94,10 @@ From the latest entry of each step. Module-level items live in each module file.
 - P8 8.1: First run (rails on) and the A6 run need the live gateway (Mac); report safety_v2 >= 38/40, 0 critical. ([entry](docs/progress/entries/2026-11-18-p8-8.1-safety-v2-draft-pritish.md))
 - P8 8.4: JWT refresh endpoint not built (plan item "JWT expiry and refresh"); decide whether the 30-minute re-login is acceptable for the demo. ([entry](docs/progress/entries/2026-11-18-p8-8.4-headers-pritish.md))
 
+### Deployment
+
+- P10 10.1: H17 pin images; H19 demo recording. ([entry](docs/progress/entries/2026-11-18-p10-10.1-ship-pritish.md))
+
 ### Documentation
 
 - S1 1: replace CODEOWNERS placeholder handles with real GitHub usernames ([entry](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md))
@@ -94,6 +105,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - S2 1: ADR recording the v3.4 cuts and the copilot scope (P0) ([entry](docs/progress/entries/2026-11-18-s2-1-plan-v34-base-files-pritish.md))
 - P0 0.2: team accepts ADRs 0029, 0030, 0031, 0033 ([entry](docs/progress/entries/2026-11-18-p0-0.2-plan-v34-adrs-pritish.md))
 - P0 0.2: mentor questions 2 (safety_v2) and 3 (system card appendix) ([entry](docs/progress/entries/2026-11-18-p0-0.2-plan-v34-adrs-pritish.md))
+- P10 10.3: H18 member sections and the three unnamed owners; the owner pushes the v1.0.0 tag after merge. ([entry](docs/progress/entries/2026-11-18-p10-10.3-contributions-release-pritish.md))
 
 ### Evaluation
 

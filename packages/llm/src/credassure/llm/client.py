@@ -67,7 +67,11 @@ class OpenAICompatLLM:
         thinking_switch: ThinkingSwitch = "chat_template_kwargs",
         http_client: httpx2.Client | None = None,
         sleep: Callable[[float], None] = time.sleep,
+        replay: bool = False,
     ) -> None:
+        if replay and cache is None:
+            raise ValueError("replay mode needs the response cache (LLM_CACHE_PATH)")
+        self.replay = replay  # scope #17, ADR 0015: answer only from recorded replies
         self._client = OpenAI(
             base_url=base_url,
             api_key=api_key or "not-needed",
@@ -96,6 +100,11 @@ class OpenAICompatLLM:
         if self._cache is not None and (hit := self._cache.get(key)) is not None:
             _log.info("llm call", extra={"prompt": name, "prompt_version": version, "cached": True})
             return hit
+        if self.replay:  # never reaches the endpoint; callers fall back as with the model off
+            _log.info(
+                "llm call", extra={"prompt": name, "prompt_version": version, "replay_miss": True}
+            )
+            raise ModelUnavailable("replay mode: no recorded reply for this call")
         extra: dict[str, Any] = {}
         caps = [c for c in (self._max_tokens, prompt_max_tokens(name)) if c is not None]
         if caps:
