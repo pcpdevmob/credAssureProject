@@ -45,7 +45,7 @@ def test_H12_refresh_refuses_an_expired_token(client: TestClient, login: Login) 
 
 def test_H12_session_cap_cannot_be_extended_by_refreshing(client: TestClient, login: Login) -> None:
     who = verify_token(login(client, "demo.preparer")["Authorization"][7:], SECRET)
-    signed_in = datetime.now(UTC) - timedelta(minutes=481)
+    signed_in = datetime.now(UTC) - timedelta(minutes=241)
     token = issue_token(who, SECRET, 30, auth_time=signed_in)  # valid now, session too old
     r = client.post("/v1/auth/refresh", headers={"Authorization": f"Bearer {token}"})
     assert r.status_code == 401 and "sign in again" in r.json()["detail"]

@@ -19,6 +19,12 @@ def test_H13_full_employee_name_is_masked_in_any_case() -> None:
     assert out == "Ask [REDACTED_EMPLOYEE_NAME] about [REDACTED_EMPLOYEE_NAME]'s training."
 
 
+def test_H13_a_name_split_over_spaces_or_a_line_is_still_masked() -> None:
+    assert pii.redact("Asha  Synthetic-01 and Ravi\nSynthetic-02") == (
+        "[REDACTED_EMPLOYEE_NAME] and [REDACTED_EMPLOYEE_NAME]"
+    )
+
+
 def test_H13_partial_and_embedded_matches_are_left_alone() -> None:
     text = "Asha met Ravi; Synthetic-01 is a code; Asha Synthetic-012 is someone else."
     assert pii.redact(text) == text

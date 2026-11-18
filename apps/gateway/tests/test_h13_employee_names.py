@@ -49,3 +49,11 @@ def test_H13_missing_hr_db_turns_name_masking_off(make_client: Callable[..., Any
     make_client(hr_db=Path("/nonexistent/hr.db"))
     assert pii.redact(name) == name
     make_client()  # restore the names for later tests in this process
+
+
+def test_H13_demo_refuses_to_start_without_hr_db(make_client: Callable[..., Any]) -> None:
+    import pytest
+
+    with pytest.raises(RuntimeError, match="make hr-db"):
+        make_client(app_env="demo", hr_db=Path("/nonexistent/hr.db"))
+    make_client()  # restore the names for later tests in this process

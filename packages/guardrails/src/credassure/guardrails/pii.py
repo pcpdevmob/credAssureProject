@@ -112,7 +112,12 @@ def set_known_names(names: Iterable[str]) -> int:
         reverse=True,
     )  # longest first, so one name never cuts another short
     pattern = (
-        re.compile(r"(?<![\w-])(?:" + "|".join(re.escape(n) for n in clean) + r")(?![\w-])", re.I)
+        re.compile(
+            r"(?<![\w-])(?:"
+            + "|".join(r"\s+".join(re.escape(w) for w in n.split()) for n in clean)
+            + r")(?![\w-])",
+            re.I,
+        )  # any run of spaces or a line break between the words of a name
         if clean
         else None
     )

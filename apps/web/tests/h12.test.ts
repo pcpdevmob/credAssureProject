@@ -39,3 +39,16 @@ describe('H12 token refresh', () => {
     expect(seen.me).toEqual(['Bearer old']);
   });
 });
+
+describe('H12 refused refresh', () => {
+  it('is not retried for the same token', async () => {
+    const seen = capture();
+    let refreshes = 0;
+    server.use(http.post(`${API}/v1/auth/refresh`, () => { refreshes += 1; return HttpResponse.json({ code: 'UNAUTHENTICATED' }, { status: 401 }); }));
+    setToken('capped', 120);
+    await gw.GET('/v1/me');
+    await gw.GET('/v1/me');
+    expect(refreshes).toBe(1);
+    expect(seen.me).toEqual(['Bearer capped', 'Bearer capped']);
+  });
+});

@@ -52,6 +52,7 @@ def services(request: Request) -> Services:
 
 Svc = Annotated[Services, Depends(services)]
 _bearer = HTTPBearer(auto_error=False)
+bearer_scheme = _bearer  # the same parser for routes that need the raw token (H12 refresh)
 
 
 def principal_from_token(svc: Services, token: str) -> Principal:

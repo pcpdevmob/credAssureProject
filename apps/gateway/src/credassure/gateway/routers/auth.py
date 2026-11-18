@@ -1,14 +1,15 @@
 """Login and identity (NFR-07). Tokens are short-lived; the user row is re-checked per request."""
 
 from datetime import UTC, datetime, timedelta
-from typing import Any
+from typing import Annotated, Any
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends, Request
+from fastapi.security import HTTPAuthorizationCredentials
 from limits import parse
 from pydantic import BaseModel, Field
 
 from credassure.core.errors import ApiErrorCode
-from credassure.gateway.deps import Svc, User
+from credassure.gateway.deps import Svc, User, bearer_scheme
 from credassure.gateway.problems import ProblemError
 from credassure.gateway.supervisor_service import acknowledge_notice, notice_state
 from credassure.ledger import reads
@@ -63,15 +64,20 @@ def token(body: Login, request: Request, svc: Svc) -> dict[str, Any]:
 
 
 @router.post("/auth/refresh")
-def refresh(who: User, request: Request, svc: Svc) -> dict[str, Any]:
+def refresh(
+    who: User,
+    creds: Annotated[HTTPAuthorizationCredentials | None, Depends(bearer_scheme)],
+    svc: Svc,
+) -> dict[str, Any]:
     """H12: swap a still-valid token for a fresh one. The user row was re-checked by `User`
     (deactivated users are refused). The session ends JWT_SESSION_MAX_MINUTES after the password
     was typed; a refresh never extends that, so a stolen token cannot live forever."""
     secret = svc.settings.jwt_secret
     if secret is None:
         raise AuthError("server has no JWT secret")
-    raw = request.headers.get("authorization", "")[7:]
-    started = token_auth_time(raw, secret.get_secret_value())
+    if creds is None:  # `User` already refused a missing token; this keeps mypy and readers sure
+        raise AuthError("missing bearer token")
+    started = token_auth_time(creds.credentials, secret.get_secret_value())
     now = datetime.now(UTC)
     if now - started >= timedelta(minutes=svc.settings.jwt_session_max_minutes):
         raise ProblemError(401, "session is too old; sign in again", ApiErrorCode.UNAUTHENTICATED)

@@ -589,8 +589,10 @@ def _load_employee_names(settings: Settings) -> None:
     clone before `make hr-db`) leaves name masking off and says so; nothing else changes."""
     try:
         count = pii.set_known_names(hr_display_names(hr_engine(settings.hr_db)))
-    except Exception:  # hr.db missing or unreadable
+    except Exception as exc:  # hr.db missing or unreadable
         pii.set_known_names([])
+        if settings.app_env == "demo":  # never demo without name masking
+            raise RuntimeError("hr.db is not readable: run make hr-db before the demo") from exc
         _log.warning("employee-name masking off: hr.db not readable (run make hr-db)")
         return
     _log.info("employee-name masking on", extra={"names": count})

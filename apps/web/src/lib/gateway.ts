@@ -15,15 +15,17 @@ export const hasToken = () => !!tok && tok.exp > Date.now();
 // H12: a separate client with no middleware, so a refresh never recurses through bearer().
 const raw = createClient<paths>({ baseUrl: API_BASE });
 let refreshing: Promise<void> | null = null;
+let refusedFor: string | null = null; // a token the gateway would not renew (session cap): don't ask again
 const REFRESH_BEFORE_MS = 5 * 60_000;
 
 /** Gateway sign-in: renew the token while the user is working (any API call in its last 5 minutes). The gateway ends the
  * session JWT_SESSION_MAX_MINUTES after sign-in; a refused refresh just lets the token run out (then sign-in again). */
 function refreshSoon(): Promise<void> {
-  if (refreshing || !tok) return refreshing ?? Promise.resolve();
+  if (refreshing || !tok || tok.v === refusedFor) return refreshing ?? Promise.resolve();
   const current = tok.v;
   refreshing = raw.POST('/v1/auth/refresh', { headers: { Authorization: `Bearer ${current}` } })
-    .then(({ data }) => {
+    .then(({ data, response }) => {
+      if (!response.ok) { refusedFor = current; return; }
       const d = data as { access_token?: unknown; expires_in?: unknown } | undefined;
       if (typeof d?.access_token === 'string' && typeof d.expires_in === 'number' && tok?.v === current) setToken(d.access_token, d.expires_in);
     })

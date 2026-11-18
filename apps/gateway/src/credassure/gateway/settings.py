@@ -80,7 +80,7 @@ class Settings(BaseSettings):
     jwt_secret: SecretStr | None = None
     jwt_expiry_minutes: int = Field(default=30, gt=0, le=30)
     # H12: POST /v1/auth/refresh renews a valid token until this long after the password was typed
-    jwt_session_max_minutes: int = Field(default=480, gt=0, le=720)
+    jwt_session_max_minutes: int = Field(default=240, gt=0, le=720)
     ui_origins: str = "http://localhost:3000,http://localhost:5173"
 
     gst_rate: Decimal = Decimal("0.18")
