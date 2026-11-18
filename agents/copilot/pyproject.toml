@@ -5,6 +5,7 @@ description = "On-demand cited answers. Not a pipeline stage."
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "credassure-core",
+    "credassure-guardrails",
     "credassure-security",
     "fastapi>=0.115",
     "pydantic>=2",
@@ -12,6 +13,7 @@ dependencies = [
 
 [tool.uv.sources]
 credassure-core = { workspace = true }
+credassure-guardrails = { workspace = true }
 credassure-security = { workspace = true }
 
 [build-system]

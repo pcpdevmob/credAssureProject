@@ -4,9 +4,13 @@ version = "0.1.0"
 description = "Auth (argon2, JWT, case policy); PII redaction and spotlighting in Phase 6."
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "credassure-guardrails",
     "argon2-cffi>=23.1",
     "pyjwt>=2.10",
 ]
+
+[tool.uv.sources]
+credassure-guardrails = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

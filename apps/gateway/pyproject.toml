@@ -15,6 +15,7 @@ dependencies = [
     "credassure-tools",
     "credassure-llm",
     "credassure-ledger",
+    "credassure-guardrails",
     "credassure-security",
     "credassure-lender-sim",
     "credassure-reports",
@@ -54,6 +55,7 @@ credassure-observability = { workspace = true }
 credassure-tools = { workspace = true }
 credassure-llm = { workspace = true }
 credassure-ledger = { workspace = true }
+credassure-guardrails = { workspace = true }
 credassure-security = { workspace = true }
 credassure-reports = { workspace = true }
 
