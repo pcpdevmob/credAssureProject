@@ -63,14 +63,35 @@ def test_client_error_is_redacted_logged_counted_and_needs_login(
         "request_id": "a" * 32,
     }
     assert client.post("/v1/client-errors", json=report).status_code == 401
-    with caplog.at_level(logging.ERROR, logger="credassure.client"):
+    with caplog.at_level(logging.WARNING, logger="credassure.client"):
         r = client.post("/v1/client-errors", json=report, headers=login(client, "demo.preparer"))
     assert r.status_code == 204
     rec = next(x for x in caplog.records if x.name == "credassure.client")
     logged = json.dumps({k: str(v) for k, v in vars(rec).items()})
     assert PAN not in logged and rec.page == "/case/"  # query string dropped
     assert rec.client_request_id == "a" * 32
-    assert client.app.state.metrics.client_errors["render"] == 1
+    assert client.app.state.metrics.client_errors["render"] == 1  # type: ignore[attr-defined]
+    assert vars(rec)["user_id"] and rec.levelname == "WARNING"
+
+
+def test_client_error_reports_are_rate_limited_per_user(client: TestClient, login: Login) -> None:
+    h = login(client, "demo.preparer")
+    codes = [
+        client.post(
+            "/v1/client-errors", json={"kind": "error", "message": f"e{i}"}, headers=h
+        ).status_code
+        for i in range(11)
+    ]
+    assert codes[:10] == [204] * 10 and codes[10] == 429
+
+
+def test_a_500_is_counted_in_the_request_metrics(client: Any, login: Login) -> None:
+    def crash() -> None:
+        raise RuntimeError("x")
+
+    client.app.add_api_route("/v1/__crash2", crash)
+    TestClient(client.app, raise_server_exceptions=False).get("/v1/__crash2")
+    assert client.app.state.metrics.requests[("GET", "/v1/__crash2", "500")] == 1
 
 
 def test_client_error_report_size_is_capped(client: TestClient, login: Login) -> None:

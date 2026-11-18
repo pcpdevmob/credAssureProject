@@ -585,6 +585,8 @@ def _rate_key(settings: Settings, request: Request) -> str:
     return "ip:" + (request.client.host if request.client else "unknown")
 
 
+_METHODS = frozenset({"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"})
+
 API_SECURITY_HEADERS = {
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
@@ -611,6 +613,7 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
     # ponytail: in-memory buckets per process; use limits' Redis storage if the gateway scales out.
     limiter, rate = MovingWindowRateLimiter(MemoryStorage()), parse(settings.rate_limit)
     app.state.login_limiter = MovingWindowRateLimiter(MemoryStorage())  # S4, routers/auth.py
+    app.state.client_error_limiter = MovingWindowRateLimiter(MemoryStorage())  # telemetry.py
 
     @app.middleware("http")
     async def rate_limit(
@@ -648,10 +651,19 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
         rid = uuid.uuid4().hex
         request.state.request_id = rid  # problem+json bodies and the 500 handler read it
         started = time.monotonic()
+
+        def route_of() -> str:
+            path = getattr(request.scope.get("route"), "path", None)
+            return path if isinstance(path, str) else "unmatched"
+
+        method = request.method if request.method in _METHODS else "OTHER"  # bounded label
         with log_context(request_id=rid, tenant_id=settings.tenant_id):
-            response = await call_next(request)
-        route = getattr(request.scope.get("route"), "path", None) or "unmatched"
-        metrics.http(request.method, route, response.status_code, time.monotonic() - started)
+            try:
+                response = await call_next(request)
+            except Exception:  # the 500 handler answers outside this middleware; count it here
+                metrics.http(method, route_of(), 500, time.monotonic() - started)
+                raise
+        metrics.http(method, route_of(), response.status_code, time.monotonic() - started)
         response.headers["X-Request-ID"] = rid
         if request.url.path.startswith("/v1/"):  # P8.4 (scope #52, OWASP API8): JSON API only;
             for name, value in API_SECURITY_HEADERS.items():  # /docs keeps Swagger's own assets

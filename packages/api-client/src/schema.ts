@@ -945,7 +945,9 @@ export interface paths {
         put?: never;
         /**
          * Client Error
-         * @description A signed-in user's browser reports an error. Logged redacted at ERROR; 204, no body.
+         * @description A signed-in user's browser reports an error: redacted, logged at WARNING with the user id
+         *     (so a report tied to someone else's request id is traceable), 204. At most 10 a minute per
+         *     user; more are dropped with 429 so the endpoint cannot flood the log.
          */
         post: operations["client_error_v1_client_errors_post"];
         delete?: never;
@@ -1229,7 +1231,7 @@ export interface components {
         ClientError: {
             /**
              * Digest
-             * @description Next.js error digest
+             * @description Next.js digest
              */
             digest?: string | null;
             /**

@@ -29,12 +29,13 @@ ARCHITECTURE §8.8. Four signals, all local to the machine: no third-party crash
 |---|---|---|
 | Server, handled (validation, auth, conflict…) | Banner: what happened, how to fix it, the request id | JSON log line; `credassure_http_requests_total{status="4xx"}` |
 | Server, unhandled | "Something went wrong on the server" + request id; never a stack trace | Stack trace at ERROR with the request id; `credassure_unhandled_errors_total` |
-| Browser, a page crashes | Crash screen with **Try again**, **Go to dashboard** and a reference | `POST /v1/client-errors` (kind `render`) → redacted ERROR line; `credassure_client_errors_total` |
+| Browser, a page crashes | Crash screen with **Try again**, **Go to dashboard** and a reference | `POST /v1/client-errors` (kind `render`) → redacted WARNING line; `credassure_client_errors_total` |
 | Browser, uncaught error or rejected promise | Nothing changes on screen | Same report (kind `error` / `unhandledrejection`) |
 | Model endpoint | Template narratives; copilot unavailable notice | `credassure_llm_calls_total{outcome="unavailable"\|"timeout"\|...}`; breaker state in `/v1/health/ready` |
 
 Browser reports are sent only from a signed-in session, at most 10 distinct ones per page load, without the query string
-of the page (case ids and filters stay out), capped in size, and redacted again by the gateway. They never reach the model,
+of the page (case ids and filters stay out), capped in size, and redacted again by the gateway. The gateway accepts at most
+10 a minute per user (429 after that) and logs them at WARNING with the user id, so a flood is visible and attributable. They never reach the model,
 the ledger or the audit log.
 
 ## Metrics
@@ -49,7 +50,8 @@ the ledger or the audit log.
 | `credassure_client_errors_total` | `kind` |
 | `credassure_unhandled_errors_total` | — |
 
-Counters are per gateway process and reset on restart. Quick look without Prometheus:
+Counters are per gateway process and reset on restart. Access tokens expire after 30 minutes, so a long-running
+Prometheus scrape needs a sidecar that signs in as the evaluator; for the prototype a manual look is enough:
 ```bash
 TOKEN=...   # an evaluator's access token
 curl -s -H "Authorization: Bearer $TOKEN" localhost:8000/v1/metrics | grep -E 'status="5|outcome="(timeout|unavailable)'
