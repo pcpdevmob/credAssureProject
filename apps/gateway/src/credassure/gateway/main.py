@@ -572,6 +572,15 @@ def _rate_key(settings: Settings, request: Request) -> str:
     return "ip:" + (request.client.host if request.client else "unknown")
 
 
+API_SECURITY_HEADERS = {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'",
+    "Referrer-Policy": "no-referrer",
+    "Cache-Control": "no-store",  # case data and tokens are never cached by a browser or proxy
+}
+
+
 def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) -> FastAPI:
     settings = settings or get_settings()
     configure_logging(settings.log_level)
@@ -623,6 +632,9 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
         with log_context(request_id=rid, tenant_id=settings.tenant_id):
             response = await call_next(request)
         response.headers["X-Request-ID"] = rid
+        if request.url.path.startswith("/v1/"):  # P8.4 (scope #52, OWASP API8): JSON API only;
+            for name, value in API_SECURITY_HEADERS.items():  # /docs keeps Swagger's own assets
+                response.headers.setdefault(name, value)  # a route's own CSP/cache header wins
         return response
 
     # Added last, so outermost: 429s and 500s still carry CORS headers for the web app (N2).
