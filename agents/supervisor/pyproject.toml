@@ -6,6 +6,7 @@ requires-python = ">=3.12,<3.13"
 dependencies = [
     "credassure-core",
     "credassure-engines",
+    "credassure-guardrails",
     "credassure-observability",
     "credassure-security",
     "credassure-tools",
@@ -16,6 +17,7 @@ dependencies = [
 [tool.uv.sources]
 credassure-core = { workspace = true }
 credassure-engines = { workspace = true }
+credassure-guardrails = { workspace = true }
 credassure-observability = { workspace = true }
 credassure-security = { workspace = true }
 credassure-tools = { workspace = true }

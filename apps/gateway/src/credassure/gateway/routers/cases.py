@@ -38,6 +38,9 @@ from credassure.engines.normaliser import parse_money
 from credassure.gateway import report
 from credassure.gateway.deps import Svc, User, case_ref, own_case, role, visible_case
 from credassure.gateway.problems import ProblemError
+from credassure.guardrails.events import AuditSink
+from credassure.guardrails.events import record as guardrail
+from credassure.guardrails.policy import load as guardrail_policy
 from credassure.ledger import reads
 from credassure.ledger.models import Case
 from credassure.ledger.session import run_in_progress, run_lock, transaction
@@ -338,13 +341,26 @@ def _parse(kind: str, text: str) -> tuple[Any, int]:
     return rows, len(rows)
 
 
-def validate_file(kind: str, text: str) -> tuple[Any, int]:
+def validate_file(
+    kind: str, text: str, *, case_id: str | None = None, audit: AuditSink | None = None
+) -> tuple[Any, int]:
     """Everything an upload checks about the file text itself (UI-02, NFR-07); also used by
     scripts/case_xlsx.py so authored files are validated by exactly this code."""
     # NFR-07: personal identifiers are refused, never stored. IFSC, phone and email are not
-    # checked here: the IFSC shape matches ordinary IDs (see security.pii).
-    ids = [h for h in pii_find(text) if h.kind in {"AADHAAR", "PAN", "ACCOUNT"}]
-    if ids:
+    # checked here: the IFSC shape matches ordinary IDs (see guardrails.pii).
+    refuse = guardrail_policy().refuse_pii_kinds
+    ids = [h for h in pii_find(text) if h.kind in refuse]
+    if ids:  # ADR 0029 R1: a block, audited with the kinds and count only, never the text
+        guardrail(
+            "R1",
+            "R1.upload_pii_refused",
+            "block",
+            case_id=case_id,
+            audit=audit,
+            file_kind=kind,
+            kinds=sorted({h.kind for h in ids}),
+            count=len(ids),
+        )
         raise ProblemError(
             422,
             f"{kind} contains a personal identifier",
@@ -408,7 +424,7 @@ async def upload(
         raise ProblemError(
             415, "file is not UTF-8 text", ApiErrorCode.UNSUPPORTED_MEDIA_TYPE
         ) from exc
-    payload, count = validate_file(kind, text)
+    payload, count = validate_file(kind, text, case_id=case.id, audit=svc.ledger.audit)
     # BR-15: uploads are data. A hit is flagged and audited; nothing in the file is obeyed.
     flags = scan(text)
     if kind == "kfs" and payload["case_ref"] not in ("", case.id):
@@ -420,6 +436,14 @@ async def upload(
         svc.ledger.audit(
             case.id, "INJECTION_FLAGGED", {"kind": kind, "sha256": stored.sha256, "flags": flags}
         )
+        for rule, hit in (
+            ("R1.upload_case_mismatch", [f for f in flags if f == "KFS_CASE_MISMATCH"]),
+            ("R1.upload_injection_flagged", [f for f in flags if f != "KFS_CASE_MISMATCH"]),
+        ):
+            if hit:  # audited above as INJECTION_FLAGGED; the span names that event
+                guardrail(
+                    "R1", rule, "flag", case_id=case.id, flags=hit, audited_as="INJECTION_FLAGGED"
+                )
     return {"kind": kind, "sha256": stored.sha256, "rows": count, "injection_flags": flags}
 
 

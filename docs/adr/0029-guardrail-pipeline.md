@@ -26,3 +26,9 @@ Phase 6 already built most guardrails: PII masking with the Aadhaar Verhoeff che
 - The report can show per-case guardrail activity and a safety panel (P9) reads the events.
 - No new model calls; the token quota is unaffected.
 - A guard model is not part of the pipeline (A7 stays a stretch ablation, ADR 0032).
+
+## Implementation notes (P3, 2026-11-18)
+- **Layering as built:** `guardrails` imports `core` and `observability` only (it emits spans); `security` re-exports `guardrails.pii`, `injection` and `spotlight` at their Phase 6 paths, so `guardrails` must not import `security` (it would be a cycle). Contract `guardrails-layer` in `.importlinter`.
+- **No double audit rows:** where a decision already had its own audit event (`INJECTION_FLAGGED`, `CRITIC_BLOCKED`), the guardrail span carries `audited_as` instead of writing a second row. Reads (the citation endpoint, R2) record spans only.
+- **R5** masks every exported span and adds `gen_ai.*` attributes; it emits no per-span `guardrail` event, which would recurse through the exporter.
+- `config/guardrails.lock` holds `version sha256`; `python -m credassure.guardrails.policy check` runs in `make eval-fast` and as a test in `make check`.
