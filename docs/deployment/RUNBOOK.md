@@ -21,10 +21,10 @@ breaker tripped after 5 failures, retried after 60 s); narratives fall back to t
 **Confirm:** the banner clears after the quota window resets.
 
 ## Database locked
-**Shows:** `database is locked` in the gateway log, or 409 `CASE_BUSY` on a run.
+**Shows:** `database is locked` in the gateway log, or 409 `RUN_IN_PROGRESS` on a run.
 **Do:**
 1. One gateway per `var/case.db`: stop a second `make run-api`, an old `make live-run` or an open `sqlite3` shell.
-2. A run that died keeps its lock row until the heartbeat expires (about a minute); the next run then proceeds.
+2. A run that died keeps its lock row until three heartbeats are missed (90 s); the next run then proceeds.
 3. Never delete `case.db-wal` while the gateway is running. If the file is corrupt, `make restore FROM=...`
    (`docs/deployment/backup-restore.md`).
 **Confirm:** `GET /v1/health/ready` → `checks.db` is `ok`; a case run returns 202.
