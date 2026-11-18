@@ -34,6 +34,30 @@ The same steps run automatically with `/build-all`; use these files when you wan
 | 25 | [Gate G4 — final evaluation](25-gate-g4.md) | W4 D5 | Integration lead | all remaining | E12–E18 |
 | 26 | [Report, slides and demo script](26-report-and-demo.md) | W4 D4–5 | All (each writes own agent section) | — | — |
 
+## Plan v3.4 phases (from 18 Nov 2026)
+
+Remaining work follows `docs/plan/CredAssure_RAI_Security_Copilot_Plan_v3.4.md`. Run these in order; each ends with the
+pack's standard close (one progress entry, `make progress`, the fixed report shape) and lists its exit checks.
+Prompts 21–26 stay for reference; where a v3.4 prompt covers the same work, the v3.4 prompt wins.
+
+| # | Phase | Model | Owner | Branch |
+|---|---|---|---|---|
+| 27 | [P0 — Plan v3.4 ADRs and dev split](27-p0-plan-v3-4-adrs-and-dev-split.md) | Opus 5.5 | Pritish, Suresh | `feature/docs-p0` |
+| 28 | [P1 — Close G1 (team + one command)](28-p1-close-g1-team-one-command.md) | Sonnet 5.5 | Team | `feature/eval-p1` |
+| 29 | [P2 — Gate G3 and injection pattern tests](29-p2-gate-g3-and-injection-pattern-tests.md) | Opus 5.5 | Integration lead, Abhishek | `feature/eval-p2` |
+| 30 | [P3 — GR Guardrails + PII v2](30-p3-gr-guardrails-pii-v2.md) | Opus 5.5 | Pritish | `feature/guardrails-p3` |
+| 31 | [P4 — CP2-R Copilot retrieval](31-p4-cp2-r-copilot-retrieval.md) | Opus 5.5 | Suresh | `feature/copilot-p4` |
+| 32 | [P5 — CP2-A Copilot answering-lite](32-p5-cp2-a-copilot-answering-lite.md) | Opus 5.5 | Tejas | `feature/copilot-p5` |
+| 33 | [P6 — Course endpoint switch](33-p6-course-endpoint-switch.md) | Sonnet 5.5 | Pritish (deferred) | `feature/deploy-p6` |
+| 34 | [P7 — Phase 11 Evaluation](34-p7-phase-11-evaluation.md) | Opus 5.5 | Abhishek, Tejas | `feature/eval-p7` |
+| 35 | [P8 — SEC Security + safety_v2](35-p8-sec-security-safety-v2.md) | Opus 5.5 | Abhishek, Tejas | `feature/security-p8` |
+| 36 | [P9 — UI U5–U6 + RAI UI](36-p9-ui-u5-u6-rai-ui.md) | Sonnet 5.5 | UI lead | `feature/ui-p9` |
+| 37 | [P10 — Phase 12 Ship + RAI docs](37-p10-phase-12-ship-rai-docs.md) | Sonnet 5.5 (10.1, 10.3) / Opus 5.5 (10.2) | [Name 1], Pritish | `feature/deploy-p10` |
+| 38 | [P11 — Gate G4](38-p11-gate-g4.md) | Opus 5.5 | Integration lead | `feature/eval-p11` |
+| 39 | [P12 — Report, slides, final demo](39-p12-report-slides-final-demo.md) | Opus 5.5 + team | All | `feature/docs-p12` |
+
+P6 (course endpoint) is deferred until the team agrees the endpoint; P7 then runs on the local model with results marked provisional.
+
 ## Recovery prompts
 
 - **Drifted from spec:** `Stop. Re-read CLAUDE.md and this step's prompt file. List every place the diff departs from them, then fix only those.`

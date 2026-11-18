@@ -1,5 +1,7 @@
 # 25 · Gate G4 — final evaluation
 
+> **Superseded for plan v3.4 (2026-11-18):** run [38-p11-gate-g4.md](38-p11-gate-g4.md) instead. It includes this step's scope plus the v3.4 additions. Kept for reference.
+
 | When | Owner | Prerequisites | Humans must |
 |---|---|---|---|
 | W4 D5 | Integration lead | 23, 24 done | — |

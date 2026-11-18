@@ -1,5 +1,7 @@
 # 24 · Phase 12 — ship
 
+> **Superseded for plan v3.4 (2026-11-18):** run [37-p10-phase-12-ship-rai-docs.md](37-p10-phase-12-ship-rai-docs.md) instead. It includes this step's scope plus the v3.4 additions. Kept for reference.
+
 | When | Owner | Prerequisites | Humans must |
 |---|---|---|---|
 | W4 D3–4 | Supervisor owner | 22 done | Record the demo video by W4 D3 (ADR 0015) |
