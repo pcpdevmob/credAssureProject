@@ -128,8 +128,9 @@ Time box: if #1 runs past 7:15, skip the source-link click and go straight to #2
   → `CA-2026-0016` → Execute.
 - **Show:** the events from STAGE_STARTED through FACT_WRITTEN, ROUTED and DECISION_RECORDED. In the JSON: **`"chain_ok": true`, `"broken": []`**.
 - **Say:** "Every fact, gate and decision is an append-only event. Each event's hash includes the previous one, and database triggers
-  refuse updates and deletes. The evaluator can verify the whole chain at any time." (The web Audit tab lists the events;
-  the chain check result is shown by the API, which is why we use /docs here.)
+  refuse updates and deletes. The evaluator can verify the whole chain at any time." (The web Audit tab shows the same
+  check as the **Hash chain verified** badge; /docs shows the raw `chain_ok` field.)
+- **Optional (20 s):** **Evaluation** in the menu → the scorecard (full system vs best baseline vs ablations, target ≥ 92/100).
 - **AI vs code:** Code only (OBJ-08).
 
 **Close (5 s):** "The model reads and drafts. Code calculates, checks and routes. A person approves. Nothing reaches a person unverified."
