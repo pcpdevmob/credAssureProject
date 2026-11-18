@@ -17,7 +17,7 @@ DEMO_TENANT := TENANT_ID=demo
 
 .PHONY: progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
-        langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe retrieval-eval retrieval-pool retrieval-silver judge kappa
+        langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe retrieval-eval retrieval-ladder retrieval-pool retrieval-silver judge kappa
 
 progress:  ## Regenerate PROGRESS.md from docs/progress/ (never edit PROGRESS.md by hand; README §12)
 	uv run python scripts/progress.py
@@ -183,6 +183,11 @@ ingest:  ## Index data/corpus + synthetic KFS/policies: corpus.db, FTS5, Chroma 
 
 retrieval-eval:  ## KR-05 recall@5/@10 for 3 retrievers x 3 chunkings x rerank -> evaluation/reports/retrieval-<date>.md
 	uv run $(ENV_FILE) python -m credassure.evaluation.retrieval_eval
+
+retrieval-ladder:  ## P4 ladder: RUNG=0..3 LABEL=.. [REWRITE=1] [RERANK=1]; CURVE=1 picks the dev-only threshold; REPORT=1 writes the report
+	@if [ -n "$(CURVE)" ]; then uv run $(ENV_FILE) python -m credassure.evaluation.retrieval_ladder curve; \
+	elif [ -n "$(REPORT)" ]; then uv run python -m credassure.evaluation.retrieval_ladder report; \
+	else uv run $(ENV_FILE) python -m credassure.evaluation.retrieval_ladder run --rung $(RUNG) --label "$(LABEL)" $(if $(REWRITE),--rewrite) $(if $(RERANK),--rerank); fi
 
 retrieval-pool:  ## Blind pooled top-5 of all 18 configs -> evaluation/retrieval/v1/judging/ (E8 M1)
 	uv run $(ENV_FILE) python -m credassure.evaluation.retrieval_judging pool

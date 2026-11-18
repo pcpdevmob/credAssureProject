@@ -104,6 +104,7 @@ def main(env: Mapping[str, str] = os.environ) -> int:
         embed=embedder(env),
         embed_model=model,
         audit=ledger.audit,
+        contextual_headers=env.get("RETRIEVAL_CONTEXT_HEADERS", "false").lower() == "true",
         progress=lambda line: print(line, file=sys.stderr, flush=True),
     )
     print(

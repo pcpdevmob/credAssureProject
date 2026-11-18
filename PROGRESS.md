@@ -28,13 +28,18 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P3 | 3.3 | AI Security and Guardrails | done | Pritish | 2026-11-18 | b43d80d | — | [2026-11-18-p3-3.3-pii-v2-pritish.md](docs/progress/entries/2026-11-18-p3-3.3-pii-v2-pritish.md) |
 | P3 | 3.4 | AI Security and Guardrails | done | Pritish | 2026-11-18 | b43d80d | E4 | [2026-11-18-p3-3.4-money-gate-pritish.md](docs/progress/entries/2026-11-18-p3-3.4-money-gate-pritish.md) |
 | P3 | 3.5 | AI Security and Guardrails | done | Pritish | 2026-11-18 | b831d29 | — | [2026-11-18-p3-3.5-trace-leak-data-classes-pritish.md](docs/progress/entries/2026-11-18-p3-3.5-trace-leak-data-classes-pritish.md) |
+| P4 | 4.1 | Copilot | done | Pritish | 2026-11-18 | 031fe48 | — | [2026-11-18-p4-4.1-contextual-headers-pritish.md](docs/progress/entries/2026-11-18-p4-4.1-contextual-headers-pritish.md) |
+| P4 | 4.2 | Copilot | done | Pritish | 2026-11-18 | 16c38a4 | — | [2026-11-18-p4-4.2-glossary-rewrite-pritish.md](docs/progress/entries/2026-11-18-p4-4.2-glossary-rewrite-pritish.md) |
+| P4 | 4.3 | Copilot | done | Pritish | 2026-11-18 | 16c38a4 | — | [2026-11-18-p4-4.3-answerability-gate-pritish.md](docs/progress/entries/2026-11-18-p4-4.3-answerability-gate-pritish.md) |
+| P4 | 4.4 | Copilot | done | Pritish | 2026-11-18 | 8cc011e | retrieval-ladder | [2026-11-18-p4-4.4-ladder-pritish.md](docs/progress/entries/2026-11-18-p4-4.4-ladder-pritish.md) |
+| P4 | 4.5 | Copilot | done | Pritish | 2026-11-18 | d9fdedc | — | [2026-11-18-p4-4.5-dev-labels-fix-pritish.md](docs/progress/entries/2026-11-18-p4-4.5-dev-labels-fix-pritish.md) |
 
 ## Modules
 
 | Module | Owner | Phases | Status |
 |---|---|---|---|
 | [UI](docs/progress/modules/ui.md) | UI lead (TODO: name) | P9 (U5, U6) | U0–U4 done (U4 + follow-ups 2026-11-17); next U5–U6 (P9) |
-| [Copilot](docs/progress/modules/copilot.md) | [Name 6] (TODO: name); plan v3.4: Suresh (retrieval, P4), Tejas (answering, P5) | P0 (dev split), P4 (CP2-R), P5 (CP2-A), P6 (course re-run) | 9e done except CP-01 (regulatory 10/25 live, OPEN); KR-05 recall@5 24/40 (v1.0) OPEN |
+| [Copilot](docs/progress/modules/copilot.md) | [Name 6] (TODO: name); plan v3.4: Suresh (retrieval, P4), Tejas (answering, P5) | P0 (dev split), P4 (CP2-R), P5 (CP2-A), P6 (course re-run) | 9e done except CP-01 (regulatory 10/25 live, OPEN); KR-05 recall@5 24/40 (v1.0) OPEN. **P4 code done 2026-11-18** (contextual headers, glossary rewrite, answerability gate, ladder script); Mac run done: frozen recall@5 23 -> 25/40 (headers), dev 13 -> 17/20 (headers + glossary); reranker only scores for the abstain gate (threshold 0.4066); `evaluation/reports/retrieval-ladder-2026-11-18.md` |
 | [Authentication](docs/progress/modules/auth.md) | TODO: owner | P8 (SEC) | JWT + roles + maker-checker + step-up above ₹1.5 cr done (Phases 5, 10a); hardening in P8 |
 | [Responsible AI](docs/progress/modules/rai.md) | Pritish | P8 (fairness), P9 (RAI UI), P10 (system card, Sutra mapping) | Human-in-the-loop, no accept tool, audit, kill switch done; documentation and fairness evidence pending |
 | [AI Security and Guardrails](docs/progress/modules/guardrails.md) | Pritish (GR); Abhishek (red-team, SEC) | P2 (pattern tests), P3 (GR), P8 (SEC), P10 (threat model) | Phase 6 safeguards done (PII masking, injection scanner, breaker, caps); ADR 0033 pattern tests in make check (P2); **P3 done 2026-11-18**: packages/guardrails (R1–R5, guardrail_event, config/guardrails.yaml), PII v2 (Presidio patterns + GSTIN/UPI/card/Udyam), money gate, trace-leak test 0 hits, data classes, CSV escaping, gen_ai.* export |
@@ -48,6 +53,9 @@ From the latest entry of each step. Module-level items live in each module file.
 ### Copilot
 
 - P0 0.3: a person confirms or narrows each label (label_status confirmed, labelled_by) before P4 tunes on it ([entry](docs/progress/entries/2026-11-18-p0-0.3-retrieval-dev-split-pritish.md))
+- P4 4.3: False-abstain on the 25 regulatory items (exit check <= 3/25) is measured with the live copilot in P5. ([entry](docs/progress/entries/2026-11-18-p4-4.3-answerability-gate-pritish.md))
+- P4 4.4: Exit check recall@5 >= 30/40 on frozen v1.0 NOT met (best 25/40). Gap: v1.0 labels are pooling-biased (silver strict labels scored 35/40 earlier); headers and the glossary were tuned on dev only, never on the frozen 40. ([entry](docs/progress/entries/2026-11-18-p4-4.4-ladder-pritish.md))
+- P4 4.5: A person still confirms the 20 labels (P0 0.3). ([entry](docs/progress/entries/2026-11-18-p4-4.5-dev-labels-fix-pritish.md))
 
 ### AI Security and Guardrails
 

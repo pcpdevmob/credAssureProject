@@ -1,0 +1,231 @@
+{
+  "answerability": {
+    "chosen_on": "dev split only (20 answerable + dev unanswerable)",
+    "curve": [
+      {
+        "caught": 0,
+        "false_abstain": 0,
+        "threshold": 0.0349
+      },
+      {
+        "caught": 1,
+        "false_abstain": 0,
+        "threshold": 0.0884
+      },
+      {
+        "caught": 2,
+        "false_abstain": 0,
+        "threshold": 0.1554
+      },
+      {
+        "caught": 2,
+        "false_abstain": 1,
+        "threshold": 0.2033
+      },
+      {
+        "caught": 3,
+        "false_abstain": 1,
+        "threshold": 0.2552
+      },
+      {
+        "caught": 4,
+        "false_abstain": 1,
+        "threshold": 0.2655
+      },
+      {
+        "caught": 5,
+        "false_abstain": 1,
+        "threshold": 0.2759
+      },
+      {
+        "caught": 6,
+        "false_abstain": 1,
+        "threshold": 0.3941
+      },
+      {
+        "caught": 7,
+        "false_abstain": 1,
+        "threshold": 0.4066
+      },
+      {
+        "caught": 7,
+        "false_abstain": 2,
+        "threshold": 0.4427
+      },
+      {
+        "caught": 7,
+        "false_abstain": 3,
+        "threshold": 0.8123
+      },
+      {
+        "caught": 7,
+        "false_abstain": 4,
+        "threshold": 0.8328
+      },
+      {
+        "caught": 8,
+        "false_abstain": 4,
+        "threshold": 0.8862
+      },
+      {
+        "caught": 8,
+        "false_abstain": 5,
+        "threshold": 0.9567
+      },
+      {
+        "caught": 8,
+        "false_abstain": 6,
+        "threshold": 0.9592
+      },
+      {
+        "caught": 8,
+        "false_abstain": 7,
+        "threshold": 0.9709
+      },
+      {
+        "caught": 8,
+        "false_abstain": 8,
+        "threshold": 0.9817
+      },
+      {
+        "caught": 8,
+        "false_abstain": 9,
+        "threshold": 0.9836
+      },
+      {
+        "caught": 8,
+        "false_abstain": 10,
+        "threshold": 0.9907
+      },
+      {
+        "caught": 8,
+        "false_abstain": 11,
+        "threshold": 0.9918
+      },
+      {
+        "caught": 8,
+        "false_abstain": 12,
+        "threshold": 0.9945
+      },
+      {
+        "caught": 8,
+        "false_abstain": 13,
+        "threshold": 0.9948
+      },
+      {
+        "caught": 8,
+        "false_abstain": 14,
+        "threshold": 0.9948
+      },
+      {
+        "caught": 8,
+        "false_abstain": 15,
+        "threshold": 0.9955
+      },
+      {
+        "caught": 8,
+        "false_abstain": 16,
+        "threshold": 0.9965
+      },
+      {
+        "caught": 8,
+        "false_abstain": 17,
+        "threshold": 0.9977
+      },
+      {
+        "caught": 8,
+        "false_abstain": 18,
+        "threshold": 0.9998
+      },
+      {
+        "caught": 8,
+        "false_abstain": 19,
+        "threshold": 0.9998
+      }
+    ],
+    "max_false_abstain": 1,
+    "threshold": 0.4066
+  },
+  "rungs": [
+    {
+      "date": "2026-11-18",
+      "dev": {
+        "mrr10": 0.5881,
+        "n": 20,
+        "recall5": 13
+      },
+      "flags": {
+        "contextual_headers": false,
+        "query_rewrite": false,
+        "rerank": false
+      },
+      "frozen_v1.0": {
+        "mrr10": 0.349,
+        "n": 40,
+        "recall5": 23
+      },
+      "label": "baseline",
+      "rung": 0
+    },
+    {
+      "date": "2026-11-18",
+      "dev": {
+        "mrr10": 0.6318,
+        "n": 20,
+        "recall5": 16
+      },
+      "flags": {
+        "contextual_headers": true,
+        "query_rewrite": false,
+        "rerank": false
+      },
+      "frozen_v1.0": {
+        "mrr10": 0.4182,
+        "n": 40,
+        "recall5": 25
+      },
+      "label": "headers",
+      "rung": 1
+    },
+    {
+      "date": "2026-11-18",
+      "dev": {
+        "mrr10": 0.6679,
+        "n": 20,
+        "recall5": 17
+      },
+      "flags": {
+        "contextual_headers": true,
+        "query_rewrite": true,
+        "rerank": false
+      },
+      "frozen_v1.0": {
+        "mrr10": 0.4107,
+        "n": 40,
+        "recall5": 22
+      },
+      "label": "headers+glossary",
+      "rung": 2
+    },
+    {
+      "date": "2026-11-18",
+      "dev": {
+        "mrr10": 0.4749,
+        "n": 20,
+        "recall5": 11
+      },
+      "flags": {
+        "contextual_headers": true,
+        "query_rewrite": true,
+        "rerank": true
+      },
+      "frozen_v1.0": {
+        "mrr10": 0.4546,
+        "n": 40,
+        "recall5": 24
+      },
+      "label": "headers+glossary+rerank",
+      "rung": 3
+    }
+  ]
+}
