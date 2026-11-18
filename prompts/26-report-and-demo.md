@@ -1,5 +1,7 @@
 # 26 · Report, slides and demo script
 
+> **Superseded for plan v3.4 (2026-11-18):** run [39-p12-report-slides-final-demo.md](39-p12-report-slides-final-demo.md) instead. It includes this step's scope plus the v3.4 additions. Kept for reference.
+
 | When | Owner | Prerequisites | Humans must |
 |---|---|---|---|
 | W4 D4–5 | All (each writes own agent section) | 22 done | Edit and approve final wording |

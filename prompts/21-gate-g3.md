@@ -1,5 +1,7 @@
 # 21 · Gate G3 and architecture check
 
+> **Superseded for plan v3.4 (2026-11-18):** run [29-p2-gate-g3-and-injection-pattern-tests.md](29-p2-gate-g3-and-injection-pattern-tests.md) instead. It includes this step's scope plus the v3.4 additions. Kept for reference.
+
 | When | Owner | Prerequisites | Humans must |
 |---|---|---|---|
 | W3 D5 | Integration lead | 19, 20 done | Decide stretch items |

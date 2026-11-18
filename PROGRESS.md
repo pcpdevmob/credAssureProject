@@ -18,6 +18,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | Phase | Step | Module | Status | Owner | Date | Commits | Evals | Entry |
 |---|---|---|---|---|---|---|---|---|
 | S1 | 1 | Documentation | done | Pritish | 2026-11-18 | 9969751, 9b63b13 | — | [2026-11-18-s1-1-progress-tracking-pritish.md](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md) |
+| S2 | 1 | Documentation | done | Pritish | 2026-11-18 | — | — | [2026-11-18-s2-1-plan-v34-base-files-pritish.md](docs/progress/entries/2026-11-18-s2-1-plan-v34-base-files-pritish.md) |
 
 ## Modules
 
@@ -29,7 +30,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | [Responsible AI](docs/progress/modules/rai.md) | Pritish | P8 (fairness), P9 (RAI UI), P10 (system card, Sutra mapping) | Human-in-the-loop, no accept tool, audit, kill switch done; documentation and fairness evidence pending |
 | [AI Security and Guardrails](docs/progress/modules/guardrails.md) | Pritish (GR); Abhishek (red-team, SEC) | P2 (pattern tests), P3 (GR), P8 (SEC), P10 (threat model) | Phase 6 safeguards done (PII masking, injection scanner, breaker, caps); consolidation into packages/guardrails pending (P3) |
 | [Deployment](docs/progress/modules/deployment.md) | [Name 1] (TODO: name) | P6 (course switch, deferred), P10 (Phase 12) | Local run + isolated e2e + demo-reset done; CI restored (ADR 0028); course endpoint deferred (under discussion) |
-| [Documentation](docs/progress/modules/docs.md) | Pritish | P0 (plan + ADRs), P10 (RUNBOOK, MODEL_CARD, CONTRIBUTIONS), P12 (report) | README §11 team workflow and conflict-free progress tracking done (S1); plan v3.4 ADRs pending (P0) |
+| [Documentation](docs/progress/modules/docs.md) | Pritish | P0 (plan + ADRs), P10 (RUNBOOK, MODEL_CARD, CONTRIBUTIONS), P12 (report) | README §11 team workflow and progress tracking done (S1); plan v3.4 base files and prompts 27–39 done (S2); plan v3.4 ADRs pending (P0) |
 | [Evaluation](docs/progress/modules/evaluation.md) | Abhishek (Phase 11); Tejas (test set) | P1 (close G1), P2 (G3), P6 (course baseline, deferred), P7 (Phase 11), P11 (G4) | G1 provisionally frozen 2026-11-15; G2 passed; G1-final checklist open |
 
 ## Open items
@@ -39,6 +40,7 @@ From the latest entry of each step. Module-level items live in each module file.
 
 - S1 1: replace CODEOWNERS placeholder handles with real GitHub usernames ([entry](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md))
 - S1 1: name owners for UI, Authentication and Deployment modules ([entry](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md))
+- S2 1: ADR recording the v3.4 cuts and the copilot scope (P0) ([entry](docs/progress/entries/2026-11-18-s2-1-plan-v34-base-files-pritish.md))
 
 ## History
 
