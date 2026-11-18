@@ -62,12 +62,10 @@ export const copilotService = {
    *  answer; `final` is the full reply. Read through the generated client (it sends the bearer header). */
   async stream(message: string, caseId: string | null, h: StreamHandlers = {}): Promise<ChatReply> {
     const body = caseId ? { message, case_id: caseId } : { message };
-    const { response } = await gw.POST('/v1/copilot/chat/stream', { body, parseAs: 'stream', signal: h.signal } as never) as { response: Response };
-    if (!response.ok || !response.body) {
-      let problem: unknown; try { problem = await response.json(); } catch { problem = undefined; }
-      throw toProblem(response.status, problem);
-    }
-    const reader = response.body.getReader(); const dec = new TextDecoder(); let buf = '';
+    const { data, error, response } = await gw.POST('/v1/copilot/chat/stream', { body, parseAs: 'stream', signal: h.signal } as never) as { data?: ReadableStream<Uint8Array>; error?: unknown; response: Response };
+    const stream = data ?? response.body;
+    if (!response.ok || !stream) throw toProblem(response.status, error);
+    const reader = stream.getReader(); const dec = new TextDecoder(); let buf = '';
     for (;;) {
       const { value, done } = await reader.read();
       if (done) throw toProblem(0, undefined);
@@ -76,8 +74,8 @@ export const copilotService = {
         const d = e.data as Record<string, unknown>;
         if (e.event === 'stage' && typeof d.stage === 'string') h.onStage?.(d.stage);
         else if (e.event === 'delta' && typeof d.text === 'string') h.onDelta?.(d.text);
-        else if (e.event === 'final') { await reader.cancel().catch(() => undefined); return mapChat(d as unknown as Wire); }
-        else if (e.event === 'error') { await reader.cancel().catch(() => undefined); throw toProblem(500, { code: d.code, detail: d.detail, request_id: d.request_id }); }
+        else if (e.event === 'final') { void reader.cancel().catch(() => undefined); return mapChat(d as unknown as Wire); }
+        else if (e.event === 'error') { void reader.cancel().catch(() => undefined); throw toProblem(500, { code: d.code, detail: d.detail, request_id: d.request_id }); }
       }
     }
   },

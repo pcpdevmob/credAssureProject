@@ -4,14 +4,14 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { server } from './setup';
-import { API, problem, reply, passage } from '@/mocks/handlers';
+import { API, problem, reply, passage, sse } from '@/mocks/handlers';
 import Copilot from '@/components/case/Copilot';
 import Report from '@/components/case/Report';
 import { approvalService } from '@/services/approvals';
 import type { CaseRecord } from '@/types';
 
 const ask = async (q = 'What is a KFS?') => { await userEvent.type(await screen.findByLabelText('Your question'), q); await userEvent.click(screen.getByRole('button', { name: /Ask$/ })); };
-const chatReturns = (o: Record<string, unknown>) => server.use(http.post(`${API}/v1/cases/:id/chat`, () => HttpResponse.json(reply(o))));
+const chatReturns = (o: Record<string, unknown>) => server.use(http.post(`${API}/v1/copilot/chat/stream`, () => sse(reply(o))));
 
 describe('copilot chat', () => {
   it('opens a citation in the side panel', async () => {
@@ -38,7 +38,7 @@ describe('copilot chat', () => {
     expect((screen.getByLabelText('Your question') as HTMLInputElement).disabled).toBe(true);
   });
   it('maps an API problem to a banner', async () => {
-    server.use(http.post(`${API}/v1/cases/:id/chat`, () => problem(429, 'RATE_LIMITED', 'Slow down.')));
+    server.use(http.post(`${API}/v1/copilot/chat/stream`, () => problem(429, 'RATE_LIMITED', 'Slow down.')));
     render(<Copilot caseId="CA-1" />); await ask();
     expect((await screen.findByRole('alert')).textContent).toMatch(/Slow down/);
   });

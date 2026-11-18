@@ -13,11 +13,24 @@ export const passage = (o: Record<string, unknown> = {}) => ({ chunk_id: 'R-RBI-
   effective_from: '2025-11-28', legal_basis: 'L4', source_url: 'https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13140', text: 'The Key Facts Statement shall disclose the annual percentage rate.',
   text_format: 'plain', truncated: false, injection_flagged: false, injection_flags: [], ...o });
 // Same wording as the gateway's CHAT_NOTICE (supervisor_service.py); the UI shows whatever GET /v1/me/chat-notice returns.
-export const NOTICE = "Ask CredAssure drafts answers with a language model from cited sources and this case's verified figures. It is general information, not legal, tax or credit advice, and it never approves, accepts or signs anything. Do not enter personal identifiers.";
+export const NOTICE = "Ask CredAssure drafts answers with a language model from cited sources (product help, regulations, policies) and the open case's verified figures. It is general information, not legal, tax or credit advice, and it never approves, accepts or signs anything. Do not enter personal identifiers.";
+/** CP-12: the gateway's stream for one reply: stage events, the checked text in deltas, then the full reply. */
+export const sse = (r: Record<string, unknown>) => {
+  const answer = String(r.answer ?? ''); const words = answer.match(/\S+\s*/g) ?? [];
+  const ev = (e: string, d: unknown) => `event: ${e}\ndata: ${JSON.stringify(d)}\n\n`;
+  const body = ['routing', 'retrieving', 'drafting', 'checking'].map(s => ev('stage', { stage: s })).join('')
+    + words.map(w => ev('delta', { text: w })).join('') + ev('final', r);
+  return new HttpResponse(body, { headers: { 'Content-Type': 'text/event-stream' } });
+};
 
 export const handlers = [
   http.get(`${API}/v1/cases/:id/citations/:chunk`, () => HttpResponse.json(passage())),
   http.post(`${API}/v1/cases/:id/chat`, () => HttpResponse.json(reply({ notice: 'Answers come from public sources and this case. Do not enter personal data.' }))),
+  http.post(`${API}/v1/copilot/chat/stream`, () => sse(reply({ followups: ['What is the status of this case?', 'How does CredAssure handle personal data?'] }))),
+  http.get(`${API}/v1/cases/:id/chat`, ({ params }) => HttpResponse.json({ case_id: String(params.id), messages: [] })),
+  http.post(`${API}/v1/cases/:id/chat/reset`, ({ params }) => HttpResponse.json({ case_id: String(params.id), messages: [] })),
+  http.post(`${API}/v1/copilot/feedback`, () => HttpResponse.json({ trace_id: 't-1', rating: 'up', recorded: true })),
+  http.get(`${API}/v1/citations/:chunk`, () => HttpResponse.json(passage())),
   http.get(`${API}/v1/cases/:id/safety`, ({ params }) => HttpResponse.json({ case_id: String(params.id), counts: {}, events: [] })),
   http.get(`${API}/v1/eval/scorecard`, () => HttpResponse.json({ baseline: null, full: null, ablations: {}, target: 92 })),
   http.get(`${API}/v1/health/ready`, () => HttpResponse.json({ status: 'ok', checks: { db: 'ok', model: 'closed' } })),
