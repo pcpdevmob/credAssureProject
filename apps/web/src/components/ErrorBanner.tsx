@@ -11,6 +11,7 @@ export default function ErrorBanner({ error, className, action }: { error: unkno
       <div className="min-w-0 flex-1">
         <p className="font-semibold text-rose-700">{b.what}</p>
         <p className="mt-0.5 text-ink-700">{b.fix}</p>
+        {b.requestId && <p className="mt-1 text-xs text-ink-600">Request ID: <code className="select-all font-mono">{b.requestId}</code></p>}
         {action && <div className="mt-3">{action}</div>}
       </div>
     </div>

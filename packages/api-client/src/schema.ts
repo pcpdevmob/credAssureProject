@@ -956,6 +956,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/client-errors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Client Error
+         * @description A signed-in user's browser reports an error: redacted, logged at WARNING with the user id
+         *     (so a report tied to someone else's request id is traceable), 204. At most 10 a minute per
+         *     user; more are dropped with 429 so the endpoint cannot flood the log.
+         */
+        post: operations["client_error_v1_client_errors_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/eval/runs": {
         parameters: {
             query?: never;
@@ -1156,6 +1178,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/metrics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Metrics */
+        get: operations["metrics_v1_metrics_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1209,6 +1248,34 @@ export interface components {
             title: string;
             /** Truncated */
             truncated: boolean;
+        };
+        /** ClientError */
+        ClientError: {
+            /**
+             * Digest
+             * @description Next.js digest
+             */
+            digest?: string | null;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "error" | "unhandledrejection" | "render";
+            /** Message */
+            message: string;
+            /**
+             * Page
+             * @description route only, no query string
+             * @default
+             */
+            page: string;
+            /** Request Id */
+            request_id?: string | null;
+            /**
+             * Stack
+             * @default
+             */
+            stack: string;
         };
         /** Config */
         Config: {
@@ -1353,6 +1420,8 @@ export interface components {
                 row?: number | null;
             }[];
             instance?: string;
+            /** @description Same as the X-Request-ID header */
+            request_id?: string;
             status: number;
             title: string;
             type: string;
@@ -3937,6 +4006,55 @@ export interface operations {
             };
         };
     };
+    client_error_v1_client_errors_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ClientError"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Client error */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Server error */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     start_eval_v1_eval_runs_post: {
         parameters: {
             query?: never;
@@ -4380,6 +4498,44 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Client error */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Server error */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    metrics_v1_metrics_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Prometheus text format */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": unknown;
                 };
             };
             /** @description Client error */

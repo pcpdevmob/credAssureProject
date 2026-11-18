@@ -13,6 +13,7 @@ import json
 import logging
 import os
 import sqlite3
+import time
 import uuid
 from collections.abc import Awaitable, Callable
 from datetime import date
@@ -67,7 +68,17 @@ from credassure.engines import (
 from credassure.gateway import problems, tracing
 from credassure.gateway.deps import Services, current_user
 from credassure.gateway.jobs import JobRunner
-from credassure.gateway.routers import admin, auth, cases, citations, health, lineage, workflow
+from credassure.gateway.metrics import MeteredLLM, Metrics
+from credassure.gateway.routers import (
+    admin,
+    auth,
+    cases,
+    citations,
+    health,
+    lineage,
+    telemetry,
+    workflow,
+)
 from credassure.gateway.settings import Settings, get_settings
 from credassure.gateway.supervisor_service import SupervisorService
 from credassure.guardrails import switch as rail_switch
@@ -575,6 +586,8 @@ def _rate_key(settings: Settings, request: Request) -> str:
     return "ip:" + (request.client.host if request.client else "unknown")
 
 
+_METHODS = frozenset({"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"})
+
 API_SECURITY_HEADERS = {
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
@@ -605,14 +618,18 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
     _load_employee_names(settings)  # H13: hr.db names masked in chat, logs and traces
     tracing.configure(settings)
     rail_switch.set_off(rail_switch.SWITCHABLE if settings.ablation == "A6" else ())  # P8.5
-    svc = build_services(settings, llm if llm is not None else _default_llm(settings))
+    metrics = Metrics()
+    inner = llm if llm is not None else _default_llm(settings)
+    svc = build_services(settings, MeteredLLM(inner, metrics) if inner is not None else None)
     app = FastAPI(title="CredAssure API", version="0.2.0")
     app.state.settings = settings
     app.state.services = svc
+    app.state.metrics = metrics
     problems.install(app)
     # ponytail: in-memory buckets per process; use limits' Redis storage if the gateway scales out.
     limiter, rate = MovingWindowRateLimiter(MemoryStorage()), parse(settings.rate_limit)
     app.state.login_limiter = MovingWindowRateLimiter(MemoryStorage())  # S4, routers/auth.py
+    app.state.client_error_limiter = MovingWindowRateLimiter(MemoryStorage())  # telemetry.py
 
     @app.middleware("http")
     async def rate_limit(
@@ -648,8 +665,21 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
         request: Request, call_next: Callable[[Request], Awaitable[Response]]
     ) -> Response:
         rid = uuid.uuid4().hex
+        request.state.request_id = rid  # problem+json bodies and the 500 handler read it
+        started = time.monotonic()
+
+        def route_of() -> str:
+            path = getattr(request.scope.get("route"), "path", None)
+            return path if isinstance(path, str) else "unmatched"
+
+        method = request.method if request.method in _METHODS else "OTHER"  # bounded label
         with log_context(request_id=rid, tenant_id=settings.tenant_id):
-            response = await call_next(request)
+            try:
+                response = await call_next(request)
+            except Exception:  # the 500 handler answers outside this middleware; count it here
+                metrics.http(method, route_of(), 500, time.monotonic() - started)
+                raise
+        metrics.http(method, route_of(), response.status_code, time.monotonic() - started)
         response.headers["X-Request-ID"] = rid
         if request.url.path.startswith("/v1/"):  # P8.4 (scope #52, OWASP API8): JSON API only;
             for name, value in API_SECURITY_HEADERS.items():  # /docs keeps Swagger's own assets
@@ -664,7 +694,7 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
         allow_headers=["Authorization", "Content-Type", "Idempotency-Key"],
     )
 
-    for module in (health, auth, cases, citations, lineage, workflow, admin):
+    for module in (health, auth, cases, citations, lineage, workflow, admin, telemetry):
         app.include_router(module.router)
     for name, agent_router, deps in _AGENT_ROUTERS:
         app.include_router(agent_router, prefix=f"/v1/agents/{name}")
@@ -685,6 +715,7 @@ _PROBLEM = {
         "detail": {"type": "string"},
         "code": {"type": "string"},
         "instance": {"type": "string"},
+        "request_id": {"type": "string", "description": "Same as the X-Request-ID header"},
         "errors": {
             "type": "array",
             "items": {

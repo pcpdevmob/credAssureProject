@@ -154,6 +154,68 @@
         "title": "CitationPassage",
         "type": "object"
       },
+      "ClientError": {
+        "properties": {
+          "digest": {
+            "anyOf": [
+              {
+                "pattern": "^[\\w-]{1,64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Next.js digest",
+            "title": "Digest"
+          },
+          "kind": {
+            "enum": [
+              "error",
+              "unhandledrejection",
+              "render"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "message": {
+            "maxLength": 500,
+            "title": "Message",
+            "type": "string"
+          },
+          "page": {
+            "default": "",
+            "description": "route only, no query string",
+            "maxLength": 200,
+            "title": "Page",
+            "type": "string"
+          },
+          "request_id": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9a-f]{32}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Id"
+          },
+          "stack": {
+            "default": "",
+            "maxLength": 4000,
+            "title": "Stack",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "message"
+        ],
+        "title": "ClientError",
+        "type": "object"
+      },
       "Config": {
         "properties": {
           "key": {
@@ -600,6 +662,10 @@
             "type": "array"
           },
           "instance": {
+            "type": "string"
+          },
+          "request_id": {
+            "description": "Same as the X-Request-ID header",
             "type": "string"
           },
           "status": {
@@ -4301,6 +4367,66 @@
         ]
       }
     },
+    "/v1/client-errors": {
+      "post": {
+        "description": "A signed-in user's browser reports an error: redacted, logged at WARNING with the user id\n(so a report tied to someone else's request id is traceable), 204. At most 10 a minute per\nuser; more are dropped with 429 so the endpoint cannot flood the log.",
+        "operationId": "client_error_v1_client_errors_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientError"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Client Error",
+        "tags": [
+          "telemetry"
+        ]
+      }
+    },
     "/v1/eval/runs": {
       "post": {
         "operationId": "start_eval_v1_eval_runs_post",
@@ -4868,6 +4994,48 @@
         "summary": "Ack Chat Notice",
         "tags": [
           "auth"
+        ]
+      }
+    },
+    "/v1/metrics": {
+      "get": {
+        "operationId": "metrics_v1_metrics_get",
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {}
+            },
+            "description": "Prometheus text format"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Metrics",
+        "tags": [
+          "telemetry"
         ]
       }
     }

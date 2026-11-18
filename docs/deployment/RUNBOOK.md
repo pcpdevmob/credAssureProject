@@ -1,7 +1,9 @@
 # Runbook
 
 Scope #45. One entry per incident: how it shows, what to do, how to confirm. Every command runs from the repo root.
-Help for users: `docs/help/`. Error codes: `docs/help/error-messages.md`.
+Help for users: `docs/help/`. Error codes: `docs/help/error-messages.md`. Logs, request ids, metrics and
+traces: [observability.md](observability.md). A user reporting an error should quote the **Request ID** or **Reference**
+shown on screen; `grep` the gateway log for it.
 
 ## Endpoint down
 **Shows:** the web banner says the copilot is unavailable; `GET /v1/health/ready` → `checks.model` is `open` (circuit
