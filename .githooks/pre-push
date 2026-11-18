@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CI was removed on purpose (cd57a3e, at the user's request); these local gates replace it (ADR 0027).
+# Local gates (ADR 0027); GitHub Actions CI runs the same targets on every PR (ADR 0028).
 # Skip once with --no-verify only when you know why.
 set -euo pipefail
 make check-fast    # includes test_openapi_current, so openapi.json is fresh before the diff below

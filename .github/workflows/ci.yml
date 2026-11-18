@@ -1,0 +1,75 @@
+name: ci
+
+# Restored by ADR 0028. Runs the same targets as the local pre-push hook (ADR 0027), so a PR shows
+# pass/fail on GitHub even when someone pushed with --no-verify or without core.hooksPath.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: make check (ruff, mypy, pytest incl. fuzz, bandit, PROGRESS.md)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v5
+      - run: uv python install 3.12
+      - run: uv sync --locked --all-packages
+      # Types only: mypy needs the optional reranker module, not torch (pinned to uv.lock).
+      - run: uv pip install --no-deps "sentence-transformers==6.2.0"
+      - name: Rebuild the gitignored HR store from frozen profiles
+        run: make hr-db
+      - run: make check
+      - name: No breaking API change against the base branch (scope #28)
+        if: github.event_name == 'pull_request'
+        run: make openapi-diff BASE=origin/${{ github.base_ref }}
+      - name: Prompt change control (scope #36)
+        if: github.event_name == 'pull_request'
+        run: |
+          if ! git diff --quiet "origin/${{ github.base_ref }}...HEAD" -- '*/prompts/*'; then
+            make eval-fast PROMPTS_BASE=origin/${{ github.base_ref }}
+          else
+            echo "No prompt changes"
+          fi
+
+  audit:
+    name: dependency audit + secret scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v5
+      - run: uv python install 3.12
+      - run: uv sync --locked --all-packages
+      - run: make audit
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  web:
+    name: web (typecheck, vitest, build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck -w apps/web
+      - run: npm run test -w apps/web
+      - run: npm run build -w apps/web
