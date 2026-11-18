@@ -76,3 +76,15 @@ def test_KR04_dev_split_targets_current_indian_documents() -> None:
             assert not doc.get("superseded_by"), doc_id
             assert doc.get("applies_to") in {"commercial_bank", "all"}, doc_id
             assert str(doc.get("effective_from") or "") <= AS_OF, doc_id
+
+
+def test_scope60_whole_document_labels_are_not_exact() -> None:
+    """A whole-document label (empty section) with exact=true would match only passages before
+    the first heading (retrieval_eval.label_match), silently zeroing section-level recall."""
+    import json
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[1] / "retrieval" / "dev" / "queries.jsonl"
+    for line in path.read_text(encoding="utf-8").splitlines():
+        for s in json.loads(line)["relevant_sections"]:
+            assert not (s["section_path"] == "" and s.get("exact")), s
