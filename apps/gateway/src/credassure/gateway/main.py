@@ -83,6 +83,7 @@ from credassure.gateway.settings import Settings, get_settings
 from credassure.gateway.supervisor_service import SupervisorService
 from credassure.guardrails import switch as rail_switch
 from credassure.ledger import hr, migrate, reads
+from credassure.ledger.hr import display_names as hr_display_names
 from credassure.ledger.session import case_engine, hr_engine, transaction
 from credassure.ledger.store import SqlLedger
 from credassure.lender_sim import ScriptedLender
@@ -596,10 +597,25 @@ API_SECURITY_HEADERS = {
 }
 
 
+def _load_employee_names(settings: Settings) -> None:
+    """H13 (ADR 0030 §2): exact-match masking of hr.db employee names. A missing hr.db (fresh
+    clone before `make hr-db`) leaves name masking off and says so; nothing else changes."""
+    try:
+        count = pii.set_known_names(hr_display_names(hr_engine(settings.hr_db)))
+    except Exception as exc:  # hr.db missing or unreadable
+        pii.set_known_names([])
+        if settings.app_env == "demo":  # never demo without name masking
+            raise RuntimeError("hr.db is not readable: run make hr-db before the demo") from exc
+        _log.warning("employee-name masking off: hr.db not readable (run make hr-db)")
+        return
+    _log.info("employee-name masking on", extra={"names": count})
+
+
 def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) -> FastAPI:
     settings = settings or get_settings()
     configure_logging(settings.log_level)
     set_redactor(pii.redact)  # NFR-07: Verhoeff-aware redaction for every log line
+    _load_employee_names(settings)  # H13: hr.db names masked in chat, logs and traces
     tracing.configure(settings)
     rail_switch.set_off(rail_switch.SWITCHABLE if settings.ablation == "A6" else ())  # P8.5
     metrics = Metrics()

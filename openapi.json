@@ -2593,6 +2593,55 @@
         ]
       }
     },
+    "/v1/auth/refresh": {
+      "post": {
+        "description": "H12: swap a still-valid token for a fresh one. The user row was re-checked by `User`\n(deactivated users are refused). The session ends JWT_SESSION_MAX_MINUTES after the password\nwas typed; a refresh never extends that, so a stolen token cannot live forever.",
+        "operationId": "refresh_v1_auth_refresh_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Refresh V1 Auth Refresh Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Refresh",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
     "/v1/auth/token": {
       "post": {
         "operationId": "token_v1_auth_token_post",

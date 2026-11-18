@@ -50,7 +50,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P10 | 10.1 | Deployment | done | Pritish | 2026-11-18 | f17e087, d4cd99f, 5b2cca6, fb8aa5f | — | [2026-11-18-p10-10.1-ship-pritish.md](docs/progress/entries/2026-11-18-p10-10.1-ship-pritish.md) |
 | P10 | 10.2 | Responsible AI | done | Pritish | 2026-11-18 | d6e63c2, fb8aa5f | — | [2026-11-18-p10-10.2-rai-docs-pritish.md](docs/progress/entries/2026-11-18-p10-10.2-rai-docs-pritish.md) |
 | P10 | 10.3 | Documentation | in_progress | Pritish | 2026-11-18 | 6fa8740, fb8aa5f | — | [2026-11-18-p10-10.3-contributions-release-pritish.md](docs/progress/entries/2026-11-18-p10-10.3-contributions-release-pritish.md) |
-| P11 | 11.0 | Deployment | done | Pritish | 2026-11-18 | f1e2f04, 630d93f, 049f782 | — | [2026-11-18-p11-11.0-observability-pritish.md](docs/progress/entries/2026-11-18-p11-11.0-observability-pritish.md) |
+| P11 | 11.0 | AI Security and Guardrails | done | Pritish | 2026-11-18 | — | — | [2026-11-18-p11-11.0-session-refresh-names-pritish.md](docs/progress/entries/2026-11-18-p11-11.0-session-refresh-names-pritish.md) |
 
 ## Modules
 
@@ -94,6 +94,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - P8 8.1: S16/S17 corpus-passage injection reach the corpus only through chat; reviewer decides whether a planted corpus chunk is needed. ([entry](docs/progress/entries/2026-11-18-p8-8.1-safety-v2-draft-pritish.md))
 - P8 8.1: First run (rails on) and the A6 run need the live gateway (Mac); report safety_v2 >= 38/40, 0 critical. ([entry](docs/progress/entries/2026-11-18-p8-8.1-safety-v2-draft-pritish.md))
 - P8 8.4: JWT refresh endpoint not built (plan item "JWT expiry and refresh"); decide whether the 30-minute re-login is acceptable for the demo. ([entry](docs/progress/entries/2026-11-18-p8-8.4-headers-pritish.md))
+- P11 11.0: H12 and H13 in review by the team. ([entry](docs/progress/entries/2026-11-18-p11-11.0-session-refresh-names-pritish.md))
 
 ### Deployment
 
