@@ -10,11 +10,12 @@ import { User, Bot, ShieldCheck, Cog, Search, Download } from 'lucide-react';
 import { cn } from '@/lib/utils';
 const ICON = { HUMAN: User, AGENT: Bot, SUPERVISOR: ShieldCheck, SYSTEM: Cog };
 export default function AuditList({ caseId }: { caseId?: string }) {
-  const [ev, setEv] = useState<AuditEvent[]>([]); const [q, setQ] = useState(''); const [t, setT] = useState('ALL');
-  useEffect(() => { auditService.list(caseId).then(setEv); }, [caseId]);
+  const [ev, setEv] = useState<AuditEvent[]>([]); const [q, setQ] = useState(''); const [t, setT] = useState('ALL'); const [chain, setChain] = useState<boolean | null>(null);
+  useEffect(() => { auditService.list(caseId).then(setEv); if (caseId) auditService.chain(caseId).then(setChain).catch(() => setChain(false)); }, [caseId]);
   const list = useMemo(() => ev.filter(e => (t === 'ALL' || e.actorType === t) && (e.action + e.detail + e.actor + e.caseId).toLowerCase().includes(q.toLowerCase())), [ev, q, t]);
   const csv = () => { const rows = [['at', 'caseId', 'actorType', 'actor', 'action', 'detail', 'severity'], ...list.map(e => [e.at, e.caseId, e.actorType, e.actor, e.action, e.detail, e.severity])]; const b = new Blob([toCsv(rows)], { type: 'text/csv' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `audit${caseId ? '-' + caseId : ''}.csv`; a.click(); };
   return (<Card>
+    {caseId && chain !== null && <p role="status" className={cn('flex items-center gap-2 border-b border-slate-100 px-4 py-3 text-sm font-medium', chain ? 'text-emerald-800' : 'text-rose-800')}><ShieldCheck aria-hidden className="h-4 w-4" />{chain ? 'Hash chain verified: no event has been changed or removed (OBJ-08).' : 'Hash chain broken: an event was changed or removed. Report this now.'}</p>}
     <div className="flex flex-col gap-3 border-b border-slate-100 p-4 sm:flex-row sm:items-center">
       <div className="relative flex-1"><Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" /><Input className="pl-9" placeholder="Search events…" value={q} onChange={e => setQ(e.target.value)} /></div>
       <div className="flex gap-1 overflow-x-auto">{['ALL', 'HUMAN', 'AGENT', 'SUPERVISOR'].map(x => <button key={x} onClick={() => setT(x)} className={cn('shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium', t === x ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100')}>{x}</button>)}</div>

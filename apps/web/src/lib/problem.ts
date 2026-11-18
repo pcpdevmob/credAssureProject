@@ -11,6 +11,7 @@ export const FIX: Record<string, string> = {
   FORBIDDEN: 'Your role cannot do this. Ask the person this case is routed to.',
   STEP_UP_REQUIRED: 'Enter your password to confirm this approval.',
   REPORT_STALE: 'Ask the preparer to regenerate the report, then approve the new version.',
+  ATTESTATION_REQUIRED: 'Tick that you reviewed the Critic findings and the safety events, then approve.',
   NOT_FOUND: 'Check the case ID, or open the case from the cases list.',
   TOOL_NOT_ALLOWED: 'This agent cannot use that tool. Report it to the evaluator.',
   COLLECTION_NOT_ALLOWED: 'This search is not allowed for the case. Rephrase the question.',

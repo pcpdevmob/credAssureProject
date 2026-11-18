@@ -113,7 +113,9 @@ Time box: if #1 runs past 7:15, skip the source-link click and go straight to #2
 
 ## 8:00–9:15 · Director approval with maker-checker
 - **Clicks:** preparer → **Review** tab → try to approve, which shows the maker-checker refusal. Switch to the **`demo.director`** window → Inbox
-  → CA-2026-0016 → Review → approve with a comment, then type the case ID to confirm.
+  → CA-2026-0016 → Review → read the **Safety events** panel, tick *I reviewed the Critic findings and the safety
+  events* (P9 attestation; Approve stays disabled until it is ticked) → approve with a comment, then type the case ID to confirm.
+  Point at the violet **AI-generated draft** label on the Workflow narratives: only model-written text carries it.
 - **Show:** the preparer's refusal (403, explained in words). The Director's Review shows the negotiation-in-progress warning but **no**
   stale-report warning, because v2 was just made (if you skipped 7:30, Approve is disabled with the reason; reject and return still work).
   The Director's approval. The line "Approval is internal, not loan acceptance."

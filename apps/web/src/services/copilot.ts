@@ -5,14 +5,14 @@ import { gw, ok } from '@/lib/gateway';
 export interface Citation { chunkId: string; docId: string; title: string | null; section: string | null; effectiveFrom: string | null }
 export interface ChatReply {
   answer: string; citations: Citation[]; abstained: boolean; refused: boolean; refusalCode: string | null;
-  injectionFlagged: boolean; piiRedacted: boolean; notice: string | null; traceId: string;
+  injectionFlagged: boolean; piiRedacted: boolean; notice: string | null; traceId: string; aiDrafted: boolean;
 }
 type Wire = { answer: string; citations: { chunk_id: string; doc_id: string; title?: string | null; section?: string | null; effective_from?: string | null }[];
-  abstained?: boolean; refused: boolean; refusal_code?: string | null; injection_flagged: boolean; pii_redacted?: boolean; notice?: string | null; trace_id: string };
+  abstained?: boolean; refused: boolean; refusal_code?: string | null; injection_flagged: boolean; pii_redacted?: boolean; notice?: string | null; trace_id: string; source?: 'model' | 'code' };
 
 export function mapChat(w: Wire): ChatReply {
   return { answer: w.answer, abstained: w.abstained === true, refused: w.refused, refusalCode: w.refusal_code ?? null, injectionFlagged: w.injection_flagged,
-    piiRedacted: w.pii_redacted === true, notice: w.notice ?? null, traceId: w.trace_id,
+    piiRedacted: w.pii_redacted === true, notice: w.notice ?? null, traceId: w.trace_id, aiDrafted: w.source === 'model',
     citations: w.citations.map(c => ({ chunkId: c.chunk_id, docId: c.doc_id, title: c.title ?? null, section: c.section ?? null, effectiveFrom: c.effective_from ?? null })) };
 }
 export interface CitedPassage {

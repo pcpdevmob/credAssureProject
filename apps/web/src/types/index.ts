@@ -51,7 +51,7 @@ export interface Negotiation {
 /** `preview` = audit and pricing only; affordability and ranking have not been checked. */
 export interface OfferView { caseId: string; source: 'ledger' | 'preview' | 'stale'; offers: OfferRow[]; ranking: string[]; negotiation: Negotiation | null; message?: string }
 
-export interface WorkflowGate { id: string; name: string; agent: string; decision: GateDecision; evidence: string; blockers: string[]; at?: string; next: string }
+export interface WorkflowGate { id: string; name: string; agent: string; decision: GateDecision; evidence: string; blockers: string[]; at?: string; next: string; aiDrafted?: boolean }
 
 export interface ApprovalDecision { caseId: string; decision: 'APPROVED' | 'REJECTED' | 'RETURNED'; comment: string; by: string; role: Role; at: string }
 

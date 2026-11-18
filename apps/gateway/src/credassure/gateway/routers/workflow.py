@@ -229,6 +229,9 @@ class Decision(BaseModel):
     password: SecretStr | None = Field(default=None, max_length=256)
     # #6: the report version the approver was shown; approve is refused if it is no longer current.
     report_version: int | None = Field(default=None, ge=0, le=2**31 - 1)
+    # P9 (plan v3.4 §6, OWASP ASI09): the approver attests they reviewed the Critic findings and
+    # safety events before approving; reject and return need no attestation.
+    attested: bool = False
 
 
 def _report_current(svc: Svc, case: Any, shown: int | None) -> None:
@@ -288,6 +291,13 @@ def decide(
             "return needs return_stage; approve and reject must not have one",
             errors=[{"field": "return_stage", "row": None, "reason": "inconsistent"}],
         )
+    if body.decision == "approve" and not body.attested:  # before the step-up password prompt
+        raise ProblemError(
+            422,
+            "confirm you reviewed the Critic findings and safety events before approving",
+            ApiErrorCode.ATTESTATION_REQUIRED,
+            errors=[{"field": "attested", "row": None, "reason": "must be true to approve"}],
+        )
     if body.decision == "approve":  # cheap pre-check: no password prompt for a stale report
         _report_current(svc, case, body.report_version)
     if body.decision == "approve" and svc.settings.approval_step_up:
@@ -311,6 +321,7 @@ def decide(
             return_stage=body.return_stage,
             comment=redact(body.comment),
             warnings=_warnings(svc, case),
+            attested=body.attested,
         )
         try:
             svc.supervisor.decide(case.id, decision=body.decision, return_stage=back)

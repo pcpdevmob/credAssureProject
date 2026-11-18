@@ -20,6 +20,7 @@ from fastapi import APIRouter, File, Query, Request, UploadFile
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, Field, ValidationError
 
+from credassure.core import narrative
 from credassure.core.enums import Stage
 from credassure.core.errors import ApiErrorCode
 from credassure.core.money import format_inr, from_paise, to_paise
@@ -121,6 +122,20 @@ _NEXT_ACTION = {
 }
 
 
+NARRATIVE_PREFIX = {"onboarding": "onb.", "working_capital": "wc.", "lendwise": "lw."}
+
+
+def _narrative_source(svc: Svc, case: Case, stage: str) -> str | None:
+    """P9 AI badge: "model" when the stage narrative is model-drafted, "template" when code wrote
+    it (fallback or model off), None when the stage has no stored narrative."""
+    prefix = NARRATIVE_PREFIX.get(stage)
+    raw = svc.ledger.get(case.id, f"{prefix}narrative") if prefix else None
+    parsed = narrative.parse(raw)
+    if parsed is None:
+        return None
+    return "model" if parsed[1] else "template"
+
+
 def _stage_views(svc: Svc, case: Case) -> list[dict[str, Any]]:
     with transaction(svc.engine) as s:
         runs = reads.stage_runs(s, case.tenant_id, case.id)
@@ -134,6 +149,7 @@ def _stage_views(svc: Svc, case: Case) -> list[dict[str, Any]]:
             "blockers": result.get("blockers", []),
             "question": result.get("question"),
             "narrative": result.get("narrative"),
+            "narrative_source": _narrative_source(svc, case, run.stage),
             "trace_id": run.trace_id,
         }
     order = [s.value for s in Stage]
@@ -586,6 +602,44 @@ def delete_case(
             case.id, expected_version=expected_version, actor=who.user_id
         )
     return {"case_id": case.id, "status": "DELETED", "removed": removed}
+
+
+# P9 safety panel (plan v3.4 §6): the guardrail and Critic events of one case. Payload keys are an
+# allowlist of codes and counts; audit payloads never hold raw text or identifiers (ADR 0029).
+SAFETY_EVENTS = {
+    "GUARDRAIL_EVENT",
+    "INJECTION_FLAGGED",
+    "CRITIC_BLOCKED",
+    "CRITIC_FALLBACK",
+    "LLM_FALLBACK",
+    "GATE_OVERRIDE",
+}
+SAFETY_KEYS: tuple[str, ...] = ("rail", "rule_id", "action", "kinds", "count", "flags", "fields")
+SAFETY_KEYS += ("file_kind", "stage", "codes", "reason", "kind")
+
+
+@router.get("/cases/{case_id}/safety")
+def safety(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
+    """Blocks, redactions, injection flags, Critic blocks and fallbacks for a case member."""
+    case = visible_case(svc, who, case_id)
+    with transaction(svc.engine) as s:
+        events = [
+            e
+            for e in reads.audit_events(s, case.tenant_id, case.id)
+            if e.event_type in SAFETY_EVENTS
+        ]
+    rows: list[dict[str, Any]] = []
+    for e in events:
+        payload = e.payload or {}
+        rows.append(
+            {"seq": e.seq, "ts": e.ts, "event_type": e.event_type}
+            | {k: payload[k] for k in SAFETY_KEYS if k in payload}
+        )
+    counts: dict[str, int] = {}
+    for r in rows:
+        key = str(r.get("action") or str(r["event_type"]).lower())
+        counts[key] = counts.get(key, 0) + 1
+    return {"case_id": case.id, "counts": counts, "events": rows}
 
 
 @router.get("/cases/{case_id}/audit")

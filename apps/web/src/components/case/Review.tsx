@@ -12,6 +12,7 @@ import { Figure } from '../Figure';
 import { ApiProblem } from '@/lib/problem';
 import type { Fig } from '@/lib/money';
 import { ShieldCheck, PauseCircle, Lock, Info, Hourglass } from 'lucide-react';
+import SafetyPanel from './SafetyPanel';
 
 // APR-04, BR-09: what the approver must know about a negotiation round that is newer than the verified comparison.
 const WARNING: Record<string, string> = {
@@ -37,17 +38,18 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
   const [open, setOpen] = useState(false); const [typed, setTyped] = useState(''); const [pw, setPw] = useState(''); const [pwNeeded, setPwNeeded] = useState(false);
   const [busy, setBusy] = useState(false); const [err, setErr] = useState<unknown>(); const [done, setDone] = useState('');
   const [warnings, setWarnings] = useState<string[]>([]); const [shown, setShown] = useState<number | null>(null); const [warnErr, setWarnErr] = useState(false);
-  const [tick, setTick] = useState(0); const [regen, setRegen] = useState(false); const [regenErr, setRegenErr] = useState<unknown>();
+  const [attested, setAttested] = useState(false); const [tick, setTick] = useState(0); const [regen, setRegen] = useState(false); const [regenErr, setRegenErr] = useState<unknown>();
   useEffect(() => { lendWiseService.warnings(c).then(w => { setWarnings(w.warnings); setShown(w.reportVersion); setWarnErr(false); }).catch(() => setWarnErr(true)); }, [c.id, c.stage, tick]); // the decision is enforced server-side either way, but say so when the check fails
   // #6, ADR 0003 §3: the gateway refuses approve with REPORT_STALE; the UI explains it and offers the preparer the fix.
   const stale = warnings.includes('report_stale');
   const regenerate = async () => { setRegen(true); setRegenErr(undefined); try { await reportService.regenerate(c.id); setTick(t => t + 1); onChange(); } catch (e) { setRegenErr(e); } setRegen(false); };
   const blocked = choice === 'APPROVED' && stale;
+  const unattested = choice === 'APPROVED' && !attested; // P9, ASI09: the approver attests before approving
   const can = approvalService.canDecide(c, user);
   const needsComment = choice !== 'APPROVED' && !comment.trim();
   const confirm = async () => {
     setBusy(true); setErr(undefined);
-    try { await approvalService.decide(c, choice, comment, back, pwNeeded ? pw : undefined, shown); setOpen(false); setPw(''); setDone(`${DONE[choice]}: ${c.id}.`); onChange(); }
+    try { await approvalService.decide(c, choice, comment, back, pwNeeded ? pw : undefined, shown, attested); setOpen(false); setPw(''); setDone(`${DONE[choice]}: ${c.id}.`); onChange(); }
     catch (e) { setErr(e); if (e instanceof ApiProblem && e.code === 'STEP_UP_REQUIRED') { setPwNeeded(true); setPw(''); } }
     setBusy(false);
   };
@@ -62,6 +64,7 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
         </div>
         {c.nextAction && <p className="border-t border-line p-5 text-sm text-ink-700">{c.nextAction}</p>}
       </Card>
+      <SafetyPanel caseId={c.id} />
       <Internal />
     </div>
     <div className="space-y-6">
@@ -82,10 +85,11 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
           {choice === 'RETURNED' && <label className="mt-3 block text-sm text-ink-700">Reopen stage
             <select value={back} onChange={e => setBack(e.target.value as ReturnStage)} className="mt-1 h-9 w-full rounded-lg border border-ink-400 bg-white px-2 text-sm">{(Object.keys(STAGE_LABEL) as ReturnStage[]).map(s => <option key={s} value={s}>{STAGE_LABEL[s]}</option>)}</select></label>}
           <label className="mt-3 block text-sm text-ink-700">Comment{choice !== 'APPROVED' && ' (required)'}<Textarea className="mt-1" value={comment} onChange={e => setComment(e.target.value)} /></label>
+          {choice === 'APPROVED' && <label className="mt-3 flex items-start gap-2 rounded-lg bg-sunken p-3 text-sm text-ink-800"><input type="checkbox" className="mt-0.5" checked={attested} onChange={e => setAttested(e.target.checked)} /><span>I reviewed the Critic findings and the safety events for this case. AI-generated text is a draft; the figures come from the fact ledger.</span></label>}
           {err !== undefined && !open && <ErrorBanner className="mt-3" error={err} />}
           <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-card p-3 lg:static lg:mt-4 lg:border-0 lg:bg-transparent lg:p-0">
             {blocked && <p id="stale-reason" className="mb-2 text-sm font-medium text-amber-900">{STALE_REASON}</p>}
-            <Button className="w-full" aria-describedby={blocked ? 'stale-reason' : undefined} variant={choice === 'REJECTED' ? 'danger' : choice === 'RETURNED' ? 'outline' : 'success'} disabled={needsComment || blocked} onClick={() => { setTyped(''); setErr(undefined); setOpen(true); }}>{ACTION[choice]}</Button>
+            <Button className="w-full" aria-describedby={blocked ? 'stale-reason' : undefined} variant={choice === 'REJECTED' ? 'danger' : choice === 'RETURNED' ? 'outline' : 'success'} disabled={needsComment || blocked || unattested} onClick={() => { setTyped(''); setErr(undefined); setOpen(true); }}>{ACTION[choice]}</Button>
           </div>
         </Card>) : <Card className="p-5 text-sm text-ink-600"><Lock className="mb-2 h-5 w-5 text-ink-400" />Awaiting decision from <Badge tone="blue">{c.routedTo ? APPROVER[c.routedTo] : 'the routed approver'}</Badge>. {user.role === 'PREPARER' ? 'Preparers cannot approve.' : 'This case is routed to a different approver.'}</Card>)}
     </div>

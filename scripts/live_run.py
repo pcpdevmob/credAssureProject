@@ -239,12 +239,13 @@ def run_all(live: Live) -> str | None:
         version = live.c.get(f"/v1/cases/{cid}", headers=prep).json()["row_version"]
         own = live.c.post(
             f"/v1/cases/{cid}/decision",
-            json={"decision": "approve", "comment": "self", "expected_version": version},
+            json={"decision": "approve", "attested": True, "comment": "self", "expected_version": version},
             headers=prep,
         )
         director = live.h("demo.director")
         body: dict[str, Any] = {
             "decision": "approve",
+            "attested": True,
             "comment": "live run",
             "expected_version": version,
         }
