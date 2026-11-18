@@ -339,7 +339,7 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0010 | Rounding policy | Accepted |
 | 0011 | Repayment date → week mapping | Proposed |
 | 0012 | APR annualisation: nominal, proven by RBI Annex B reproduction test | Accepted |
-| 0013 | Reranker: none by default; local cross-encoder if mentor approves | Accepted |
+| 0013 | Reranker: none by default; local cross-encoder if mentor approves | Accepted (amended by 0032: reranker on) |
 | 0014 | Automated judge J1, calibrated; human scoring if kappa < 0.7 | Accepted |
 | 0015 | Demo: live, with replay profile and recorded video fallback | Accepted |
 | 0016 | Langfuse self-hosted in Compose (amends BRD NFR-09) | Accepted |
@@ -351,6 +351,11 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0026 | KR-04 data correction: three outdated documents tagged superseded | Accepted |
 | 0027 | Local pre-push gates replace GitHub Actions CI | Accepted (amended by 0028) |
 | 0028 | GitHub Actions CI restored alongside the pre-push gates | Accepted |
+| 0029 | Guardrail pipeline: one package, rails R1–R5, fail closed | Proposed |
+| 0030 | PII policy: data classes, Presidio, money never masked | Proposed |
+| 0031 | safety_v2: separately frozen 40-item safety suite | Proposed |
+| 0032 | Copilot v2 reduced scope, dual scoring, reranker on, plan v3.4 cuts | Accepted |
+| 0033 | Prompt-injection design patterns as architecture | Proposed |
 
 Full index with phase and scope numbers: `docs/adr/README.md`.
 

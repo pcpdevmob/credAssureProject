@@ -95,7 +95,7 @@ Block → phase map: A=0, B=1, C=2, D=3, E=8 then 5, F=4, G=6, H=7, I1..I5=9a..9
 | 68 | RAI UI | AI-generated badge, approver attestation, safety panel | P9 |
 | 69 | System card + threat model | SYSTEM_CARD, THREAT_MODEL (LLM + ASI), Sutra mapping (RBI + MeitY), DPDP gap note | P10 |
 
-### Cut by plan v3.4 (ADR to be written in P0; rows above are kept, not deleted)
+### Cut by plan v3.4 ([ADR 0032](../adr/0032-copilot-v2-scope-and-v34-cuts.md); rows above are kept, not deleted)
 Stretch items not built: UI-09, UI-10, WC-08, LW-15, VER-06, ONB-07, CP-04. Deferred copilot items: CP-07 intent routing, full two-call CP-08, CP-10 case-aware tools, CP-11 case memory, CP-12 streaming/follow-ups/feedback, A7 guard-model ablation, adaptive red-team round. Reversible token vault replaced by irreversible placeholders.
 
 ## E. Decisions settled (no open questions block the build)

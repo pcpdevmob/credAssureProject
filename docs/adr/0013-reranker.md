@@ -1,5 +1,5 @@
 # ADR 0013 — Reranker
-Status: Accepted · 2026-11-04
+Status: Accepted · 2026-11-04 · **Amended by [ADR 0032](0032-copilot-v2-scope-and-v34-cuts.md) (2026-11-18): reranker on (user decision)**
 Decision: core configuration runs with `RERANKER=none` so retrieval never depends on an approval. If the mentor allows local models,
 `RERANKER=local_cross_encoder` (BAAI/bge-reranker-base, MIT) is enabled. Both settings are reported in the retrieval ablation; the
 better-scoring permitted setting becomes the demo default.
