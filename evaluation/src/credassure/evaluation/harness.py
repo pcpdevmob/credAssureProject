@@ -34,6 +34,7 @@ NEW_CASE = {
     "due_date": "2027-05-15",
 }
 STAGE_KEYS = {"onboarding": "onboarding_gate", "working_capital": "funding_gate"}
+TOKEN_REUSE_S = 20 * 60  # under the 30-minute access-token lifetime (JWT_EXPIRY_MINUTES max 30)
 STAGE_KEYS |= {"lendwise": "lendwise_gate"}
 Client = Any  # httpx.Client or TestClient (see safety_v2: httpx spells every keyword out)
 Meter = Callable[[], tuple[int, int]]  # cumulative (model calls, tokens)
@@ -90,15 +91,21 @@ class Harness:
         self.c, self.password, self.route_fn = client, password, route_fn
         self.meter, self.price = meter, price_per_1k
         self._tokens: dict[str, dict[str, str]] = {}
+        self._issued: dict[str, float] = {}
         self._base: str | None = None
         self.known = known_doc_ids()
 
     # ---- plumbing
     def h(self, user: str) -> dict[str, str]:
-        if user not in self._tokens:
+        """A bearer header for ``user``. Access tokens last at most 30 minutes and a live run takes
+        hours, so a token is reused for TOKEN_REUSE_S only, then the user signs in again (a cached
+        token made the last e2e items of the 2026-11-18 live run fail with 401)."""
+        now = time.monotonic()
+        if user not in self._tokens or now - self._issued.get(user, 0.0) > TOKEN_REUSE_S:
             r = self.c.post("/v1/auth/token", json={"username": user, "password": self.password})
             r.raise_for_status()
             self._tokens[user] = {"Authorization": f"Bearer {r.json()['access_token']}"}
+            self._issued[user] = now
         return self._tokens[user]
 
     def _post(self, cid: str, kind: str, path: Path, h: dict[str, str]) -> list[str]:
