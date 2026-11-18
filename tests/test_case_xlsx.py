@@ -177,3 +177,19 @@ def test_api_results_identical(template: Path, tmp_path: Path) -> None:
     assert (head_a["status"], head_a["route"]) == ("AWAITING_APPROVAL", "director_finance")
     assert (head_b["status"], head_b["route"]) == (head_a["status"], head_a["route"])
     assert views[0] == views[1]
+
+
+def test_sample_case_is_current(template: Path, tmp_path: Path) -> None:
+    """data/templates/sample_case = the converted template + the offers' frozen KFS
+    (regenerate with `make case-template`)."""
+    sample = kit.TEMPLATE.parent / "sample_case"
+    assert kit.main(["convert", str(template), str(tmp_path)]) == 0
+    for p in tmp_path.rglob("*"):
+        if p.is_file():
+            assert (sample / p.relative_to(tmp_path)).read_text() == p.read_text(), p.name
+    for offer in (sample / "offers").glob("*.json"):
+        doc = json.loads(offer.read_text())["kfs_doc_id"]
+        for name in (f"{doc}.md", f"{doc}-SCH.md"):
+            assert (sample / "kfs" / name).read_bytes() == (FROZEN / "kfs" / name).read_bytes()
+            payload, _ = validate_file("kfs", (sample / "kfs" / name).read_text())
+            assert payload["doc_id"] == name.removesuffix(".md")

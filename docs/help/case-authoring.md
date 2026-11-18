@@ -1,5 +1,7 @@
 # Authoring a test case in Excel
 
+Step-by-step guide and a complete set of sample files (JSON, CSV, offers, KFS): [data/templates/README.md](../../data/templates/README.md).
+
 Use this to write a new MSME case and its lender offers in a spreadsheet instead of editing seven CSV/JSON files
 and an offer JSON for each lender by hand.
 
