@@ -34,3 +34,8 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | [0026](0026-kr04-superseded-data-correction.md) | KR-04 data correction: R-CG-C-274, R-SIDBI-P-008, R-CG-C-237 tagged superseded from their own text | Accepted | 10b | — |
 | [0027](0027-local-gates-replace-ci.md) | Local pre-push gates replace GitHub Actions CI (#28, #36, #51) | Accepted (amended by 0028) | 10b | 28, 36, 41, 51 |
 | [0028](0028-ci-restored.md) | GitHub Actions CI restored alongside the pre-push gates; `make hr-db` | Accepted | S1 | 28, 36, 51 |
+| [0029](0029-guardrail-pipeline.md) | Guardrail pipeline: one package, rails R1–R5, fail closed | Proposed | P0 → P3 | 55, 56 |
+| [0030](0030-pii-policy-presidio.md) | PII policy: data classes, Presidio, money never masked | Proposed | P0 → P3 | 57, 58, 59 |
+| [0031](0031-safety-v2-suite.md) | safety_v2: separately frozen 40-item safety suite | Proposed | P0 → P8 | 65, 66 |
+| [0032](0032-copilot-v2-scope-and-v34-cuts.md) | Copilot v2 reduced scope, dual scoring, reranker on, plan v3.4 cuts (amends 0013) | Accepted | P0 → P4, P5 | 60–64 |
+| [0033](0033-injection-design-patterns.md) | Prompt-injection design patterns as architecture | Proposed | P0 → P2 | 54 |

@@ -54,3 +54,7 @@ def test_OBJ08_demo_case_run_and_approval_share_one_trace(
     traced = [s for s in spans if s.get("case_id") == case_id]
     assert {s["name"] for s in traced} >= {"plan", "stage", "route", "decision"}
     assert len({s["trace_id"] for s in traced}) == 1
+    # ADR 0029 (P3): rail events are spans in the same trace
+    rails = {(s["rail"], s["rule_id"], s["action"]) for s in traced if s["name"] == "guardrail"}
+    assert ("R3", "R3.tool_allowed", "pass") in rails
+    assert ("R4", "R4.critic_passed", "pass") in rails

@@ -204,6 +204,7 @@ eval:  ## Run the 100-item test set through the API (Phase 11)
 # ponytail: offline subset; the API-driven fast eval subset replaces it with the Phase 11 harness
 eval-fast:  ## Prompt change control (#36): version-bump check + offline prompt subset (FakeLLM)
 	uv run python -m credassure.core.prompts check --base $${PROMPTS_BASE:-origin/main}
+	uv run python -m credassure.guardrails.policy check
 	uv run pytest -q packages/llm/tests agents/supervisor/tests/test_resilience.py tests/e2e
 
 llm-probe:  ## Does the endpoint honour guided JSON? Decides LLM_SUPPORTS_GUIDED_JSON (ADR 0017)

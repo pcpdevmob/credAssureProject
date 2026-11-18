@@ -22,6 +22,7 @@ from credassure.gateway.deps import Services, own_case, visible_case
 from credassure.gateway.jobs import NOT_RUNNABLE, job_view
 from credassure.gateway.problems import ProblemError
 from credassure.gateway.report import superseded_uploads
+from credassure.guardrails.events import record as guardrail
 from credassure.ledger import reads
 from credassure.ledger.session import RunInProgressError, run_in_progress, run_lock, transaction
 from credassure.observability.tracing import span
@@ -269,6 +270,15 @@ class SupervisorService:
         trace_id = uuid.uuid4().hex
         kinds = sorted({hit.kind for hit in pii.find(message)})  # ONB-06: refuse and redact
         text = pii.redact(message)
+        if kinds:  # ADR 0029 R1: redaction is audited with the kinds only, never the text
+            guardrail(
+                "R1",
+                "R1.chat_pii_redacted",
+                "redact",
+                case_id=case.id,
+                audit=self.svc.ledger.audit,
+                kinds=kinds,
+            )
         with transaction(self.svc.engine) as s:
             turns = reads.chat_history(s, case.tenant_id, case.id, actor.user_id, MEMORY_TURNS)
             offer_ids = {
@@ -296,6 +306,15 @@ class SupervisorService:
                 abstained=reply.abstained,
             )
         answer = pii.redact(reply.answer)
+        if answer != reply.answer:  # ADR 0029 R4: PII re-scan on model output
+            guardrail(
+                "R4",
+                "R4.model_io_pii_redacted",
+                "redact",
+                case_id=case.id,
+                audit=self.svc.ledger.audit,
+                trace_id=trace_id,
+            )
         chunk_ids = [str(c["chunk_id"]) for c in reply.citations]
         fact_key = None
         if reply.source == "model" and not reply.abstained:

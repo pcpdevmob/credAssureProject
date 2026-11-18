@@ -1,5 +1,7 @@
 # 22 · Phase 11 — evaluation, ablations, red-team
 
+> **Superseded for plan v3.4 (2026-11-18):** run [34-p7-phase-11-evaluation.md](34-p7-phase-11-evaluation.md) instead. It includes this step's scope plus the v3.4 additions. Kept for reference.
+
 | When | Owner | Prerequisites | Humans must |
 |---|---|---|---|
 | W4 D1–3 | Critic owner + Onboarding owner | 21 done | Label the 20% judge-calibration sample |

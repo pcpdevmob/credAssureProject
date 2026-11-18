@@ -18,14 +18,14 @@ from pydantic import BaseModel
 from credassure.core.errors import ApiErrorCode
 from credassure.gateway.deps import Svc, User, visible_case
 from credassure.gateway.problems import ProblemError
+from credassure.guardrails.events import record as guardrail
+from credassure.guardrails.excerpt import EXCERPT_LIMIT, FULL_TEXT_BASES, excerpt
 from credassure.ledger import reads
 from credassure.ledger.session import transaction
 from credassure.retrieval.search import Filters, Searcher
 from credassure.security.injection import scan
 
 router = APIRouter(prefix="/v1", tags=["cases"])
-FULL_TEXT_BASES = frozenset({"L1", "L2", "L5"})  # anything else is capped: fail closed
-EXCERPT_LIMIT = 600  # characters of a capped passage that may be shown
 
 
 class CitationPassage(BaseModel):
@@ -41,22 +41,6 @@ class CitationPassage(BaseModel):
     truncated: bool  # True when the text is a 600 character excerpt (legal basis not L1, L2 or L5)
     injection_flagged: bool
     injection_flags: list[str]
-
-
-def excerpt(text: str, quote: str | None, limit: int = EXCERPT_LIMIT) -> str:
-    """At most ``limit`` characters, centred on the longest word of ``quote`` found in the text
-    (else the start). A window, not a summary: the characters are the source's own."""
-    if len(text) <= limit:
-        return text
-    centre, lowered = 0, text.lower()
-    words = {w for w in (quote or "").lower().split() if len(w) >= 4}
-    for word in sorted(words, key=len, reverse=True):
-        at = lowered.find(word)
-        if at >= 0:
-            centre = at + len(word) // 2
-            break
-    start = max(0, min(centre - limit // 2, len(text) - limit))
-    return text[start : start + limit]
 
 
 @router.get("/cases/{case_id}/citations/{chunk_id:path}", response_model=CitationPassage)
@@ -82,6 +66,11 @@ def citation(
     short = found.legal_basis not in FULL_TEXT_BASES and len(found.text) > EXCERPT_LIMIT
     text = excerpt(found.text, quote) if short else found.text
     flags = scan(text)
+    # ADR 0029 R2: a read, so the events stay in the trace (no audit row per citation view)
+    if short:
+        guardrail("R2", "R2.citation_excerpt_capped", "cap", case_id=case.id, chunk_id=chunk_id)
+    if flags:
+        guardrail("R2", "R2.passage_injection_flagged", "flag", case_id=case.id, flags=flags)
     return CitationPassage(
         chunk_id=found.chunk_id,
         doc_id=found.doc_id,

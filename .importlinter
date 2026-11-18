@@ -29,6 +29,7 @@ source_modules =
     credassure.reports
     credassure.retrieval
     credassure.security
+    credassure.guardrails
     credassure.tools
     credassure.lender_sim
     credassure.evaluation
@@ -130,3 +131,22 @@ source_modules =
     credassure.ledger
 forbidden_modules =
     credassure.security.pii
+    credassure.guardrails.pii
+
+[importlinter:contract:guardrails-layer]
+name = Guardrails import only core and observability (ADR 0029: core <- guardrails <- llm, adapters, gateway)
+type = forbidden
+source_modules =
+    credassure.guardrails
+forbidden_modules =
+    credassure.engines
+    credassure.ledger
+    credassure.llm
+    credassure.reports
+    credassure.retrieval
+    credassure.security
+    credassure.tools
+    credassure.lender_sim
+    credassure.evaluation
+    credassure.datagen
+    openai
