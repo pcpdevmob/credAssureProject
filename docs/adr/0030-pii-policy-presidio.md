@@ -23,4 +23,4 @@ Phase 6 masks Aadhaar (only when the Verhoeff checksum is valid), PAN, IFSC, acc
 - Placeholders keep the Phase 6 spelling `[REDACTED_<KIND>]` (typed and irreversible, as decided); renaming to `[PAN]` would change stored text and every caller's tests for no safety gain.
 - UPI, GSTIN and Udyam run before the Phase 6 patterns (a UPI ID's digits are not a phone); cards run after them; no kind takes a rupee amount.
 - Adding spaCy (a Presidio dependency) moves numpy from 2.5.4 to 2.4.6 in `uv.lock`.
-- Not built here: exact-match masking of employee names against hr.db (open item for P8).
+- Built 2026-11-18 (H13): exact-match masking of employee names against hr.db (`guardrails.pii.set_known_names`, loaded by the gateway at startup); kind `EMPLOYEE_NAME`.
