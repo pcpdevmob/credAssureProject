@@ -22,6 +22,7 @@ so the model profile wins for model settings. `MODELS` itself is a make variable
 | `CASE_DB` | `var/case.db` | Case, ledger and audit database. The e2e targets point it at `var/case-e2e.db` |
 | `UI_ORIGINS` | `http://localhost:3000,http://localhost:5173` | CORS allowlist, comma-separated |
 | `JWT_EXPIRY_MINUTES` | 30 | Token lifetime (max 30) |
+| `JWT_SESSION_MAX_MINUTES` | 480 | `POST /v1/auth/refresh` renews a token until this long after sign-in (max 720), then the user signs in again |
 | `RATE_LIMIT` | `120/minute` | Per user, else per client IP (NFR-04) |
 | `MAX_UPLOAD_BYTES` | 2 MB | Upload cap (UI-02) |
 

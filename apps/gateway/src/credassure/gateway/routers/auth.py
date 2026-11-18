@@ -1,5 +1,6 @@
 """Login and identity (NFR-07). Tokens are short-lived; the user row is re-checked per request."""
 
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from fastapi import APIRouter, Request
@@ -19,6 +20,7 @@ from credassure.security.auth import (
     hash_password,
     issue_token,
     needs_rehash,
+    token_auth_time,
     verify_password,
 )
 
@@ -55,6 +57,29 @@ def token(body: Login, request: Request, svc: Svc) -> dict[str, Any]:
     who = Principal(user.id, Role(user.role), user.tenant_id)
     return {
         "access_token": issue_token(who, secret.get_secret_value(), minutes),
+        "token_type": "bearer",  # nosec B105 - OAuth2 token type name, not a secret
+        "expires_in": minutes * 60,
+    }
+
+
+@router.post("/auth/refresh")
+def refresh(who: User, request: Request, svc: Svc) -> dict[str, Any]:
+    """H12: swap a still-valid token for a fresh one. The user row was re-checked by `User`
+    (deactivated users are refused). The session ends JWT_SESSION_MAX_MINUTES after the password
+    was typed; a refresh never extends that, so a stolen token cannot live forever."""
+    secret = svc.settings.jwt_secret
+    if secret is None:
+        raise AuthError("server has no JWT secret")
+    raw = request.headers.get("authorization", "")[7:]
+    started = token_auth_time(raw, secret.get_secret_value())
+    now = datetime.now(UTC)
+    if now - started >= timedelta(minutes=svc.settings.jwt_session_max_minutes):
+        raise ProblemError(401, "session is too old; sign in again", ApiErrorCode.UNAUTHENTICATED)
+    minutes = svc.settings.jwt_expiry_minutes
+    return {
+        "access_token": issue_token(
+            who, secret.get_secret_value(), minutes, now=now, auth_time=started
+        ),
         "token_type": "bearer",  # nosec B105 - OAuth2 token type name, not a secret
         "expires_in": minutes * 60,
     }

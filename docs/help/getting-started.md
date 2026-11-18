@@ -7,7 +7,8 @@ show its source.
 ## Sign in
 Use the username and password your administrator gave you. If your account asks for it, enter the 6-digit code from
 your authenticator app, or one of your backup codes. A new account first changes its password and sets up the
-authenticator. Your session ends after about 30 minutes; sign in again to continue.
+authenticator. While you work, your session renews itself; it ends 8 hours after you signed in, or after 30 minutes without
+activity. Then sign in again.
 
 ## Roles
 | Role | What you do |

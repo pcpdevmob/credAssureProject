@@ -173,7 +173,8 @@ This maps each to the controls above: alignment by design for a prototype, not a
   sentence's reasoning is sound.
 - **One negotiation round**, fee-waiver template only; simulated lenders.
 - **English only**; Hinglish injection text is tested, Hinglish answers are not.
-- **Prototype operations:** one gateway, SQLite, 30-minute sessions without refresh.
+- **Prototype operations:** one gateway, SQLite; tokens renew while you work but a session ends 8 hours after sign-in,
+  with no server-side revocation before then.
 
 ## 14. Contact
 Team CredAssure, IIT Kharagpur Executive PG Programme in Generative AI and Agentic AI. Owners per module:
