@@ -20,9 +20,12 @@ def test_scope56_edit_without_bump_is_detected(
     edited = tmp_path / "guardrails.yaml"
     edited.write_text(policy.POLICY.read_text() + "\n# tweak\n")
     monkeypatch.setattr(policy, "POLICY", edited)
-    assert policy.violations() == ["guardrails.yaml changed without a version bump (was 1.0.0)"]
+    current = policy.load().version
+    assert policy.violations() == [
+        f"guardrails.yaml changed without a version bump (was {current})"
+    ]
     bumped = tmp_path / "bumped.yaml"
-    bumped.write_text(edited.read_text().replace("version: 1.0.0", "version: 1.0.1"))
+    bumped.write_text(edited.read_text().replace(f"version: {current}", "version: 99.0.0"))
     monkeypatch.setattr(policy, "POLICY", bumped)
     assert "not in guardrails.lock" in policy.violations()[0]
 

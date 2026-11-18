@@ -23,6 +23,7 @@ from credassure.gateway.jobs import NOT_RUNNABLE, job_view
 from credassure.gateway.problems import ProblemError
 from credassure.gateway.report import superseded_uploads
 from credassure.guardrails.events import record as guardrail
+from credassure.guardrails.switch import on as rail_on
 from credassure.ledger import reads
 from credassure.ledger.session import RunInProgressError, run_in_progress, run_lock, transaction
 from credassure.observability.tracing import span
@@ -268,8 +269,9 @@ class SupervisorService:
         stored, traced or sent to the model (ONB-06); memory is this user's turns in this case."""
         case = visible_case(self.svc, actor, case_id)
         trace_id = uuid.uuid4().hex
-        kinds = sorted({hit.kind for hit in pii.find(message)})  # ONB-06: refuse and redact
-        text = pii.redact(message)
+        r1 = rail_on("R1")  # A6 ablation switches the rail off (guardrails.switch)
+        kinds = sorted({hit.kind for hit in pii.find(message)}) if r1 else []  # ONB-06
+        text = pii.redact(message) if r1 else message
         if kinds:  # ADR 0029 R1: redaction is audited with the kinds only, never the text
             guardrail(
                 "R1",
@@ -306,7 +308,7 @@ class SupervisorService:
                 findings=list(reply.findings),
                 abstained=reply.abstained,
             )
-        answer = pii.redact(reply.answer)
+        answer = pii.redact(reply.answer) if rail_on("R4") else reply.answer
         if answer != reply.answer:  # ADR 0029 R4: PII re-scan on model output
             guardrail(
                 "R4",

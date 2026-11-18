@@ -102,7 +102,7 @@ class Settings(BaseSettings):
 
     feature_stretch: bool = False
     planner_mode: Literal["fixed", "llm_proposes"] = "fixed"
-    ablation: Literal["A1", "A2", "A3", "A4", "A5"] | None = None
+    ablation: Literal["A1", "A2", "A3", "A4", "A5", "A6"] | None = None
 
     @field_validator("ablation", "llm_ca_cert", mode="before")
     @classmethod
@@ -111,6 +111,8 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def _fail_closed(self) -> Self:
+        if self.app_env == "demo" and self.ablation == "A6":  # rails off never in a demo
+            raise ValueError("ABLATION=A6 (guardrails off) is refused in the demo profile")
         if self.app_env == "test":
             return self
         problems: list[str] = []

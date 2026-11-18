@@ -1,9 +1,9 @@
 # Guardrail policy (ADR 0029, scope #56). Versioned and hashed like the prompt registry:
 # change anything here -> bump `version` and run `python -m credassure.guardrails.policy lock`.
 # `make eval-fast` and `make check` fail when the file changed without a bump.
-version: 1.0.0
+version: 1.1.0
 rails:
-  R1: {seam: "gateway upload and chat routers", rules: [R1.upload_pii_refused, R1.upload_injection_flagged, R1.upload_case_mismatch, R1.chat_pii_redacted]}
+  R1: {seam: "gateway upload and chat routers", rules: [R1.upload_pii_refused, R1.upload_injection_flagged, R1.upload_case_mismatch, R1.upload_protected_attribute, R1.chat_pii_redacted]}
   R2: {seam: "retrieval and citation endpoint", rules: [R2.citation_excerpt_capped, R2.passage_injection_flagged]}
   R3: {seam: "ToolRunner", rules: [R3.tool_allowed, R3.tool_not_allowed, R3.loop_detected]}
   R4: {seam: "structured output and Critic", rules: [R4.critic_passed, R4.critic_blocked, R4.model_io_pii_redacted]}
@@ -17,3 +17,10 @@ excerpt:
   full_text_bases: [L1, L2, L5]
 upload:
   refuse_pii_kinds: [AADHAAR, PAN, ACCOUNT]
+# P8.3 fairness (scope #67): a JSON key or CSV header naming a protected attribute is refused, so no
+# such field can reach a gate, a ranking or a prompt. `tokens` match any word of the field name
+# (split on non-letters and camelCase); `exact` match the whole normalised name only, because
+# words like "age" also appear in ordinary names ("inventory_age" is allowed).
+protected_attributes:
+  tokens: [gender, sex, religion, religious, caste, ethnicity, ethnic, race, racial, disability, disabled, marital, pregnancy, pregnant, orientation, tribe, tribal, nationality]
+  exact: [age, dob, date_of_birth, birth_date, birthdate, community, social_category, category_sc_st_obc]
