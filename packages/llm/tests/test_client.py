@@ -284,6 +284,27 @@ def test_NFR05_repeat_call_is_served_from_cache(tmp_path: Path) -> None:
     assert len(script.bodies) == 2
 
 
+def test_NFR08_replay_mode_serves_recorded_replies_and_never_calls_the_endpoint(
+    tmp_path: Path,
+) -> None:
+    """Scope #17, ADR 0015: a live run records replies in the cache; replay answers from it
+    only. A miss is ModelUnavailable, so callers fall back to templates as with the model off."""
+    cache = ResponseCache(tmp_path / "c.db")
+    live, _ = make(Script(_ok("recorded")), cache=cache)
+    assert live.complete("demo question", name="p") == "recorded"
+    script = Script(_ok("live reply"))
+    replay, _ = make(script, cache=cache, replay=True)
+    assert replay.complete("demo question", name="p") == "recorded"
+    with pytest.raises(ModelUnavailable):
+        replay.complete("a question nobody recorded", name="p")
+    assert script.bodies == []  # the endpoint was never called
+
+
+def test_NFR08_replay_mode_needs_a_cache() -> None:
+    with pytest.raises(ValueError, match="cache"):
+        make(Script(_ok()), replay=True)
+
+
 def test_NFR05_cache_key_includes_prompt_version() -> None:
     from credassure.llm.cache import cache_key
 

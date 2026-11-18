@@ -51,6 +51,8 @@ class Settings(BaseSettings):
     llm_rate_per_minute: float = Field(default=60.0, gt=0)  # shared per team (NFR-04)
     llm_cache_path: str | None = "var/llm_cache.db"  # unset/empty turns the response cache off
     llm_enabled: bool = True
+    # Scope #17, ADR 0015: answer only from recorded replies in LLM_CACHE_PATH (record with a live run)
+    replay_mode: bool = False
     embed_base_url: str | None = None
     embed_model: str | None = None
     reranker: Literal["none", "local_cross_encoder", "llm_pointwise"] = "none"
@@ -115,6 +117,8 @@ class Settings(BaseSettings):
     def _fail_closed(self) -> Self:
         if self.app_env == "demo" and self.ablation == "A6":  # rails off never in a demo
             raise ValueError("ABLATION=A6 (guardrails off) is refused in the demo profile")
+        if self.replay_mode and not self.llm_cache_path:
+            raise ValueError("REPLAY_MODE=true needs LLM_CACHE_PATH (the recorded replies)")
         if self.app_env == "test":
             return self
         problems: list[str] = []

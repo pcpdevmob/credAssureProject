@@ -25,6 +25,8 @@ def ready(svc: Svc) -> dict[str, Any]:
     except Exception:
         db = "error"
     model = "disabled" if svc.llm is None else str(getattr(svc.llm, "circuit_state", "closed"))
+    if svc.llm is not None and getattr(svc.llm, "replay", False) is True and model == "closed":
+        model = "replay"  # recorded replies only (scope #17, ADR 0015)
     checks: dict[str, Any] = {
         "db": db,
         "chroma": "not_configured",  # Phase 7 adds the embedded Chroma client
