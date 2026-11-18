@@ -284,6 +284,23 @@ def chat_history(
     return list(reversed(list(rows)))
 
 
+def feedback_given(s: Session, tenant_id: str, user_id: str, trace_id: str) -> bool:
+    """CP-12: has this user already rated the answer ``trace_id``? (one rating per answer)"""
+    return (
+        s.scalar(
+            select(AuditLog.seq)
+            .where(
+                AuditLog.tenant_id == tenant_id,
+                AuditLog.actor == user_id,
+                AuditLog.event_type == "COPILOT_FEEDBACK",
+                func.json_extract(AuditLog.payload, "$.trace_id") == trace_id,
+            )
+            .limit(1)
+        )
+        is not None
+    )
+
+
 def chat_turn_by_trace(
     s: Session, tenant_id: str, user_id: str, trace_id: str
 ) -> ChatMessage | None:

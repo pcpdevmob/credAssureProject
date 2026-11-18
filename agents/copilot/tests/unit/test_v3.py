@@ -144,9 +144,9 @@ def test_CP10_case_status_is_code_text_that_works_with_the_model_off() -> None:
     tools = Tools(CASE)
     r = _ask("What is the status of this case?", case_id=CASE, llm=None, tools=tools)
     assert r.source == "code" and r.intent == "case_status"
-    assert "waiting for the approver's decision" in r.answer
+    assert "waiting for the routed decision-maker" in r.answer
     assert "Routed to: Director, Finance." in r.answer
-    assert "Readiness GO" in r.answer and "Lender comparison GO" in r.answer
+    assert "Readiness passed" in r.answer and "Lender comparison passed" in r.answer
     assert ("verify_claims", CASE, {"text": r.answer}) in tools.calls
 
 

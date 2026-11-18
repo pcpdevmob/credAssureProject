@@ -169,6 +169,8 @@ def test_CP12_feedback_only_on_my_own_answer_and_fixed_reasons(
             headers=h,
         )
         assert ok.status_code == 200 and ok.json()["recorded"], ok.text
+    again = {"trace_id": in_case["trace_id"], "rating": "up"}
+    assert client.post("/v1/copilot/feedback", json=again, headers=h).status_code == 409
     other = login(client, "demo.director")
     body = {"trace_id": in_case["trace_id"], "rating": "up"}
     stolen = client.post("/v1/copilot/feedback", json=body, headers=other)
@@ -198,3 +200,30 @@ def test_ADR0035_a_passage_outside_a_case_is_404_when_it_is_not_in_the_library(
     client = _client(make_client)
     r = client.get("/v1/citations/KFS-OF-01-A-v1#section#1", headers=login(client, "demo.preparer"))
     assert r.status_code == 404
+
+
+def test_CP10_VER03_status_text_passes_the_real_critic_for_every_status(
+    make_client: Callable[..., Any],
+) -> None:
+    """Code-written status text goes through the same Critic as model text (no exemption), so it
+    must avoid the banned list: gate tokens and approval wording."""
+    from credassure.agents.copilot.agent import _STATUS, _status_text
+
+    verify = _client(make_client).app.state.services.verify_claims
+    runs = [("onboarding", "GO"), ("working_capital", "NEEDS_INPUT"), ("lendwise", "NO_GO")]
+    stages = [{"stage": st, "decision": d} for st, d in runs]
+    for status in _STATUS:
+        info = {"status": status, "current_stage": "routing", "route": "VP_FINANCE"}
+        text = _status_text(info | {"stages": stages, "blockers": True, "report_stale": True})
+        assert verify("", text) == [], (status, text)
+
+
+def test_ADR0035_copilot_is_limited_per_person(
+    make_client: Callable[..., Any], login: Login
+) -> None:
+    client = _client(make_client)
+    h = login(client, "demo.preparer")
+    codes = [_ask(client, h, "What is the status of this case?").status_code for _ in range(21)]
+    assert codes[:20] == [200] * 20 and codes[20] == 429
+    other = login(client, "demo.preparer2")  # the limit is per person
+    assert _ask(client, other, "What is the status of this case?").status_code == 200

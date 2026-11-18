@@ -658,6 +658,7 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
     # ponytail: in-memory buckets per process; use limits' Redis storage if the gateway scales out.
     limiter, rate = MovingWindowRateLimiter(MemoryStorage()), parse(settings.rate_limit)
     app.state.login_limiter = MovingWindowRateLimiter(MemoryStorage())  # S4, routers/auth.py
+    app.state.copilot_limiter = MovingWindowRateLimiter(MemoryStorage())  # routers/copilot.py
 
     @app.middleware("http")
     async def rate_limit(

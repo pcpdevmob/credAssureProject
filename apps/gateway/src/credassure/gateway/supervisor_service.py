@@ -447,6 +447,9 @@ class SupervisorService:
         case_id = row.case_id if row is not None else None
         if case_id is not None:
             visible_case(self.svc, actor, case_id)  # access may have changed since
+        with transaction(self.svc.engine) as s:  # one rating per person and answer
+            if reads.feedback_given(s, actor.tenant_id, actor.user_id, trace_id):
+                raise ProblemError(409, "you already rated this answer", ApiErrorCode.CONFLICT)
         self.svc.ledger.audit(
             case_id,
             "COPILOT_FEEDBACK",

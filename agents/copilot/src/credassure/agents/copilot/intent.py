@@ -37,7 +37,8 @@ _REGULATORY = re.compile(
 )
 _POLICY = re.compile(
     r"\b(?:our|company|internal|wc-pol|working[- ]capital policy|approval matrix|delegation|"
-    r"negotiation conduct|data[- ]handling policy|training catalogue)\b.*\bpolic(?:y|ies)\b|"
+    r"negotiation conduct|data[- ]handling policy|training catalogue)\b"
+    r"[^\n]{0,200}?\bpolic(?:y|ies)\b|"
     r"\b(?:wc-pol|approval matrix|delegation of authority)\b",
     re.IGNORECASE,
 )
@@ -56,7 +57,8 @@ _HELP = re.compile(
     re.IGNORECASE,
 )
 _HOW = re.compile(
-    r"^\s*(?:how (?:do|can|should) (?:i|we)|where (?:do|can|is|are)|what (?:does|is) the .*"
+    r"^\s*(?:how (?:do|can|should) (?:i|we)|where (?:do|can|is|are)|"
+    r"what (?:does|is) the [^\n]{0,120}?"
     r"(?:button|tab|screen|page)|can i|why can'?t i|what happens (?:if|when))\b",
     re.IGNORECASE,
 )
@@ -72,7 +74,7 @@ _STATUS = re.compile(
     re.IGNORECASE,
 )
 _BLOCKER = re.compile(
-    r"\b(?:blocked|blocker|paused|stuck|why (?:did|does|is) .*(?:stop|fail|pause)|"
+    r"\b(?:blocked|blocker|paused|stuck|why (?:did|does|is) [^\n]{0,200}?(?:stop|fail|pause)|"
     r"what (?:do i|should i) (?:fix|upload)|needs? input|no[- ]go|failed)\b",
     re.IGNORECASE,
 )

@@ -17,13 +17,18 @@ import asyncio
 import json
 import logging
 import re
-from collections.abc import AsyncIterator
+import threading
+from collections import Counter
+from collections.abc import AsyncIterator, Iterator
+from contextlib import contextmanager
 from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
+from limits import parse
 from pydantic import BaseModel, Field
 
+from credassure.core.errors import ApiErrorCode
 from credassure.gateway.deps import Svc, User, visible_case
 from credassure.gateway.problems import ProblemError
 
@@ -32,6 +37,33 @@ _log = logging.getLogger("credassure.gateway")
 CASE_ID = r"^[A-Za-z0-9-]{1,16}$"
 _WORDS = re.compile(r"\S+\s*")
 DELTA_WORDS = 6  # words per delta event: a readable reveal, not a token stream
+# A copilot turn holds a worker thread for a whole model call, so each person gets at most two at a
+# time and twenty a minute, on top of the gateway-wide limit (security review, ADR 0035).
+PER_USER_AT_ONCE = 2
+COPILOT_RATE = parse("20/minute")
+_busy: Counter[str] = Counter()
+_busy_lock = threading.Lock()
+_tasks: set["asyncio.Task[None]"] = set()  # keeps a stream's worker referenced until it ends
+
+
+@contextmanager
+def _admit(request: Request, user_id: str) -> Iterator[None]:
+    """One slot of this user's copilot capacity, or 429 RATE_LIMITED."""
+    if not request.app.state.copilot_limiter.hit(COPILOT_RATE, user_id):
+        raise ProblemError(429, "too many questions; wait a minute", ApiErrorCode.RATE_LIMITED)
+    with _busy_lock:
+        if _busy[user_id] >= PER_USER_AT_ONCE:
+            raise ProblemError(
+                429, "wait for your current answer to finish", ApiErrorCode.RATE_LIMITED
+            )
+        _busy[user_id] += 1
+    try:
+        yield
+    finally:
+        with _busy_lock:
+            _busy[user_id] -= 1
+            if _busy[user_id] <= 0:
+                del _busy[user_id]
 
 
 class CopilotChat(BaseModel):
@@ -47,10 +79,11 @@ class Feedback(BaseModel):
 
 
 @router.post("/copilot/chat")
-def chat(body: CopilotChat, who: User, svc: Svc) -> dict[str, Any]:
+def chat(body: CopilotChat, who: User, svc: Svc, request: Request) -> dict[str, Any]:
     """One copilot turn on any page (ADR 0035): help, regulations and policies everywhere; case
     status, blockers and figures only with a ``case_id`` the caller may see."""
-    reply: dict[str, Any] = svc.service.converse(who, body.case_id, body.message)
+    with _admit(request, who.user_id):
+        reply: dict[str, Any] = svc.service.converse(who, body.case_id, body.message)
     return reply
 
 
@@ -70,6 +103,8 @@ async def chat_stream(
     Critic, so a blocked answer never shows a partial sentence."""
     if body.case_id is not None:
         visible_case(svc, who, body.case_id)  # 404 as a normal response, before the stream opens
+    slot = _admit(request, who.user_id)
+    slot.__enter__()  # 429 as a normal response; released when the worker ends
     loop = asyncio.get_running_loop()
     queue: asyncio.Queue[tuple[str, Any]] = asyncio.Queue()
     rid = getattr(request.state, "request_id", None)
@@ -92,9 +127,14 @@ async def chat_stream(
             await queue.put(
                 ("error", {"code": "INTERNAL", "detail": "copilot failed", "request_id": rid})
             )
+        finally:
+            slot.__exit__(None, None, None)
+
+    task = asyncio.create_task(work())
+    _tasks.add(task)  # a disconnect does not cancel the model call; the turn is still recorded
+    task.add_done_callback(_tasks.discard)
 
     async def stream() -> AsyncIterator[str]:
-        task = asyncio.create_task(work())
         try:
             while True:
                 kind, data = await queue.get()
@@ -110,7 +150,8 @@ async def chat_stream(
                 yield _sse("final", data)
                 return
         finally:
-            await task
+            if not task.done():
+                await asyncio.shield(task)
 
     return StreamingResponse(
         stream(), media_type="text/event-stream", headers={"Cache-Control": "no-cache"}

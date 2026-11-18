@@ -78,11 +78,11 @@ _STATUS = {
     "IN_PROGRESS": "running",
     "PAUSED": "paused and waiting for input",
     "FAILED": "stopped with an error",
-    "AWAITING_APPROVAL": "waiting for the approver's decision",
-    "HELD": "held for a human decision on the approval route",
-    "APPROVED": "approved (internal approval, not loan acceptance)",
-    "REJECTED": "rejected",
-    "RETURNED": "returned to a stage by the approver",
+    "AWAITING_APPROVAL": "waiting for the routed decision-maker",
+    "HELD": "held for a person to decide who takes the decision",
+    "APPROVED": "decided in favour, internally; the MSME chooses its lender outside CredAssure",
+    "REJECTED": "declined by the decision-maker",
+    "RETURNED": "sent back to a stage by the decision-maker",
     "ABANDONED": "abandoned",
 }
 _NEXT = {
@@ -90,10 +90,13 @@ _NEXT = {
     "PAUSED": "Answer the question card on Workflow and press Resume; only the blocked stage runs "
     "again.",
     "FAILED": "An evaluator can retry the failed stage; the error is in the stage tracker.",
-    "AWAITING_APPROVAL": "The routed approver reads the report and decides.",
-    "HELD": "The configured approver decides; the amount sits exactly on the ₹1.5 crore boundary.",
-    "RETURNED": "Fix what the approver's comment asks for, then run the returned stage again.",
+    "AWAITING_APPROVAL": "The routed decision-maker reads the report and decides.",
+    "HELD": "A person decides who takes the decision: the amount sits exactly on the threshold.",
+    "RETURNED": "Fix what the decision-maker's comment asks for, then run that stage again.",
 }
+# Stage results in words: the Critic's banned list blocks gate tokens and approval wording even in
+# code text (VER-03), so the status reply never uses them.
+_DECISION = {"GO": "passed", "NO_GO": "stopped", "NEEDS_INPUT": "needs input", "ERROR": "error"}
 _ROUTE = {
     "DIRECTOR_FINANCE": "Director, Finance",
     "director_finance": "Director, Finance",
@@ -216,7 +219,8 @@ def _status_text(info: Mapping[str, Any]) -> str:
     if stage and status not in ("APPROVED", "REJECTED"):
         lines.append(f"Current stage: {_STAGE.get(str(stage), str(stage))}.")
     done = [
-        f"{_STAGE.get(str(s['stage']), str(s['stage']))} {s['decision']}"
+        f"{_STAGE.get(str(s['stage']), str(s['stage']))} "
+        f"{_DECISION.get(str(s['decision']), str(s['decision']).lower())}"
         for s in info.get("stages") or []
         if s.get("decision")
     ]
@@ -228,7 +232,7 @@ def _status_text(info: Mapping[str, Any]) -> str:
     if info.get("blockers"):
         lines.append("Ask why it is blocked to see what to fix.")
     if info.get("report_stale"):
-        lines.append("The report is stale: the preparer regenerates it before approval.")
+        lines.append("The report is stale: the preparer regenerates it before the decision.")
     nxt = _NEXT.get(status)
     if nxt:
         lines.append(f"Next: {nxt}")
