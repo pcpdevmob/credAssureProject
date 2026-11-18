@@ -16,10 +16,10 @@ PASSWORD = "fixture-password-123"
 
 
 @pytest.fixture
-def make_client(tmp_path: Path) -> Iterator[Callable[[bool], tuple[TestClient, FakeLLM | None]]]:
+def make_client(tmp_path: Path) -> Iterator[Callable[..., tuple[TestClient, FakeLLM | None]]]:
     stack = ExitStack()
 
-    def _make(llm_enabled: bool) -> tuple[TestClient, FakeLLM | None]:
+    def _make(llm_enabled: bool, **overrides: Any) -> tuple[TestClient, FakeLLM | None]:
         from credassure.gateway.main import create_app
         from credassure.gateway.settings import Settings
         from credassure.ledger.seed import seed
@@ -27,12 +27,13 @@ def make_client(tmp_path: Path) -> Iterator[Callable[[bool], tuple[TestClient, F
         db = tmp_path / "case.db"
         seed(db, {"SEED_PASSWORD": PASSWORD})
         settings: Any = Settings(
-            _env_file=None,  # type: ignore[call-arg]
+            _env_file=None,
             app_env="test",
             jwt_secret="x" * 40,
             case_db=db,
             llm_enabled=llm_enabled,
             tracing_enabled=False,
+            **overrides,
         )
         llm = FakeLLM() if llm_enabled else None
         app = create_app(settings, llm=llm) if llm is not None else create_app(settings)

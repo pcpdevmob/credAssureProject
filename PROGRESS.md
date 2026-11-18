@@ -35,6 +35,10 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P4 | 4.5 | Copilot | done | Pritish | 2026-11-18 | d9fdedc | — | [2026-11-18-p4-4.5-dev-labels-fix-pritish.md](docs/progress/entries/2026-11-18-p4-4.5-dev-labels-fix-pritish.md) |
 | P5 | 5.1 | Copilot | in_progress | Pritish | 2026-11-18 | 344a016 | — | [2026-11-18-p5-5.1-span-cited-answers-pritish.md](docs/progress/entries/2026-11-18-p5-5.1-span-cited-answers-pritish.md) |
 | P5 | 5.2 | Evaluation | in_progress | Pritish | 2026-11-18 | 9d73457 | — | [2026-11-18-p5-5.2-dual-scoring-pritish.md](docs/progress/entries/2026-11-18-p5-5.2-dual-scoring-pritish.md) |
+| P7 | 7.1 | Evaluation | in_progress | Pritish | 2026-11-18 | b8aa0cf | — | [2026-11-18-p7-7.1-harness-pritish.md](docs/progress/entries/2026-11-18-p7-7.1-harness-pritish.md) |
+| P7 | 7.2 | Evaluation | in_progress | Pritish | 2026-11-18 | b8aa0cf | — | [2026-11-18-p7-7.2-judge-j1-pritish.md](docs/progress/entries/2026-11-18-p7-7.2-judge-j1-pritish.md) |
+| P7 | 7.3 | Evaluation | in_progress | Pritish | 2026-11-18 | b8aa0cf | — | [2026-11-18-p7-7.3-report-ablations-pritish.md](docs/progress/entries/2026-11-18-p7-7.3-report-ablations-pritish.md) |
+| P7 | 7.4 | Evaluation | in_progress | Pritish | 2026-11-18 | fa0ccb7 | — | [2026-11-18-p7-7.4-degradation-load-pritish.md](docs/progress/entries/2026-11-18-p7-7.4-degradation-load-pritish.md) |
 | P8 | 8.1 | AI Security and Guardrails | in_progress | Pritish | 2026-11-18 | bbbbecd | — | [2026-11-18-p8-8.1-safety-v2-draft-pritish.md](docs/progress/entries/2026-11-18-p8-8.1-safety-v2-draft-pritish.md) |
 | P8 | 8.2 | AI Security and Guardrails | done | Pritish | 2026-11-18 | b97a46b | — | [2026-11-18-p8-8.2-owasp-asi-mapping-pritish.md](docs/progress/entries/2026-11-18-p8-8.2-owasp-asi-mapping-pritish.md) |
 | P8 | 8.3 | Responsible AI | done | Pritish | 2026-11-18 | 8be5ef0 | — | [2026-11-18-p8-8.3-fairness-pritish.md](docs/progress/entries/2026-11-18-p8-8.3-fairness-pritish.md) |
@@ -52,7 +56,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | [AI Security and Guardrails](docs/progress/modules/guardrails.md) | Pritish (GR); Abhishek (red-team, SEC) | P2 (pattern tests), P3 (GR), P8 (SEC), P10 (threat model) | Phase 6 safeguards done (PII masking, injection scanner, breaker, caps); ADR 0033 pattern tests in make check (P2); **P3 done 2026-11-18**: packages/guardrails (R1–R5, guardrail_event, config/guardrails.yaml), PII v2 (Presidio patterns + GSTIN/UPI/card/Udyam), money gate, trace-leak test 0 hits, data classes, CSV escaping, gen_ai.* export; **P8 2026-11-18**: OWASP LLM + ASI mapping with a test per row, fairness invariance + protected-attribute denylist, API and web-container security headers, A6 switch; safety_v2 drafted (unfrozen) |
 | [Deployment](docs/progress/modules/deployment.md) | [Name 1] (TODO: name) | P6 (course switch, deferred), P10 (Phase 12) | Local run + isolated e2e + demo-reset done; CI restored (ADR 0028); course endpoint deferred (under discussion) |
 | [Documentation](docs/progress/modules/docs.md) | Pritish | P0 (plan + ADRs), P10 (RUNBOOK, MODEL_CARD, CONTRIBUTIONS), P12 (report) | S1 progress tracking, S2 base files and prompts 27–39 done; P0 ADRs 0029–0033 written (0032 Accepted, others Proposed); mentor questions 2–3 open |
-| [Evaluation](docs/progress/modules/evaluation.md) | Abhishek (Phase 11); Tejas (test set) | P1 (close G1), P2 (G3), P6 (course baseline, deferred), P7 (Phase 11), P11 (G4) | G1 provisionally frozen 2026-11-15; G2 passed; **G3 passed 2026-11-18** (G3 + E18 READY); G1-final checklist open |
+| [Evaluation](docs/progress/modules/evaluation.md) | Abhishek (Phase 11); Tejas (test set) | P1 (close G1), P2 (G3), P6 (course baseline, deferred), P7 (Phase 11), P11 (G4) | G1 provisionally frozen 2026-11-15; G2 passed; **G3 passed 2026-11-18** (G3 + E18 READY); G1-final checklist open; **P7 code done 2026-11-18**: make eval harness, J1 + kappa, E13 report, A1-A5 runner, degradation matrix, load smoke (live runs pending on the Mac) |
 
 ## Open items
 From the latest entry of each step. Module-level items live in each module file.
@@ -89,6 +93,10 @@ From the latest entry of each step. Module-level items live in each module file.
 - P2 2.2: re-record one live-model demo run with a Langfuse trace at P4 (Mac). ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
 - P2 2.2: E18 SHOULDs S1/S2 (ARCHITECTURE says React SPA/nginx; §6.3 omits RETURNED) — P10 docs. ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
 - P5 5.2: Human review of the J1 sample after the live run (human review list H14). ([entry](docs/progress/entries/2026-11-18-p5-5.2-dual-scoring-pritish.md))
+- P7 7.1: Live run on the Mac (make eval), target >= 92/100 and above the best baseline. ([entry](docs/progress/entries/2026-11-18-p7-7.1-harness-pritish.md))
+- P7 7.2: Run J1 on the live results and label the sample (human). ([entry](docs/progress/entries/2026-11-18-p7-7.2-judge-j1-pritish.md))
+- P7 7.3: Live A1-A5 runs and the E13 report on the Mac. ([entry](docs/progress/entries/2026-11-18-p7-7.3-report-ablations-pritish.md))
+- P7 7.4: make load-smoke on the Mac. ([entry](docs/progress/entries/2026-11-18-p7-7.4-degradation-load-pritish.md))
 - P8 8.5: A6 result is recorded only after safety_v2 is frozen and run (8.1). ([entry](docs/progress/entries/2026-11-18-p8-8.5-a6-switch-pritish.md))
 
 ## History

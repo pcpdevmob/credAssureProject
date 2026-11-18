@@ -15,7 +15,7 @@ ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 # The dev/demo database (var/case.db) is tenant "demo" (make demo-reset); an exported variable beats --env-file.
 DEMO_TENANT := TENANT_ID=demo
 
-.PHONY: progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
+.PHONY: load-smoke eval-judge eval-kappa eval-report eval-ablations progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset live-run copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe retrieval-eval retrieval-ladder retrieval-pool retrieval-silver judge kappa
 
@@ -203,8 +203,23 @@ judge:  ## Judge the blind human sample, one passage at a time, resumable (JUDGE
 kappa:  ## Cohen's kappa, silver vs JUDGE on the human sample (run after make judge)
 	uv run python -m credassure.evaluation.retrieval_judging kappa --judge $(JUDGE)
 
-eval:  ## Run the 100-item test set through the API (Phase 11)
-	@echo "eval: not implemented until Phase 11"; exit 1
+eval:  ## Run the 100 items through the API on the configured model (Phase 11/P7); ARGS="--ablation A1" | "--fake --only routing"
+	APP_ENV=dev LOG_LEVEL=WARNING uv run $(ENV_FILE) python scripts/eval_harness.py $(ARGS)
+
+eval-judge:  ## J1 grades the run's regulatory answers and writes a 20% human sample: RUN=var/eval/<run>
+	uv run $(ENV_FILE) python -m credassure.evaluation.judge_j1 judge --run $(RUN)
+
+eval-kappa:  ## Kappa between J1 and the labelled human sample (ADR 0014): RUN=var/eval/<run>
+	uv run python -m credassure.evaluation.judge_j1 kappa --run $(RUN)
+
+eval-report:  ## E13 report: RUN=var/eval/<run> ABL="var/eval/<run>-A1 ..." OUT=evaluation/reports/E13-<date>.md
+	uv run python -m credassure.evaluation.eval_report --full $(RUN) --ablation $(ABL) --calibration $(RUN)/j1-calibration.json --out $(OUT)
+
+load-smoke:  ## Scope #35: 10 concurrent demo cases through the API, p95 per stage (ARGS="--fake" for locking only)
+	APP_ENV=dev LOG_LEVEL=WARNING uv run $(ENV_FILE) python scripts/load_smoke.py $(ARGS)
+
+eval-ablations:  ## A1-A5 on the configured model, each on its affected categories only (ablations.yaml)
+	for a in A1 A2 A3 A4 A5; do $(MAKE) eval ARGS="--ablation $$a"; done
 
 # ponytail: offline subset; the API-driven fast eval subset replaces it with the Phase 11 harness
 eval-fast:  ## Prompt change control (#36): version-bump check + offline prompt subset (FakeLLM)
