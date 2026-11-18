@@ -41,7 +41,12 @@ TOY = [
             "actor": "preparer",
             "method": "POST",
             "path": "/v1/cases/{case_id}/decision",
-            "json": {"decision": "approve", "attested": True, "comment": "x", "expected_version": "{row_version}"},
+            "json": {
+                "decision": "approve",
+                "attested": True,
+                "comment": "x",
+                "expected_version": "{row_version}",
+            },
         },
         {"status": 403, "no_state_change": True},
     ),

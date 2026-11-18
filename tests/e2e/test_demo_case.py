@@ -64,7 +64,12 @@ def test_scope15_SUP01_APR02_demo_case_end_to_end(
     offers = client.get(f"/v1/cases/{case_id}/offers", headers=prep).json()
     assert offers["gate"] == "GO" and offers["ranking"] == ["OF-01-B", "OF-01-A"]  # BRD App. A
 
-    decision = {"decision": "approve", "attested": True, "comment": "ok", "expected_version": case["row_version"]}
+    decision = {
+        "decision": "approve",
+        "attested": True,
+        "comment": "ok",
+        "expected_version": case["row_version"],
+    }
     assert (
         client.post(f"/v1/cases/{case_id}/decision", json=decision, headers=prep).status_code == 403
     )
@@ -73,7 +78,12 @@ def test_scope15_SUP01_APR02_demo_case_end_to_end(
     version = client.get(f"/v1/cases/{case_id}", headers=director).json()["row_version"]
     approved = client.post(
         f"/v1/cases/{case_id}/decision",
-        json={"decision": "approve", "attested": True, "comment": "approved", "expected_version": version},
+        json={
+            "decision": "approve",
+            "attested": True,
+            "comment": "approved",
+            "expected_version": version,
+        },
         headers=director,
     )
     assert approved.status_code == 200, approved.text
