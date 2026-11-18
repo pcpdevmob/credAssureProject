@@ -230,6 +230,13 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
   a cited sentence's wording when the same word pair appears in the cited passage. With the model off,
   every non-refused question gets the abstention string. Memory keeps the last 4 redacted turns per
   user and case. Each answer is recorded as `cp.answer.<trace_id>`, with chunk ids, for lineage.
+- **P5 (2026-11-18, plan v3.4 §7.1 CP-08-lite):** passages reach `cp_answer` 2.0.0 as numbered sentence
+  spans `[n.m]` (code numbers them; bracketed ids in the source text are removed so none can be forged).
+  The model ends every sentence with the span ids that support it; code cuts each sentence without a
+  valid span id for that turn (or, on the case-facts path, a known slot), maps the rest to `[chunk_id]`,
+  and the Critic then checks it. Nothing left gives the abstention string. Citations carry `span_ids`.
+  Scoring is dual (ADR 0032 §4): strict (the frozen scorer) is the headline; supported = valid,
+  current, allowed citations that judge J1 says support the answer, with a human sample.
 
 #### 2.4.7 LendWise step detail
 

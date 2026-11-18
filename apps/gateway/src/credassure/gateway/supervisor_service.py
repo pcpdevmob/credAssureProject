@@ -302,6 +302,7 @@ class SupervisorService:
                 refusal_code=reply.refusal_code,
                 injection_flagged=reply.injection_flagged,
                 dropped=reply.dropped,
+                cut=reply.cut,  # P5: answer sentences cut for lacking a valid span id
                 findings=list(reply.findings),
                 abstained=reply.abstained,
             )
@@ -352,6 +353,7 @@ class SupervisorService:
                     "title": c["title"],
                     "section": c["section_path"],
                     "effective_from": c["effective_from"],
+                    "span_ids": list(c.get("span_ids") or []),  # P5: the sentences cited
                 }
                 for c in reply.citations
             ],
