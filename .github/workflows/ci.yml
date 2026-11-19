@@ -6,6 +6,8 @@ on:
   push:
     branches: [main]
   pull_request:
+    # ready_for_review: draft PRs run no jobs (minutes budget, 2026-11-19); marking a PR ready runs CI once.
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
   contents: read
@@ -17,6 +19,7 @@ concurrency:
 jobs:
   python:
     name: make check (ruff, mypy, pytest incl. fuzz, bandit, PROGRESS.md)
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -45,6 +48,7 @@ jobs:
 
   audit:
     name: dependency audit + secret scan
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -70,16 +74,42 @@ jobs:
 
   web:
     name: web (typecheck, vitest, build)
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    permissions:
+      contents: read
+      pull-requests: read   # paths-filter lists the PR's changed files through the API
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      # Only web-relevant changes build the web app (docs/help feeds the in-app help, openapi.json the client).
+      - uses: dorny/paths-filter@v3
+        id: changed
+        with:
+          filters: |
+            web:
+              - 'apps/web/**'
+              - 'packages/api-client/**'
+              - 'docs/help/**'
+              - 'openapi.json'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/**'
+      - if: steps.changed.outputs.web == 'true'
+        uses: actions/setup-node@v4
         with:
           node-version: 22   # vitest 5 needs Node >= 22.12
           cache: npm
-      - run: npm ci
-      - run: npm run typecheck -w apps/web
-      - run: npm run test -w apps/web
-      - run: npm run build -w apps/web
-      - run: npm run budget -w apps/web  # U6: initial JS ≤ 250 kB gzip per route
+      - if: steps.changed.outputs.web == 'true'
+        run: npm ci
+      - if: steps.changed.outputs.web == 'true'
+        run: npm run typecheck -w apps/web
+      - if: steps.changed.outputs.web == 'true'
+        run: npm run test -w apps/web
+      - if: steps.changed.outputs.web == 'true'
+        run: npm run build -w apps/web
+      - if: steps.changed.outputs.web == 'true'
+        run: npm run budget -w apps/web  # U6: initial JS ≤ 250 kB gzip per route
+      - if: steps.changed.outputs.web != 'true'
+        run: echo "No web-relevant changes; web build skipped"
