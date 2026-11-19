@@ -11,3 +11,4 @@
 - Baseline S1–S3 on qwen3:8b done 2026-11-19 (S1 20, S2 23, S3 22; system 88); course-endpoint baseline not needed (ADR 0036).
 - RAG-only baseline: `make rag-baseline` on the Mac (script on `feature/evaluation-p11f`), then fill the G4 four-row table.
 - P7 live runs on the Mac: make eval, make eval-ablations, make eval-judge + human labels + make eval-kappa, make eval-report, make load-smoke.
+- K6 red-team (11.12): runner `make redteam` + `docs/redteam_log.md` ready (20 frozen + 5 E14 probes, verdicts by state/leak checks); live run on the Mac, then paste results and fill the Fix column.

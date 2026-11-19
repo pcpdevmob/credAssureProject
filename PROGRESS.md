@@ -61,6 +61,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P11 | 11.9 | Evaluation | done | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.9-critic-quote-grounding-pritish.md](docs/progress/entries/2026-11-19-p11-11.9-critic-quote-grounding-pritish.md) |
 | P11 | 11.10 | Deployment | done | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.10-freeze-scope-ci-pritish.md](docs/progress/entries/2026-11-19-p11-11.10-freeze-scope-ci-pritish.md) |
 | P11 | 11.11 | Evaluation | done | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md](docs/progress/entries/2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md) |
+| P11 | 11.12 | Evaluation | in_progress | Pritish | 2026-11-19 | — | E14 | [2026-11-19-p11-11.12-redteam-runner-pritish.md](docs/progress/entries/2026-11-19-p11-11.12-redteam-runner-pritish.md) |
 | P13 | 13.0 | Copilot | done | Pritish | 2026-11-18 | 2c3088d, bbe5f62, 0148fe0 | — | [2026-11-18-p13-13.0-copilot-product-assistant-pritish.md](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md) |
 
 ## Modules
@@ -147,6 +148,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - P11 11.8: Mac runs: `python scripts/oracle_context.py` (traced) and `python scripts/copilot_dev_citations.py --priority off` (traced); then the fixes with unit tests; then dev split, full eval, safety suites. ([entry](docs/progress/entries/2026-11-19-p11-11.8-critic-diagnostics-pritish.md))
 - P11 11.9: K3 final full run + A2 on the merged code; safety_v2 (K5) on the same code; J1 supported score (K4). ([entry](docs/progress/entries/2026-11-19-p11-11.9-critic-quote-grounding-pritish.md))
 - P11 11.11: the Mac reruns the negotiation, offers, e2e and T082 items on the final code (K3). A teammate reviews the v2 lender replies (human-review H26; data provisional until then). Owners must set `LENDER_SCRIPTS_DIR=data/frozen/v2/lender_scripts` in their own `.env`. ([entry](docs/progress/entries/2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md))
+- P11 11.12: live run on the Mac (`make redteam`, ~10 min, after the K2 validation runs); paste `redteam.md` into the log, read REVIEW answers, fill the Fix column; add trace links for the report. ([entry](docs/progress/entries/2026-11-19-p11-11.12-redteam-runner-pritish.md))
 
 ## History
 
