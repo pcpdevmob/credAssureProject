@@ -1,0 +1,15 @@
+lender_id: L07
+lender_name: Ghaghara Co-operative Bank (synthetic)
+responses:
+  fee_waiver_v1:
+    processing_fee_share_kept: '0.5'
+    reply_text: We agree to waive 50% of the processing fee.
+    type: partial_waiver
+  rate_match_v1:
+    rate_gap_closed: '0.5'
+    reply_text: We agree to reduce the annual interest rate by half of the difference to the cited rate.
+    type: partial_match
+  tenor_change_v1:
+    max_extra_months: 2
+    reply_text: We can extend the moratorium by up to 2 months, with the tenure extended by the same period.
+    type: partial_extension

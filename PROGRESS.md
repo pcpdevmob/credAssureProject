@@ -59,6 +59,8 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P11 | 11.7 | Evaluation | in_progress | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.7-rag-only-baseline-pritish.md](docs/progress/entries/2026-11-19-p11-11.7-rag-only-baseline-pritish.md) |
 | P11 | 11.8 | Evaluation | in_progress | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.8-critic-diagnostics-pritish.md](docs/progress/entries/2026-11-19-p11-11.8-critic-diagnostics-pritish.md) |
 | P11 | 11.9 | Evaluation | in_progress | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.9-critic-quote-grounding-pritish.md](docs/progress/entries/2026-11-19-p11-11.9-critic-quote-grounding-pritish.md) |
+| P11 | 11.10 | Deployment | done | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.10-freeze-scope-ci-pritish.md](docs/progress/entries/2026-11-19-p11-11.10-freeze-scope-ci-pritish.md) |
+| P11 | 11.11 | Evaluation | done | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md](docs/progress/entries/2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md) |
 | P13 | 13.0 | Copilot | done | Pritish | 2026-11-18 | 2c3088d, bbe5f62, 0148fe0 | — | [2026-11-18-p13-13.0-copilot-product-assistant-pritish.md](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md) |
 
 ## Modules
@@ -112,6 +114,7 @@ From the latest entry of each step. Module-level items live in each module file.
 ### Deployment
 
 - P10 10.1: H17 pin images; H19 demo recording. ([entry](docs/progress/entries/2026-11-18-p10-10.1-ship-pritish.md))
+- P11 11.10: K12 on `feature/lendwise-p11` (LendWise thread), by 22 Nov. ([entry](docs/progress/entries/2026-11-19-p11-11.10-freeze-scope-ci-pritish.md))
 
 ### Documentation
 
@@ -143,6 +146,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - P11 11.7: run `make rag-baseline` on the Mac (Ollama not reachable from Claude's shell) and fill the RAG-only row; J1 judge + kappa; `make eval-report`. ([entry](docs/progress/entries/2026-11-19-p11-11.7-rag-only-baseline-pritish.md))
 - P11 11.8: Mac runs: `python scripts/oracle_context.py` (traced) and `python scripts/copilot_dev_citations.py --priority off` (traced); then the fixes with unit tests; then dev split, full eval, safety suites. ([entry](docs/progress/entries/2026-11-19-p11-11.8-critic-diagnostics-pritish.md))
 - P11 11.9: Mac validation (dev split, oracle, regulatory + injection + negotiation, safety_v2 when frozen); keep or drop by 22 Nov; J1 supported score. ([entry](docs/progress/entries/2026-11-19-p11-11.9-critic-quote-grounding-pritish.md))
+- P11 11.11: the Mac reruns the negotiation, offers, e2e and T082 items on the final code (K3). A teammate reviews the v2 lender replies (human-review H26; data provisional until then). Owners must set `LENDER_SCRIPTS_DIR=data/frozen/v2/lender_scripts` in their own `.env`. ([entry](docs/progress/entries/2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md))
 
 ## History
 

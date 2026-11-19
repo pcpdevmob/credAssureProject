@@ -89,7 +89,7 @@ class Settings(BaseSettings):
     gst_rate: Decimal = Decimal("0.18")
     # S22 reference rates (R-RATE-02), loaded once at startup; engines never read the file.
     reference_rates_file: Path = Path("data/reference/reference_rates.yaml")
-    lender_scripts_dir: Path = Path("data/frozen/v1/lender_scripts")  # S05, lender simulator
+    lender_scripts_dir: Path = Path("data/frozen/v2/lender_scripts")  # S05 v2, ADR 0037
     corpus_db: Path = Path("var/corpus.db")  # Critic citation checks (VER-02), opened read-only
     corpus_manifest: Path = Path("data/corpus/manifest.yaml")  # superseded but unindexed docs
     # Copilot search (9e): the vector store and embedder are the ingest's (CHROMA_PATH, EMBED_*);

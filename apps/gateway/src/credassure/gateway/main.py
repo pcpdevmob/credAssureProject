@@ -204,7 +204,8 @@ def _reference_rates(settings: Settings) -> tuple[lendwise.ReferenceRate, ...]:
 
 
 def _offer_inputs(settings: Settings, engine: Engine) -> Callable[[str], lendwise.Inputs]:
-    """Case -> its uploaded offers and KFS schedules plus its funding position (read-only)."""
+    """Case -> its uploaded offers and KFS schedules, plus every negotiated revision whose
+    concession counted (ADR 0037), and its funding position (read-only)."""
     funding, rates = _case_inputs(settings, engine), _reference_rates(settings)
     week1 = calendar.week1_start(settings.as_of_date)
 
@@ -216,6 +217,11 @@ def _offer_inputs(settings: Settings, engine: Engine) -> Callable[[str], lendwis
                 for r in rows
                 if r.kind in ("offer", "kfs")
             ]
+            negotiated = {  # the last version wins
+                f.key: f.value_text
+                for f in reads.list_for_case(s, settings.tenant_id, case_id)
+                if f.key.startswith(lendwise.NEGOTIATION)
+            }
         wc = funding(case_id)
         position = (
             None
@@ -223,7 +229,9 @@ def _offer_inputs(settings: Settings, engine: Engine) -> Callable[[str], lendwis
             else lendwise.position(wc.files, wc.indicative, wc.weeks, week1)
         )
         cls = str(wc.files.order.get("enterprise_class", "")) if wc.files else ""
-        return lendwise.load_inputs(uploads, cls, position, rates)
+        return lendwise.with_revisions(
+            lendwise.load_inputs(uploads, cls, position, rates), negotiated
+        )
 
     return load
 

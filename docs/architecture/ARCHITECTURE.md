@@ -357,11 +357,12 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0029 | Guardrail pipeline: one package, rails R1–R5, fail closed | Proposed |
 | 0030 | PII policy: data classes, Presidio, money never masked | Proposed |
 | 0031 | safety_v2: separately frozen 40-item safety suite | Proposed |
-| 0032 | Copilot v2 reduced scope, dual scoring, reranker on, plan v3.4 cuts | Accepted |
+| 0032 | Copilot v2 reduced scope, dual scoring, reranker on, plan v3.4 cuts | Accepted (LW-15 cut reversed by 0037) |
 | 0033 | Prompt-injection design patterns as architecture | Proposed |
 | 0034 | Image digest pinning: tooling now, pins from a networked machine | Accepted |
 | 0035 | Copilot v3: product assistant on every page (help source, CP-07, CP-10..12) | Accepted |
 | 0036 | Local Ollama (qwen3:8b) is the evaluated path; course endpoint not used | Accepted |
+| 0037 | Three negotiation rounds by default; re-rank after every counted concession | Accepted |
 
 Full index with phase and scope numbers: `docs/adr/README.md`.
 

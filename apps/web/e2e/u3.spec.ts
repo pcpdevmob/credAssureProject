@@ -58,21 +58,22 @@ test('U3 funding, offers, negotiation', async ({ page }) => {
   await expect(a.getByText(/Hidden charge/)).toBeVisible();
   await capture(page, 'offers');
 
-  // --- Negotiation: one round, then the revised offer is not re-audited until the stage re-runs
+  // --- Negotiation (ADR 0037): round 1, then the next rounds until complete; counted concessions re-rank the offers
   await page.getByRole('button', { name: 'Start negotiation round' }).click();
-  await expect(page.getByText('Round 1 of 1')).toBeVisible({ timeout: 120_000 });
-  await expect(page.getByText('Revised offer not re-audited').or(page.getByText('Concession verified by re-audit'))).toBeVisible();
+  await expect(page.getByText(/^Round 1 of 3/)).toBeVisible({ timeout: 120_000 });
+  await expect(page.getByText('Revised offer not re-audited').or(page.getByText('Concession verified by re-audit')).first()).toBeVisible();
   await capture(page, 'negotiation');
 
   expect(problems.filter(p => !/\/auth\/token/.test(p)), 'no console errors or failed requests on any U3 screen').toEqual([]);
 });
 
-test('U3 approver sees negotiation in progress', async ({ page }) => {
+test('U3 approver sees the negotiated ranking and the stale report', async ({ page }) => {
   const { caseId } = JSON.parse(readFileSync(DEMO_FILE, 'utf8')) as { caseId: string };
   await page.setViewportSize({ width: 1280, height: 860 });
   await signIn(page, process.env.E2E_DIRECTOR || 'demo.director', e2ePassword(process.env.E2E_DIRECTOR || 'demo.director'));
   await openCase(page, caseId, 'Review & approval');
-  await expect(page.getByRole('list', { name: 'Negotiation status' }).getByText(/Negotiation in progress/)).toBeVisible();
+  // ADR 0037: every counted concession is already in the ranking; the changed figures make the report stale
+  await expect(page.getByRole('list', { name: 'Negotiation status' }).getByText(/Report stale/)).toBeVisible();
   await expect(page.getByText('Approval is internal, not loan acceptance.').first()).toBeVisible();
   await shot(page, 'u3', 'approval-negotiation');
 });
