@@ -92,7 +92,11 @@ def summary(by_strategy: dict[str, list[dict[str, Any]]], record: dict[str, Any]
         "# Baseline results (BRD §12)",
         "",
         f"Run kind: **{kind}**"
-        + (" (not graded: only the course-endpoint run is graded)" if kind != "graded" else "")
+        + {
+            "graded": "",
+            "local_provisional": " (local Ollama: the evaluated path, ADR 0036)",
+            "smoke_test": " (smoke test: context length not set, not a reported result)",
+        }.get(kind, "")
         + f" · endpoint `{record['endpoint']}` · model `{record['model']}`"
         + f" · context length {record['context_length'] or 'not set (Ollama default)'}",
         "",
