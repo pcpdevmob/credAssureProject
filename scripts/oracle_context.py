@@ -9,7 +9,8 @@ same answer prompt, span citations, the real Critic and the frozen strict scorer
 
     uv run --env-file .env --env-file deploy/env/models-local.env python scripts/oracle_context.py
 
-Prints a table and writes var/oracle-context.jsonl. Writes nothing to any database you use.
+Prints a table and writes var/oracle-context.jsonl (each row with the raw draft and the Critic's
+findings and matched spans, scripts/critic_trace.py). Writes nothing to any database you use.
 """
 
 import argparse
@@ -20,6 +21,8 @@ import sqlite3
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
+
+from critic_trace import TracedLLM, TracedTools, snapshot
 
 from credassure.agents.copilot import agent as copilot
 from credassure.evaluation.check_corpus_refs import known_doc_ids
@@ -90,10 +93,11 @@ def main() -> int:
     settings = Settings(
         case_db=ROOT / "var" / "oracle-case.db", tenant_id="default", llm_cache_path=None
     )
-    llm = _default_llm(settings)
-    if llm is None:
+    base_llm = _default_llm(settings)
+    if base_llm is None:
         raise SystemExit("needs LLM_ENABLED=true and a reachable model")
-    app = create_app(settings, llm=llm)
+    app = create_app(settings, llm=base_llm)
+    llm = TracedLLM(base_llm)
     rerank = _searcher(settings)().reranker
     known = known_doc_ids()
     items = [json.loads(x) for x in ITEMS.open()]
@@ -109,7 +113,7 @@ def main() -> int:
     with out.open("w") as f:
         for it in items:
             passages, quoted = _gold_passages(settings.corpus_db, it, "section", rerank)
-            tools = Oracle(app.state.services.copilot_tools(), passages)
+            tools = TracedTools(Oracle(app.state.services.copilot_tools(), passages))
             rep = copilot.answer(
                 it["input"]["question"], case_id=None, tools=tools, llm=llm, history=(),
                 offer_ids=(), as_of=settings.as_of_date,
@@ -121,6 +125,7 @@ def main() -> int:
                 "id": it["id"], "passed": bool(res["passed"]), "detail": res.get("detail"),
                 "gold_passages": len(passages), "with_quote": quoted, "abstained": rep.abstained,
                 "findings": list(rep.findings), "cited": cited, "answer": rep.answer[:300],
+                "trace": snapshot(llm, tools),
             }  # fmt: skip
             rows.append(row)
             f.write(json.dumps(row) + "\n")
