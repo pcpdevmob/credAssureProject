@@ -57,8 +57,11 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P11 | 11.5 | Evaluation | in_progress | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.5-g4-draft-adr0036-pritish.md](docs/progress/entries/2026-11-19-p11-11.5-g4-draft-adr0036-pritish.md) |
 | P11 | 11.6 | Documentation | in_progress | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.6-human-review-pack-pritish.md](docs/progress/entries/2026-11-19-p11-11.6-human-review-pack-pritish.md) |
 | P11 | 11.7 | Evaluation | in_progress | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.7-rag-only-baseline-pritish.md](docs/progress/entries/2026-11-19-p11-11.7-rag-only-baseline-pritish.md) |
+| P11 | 11.8 | Evaluation | in_progress | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.8-critic-diagnostics-pritish.md](docs/progress/entries/2026-11-19-p11-11.8-critic-diagnostics-pritish.md) |
+| P11 | 11.9 | Evaluation | done | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.9-critic-quote-grounding-pritish.md](docs/progress/entries/2026-11-19-p11-11.9-critic-quote-grounding-pritish.md) |
 | P11 | 11.10 | Deployment | done | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.10-freeze-scope-ci-pritish.md](docs/progress/entries/2026-11-19-p11-11.10-freeze-scope-ci-pritish.md) |
 | P11 | 11.11 | Evaluation | done | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md](docs/progress/entries/2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md) |
+| P11 | 11.12 | Evaluation | in_progress | Pritish | 2026-11-19 | — | E14 | [2026-11-19-p11-11.12-redteam-runner-pritish.md](docs/progress/entries/2026-11-19-p11-11.12-redteam-runner-pritish.md) |
 | P13 | 13.0 | Copilot | done | Pritish | 2026-11-18 | 2c3088d, bbe5f62, 0148fe0 | — | [2026-11-18-p13-13.0-copilot-product-assistant-pritish.md](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md) |
 | P14 | 14.1 | Authentication | in_progress | Pritish | 2026-11-20 | — | — | [2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md](docs/progress/entries/2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md) |
 
@@ -147,7 +150,10 @@ From the latest entry of each step. Module-level items live in each module file.
 - P11 11.2: regulatory search misses (T001, T002, T003, T004–T007, T013, T019) on the retrieval dev split. ([entry](docs/progress/entries/2026-11-18-p11-11.2-citation-failure-labels-pritish.md))
 - P11 11.5: S1-S3 baseline on qwen3:8b (only an S1 smoke test on llama3.1:8b exists, 11/100); J1 judge, human labels, kappa; `make eval-report`; safety_v2, red-team log, Lighthouse, pin-images, v1.1.0 tag. ([entry](docs/progress/entries/2026-11-19-p11-11.5-g4-draft-adr0036-pritish.md))
 - P11 11.7: run `make rag-baseline` on the Mac (Ollama not reachable from Claude's shell) and fill the RAG-only row; J1 judge + kappa; `make eval-report`. ([entry](docs/progress/entries/2026-11-19-p11-11.7-rag-only-baseline-pritish.md))
+- P11 11.8: Mac runs: `python scripts/oracle_context.py` (traced) and `python scripts/copilot_dev_citations.py --priority off` (traced); then the fixes with unit tests; then dev split, full eval, safety suites. ([entry](docs/progress/entries/2026-11-19-p11-11.8-critic-diagnostics-pritish.md))
+- P11 11.9: K3 final full run + A2 on the merged code; safety_v2 (K5) on the same code; J1 supported score (K4). ([entry](docs/progress/entries/2026-11-19-p11-11.9-critic-quote-grounding-pritish.md))
 - P11 11.11: the Mac reruns the negotiation, offers, e2e and T082 items on the final code (K3). A teammate reviews the v2 lender replies (human-review H26; data provisional until then). Owners must set `LENDER_SCRIPTS_DIR=data/frozen/v2/lender_scripts` in their own `.env`. ([entry](docs/progress/entries/2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md))
+- P11 11.12: live run on the Mac (`make redteam`, ~10 min, after the K2 validation runs); paste `redteam.md` into the log, read REVIEW answers, fill the Fix column; add trace links for the report. ([entry](docs/progress/entries/2026-11-19-p11-11.12-redteam-runner-pritish.md))
 
 ## History
 
