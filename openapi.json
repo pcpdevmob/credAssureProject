@@ -895,6 +895,23 @@
         "title": "Producer",
         "type": "object"
       },
+      "Reauth": {
+        "properties": {
+          "current_password": {
+            "format": "password",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Current Password",
+            "type": "string",
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "current_password"
+        ],
+        "title": "Reauth",
+        "type": "object"
+      },
       "Role": {
         "enum": [
           "preparer",
@@ -3445,8 +3462,18 @@
     },
     "/v1/auth/mfa/setup": {
       "post": {
-        "description": "Start enrolment: a new secret for the authenticator app (shown once, stored sealed).",
+        "description": "Start enrolment: a new secret for the authenticator app (shown once, stored sealed). Needs\nthe password again, so a stolen token alone cannot bind the attacker's app to the account.",
         "operationId": "start_mfa_v1_auth_mfa_setup_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Reauth"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -3459,6 +3486,16 @@
               }
             },
             "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
           },
           "4XX": {
             "content": {

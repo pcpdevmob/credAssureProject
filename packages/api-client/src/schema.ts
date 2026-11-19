@@ -742,7 +742,8 @@ export interface paths {
         put?: never;
         /**
          * Start Mfa
-         * @description Start enrolment: a new secret for the authenticator app (shown once, stored sealed).
+         * @description Start enrolment: a new secret for the authenticator app (shown once, stored sealed). Needs
+         *     the password again, so a stolen token alone cannot bind the attacker's app to the account.
          */
         post: operations["start_mfa_v1_auth_mfa_setup_post"];
         delete?: never;
@@ -1817,6 +1818,14 @@ export interface components {
             stage: string | null;
             /** Trace Id */
             trace_id: string | null;
+        };
+        /** Reauth */
+        Reauth: {
+            /**
+             * Current Password
+             * Format: password
+             */
+            current_password: string;
         };
         /**
          * Role
@@ -3717,7 +3726,11 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Reauth"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -3728,6 +3741,15 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
                 };
             };
             /** @description Client error */
