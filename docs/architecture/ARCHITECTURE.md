@@ -346,7 +346,7 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0014 | Automated judge J1, calibrated; human scoring if kappa < 0.7 | Accepted |
 | 0015 | Demo: live, with replay profile and recorded video fallback | Accepted |
 | 0016 | Langfuse self-hosted in Compose (amends BRD NFR-09) | Accepted |
-| 0017 | Local default model: Ollama, Llama 3.1 8B (course endpoint stays the graded path) | Accepted |
+| 0017 | Local default model: Ollama, Llama 3.1 8B (course endpoint stays the graded path) | Accepted (amended by 0036) |
 | 0018 | AgentResult contract, including agent_version and tenant_id | Accepted (frozen at G1) |
 | 0023 | Ledger facts + audit are the record for offers, evaluations and negotiation | Accepted |
 | 0024 | chromadb advisories accepted (embedded mode only) | Accepted |
@@ -361,6 +361,7 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0033 | Prompt-injection design patterns as architecture | Proposed |
 | 0034 | Image digest pinning: tooling now, pins from a networked machine | Accepted |
 | 0035 | Copilot v3: product assistant on every page (help source, CP-07, CP-10..12) | Accepted |
+| 0036 | Local Ollama (qwen3:8b) is the evaluated path; course endpoint not used | Accepted |
 
 Full index with phase and scope numbers: `docs/adr/README.md`.
 
