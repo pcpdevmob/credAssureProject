@@ -55,6 +55,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P11 | 11.2 | Evaluation | done | Pritish | 2026-11-18 | — | — | [2026-11-18-p11-11.2-citation-failure-labels-pritish.md](docs/progress/entries/2026-11-18-p11-11.2-citation-failure-labels-pritish.md) |
 | P11 | 11.3 | Copilot | in_progress | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.3-source-priority-pritish.md](docs/progress/entries/2026-11-19-p11-11.3-source-priority-pritish.md) |
 | P11 | 11.5 | Evaluation | in_progress | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.5-g4-draft-adr0036-pritish.md](docs/progress/entries/2026-11-19-p11-11.5-g4-draft-adr0036-pritish.md) |
+| P11 | 11.6 | Documentation | in_progress | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.6-human-review-pack-pritish.md](docs/progress/entries/2026-11-19-p11-11.6-human-review-pack-pritish.md) |
 | P13 | 13.0 | Copilot | done | Pritish | 2026-11-18 | 2c3088d, bbe5f62, 0148fe0 | — | [2026-11-18-p13-13.0-copilot-product-assistant-pritish.md](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md) |
 
 ## Modules
@@ -117,6 +118,10 @@ From the latest entry of each step. Module-level items live in each module file.
 - P0 0.2: team accepts ADRs 0029, 0030, 0031, 0033 ([entry](docs/progress/entries/2026-11-18-p0-0.2-plan-v34-adrs-pritish.md))
 - P0 0.2: mentor questions 2 (safety_v2) and 3 (system card appendix) ([entry](docs/progress/entries/2026-11-18-p0-0.2-plan-v34-adrs-pritish.md))
 - P10 10.3: H18 member sections and the three unnamed owners; the owner pushes the v1.0.0 tag after merge. ([entry](docs/progress/entries/2026-11-18-p10-10.3-contributions-release-pritish.md))
+- P11 11.6: H7 safety_v2 review and freeze (Tejas + Suresh, 20 Nov), after the H24 runner fix. ([entry](docs/progress/entries/2026-11-19-p11-11.6-human-review-pack-pritish.md))
+- P11 11.6: H21 APR transcription and H22 gold hand check (G1 final). ([entry](docs/progress/entries/2026-11-19-p11-11.6-human-review-pack-pritish.md))
+- P11 11.6: H1/H2 dev labels and H14 J1 labels (Abhishek); `judge_j1` all-rows option (Eval thread). ([entry](docs/progress/entries/2026-11-19-p11-11.6-human-review-pack-pritish.md))
+- P11 11.6: ADR text for D1, D2, D3, D9 after the team call; H18 owner names and handles. ([entry](docs/progress/entries/2026-11-19-p11-11.6-human-review-pack-pritish.md))
 
 ### Evaluation
 
