@@ -61,3 +61,6 @@ apps/web/tsconfig.tsbuildinfo
 apps/web/test-results/
 apps/web/playwright-report/
 apps/web/e2e/.demo-case.json
+
+# Local Claude deliverables on the Mac (copies of project docs); never commit
+Claude outputs/
