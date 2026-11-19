@@ -57,6 +57,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P11 | 11.5 | Evaluation | in_progress | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.5-g4-draft-adr0036-pritish.md](docs/progress/entries/2026-11-19-p11-11.5-g4-draft-adr0036-pritish.md) |
 | P11 | 11.6 | Documentation | in_progress | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.6-human-review-pack-pritish.md](docs/progress/entries/2026-11-19-p11-11.6-human-review-pack-pritish.md) |
 | P11 | 11.7 | Evaluation | in_progress | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.7-rag-only-baseline-pritish.md](docs/progress/entries/2026-11-19-p11-11.7-rag-only-baseline-pritish.md) |
+| P11 | 11.10 | Deployment | done | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.10-freeze-scope-ci-pritish.md](docs/progress/entries/2026-11-19-p11-11.10-freeze-scope-ci-pritish.md) |
 | P11 | 11.11 | Evaluation | done | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md](docs/progress/entries/2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md) |
 | P11 | 11.12 | Evaluation | in_progress | Pritish | 2026-11-19 | — | E14 | [2026-11-19-p11-11.12-redteam-runner-pritish.md](docs/progress/entries/2026-11-19-p11-11.12-redteam-runner-pritish.md) |
 | P13 | 13.0 | Copilot | done | Pritish | 2026-11-18 | 2c3088d, bbe5f62, 0148fe0 | — | [2026-11-18-p13-13.0-copilot-product-assistant-pritish.md](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md) |
@@ -112,6 +113,7 @@ From the latest entry of each step. Module-level items live in each module file.
 ### Deployment
 
 - P10 10.1: H17 pin images; H19 demo recording. ([entry](docs/progress/entries/2026-11-18-p10-10.1-ship-pritish.md))
+- P11 11.10: K12 on `feature/lendwise-p11` (LendWise thread), by 22 Nov. ([entry](docs/progress/entries/2026-11-19-p11-11.10-freeze-scope-ci-pritish.md))
 
 ### Documentation
 
