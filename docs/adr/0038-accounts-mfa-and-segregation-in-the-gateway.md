@@ -52,6 +52,9 @@ the seeded users; a real deployment removes that line and sets the key.
   approver's password and MFA and sign in with the temporary password, or create a new approver. AUTH-02 stops the admin
   role itself from touching cases, but not an admin who makes themselves a business user. Next step if wanted: a second
   admin approves role changes into or out of `user_admin` and approver roles, and combined password + MFA resets.
+- Accepted (review NITs): the per-username bucket can be used to lock a known user out of password sign-in for up to
+  an hour (alerting on it is a follow-up); a backup-code attempt runs up to 8 argon2 checks inside the write
+  transaction, bounded by the per-user limits.
 - Accepted: a failed sign-in of an existing user writes one audit row, so its timing differs slightly from an unknown
   username (argon2 dominates); TOTP uses SHA-1 because authenticator apps expect it; logout is "everywhere" rather than
   per device.
