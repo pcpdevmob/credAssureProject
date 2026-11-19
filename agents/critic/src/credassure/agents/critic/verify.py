@@ -217,6 +217,13 @@ def _reasons(
 
 
 _TERMS = re.compile(r"(?:guaranteed|sanctioned)\s+(?:amount|portion|limits?|cover)\b", re.I)
+# Who approves inside the company (the approval matrix), never whether anything will be approved:
+# only these word forms, never "approve"/"approved" ("will approve", "is approved" are predictions).
+_AUTHORITY = re.compile(r"approv(?:es|als?|ers?)\b", re.I)
+# A sentence about a lender, a bank or a sanction is never excused, whatever it cites.
+_LENDERISH = re.compile(r"\b(?:lender\w*|bank\w*|nbfc\w*|sanction\w*|loan offer\w*)\b", re.I)
+# Team-owned internal policy collection (WC-POL, approval matrix, FAQ); public and KFS text never.
+_POLICY_IDS = ("POL-", "FAQ-")
 
 
 def _banned(
@@ -225,6 +232,7 @@ def _banned(
     model: bool,
     stage: Stage | None,
     grounded: Callable[[int, int, str], bool] = lambda a, b, w: False,
+    authority: Callable[[int, int, str], bool] = lambda a, b, w: False,
 ) -> list[CriticFinding]:
     b = banned()
     rules = list(b.all)
@@ -235,7 +243,12 @@ def _banned(
         # Only a quoted noun term ("guaranteed amount") is excused, never a prediction or
         # acceptance phrase, however common its word pair is in passages (9e security review).
         term = _TERMS.match(text, m.start())
-        return term is not None and grounded(m.start(), term.end(), term[0])
+        if term is not None and grounded(m.start(), term.end(), term[0]):
+            return True
+        # An approval-matrix fact ("the VP, Finance approves proposals above ...") stated by a cited
+        # internal policy passage that uses the same word (P11, VER-03 false positive).
+        word = _AUTHORITY.fullmatch(m[0])
+        return word is not None and authority(m.start(), m.end(), word[0])
 
     out = []
     for name, rx in rules:
@@ -277,7 +290,10 @@ def _citations(
         ]
         claimed = [h for h in find_all(CITE.sub(" ", sentence)) if h.kind != "unparsed"]
         held = find_all(passage)
+        counted = _counted_words(passage)
         for h in claimed:
+            if h.kind == "number" and h.value in counted:
+                continue
             if not any(p.kind == h.kind and _same(h.kind, p.value, h.value) for p in held):
                 out.append(
                     _finding(
@@ -288,6 +304,76 @@ def _citations(
                     )
                 )
                 break
+    return out
+
+
+_ONES = {
+    w: i
+    for i, w in enumerate(
+        [
+            "zero",
+            "one",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "eleven",
+            "twelve",
+            "thirteen",
+            "fourteen",
+            "fifteen",
+            "sixteen",
+            "seventeen",
+            "eighteen",
+            "nineteen",
+        ]
+    )
+}
+_TENS = {
+    w: 10 * i
+    for i, w in enumerate(
+        ["_", "_", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"]
+    )
+    if i >= 2
+}
+_UNIT = r"(?:working\s+)?(?:days?|weeks?|months?|years?|instalments?)"
+_WORDS = "|".join(sorted([*_ONES, *_TENS], key=len, reverse=True))
+_COUNT_WORDS = re.compile(
+    rf"\b((?:(?:{_WORDS})(?:[\s-]+hundred)?(?:[\s-]+(?:and[\s-]+)?)?)+)\s*{_UNIT}\b", re.I
+)
+
+
+def _cardinal(phrase: str) -> int | None:
+    """English cardinal 0-999 ("forty-five", "one hundred and twenty"), or None."""
+    total, seen = 0, False
+    for w in re.findall(r"[a-z]+", phrase.lower()):
+        if w == "and":
+            continue
+        if w == "hundred":
+            if not 0 < total < 10:
+                return None
+            total *= 100
+            continue
+        v = _ONES.get(w, _TENS.get(w))
+        if v is None:
+            return None
+        total, seen = total + v, True
+    return total if seen else None
+
+
+def _counted_words(passage: str) -> set[Decimal]:
+    """Counts written in words before a period unit ("forty-five days", R-MSME-01 s.15): Acts
+    write them out, so a cited "45 days" is checked against them too (P11, VER-02)."""
+    out = set()
+    for m in _COUNT_WORDS.finditer(passage):
+        n = _cardinal(m.group(1))
+        if n is not None:
+            out.add(Decimal(n))
     return out
 
 
@@ -355,7 +441,24 @@ def verify(
     findings += _stale(slots, facts, stage)
     if model:
         findings += _reasons(plain, slots, stage, grounded)
-    findings += _banned(plain, model=model, stage=stage, grounded=grounded)
+
+    def authority(start: int, end: int, word: str) -> bool:
+        """An approval-matrix word inside a citing sentence that cites only internal policy
+        passages, one of which uses the same word, and that names no lender, bank or sanction."""
+        for a, b, sentence in sentences:
+            if not (a <= start and end <= b):
+                continue
+            ids = CITE.findall(sentence)
+            if not ids or not all(i.startswith(_POLICY_IDS) for i in ids):
+                return False
+            if _LENDERISH.search(plain[a:b]):
+                return False
+            held = [(found or {}).get(i, ("missing", "")) for i in ids]
+            token = word.lower()
+            return any(st == "ok" and token in re.findall(r"[a-z]+", p.lower()) for st, p in held)
+        return False
+
+    findings += _banned(plain, model=model, stage=stage, grounded=grounded, authority=authority)
     findings += _citations(text, found, stage)
     return findings
 

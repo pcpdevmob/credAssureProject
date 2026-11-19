@@ -1,5 +1,5 @@
 name: critic
-version: "0.2.0"
+version: "0.2.1"
 owner: "Abhishek"
 requirement_ids: [VER-01, VER-02, VER-03, VER-04, VER-05]
 tools: [verify_claims]
