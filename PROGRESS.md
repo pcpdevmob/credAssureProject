@@ -60,6 +60,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P11 | 11.10 | Deployment | done | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.10-freeze-scope-ci-pritish.md](docs/progress/entries/2026-11-19-p11-11.10-freeze-scope-ci-pritish.md) |
 | P11 | 11.11 | Evaluation | done | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md](docs/progress/entries/2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md) |
 | P13 | 13.0 | Copilot | done | Pritish | 2026-11-18 | 2c3088d, bbe5f62, 0148fe0 | — | [2026-11-18-p13-13.0-copilot-product-assistant-pritish.md](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md) |
+| P14 | 14.1 | Authentication | in_progress | Pritish | 2026-11-20 | — | — | [2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md](docs/progress/entries/2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md) |
 
 ## Modules
 
@@ -67,7 +68,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 |---|---|---|---|
 | [UI](docs/progress/modules/ui.md) | UI lead (TODO: name) | P9 (U5, U6) | U0–U5 done; U6 built, live run pending (H15 Lighthouse, H16 e2e) |
 | [Copilot](docs/progress/modules/copilot.md) | [Name 6] (TODO: name); plan v3.4: Suresh (retrieval, P4), Tejas (answering, P5) | P0 (dev split), P4 (CP2-R), P5 (CP2-A), P6 (course re-run), P13 (product assistant, ADR 0035) | 9e done except CP-01 (regulatory 10/25 live, OPEN); KR-05 recall@5 24/40 (v1.0) OPEN. **P4 code done 2026-11-18** (contextual headers, glossary rewrite, answerability gate, ladder script); Mac run done: frozen recall@5 23 -> 25/40 (headers), dev 13 -> 17/20 (headers + glossary); reranker only scores for the abstain gate (threshold 0.4066); `evaluation/reports/retrieval-ladder-2026-11-18.md`. **P5 code done 2026-11-18**: span-cited answers (cp_answer 2.0.0, unsupported sentences cut) and dual strict/supported scoring in copilot-live; live re-run pending on the Mac. **P13 built 2026-11-18** (ADR 0035): Ask CredAssure on every page; product help as a cited source; CP-07 code routing; CP-10 case status; CP-11 per-case memory with reset; CP-12 Critic-first streaming, fixed follow-ups, feedback |
-| [Authentication](docs/progress/modules/auth.md) | TODO: owner | P8 (SEC) | JWT + roles + maker-checker + step-up above ₹1.5 cr done (Phases 5, 10a); hardening in P8 |
+| [Authentication](docs/progress/modules/auth.md) | Pritish | P8 (SEC), P14 (ADR 0038) | JWT + roles + maker-checker + step-up above ₹1.5 cr done (Phases 5, 10a); P14 backend: per-person accounts, user_admin role, staged sign-in, TOTP MFA, password policy, revocation, admin API (branch `feature/auth-p14`) |
 | [Responsible AI](docs/progress/modules/rai.md) | Pritish | P8 (fairness), P9 (RAI UI), P10 (system card, Sutra mapping) | Human-in-the-loop, no accept tool, audit, kill switch, RAI UI (P9), fairness invariance (P8), system card, threat model, Sutra mapping and DPDP gap note (P10) done; live evaluation numbers pending (P11) |
 | [AI Security and Guardrails](docs/progress/modules/guardrails.md) | Pritish (GR); Abhishek (red-team, SEC) | P2 (pattern tests), P3 (GR), P8 (SEC), P10 (threat model) | Phase 6 safeguards done (PII masking, injection scanner, breaker, caps); ADR 0033 pattern tests in make check (P2); **P3 done 2026-11-18**: packages/guardrails (R1–R5, guardrail_event, config/guardrails.yaml), PII v2 (Presidio patterns + GSTIN/UPI/card/Udyam), money gate, trace-leak test 0 hits, data classes, CSV escaping, gen_ai.* export; **P8 2026-11-18**: OWASP LLM + ASI mapping with a test per row, fairness invariance + protected-attribute denylist, API and web-container security headers, A6 switch; safety_v2 drafted (unfrozen) |
 | [Deployment](docs/progress/modules/deployment.md) | [Name 1] (TODO: name) | P6 (course switch, deferred), P10 (Phase 12) | Local run, isolated e2e, demo-reset, replay mode, backup/restore, release bundle + SBOM, runbook done (P10); clean-machine run passed; course endpoint deferred |
@@ -92,6 +93,10 @@ From the latest entry of each step. Module-level items live in each module file.
 - P13 13.0: live G4 run on the Mac to measure the effect of code routing on the 25 regulatory items (11 now code-routed). ([entry](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md))
 - P13 13.0: a held-out routing set; the 40 routing questions are a dev split. ([entry](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md))
 - P13 13.0: team review of the two new help pages. ([entry](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md))
+
+### Authentication
+
+- P14 14.1: web step E: one auth mode on the gateway; login follows `stage`/`next`; MFA and first-sign-in screens; Admin → Users on the new API; acting-role switch removed. Step F: retire `deploy/auth/`, help pages, threat model and system card rows. Security review. `make redteam` (PR #26) needs `mfa_enforced=False` once both merge. ([entry](docs/progress/entries/2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md))
 
 ### Responsible AI
 
