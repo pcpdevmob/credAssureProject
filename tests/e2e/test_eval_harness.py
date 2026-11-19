@@ -24,3 +24,7 @@ def test_scope15_P7_harness_scores_items_through_the_api(
     assert {r.id: (r.passed, r.detail) for r in rows if not r.passed} == {}
     s = harness.summary(rows)
     assert s["passed"] == len(IDS) and s["taxonomy"] == {}
+    # every item that runs a stage, a case or a chat links to its trace (course template M8)
+    traced = {r.id: r.trace_ids for r in rows}
+    assert all(traced[i] for i in ("T026", "T036", "T051", "T085", "T099")), traced
+    assert all(len(t) == 32 for ids in traced.values() for t in ids)
