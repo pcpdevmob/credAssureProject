@@ -7,7 +7,7 @@ import { chartSummary } from '@/components/case/CashChart';
 import Lenders from '@/components/case/Lenders';
 import Negotiation from '@/components/case/Negotiation';
 import { flagText } from '@/lib/flags';
-import type { CaseRecord } from '@/types';
+import type { CaseRecord, NegotiationMove } from '@/types';
 
 const m = (paise: number, display: string) => ({ paise, display });
 const offer = (id: string, apr: string, o: Record<string, unknown> = {}) => ({ offer_id: id, version: 1, flags: [], comparable: true, affordable: true, rank: null as number | null,
@@ -71,7 +71,7 @@ describe('negotiation', () => {
     revised: { version: 2, comparable: true, flags: [], apr_pct: '16.90', total_cost: m(150000000, '₹15,00,000') } };
   it('says "not re-audited" until the concession counts', () => {
     render(<Negotiation c={c} n={mapNegotiation(sent)} canStart={false} onChange={() => undefined} />);
-    expect(screen.getByText('Round 1 of 1')).toBeTruthy();
+    expect(screen.getByText('Round 1 of 3')).toBeTruthy();
     expect(screen.getByText('Revised offer not re-audited')).toBeTruthy();
   });
   it('shows verified once re-audited', () => {
@@ -88,6 +88,29 @@ describe('negotiation', () => {
   it('offers the round only to a preparer before it has run', () => {
     render(<Negotiation c={c} n={null} canStart onChange={() => undefined} />);
     expect(screen.getByRole('button', { name: 'Start negotiation round' })).toBeTruthy();
+  });
+  // ADR 0037: three rounds, one per request; each shows its move, cited figures and outcome; done when complete.
+  const round = (n: number, move: NegotiationMove, extra = {}) => ({ round: n, move, target_offer: 'OF-06-B', status: 'sent', cited: { competing_rate: '11.25%' },
+    message: `Round ${n} request.`, concession_counts: true, revised: { version: n + 1, comparable: true, flags: [], apr_pct: '12.36', total_cost: null },
+    reply: { round: n, text: 'We agree.', injection_flags: [] }, ...extra });
+  it('lists every round and offers the next one until negotiation is complete', () => {
+    const two = { ...sent, rounds: [round(1, 'fee_waiver_v1'), round(2, 'rate_match_v1')], complete: false };
+    const { unmount } = render(<Negotiation c={c} n={mapNegotiation(two)} canStart onChange={() => undefined} />);
+    expect(screen.getByText('Round 2 of 3')).toBeTruthy();
+    expect(screen.getByRole('region', { name: 'Round 2' }).textContent).toContain('Rate match');
+    expect(screen.getByRole('region', { name: 'Round 2' }).textContent).toContain('Competing rate 11.25%');
+    expect(screen.getAllByText('Concession verified by re-audit')).toHaveLength(2);
+    expect(screen.getByRole('button', { name: 'Run next negotiation round' })).toBeTruthy();
+    unmount();
+    render(<Negotiation c={c} n={mapNegotiation({ ...two, complete: true })} canStart onChange={() => undefined} />);
+    expect(screen.getByText('Round 2 of 3 · complete')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: /negotiation round/ })).toBeNull();
+  });
+  it('a refused round shows no revision and keeps the ranking', () => {
+    const refused = { ...sent, rounds: [round(1, 'tenor_change_v1', { revised: null, concession_counts: false })], complete: false };
+    render(<Negotiation c={c} n={mapNegotiation(refused)} canStart={false} onChange={() => undefined} />);
+    expect(screen.getByText('No revised offer: nothing changes.')).toBeTruthy();
+    expect(screen.getByRole('region', { name: 'Round 1' }).textContent).toContain('Tenor change');
   });
 });
 

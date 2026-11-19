@@ -238,6 +238,17 @@ def _sections(s: Session, case: Case, values: dict[str, LedgerFact]) -> list[_Se
 
     nego = sec("Negotiation")
     nego.put(f"Fee-waiver round: {value('lw.negotiation.status', 'not sent')}.")
+    for name, p in (("Rate match", "rate_match."), ("Tenor change", "tenor_change.")):
+        key = "lw.negotiation." + p  # LW-15 rounds 2-3 (ADR 0037)
+        if value(key + "status", "") in ("sent", "blocked"):
+            counts = "yes" if value(key + "concession_counts", "") == "true" else "no"
+            status, target = value(key + "status"), value(key + "target", "?")
+            nego.put(
+                f"\n- {name} (round {value(key + 'round', '?')}) to {target}: {status}; "
+                f"concession counts: {counts}."
+            )
+    if value("lw.negotiation.complete", "") == "true":
+        nego.put("\nNegotiation is complete; the ranking above includes every counted concession.")
 
     findings = json.loads(value("ver.findings", "[]"))
     verify = sec("Verification").put(

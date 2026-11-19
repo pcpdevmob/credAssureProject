@@ -264,6 +264,9 @@ Pipeline per case:
 6. Negotiation round 1 (separate invocation): pick an offer whose fee > a verified competing fee;
    fill template `fee_waiver_v1` with ledger values only; Critic checks; simulator returns new version;
    re-audit + re-price; concession counts only after re-audit (LW-13, BR-09).
+   *ADR 0037 (2026-11-19):* up to three rounds, one per invocation, in the fixed order `fee_waiver_v1` →
+   `rate_match_v1` → `tenor_change_v1` (a move with no target is skipped); every counted concession is stored and the
+   offers are re-ranked (`lw.ranking`, `lw.gate`), and `load_offers` merges stored revisions into the uploads.
 
 ### 2.5 Reconciliation with the team diagram (`docs/images/Flow_image.jpeg`)
 

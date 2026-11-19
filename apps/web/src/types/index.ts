@@ -42,11 +42,22 @@ export interface OfferRow {
   cheapest: boolean;
   apr: Fig | null; aprPct: string | null; amountReceived: Fig | null; totalRepayment: Fig | null; totalCost: Fig | null;
 }
+export type NegotiationMove = 'fee_waiver_v1' | 'rate_match_v1' | 'tenor_change_v1';
+export interface Revised { version: number; comparable: boolean; flags: string[]; apr: Fig | null; totalCost: Fig | null }
+/** The lender's reply, masked by the gateway; untrusted text, shown as plain text only (BR-15). */
+export interface LenderReply { round: number; text: string; injectionFlags: string[] }
+/** One sent or blocked round (LW-12/13/15, ADR 0037). `cited` holds the verified figures the message quoted. */
+export interface NegotiationRound {
+  round: number; move: NegotiationMove; target: string; status: string; cited: { label: string; value: string }[];
+  message: string; countsAsConcession: boolean; revised: Revised | null; reply: LenderReply | null;
+}
 export interface Negotiation {
+  /** Round-1 fee-waiver fields, as before ADR 0037. */
   target: string | null; competingFee: Fig | null; countsAsConcession: boolean; message: string; status: string | null;
-  revised: { version: number; comparable: boolean; flags: string[]; apr: Fig | null; totalCost: Fig | null } | null;
-  /** The lender's reply, masked by the gateway; untrusted text, shown as plain text only (BR-15). */
-  reply: { round: number; text: string; injectionFlags: string[] } | null;
+  revised: Revised | null;
+  reply: LenderReply | null;
+  /** Every round in order; at most three. `complete`: no move is left, the next request is refused. */
+  rounds: NegotiationRound[]; complete: boolean;
 }
 /** `preview` = audit and pricing only; affordability and ranking have not been checked. */
 export interface OfferView { caseId: string; source: 'ledger' | 'preview' | 'stale'; offers: OfferRow[]; ranking: string[]; negotiation: Negotiation | null; message?: string }

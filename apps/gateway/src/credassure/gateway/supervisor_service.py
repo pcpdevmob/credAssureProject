@@ -156,9 +156,10 @@ class SupervisorService:
         return None if found is None else found.value_text
 
     def negotiate(self, actor: Principal, case_id: str) -> dict[str, Any]:
-        """LW-12/13: one fee-waiver round, a separate invocation through the Supervisor (caps,
-        case pinning, audit). The preparer only; one sent request per case, under the case run
-        lock so two calls cannot both send; never accepts an offer."""
+        """LW-12/13/15: the next negotiation round (fee waiver, rate match, tenor change; at most
+        three per case, ADR 0037), a separate invocation through the Supervisor (caps, case
+        pinning, audit). The preparer only; under the case run lock so two calls cannot both send;
+        409 once negotiation is complete; never accepts an offer."""
         case = own_case(self.svc, actor, case_id)
         # The round changes neither the funding amount nor the route, so it may run while the
         # proposal awaits approval; a decided case is closed.
@@ -168,9 +169,9 @@ class SupervisorService:
 
         try:
             with run_lock(self.svc.engine, case.tenant_id, case.id, uuid.uuid4().hex):
-                if self.fact(actor, case_id, "lw.negotiation.status") == "sent":
+                if self.fact(actor, case_id, "lw.negotiation.complete") == "true":
                     raise ProblemError(
-                        409, "the negotiation round has already run", ApiErrorCode.CONFLICT
+                        409, "negotiation is complete for this case", ApiErrorCode.CONFLICT
                     )
                 result = self.svc.supervisor.invoke_extra(
                     case.id, Stage.LENDWISE, negotiate, "negotiate"
@@ -182,12 +183,16 @@ class SupervisorService:
         return {"decision": result.decision.value, **self.negotiation(actor, case_id)}
 
     def negotiation(self, actor: Principal, case_id: str) -> dict[str, Any]:
-        """The round as stored facts: what was asked, and a concession only after re-audit."""
+        """The rounds as stored facts: what was asked, and a concession only after re-audit.
+        The top-level fields are the fee-waiver round (LW-12, unchanged by ADR 0037); ``rounds``
+        lists every sent or blocked round in order, and ``complete`` says no move is left."""
         case = visible_case(self.svc, actor, case_id)
         with transaction(self.svc.engine) as s:
             facts = reads.list_for_case(s, case.tenant_id, case.id)
         latest = {x.key.removeprefix("lw.negotiation."): x for x in facts}
         f = {k: x.value_text for k, x in latest.items()}
+        rounds = _rounds(f, {k: x.unit for k, x in latest.items()})
+        complete = f.get("complete") == "true"
         target = f.get("target")
         if target in (None, "none"):
             return {
@@ -198,16 +203,8 @@ class SupervisorService:
                 "status": f.get("status"),
                 "revised": None,
                 "reply": None,
-            }
-        revised = None
-        if "revised.version" in f:
-            apr, cost, flags = f.get("revised.apr"), f.get("revised.total_cost"), f["revised.flags"]
-            revised = {
-                "version": int(f["revised.version"]),
-                "comparable": f.get("revised.comparable") == "true",
-                "flags": [] if flags == "none" else flags.split(","),
-                "apr_pct": None if apr is None else _pct(apr),
-                "total_cost": None if cost is None else _money(to_paise(Decimal(cost))),
+                "rounds": rounds,
+                "complete": complete,
             }
         rate = latest["competing_fee"].unit == "rate"
         return {
@@ -217,8 +214,10 @@ class SupervisorService:
             "concession_counts": f.get("concession_counts") == "true",
             "message": f.get("message", ""),
             "status": f.get("status"),
-            "revised": revised,
+            "revised": _revised(f),
             "reply": _reply(f),
+            "rounds": rounds,
+            "complete": complete,
         }
 
     def offers(self, actor: Principal, case_id: str) -> dict[str, Any]:
@@ -473,24 +472,28 @@ def _remember_trace(trace_id: str, user_id: str) -> None:
 
 def approval_warnings(facts: Any) -> list[str]:
     """APR-04 evidence for the approver (ADR 0023, BR-09), from ledger fact rows (all versions):
-    ``negotiation_in_progress`` — a sent round is newer than the comparison the case was verified
-    and routed on, so its revision is not in the ranking; ``revised_offer_not_reaudited`` — a
-    revised version arrived but did not pass re-audit, so no concession counts."""
+    ``negotiation_in_progress`` — a round's counted concession is newer than the latest comparison,
+    so the ranking does not include it yet (since ADR 0037 every counted concession re-ranks, so
+    this shows only if that write is missing); ``revised_offer_not_reaudited`` — a revised version
+    arrived but did not pass re-audit, so no concession counts."""
     latest: dict[str, Any] = {}
     for f in facts:
         if f.key not in latest or f.version > latest[f.key].version:
             latest[f.key] = f
-    status, gate = latest.get("lw.negotiation.status"), latest.get("lw.gate")
-    out = []
-    if status is not None and status.value_text == "sent":
-        if gate is None or status.created_at > gate.created_at:
+    gate = latest.get("lw.gate")
+    out: list[str] = []
+    for _, p in _MOVES:
+        key = "lw.negotiation." + p
+        status = latest.get(key + "status")
+        if status is None or status.value_text != "sent":
+            continue
+        counts = latest.get(key + "concession_counts")
+        counted = counts is not None and counts.value_text == "true"
+        if counts is not None and counted and (gate is None or counts.created_at > gate.created_at):
             out.append("negotiation_in_progress")
-        counts = latest.get("lw.negotiation.concession_counts")
-        if "lw.negotiation.revised.version" in latest and (
-            counts is None or counts.value_text != "true"
-        ):
+        if key + "revised.version" in latest and not counted:
             out.append("revised_offer_not_reaudited")
-    return out
+    return sorted(set(out), key=out.index)
 
 
 def _money(paise: int) -> dict[str, Any]:
@@ -547,6 +550,78 @@ PCT = Decimal("0.01")
 
 def _plain(value: Decimal) -> str:
     return format(value.normalize(), "f")
+
+
+_MOVES = (  # (move, key prefix under lw.negotiation.) in the fixed order (ADR 0037)
+    ("fee_waiver_v1", ""),
+    ("rate_match_v1", "rate_match."),
+    ("tenor_change_v1", "tenor_change."),
+)
+
+
+def _revised(f: dict[str, str]) -> dict[str, Any] | None:
+    if "revised.version" not in f:
+        return None
+    apr, cost, flags = f.get("revised.apr"), f.get("revised.total_cost"), f["revised.flags"]
+    return {
+        "version": int(f["revised.version"]),
+        "comparable": f.get("revised.comparable") == "true",
+        "flags": [] if flags == "none" else flags.split(","),
+        "apr_pct": None if apr is None else _pct(apr),
+        "total_cost": None if cost is None else _money(to_paise(Decimal(cost))),
+    }
+
+
+def _cited(move: str, f: dict[str, str], units: dict[str, str]) -> dict[str, str]:
+    """The verified figures the round's message quoted, as display text (unit from the ledger)."""
+
+    def shown(key: str) -> str | None:
+        if key not in f:
+            return None
+        if units.get(key) == "rate":
+            return _plain(Decimal(f[key]) * 100) + "%"
+        if units.get(key) == "INR":
+            return format_inr(Decimal(f[key]))
+        return f[key]
+
+    keys = {
+        "fee_waiver_v1": ("current_fee", "competing_fee", "competing_offer"),
+        "rate_match_v1": ("current_rate", "competing_rate", "competing_offer"),
+        "tenor_change_v1": (
+            "current_first_repayment",
+            "requested_first_repayment",
+            "cash_low_week_start",
+            "extra_months",
+        ),
+    }[move]
+    return {k: v for k in keys if (v := shown(k)) is not None}
+
+
+def _rounds(f: dict[str, str], units: dict[str, str]) -> list[dict[str, Any]]:
+    """Every round that was sent or blocked, in the order it ran."""
+    out = []
+    for move, p in _MOVES:
+        sub = {k.removeprefix(p): v for k, v in f.items() if k.startswith(p)} if p else f
+        sub_units = (
+            {k.removeprefix(p): v for k, v in units.items() if k.startswith(p)} if p else units
+        )
+        status, target = sub.get("status"), sub.get("target")
+        if status not in ("sent", "blocked") or target in (None, "none"):
+            continue
+        out.append(
+            {
+                "round": int(sub.get("round", "1")),
+                "move": move,
+                "target_offer": target,
+                "status": status,
+                "cited": _cited(move, sub, sub_units),
+                "message": sub.get("message", ""),
+                "concession_counts": sub.get("concession_counts") == "true",
+                "revised": _revised(sub),
+                "reply": _reply(sub),
+            }
+        )
+    return sorted(out, key=lambda r: (r["status"] != "sent", r["round"]))
 
 
 def _reply(f: dict[str, str]) -> dict[str, Any] | None:

@@ -16,8 +16,8 @@ import SafetyPanel from './SafetyPanel';
 
 // APR-04, BR-09: what the approver must know about a negotiation round that is newer than the verified comparison.
 const WARNING: Record<string, string> = {
-  negotiation_in_progress: 'Negotiation in progress: a round was sent after this proposal was verified, so its result is not in the ranking.',
-  revised_offer_not_reaudited: 'Revised offer not re-audited: the lender replied, but no concession counts until the stage re-runs.',
+  negotiation_in_progress: 'Negotiation in progress: a counted concession is not in the ranking yet. Reload before deciding.',
+  revised_offer_not_reaudited: 'Revised offer did not pass re-audit: the lender replied, but no concession counts and the ranking is unchanged.',
   report_stale: 'Report stale: figures changed after this proposal was rendered. The preparer must regenerate it before it can be approved; reject and return still work.',
 };
 
