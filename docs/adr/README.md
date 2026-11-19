@@ -41,3 +41,4 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | [0033](0033-injection-design-patterns.md) | Prompt-injection design patterns as architecture | Proposed | P0 → P2 | 54 |
 | [0034](0034-image-digest-pinning-deferred.md) | Image digest pinning: tooling now, pins from a networked machine | Accepted | P10 | 41 |
 | [0035](0035-copilot-v3-product-assistant.md) | Copilot v3: Ask CredAssure as the product assistant on every page (amends 0032 §6) | Accepted | P13 | 2, 20 |
+| [0036](0036-local-ollama-is-the-evaluated-path.md) | Local Ollama (qwen3:8b) is the evaluated path; course endpoint not used (amends 0017) | Accepted | P11 | 13 |

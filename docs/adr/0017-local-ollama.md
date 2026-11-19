@@ -1,6 +1,6 @@
 # ADR 0017 — Local default model: Ollama (Qwen3 8B since 2026-11-15; was Llama 3.1 8B)
 
-Status: Accepted · 2026-11-05 · Approved by the project owner (Pritish) · Does not amend BRD NFR-01
+Status: Accepted (amended by ADR 0036: local profile is the evaluated path) · 2026-11-05 · Approved by the project owner (Pritish) · Does not amend BRD NFR-01
 
 ## Context
 NFR-01 says the product runs only on the course's ≤8B chat and embeddings endpoints. Those endpoints are not needed to develop or rehearse. The gateway talks to any OpenAI-compatible URL (`LLM_BASE_URL`, `EMBED_BASE_URL`), so a local server can stand in without a second client.

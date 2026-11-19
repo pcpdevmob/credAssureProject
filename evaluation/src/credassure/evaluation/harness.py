@@ -55,6 +55,9 @@ class Row:
     tokens: int
     cost: float
     answer: dict[str, Any] = field(default_factory=dict)
+    # Langfuse trace ids the item's API calls returned (stage runs, case runs, chat), so every
+    # result links to its trace in the dashboard (BRD §14, course template M8)
+    trace_ids: list[str] = field(default_factory=list)
 
 
 def load(path: Path = ITEMS) -> list[dict[str, Any]]:
@@ -94,6 +97,7 @@ class Harness:
         self._tokens: dict[str, dict[str, str]] = {}
         self._issued: dict[str, float] = {}
         self._base: str | None = None
+        self._traces: list[str] = []
         self.known = known_doc_ids()
 
     # ---- plumbing
@@ -141,16 +145,30 @@ class Harness:
                     flags += self._post(cid, "kfs", p, h)
         return cid, flags
 
+    def _note(self, body: Any) -> Any:
+        """Keep every trace_id an API response carries (any depth) for the current item."""
+        stack = [body]
+        while stack:
+            x = stack.pop()
+            if isinstance(x, dict):
+                t = x.get("trace_id")
+                if isinstance(t, str) and t and t not in self._traces:
+                    self._traces.append(t)
+                stack.extend(x.values())
+            elif isinstance(x, list):
+                stack.extend(x)
+        return body
+
     def stage(self, cid: str, agent: str, h: dict[str, str]) -> dict[str, Any]:
         self.c.post(f"/v1/agents/{agent}/cases/{cid}/run", headers=h)
         r = self.c.get(f"/v1/agents/{agent}/cases/{cid}/result", headers=h)
-        return dict(r.json()) if r.status_code == 200 else {}
+        return dict(self._note(r.json())) if r.status_code == 200 else {}
 
     def run_case(self, cid: str, h: dict[str, str]) -> dict[str, Any]:
         r = self.c.post(f"/v1/cases/{cid}/run", headers=h)
         if r.status_code == 202:
             self.c.get(r.json()["status_url"], headers=h)
-        return dict(self.c.get(f"/v1/cases/{cid}", headers=h).json())
+        return dict(self._note(self.c.get(f"/v1/cases/{cid}", headers=h).json()))
 
     def base(self) -> str:
         if self._base is None:
@@ -161,7 +179,7 @@ class Harness:
         r = self.c.post(f"/v1/cases/{cid}/chat", json={"message": question}, headers=self.h(actor))
         if r.status_code == 404:  # another case: refused by scoping (SUP-08)
             return {"refused": True, "answer": str(r.json().get("detail", "")), "citations": []}
-        return dict(r.json())
+        return dict(self._note(r.json()))
 
     # ---- answers per category (the shapes in each item's answer_schema)
     def answer(self, item: Mapping[str, Any]) -> dict[str, Any]:
@@ -294,6 +312,7 @@ class Harness:
         return str(route) if route else None
 
     def run_item(self, item: Mapping[str, Any]) -> Row:
+        self._traces = []
         calls0, tok0 = self.meter()
         t0 = time.monotonic()
         try:
@@ -328,6 +347,7 @@ class Harness:
                 for k, v in answer.items()
                 if k in ("answer", "citations", "ranking", "route", "gate", "error", "refused")
             },
+            trace_ids=list(self._traces),
         )
 
     def run(
