@@ -20,7 +20,7 @@ and BRD §13/§15 G4. Everything not listed under **Keep** is a stated limitatio
 | K9 | Clean-machine run of the demo profile from the setup guide (one teammate) | Working deployed system | Deployment | Case runs end to end on a second machine |
 | K10 | G4 report, 12-page technical report, demo script, recorded backup video | Report and demo | All | Submitted 27 Nov |
 | K11 | Release: `v1.1.0` tag (owner) with eval report, data hashes; image pins if a networked machine is free (ADR 0034) | Reproducible repository | Deployment | Tag pushed by the owner after G4 |
-| K12 | LendWise: re-rank after a counted concession, **time-boxed to Fri 20 Nov** | Working system: the recommendation the approver sees is correct (OBJ-03, LW-11, LW-13, BR-09) | LendWise | Revised version replaces the original in `rank_offers`; new `lw.ranking` / `lw.gate` facts; report stale until regenerated; negotiation, offers, e2e and T082 re-run unchanged |
+| K12 | LendWise: **three negotiation rounds by default** (fee waiver → rate match → tenor change; one round per call) with **re-ranking after every counted concession**, ADR 0037 + v2 lender scripts; **time-boxed to Sun 22 Nov** | Working system (full app, not a demo; owner decision 19 Nov 20:40): the recommendation the approver sees is correct (OBJ-03, LW-11, LW-13, LW-15, BR-09) | LendWise | Round 1 unchanged; rounds 2–3 tested; frozen negotiation, offers, e2e and T082 re-run unchanged; rounds 2–3 scored on a new non-frozen fixture set |
 
 ## Cut (reported as known limitations)
 
@@ -39,8 +39,17 @@ best offer: case 06, OF-06-A drops from 16.60% to 12.36% APR after the fee waive
 13.80%. Without re-ranking, that case keeps recommending the dearer offer, with only the `negotiation_in_progress`
 warning. In the other two the order holds (case 01: 15.30% vs 13.00%; case 03: 15.16% vs OF-03-C 15.03%, so T082's
 expected order B, C, A is unchanged). No frozen item scores a post-round ranking except T082, so the change is safe for
-the evaluation and fixes a real wrong-recommendation path. The target rule (highest processing fee in ₹) and one round
-stay as they are: changing them would change the frozen negotiation gold.
+the evaluation and fixes a real wrong-recommendation path. Round 1 (fee waiver to the highest-fee offer) stays exactly as it
+is, so the frozen negotiation gold still holds.
+
+Owner decision (19 Nov 20:40): CredAssure is run as a full app, not a demo, so **three rounds are the default** (LW-15,
+reversing its cut in ADR 0032). Design: each `POST .../negotiate` runs the next round (separate invocation, BRD §6);
+round 2 is a rate-match request citing the lowest verified competing APR; round 3 a tenor/moratorium change for an
+offer flagged `LW_NOT_AFFORDABLE` or `LW_LATE_OR_SHORT`; a round with no eligible move ends negotiation early; after
+round 3 or no move the call answers 409. Every round: fixed template, Critic, scripted reply, re-audit, re-price,
+affordability, re-rank; facts per round; the report goes stale. The frozen v1 lender scripts answer only the fee
+waiver, so replies for rounds 2–3 come from new v2 scripts (ADR 0037); v1 stays unchanged. The harness calls
+negotiate once per item, so the frozen 100 items see round 1 only.
 
 ## The numbers the report uses (one canonical set)
 

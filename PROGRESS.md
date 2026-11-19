@@ -110,7 +110,7 @@ From the latest entry of each step. Module-level items live in each module file.
 ### Deployment
 
 - P10 10.1: H17 pin images; H19 demo recording. ([entry](docs/progress/entries/2026-11-18-p10-10.1-ship-pritish.md))
-- P11 11.10: K12 on `feature/lendwise-rerank` (LendWise thread). ([entry](docs/progress/entries/2026-11-19-p11-11.10-freeze-scope-ci-pritish.md))
+- P11 11.10: K12 on `feature/lendwise-p11` (LendWise thread), by 22 Nov. ([entry](docs/progress/entries/2026-11-19-p11-11.10-freeze-scope-ci-pritish.md))
 
 ### Documentation
 
