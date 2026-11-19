@@ -53,6 +53,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P11 | 11.0 | AI Security and Guardrails | done | Pritish | 2026-11-18 | — | — | [2026-11-18-p11-11.0-session-refresh-names-pritish.md](docs/progress/entries/2026-11-18-p11-11.0-session-refresh-names-pritish.md) |
 | P11 | 11.1 | Evaluation | done | Pritish | 2026-11-18 | — | — | [2026-11-18-p11-11.1-critic-false-positives-pritish.md](docs/progress/entries/2026-11-18-p11-11.1-critic-false-positives-pritish.md) |
 | P11 | 11.2 | Evaluation | done | Pritish | 2026-11-18 | — | — | [2026-11-18-p11-11.2-citation-failure-labels-pritish.md](docs/progress/entries/2026-11-18-p11-11.2-citation-failure-labels-pritish.md) |
+| P11 | 11.3 | Copilot | in_progress | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.3-source-priority-pritish.md](docs/progress/entries/2026-11-19-p11-11.3-source-priority-pritish.md) |
 | P13 | 13.0 | Copilot | done | Pritish | 2026-11-18 | 2c3088d, bbe5f62, 0148fe0 | — | [2026-11-18-p13-13.0-copilot-product-assistant-pritish.md](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md) |
 
 ## Modules
@@ -82,6 +83,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - P4 4.4: Exit check recall@5 >= 30/40 on frozen v1.0 NOT met (best 25/40). Gap: v1.0 labels are pooling-biased (silver strict labels scored 35/40 earlier); headers and the glossary were tuned on dev only, never on the frozen 40. ([entry](docs/progress/entries/2026-11-18-p4-4.4-ladder-pritish.md))
 - P4 4.5: A person still confirms the 20 labels (P0 0.3). ([entry](docs/progress/entries/2026-11-18-p4-4.5-dev-labels-fix-pritish.md))
 - P5 5.1: Live re-run on the Mac (make copilot-live): citation coverage 100% on answered items, regulatory strict >= 16/25 with supported, refusal 8/8, injection 8/8, isolation 3/3; save the report. ([entry](docs/progress/entries/2026-11-18-p5-5.1-span-cited-answers-pritish.md))
+- P11 11.3: dev run on the Mac (both settings), then decide; if kept, one `make eval` with SOURCE_PRIORITY=true. ([entry](docs/progress/entries/2026-11-19-p11-11.3-source-priority-pritish.md))
 - P13 13.0: live G4 run on the Mac to measure the effect of code routing on the 25 regulatory items (11 now code-routed). ([entry](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md))
 - P13 13.0: a held-out routing set; the 40 routing questions are a dev split. ([entry](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md))
 - P13 13.0: team review of the two new help pages. ([entry](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md))

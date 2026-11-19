@@ -92,6 +92,7 @@ from credassure.observability.log import configure_logging, log_context, set_red
 from credassure.retrieval.help import PREFIX as HELP_PREFIX
 from credassure.retrieval.help import HelpIndex
 from credassure.retrieval.search import Filters, Searcher, make_reranker, resolve
+from credassure.retrieval.source_priority import prioritise
 from credassure.security import pii
 from credassure.security.auth import verify_token
 from credassure.tools.registry import RegistryError, authorize_fact, is_display_only
@@ -479,6 +480,8 @@ def _copilot_handlers(settings: Settings, engine: Engine) -> dict[str, Callable[
                 mode=settings.copilot_search_mode,
                 k=5,
             )
+            if settings.source_priority:  # same five passages, primary instruments first
+                hits = prioritise(hits)
             return [
                 {
                     **dataclasses.asdict(p),

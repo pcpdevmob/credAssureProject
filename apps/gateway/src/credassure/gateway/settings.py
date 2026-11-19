@@ -64,6 +64,9 @@ class Settings(BaseSettings):
     rerank_order: bool = (
         True  # false = the reranker only scores for the gate (P4 ladder, user decision)
     )
+    # P11: the copilot reads its k passages primary instruments first (retrieval.source_priority);
+    # off until the retrieval dev split shows a gain (scripts/copilot_dev_citations.py)
+    source_priority: bool = False
 
     tracing_enabled: bool = True
     langfuse_host: str = "http://localhost:3000"
