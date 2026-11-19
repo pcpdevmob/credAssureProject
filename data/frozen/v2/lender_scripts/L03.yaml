@@ -1,0 +1,15 @@
+lender_id: L03
+lender_name: Chambal Small Finance Bank (synthetic)
+responses:
+  fee_waiver_v1:
+    processing_fee_share_kept: '1'
+    reply_text: We are unable to revise the processing fee for this proposal.
+    type: refusal
+  rate_match_v1:
+    rate_gap_closed: '0'
+    reply_text: We are unable to revise the annual interest rate for this proposal.
+    type: refusal
+  tenor_change_v1:
+    max_extra_months: 0
+    reply_text: We are unable to change the repayment schedule for this proposal.
+    type: refusal

@@ -143,6 +143,42 @@ def load_inputs(
     )
 
 
+NEGOTIATION = "lw.negotiation."
+# where each negotiation move stores its revision (fee waiver, rate match, tenor change; ADR 0037)
+REVISION_PREFIXES = (NEGOTIATION, NEGOTIATION + "rate_match.", NEGOTIATION + "tenor_change.")
+
+
+def with_revisions(inputs: Inputs, facts: Mapping[str, str]) -> Inputs:
+    """The uploads plus every negotiated revision whose concession counted (LW-13, BR-09,
+    ADR 0037): each offer at its highest version, its revised schedule beside it. ``facts`` are
+    the case's latest ledger values. A revision is cited in the sources as ``negotiation:``."""
+    offers = {str(o["offer_id"]): o for o in inputs.offers}
+    schedules, sources = dict(inputs.schedules), dict(inputs.sources)
+    for p in REVISION_PREFIXES:
+        raw = facts.get(p + "revised.offer")
+        if facts.get(p + "concession_counts") != "true" or not raw:
+            continue
+        offer = json.loads(raw)
+        oid = str(offer["offer_id"])
+        if oid in offers and int(offer["version"]) <= int(offers[oid]["version"]):
+            continue
+        schedule = facts.get(p + "revised.schedule", "")
+        doc = f"{offer['kfs_doc_id']}-SCH"
+        offers[oid], schedules[doc] = offer, schedule
+        sources[f"negotiation:{oid}.v{offer['version']}"] = _sha(raw)
+        sources[f"negotiation:{doc}"] = _sha(schedule)
+    return replace(
+        inputs,
+        offers=tuple(o for _, o in sorted(offers.items())),
+        schedules=schedules,
+        sources=sources,
+    )
+
+
+def _sha(text: str) -> str:
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
 # ---- composition: the same code for the run, the re-check and the read-only preview ------------
 @dataclass(frozen=True)
 class OfferResult:

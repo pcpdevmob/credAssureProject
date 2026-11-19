@@ -62,6 +62,8 @@ def offers(case_id: str, who: Caller, supervisor: SupervisorDep) -> dict[str, An
 
 @router.post("/cases/{case_id}/negotiate")
 def negotiate(case_id: str, who: Caller, supervisor: SupervisorDep) -> dict[str, Any]:
-    """One fee-waiver round (LW-12/13): the request is built from ledger facts, verified, sent to
-    the simulated lender; a revision counts only after re-audit. Never accepts an offer."""
+    """The next negotiation round (LW-12/13/15, ADR 0037): fee waiver, rate match, tenor change,
+    at most three per case, one per call. Each request is built from ledger facts, verified and
+    sent to the simulated lender; a revision counts only after re-audit, and a counted concession
+    re-ranks the offers. 409 once negotiation is complete. Never accepts an offer."""
     return supervisor.negotiate(who, case_id)
