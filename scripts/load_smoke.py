@@ -142,6 +142,7 @@ def main() -> int:
         "jwt_secret": secrets.token_urlsafe(48),
         "tenant_id": "default",
         "rate_limit": "100000/minute",
+        "mfa_enforced": False,  # ADR 0038: the smoke signs in with a password only
     }
     if args.fake:
         from credassure.llm.fake import FakeLLM

@@ -16,9 +16,10 @@ from typing import Any
 import yaml
 from sqlalchemy import select
 
+from credassure.security import password_policy
 from credassure.security.auth import Role, hash_password
 
-from . import migrate, session, writes
+from . import migrate, reads, session, writes
 from .models import User
 
 MIN_PASSWORD = 12
@@ -65,11 +66,51 @@ def seed(
     return added
 
 
+def bootstrap_admin(
+    db: Path | str, username: str, password: str, tenant_id: str = "default"
+) -> str:
+    """ADR 0038: the first user_admin of a tenant (the admin API needs an admin to exist). Refused
+    when the tenant already has an active admin; the password must pass the policy and is changed
+    at first sign-in, where MFA enrolment is also required."""
+    found = password_policy.problems(password, username)
+    if found:
+        raise SystemExit("BOOTSTRAP_ADMIN_PASSWORD: " + "; ".join(found))
+    migrate.upgrade("case", db)
+    engine = session.case_engine(db)
+    try:
+        with session.transaction(engine) as s:
+            if reads.active_admins(s, tenant_id):
+                raise SystemExit(f"tenant {tenant_id} already has an active user_admin")
+            user = writes.create_user(
+                s,
+                tenant_id=tenant_id,
+                actor="bootstrap",
+                username=username,
+                role=Role.USER_ADMIN.value,
+                password_hash=hash_password(password),
+                display_name=username,
+            )
+            return user.id
+    finally:
+        engine.dispose()
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m credassure.ledger.seed")
     parser.add_argument("db", nargs="?", default="var/case.db")
     parser.add_argument("--users", type=Path, default=USERS, help="eval_users.yaml (S08/S19)")
+    parser.add_argument(
+        "--bootstrap-admin",
+        metavar="USERNAME",
+        help="create the first user_admin; password from BOOTSTRAP_ADMIN_PASSWORD (never argv)",
+    )
     args = parser.parse_args(argv)
+    if args.bootstrap_admin:
+        password = os.environ.get("BOOTSTRAP_ADMIN_PASSWORD", "")
+        tenant = os.environ.get("TENANT_ID", "default")
+        user_id = bootstrap_admin(args.db, args.bootstrap_admin, password, tenant)
+        print(f"created user_admin {args.bootstrap_admin} ({user_id})", file=sys.stderr)
+        return 0
     added = seed(args.db, dict(os.environ), users=args.users)
     print(f"seeded {added} users into {args.db}", file=sys.stderr)
     return 0

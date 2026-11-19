@@ -21,7 +21,7 @@ from pydantic import BaseModel, Field, SecretStr
 from credassure.core.enums import Stage
 from credassure.core.errors import ApiErrorCode, NoPendingApproval
 from credassure.engines.routing import THRESHOLD
-from credassure.gateway import report
+from credassure.gateway import accounts, report
 from credassure.gateway.deps import Svc, User, case_ref, role, visible_case
 from credassure.gateway.jobs import job_view
 from credassure.gateway.problems import ProblemError
@@ -227,6 +227,8 @@ class Decision(BaseModel):
     expected_version: int = Field(ge=0, le=2**31 - 1)
     # NFR-07 step-up: the approver's own password, required to approve above ₹1.5 crore.
     password: SecretStr | None = Field(default=None, max_length=256)
+    # ADR 0038: with MFA enrolled, the step-up also needs a current code from the app.
+    mfa_code: SecretStr | None = Field(default=None, max_length=16)
     # #6: the report version the approver was shown; approve is refused if it is no longer current.
     report_version: int | None = Field(default=None, ge=0, le=2**31 - 1)
     # P9 (plan v3.4 §6, OWASP ASI09): the approver attests they reviewed the Critic findings and
@@ -244,7 +246,12 @@ def _report_current(svc: Svc, case: Any, shown: int | None) -> None:
 
 
 def _step_up(
-    svc: Svc, who: Principal, case: Any, password: SecretStr | None, request: Request
+    svc: Svc,
+    who: Principal,
+    case: Any,
+    password: SecretStr | None,
+    request: Request,
+    mfa_code: SecretStr | None = None,
 ) -> None:
     """Re-authenticate an approval of more than the routing threshold (engines.routing.THRESHOLD,
     the same number routing uses). Failures share the login limit; 403, never 401, so the web
@@ -274,6 +281,20 @@ def _step_up(
             "approving more than ₹1,50,00,000 needs your password again",
             ApiErrorCode.STEP_UP_REQUIRED,
         )
+    if user.mfa_enabled and (
+        mfa_code is None
+        or not accounts.check_second_factor(
+            svc, user, mfa_code.get_secret_value(), actor=who.user_id
+        )
+    ):
+        if mfa_code is not None:
+            limiter.hit(LOGIN_FAILURES, *key)
+            svc.ledger.audit(case.id, "STEP_UP_FAILED", {"by": who.user_id, "factor": "mfa"})
+        raise ProblemError(
+            403,
+            "approving more than ₹1,50,00,000 needs your password and a code from your app",
+            ApiErrorCode.STEP_UP_REQUIRED,
+        )
     svc.ledger.audit(case.id, "STEP_UP_VERIFIED", {"by": who.user_id})
 
 
@@ -301,7 +322,7 @@ def decide(
     if body.decision == "approve":  # cheap pre-check: no password prompt for a stale report
         _report_current(svc, case, body.report_version)
     if body.decision == "approve" and svc.settings.approval_step_up:
-        _step_up(svc, who, case, body.password, request)
+        _step_up(svc, who, case, body.password, request, body.mfa_code)
     back = Stage(body.return_stage) if body.return_stage else None
     # One writer per case: a decision never races a running stage (ADR 0007).
     with run_lock(svc.engine, who.tenant_id, case.id, f"decision-{uuid.uuid4().hex}"):

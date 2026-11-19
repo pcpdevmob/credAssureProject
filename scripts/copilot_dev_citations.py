@@ -26,7 +26,11 @@ DEV = ROOT / "evaluation" / "retrieval" / "dev" / "queries.jsonl"
 
 def _run(priority: bool, rows: list[dict[str, Any]], db: Path) -> list[dict[str, Any]]:
     settings = Settings(
-        case_db=db, tenant_id="default", source_priority=priority, llm_cache_path=None
+        case_db=db,
+        tenant_id="default",
+        source_priority=priority,
+        llm_cache_path=None,
+        mfa_enforced=False,  # ADR 0038: evaluation tools sign in with a password only
     )
     llm = _default_llm(settings)
     if llm is None:

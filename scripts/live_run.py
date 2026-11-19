@@ -388,6 +388,7 @@ def main() -> int:
     seed(db, {"SEED_PASSWORD": password})
     settings = Settings(
         case_db=db,
+        mfa_enforced=False,  # ADR 0038: evaluation tools sign in with a password only
         jwt_secret=secrets.token_urlsafe(48),
         tenant_id="default",
         rate_limit="100000/minute",

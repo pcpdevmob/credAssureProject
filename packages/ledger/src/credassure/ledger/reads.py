@@ -130,6 +130,39 @@ def user_by_name(s: Session, username: str) -> User | None:
     return s.scalar(select(User).where(User.username == username))
 
 
+def list_users(s: Session, tenant_id: str) -> list[User]:
+    return list(s.scalars(select(User).where(User.tenant_id == tenant_id).order_by(User.username)))
+
+
+def active_admins(s: Session, tenant_id: str) -> int:
+    """ADR 0038: the last active user_admin can be neither disabled nor demoted."""
+    return len(
+        s.scalars(
+            select(User.id).where(
+                User.tenant_id == tenant_id, User.role == "user_admin", User.active.is_(True)
+            )
+        ).all()
+    )
+
+
+def account_events(s: Session, tenant_id: str, limit: int = 200) -> list[AuditLog]:
+    """Newest first: audit rows for account changes and sign-in failures (no case)."""
+    from .writes import ACCOUNT_EVENTS  # writes imports reads; keep the cycle local
+
+    return list(
+        s.scalars(
+            select(AuditLog)
+            .where(
+                AuditLog.tenant_id == tenant_id,
+                AuditLog.case_id.is_(None),
+                AuditLog.event_type.in_(sorted(ACCOUNT_EVENTS)),
+            )
+            .order_by(AuditLog.seq.desc())
+            .limit(limit)
+        )
+    )
+
+
 def list_cases(s: Session, tenant_id: str) -> list[Case]:
     """Live cases only: a DELETED tombstone (ADR 0025) is never listed."""
     return list(

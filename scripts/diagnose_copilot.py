@@ -58,7 +58,9 @@ def main() -> int:
     ap.add_argument("--ids", nargs="*", default=None)
     args = ap.parse_args()
 
-    settings = Settings(case_db=ROOT / "var" / "diagnose-case.db", tenant_id="default")
+    settings = Settings(  # ADR 0038: evaluation tools sign in with a password only
+        case_db=ROOT / "var" / "diagnose-case.db", tenant_id="default", mfa_enforced=False
+    )
     searcher = _searcher(settings)()
     gate = settings.answerability_threshold
     filters = Filters(as_of=settings.as_of_date, home_state=settings.home_state)

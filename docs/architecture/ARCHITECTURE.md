@@ -363,6 +363,7 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0035 | Copilot v3: product assistant on every page (help source, CP-07, CP-10..12) | Accepted |
 | 0036 | Local Ollama (qwen3:8b) is the evaluated path; course endpoint not used | Accepted |
 | 0037 | Three negotiation rounds by default; re-rank after every counted concession | Accepted |
+| 0038 | Accounts, MFA and segregation of duties in the gateway | Accepted |
 
 Full index with phase and scope numbers: `docs/adr/README.md`.
 

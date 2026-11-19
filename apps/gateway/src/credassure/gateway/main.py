@@ -78,6 +78,7 @@ from credassure.gateway.routers import (
     health,
     lineage,
     telemetry,
+    users,
     workflow,
 )
 from credassure.gateway.settings import Settings, get_settings
@@ -759,7 +760,18 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
         allow_headers=["Authorization", "Content-Type", "Idempotency-Key"],
     )
 
-    for module in (health, auth, cases, citations, lineage, workflow, admin, telemetry, copilot):
+    for module in (
+        health,
+        auth,
+        users,
+        cases,
+        citations,
+        lineage,
+        workflow,
+        admin,
+        telemetry,
+        copilot,
+    ):
         app.include_router(module.router)
     for name, agent_router, deps in _AGENT_ROUTERS:
         app.include_router(agent_router, prefix=f"/v1/agents/{name}")

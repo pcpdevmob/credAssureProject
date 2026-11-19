@@ -222,11 +222,14 @@ def test_NFR07_unknown_user_is_401_and_still_runs_one_password_verify(
 def test_NFR07_me_returns_the_caller(fx: SimpleNamespace) -> None:
     r = fx.client.get("/v1/me", headers=fx.login("demo.director"))
     assert r.status_code == 200
-    assert r.json() == {
+    body = r.json()
+    assert {k: body[k] for k in ("user_id", "username", "role")} == {
         "user_id": "u-demo.director",
         "username": "demo.director",
         "role": "director_finance",
     }
+    # ADR 0038 adds the account state (additive; the original three keys are unchanged)
+    assert body["stage"] == "full" and body["mfa_enabled"] is False
 
 
 def test_NFR07_user_deactivated_after_login_gets_401(fx: SimpleNamespace) -> None:

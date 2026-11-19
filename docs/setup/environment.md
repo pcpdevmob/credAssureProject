@@ -23,6 +23,10 @@ so the model profile wins for model settings. `MODELS` itself is a make variable
 | `UI_ORIGINS` | `http://localhost:3000,http://localhost:5173` | CORS allowlist, comma-separated |
 | `JWT_EXPIRY_MINUTES` | 30 | Token lifetime (max 30) |
 | `JWT_SESSION_MAX_MINUTES` | 240 | `POST /v1/auth/refresh` renews a token until this long after sign-in (max 720), then the user signs in again |
+| `MFA_ENCRYPTION_KEY` | unset | ADR 0038: base64 of 32 random bytes; seals each TOTP secret at rest. Required while MFA is enforced (the API won't start without it) |
+| `MFA_REQUIRED_ROLES` | `director_finance,vp_finance,user_admin` | Roles that must enrol a TOTP app before their first full sign-in |
+| `MFA_ENFORCED` | on outside `APP_ENV=test` | `false` turns the second factor off (the evaluation scripts and the demo profile do this for the seeded users) |
+| `BOOTSTRAP_ADMIN_PASSWORD` | unset | Read once by `make admin NAME=<username>` to create the first `user_admin` (changed at first sign-in) |
 | `RATE_LIMIT` | `120/minute` | Per user, else per client IP (NFR-04) |
 | `MAX_UPLOAD_BYTES` | 2 MB | Upload cap (UI-02) |
 
