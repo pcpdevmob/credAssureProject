@@ -15,7 +15,7 @@ ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 # The dev/demo database (var/case.db) is tenant "demo" (make demo-reset); an exported variable beats --env-file.
 DEMO_TENANT := TENANT_ID=demo
 
-.PHONY: rag-baseline load-smoke eval-judge eval-kappa eval-report eval-ablations progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
+.PHONY: redteam rag-baseline load-smoke eval-judge eval-kappa eval-report eval-ablations progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset live-run copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe retrieval-eval retrieval-ladder retrieval-pool retrieval-silver judge kappa release sbom pin-images
 
@@ -238,6 +238,9 @@ eval-fast:  ## Prompt change control (#36): version-bump check + offline prompt 
 
 llm-probe:  ## Does the endpoint honour guided JSON? Decides LLM_SUPPORTS_GUIDED_JSON (ADR 0017)
 	uv run $(ENV_FILE) python -m credassure.llm.probe
+
+redteam:  ## K6 red-team log: 20 frozen prompts + 5 E14 probes through the API, verdicts by code (writes var/redteam/<run>/redteam.md); ARGS="--fake"
+	APP_ENV=dev LOG_LEVEL=WARNING uv run $(ENV_FILE) python scripts/redteam_run.py $(ARGS)
 
 rag-baseline:  ## RAG-only baseline: S1 prompt + copilot hybrid top-5, no agents, regulatory 25 (writes var/rag-only-baseline.jsonl)
 	uv run $(ENV_FILE) python scripts/rag_only_baseline.py
