@@ -62,6 +62,7 @@ def test_H13_demo_refuses_to_start_without_hr_db() -> None:
         app_env="demo",
         jwt_secret="x" * 40,
         llm_enabled=False,
+        mfa_enforced=False,  # the demo profile template turns MFA off (ADR 0038)
         hr_db=Path("/nonexistent/hr.db"),
     )
     with pytest.raises(RuntimeError, match="make hr-db"):

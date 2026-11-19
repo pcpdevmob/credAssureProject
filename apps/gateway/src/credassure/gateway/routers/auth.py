@@ -29,7 +29,7 @@ from credassure.gateway.deps import (
 )
 from credassure.gateway.problems import ProblemError
 from credassure.gateway.supervisor_service import acknowledge_notice, notice_state
-from credassure.ledger import reads, writes
+from credassure.ledger import reads
 from credassure.ledger.models import User as UserRow
 from credassure.ledger.session import transaction
 from credassure.security import mfa, password_policy
@@ -99,14 +99,12 @@ def _failed(svc: Svc, request: Request, user: UserRow | None, reason: str, *key:
     limiter.hit(LOGIN_FAILURES, *key)  # only failures count
     limiter.hit(HOURLY_FAILURES, *key)
     if user is not None:  # unknown usernames are not written to the audit chain
-        with transaction(svc.engine) as s:
-            writes.account_event(
-                s,
-                tenant_id=user.tenant_id,
-                actor=user.id,
-                event_type="LOGIN_FAILED",
-                payload={"user_id": user.id, "username": user.username, "reason": reason},
-            )
+        svc.ledger.account_event(
+            tenant_id=user.tenant_id,
+            actor=user.id,
+            event_type="LOGIN_FAILED",
+            payload={"user_id": user.id, "username": user.username, "reason": reason},
+        )
 
 
 @router.post("/auth/token")
@@ -164,16 +162,17 @@ def change_password(
             "choose another password: " + "; ".join(found),
             errors=[{"field": "new_password", "row": None, "reason": r} for r in found],
         )
-    with transaction(svc.engine) as s:
-        writes.update_user(
-            s,
-            user_id=user.id,
-            tenant_id=user.tenant_id,
-            actor=user.id,
-            changes={"password_hash": hash_password(new), "must_change_password": False},
-            event_type="PASSWORD_CHANGED",
-            revoke=True,
-        )
+    svc.ledger.update_user(
+        user.id,
+        tenant_id=user.tenant_id,
+        actor=user.id,
+        changes={
+            "password_hash": hash_password(new),
+            "must_change_password": False,  # nosec B105 - a flag name, not a secret
+        },
+        event_type="PASSWORD_CHANGED",
+        revoke=True,
+    )
     return accounts.token_for(svc, _user(svc, who.user_id), mfa_done=who.mfa)
 
 
@@ -193,14 +192,12 @@ def start_mfa(body: Reauth, who: SetupUser, request: Request, svc: Svc) -> dict[
         )
     secret = mfa.new_secret()
     sealed = mfa.seal(accounts.mfa_key(svc), user.id, secret)
-    with transaction(svc.engine) as s:  # pending until enabled; not an account event yet
-        writes.update_user(
-            s,
-            user_id=user.id,
-            tenant_id=user.tenant_id,
-            actor=user.id,
-            changes={"mfa_secret": sealed, "mfa_last_step": None},
-        )
+    svc.ledger.update_user(  # pending until enabled; not an account event yet
+        user.id,
+        tenant_id=user.tenant_id,
+        actor=user.id,
+        changes={"mfa_secret": sealed, "mfa_last_step": None},
+    )
     return {"secret": secret, "otpauth_uri": mfa.provisioning_uri(secret, user.username)}
 
 
@@ -219,16 +216,14 @@ def enable_mfa(body: Code, who: SetupUser, request: Request, svc: Svc) -> dict[s
         _failed(svc, request, user, "mfa_enrolment", *key)
         raise ProblemError(422, "that code is not valid; check the time on your phone")
     codes, hashes = mfa.new_backup_codes()
-    with transaction(svc.engine) as s:
-        writes.update_user(
-            s,
-            user_id=user.id,
-            tenant_id=user.tenant_id,
-            actor=user.id,
-            changes={"mfa_enabled": True, "mfa_last_step": step, "mfa_backup": hashes},
-            event_type="MFA_ENROLLED",
-            revoke=True,
-        )
+    svc.ledger.update_user(
+        user.id,
+        tenant_id=user.tenant_id,
+        actor=user.id,
+        changes={"mfa_enabled": True, "mfa_last_step": step, "mfa_backup": hashes},
+        event_type="MFA_ENROLLED",
+        revoke=True,
+    )
     started = _auth_time(svc, request)  # enrolment never restarts the session clock
     return {"backup_codes": codes} | accounts.token_for(
         svc, _user(svc, who.user_id), mfa_done=True, auth_time=started
@@ -238,16 +233,14 @@ def enable_mfa(body: Code, who: SetupUser, request: Request, svc: Svc) -> dict[s
 @router.post("/auth/logout")
 def logout(who: SetupUser, svc: Svc) -> dict[str, Any]:
     """Sign out everywhere: every token this user holds stops working at once."""
-    with transaction(svc.engine) as s:
-        writes.update_user(
-            s,
-            user_id=who.user_id,
-            tenant_id=who.tenant_id,
-            actor=who.user_id,
-            changes={},
-            event_type="SIGNED_OUT",
-            revoke=True,
-        )
+    svc.ledger.update_user(
+        who.user_id,
+        tenant_id=who.tenant_id,
+        actor=who.user_id,
+        changes={},
+        event_type="SIGNED_OUT",
+        revoke=True,
+    )
     return {"signed_out": True}
 
 

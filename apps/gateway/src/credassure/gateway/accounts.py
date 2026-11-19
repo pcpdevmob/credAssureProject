@@ -13,9 +13,7 @@ from typing import Any
 from credassure.core.errors import ApiErrorCode
 from credassure.gateway.deps import Services
 from credassure.gateway.problems import ProblemError
-from credassure.ledger import reads, writes
 from credassure.ledger.models import User as UserRow
-from credassure.ledger.session import transaction
 from credassure.security import mfa
 from credassure.security.auth import AuthError, Principal, Role, Stage, issue_token
 
@@ -84,36 +82,20 @@ def unseal(svc: Services, user: UserRow) -> str:
 
 
 def check_second_factor(svc: Services, user: UserRow, code: str, *, actor: str) -> bool:
-    """A TOTP code (newer than the last one used) or an unused backup code. The row is re-read and
-    checked inside the write transaction (BEGIN IMMEDIATE), so two parallel requests cannot both
-    spend the same code, and the stored step only moves forward."""
-    with transaction(svc.engine) as s:
-        fresh = reads.get_user(s, user.id)
-        if fresh is None or not fresh.mfa_enabled or not fresh.mfa_secret:
-            return False
-        secret = unseal(svc, fresh)
-        step = mfa.verify_totp(secret, code, time.time(), fresh.mfa_last_step)
+    """A TOTP code (newer than the last one used) or an unused backup code. The ledger re-reads the
+    row and runs this check inside its write transaction (BEGIN IMMEDIATE), so two parallel
+    requests cannot both spend the same code, and the stored step only moves forward."""
+
+    def decide(fresh: UserRow) -> tuple[dict[str, Any], str | None] | None:
+        if not fresh.mfa_enabled or not fresh.mfa_secret:
+            return None
+        step = mfa.verify_totp(unseal(svc, fresh), code, time.time(), fresh.mfa_last_step)
         if step is not None:
-            writes.update_user(
-                s,
-                user_id=fresh.id,
-                tenant_id=fresh.tenant_id,
-                actor=actor,
-                changes={"mfa_last_step": step},
-            )
-            return True
+            return {"mfa_last_step": step}, None
         left = mfa.use_backup_code(list(fresh.mfa_backup or []), code) if "-" in code else None
-        if left is None:
-            return False
-        writes.update_user(
-            s,
-            user_id=fresh.id,
-            tenant_id=fresh.tenant_id,
-            actor=actor,
-            changes={"mfa_backup": left},
-            event_type="BACKUP_CODE_USED",
-        )
-        return True
+        return None if left is None else ({"mfa_backup": left}, "BACKUP_CODE_USED")
+
+    return bool(svc.ledger.spend(user.id, actor=actor, decide=decide))
 
 
 def now() -> datetime:

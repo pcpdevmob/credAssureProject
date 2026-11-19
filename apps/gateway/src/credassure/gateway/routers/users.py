@@ -21,7 +21,7 @@ from credassure.core.errors import ApiErrorCode
 from credassure.gateway.accounts import forbid
 from credassure.gateway.deps import Svc, UserAdmin
 from credassure.gateway.problems import ProblemError
-from credassure.ledger import reads, writes
+from credassure.ledger import reads
 from credassure.ledger.errors import ConflictError
 from credassure.ledger.models import User as UserRow
 from credassure.ledger.session import transaction
@@ -85,15 +85,14 @@ def _change(
     check: Callable[[Any, UserRow], None],
     **update: Any,
 ) -> UserRow:
-    """One transaction: load the target in the admin's tenant, run the rule check, write."""
-    with transaction(svc.engine) as s:
-        user = reads.get_user(s, user_id)
-        if user is None or user.tenant_id != who.tenant_id:
-            raise ProblemError(404, f"no user {user_id}", ApiErrorCode.NOT_FOUND)
-        check(s, user)
-        return writes.update_user(
-            s, user_id=user_id, tenant_id=who.tenant_id, actor=who.user_id, **update
+    """One transaction (the ledger's): load the target in the admin's tenant, run the rule
+    check, write."""
+    try:
+        return svc.ledger.update_user(
+            user_id, tenant_id=who.tenant_id, actor=who.user_id, check=check, **update
         )
+    except ConflictError as exc:
+        raise ProblemError(404, f"no user {user_id}", ApiErrorCode.NOT_FOUND) from exc
 
 
 def _not_self(who: Principal, user_id: str, what: str) -> None:
@@ -126,18 +125,16 @@ def create_user(body: NewUser, who: UserAdmin, svc: Svc) -> dict[str, Any]:
         )
     temporary = _temporary()
     try:
-        with transaction(svc.engine) as s:
-            user = writes.create_user(
-                s,
-                tenant_id=who.tenant_id,
-                actor=who.user_id,
-                username=body.username,
-                role=body.role.value,
-                password_hash=hash_password(temporary),
-                display_name=body.display_name,
-                emp_id=body.emp_id,
-            )
-            out = view(user)
+        user = svc.ledger.create_user(
+            tenant_id=who.tenant_id,
+            actor=who.user_id,
+            username=body.username,
+            role=body.role.value,
+            password_hash=hash_password(temporary),
+            display_name=body.display_name,
+            emp_id=body.emp_id,
+        )
+        out = view(user)
     except ConflictError as exc:
         raise ProblemError(409, str(exc), ApiErrorCode.CONFLICT) from exc
     return {"user": out, "temporary_password": temporary}
@@ -203,7 +200,10 @@ def reset_password(user_id: str, who: UserAdmin, svc: Svc) -> dict[str, Any]:
         who,
         user_id,
         lambda s, u: None,
-        changes={"password_hash": hash_password(temporary), "must_change_password": True},
+        changes={
+            "password_hash": hash_password(temporary),
+            "must_change_password": True,  # nosec B105 - a flag name, not a secret
+        },
         event_type="PASSWORD_RESET",
         payload={"by": who.user_id},
         revoke=True,
@@ -221,7 +221,7 @@ def reset_mfa(user_id: str, who: UserAdmin, svc: Svc) -> dict[str, Any]:
         lambda s, u: None,
         changes={
             "mfa_enabled": False,
-            "mfa_secret": None,
+            "mfa_secret": None,  # nosec B105 - clearing the sealed secret, not a value
             "mfa_last_step": None,
             "mfa_backup": None,
         },

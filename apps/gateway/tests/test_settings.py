@@ -11,6 +11,7 @@ from pydantic import ValidationError
 from credassure.gateway.settings import Settings
 
 GOOD_SECRET = "x" * 40
+MFA_KEY = "A" * 43 + "="  # base64 of 32 bytes (ADR 0038: required while MFA is enforced)
 REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
@@ -19,6 +20,7 @@ def make(**overrides: Any) -> Settings:
         "app_env": "dev",
         "llm_base_url": "https://llm.example.test/v1",
         "jwt_secret": GOOD_SECRET,
+        "mfa_encryption_key": MFA_KEY,
     }
     values.update(overrides)
     return Settings(_env_file=None, **values)
@@ -104,6 +106,7 @@ def test_env_example_loads_with_required_values_filled(tmp_path: Path) -> None:
     template = (REPO_ROOT / ".env.example").read_text(encoding="utf-8")
     filled = _replace_line(template, "JWT_SECRET", GOOD_SECRET)
     filled = _replace_line(filled, "LLM_BASE_URL", "https://llm.example.test/v1")
+    filled = _replace_line(filled, "MFA_ENCRYPTION_KEY", MFA_KEY)
     env_file = tmp_path / ".env"
     env_file.write_text(filled, encoding="utf-8")
     s = Settings(_env_file=env_file)
@@ -126,7 +129,7 @@ def test_NFR07_model_profiles_load_and_hold_no_secrets(profile: str) -> None:
             assert value in ("", "ollama"), f"{name}: keys belong in the dotenv file only"
         if name.endswith("_CA_CERT"):
             assert value == "", "CA paths are machine-specific; profiles may only blank them"
-    s = Settings(_env_file=path, jwt_secret=GOOD_SECRET)
+    s = Settings(_env_file=path, jwt_secret=GOOD_SECRET, mfa_encryption_key=MFA_KEY)
     assert s.llm_disable_thinking and s.llm_max_tokens == 1024
     assert s.llm_model == {"local": "qwen3:8b", "course": "Qwen/Qwen3-8B"}[profile]
     # Ollama ignores chat_template_kwargs; only reasoning_effort turns Qwen3 thinking off there
