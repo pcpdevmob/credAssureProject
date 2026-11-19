@@ -65,7 +65,8 @@ def brd_class(
     item: Mapping[str, Any], result: Mapping[str, Any], answer: Mapping[str, Any]
 ) -> str | None:
     """Scope #12 first guess. A citation item that abstained or cited only real but wrong documents
-    is a search miss, not a hallucination; a cited document that does not exist is a hallucination."""
+    is a search miss, not a hallucination; a cited document that does not exist is a hallucination.
+    The scorer now labels these itself (no_citation, wrong_citation); this also reads older runs."""
     if result.get("passed"):
         return None
     cls = str(result.get("failure_class") or "schema_failure")

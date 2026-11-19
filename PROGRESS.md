@@ -52,6 +52,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P10 | 10.3 | Documentation | in_progress | Pritish | 2026-11-18 | 6fa8740, fb8aa5f | — | [2026-11-18-p10-10.3-contributions-release-pritish.md](docs/progress/entries/2026-11-18-p10-10.3-contributions-release-pritish.md) |
 | P11 | 11.0 | AI Security and Guardrails | done | Pritish | 2026-11-18 | — | — | [2026-11-18-p11-11.0-session-refresh-names-pritish.md](docs/progress/entries/2026-11-18-p11-11.0-session-refresh-names-pritish.md) |
 | P11 | 11.1 | Evaluation | done | Pritish | 2026-11-18 | — | — | [2026-11-18-p11-11.1-critic-false-positives-pritish.md](docs/progress/entries/2026-11-18-p11-11.1-critic-false-positives-pritish.md) |
+| P11 | 11.2 | Evaluation | done | Pritish | 2026-11-18 | — | — | [2026-11-18-p11-11.2-citation-failure-labels-pritish.md](docs/progress/entries/2026-11-18-p11-11.2-citation-failure-labels-pritish.md) |
 | P13 | 13.0 | Copilot | done | Pritish | 2026-11-18 | 2c3088d, bbe5f62, 0148fe0 | — | [2026-11-18-p13-13.0-copilot-product-assistant-pritish.md](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md) |
 
 ## Modules
@@ -126,6 +127,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - P8 8.5: A6 result is recorded only after safety_v2 is frozen and run (8.1). ([entry](docs/progress/entries/2026-11-18-p8-8.5-a6-switch-pritish.md))
 - P11 11.1: retrieval misses on 7 regulatory items (hybrid top 5, RERANK_ORDER) — check on the retrieval dev split. ([entry](docs/progress/entries/2026-11-18-p11-11.1-critic-false-positives-pritish.md))
 - P11 11.1: the Critic cannot tie a table figure to a unit in its header ("(Rs. in Crore)"); not fixed. ([entry](docs/progress/entries/2026-11-18-p11-11.1-critic-false-positives-pritish.md))
+- P11 11.2: regulatory search misses (T001, T002, T003, T004–T007, T013, T019) on the retrieval dev split. ([entry](docs/progress/entries/2026-11-18-p11-11.2-citation-failure-labels-pritish.md))
 
 ## History
 

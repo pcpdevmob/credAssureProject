@@ -143,6 +143,14 @@ def test_WC03_CP02_scorers_money_rate_and_citation_rules() -> None:
         == "invented_citation"
     )
     assert (
+        scorers.citation(cite, {"answer": "x", "citations": []}, known)["failure_class"]
+        == "no_citation"
+    )
+    wrong = {"answer": "x", "citations": ["R-CG-02"]}
+    other = cite | {"relevant_doc_ids": ["R-CG-05"]}
+    assert scorers.citation(other, wrong, known)["failure_class"] == "wrong_citation"
+    assert scorers.BRD_CLASS["no_citation"] == scorers.BRD_CLASS["wrong_citation"] == "search_miss"
+    assert (
         scorers.citation(cite, {"answer": "outstanding", "citations": ["R-MSME-03"]}, known)[
             "failure_class"
         ]

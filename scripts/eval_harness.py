@@ -76,6 +76,11 @@ def main() -> int:
     )
     ap.add_argument("--ids", nargs="*", default=None, help="item ids")
     ap.add_argument("--fake", action="store_true", help="FakeLLM: mechanics only, not a score")
+    ap.add_argument(
+        "--use-cache",
+        action="store_true",
+        help="reuse cached model replies (debugging only; a scored run always calls the model)",
+    )
     args = ap.parse_args()
 
     stamp = time.strftime("%Y%m%dT%H%M%S") + (f"-{args.ablation}" if args.ablation else "")
@@ -91,6 +96,10 @@ def main() -> int:
         "rate_limit": "100000/minute",
         "ablation": args.ablation,
     }
+    # A scored run measures the model, never the response cache: the cache key has no server
+    # context length, so replies cached under another context would be replayed (G4 live run).
+    if not args.use_cache:
+        overrides["llm_cache_path"] = None
     if args.fake:
         overrides |= {
             "_env_file": None,
@@ -133,6 +142,7 @@ def main() -> int:
         "prompt_versions": {n: p.version for n, p in registry().items()},
         "corpus_lock": _corpus_hash(),
         "reranker": settings.reranker,
+        "llm_cache": bool(settings.llm_cache_path),
         "price_per_1k": float(os.environ.get("EVAL_PRICE_PER_1K", "0") or 0),
         "started": stamp,
     }
