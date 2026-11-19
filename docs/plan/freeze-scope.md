@@ -1,6 +1,7 @@
 # Freeze scope: what is built and measured before 24 Nov 2026
 
-Decided 2026-11-19 (Pritish asked for a call on what is essential). Basis: the course template's deliverables and
+Decided 2026-11-19 (Pritish asked for a call on what is essential; K12 added the same evening after the reference-run
+check below). Basis: the course template's deliverables and
 assessment (technical depth 30%, punctuality 25%, working deployed system 20%, report and demo 25%; no score threshold)
 and BRD §13/§15 G4. Everything not listed under **Keep** is a stated limitation in the report, not unfinished work.
 
@@ -19,17 +20,27 @@ and BRD §13/§15 G4. Everything not listed under **Keep** is a stated limitatio
 | K9 | Clean-machine run of the demo profile from the setup guide (one teammate) | Working deployed system | Deployment | Case runs end to end on a second machine |
 | K10 | G4 report, 12-page technical report, demo script, recorded backup video | Report and demo | All | Submitted 27 Nov |
 | K11 | Release: `v1.1.0` tag (owner) with eval report, data hashes; image pins if a networked machine is free (ADR 0034) | Reproducible repository | Deployment | Tag pushed by the owner after G4 |
+| K12 | LendWise: re-rank after a counted concession, **time-boxed to Fri 20 Nov** | Working system: the recommendation the approver sees is correct (OBJ-03, LW-11, LW-13, BR-09) | LendWise | Revised version replaces the original in `rank_offers`; new `lw.ranking` / `lw.gate` facts; report stale until regenerated; negotiation, offers, e2e and T082 re-run unchanged |
 
 ## Cut (reported as known limitations)
 
 | Item | Why it is cut |
 |---|---|
-| LendWise re-ranking after the negotiation round (§8a) | No evaluation item scores a post-round ranking, so it adds no measured result; it changes negotiation and offers code five days before the freeze and needs 20 items re-run. The approver already sees `negotiation_in_progress`. Reverses the 19 Nov 18:09 plan: owner to confirm. |
 | Hinglish object-verb injection gap, employee-name PII matching, Critic table-unit check | Found by our own review; listed in the red-team log and system card as open limitations |
 | JWT refresh endpoint | 30-minute re-login does not affect a 10-minute demo |
 | Lighthouse ≥ 95 (H15), load smoke (#35, first in the permitted cut order), full e2e u6 | Replaced by one demo-path smoke test; latency and tokens per stage come from the eval run's `summary.json` |
 | Further model, prompt or retrieval experiments beyond K2 | No measured gain on the dev split so far (source priority, llama3.1, thinking) |
 | Retrieval human judging of 249 items (D3), LW-15, CP-08 full, A7 | Already cut (D3, ADR 0032) |
+
+## Why LendWise re-ranking is kept (K12)
+
+The reference run (`var/eval/20261119T091531`) negotiated three cases. In one of them the counted concession changes the
+best offer: case 06, OF-06-A drops from 16.60% to 12.36% APR after the fee waiver, below the top-ranked OF-06-B at
+13.80%. Without re-ranking, that case keeps recommending the dearer offer, with only the `negotiation_in_progress`
+warning. In the other two the order holds (case 01: 15.30% vs 13.00%; case 03: 15.16% vs OF-03-C 15.03%, so T082's
+expected order B, C, A is unchanged). No frozen item scores a post-round ranking except T082, so the change is safe for
+the evaluation and fixes a real wrong-recommendation path. The target rule (highest processing fee in ₹) and one round
+stay as they are: changing them would change the frozen negotiation gold.
 
 ## The numbers the report uses (one canonical set)
 
