@@ -1,0 +1,6 @@
+status: provisional
+frozen_on: 2026-11-19
+contents: lender_scripts (S05 v2: fee_waiver_v1 copied from v1, rate_match_v1 and tenor_change_v1 added; ADR 0037)
+manifest: data/frozen/v2/SHA256SUMS (regenerate with: uv run python -m credassure.datagen.lender_scripts_v2 after removing this file)
+final_when: a teammate who did not write the replies has reviewed them (human-review.md)
+corrections: never edit this version; add a new version with an ADR

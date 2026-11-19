@@ -1446,7 +1446,7 @@
     },
     "/v1/agents/lendwise/cases/{case_id}/negotiate": {
       "post": {
-        "description": "One fee-waiver round (LW-12/13): the request is built from ledger facts, verified, sent to\nthe simulated lender; a revision counts only after re-audit. Never accepts an offer.",
+        "description": "The next negotiation round (LW-12/13/15, ADR 0037): fee waiver, rate match, tenor change,\nat most three per case, one per call. Each request is built from ledger facts, verified and\nsent to the simulated lender; a revision counts only after re-audit, and a counted concession\nre-ranks the offers. 409 once negotiation is complete. Never accepts an offer.",
         "operationId": "negotiate_v1_agents_lendwise_cases__case_id__negotiate_post",
         "parameters": [
           {

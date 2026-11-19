@@ -96,7 +96,7 @@ Block → phase map: A=0, B=1, C=2, D=3, E=8 then 5, F=4, G=6, H=7, I1..I5=9a..9
 | 69 | System card + threat model | SYSTEM_CARD, THREAT_MODEL (LLM + ASI), Sutra mapping (RBI + MeitY), DPDP gap note | P10 |
 
 ### Cut by plan v3.4 ([ADR 0032](../adr/0032-copilot-v2-scope-and-v34-cuts.md); rows above are kept, not deleted)
-Stretch items not built: UI-09, UI-10, WC-08, LW-15, VER-06, ONB-07, CP-04. Deferred copilot items: full two-call CP-08, A7 guard-model ablation, adaptive red-team round (CP-07, CP-10, CP-11 and CP-12 were built in P13, [ADR 0035](../adr/0035-copilot-v3-product-assistant.md)). Reversible token vault replaced by irreversible placeholders.
+Stretch items not built: UI-09, UI-10, WC-08, VER-06, ONB-07, CP-04 (LW-15 built after all: [ADR 0037](../adr/0037-three-negotiation-rounds-and-reranking.md)). Deferred copilot items: full two-call CP-08, A7 guard-model ablation, adaptive red-team round (CP-07, CP-10, CP-11 and CP-12 were built in P13, [ADR 0035](../adr/0035-copilot-v3-product-assistant.md)). Reversible token vault replaced by irreversible placeholders.
 
 ## E. Decisions settled (no open questions block the build)
 | Decision | Default now | Evidence or switch | ADR |
