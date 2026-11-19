@@ -13,7 +13,7 @@ from typing import Any
 from credassure.core.errors import ApiErrorCode
 from credassure.gateway.deps import Services
 from credassure.gateway.problems import ProblemError
-from credassure.ledger import writes
+from credassure.ledger import reads, writes
 from credassure.ledger.models import User as UserRow
 from credassure.ledger.session import transaction
 from credassure.security import mfa
@@ -73,30 +73,42 @@ def mfa_key(svc: Services) -> bytes:
         raise ProblemError(503, "second factor is not configured on this server") from exc
 
 
+def unseal(svc: Services, user: UserRow) -> str:
+    """The user's TOTP secret; a wrong or rotated key is a server problem (503), never a 500."""
+    if not user.mfa_secret:
+        raise ProblemError(409, "no second factor is set up", ApiErrorCode.CONFLICT)
+    try:
+        return mfa.unseal(mfa_key(svc), user.id, user.mfa_secret)
+    except mfa.MfaError as exc:
+        raise ProblemError(503, "second factor is not configured on this server") from exc
+
+
 def check_second_factor(svc: Services, user: UserRow, code: str, *, actor: str) -> bool:
-    """A TOTP code (newer than the last one used) or an unused backup code. On success the step or
-    the spent backup code is stored, in the same transaction as its audit row."""
-    if not user.mfa_enabled or not user.mfa_secret:
-        return False
-    secret = mfa.unseal(mfa_key(svc), user.id, user.mfa_secret)
-    step = mfa.verify_totp(secret, code, time.time(), user.mfa_last_step)
+    """A TOTP code (newer than the last one used) or an unused backup code. The row is re-read and
+    checked inside the write transaction (BEGIN IMMEDIATE), so two parallel requests cannot both
+    spend the same code, and the stored step only moves forward."""
     with transaction(svc.engine) as s:
+        fresh = reads.get_user(s, user.id)
+        if fresh is None or not fresh.mfa_enabled or not fresh.mfa_secret:
+            return False
+        secret = unseal(svc, fresh)
+        step = mfa.verify_totp(secret, code, time.time(), fresh.mfa_last_step)
         if step is not None:
             writes.update_user(
                 s,
-                user_id=user.id,
-                tenant_id=user.tenant_id,
+                user_id=fresh.id,
+                tenant_id=fresh.tenant_id,
                 actor=actor,
                 changes={"mfa_last_step": step},
             )
             return True
-        left = mfa.use_backup_code(list(user.mfa_backup or []), code) if "-" in code else None
+        left = mfa.use_backup_code(list(fresh.mfa_backup or []), code) if "-" in code else None
         if left is None:
             return False
         writes.update_user(
             s,
-            user_id=user.id,
-            tenant_id=user.tenant_id,
+            user_id=fresh.id,
+            tenant_id=fresh.tenant_id,
             actor=actor,
             changes={"mfa_backup": left},
             event_type="BACKUP_CODE_USED",

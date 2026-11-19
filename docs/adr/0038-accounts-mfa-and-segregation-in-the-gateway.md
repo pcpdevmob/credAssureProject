@@ -27,8 +27,11 @@ bridge had no tests and was not in Compose or CI.
 | AUTH-09 | Audit: every account change and failed sign-in of a known user goes into the hash-chained audit log (`case_id` null) as an allow-listed event with allow-listed payload keys (who, whom, role, field names) and never a value of a hash, code, secret or temporary password. |
 | AUTH-10 | Step-up above ₹1.5 crore: the password as before, and a current TOTP code (or a backup code) once the approver has MFA. Failures share the per-user limit and are audited. |
 
-Rate limits: 5 failures per minute per username and IP for passwords; per user for second-factor codes, password change
-and step-up; a right answer is refused too while limited.
+Rate limits: 5 failures per minute and 20 per hour per username and IP for passwords, plus 50 per hour per username across
+all IPs; 5 per minute and 20 per hour per user for second-factor codes, password change, MFA setup and step-up; a right
+answer is refused too while limited. Starting MFA enrolment needs the password again, and enrolment keeps the session's
+original sign-in time, so a stolen token alone can neither bind another authenticator nor extend the session. A code is
+checked and spent inside one write transaction, so two parallel requests cannot both use it.
 
 MFA enforcement is a setting: on everywhere except `APP_ENV=test` unless `MFA_ENFORCED` says otherwise. The evaluation
 scripts (`make eval`, oracle, RAG-only, dev citations, live runs, load smoke; `make redteam` when PR #26
@@ -44,6 +47,11 @@ the seeded users; a real deployment removes that line and sets the key.
   keep working: the migration adds the columns with no forced change, no MFA and version 0.
 - Tokens stay in browser memory only (no storage, ADR 0004/#52): a reload means signing in again within the 30-minute
   token life. A refresh token in an httpOnly cookie was considered and not taken (it adds CSRF handling).
+- Usernames are unique across tenants (sign-in names no tenant); an HR id binds at most one login per tenant.
+- **Accepted risk (security review, owner to decide on four-eyes):** a single `user_admin` can, with audit, reset an
+  approver's password and MFA and sign in with the temporary password, or create a new approver. AUTH-02 stops the admin
+  role itself from touching cases, but not an admin who makes themselves a business user. Next step if wanted: a second
+  admin approves role changes into or out of `user_admin` and approver roles, and combined password + MFA resets.
 - Accepted: a failed sign-in of an existing user writes one audit row, so its timing differs slightly from an unknown
   username (argon2 dominates); TOTP uses SHA-1 because authenticator apps expect it; logout is "everywhere" rather than
   per device.

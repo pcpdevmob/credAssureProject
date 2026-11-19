@@ -125,7 +125,7 @@ class Settings(BaseSettings):
     planner_mode: Literal["fixed", "llm_proposes"] = "fixed"
     ablation: Literal["A1", "A2", "A3", "A4", "A5", "A6"] | None = None
 
-    @field_validator("ablation", "llm_ca_cert", mode="before")
+    @field_validator("ablation", "llm_ca_cert", "mfa_encryption_key", mode="before")
     @classmethod
     def _empty_is_unset(cls, value: object) -> object:
         return None if value == "" else value

@@ -227,8 +227,13 @@ def create_user(
     must_change_password: bool = True,
 ) -> User:
     """An account made by an admin (or the bootstrap command): temporary password, audited."""
+    # Usernames are global: sign-in names no tenant, so one name is one person everywhere.
     if s.scalar(select(User.id).where(User.username == username)) is not None:
         raise ConflictError(f"username {username} is taken")
+    if emp_id is not None and s.scalar(  # one login per HR profile (ONB-01)
+        select(User.id).where(User.tenant_id == tenant_id, User.emp_id == emp_id)
+    ):
+        raise ConflictError(f"HR id {emp_id} is already bound to another user")
     user = add_user(
         s,
         user_id=f"u-{uuid.uuid4().hex[:12]}",

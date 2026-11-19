@@ -124,8 +124,8 @@ def unseal(key: bytes, user_id: str, sealed: str) -> str:
     version, _, body = sealed.partition(":")
     if version != _SEAL_VERSION:
         raise MfaError("unknown sealed-secret version")
-    raw = base64.b64decode(body)
     try:
+        raw = base64.b64decode(body, validate=True)
         return AESGCM(key).decrypt(raw[:12], raw[12:], user_id.encode()).decode()
-    except InvalidTag as exc:
+    except (InvalidTag, ValueError) as exc:
         raise MfaError("sealed secret does not open with this key and user") from exc

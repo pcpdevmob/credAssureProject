@@ -21,7 +21,6 @@ from credassure.core.errors import ApiErrorCode
 from credassure.gateway import accounts
 from credassure.gateway.deps import (
     Account,
-    AnyToken,
     MfaPending,
     SetupUser,
     Svc,
@@ -47,6 +46,10 @@ router = APIRouter(prefix="/v1", tags=["auth"])
 # A real argon2 hash of a throwaway value: an unknown username costs the same verify (timing).
 _DUMMY_HASH = hash_password("credassure-dummy-password-for-timing")
 LOGIN_FAILURES = parse("5/minute")  # S4: per username and client IP; per user for codes
+# ADR 0038 review: a slower ceiling on the same keys, so a 6-digit code cannot be guessed at
+# 5 a minute all day (20 an hour), and a per-username bucket across IPs against spraying.
+HOURLY_FAILURES = parse("20/hour")
+USERNAME_FAILURES = parse("50/hour")
 
 
 class Login(BaseModel):
@@ -58,9 +61,21 @@ class Code(BaseModel):
     code: SecretStr = Field(min_length=6, max_length=16)  # 6 digits, or a backup code 'xxxx-xxxx'
 
 
+class Reauth(BaseModel):
+    current_password: SecretStr = Field(min_length=1, max_length=256)
+
+
 class PasswordChange(BaseModel):
     current_password: SecretStr = Field(min_length=1, max_length=256)
     new_password: SecretStr = Field(min_length=1, max_length=256)
+
+
+def _auth_time(svc: Svc, request: Request) -> datetime:
+    """When the password behind this request's (already validated) token was typed."""
+    secret = svc.settings.jwt_secret
+    if secret is None:
+        raise AuthError("server has no JWT secret")
+    return token_auth_time(request.headers["authorization"][7:], secret.get_secret_value())
 
 
 def _user(svc: Svc, user_id: str) -> UserRow:
@@ -72,14 +87,17 @@ def _user(svc: Svc, user_id: str) -> UserRow:
 
 
 def _limited(request: Request, *key: str) -> None:
-    if not request.app.state.login_limiter.test(LOGIN_FAILURES, *key):
+    limiter = request.app.state.login_limiter
+    if not limiter.test(LOGIN_FAILURES, *key) or not limiter.test(HOURLY_FAILURES, *key):
         raise ProblemError(
-            429, "too many failed attempts; wait a minute", ApiErrorCode.RATE_LIMITED
+            429, "too many failed attempts; try again later", ApiErrorCode.RATE_LIMITED
         )
 
 
 def _failed(svc: Svc, request: Request, user: UserRow | None, reason: str, *key: str) -> None:
-    request.app.state.login_limiter.hit(LOGIN_FAILURES, *key)  # only failures count
+    limiter = request.app.state.login_limiter
+    limiter.hit(LOGIN_FAILURES, *key)  # only failures count
+    limiter.hit(HOURLY_FAILURES, *key)
     if user is not None:  # unknown usernames are not written to the audit chain
         with transaction(svc.engine) as s:
             writes.account_event(
@@ -95,11 +113,17 @@ def _failed(svc: Svc, request: Request, user: UserRow | None, reason: str, *key:
 def token(body: Login, request: Request, svc: Svc) -> dict[str, Any]:
     key = (body.username.lower(), request.client.host if request.client else "unknown")
     _limited(request, *key)
+    spray = (f"user:{body.username.lower()}",)  # all IPs together
+    if not request.app.state.login_limiter.test(USERNAME_FAILURES, *spray):
+        raise ProblemError(
+            429, "too many failed attempts; try again later", ApiErrorCode.RATE_LIMITED
+        )
     with transaction(svc.engine) as s:
         user = reads.user_by_name(s, body.username)
     digest = user.password_hash if user is not None else _DUMMY_HASH
     ok = verify_password(digest, body.password)
     if user is None or not ok or not user.active:
+        request.app.state.login_limiter.hit(USERNAME_FAILURES, *spray)
         _failed(svc, request, user if user and user.active else None, "password", *key)
         raise AuthError("invalid credentials")
     if needs_rehash(user.password_hash):
@@ -116,10 +140,7 @@ def verify_mfa(body: Code, who: MfaPending, request: Request, svc: Svc) -> dict[
     if not accounts.check_second_factor(svc, user, body.code.get_secret_value(), actor=user.id):
         _failed(svc, request, user, "second_factor", *key)
         raise AuthError("invalid code")
-    secret = svc.settings.jwt_secret
-    if secret is None:
-        raise AuthError("server has no JWT secret")
-    started = token_auth_time(request.headers["authorization"][7:], secret.get_secret_value())
+    started = _auth_time(svc, request)
     return accounts.token_for(svc, _user(svc, who.user_id), mfa_done=True, auth_time=started)
 
 
@@ -157,9 +178,15 @@ def change_password(
 
 
 @router.post("/auth/mfa/setup")
-def start_mfa(who: SetupUser, svc: Svc) -> dict[str, Any]:
-    """Start enrolment: a new secret for the authenticator app (shown once, stored sealed)."""
+def start_mfa(body: Reauth, who: SetupUser, request: Request, svc: Svc) -> dict[str, Any]:
+    """Start enrolment: a new secret for the authenticator app (shown once, stored sealed). Needs
+    the password again, so a stolen token alone cannot bind the attacker's app to the account."""
+    key = (f"password:{who.user_id}",)
+    _limited(request, *key)
     user = _user(svc, who.user_id)
+    if not verify_password(user.password_hash, body.current_password.get_secret_value()):
+        _failed(svc, request, user, "mfa_setup", *key)
+        raise ProblemError(403, "current password is not correct", ApiErrorCode.FORBIDDEN)
     if user.mfa_enabled:
         raise ProblemError(
             409, "a second factor is already set up; ask an administrator to reset it"
@@ -186,7 +213,7 @@ def enable_mfa(body: Code, who: SetupUser, request: Request, svc: Svc) -> dict[s
     user = _user(svc, who.user_id)
     if user.mfa_enabled or not user.mfa_secret:
         raise ProblemError(409, "start the setup first", ApiErrorCode.CONFLICT)
-    secret = mfa.unseal(accounts.mfa_key(svc), user.id, user.mfa_secret)
+    secret = accounts.unseal(svc, user)
     step = mfa.verify_totp(secret, body.code.get_secret_value(), time.time(), None)
     if step is None:
         _failed(svc, request, user, "mfa_enrolment", *key)
@@ -202,11 +229,14 @@ def enable_mfa(body: Code, who: SetupUser, request: Request, svc: Svc) -> dict[s
             event_type="MFA_ENROLLED",
             revoke=True,
         )
-    return {"backup_codes": codes} | accounts.token_for(svc, _user(svc, who.user_id), mfa_done=True)
+    started = _auth_time(svc, request)  # enrolment never restarts the session clock
+    return {"backup_codes": codes} | accounts.token_for(
+        svc, _user(svc, who.user_id), mfa_done=True, auth_time=started
+    )
 
 
 @router.post("/auth/logout")
-def logout(who: AnyToken, svc: Svc) -> dict[str, Any]:
+def logout(who: SetupUser, svc: Svc) -> dict[str, Any]:
     """Sign out everywhere: every token this user holds stops working at once."""
     with transaction(svc.engine) as s:
         writes.update_user(

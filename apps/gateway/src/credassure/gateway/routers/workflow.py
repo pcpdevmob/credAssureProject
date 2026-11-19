@@ -26,7 +26,7 @@ from credassure.gateway.deps import Svc, User, case_ref, role, visible_case
 from credassure.gateway.jobs import job_view
 from credassure.gateway.problems import ProblemError
 from credassure.gateway.quota import quota
-from credassure.gateway.routers.auth import LOGIN_FAILURES
+from credassure.gateway.routers.auth import HOURLY_FAILURES, LOGIN_FAILURES
 from credassure.gateway.supervisor_service import approval_warnings
 from credassure.ledger import reads
 from credassure.ledger.session import run_in_progress, run_lock, transaction
@@ -264,7 +264,7 @@ def _step_up(
         return
     limiter = request.app.state.login_limiter
     key = (f"step-up:{who.user_id}",)  # per user, not per IP: a stolen token cannot rotate IPs
-    if not limiter.test(LOGIN_FAILURES, *key):
+    if not limiter.test(LOGIN_FAILURES, *key) or not limiter.test(HOURLY_FAILURES, *key):
         raise ProblemError(
             429, "too many failed confirmations; wait a minute", ApiErrorCode.RATE_LIMITED
         )
@@ -275,6 +275,7 @@ def _step_up(
     ):
         if password is not None:
             limiter.hit(LOGIN_FAILURES, *key)
+            limiter.hit(HOURLY_FAILURES, *key)
             svc.ledger.audit(case.id, "STEP_UP_FAILED", {"by": who.user_id})
         raise ProblemError(
             403,
@@ -289,6 +290,7 @@ def _step_up(
     ):
         if mfa_code is not None:
             limiter.hit(LOGIN_FAILURES, *key)
+            limiter.hit(HOURLY_FAILURES, *key)
             svc.ledger.audit(case.id, "STEP_UP_FAILED", {"by": who.user_id, "factor": "mfa"})
         raise ProblemError(
             403,

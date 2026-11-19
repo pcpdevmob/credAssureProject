@@ -73,6 +73,8 @@ def test_ADR0038_sealed_secret_opens_only_with_its_key_and_user() -> None:
         mfa.unseal(key, "u-2", sealed)  # copied to another user's row
     with pytest.raises(mfa.MfaError):
         mfa.unseal(os.urandom(32), "u-1", sealed)
+    with pytest.raises(mfa.MfaError):
+        mfa.unseal(key, "u-1", "v1:not*base64")
 
 
 def test_ADR0038_mfa_key_fails_closed() -> None:

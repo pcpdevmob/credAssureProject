@@ -60,8 +60,12 @@ def _sign_in(client: TestClient, username: str, password: str = PASSWORD) -> dic
     return dict(r.json())
 
 
-def _enrol(client: TestClient, token: str, clock: Clock) -> tuple[str, dict[str, Any]]:
-    setup = client.post("/v1/auth/mfa/setup", headers=_bearer(token))
+def _enrol(
+    client: TestClient, token: str, clock: Clock, password: str = PASSWORD
+) -> tuple[str, dict[str, Any]]:
+    setup = client.post(
+        "/v1/auth/mfa/setup", json={"current_password": password}, headers=_bearer(token)
+    )
     assert setup.status_code == 200, setup.text
     secret = setup.json()["secret"]
     done = client.post(
@@ -88,7 +92,7 @@ def _admin(client: Any, clock: Clock, username: str = "root.admin") -> dict[str,
         )
     first = _sign_in(client, username, ADMIN_PASSWORD)
     assert first["stage"] == "setup" and first["next"] == ["enrol_mfa"]
-    _, full = _enrol(client, first["access_token"], clock)
+    _, full = _enrol(client, first["access_token"], clock, ADMIN_PASSWORD)
     assert full["stage"] == "full"
     return _bearer(full["access_token"])
 
@@ -158,7 +162,7 @@ def test_ADR0038_admin_creates_a_user_who_must_change_the_temporary_password(
             "username": "ravi.prep",
             "display_name": "Ravi",
             "role": "preparer",
-            "emp_id": "E003",
+            "emp_id": "E999",
         },
         headers=admin,
     )
@@ -348,7 +352,8 @@ def test_ADR0038_mfa_off_in_the_test_profile_keeps_the_old_sign_in(client: Any) 
 def test_ADR0038_enrolment_without_a_key_is_refused(make_client: Callable[..., Any]) -> None:
     c = make_client(mfa_enforced=False)
     token = _sign_in(c, "demo.vp")["access_token"]
-    assert c.post("/v1/auth/mfa/setup", headers=_bearer(token)).status_code == 503
+    body = {"current_password": PASSWORD}
+    assert c.post("/v1/auth/mfa/setup", json=body, headers=_bearer(token)).status_code == 503
 
 
 def test_ADR0038_settings_refuse_a_bad_key_and_require_one_when_enforced() -> None:
@@ -364,3 +369,72 @@ def test_ADR0038_settings_refuse_a_bad_key_and_require_one_when_enforced() -> No
         _env_file=None, app_env="dev", jwt_secret="x" * 40, llm_enabled=False, mfa_enforced=False
     )
     assert not ok.mfa_required_for("vp_finance")
+
+
+def test_ADR0038_review_a_stolen_token_alone_cannot_bind_an_attackers_app(app: Any) -> None:
+    """MUST from the security review: enrolment needs the password again."""
+    stolen = _bearer(_sign_in(app, "demo.preparer")["access_token"])  # full, MFA optional
+    assert app.post("/v1/auth/mfa/setup", headers=stolen).status_code == 422
+    wrong = app.post(
+        "/v1/auth/mfa/setup", json={"current_password": "not-the-password"}, headers=stolen
+    )
+    assert wrong.status_code == 403
+    assert app.get("/v1/cases", headers=stolen).status_code == 200  # nothing was revoked
+
+
+def test_ADR0038_review_enrolment_keeps_the_session_clock(app: Any, clock: Clock) -> None:
+    import jwt
+
+    first = _sign_in(app, "demo.director")
+    _, done = _enrol(app, first["access_token"], clock)
+
+    def claims(tok: str) -> dict[str, Any]:
+        return dict(jwt.decode(tok, options={"verify_signature": False}))
+
+    assert claims(done["access_token"])["auth_time"] == claims(first["access_token"])["auth_time"]
+
+
+def test_ADR0038_review_password_alone_cannot_sign_the_user_out(app: Any, clock: Clock) -> None:
+    first = _sign_in(app, "demo.vp")
+    _, done = _enrol(app, first["access_token"], clock)
+    pending = _bearer(_sign_in(app, "demo.vp")["access_token"])  # stage mfa
+    assert app.post("/v1/auth/logout", headers=pending).status_code == 401
+    assert app.get("/v1/me", headers=_bearer(done["access_token"])).status_code == 200
+
+
+def test_ADR0038_review_one_code_cannot_be_spent_twice_from_a_stale_row(
+    app: Any, clock: Clock
+) -> None:
+    from credassure.gateway import accounts
+    from credassure.ledger import reads
+    from credassure.ledger.session import transaction
+
+    first = _sign_in(app, "demo.vp")
+    secret, done = _enrol(app, first["access_token"], clock)
+    svc = app.app.state.services
+    with transaction(svc.engine) as s:
+        stale = reads.get_user(s, "u-demo.vp")
+    assert stale is not None
+    code = clock.code(secret)
+    assert accounts.check_second_factor(svc, stale, code, actor="t")
+    assert not accounts.check_second_factor(svc, stale, code, actor="t")  # re-read, refused
+    backup = done["backup_codes"][0]
+    assert accounts.check_second_factor(svc, stale, backup, actor="t")
+    assert not accounts.check_second_factor(svc, stale, backup, actor="t")
+
+
+def test_ADR0038_review_one_login_per_hr_profile(app: Any, clock: Clock) -> None:
+    admin = _admin(app, clock)
+    r = app.post(
+        "/v1/admin/users",
+        json={"username": "copy.prep", "display_name": "C", "role": "preparer", "emp_id": "E001"},
+        headers=admin,
+    )
+    assert r.status_code == 409 and "HR id" in r.json()["detail"]  # demo.preparer holds E001
+
+
+def test_ADR0038_review_an_empty_key_is_unset() -> None:
+    from credassure.gateway.settings import Settings
+
+    s = Settings(_env_file=None, app_env="test", mfa_encryption_key="")
+    assert s.mfa_encryption_key is None
