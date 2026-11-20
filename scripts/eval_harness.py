@@ -28,6 +28,7 @@ from credassure.core.ports import LLMPort
 from credassure.core.prompts import registry
 from credassure.engines.routing import route
 from credassure.evaluation import harness
+from credassure.evaluation.record import data_hashes
 from credassure.gateway.main import _default_llm, create_app
 from credassure.gateway.settings import Settings
 from credassure.ledger.seed import seed
@@ -142,6 +143,8 @@ def main() -> int:
         "items": len(items),
         "prompt_versions": {n: p.version for n, p in registry().items()},
         "corpus_lock": _corpus_hash(),
+        "data_hashes": data_hashes(),  # v1 + v2 lender scripts (ADR 0037)
+        "lender_scripts_dir": str(settings.lender_scripts_dir),
         "reranker": settings.reranker,
         "llm_cache": bool(settings.llm_cache_path),
         "price_per_1k": float(os.environ.get("EVAL_PRICE_PER_1K", "0") or 0),
