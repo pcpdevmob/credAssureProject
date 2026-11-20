@@ -4,12 +4,12 @@ PY_SRC := apps/gateway/src $(wildcard agents/*/src) \
 	data/generators/src
 COMPOSE := docker compose -f deploy/compose/compose.yaml
 # Settings for corpus network runs (CORPUS_CONTACT_EMAIL, ADR 0020) come from .env when it exists.
-# MODELS=local (default, Ollama qwen3:8b + in-process bge-small) | course (graded endpoints).
+# MODELS=local (default, Ollama qwen3:8b + in-process bge-small) | course (graded endpoints) | hf (Qwen3-8B via Hugging Face → Featherless).
 # The profile loads after the dotenv file, so it wins for model settings; keys and CA paths stay there.
 MODELS ?= local
 MODELS_FILE := deploy/env/models-$(MODELS).env
 ifeq ($(wildcard $(MODELS_FILE)),)
-$(error MODELS=$(MODELS): no $(MODELS_FILE); use local or course)
+$(error MODELS=$(MODELS): no $(MODELS_FILE); use local, course or hf)
 endif
 ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 # The dev/demo database (var/case.db) is tenant "demo" (make demo-reset); an exported variable beats --env-file.

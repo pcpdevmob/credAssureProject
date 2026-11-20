@@ -1,4 +1,4 @@
-# Course endpoint comparison (local qwen3:8b vs the course `Qwen/Qwen3-8B`)
+# Model comparison: local qwen3:8b vs the course endpoint or the hosted provider
 
 The evaluated path is the local profile (ADR 0036): every reported number comes from Ollama `qwen3:8b` on the Mac.
 This page runs the same evaluation on the course endpoint (`MODELS=course`, `deploy/env/models-course.env`) and
@@ -56,3 +56,13 @@ on the same code (today's 33-item recheck plus the 67-item run on main).
   (quantisation: the Mac runs a 4-bit build, the course serves full precision).
 - Do not switch the evaluated path from this comparison alone: that is an owner decision and a new ADR (it would
   change every reported number and needs a full rerun of K3 and the ablations on that endpoint).
+
+## Same comparison for the hosted deployment model (`MODELS=hf`)
+The deployment plan serves `Qwen/Qwen3-8B` through Hugging Face Inference Providers (provider Featherless AI, FP8).
+Embeddings, reranker and the vector index stay local, so no index work is needed.
+1. `.env`: `LLM_API_KEY=<Hugging Face fine-grained token with "Make calls to Inference Providers">` and
+   `EVAL_API_KEY=<same token>`. (MODELS=local ignores them: its profile sets its own key.)
+2. `make llm-probe MODELS=hf` (reachable, thinking off, JSON).
+3. `make eval MODELS=hf ARGS="--ids T001 T082"`, then
+   `make eval MODELS=hf ARGS="--only regulatory negotiation offers e2e injection refusal"` (about $0.05).
+4. `make compare-runs A=var/eval/<local run> B=var/eval/<hf run>`.
