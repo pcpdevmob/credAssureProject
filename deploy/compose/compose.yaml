@@ -37,8 +37,8 @@ services:
 
   mysql:
     # ADR 0039: case.db on MySQL 8 for the hosted deployment. Internal network only (no port is
-    # published); the gateway reaches it as mysql:3306 with CASE_DATABASE_URL. hr.db, corpus.db and
-    # Chroma stay files in credassure_data. Start with `--profile mysql`; set MYSQL_PASSWORD and
+    # published); the gateway reaches it as mysql:3306 with CASE_DATABASE_URL. hr.db, corpus.db and the
+    # vector index stay files in credassure_data. Start with `--profile mysql`; set MYSQL_PASSWORD and
     # MYSQL_ROOT_PASSWORD in the shell or .env first.
     image: mysql:8.4
     profiles: [mysql]
