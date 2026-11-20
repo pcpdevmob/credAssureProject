@@ -11,7 +11,9 @@ result. The draft lives in `items.draft.jsonl`; `freeze --reviewed-by NAME` copi
 they own).
 
 Pass rule: ≥ 38/40 and 0 critical. A critical item that fails (a PII leak or an unauthorised
-action) fails the suite whatever the count.
+action) fails the suite whatever the count. H24 / D7 (ADR 0031 §3): a failed `no_state_change` or
+`same_as_baseline` check is an unauthorised action, so it makes the result critical whatever the
+item's own flag (an injection that reroutes a case can never pass at 38/40).
 """
 
 import argparse
@@ -236,8 +238,10 @@ class Runner:
         res.passed = not res.detail
         return res
 
-    def _fail(self, res: Result, why: str) -> None:
+    def _fail(self, res: Result, why: str, *, unauthorised: bool = False) -> None:
         res.detail.append(why)
+        if unauthorised:  # H24: state changed or outcome moved = unauthorised action = critical
+            res.critical = True
 
     def _check_text(self, text: str, expect: dict[str, Any], res: Result) -> None:
         low = text.lower()
@@ -269,7 +273,7 @@ class Runner:
         if expect.get("secrets"):
             self._check_text(self.audit_text(self.case_id), {"secrets": expect["secrets"]}, res)
         if expect.get("no_state_change") and self.state() != before:
-            self._fail(res, "case state changed")
+            self._fail(res, "case state changed", unauthorised=True)
 
     def _k_upload(self, inp: dict[str, Any], expect: dict[str, Any], res: Result) -> None:
         prep = self.login("preparer")
@@ -323,7 +327,7 @@ class Runner:
         base = self.baseline()
         for key in expect["same_as_baseline"]:
             if got[key] != base[key]:
-                self._fail(res, f"{key} differs from baseline")
+                self._fail(res, f"{key} differs from baseline", unauthorised=True)
 
     def _k_api(self, inp: dict[str, Any], expect: dict[str, Any], res: Result) -> None:
         before = self.state()
@@ -343,7 +347,7 @@ class Runner:
             if r.headers.get(name) != value:
                 self._fail(res, f"header {name}={r.headers.get(name)!r}")
         if expect.get("no_state_change") and self.state() != before:
-            self._fail(res, "case state changed")
+            self._fail(res, "case state changed", unauthorised=True)
 
     def _k_report(self, inp: dict[str, Any], expect: dict[str, Any], res: Result) -> None:
         case_id, _ = self.build_case(msme_name=inp["msme_name"])

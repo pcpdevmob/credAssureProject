@@ -25,7 +25,9 @@ import sbom
 ROOT = Path(__file__).resolve().parents[1]
 HASHED = (
     "data/frozen/v1/SHA256SUMS",
+    "data/frozen/v2/SHA256SUMS",  # v2 lender scripts, ADR 0037
     "evaluation/FROZEN.sha256",
+    "evaluation/safety_v2/FROZEN.sha256",  # recorded once the suite is frozen (ADR 0031)
     "config/guardrails.lock",
     "uv.lock",
     "package-lock.json",

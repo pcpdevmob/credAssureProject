@@ -2,7 +2,7 @@
 
 Every run writes record.json with the model, endpoint, context length (EVAL_NUM_CTX) and run kind
 (graded / local_provisional / smoke_test), prompt versions (SHA-256), the engine version
-(last git commit touching packages/engines), the corpus hash (manifest + lock), the data hash (SHA256SUMS),
+(last git commit touching packages/engines), the corpus hash (manifest + lock), the data hash (v1 SHA256SUMS) and every frozen version's SHA256SUMS,
 the test-set hash, the seed, the item count and the UTC time.
 """
 
@@ -23,6 +23,14 @@ def _sha(*paths: str) -> str:
     for p in paths:
         h.update((REPO / p).read_bytes())
     return h.hexdigest()
+
+
+def data_hashes() -> dict[str, str]:
+    """SHA-256 of every frozen data version's manifest (v1, v2 lender scripts since ADR 0037, ...)."""
+    return {
+        str(p.relative_to(REPO)): _sha(str(p.relative_to(REPO)))
+        for p in sorted((REPO / "data" / "frozen").glob("v*/SHA256SUMS"))
+    }
 
 
 def engine_version() -> str:
@@ -67,6 +75,7 @@ def run_record(
         "engine_version": engine_version(),
         "corpus_hash": _sha("data/corpus/manifest.yaml", "data/corpus/manifest.lock.json"),
         "data_hash": _sha("data/frozen/v1/SHA256SUMS"),
+        "data_hashes": data_hashes(),
         "testset_hash": _sha("evaluation/testset/v1/items.jsonl"),
         "seed": int(os.environ.get("CREDASSURE_SEED", "20261026")),
         "items": items,

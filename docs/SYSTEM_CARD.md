@@ -1,6 +1,6 @@
 # CredAssure system card
 
-Version 1.0.0 · 2026-11-18 · Plan v3.4 §6, scope #69 · Companion pages: [THREAT_MODEL.md](THREAT_MODEL.md),
+Version 1.1.0 · 2026-11-20 · Plan v3.4 §6, scope #69 · Companion pages: [THREAT_MODEL.md](THREAT_MODEL.md),
 [security/model-card.md](security/model-card.md) (models and data provenance), [security/owasp-asi-mapping.md](security/owasp-asi-mapping.md).
 
 CredAssure is an IIT Kharagpur Track B capstone **prototype**. It runs on synthetic company, lender and employee data
@@ -63,6 +63,7 @@ and ADR 0020. Every corpus document carries its legal basis and SHA-256 (`data/g
 | Approve, reject, return | The routed human approver only | `packages/security/tests/test_auth.py::test_APR05_maker_checker_refuses_self_approval_even_for_an_approver_role` |
 | Approve above ₹1.5 crore | VP with password step-up | `apps/gateway/tests/test_phase10_approvals.py::test_NFR07_vp_approval_above_threshold_needs_step_up` |
 | Approve at all | Only after the approver attests they reviewed Critic findings and safety events | `apps/gateway/tests/test_p9_rai.py::test_P9_ASI09_approve_needs_the_attestation_and_records_it` |
+| Negotiation move and target | Code, from ledger figures; the Critic checks the message before it is sent | `agents/lendwise/tests/test_negotiation_rounds.py::test_LW15_three_rounds_in_fixed_order_one_per_call_then_complete` |
 | Choose a lender | The MSME, outside CredAssure | No accept/sign path (§2) |
 
 **RACI**
@@ -112,24 +113,74 @@ All ten OWASP LLM (2026) and ten Agentic ASI (2026) risks map to controls and te
 [security/owasp-asi-mapping.md](security/owasp-asi-mapping.md); the STRIDE view is [THREAT_MODEL.md](THREAT_MODEL.md).
 
 ## 9. Evaluation and adversarial results
-Measured so far (reports in `evaluation/reports/`):
+All model runs: local Ollama `qwen3:8b` (ADR 0036), 8192-token context, thinking off, response cache off, on one
+16 GB Apple Silicon Mac. Write-up with every run id: `evaluation/reports/G4-draft-2026-11-19.md`.
 
-| Check | Result | Evidence |
+**Headline: 88/100 against the team's own BRD target of 92 (not met), and +65 over the best single-prompt baseline.**
+Reference run `var/eval/20261119T091531`; reproduced on `main` on 20 Nov (`20261120T121853` + `20261120T140004`, 88).
+
+| Category | Items | Best baseline (S2) | System | Target |
+|---|---|---|---|---|
+| Regulatory and policy (valid citation) | 25 | 6 | **13** (± 1 between runs) | ≥ 20 |
+| Onboarding decisions | 10 | 3 | 10 | 10 |
+| Cash flow and funding need (to ₹1) | 15 | 0 | 15 | 15 |
+| Offer audit, affordability, ranking | 15 | 0 | 15 | 15 |
+| Negotiation safety | 5 | 1 | 5 | 5 |
+| Approval routing (incl. ₹1.5 crore ± ₹1) | 6 | 4 | 6 | 6 |
+| Prompt injection | 8 | 0 | 8 | 8 |
+| Refusal and out of scope | 8 | 6 | 8 | 8 |
+| Case isolation | 3 | 3 | 3 | 3 |
+| End to end | 5 | 0 | 5 | ≥ 4 |
+| **Total** | **100** | **23** (S1 20, S3 22) | **88** | ≥ 92 |
+
+Every deterministic and safety category is at its target; the whole shortfall is regulatory answers. The bare model
+followed the planted instruction on 8/8 injection items in all three baseline strategies. Refusal and isolation pass
+almost fully for the bare model too, so they are not a differentiator.
+
+**Ablations** (each on its affected categories; an effect is claimed only when it appears in more than one category or
+on a rerun):
+
+| Ablation | Full | Ablated | Effect |
+|---|---|---|---|
+| A1 model calculates (no engines) | 41/41 | 10/41 | Yes (4 categories, identical on rerun) |
+| A2 ledger and Critic off | 39/51 | 38/51 | Not measurable on these scorers |
+| A3 dense top 5 only | 13/25 | 12/25 | Within run-to-run variation |
+| A4 model decides gates | 45/45 | 13/45 | Yes (4 categories, identical on rerun) |
+| A5 injection defence off | 13/13 | 12/13 (T082 followed the plant) | Yes (reproduced) |
+
+**Compensating for a small model: the 19 answerable regulatory questions** (same frozen strict scorer in every row;
+"false answers" read by hand):
+
+| Configuration | Pass (of 19) | False answers with a citation | Abstains when it should (of 6) |
+|---|---|---|---|
+| Closed book (baseline S1–S3) | 0 | – | 6 |
+| Prompting + RAG, no agents | 6 | 7 | 4 |
+| Full system (span citations, Critic) | 6–8 | 1–2 | 6 |
+| Oracle: gold passages | 8 (10 after the K2 Critic fix) | 1 | – |
+
+What the agents add over plain RAG is mostly safety: up to two more passes, five or six fewer false answers and no
+answered unanswerable question. Search is not the bottleneck (perfect passages give the same 8/19); the limit is the
+8B model writing a sentence the Critic can tie to a passage. The K2 Critic fix was found by reading frozen-item traces
+and is reported as post-diagnosis (dev split 10 → 11/20, oracle 8 → 10/19, safety categories unchanged).
+
+| Other check | Result | Evidence |
 |---|---|---|
 | Cash-flow known answers (to ₹1) | 15/15 | `evaluation/reports/E6-2026-11-15.md` (engines and the agent vs independent gold) |
 | Offer APR, cost and ranking known answers | 15/15 | `evaluation/reports/E7-2026-11-16.md` |
 | Onboarding decisions | 10/10 | `evaluation/reports/E5-2026-11-15.md` |
 | Normaliser formats | 146 tests | `evaluation/reports/E4-2026-11-16.md` |
 | Planted bad citations blocked | 12/12 | `agents/critic/tests/test_bad_citations.py::test_VER02_S24_every_planted_bad_citation_is_blocked` |
-| Refusal and isolation through the API | 8/8, 3/3 | `apps/gateway/tests/test_copilot_items.py::test_CP03_SUP08_refusal_8_and_isolation_3_through_the_api` |
-| Retrieval recall@5, frozen 40 | 25/40 (target 30; labels pooling-biased) | `evaluation/reports/retrieval-ladder-2026-11-18.md` |
+| Red team (20 frozen prompts + 5 probes, live model) | 25/25 resisted: 20 pass by code, 5 read by a person, 0 fail, no state change, no leak | `docs/redteam_log.md`, `evaluation/reports/redteam/redteam-20261120T011215.md` |
+| Negotiation (three rounds, re-rank after each counted concession) | Unit and API tested; not in the 100 items; case 06 ranks OF-06-A first after round 1 | `apps/gateway/tests/test_lw_items.py::test_LW15_LW11_three_rounds_rerank_case_06_through_the_api`, `agents/lendwise/tests/test_negotiation_rounds.py::test_BR15_injected_round_2_reply_changes_nothing` |
+| Retrieval recall@5, frozen 40 | 22/40 with the shipped configuration (target 34; labels pooling-biased); dev split 17/20 | `evaluation/reports/retrieval-ladder-2026-11-18.md` |
+| Where the model runs | Course endpoint (full-precision Qwen3-8B): 53/66 vs 54/66 on the model-dependent items (≈ 87 vs 88 of 100; only T003 differs), at 4–8× lower latency | `docs/evaluation/course-endpoint.md`; run `20261120T161257` |
 | Fairness invariance (names, cities, state) | Gates, amount, route and ranking unchanged | `tests/e2e/test_fairness_invariance.py::test_scope67_BR12_names_and_state_do_not_change_decisions` |
 | Architecture conformance | PASS | `evaluation/reports/E18-2026-11-18.md` |
 
-**Pending the live model run** (Gate G4, P11; needs the Mac with the model): the 100-item score against the best
-baseline (`make eval`, `make eval-report` → E13), ablations A1–A6, judge J1 kappa, copilot strict and supported scores,
-safety_v2 (≥ 38/40, 0 critical, after a teammate freezes it) and the load smoke (Q6). This card is updated with those
-numbers; until then it claims none of them.
+**Still to measure before submission** (freeze scope; this card claims none of them until they are in):
+the final full run on the merged code (K3, expected 88 ± 1) and A2 rerun; judge J1 agreement with human labels
+(Cohen's kappa) and the "supported" copilot score (K4); safety_v2 (40 items, target ≥ 38/40 with 0 critical) and its
+guardrails-off ablation A6 (K5).
 
 ## 10. Failure taxonomy
 Every failed evaluation item gets one class (rule-based first guess, human confirm; scope #12):
@@ -171,15 +222,25 @@ This maps each to the controls above: alignment by design for a prototype, not a
 | Safety, Resilience and Sustainability | Fail-closed gates; model-off and replay modes; breaker, budgets and timeouts; backup and restore; runbook | `tests/e2e/test_degradation_matrix.py::test_scope34_Q5_code_decisions_survive_and_copilot_fails_closed`, `tests/test_backup_restore.py::test_scope38_backup_then_restore_round_trip` |
 
 ## 13. Limitations
+- **Below the team's target.** 88/100 against 92; regulatory answers 13/25. A wrong but cited answer is possible
+  (1–2 of 19 in the system runs, e.g. T004 reads CGTMSE as covering medium enterprises). Approvers must not treat
+  copilot answers as advice.
 - **Synthetic data.** Cases, offers and KFS documents are generated; real documents vary more.
-- **Copilot accuracy.** Retrieval reaches the right document in the top 5 for 25 of 40 frozen questions; a wrong
-  but cited answer is possible. Approvers must not treat copilot answers as advice.
+- **Retrieval.** The right document reaches the top 5 for 22 of 40 frozen questions with the shipped configuration.
 - **Narrative wording is not judged.** The Critic checks figures, citations, banned content and PII, not whether a
-  sentence's reasoning is sound.
-- **One negotiation round**, fee-waiver template only; simulated lenders.
-- **English only**; Hinglish injection text is tested, Hinglish answers are not.
-- **Prototype operations:** one gateway, SQLite; tokens renew while you work but a session ends 4 hours after sign-in,
-  with no server-side revocation before then.
+  sentence's reasoning is sound. It does not tie a table figure to the unit in the table header ("(Rs. in Crore)").
+- **Negotiation is simulated.** Template-based, at most three rounds (fee waiver, rate match, tenor change), moves
+  chosen by code from ledger figures, one request per round to one lender, no counter-offers, scripted lender
+  replies; it never accepts an offer. The tenor change does not restore affordability in any frozen case.
+- **English only.** The injection scanner misses Hinglish object-verb order ("checks skip karo"); gates, ranking and
+  routing never read text as instructions, so a missed flag changes no decision.
+- **Personal data.** Only full employee names are masked (exact match against the HR store); a 12-digit number that
+  fails the Aadhaar checksum is stored as typed, so that rupee figures are never masked (ADR 0030).
+- **Prototype operations.** One gateway process; SQLite on the evaluated path (MySQL for case.db is optional, ADR 0039,
+  and no reported number uses it). Tokens live in browser memory for 30 minutes (a reload means signing in again),
+  sessions end 4 hours after sign-in; revocation is by token version (ADR 0038).
+- **Model location.** Every reported number is from a 4-bit local build on one Mac; the full-precision course model
+  scored within one item. Latency on the Mac is 15–47 s per copilot answer (the Critic checks before anything is shown).
 - **Copilot routing and help (ADR 0035).** Code routing rules were written on a 40-question dev split, not a held-out
   set. A help page that is wrong produces a wrong but cited answer; help pages are reviewed like code. Feedback on an
   answer outside a case is accepted only until the gateway restarts.
