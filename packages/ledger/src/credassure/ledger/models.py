@@ -21,9 +21,23 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
 )
+from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 TENANT = String(64)
+
+
+# ADR 0039: on MySQL keep what SQLite stores. Microsecond timestamps (the audit hash covers
+# `ts`); JSON and long text as text: native JSON rewrites numbers and key order, TEXT ends at 64KB.
+@compiles(DateTime, "mysql")
+def _mysql_datetime(_type: Any, _compiler: Any, **_kw: Any) -> str:
+    return "DATETIME(6)"
+
+
+@compiles(JSON, "mysql")
+@compiles(Text, "mysql")
+def _mysql_longtext(_type: Any, _compiler: Any, **_kw: Any) -> str:
+    return "LONGTEXT"
 
 
 class CaseBase(DeclarativeBase):
@@ -115,7 +129,8 @@ class LedgerFact(CaseBase):
     value_text: Mapped[str] = mapped_column(Text)  # Decimal/int as exact text
     unit: Mapped[str] = mapped_column(String(16))
     source_type: Mapped[str] = mapped_column(String(32))
-    source_ref: Mapped[str] = mapped_column(String(255))
+    # Text: a fact can cite every file it was computed from (ADR 0039: MySQL enforces lengths).
+    source_ref: Mapped[str] = mapped_column(Text)
     produced_by: Mapped[str] = mapped_column(String(128))  # engine/agent + version
     input_hash: Mapped[str] = mapped_column(String(64))
     created_at: Mapped[datetime] = mapped_column(DateTime)
@@ -174,6 +189,13 @@ class RunLock(CaseBase):
     tenant_id: Mapped[str] = mapped_column(TENANT)
     run_id: Mapped[str] = mapped_column(String(64))
     acquired_at: Mapped[datetime] = mapped_column(DateTime)
+
+
+class WriteLock(CaseBase):
+    """One row (id 1) every MySQL transaction locks first: SQLite's BEGIN IMMEDIATE (ADR 0039)."""
+
+    __tablename__ = "write_lock"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
 
 
 class AuditHead(CaseBase):

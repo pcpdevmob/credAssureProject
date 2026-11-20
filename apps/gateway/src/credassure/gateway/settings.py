@@ -74,6 +74,11 @@ class Settings(BaseSettings):
     langfuse_secret_key: SecretStr | None = None
 
     case_db: Path = Path("var/case.db")
+    # ADR 0039: case.db on MySQL 8 (`mysql+pymysql://user:pass@host/db`, database created with
+    # utf8mb4_bin). Unset = the SQLite file above (dev, tests, evaluation). hr.db and corpus.db stay
+    # SQLite; LangGraph checkpoints then go to `checkpoint_db` (a SQLite file next to the gateway).
+    case_database_url: SecretStr | None = None
+    checkpoint_db: Path = Path("var/checkpoints.db")
     hr_db: Path = Path("data/frozen/v1/hr.db")  # opened read-only (ONB-05)
     seed_password: SecretStr | None = None  # demo users only (make db); tests pass their own
     rate_limit: str = "120/minute"  # per user (JWT sub), else per client IP (NFR-04)
@@ -125,10 +130,23 @@ class Settings(BaseSettings):
     planner_mode: Literal["fixed", "llm_proposes"] = "fixed"
     ablation: Literal["A1", "A2", "A3", "A4", "A5", "A6"] | None = None
 
-    @field_validator("ablation", "llm_ca_cert", "mfa_encryption_key", mode="before")
+    @field_validator(
+        "ablation", "llm_ca_cert", "mfa_encryption_key", "case_database_url", mode="before"
+    )
     @classmethod
     def _empty_is_unset(cls, value: object) -> object:
         return None if value == "" else value
+
+    @property
+    def case_target(self) -> Path | str:
+        """What case_engine and migrate open: the MySQL URL if set, else the SQLite file."""
+        url = self.case_database_url
+        return url.get_secret_value() if url is not None else self.case_db
+
+    @property
+    def checkpoints_path(self) -> Path:
+        """LangGraph state: inside case.db on SQLite (as before), its own file beside MySQL."""
+        return self.checkpoint_db if self.case_database_url is not None else self.case_db
 
     @model_validator(mode="after")
     def _fail_closed(self) -> Self:

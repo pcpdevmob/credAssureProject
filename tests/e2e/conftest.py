@@ -22,10 +22,18 @@ def make_client(tmp_path: Path) -> Iterator[Callable[..., tuple[TestClient, Fake
     def _make(llm_enabled: bool, **overrides: Any) -> tuple[TestClient, FakeLLM | None]:
         from credassure.gateway.main import create_app
         from credassure.gateway.settings import Settings
+        from credassure.ledger import testing
         from credassure.ledger.seed import seed
 
         db = tmp_path / "case.db"
-        seed(db, {"SEED_PASSWORD": PASSWORD})
+        if (url := testing.mysql_url()) is not None:  # ADR 0039: a fresh MySQL database
+            mysql = testing.create_database(url, "e2e")
+            stack.callback(testing.drop_database, mysql)
+            overrides.setdefault("case_database_url", mysql)
+            overrides.setdefault("checkpoint_db", tmp_path / "checkpoints.db")
+            seed(mysql, {"SEED_PASSWORD": PASSWORD})
+        else:
+            seed(db, {"SEED_PASSWORD": PASSWORD})
         settings: Any = Settings(
             _env_file=None,
             app_env="test",

@@ -11,7 +11,7 @@ from datetime import UTC, date, datetime
 from decimal import Decimal
 from typing import Any
 
-from sqlalchemy import CursorResult, func, select, text
+from sqlalchemy import CursorResult, func, inspect, select, text
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import StaleDataError
 
@@ -55,7 +55,8 @@ def append_audit(
     event_type: str,
     payload: dict[str, Any],
 ) -> AuditLog:
-    """Next link of the chain. BEGIN IMMEDIATE (session.py) serialises writers, so seq is safe."""
+    """Next link of the chain. BEGIN IMMEDIATE (SQLite) or the write-lock row (MySQL, ADR 0039)
+    serialises writers, so seq is safe."""
     payload = canonical(payload)  # hash exactly what the JSON column will read back
     last = s.execute(select(AuditLog).order_by(AuditLog.seq.desc()).limit(1)).scalar_one_or_none()
     seq = 1 if last is None else last.seq + 1
@@ -718,7 +719,7 @@ def delete_case(
     for table in _CASE_CONTENT:  # constant names; ids are bound parameters
         sql = f"DELETE FROM {table} WHERE tenant_id = :t AND case_id = :c"  # noqa: S608  # nosec B608
         removed[table] = _rows(s, sql, params)
-    present = set(s.execute(text("SELECT name FROM sqlite_master WHERE type='table'")).scalars())
+    present = set(inspect(s.connection()).get_table_names())  # SQLite or MySQL (ADR 0039)
     for table in ("checkpoints", "writes"):  # LangGraph state for the case thread, if it ran
         if table in present:
             sql = f"DELETE FROM {table} WHERE thread_id = :th"  # noqa: S608  # nosec B608

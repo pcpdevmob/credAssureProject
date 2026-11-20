@@ -21,8 +21,8 @@ T = "default"
 
 
 @pytest.fixture
-def engine(tmp_path: Path) -> Iterator[Engine]:
-    db = tmp_path / "case.db"
+def engine(case_target: Path | str) -> Iterator[Engine]:
+    db = case_target
     migrate.upgrade("case", db)
     eng = session.case_engine(db)
     with session.transaction(eng) as s:
@@ -77,6 +77,12 @@ def _put(
 
 
 def test_scope22_wal_busy_timeout_and_foreign_keys(engine: Engine) -> None:
+    if engine.dialect.name == "mysql":  # ADR 0039: the write-lock row replaces BEGIN IMMEDIATE
+        with engine.connect() as c:
+            assert c.exec_driver_sql("SELECT @@transaction_isolation").scalar() == "READ-COMMITTED"
+            assert c.exec_driver_sql("SELECT @@collation_database").scalar() == "utf8mb4_bin"
+            assert c.exec_driver_sql("SELECT id FROM write_lock").scalars().all() == [1]
+        return
     with engine.connect() as c:
         assert c.exec_driver_sql("PRAGMA journal_mode").scalar() == "wal"
         assert c.exec_driver_sql("PRAGMA busy_timeout").scalar() == 5000
@@ -95,7 +101,7 @@ def test_scope22_one_active_run_per_case(engine: Engine) -> None:
 
 
 def test_scope27_every_case_scoped_table_has_tenant_id() -> None:
-    global_tables = {"prompt_registry", "eval_runs", "eval_results"}
+    global_tables = {"prompt_registry", "eval_runs", "eval_results", "write_lock"}
     for table in models.CaseBase.metadata.tables.values():
         if table.name not in global_tables:
             assert "tenant_id" in table.c, table.name
@@ -172,19 +178,17 @@ def test_OBJ08_append_only_tables_reject_update_and_delete(engine: Engine, table
             s.execute(text(sql))
 
 
-def test_OBJ08_verify_chain_detects_tampering(engine: Engine, tmp_path: Path) -> None:
+def test_OBJ08_verify_chain_detects_tampering(engine: Engine) -> None:
     with session.transaction(engine) as s:
         _put(s)
         _put(s, key="wc.peak_week", value=9)
         assert reads.verify_chain(s) == []
-    engine.dispose()
-    raw = sqlite3.connect(tmp_path / "case.db")  # an attacker with file access drops the trigger
-    raw.execute("DROP TRIGGER audit_log_no_update")
-    raw.execute(
-        "UPDATE audit_log SET payload_json = replace(payload_json, '14200000', '1') WHERE seq = 3"
-    )
-    raw.commit()
-    raw.close()
+    with engine.begin() as raw:  # an attacker with database access drops the trigger
+        raw.exec_driver_sql("DROP TRIGGER audit_log_no_update")
+        raw.exec_driver_sql(
+            "UPDATE audit_log SET payload_json = replace(payload_json, '14200000', '1') "
+            "WHERE seq = 3"
+        )
     with session.transaction(engine) as s:
         assert reads.verify_chain(s) == [3]
         assert reads.verify_chain(s, tenant_id=T) == [3]

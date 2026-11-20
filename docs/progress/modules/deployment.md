@@ -5,6 +5,7 @@
 **Status:** Local run, isolated e2e, demo-reset, replay mode, backup/restore, release bundle + SBOM, runbook done (P10); clean-machine run passed; course endpoint deferred
 
 ## Open items
+- K13 / ADR 0039: case.db on MySQL (`CASE_DATABASE_URL`, Compose `mysql` profile). Review and merge; then the Azure VM deployment.
 - Course endpoint switch (llm-probe, graded baseline, re-embed) — deferred until the course endpoint is agreed.
 - Pin image digests from a networked machine (`make pin-images`, H17, ADR 0034).
 - Docker Compose run on the Mac (`make up`); record replies for `REPLAY_MODE` during the rehearsal.

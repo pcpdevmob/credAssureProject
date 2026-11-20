@@ -65,6 +65,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P11 | 11.13 | Evaluation | done | Pritish | 2026-11-20 | — | E14 | [2026-11-20-p11-11.13-redteam-live-run-pritish.md](docs/progress/entries/2026-11-20-p11-11.13-redteam-live-run-pritish.md) |
 | P13 | 13.0 | Copilot | done | Pritish | 2026-11-18 | 2c3088d, bbe5f62, 0148fe0 | — | [2026-11-18-p13-13.0-copilot-product-assistant-pritish.md](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md) |
 | P14 | 14.1 | Authentication | in_progress | Pritish | 2026-11-20 | — | — | [2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md](docs/progress/entries/2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md) |
+| P15 | 15.1 | Deployment | in_progress | Pritish | 2026-11-20 | — | — | [2026-11-20-p15-15.1-case-db-mysql-pritish.md](docs/progress/entries/2026-11-20-p15-15.1-case-db-mysql-pritish.md) |
 
 ## Modules
 
@@ -122,6 +123,7 @@ From the latest entry of each step. Module-level items live in each module file.
 
 - P10 10.1: H17 pin images; H19 demo recording. ([entry](docs/progress/entries/2026-11-18-p10-10.1-ship-pritish.md))
 - P11 11.10: K12 on `feature/lendwise-p11` (LendWise thread), by 22 Nov. ([entry](docs/progress/entries/2026-11-19-p11-11.10-freeze-scope-ci-pritish.md))
+- P15 15.1: merge after review; Azure VM deployment (production compose with HTTPS, runbook, smoke test); provider choice for hosted Qwen3-8B. ([entry](docs/progress/entries/2026-11-20-p15-15.1-case-db-mysql-pritish.md))
 
 ### Documentation
 

@@ -43,23 +43,35 @@ class GatewayClient(TestClient):
     """TestClient that also exposes the FakeLLM (None when the LLM is off) and the case.db path."""
 
     llm: FakeLLM | None
-    db: Path
+    db: Path | str  # the SQLite file, or the MySQL URL (ADR 0039)
 
 
 @pytest.fixture(scope="session")
-def seeded_template(tmp_path_factory: pytest.TempPathFactory) -> Path:
+def seeded_template(tmp_path_factory: pytest.TempPathFactory) -> Iterator[Path | str]:
     """Seed once (25 argon2 hashes are slow); each client copies this file."""
+    from credassure.ledger import testing
     from credassure.ledger.seed import seed
 
+    if (url := testing.mysql_url()) is not None:  # ADR 0039: one seeded MySQL template
+        db: Path | str = testing.create_database(url, "template")
+        seed(db, {"SEED_PASSWORD": PASSWORD})
+        yield db
+        testing.drop_database(db)
+        return
     db = tmp_path_factory.mktemp("template") / "case.db"
     seed(db, {"SEED_PASSWORD": PASSWORD})
-    return db
+    yield db
 
 
 @pytest.fixture
-def make_client(tmp_path: Path, seeded_template: Path) -> Iterator[Callable[..., GatewayClient]]:
+def make_client(
+    tmp_path: Path, seeded_template: Path | str
+) -> Iterator[Callable[..., GatewayClient]]:
+    from credassure.ledger import testing
+
     stack = ExitStack()
     count = 0
+    mysql = testing.mysql_url()
 
     def _make(llm_enabled: bool = False, **overrides: Any) -> GatewayClient:
         nonlocal count
@@ -67,13 +79,20 @@ def make_client(tmp_path: Path, seeded_template: Path) -> Iterator[Callable[...,
         from credassure.gateway.settings import Settings
 
         count += 1
-        db = tmp_path / f"case-{count}.db"
-        shutil.copyfile(seeded_template, db)
+        db: Path | str
+        if mysql is not None:  # ADR 0039: a copy of the seeded template, dropped at the end
+            db = testing.clone_database(mysql, str(seeded_template), "gw")
+            stack.callback(testing.drop_database, db)
+            overrides.setdefault("case_database_url", db)
+            overrides.setdefault("checkpoint_db", tmp_path / f"checkpoints-{count}.db")
+        else:
+            db = tmp_path / f"case-{count}.db"
+            shutil.copyfile(seeded_template, db)
         settings = Settings(
             _env_file=None,  # type: ignore[call-arg]
             app_env="test",
             jwt_secret="x" * 40,
-            case_db=db,
+            case_db=tmp_path / f"case-{count}.db",
             llm_enabled=llm_enabled,
             tracing_enabled=False,
             **overrides,

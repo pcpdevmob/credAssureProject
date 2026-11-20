@@ -13,7 +13,7 @@ from typing import Literal
 from alembic import command
 from alembic.config import Config
 
-from .session import case_engine
+from .session import NO_WRITE_LOCK, case_engine, is_url
 
 Which = Literal["case", "corpus"]
 HERE = Path(__file__).parent / "migrations"
@@ -22,12 +22,16 @@ HERE = Path(__file__).parent / "migrations"
 def _run(which: str, db: Path | str, action: str, *args: str, **kwargs: object) -> None:
     if which not in ("case", "corpus"):
         raise ValueError("which must be 'case' or 'corpus'")
-    Path(db).parent.mkdir(parents=True, exist_ok=True)
+    if is_url(db):
+        if which != "case":
+            raise ValueError("only case.db can be MySQL (ADR 0039); corpus.db needs SQLite FTS5")
+    else:
+        Path(db).parent.mkdir(parents=True, exist_ok=True)
     config = Config()
     config.set_main_option("script_location", str(HERE / which))
     engine = case_engine(db)  # same pragmas (WAL, busy timeout, foreign keys) as the app
     try:
-        with engine.begin() as connection:
+        with engine.execution_options(**{NO_WRITE_LOCK: True}).begin() as connection:
             config.attributes["connection"] = connection
             getattr(command, action)(config, *args, **kwargs)
     finally:

@@ -52,13 +52,15 @@ def test_H12_session_cap_cannot_be_extended_by_refreshing(client: TestClient, lo
 
 
 def test_H12_a_deactivated_user_cannot_refresh(client: Any, login: Login) -> None:
-    import sqlite3
+    from sqlalchemy import text
+
+    from credassure.ledger.session import case_engine
 
     h = login(client, "demo.preparer")
-    con = sqlite3.connect(client.db)
-    con.execute("UPDATE users SET active = 0 WHERE username = 'demo.preparer'")
-    con.commit()
-    con.close()
+    engine = case_engine(client.db)  # SQLite or MySQL (ADR 0039)
+    with engine.begin() as conn:
+        conn.execute(text("UPDATE users SET active = 0 WHERE username = 'demo.preparer'"))
+    engine.dispose()
     assert client.post("/v1/auth/refresh", headers=h).status_code == 401
 
 

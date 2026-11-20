@@ -125,9 +125,16 @@ def test_scope51_found_paise_beyond_sqlite_integer_is_422_not_500(
 
 
 @pytest.fixture
-def fuzz_app(tmp_path: Path, seeded_template: Path) -> Iterator[Any]:
+def fuzz_app(tmp_path: Path, seeded_template: Path | str) -> Iterator[Any]:
+    from credassure.ledger import testing
+
     db = tmp_path / "fuzz.db"
-    shutil.copyfile(seeded_template, db)
+    extra: dict[str, Any] = {}
+    if (url := testing.mysql_url()) is not None:  # ADR 0039: a copy of the seeded MySQL template
+        mysql = testing.clone_database(url, str(seeded_template), "fuzz")
+        extra = {"case_database_url": mysql, "checkpoint_db": tmp_path / "checkpoints.db"}
+    else:
+        shutil.copyfile(seeded_template, db)
     app = create_app(
         Settings(
             _env_file=None,  # type: ignore[call-arg]
@@ -137,9 +144,12 @@ def fuzz_app(tmp_path: Path, seeded_template: Path) -> Iterator[Any]:
             llm_enabled=False,
             tracing_enabled=False,
             rate_limit="100000/minute",
+            **extra,
         )
     )
     yield app
+    if extra:
+        testing.drop_database(extra["case_database_url"])
 
 
 @pytest.fixture

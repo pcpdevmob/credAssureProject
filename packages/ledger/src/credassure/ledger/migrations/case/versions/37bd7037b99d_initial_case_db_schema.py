@@ -327,12 +327,15 @@ def upgrade() -> None:
         )
 
     # ### end Alembic commands ###
+    mysql = op.get_bind().dialect.name == "mysql"  # ADR 0039: same rule, MySQL syntax
     for table in APPEND_ONLY:  # OBJ-08, APR-04: no edit or delete, even by the app
         for verb in ("update", "delete"):
-            op.execute(
-                f"CREATE TRIGGER {table}_no_{verb} BEFORE {verb.upper()} ON {table} "
-                "BEGIN SELECT RAISE(ABORT, 'append-only'); END"
+            body = (
+                "FOR EACH ROW SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'append-only'"
+                if mysql
+                else "BEGIN SELECT RAISE(ABORT, 'append-only'); END"
             )
+            op.execute(f"CREATE TRIGGER {table}_no_{verb} BEFORE {verb.upper()} ON {table} {body}")
 
 
 def downgrade() -> None:

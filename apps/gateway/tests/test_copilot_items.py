@@ -18,9 +18,11 @@ from typing import Any
 
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import text
 
 from credassure.evaluation.check_corpus_refs import known_doc_ids
 from credassure.evaluation.scorers import ABSTAIN, score
+from credassure.ledger import session
 from credassure.llm.fake import FakeLLM
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -43,7 +45,6 @@ def _ingested() -> bool:
     path = ROOT / "var/corpus.db"
     if not path.exists():
         return False
-    import sqlite3
 
     c = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
     try:
@@ -264,8 +265,10 @@ def test_SUP08_own_uploaded_kfs_cited_never_another_cases(
     """The ingested synthetic KFS belong to tenant demo (make ingest). Tenant demo reads the
     KFS it uploaded; tenant default uploads the same bytes and reads none (Phase 10b item 3)."""
     client = _client(make_client, True, tenant_id=tenant)
-    with sqlite3.connect(client.db) as con:  # the seeded users move to this test's tenant
-        con.execute("UPDATE users SET tenant_id = ?", (tenant,))
+    engine = session.case_engine(client.db)  # the seeded users move to this test's tenant
+    with engine.begin() as conn:
+        conn.execute(text("UPDATE users SET tenant_id = :t"), {"t": tenant})
+    engine.dispose()
     a, _ = _case(client, login, "CA-2026-0001", run=False)
     own = {
         json.loads(p.read_text())["kfs_doc_id"]
