@@ -12,18 +12,19 @@ export default function MfaSetup() {
   const r = useRouter(); const [u, setU] = useState<User | null>(null);
   const [qr, setQr] = useState(''); const [secret, setSecret] = useState(''); const [code, setCode] = useState('');
   const [codes, setCodes] = useState<string[] | null>(null); const [saved, setSaved] = useState(false);
-  const [err, setErr] = useState(''); const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState(''); const [busy, setBusy] = useState(false); const [pw, setPw] = useState('');
+  // The gateway shows a new authenticator secret only after the password is typed again (ADR 0038).
+  const start = async (password?: string) => { setErr(''); setBusy(true); try { const s = await authService.startMfaSetup(password); setSecret(s.secret); setQr(await QRCode.toDataURL(s.otpauthUri, { margin: 1, width: 220, color: { dark: '#0E1628', light: '#ffffff' } })); setPw(''); } catch (e) { setErr((e as Error).message); } setBusy(false); };
   useEffect(() => {
     authService.verify().then(async x => {
       if (!x || x.stage === 'mfa') return r.replace('/login/');
       if (x.mustChangePassword) return r.replace('/change-password/');
       if (x.stage === 'full' || x.mfaEnabled) return r.replace('/dashboard/');
       setU(x);
-      try { const s = await authService.startMfaSetup(); setSecret(s.secret); setQr(await QRCode.toDataURL(s.otpauthUri, { margin: 1, width: 220, color: { dark: '#0E1628', light: '#ffffff' } })); }
-      catch (e) { setErr((e as Error).message); }
+      if (!authService.mfaSetupNeedsPassword) await start();
     });
   }, [r]);
-  const confirm = async (e: React.FormEvent) => { e.preventDefault(); setErr(''); setBusy(true); try { setCodes(await authService.enableMfa(code.trim())); } catch (x) { setErr((x as Error).message); setCode(''); } setBusy(false); };
+  const confirm = async (e: React.FormEvent) => { e.preventDefault(); setErr(''); setBusy(true); try { setCodes(await authService.enableMfa(code.replace(/\s/g, ''))); } catch (x) { setErr((x as Error).message); setCode(''); } setBusy(false); };
   if (!u) return <div className="grid min-h-screen place-items-center text-slate-400">{err || 'Loading…'}</div>;
   if (codes) return (
     <AuthLayout>
@@ -36,7 +37,19 @@ export default function MfaSetup() {
         <Button type="button" variant="outline" size="sm" onClick={() => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([`CredAssure backup codes for ${u.username}\n\n${codes.join('\n')}\n`], { type: 'text/plain' })); a.download = 'credassure-backup-codes.txt'; a.click(); }}><Download className="h-4 w-4" />Download</Button>
       </div>
       <label className="mt-5 flex items-center gap-2 text-sm text-slate-700"><input type="checkbox" checked={saved} onChange={e => setSaved(e.target.checked)} className="h-4 w-4 rounded" />I have saved my backup codes</label>
-      <Button className="mt-5 w-full" size="lg" disabled={!saved} onClick={() => r.replace('/dashboard/')}>Continue to CredAssure</Button>
+      <Button className="mt-5 w-full" size="lg" disabled={!saved} onClick={() => r.replace(authService.current()?.adminOnly ? '/admin/users/' : '/dashboard/')}>Continue to CredAssure</Button>
+    </AuthLayout>
+  );
+  if (!secret && authService.mfaSetupNeedsPassword) return (
+    <AuthLayout>
+      <h1 className="text-2xl font-bold tracking-tight text-slate-900">Set up two-step verification</h1>
+      <p className="mt-1 text-slate-500">Your role needs a code from an authenticator app at every sign-in. First, confirm it is you.</p>
+      <form onSubmit={e => { e.preventDefault(); start(pw); }} className="mt-8 space-y-5">
+        <div><Label htmlFor="pw">Your password</Label><Input id="pw" type="password" autoComplete="current-password" autoFocus required value={pw} onChange={e => setPw(e.target.value)} /></div>
+        {err && <p role="alert" className="rounded-xl bg-rose-50 p-3 text-sm text-rose-700">{err}</p>}
+        <Button className="w-full" size="lg" loading={busy}>Continue</Button>
+      </form>
+      <button type="button" onClick={async () => { await authService.logout(); r.replace('/login/'); }} className="mt-4 w-full text-center text-sm text-slate-500 hover:text-slate-800">Sign out and finish later</button>
     </AuthLayout>
   );
   return (

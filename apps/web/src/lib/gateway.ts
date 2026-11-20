@@ -46,10 +46,12 @@ export const gw = createClient<paths>({ baseUrl: API_BASE });
 gw.use({
   async onRequest({ request }) { const t = await bearer(); if (t) request.headers.set('Authorization', `Bearer ${t}`); return request; },
   async onResponse({ request, response }) {
-    if (response.status === 401) {
+    // A wrong password or code on a sign-in step is an answer, not an ended session: keep the stage token so the
+    // user can try again (the gateway rate-limits failures per user).
+    if (response.status === 401 && !/\/v1\/auth\/(token|mfa\/verify|mfa\/enable)$/.test(new URL(request.url).pathname)) {
       tok = null;
       // The token was renewed while the user worked (H12); a 401 now means the session ended: sign in again.
-      if (!AUTH_LIVE && typeof window !== 'undefined' && !request.url.endsWith('/v1/auth/token')) window.location.assign('/login/?expired=1');
+      if (!AUTH_LIVE && typeof window !== 'undefined') window.location.assign('/login/?expired=1');
     }
     return response;
   },
