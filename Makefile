@@ -4,12 +4,12 @@ PY_SRC := apps/gateway/src $(wildcard agents/*/src) \
 	data/generators/src
 COMPOSE := docker compose -f deploy/compose/compose.yaml
 # Settings for corpus network runs (CORPUS_CONTACT_EMAIL, ADR 0020) come from .env when it exists.
-# MODELS=local (default, Ollama qwen3:8b + in-process bge-small) | course (graded endpoints).
+# MODELS=local (default, Ollama qwen3:8b + in-process bge-small) | course (graded endpoints) | hf (Qwen3-8B via Hugging Face → Featherless).
 # The profile loads after the dotenv file, so it wins for model settings; keys and CA paths stay there.
 MODELS ?= local
 MODELS_FILE := deploy/env/models-$(MODELS).env
 ifeq ($(wildcard $(MODELS_FILE)),)
-$(error MODELS=$(MODELS): no $(MODELS_FILE); use local or course)
+$(error MODELS=$(MODELS): no $(MODELS_FILE); use local, course or hf)
 endif
 ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 # The dev/demo database (var/case.db) is tenant "demo" (make demo-reset); an exported variable beats --env-file.
@@ -17,7 +17,7 @@ DEMO_TENANT := TENANT_ID=demo
 
 .PHONY: admin redteam rag-baseline load-smoke eval-judge eval-kappa eval-report eval-ablations progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset live-run copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
-        langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe retrieval-eval retrieval-ladder retrieval-pool retrieval-silver judge kappa release sbom pin-images
+        langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe embed-parity compare-runs retrieval-eval retrieval-ladder retrieval-pool retrieval-silver judge kappa release sbom pin-images
 
 progress:  ## Regenerate PROGRESS.md from docs/progress/ (never edit PROGRESS.md by hand; README §12)
 	uv run python scripts/progress.py
@@ -238,6 +238,13 @@ eval-fast:  ## Prompt change control (#36): version-bump check + offline prompt 
 
 llm-probe:  ## Does the endpoint honour guided JSON? Decides LLM_SUPPORTS_GUIDED_JSON (ADR 0017)
 	uv run $(ENV_FILE) python -m credassure.llm.probe
+
+embed-parity:  ## MODELS=course: can the course embeddings reuse the local vector index? (docs/evaluation/course-endpoint.md)
+	uv run $(ENV_FILE) python scripts/embed_parity.py $(ARGS)
+
+compare-runs:  ## Item-by-item diff of two eval runs: make compare-runs A=var/eval/<run> B=var/eval/<run>
+	@test -n "$(A)" -a -n "$(B)" || (echo "usage: make compare-runs A=var/eval/<run> B=var/eval/<run>" && exit 1)
+	uv run python scripts/compare_runs.py "$(A)" "$(B)" $(ARGS)
 
 admin:  ## ADR 0038: first account admin of the tenant: BOOTSTRAP_ADMIN_PASSWORD=... make admin NAME=<username>
 	@test -n "$(NAME)" || (echo "usage: BOOTSTRAP_ADMIN_PASSWORD=... make admin NAME=<username>" && exit 1)
