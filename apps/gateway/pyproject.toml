@@ -39,6 +39,7 @@ dependencies = [
     "limits>=3.13",
     "openpyxl>=3.1",  # Excel case workbook import (ADR 0040)
     "defusedxml>=0.7",  # openpyxl parses untrusted XML through it when installed
+    "pypdf>=5.0",  # ADR 0041: text layer of lender PDFs
 ]
 
 [project.optional-dependencies]

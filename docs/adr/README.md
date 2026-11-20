@@ -46,3 +46,4 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | [0038](0038-accounts-mfa-and-segregation-in-the-gateway.md) | Accounts, MFA and segregation of duties in the gateway (supersedes the bridge auth service) | Accepted | P14 | 52 |
 | [0039](0039-case-db-on-mysql.md) | case.db on MySQL for the hosted deployment; SQLite stays for hr.db, corpus.db (FTS5), checkpoints and eval (amends 0001) | Proposed | P15 | 22, 29, 38, 49 |
 | [0040](0040-excel-workbook-import.md) | Excel workbook import for case data (same files, same upload checks); PDF stays out of scope (amends BRD Q-08, 0003) | Accepted | P9 | — |
+| [0041](0041-lender-pdf-intake.md) | Lender PDFs: text layer, AI-suggested offer fields as quotes read by code, human review before saving (amends 0040) | Accepted | P9 | — |

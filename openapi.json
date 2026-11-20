@@ -38,6 +38,20 @@
         "title": "Body_import_workbook_v1_cases__case_id__workbook_post",
         "type": "object"
       },
+      "Body_read_pdf_v1_cases__case_id__pdf_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_read_pdf_v1_cases__case_id__pdf_post",
+        "type": "object"
+      },
       "Body_upload_v1_cases__case_id__files_post": {
         "properties": {
           "file": {
@@ -50,6 +64,38 @@
           "file"
         ],
         "title": "Body_upload_v1_cases__case_id__files_post",
+        "type": "object"
+      },
+      "ChargeRow": {
+        "properties": {
+          "amount": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Amount",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "timing": {
+            "enum": [
+              "upfront",
+              "monthly",
+              "annual"
+            ],
+            "title": "Timing",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "timing",
+          "amount"
+        ],
+        "title": "ChargeRow",
         "type": "object"
       },
       "Chat": {
@@ -516,6 +562,63 @@
           "fact_key"
         ],
         "title": "Input",
+        "type": "object"
+      },
+      "KfsDocument": {
+        "properties": {
+          "kfs_doc_id": {
+            "pattern": "^KFS-[A-Za-z0-9-]{1,60}$",
+            "title": "Kfs Doc Id",
+            "type": "string"
+          },
+          "offer_id": {
+            "pattern": "^OF-[A-Za-z0-9-]{1,60}$",
+            "title": "Offer Id",
+            "type": "string"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/ChargeRow"
+            },
+            "maxItems": 40,
+            "title": "Rows",
+            "type": "array"
+          },
+          "text": {
+            "maxLength": 60000,
+            "title": "Text",
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          },
+          "version": {
+            "maximum": 99.0,
+            "minimum": 1.0,
+            "title": "Version",
+            "type": "integer"
+          },
+          "which": {
+            "enum": [
+              "kfs",
+              "schedule"
+            ],
+            "title": "Which",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kfs_doc_id",
+          "offer_id",
+          "version",
+          "which",
+          "title",
+          "text"
+        ],
+        "title": "KfsDocument",
         "type": "object"
       },
       "Lineage": {
@@ -5077,6 +5180,86 @@
         ]
       }
     },
+    "/v1/cases/{case_id}/kfs-document": {
+      "post": {
+        "description": "A reviewed KFS or schedule of charges from a PDF, stored as the KFS document LendWise reads\n(ADR 0041). The rows the person confirmed become the charge table; the PDF text follows as\ndata. Stored through the same validation, injection scan and audit as any upload.",
+        "operationId": "save_kfs_document_v1_cases__case_id__kfs_document_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KfsDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Save Kfs Document V1 Cases  Case Id  Kfs Document Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Save Kfs Document",
+        "tags": [
+          "cases"
+        ]
+      }
+    },
     "/v1/cases/{case_id}/offers": {
       "get": {
         "description": "The offer comparison (UI-05): stored lw.* facts after the LendWise stage, else a\nread-only audit preview (no affordability, no ranking).",
@@ -5142,6 +5325,100 @@
           }
         ],
         "summary": "Offers",
+        "tags": [
+          "cases"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}/pdf": {
+      "post": {
+        "description": "A text-layer PDF -> its text and, for an offer letter or schedule of charges, a draft the\nmodel quoted and code read (ADR 0041). Nothing is stored: the preparer reviews the draft and\nsaves it through the ordinary upload path. Scanned PDFs are refused (no OCR, BRD \u00a74.3).",
+        "operationId": "read_pdf_v1_cases__case_id__pdf_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "doc",
+            "required": true,
+            "schema": {
+              "enum": [
+                "offer",
+                "kfs",
+                "schedule"
+              ],
+              "title": "Doc",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_read_pdf_v1_cases__case_id__pdf_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Read Pdf V1 Cases  Case Id  Pdf Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Read Pdf",
         "tags": [
           "cases"
         ]
