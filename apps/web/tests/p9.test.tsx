@@ -44,12 +44,13 @@ describe('P9 safety panel', () => {
     expect(await screen.findByText('Blocked: 1')).toBeTruthy();
     expect(screen.getByText('Redacted: 2')).toBeTruthy();
     expect(screen.getByText(/R1.upload_pii_refused/)).toBeTruthy();
-    expect(screen.getByText('kinds: PAN')).toBeTruthy();
+    expect(screen.getByText(/kinds: PAN/)).toBeTruthy();
+    expect(screen.getByText(/A file with a personal ID number/)).toBeTruthy();
   });
   it('says so when nothing happened', async () => {
     server.use(http.get(`${API}/v1/cases/:id/safety`, () => HttpResponse.json({ case_id: 'CA-1', counts: {}, events: [] })));
     render(<SafetyPanel caseId="CA-1" />);
-    expect(await screen.findByText(/No blocks, redactions/)).toBeTruthy();
+    expect(await screen.findByText(/Nothing was blocked, hidden or flagged/)).toBeTruthy();
   });
   it('maps lists to readable detail', () => {
     const s = mapSafety({ counts: {}, events: [{ seq: 1, ts: 't', event_type: 'CRITIC_BLOCKED', stage: 'lendwise', codes: ['VER_UNMATCHED_NUMBER'] }] });

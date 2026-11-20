@@ -69,18 +69,18 @@ test('U2 preparer flow, question and resume, Director approval', async ({ page, 
   await expect(question).toContainText(/min(imum)? cash buffer/i, { timeout: 10 * 60_000 });
   // The streamed stage events stay on screen as the last run's log (fast stages end in well under a second).
   await expect(page.getByText('Last run')).toBeVisible();
-  await expect(page.getByTestId('live-progress')).toContainText('Employee readiness: GO');
-  await expect(page.getByTestId('live-progress')).toContainText('Funding need: NEEDS_INPUT');
-  await expect(page.getByText('NEEDS INPUT')).toBeVisible();
+  await expect(page.getByTestId('live-progress')).toContainText('Preparer check: passed');
+  await expect(page.getByTestId('live-progress')).toContainText('Funding need: needs information');
+  await expect(page.getByText('Needs information').first()).toBeVisible();
   await capture(page, 'workflow-question');
 
   // Answer: upload the corrected file in the question card, then resume.
   await page.locator('#upload-opening_position').setInputFiles(file('opening_position'));
   await expect(page.getByText(/^opening_position\.json accepted/)).toBeVisible();
-  await page.getByRole('button', { name: 'Resume' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
   await expect(page.getByText('Awaiting approval').first()).toBeVisible({ timeout: 15 * 60_000 });
-  await expect(page.getByTestId('live-progress')).toContainText('Funding need: GO');
-  await expect(page.getByTestId('live-progress')).not.toContainText('Employee readiness'); // resume re-ran only the blocked stage onward
+  await expect(page.getByTestId('live-progress')).toContainText('Funding need: passed');
+  await expect(page.getByTestId('live-progress')).not.toContainText('Preparer check'); // resume re-ran only the blocked stage onward
   await expect(page.getByRole('button', { name: 'Validated need: ₹1,42,00,000, show source' })).toBeVisible(); // BRD App. A
   await capture(page, 'workflow-done');
 
@@ -95,7 +95,7 @@ test('U2 preparer flow, question and resume, Director approval', async ({ page, 
   await expect(page.getByText('Director, Finance').first()).toBeVisible();
   await expect(page.getByRole('button', { name: 'Validated funding need: ₹1,42,00,000, show source' })).toBeVisible();
   await capture(page, 'review');
-  await page.getByLabel(/I reviewed the Critic findings/).check(); // P9 attestation
+  await page.getByLabel(/I reviewed the accuracy checks/).check(); // P9 attestation
   await page.getByRole('button', { name: 'Approve proposal' }).click();
   const confirm = page.getByRole('dialog');
   await expect(confirm.getByText('Approval is internal, not loan acceptance.')).toBeVisible();

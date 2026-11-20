@@ -22,6 +22,7 @@ from sqlalchemy import CursorResult, Engine, create_engine, delete, event, selec
 from sqlalchemy.engine import make_url
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.pool import NullPool
 
 from .models import RunLock
 
@@ -163,4 +164,7 @@ def hr_engine(path: Path | str) -> Engine:
         con.execute("PRAGMA query_only=ON")
         return con
 
-    return create_engine("sqlite://", creator=connect)
+    # NullPool: a fresh read-only connection per use. "sqlite://" would default to
+    # SingletonThreadPool, which keeps 5 connections and closes another thread's connection while it
+    # is in use once more threads read at the same time (a segfault under the scope #35 load smoke).
+    return create_engine("sqlite://", creator=connect, poolclass=NullPool)

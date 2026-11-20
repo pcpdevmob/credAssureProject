@@ -366,6 +366,7 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0037 | Three negotiation rounds by default; re-rank after every counted concession | Accepted |
 | 0038 | Accounts, MFA and segregation of duties in the gateway | Accepted |
 | 0039 | case.db on MySQL for the hosted deployment (SQLite kept where needed) | Proposed |
+| 0040 | Excel workbook import for case data; PDF out of scope | Accepted |
 
 Full index with phase and scope numbers: `docs/adr/README.md`.
 

@@ -1,0 +1,3 @@
+# False positives reviewed by a person: test fixtures, not credentials.
+# generic-api-key on a ledger key literal ('lw.OF-01-A.v2.apr') in a UI test; the line was rewritten in the next commit.
+251ed284105de9f280df508f7548f7e710dfec23:apps/web/tests/ui-plain.test.tsx:generic-api-key:93

@@ -19,9 +19,12 @@ test('U6 evaluator story: audit, safety, scorecard, help', async ({ page }) => {
   // --- The demo case: safety panel (counts and codes only), then its audit log with the hash-chain badge
   await page.goto(`/case/?id=${caseId}`);
   await page.getByRole('button', { name: 'Review & approval' }).click();
-  await expect(page.getByText('Safety events').first()).toBeVisible();
+  await expect(page.getByText('Safety checks on this case').first()).toBeVisible();
   await capture(page, 'safety');
-  await page.getByRole('button', { name: 'Audit', exact: true }).click();
+  await page.getByRole('button', { name: 'History', exact: true }).click();
+  await expect(page.getByText(/^Record intact/)).toBeVisible(); // plain case history for every member (UI thread)
+  await capture(page, 'history');
+  await page.getByRole('button', { name: 'Technical audit log' }).click(); // the evaluator's raw log
   await expect(page.getByText(/^Hash chain verified/)).toBeVisible();
   await capture(page, 'audit');
 

@@ -11,9 +11,9 @@ export const FIX: Record<string, string> = {
   FORBIDDEN: 'Your role cannot do this. Ask the person this case is routed to.',
   STEP_UP_REQUIRED: 'Enter your password to confirm this approval.',
   REPORT_STALE: 'Ask the preparer to regenerate the report, then approve the new version.',
-  ATTESTATION_REQUIRED: 'Tick that you reviewed the Critic findings and the safety events, then approve.',
+  ATTESTATION_REQUIRED: 'Tick that you reviewed the accuracy checks and the safety checks, then approve.',
   NOT_FOUND: 'Check the case ID, or open the case from the cases list.',
-  TOOL_NOT_ALLOWED: 'This agent cannot use that tool. Report it to the evaluator.',
+  TOOL_NOT_ALLOWED: 'This step is not allowed. Tell your administrator.',
   COLLECTION_NOT_ALLOWED: 'This search is not allowed for the case. Rephrase the question.',
   CASE_REQUIRED: 'Open a case first, then try again.',
   CONFLICT: 'Someone changed this case. Reload it and try again.',
@@ -22,7 +22,7 @@ export const FIX: Record<string, string> = {
   PAYLOAD_TOO_LARGE: 'The file is over 2 MB. Upload a smaller file.',
   UNSUPPORTED_MEDIA_TYPE: 'Upload a JSON or CSV file (Markdown for KFS documents).',
   NOT_IMPLEMENTED: 'This feature is not available yet.',
-  INTERNAL_ERROR: 'Try again. If it keeps happening, tell the evaluator and quote the request ID.',
+  INTERNAL_ERROR: 'Try again. If it keeps happening, tell your administrator and quote the request ID.',
 };
 const BY_STATUS: Record<number, string> = { 400: 'VALIDATION_FAILED', 401: 'UNAUTHENTICATED', 403: 'FORBIDDEN', 404: 'NOT_FOUND', 409: 'CONFLICT', 413: 'PAYLOAD_TOO_LARGE', 415: 'UNSUPPORTED_MEDIA_TYPE', 422: 'VALIDATION_FAILED', 429: 'RATE_LIMITED' };
 

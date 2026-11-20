@@ -2,6 +2,9 @@
 
 Step-by-step guide and a complete set of sample files (JSON, CSV, offers, KFS): [data/templates/README.md](../../data/templates/README.md).
 
+In the app you do not need this conversion: on **Documents**, upload the filled workbook and it is converted and checked
+the same way (ADR 0040). The steps below are for authoring test cases from the command line.
+
 Use this to write a new MSME case and its lender offers in a spreadsheet instead of editing seven CSV/JSON files
 and an offer JSON for each lender by hand.
 
