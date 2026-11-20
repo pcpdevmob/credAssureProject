@@ -45,7 +45,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P8 | 8.4 | AI Security and Guardrails | done | Pritish | 2026-11-18 | b09d62f | — | [2026-11-18-p8-8.4-headers-pritish.md](docs/progress/entries/2026-11-18-p8-8.4-headers-pritish.md) |
 | P8 | 8.5 | Evaluation | in_progress | Pritish | 2026-11-18 | c40d155 | — | [2026-11-18-p8-8.5-a6-switch-pritish.md](docs/progress/entries/2026-11-18-p8-8.5-a6-switch-pritish.md) |
 | P9 | 9.1 | Responsible AI | done | Pritish | 2026-11-18 | 5572aa0, 02d045d | — | [2026-11-18-p9-9.1-rai-ui-pritish.md](docs/progress/entries/2026-11-18-p9-9.1-rai-ui-pritish.md) |
-| P9 | 9.2 | UI | done | Pritish | 2026-11-20 | — | — | [2026-11-20-p9-9.2-plain-language-ui-pritish.md](docs/progress/entries/2026-11-20-p9-9.2-plain-language-ui-pritish.md) |
+| P9 | 9.2 | UI | done | Pritish | 2026-11-20 | 251ed28 | — | [2026-11-20-p9-9.2-plain-language-ui-pritish.md](docs/progress/entries/2026-11-20-p9-9.2-plain-language-ui-pritish.md) |
 | P9 | 9.3 | UI | in_progress | Pritish | 2026-11-18 | — | — | [2026-11-18-p9-9.3-u6-budget-pritish.md](docs/progress/entries/2026-11-18-p9-9.3-u6-budget-pritish.md) |
 | P10 | 10.1 | Deployment | done | Pritish | 2026-11-18 | f17e087, d4cd99f, 5b2cca6, fb8aa5f | — | [2026-11-18-p10-10.1-ship-pritish.md](docs/progress/entries/2026-11-18-p10-10.1-ship-pritish.md) |
 | P10 | 10.2 | Responsible AI | done | Pritish | 2026-11-18 | d6e63c2, fb8aa5f | — | [2026-11-18-p10-10.2-rai-docs-pritish.md](docs/progress/entries/2026-11-18-p10-10.2-rai-docs-pritish.md) |
