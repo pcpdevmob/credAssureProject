@@ -328,7 +328,7 @@ OFFER_TABLES = {"offers", "offer_evaluations", "negotiation_messages"}
 def test_scope29_ADR0023_offer_tables_drop_up_down_up(db: Path) -> None:
     migrate.upgrade("case", db)
     assert not OFFER_TABLES & set(inspect(session.case_engine(db)).get_table_names())
-    migrate.downgrade("case", db, "-1")
+    migrate.downgrade("case", db, "5c1e0a8f2d47")  # just before the ADR 0023 drop
     restored = set(inspect(session.case_engine(db)).get_table_names())
     assert restored >= OFFER_TABLES
     with sqlite3.connect(db) as conn:  # recreated empty
@@ -342,12 +342,15 @@ def test_scope29_ADR0023_offer_tables_drop_up_down_up(db: Path) -> None:
 
 def test_scope29_ADR0023_offer_table_drop_refuses_a_non_empty_table(db: Path) -> None:
     migrate.upgrade("case", db)
-    migrate.downgrade("case", db, "-1")
+    migrate.downgrade("case", db, "5c1e0a8f2d47")  # just before the ADR 0023 drop
+    with sqlite3.connect(db) as conn:  # the users table of that revision (no ADR 0038 columns)
+        conn.execute(
+            "INSERT INTO users (id, tenant_id, username, role, password_hash, active) "
+            "VALUES ('u', ?, 'u', 'preparer', 'x', 1)",
+            (T,),
+        )
     eng = session.case_engine(db)
     with session.transaction(eng) as s:
-        writes.add_user(
-            s, user_id="u", tenant_id=T, username="u", role="preparer", password_hash="x"
-        )
         writes.create_case(
             s,
             tenant_id=T,

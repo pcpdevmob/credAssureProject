@@ -26,6 +26,19 @@ class Role(StrEnum):
     DIRECTOR_FINANCE = "director_finance"
     VP_FINANCE = "vp_finance"
     EVALUATOR = "evaluator"
+    USER_ADMIN = "user_admin"  # ADR 0038: manages accounts only; never sees or decides a case
+
+
+# Roles that work on cases. USER_ADMIN is not one of them (segregation of duties, ADR 0038).
+BUSINESS_ROLES = frozenset({Role.PREPARER, Role.DIRECTOR_FINANCE, Role.VP_FINANCE, Role.EVALUATOR})
+
+
+class Stage(StrEnum):
+    """What a token is good for (ADR 0038). Only FULL passes the ordinary route dependencies."""
+
+    FULL = "full"
+    MFA = "mfa"  # password accepted, second factor still due: only /auth/mfa/verify
+    SETUP = "setup"  # must change the password and/or enrol MFA: only those routes and /me
 
 
 class AuthError(Exception):
@@ -41,6 +54,9 @@ class Principal:
     user_id: str
     role: Role
     tenant_id: str
+    stage: Stage = Stage.FULL
+    ver: int = 0  # the user's token_version when the token was issued; a bump revokes it
+    mfa: bool = False  # the second factor was checked in this sign-in
 
 
 @dataclass(frozen=True)
@@ -109,6 +125,9 @@ def issue_token(
         "iat": now,
         "exp": now + timedelta(minutes=minutes),
         "auth_time": int((auth_time or now).timestamp()),
+        "stage": who.stage.value,
+        "ver": who.ver,
+        "mfa": who.mfa,
     }
     return jwt.encode(claims, secret, algorithm=ALGORITHM)
 
@@ -150,7 +169,18 @@ def verify_token(token: str, secret: str, now: datetime | None = None) -> Princi
         )
         if datetime.fromtimestamp(claims["exp"], UTC) <= now:
             raise AuthError("token expired")
-        return Principal(str(claims["sub"]), Role(claims["role"]), str(claims["tenant"]))
+        ver = claims.get("ver", 0)
+        if not isinstance(ver, int) or isinstance(ver, bool):
+            raise AuthError("invalid token")
+        return Principal(
+            str(claims["sub"]),
+            Role(claims["role"]),
+            str(claims["tenant"]),
+            # A token without a stage predates ADR 0038 and was only ever issued after a password.
+            Stage(claims.get("stage", Stage.FULL.value)),
+            ver,
+            claims.get("mfa") is True,
+        )
     except (jwt.InvalidTokenError, ValueError, KeyError) as exc:
         raise AuthError("invalid token") from exc
 

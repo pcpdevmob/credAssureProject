@@ -95,6 +95,7 @@ def main() -> int:
         "tenant_id": "default",
         "rate_limit": "100000/minute",
         "ablation": args.ablation,
+        "mfa_enforced": False,  # ADR 0038: the frozen evaluation signs in with a password only
     }
     # A scored run measures the model, never the response cache: the cache key has no server
     # context length, so replies cached under another context would be replayed (G4 live run).

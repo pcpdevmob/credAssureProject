@@ -45,6 +45,16 @@ class User(CaseBase):
     )  # S19 binding; never taken from chat (ONB-01)
     password_hash: Mapped[str] = mapped_column(String(255))
     active: Mapped[bool] = mapped_column(Boolean, default=True)
+    # ADR 0038 (account management, MFA, revocation); every change is audited by ledger.writes.
+    display_name: Mapped[str | None] = mapped_column(String(128))
+    must_change_password: Mapped[bool] = mapped_column(Boolean, default=False)
+    mfa_enabled: Mapped[bool] = mapped_column(Boolean, default=False)
+    mfa_secret: Mapped[str | None] = mapped_column(Text)  # AES-GCM sealed (security.mfa.seal)
+    mfa_last_step: Mapped[int | None] = mapped_column(Integer)  # TOTP replay protection
+    mfa_backup: Mapped[list[str] | None] = mapped_column(JSON)  # argon2 hashes, each used once
+    token_version: Mapped[int] = mapped_column(Integer, default=0)  # bump = revoke all tokens
+    created_at: Mapped[datetime | None] = mapped_column(DateTime)
+    updated_at: Mapped[datetime | None] = mapped_column(DateTime)
 
 
 class Case(CaseBase):

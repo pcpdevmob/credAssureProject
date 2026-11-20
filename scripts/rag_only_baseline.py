@@ -67,6 +67,7 @@ def main() -> int:
     overrides: dict[str, Any] = {} if args.with_gate else {"answerability_threshold": None}
     settings = Settings(
         case_db=ROOT / "var" / "rag-only-case.db",
+        mfa_enforced=False,  # ADR 0038: evaluation tools sign in with a password only
         tenant_id="default",
         llm_cache_path=None,
         **overrides,

@@ -173,10 +173,135 @@ def add_user(
         emp_id=emp_id,
         password_hash=password_hash,
         active=True,
+        created_at=_now(),
     )
     s.add(user)
     s.flush()
     return user
+
+
+# ---- accounts (ADR 0038) ------------------------------------------------------------------------
+ACCOUNT_EVENTS = frozenset(
+    {
+        "USER_CREATED",
+        "USER_ROLE_CHANGED",
+        "USER_DISABLED",
+        "USER_ENABLED",
+        "PASSWORD_RESET",
+        "PASSWORD_CHANGED",
+        "MFA_ENROLLED",
+        "MFA_RESET",
+        "BACKUP_CODE_USED",
+        "LOGIN_FAILED",
+        "SIGNED_OUT",
+    }
+)
+# What an account change may set, and what its audit payload may say: never a hash, a code or a
+# secret (only the field names that changed).
+_USER_FIELDS = frozenset(
+    {
+        "role",
+        "active",
+        "display_name",
+        "password_hash",
+        "must_change_password",
+        "mfa_enabled",
+        "mfa_secret",
+        "mfa_last_step",
+        "mfa_backup",
+    }
+)
+_ACCOUNT_PAYLOAD = frozenset({"user_id", "username", "role", "from_role", "by", "reason"})
+
+
+def create_user(
+    s: Session,
+    *,
+    tenant_id: str,
+    actor: str,
+    username: str,
+    role: str,
+    password_hash: str,
+    display_name: str | None = None,
+    emp_id: str | None = None,
+    must_change_password: bool = True,
+) -> User:
+    """An account made by an admin (or the bootstrap command): temporary password, audited."""
+    # Usernames are global: sign-in names no tenant, so one name is one person everywhere.
+    if s.scalar(select(User.id).where(User.username == username)) is not None:
+        raise ConflictError(f"username {username} is taken")
+    if emp_id is not None and s.scalar(  # one login per HR profile (ONB-01)
+        select(User.id).where(User.tenant_id == tenant_id, User.emp_id == emp_id)
+    ):
+        raise ConflictError(f"HR id {emp_id} is already bound to another user")
+    user = add_user(
+        s,
+        user_id=f"u-{uuid.uuid4().hex[:12]}",
+        tenant_id=tenant_id,
+        username=username,
+        role=role,
+        password_hash=password_hash,
+        emp_id=emp_id,
+    )
+    user.display_name, user.must_change_password = display_name, must_change_password
+    s.flush()
+    append_audit(
+        s,
+        tenant_id=tenant_id,
+        case_id=None,
+        actor=actor,
+        event_type="USER_CREATED",
+        payload={"user_id": user.id, "username": username, "role": role},
+    )
+    return user
+
+
+def update_user(
+    s: Session,
+    *,
+    user_id: str,
+    tenant_id: str,
+    actor: str,
+    changes: Mapping[str, Any],
+    event_type: str | None = None,
+    payload: Mapping[str, Any] | None = None,
+    revoke: bool = False,
+) -> User:
+    """Apply allow-listed changes; `revoke` bumps token_version so every issued token dies at once;
+    `event_type` (an ACCOUNT_EVENTS name) appends one audit row naming the fields, not values."""
+    user = s.get(User, user_id)
+    if user is None or user.tenant_id != tenant_id:
+        raise ConflictError(f"no user {user_id}")
+    unknown = set(changes) - _USER_FIELDS
+    if unknown:
+        raise ValueError(f"not an account field: {sorted(unknown)}")
+    for key, value in changes.items():
+        setattr(user, key, value)
+    if revoke:
+        user.token_version = (user.token_version or 0) + 1
+    user.updated_at = _now()
+    s.flush()
+    if event_type is not None:
+        if event_type not in ACCOUNT_EVENTS:
+            raise ValueError(f"not an account event: {event_type}")
+        body = {k: v for k, v in (payload or {}).items() if k in _ACCOUNT_PAYLOAD}
+        body |= {"user_id": user.id, "username": user.username, "fields": sorted(changes)}
+        append_audit(
+            s, tenant_id=tenant_id, case_id=None, actor=actor, event_type=event_type, payload=body
+        )
+    return user
+
+
+def account_event(
+    s: Session, *, tenant_id: str, actor: str, event_type: str, payload: Mapping[str, Any]
+) -> None:
+    """An account event with no field change (a failed login): same allow-list as update_user."""
+    if event_type not in ACCOUNT_EVENTS:
+        raise ValueError(f"not an account event: {event_type}")
+    body = {k: v for k, v in payload.items() if k in _ACCOUNT_PAYLOAD}
+    append_audit(
+        s, tenant_id=tenant_id, case_id=None, actor=actor, event_type=event_type, payload=body
+    )
 
 
 def create_case(

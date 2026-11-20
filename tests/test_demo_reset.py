@@ -117,7 +117,7 @@ def test_demo_reset_rebuilds_unknown_revision(tmp_path: Path) -> None:
     with transaction(case_engine(db)) as s:
         assert (
             s.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
-            == "7d2b9e4c1a30"
+            == "e3b8c1d5a702"  # migration head (ADR 0038)
         )
         assert (
             s.execute(

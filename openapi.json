@@ -216,6 +216,23 @@
         "title": "ClientError",
         "type": "object"
       },
+      "Code": {
+        "properties": {
+          "code": {
+            "format": "password",
+            "maxLength": 16,
+            "minLength": 6,
+            "title": "Code",
+            "type": "string",
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "Code",
+        "type": "object"
+      },
       "Config": {
         "properties": {
           "key": {
@@ -294,6 +311,20 @@
             "minimum": 0.0,
             "title": "Expected Version",
             "type": "integer"
+          },
+          "mfa_code": {
+            "anyOf": [
+              {
+                "format": "password",
+                "maxLength": 16,
+                "type": "string",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mfa Code"
           },
           "password": {
             "anyOf": [
@@ -650,6 +681,44 @@
         "title": "NewCase",
         "type": "object"
       },
+      "NewUser": {
+        "properties": {
+          "display_name": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Display Name",
+            "type": "string"
+          },
+          "emp_id": {
+            "anyOf": [
+              {
+                "maxLength": 16,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Emp Id"
+          },
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          },
+          "username": {
+            "maxLength": 64,
+            "minLength": 3,
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "display_name",
+          "role"
+        ],
+        "title": "NewUser",
+        "type": "object"
+      },
       "Passage": {
         "properties": {
           "chunk_id": {
@@ -697,6 +766,32 @@
           "chunk_id"
         ],
         "title": "Passage",
+        "type": "object"
+      },
+      "PasswordChange": {
+        "properties": {
+          "current_password": {
+            "format": "password",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Current Password",
+            "type": "string",
+            "writeOnly": true
+          },
+          "new_password": {
+            "format": "password",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "New Password",
+            "type": "string",
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "current_password",
+          "new_password"
+        ],
+        "title": "PasswordChange",
         "type": "object"
       },
       "Problem": {
@@ -798,6 +893,46 @@
           "trace_id"
         ],
         "title": "Producer",
+        "type": "object"
+      },
+      "Reauth": {
+        "properties": {
+          "current_password": {
+            "format": "password",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Current Password",
+            "type": "string",
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "current_password"
+        ],
+        "title": "Reauth",
+        "type": "object"
+      },
+      "Role": {
+        "enum": [
+          "preparer",
+          "director_finance",
+          "vp_finance",
+          "evaluator",
+          "user_admin"
+        ],
+        "title": "Role",
+        "type": "string"
+      },
+      "RoleChange": {
+        "properties": {
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          }
+        },
+        "required": [
+          "role"
+        ],
+        "title": "RoleChange",
         "type": "object"
       },
       "SourceFile": {
@@ -908,6 +1043,551 @@
         "summary": "Set Config",
         "tags": [
           "admin"
+        ]
+      }
+    },
+    "/v1/admin/users": {
+      "get": {
+        "operationId": "list_users_v1_admin_users_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response List Users V1 Admin Users Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "List Users",
+        "tags": [
+          "users"
+        ]
+      },
+      "post": {
+        "operationId": "create_user_v1_admin_users_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewUser"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Create User V1 Admin Users Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Create User",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/v1/admin/users/events": {
+      "get": {
+        "operationId": "events_v1_admin_users_events_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 200,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response Events V1 Admin Users Events Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Events",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/v1/admin/users/{user_id}/disable": {
+      "post": {
+        "operationId": "disable_v1_admin_users__user_id__disable_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "title": "User Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Disable V1 Admin Users  User Id  Disable Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Disable",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/v1/admin/users/{user_id}/enable": {
+      "post": {
+        "operationId": "enable_v1_admin_users__user_id__enable_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "title": "User Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Enable V1 Admin Users  User Id  Enable Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Enable",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/v1/admin/users/{user_id}/reset-mfa": {
+      "post": {
+        "operationId": "reset_mfa_v1_admin_users__user_id__reset_mfa_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "title": "User Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Reset Mfa V1 Admin Users  User Id  Reset Mfa Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Reset Mfa",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/v1/admin/users/{user_id}/reset-password": {
+      "post": {
+        "operationId": "reset_password_v1_admin_users__user_id__reset_password_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "title": "User Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Reset Password V1 Admin Users  User Id  Reset Password Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Reset Password",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/v1/admin/users/{user_id}/role": {
+      "post": {
+        "operationId": "change_role_v1_admin_users__user_id__role_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "title": "User Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleChange"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Change Role V1 Admin Users  User Id  Role Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Change Role",
+        "tags": [
+          "users"
         ]
       }
     },
@@ -2662,9 +3342,334 @@
         ]
       }
     },
+    "/v1/auth/logout": {
+      "post": {
+        "description": "Sign out everywhere: every token this user holds stops working at once.",
+        "operationId": "logout_v1_auth_logout_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Logout V1 Auth Logout Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Logout",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/v1/auth/mfa/enable": {
+      "post": {
+        "description": "Finish enrolment with a code from the app; returns 8 backup codes (shown once) and the next\ntoken. Revokes every other token.",
+        "operationId": "enable_mfa_v1_auth_mfa_enable_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Code"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Enable Mfa V1 Auth Mfa Enable Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Enable Mfa",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/v1/auth/mfa/setup": {
+      "post": {
+        "description": "Start enrolment: a new secret for the authenticator app (shown once, stored sealed). Needs\nthe password again, so a stolen token alone cannot bind the attacker's app to the account.",
+        "operationId": "start_mfa_v1_auth_mfa_setup_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Reauth"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Start Mfa V1 Auth Mfa Setup Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Start Mfa",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/v1/auth/mfa/verify": {
+      "post": {
+        "description": "The second factor after a correct password: a TOTP code or one backup code.",
+        "operationId": "verify_mfa_v1_auth_mfa_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Code"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Verify Mfa V1 Auth Mfa Verify Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Verify Mfa",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/v1/auth/password": {
+      "post": {
+        "description": "Change your own password: the current one, then the policy. Every other token is revoked.",
+        "operationId": "change_password_v1_auth_password_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordChange"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Change Password V1 Auth Password Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Change Password",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
     "/v1/auth/refresh": {
       "post": {
-        "description": "H12: swap a still-valid token for a fresh one. The user row was re-checked by `User`\n(deactivated users are refused). The session ends JWT_SESSION_MAX_MINUTES after the password\nwas typed; a refresh never extends that, so a stolen token cannot live forever.",
+        "description": "H12: swap a still-valid token for a fresh one. The user row was re-checked by `Account`\n(deactivated or revoked users are refused). The session ends JWT_SESSION_MAX_MINUTES after the\npassword was typed; a refresh never extends that, so a stolen token cannot live forever.",
         "operationId": "refresh_v1_auth_refresh_post",
         "responses": {
           "200": {

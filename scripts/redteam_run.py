@@ -258,6 +258,7 @@ def main() -> int:
         "tenant_id": "default",
         "rate_limit": "100000/minute",
         "llm_cache_path": None,  # a red-team result is a fresh model call
+        "mfa_enforced": False,  # ADR 0038: the probes sign in as seeded users with a password only
     }
     if args.fake:
         overrides |= {"_env_file": None, "app_env": "test", "llm_enabled": True}

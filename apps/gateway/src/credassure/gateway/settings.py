@@ -84,6 +84,13 @@ class Settings(BaseSettings):
     jwt_expiry_minutes: int = Field(default=30, gt=0, le=30)
     # H12: POST /v1/auth/refresh renews a valid token until this long after the password was typed
     jwt_session_max_minutes: int = Field(default=240, gt=0, le=720)
+    # ADR 0038: TOTP second factor. The secret is sealed at rest with this key (base64 of 32 random
+    # bytes: `python -c "import os,base64;print(base64.b64encode(os.urandom(32)).decode())"`).
+    mfa_encryption_key: SecretStr | None = None
+    mfa_required_roles: str = "director_finance,vp_finance,user_admin"
+    # None = on everywhere except APP_ENV=test; the eval and red-team runners pass False so the
+    # frozen evaluation keeps signing in with a password only.
+    mfa_enforced: bool | None = None
     ui_origins: str = "http://localhost:3000,http://localhost:5173"
 
     gst_rate: Decimal = Decimal("0.18")
@@ -118,7 +125,7 @@ class Settings(BaseSettings):
     planner_mode: Literal["fixed", "llm_proposes"] = "fixed"
     ablation: Literal["A1", "A2", "A3", "A4", "A5", "A6"] | None = None
 
-    @field_validator("ablation", "llm_ca_cert", mode="before")
+    @field_validator("ablation", "llm_ca_cert", "mfa_encryption_key", mode="before")
     @classmethod
     def _empty_is_unset(cls, value: object) -> object:
         return None if value == "" else value
@@ -129,6 +136,13 @@ class Settings(BaseSettings):
             raise ValueError("ABLATION=A6 (guardrails off) is refused in the demo profile")
         if self.replay_mode and not self.llm_cache_path:
             raise ValueError("REPLAY_MODE=true needs LLM_CACHE_PATH (the recorded replies)")
+        if self.mfa_encryption_key is not None:  # a malformed key fails at startup, not at login
+            from credassure.security.mfa import MfaError, load_key
+
+            try:
+                load_key(self.mfa_encryption_key.get_secret_value())
+            except MfaError as exc:
+                raise ValueError(str(exc)) from exc
         if self.app_env == "test":
             return self
         problems: list[str] = []
@@ -139,9 +153,19 @@ class Settings(BaseSettings):
             problems.append(f"JWT_SECRET must be at least {MIN_JWT_SECRET_LENGTH} characters")
         if self.llm_enabled and not self.llm_base_url:
             problems.append("LLM_BASE_URL is required when LLM_ENABLED=true")
+        if self.mfa_on and not self.mfa_encryption_key:
+            problems.append("MFA_ENCRYPTION_KEY is required while MFA is enforced (ADR 0038)")
         if problems:
             raise ValueError("; ".join(problems))
         return self
+
+    @property
+    def mfa_on(self) -> bool:
+        return self.app_env != "test" if self.mfa_enforced is None else self.mfa_enforced
+
+    def mfa_required_for(self, role: str) -> bool:
+        wanted = {r.strip() for r in self.mfa_required_roles.split(",") if r.strip()}
+        return self.mfa_on and role in wanted
 
     @property
     def ui_origin_list(self) -> list[str]:

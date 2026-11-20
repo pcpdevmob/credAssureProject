@@ -91,7 +91,10 @@ def main() -> int:
     ap.add_argument("--ids", nargs="*", default=None)
     args = ap.parse_args()
     settings = Settings(
-        case_db=ROOT / "var" / "oracle-case.db", tenant_id="default", llm_cache_path=None
+        case_db=ROOT / "var" / "oracle-case.db",
+        tenant_id="default",
+        llm_cache_path=None,
+        mfa_enforced=False,  # ADR 0038: evaluation tools sign in with a password only
     )
     base_llm = _default_llm(settings)
     if base_llm is None:

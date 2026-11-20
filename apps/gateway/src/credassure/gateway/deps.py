@@ -22,10 +22,12 @@ from credassure.ledger.models import Case
 from credassure.ledger.session import transaction
 from credassure.ledger.store import SqlLedger
 from credassure.security.auth import (
+    BUSINESS_ROLES,
     AuthError,
     CaseRef,
     Principal,
     Role,
+    Stage,
     can_view_case,
     verify_token,
 )
@@ -67,20 +69,74 @@ def principal_from_token(svc: Services, token: str) -> Principal:
             or not user.active
             or user.role != who.role.value
             or user.tenant_id != who.tenant_id
+            or (user.token_version or 0) != who.ver  # ADR 0038: signed out, reset or changed
         ):
             raise AuthError("user no longer active")
     return who
 
 
-def current_user(
+def any_token(
     svc: Svc, creds: Annotated[HTTPAuthorizationCredentials | None, Depends(_bearer)]
 ) -> Principal:
+    """A valid, unrevoked token of any stage (sign-out accepts a half-finished sign-in too)."""
     if creds is None or creds.scheme.lower() != "bearer":
         raise AuthError("missing bearer token")
     return principal_from_token(svc, creds.credentials)
 
 
+AnyToken = Annotated[Principal, Depends(any_token)]
+
+
+def _unfinished(who: Principal) -> ProblemError:
+    step = "the second factor" if who.stage is Stage.MFA else "your account setup"
+    return ProblemError(401, f"finish signing in: {step} is due", ApiErrorCode.UNAUTHENTICATED)
+
+
+def account_user(who: AnyToken) -> Principal:
+    """Fully signed in, any role (account routes: /me, refresh, the admin API)."""
+    if who.stage is not Stage.FULL:
+        raise _unfinished(who)
+    return who
+
+
+def current_user(who: AnyToken) -> Principal:
+    """Every case and workflow route: fully signed in and a business role. Deny by default for the
+    account administrator (segregation of duties, ADR 0038)."""
+    if who.stage is not Stage.FULL:
+        raise _unfinished(who)
+    if who.role not in BUSINESS_ROLES:
+        raise ProblemError(
+            403, "account administrators cannot use case routes", ApiErrorCode.FORBIDDEN
+        )
+    return who
+
+
+def setup_user(who: AnyToken) -> Principal:
+    """Password change and MFA enrolment: a setup-stage token, or a full one."""
+    if who.stage not in (Stage.SETUP, Stage.FULL):
+        raise _unfinished(who)
+    return who
+
+
+def mfa_pending(who: AnyToken) -> Principal:
+    if who.stage is not Stage.MFA:
+        raise ProblemError(409, "no second factor is pending", ApiErrorCode.CONFLICT)
+    return who
+
+
+def user_admin(who: Annotated[Principal, Depends(account_user)]) -> Principal:
+    if who.role is not Role.USER_ADMIN:
+        raise ProblemError(
+            403, "user administration needs the user_admin role", ApiErrorCode.FORBIDDEN
+        )
+    return who
+
+
 User = Annotated[Principal, Depends(current_user)]
+Account = Annotated[Principal, Depends(account_user)]
+SetupUser = Annotated[Principal, Depends(setup_user)]
+MfaPending = Annotated[Principal, Depends(mfa_pending)]
+UserAdmin = Annotated[Principal, Depends(user_admin)]
 
 
 def role(*roles: Role) -> Any:
