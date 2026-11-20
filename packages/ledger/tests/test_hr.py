@@ -34,3 +34,21 @@ def test_ONB05_hr_reader_engine_refuses_writes() -> None:
     engine = session.hr_engine(FROZEN / "hr.db")
     with pytest.raises(DBAPIError), engine.begin() as con:
         con.execute(text("UPDATE training_records SET status = 'completed'"))
+
+
+def test_scope22_hr_reads_from_many_threads_do_not_share_connections() -> None:
+    """The load smoke (scope #35) reads HR profiles from more than five threads at once. A pooled
+    "sqlite://" engine (SingletonThreadPool) closed other threads' connections mid-query
+    (segfault on CI); each read now opens its own read-only connection."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    from sqlalchemy.pool import NullPool
+
+    engine = session.hr_engine(FROZEN / "hr.db")
+    assert isinstance(engine.pool, NullPool)
+    ids = [f"E{n:03d}" for n in range(1, 21)] * 10
+    with ThreadPoolExecutor(max_workers=16) as pool:
+        got = list(pool.map(lambda e: hr.load_profile(engine, e), ids))
+    assert sum(p is not None for p in got) == sum(
+        hr.load_profile(engine, e) is not None for e in ids
+    )

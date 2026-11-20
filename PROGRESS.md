@@ -45,8 +45,8 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P8 | 8.4 | AI Security and Guardrails | done | Pritish | 2026-11-18 | b09d62f | — | [2026-11-18-p8-8.4-headers-pritish.md](docs/progress/entries/2026-11-18-p8-8.4-headers-pritish.md) |
 | P8 | 8.5 | Evaluation | in_progress | Pritish | 2026-11-18 | c40d155 | — | [2026-11-18-p8-8.5-a6-switch-pritish.md](docs/progress/entries/2026-11-18-p8-8.5-a6-switch-pritish.md) |
 | P9 | 9.1 | Responsible AI | done | Pritish | 2026-11-18 | 5572aa0, 02d045d | — | [2026-11-18-p9-9.1-rai-ui-pritish.md](docs/progress/entries/2026-11-18-p9-9.1-rai-ui-pritish.md) |
-| P9 | 9.2 | UI | done | Pritish | 2026-11-18 | d57e07a | — | [2026-11-18-p9-9.2-scorecard-help-pritish.md](docs/progress/entries/2026-11-18-p9-9.2-scorecard-help-pritish.md) |
-| P9 | 9.3 | UI | in_progress | Pritish | 2026-11-18 | — | — | [2026-11-18-p9-9.3-u6-budget-pritish.md](docs/progress/entries/2026-11-18-p9-9.3-u6-budget-pritish.md) |
+| P9 | 9.2 | UI | done | Pritish | 2026-11-20 | 251ed28 | — | [2026-11-20-p9-9.2-plain-language-ui-pritish.md](docs/progress/entries/2026-11-20-p9-9.2-plain-language-ui-pritish.md) |
+| P9 | 9.3 | UI | done | Pritish | 2026-11-20 | — | — | [2026-11-20-p9-9.3-excel-workbook-import-pritish.md](docs/progress/entries/2026-11-20-p9-9.3-excel-workbook-import-pritish.md) |
 | P10 | 10.1 | Deployment | done | Pritish | 2026-11-18 | f17e087, d4cd99f, 5b2cca6, fb8aa5f | — | [2026-11-18-p10-10.1-ship-pritish.md](docs/progress/entries/2026-11-18-p10-10.1-ship-pritish.md) |
 | P10 | 10.2 | Responsible AI | done | Pritish | 2026-11-18 | d6e63c2, fb8aa5f | — | [2026-11-18-p10-10.2-rai-docs-pritish.md](docs/progress/entries/2026-11-18-p10-10.2-rai-docs-pritish.md) |
 | P10 | 10.3 | Documentation | in_progress | Pritish | 2026-11-18 | 6fa8740, fb8aa5f | — | [2026-11-18-p10-10.3-contributions-release-pritish.md](docs/progress/entries/2026-11-18-p10-10.3-contributions-release-pritish.md) |
@@ -63,6 +63,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P11 | 11.11 | Evaluation | done | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md](docs/progress/entries/2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md) |
 | P11 | 11.12 | Evaluation | in_progress | Pritish | 2026-11-19 | — | E14 | [2026-11-19-p11-11.12-redteam-runner-pritish.md](docs/progress/entries/2026-11-19-p11-11.12-redteam-runner-pritish.md) |
 | P11 | 11.13 | Evaluation | done | Pritish | 2026-11-20 | — | E14 | [2026-11-20-p11-11.13-redteam-live-run-pritish.md](docs/progress/entries/2026-11-20-p11-11.13-redteam-live-run-pritish.md) |
+| P11 | 11.14 | Evaluation | done | Pritish | 2026-11-20 | — | — | [2026-11-20-p11-11.14-safety-v2-h24-pritish.md](docs/progress/entries/2026-11-20-p11-11.14-safety-v2-h24-pritish.md) |
 | P12 | 12.10 | Responsible AI | done | Pritish | 2026-11-20 | — | — | [2026-11-20-p12-12.10-system-card-release-hashes-pritish.md](docs/progress/entries/2026-11-20-p12-12.10-system-card-release-hashes-pritish.md) |
 | P13 | 13.0 | Copilot | done | Pritish | 2026-11-18 | 2c3088d, bbe5f62, 0148fe0 | — | [2026-11-18-p13-13.0-copilot-product-assistant-pritish.md](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md) |
 | P14 | 14.1 | Authentication | in_progress | Pritish | 2026-11-20 | — | — | [2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md](docs/progress/entries/2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md) |
@@ -87,7 +88,9 @@ From the latest entry of each step. Module-level items live in each module file.
 
 ### UI
 
-- P9 9.3: H15 Lighthouse ≥ 95 and H16 first `make e2e` run of u6 on the Mac. ([entry](docs/progress/entries/2026-11-18-p9-9.3-u6-budget-pritish.md))
+- P9 9.2: e2e u2/u3/u4/u6 text expectations updated but not run here (live model needed): run them on the Mac. ([entry](docs/progress/entries/2026-11-20-p9-9.2-plain-language-ui-pritish.md))
+- P9 9.2: copilot answer and injection steps of the app-path walk need the Mac (sandbox runs with the model off). ([entry](docs/progress/entries/2026-11-20-p9-9.2-plain-language-ui-pritish.md))
+- P9 9.3: PDF intake (design in ADR 0040: model drafts fields from the PDF text, person reviews in the form, code validates) after 27 Nov. ([entry](docs/progress/entries/2026-11-20-p9-9.3-excel-workbook-import-pritish.md))
 
 ### Copilot
 
@@ -161,6 +164,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - P11 11.11: the Mac reruns the negotiation, offers, e2e and T082 items on the final code (K3). A teammate reviews the v2 lender replies (human-review H26; data provisional until then). Owners must set `LENDER_SCRIPTS_DIR=data/frozen/v2/lender_scripts` in their own `.env`. ([entry](docs/progress/entries/2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md))
 - P11 11.12: live run on the Mac (`make redteam`, ~10 min, after the K2 validation runs); paste `redteam.md` into the log, read REVIEW answers, fill the Fix column; add trace links for the report. ([entry](docs/progress/entries/2026-11-19-p11-11.12-redteam-runner-pritish.md))
 - P11 11.13: a teammate who did not write the probes confirms the five REVIEW rows (human review). The report's K6 placeholder is filled. ([entry](docs/progress/entries/2026-11-20-p11-11.13-redteam-live-run-pritish.md))
+- P11 11.14: Abhishek reviews the change (H24 owner); then H7 freeze, safety_v2 run and A6 (K5) on Mon 23. ([entry](docs/progress/entries/2026-11-20-p11-11.14-safety-v2-h24-pritish.md))
 - P15 15.2: run on the Mac: course (keys, CA certificates, VPN) and hf (Hugging Face token): llm-probe, smoke, comparison run, compare-runs. ([entry](docs/progress/entries/2026-11-20-p15-15.2-course-endpoint-comparison-pritish.md))
 
 ## History

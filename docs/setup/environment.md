@@ -76,6 +76,7 @@ Paths are relative to the repo root. The defaults point at the frozen synthetic 
 | Variable | Default | Meaning |
 |---|---|---|
 | `HR_DB` | `data/frozen/v1/hr.db` | Synthetic HR store, opened read-only (ONB-01, ONB-05) |
+| `CASE_TEMPLATE` | `data/templates/case_template.xlsx` | Excel case template served for download and read by the workbook import (ADR 0040) |
 | `REFERENCE_RATES_FILE` | `data/reference/reference_rates.yaml` | Repo rate and bank EBLR/RLLR as of `AS_OF_DATE`; prices floating-rate offers (LW-08, S22) |
 | `LENDER_SCRIPTS_DIR` | `data/frozen/v2/lender_scripts` | Scripted lender replies for the three negotiation rounds (S05 v2, LW-13/15, ADR 0037). A v1 directory answers only round 1 |
 | `CORPUS_MANIFEST` | `data/corpus/manifest.yaml` | Lets the Critic and copilot call a cited document superseded even when it was never indexed (VER-02, KR-04) |
