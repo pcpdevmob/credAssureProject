@@ -45,9 +45,9 @@ def test_scope39_OBJ08_BR14_delete_keeps_record_removes_content_and_chain_verifi
     assert _count(client, tomb, case_id) == 1
     with transaction(client.app.state.services.engine) as s:
         assert reads.verify_chain(s) == []
-        thread = f"{client.app.state.services.settings.tenant_id}:{case_id}"
-        left = s.execute(text("SELECT count(*) FROM checkpoints WHERE thread_id=:t"), {"t": thread})
-        assert left.scalar_one() == 0  # LangGraph state for the case is gone too
+    svc = client.app.state.services  # LangGraph state for the case is gone too, on SQLite (case.db)
+    thread = f"{svc.settings.tenant_id}:{case_id}"  # or beside MySQL (CHECKPOINT_DB, ADR 0039)
+    assert svc.checkpointer.get_tuple({"configurable": {"thread_id": thread}}) is None
 
     # invisible everywhere, except the evaluator's audit view of the tombstone
     for h in (p, e):
@@ -84,6 +84,10 @@ def test_scope39_demo_reset_purge_still_removes_a_tombstone(
     client: TestClient, login: Login, new_case: Callable[[TestClient], str]
 ) -> None:
     """make demo-reset purges with scripts/purge_cases.py; a tombstone must not block it."""
+    import pytest
+
+    if client.app.state.services.engine.dialect.name != "sqlite":
+        pytest.skip("purge_cases is a SQLite demo-reset tool (ADR 0039)")
     import importlib.util
     import sys
     from pathlib import Path

@@ -58,5 +58,7 @@ a managed service on both Azure and AWS.
 - Parity is shown, not assumed: the same suite passes on both, and the parity check runs the five end-to-end cases and
   a three-round negotiation on both backends and compares every ledger fact and gate.
 - The evaluation, red-team and harness scripts read case.db with `sqlite3` for state digests; they stay on SQLite.
+- `scripts/purge_cases.py` (the `make demo-reset` purge) is SQLite-only: it drops and recreates triggers inside one
+  transaction, and MySQL DDL commits implicitly. On MySQL a case is removed with `DELETE /v1/cases/{id}` (ADR 0025).
 - Fallback: if MySQL is not green before the deployment, the VM runs on SQLite with no code change (unset the URL).
 - `make backup` stays the SQLite backup; on MySQL use `backup-mysql.sh` (or the managed service's backups).

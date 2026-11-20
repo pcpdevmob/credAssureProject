@@ -3,13 +3,14 @@
 the Langfuse mask on the Verhoeff-aware redactor."""
 
 import json
-import sqlite3
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
 from fastapi.testclient import TestClient
+from sqlalchemy import text
 
+from credassure.ledger.session import case_engine
 from credassure.security.pii import verhoeff_digit
 
 PAN = "ABCPE1234F"
@@ -20,8 +21,16 @@ Login = Callable[[TestClient, str], dict[str, str]]
 
 
 def _rows(db: Any, sql: str, *args: str) -> list[tuple[Any, ...]]:
-    with sqlite3.connect(db) as conn:
-        return conn.execute(sql, args).fetchall()
+    """`?` placeholders, on SQLite or MySQL (ADR 0039)."""
+    parts = sql.split("?")
+    named = "".join(p + (f":p{i}" if i < len(parts) - 1 else "") for i, p in enumerate(parts))
+    engine = case_engine(db)
+    try:
+        with engine.begin() as conn:
+            rows = conn.execute(text(named), {f"p{i}": a for i, a in enumerate(args)}).all()
+            return [tuple(r) for r in rows]
+    finally:
+        engine.dispose()
 
 
 def test_NFR07_approver_comment_is_redacted_in_row_and_audit(

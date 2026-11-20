@@ -41,6 +41,8 @@ def _in(ids: list[str]) -> tuple[str, dict[str, str]]:
 
 
 def purge(s: Session, ids: list[str], *, dry_run: bool) -> dict[str, int]:
+    if s.get_bind().dialect.name != "sqlite":  # MySQL DDL commits implicitly: no atomic purge
+        raise SystemExit("purge_cases is SQLite-only (ADR 0039); use DELETE /v1/cases/{id}")
     marks, params = _in(ids)
     found = {r[0] for r in s.execute(text(f"SELECT id FROM cases WHERE id IN ({marks})"), params)}
     if missing := set(ids) - found:

@@ -6,7 +6,9 @@ from pathlib import Path
 from typing import Any
 
 from fastapi.testclient import TestClient
+from sqlalchemy import text
 
+from credassure.ledger.session import case_engine
 from credassure.security import pii
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -35,11 +37,10 @@ def test_H13_name_in_chat_is_stored_redacted(
     h = login(client, "demo.preparer")
     r = client.post(f"/v1/cases/{case_id}/chat", json={"message": f"Is {name} trained?"}, headers=h)
     assert r.status_code == 200, r.text
-    con = sqlite3.connect(client.db)
-    try:
-        stored = [r[0] for r in con.execute("SELECT redacted_text FROM chat_messages")]
-    finally:
-        con.close()
+    engine = case_engine(client.db)  # SQLite or MySQL (ADR 0039)
+    with engine.connect() as conn:
+        stored = list(conn.execute(text("SELECT redacted_text FROM chat_messages")).scalars())
+    engine.dispose()
     assert stored and all(name.lower() not in t.lower() for t in stored)
     assert any("[REDACTED_EMPLOYEE_NAME]" in t for t in stored)
 
