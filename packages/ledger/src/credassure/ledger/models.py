@@ -129,7 +129,8 @@ class LedgerFact(CaseBase):
     value_text: Mapped[str] = mapped_column(Text)  # Decimal/int as exact text
     unit: Mapped[str] = mapped_column(String(16))
     source_type: Mapped[str] = mapped_column(String(32))
-    source_ref: Mapped[str] = mapped_column(String(255))
+    # Text: a fact can cite every file it was computed from (ADR 0039: MySQL enforces lengths).
+    source_ref: Mapped[str] = mapped_column(Text)
     produced_by: Mapped[str] = mapped_column(String(128))  # engine/agent + version
     input_hash: Mapped[str] = mapped_column(String(64))
     created_at: Mapped[datetime] = mapped_column(DateTime)
