@@ -601,6 +601,9 @@ def delete_case(
         removed = svc.ledger.delete_case(
             case.id, expected_version=expected_version, actor=who.user_id
         )
+        if svc.settings.case_database_url is not None and svc.checkpointer is not None:
+            # ADR 0039: LangGraph state lives beside MySQL, not in it; remove the thread there too.
+            svc.checkpointer.delete_thread(f"{case.tenant_id}:{case.id}")
     return {"case_id": case.id, "status": "DELETED", "removed": removed}
 
 

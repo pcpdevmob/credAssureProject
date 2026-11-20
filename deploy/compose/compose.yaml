@@ -35,6 +35,32 @@ services:
       retries: 10
       start_period: 15s
 
+  mysql:
+    # ADR 0039: case.db on MySQL 8 for the hosted deployment. Internal network only (no port is
+    # published); the gateway reaches it as mysql:3306 with CASE_DATABASE_URL. hr.db, corpus.db and
+    # Chroma stay files in credassure_data. Start with `--profile mysql`; set MYSQL_PASSWORD and
+    # MYSQL_ROOT_PASSWORD in the shell or .env first.
+    image: mysql:8.4
+    profiles: [mysql]
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_bin  # byte-exact like SQLite; the gateway refuses anything else
+      - --log-bin-trust-function-creators=ON  # the append-only triggers (OBJ-08)
+      - --innodb-buffer-pool-size=256M
+    environment:
+      MYSQL_DATABASE: credassure
+      MYSQL_USER: credassure
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-}
+    volumes: [mysql_data:/var/lib/mysql]
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
   web:
     profiles: [dev, demo]
     build:
@@ -63,6 +89,7 @@ services:
     environment: *ollama-env
     depends_on:
       ollama: {condition: service_healthy}
+      mysql: {condition: service_healthy, required: false}  # only with --profile mysql
 
   corpus:
     # Corpus fetch/import/ingest tools (ADR 0020): non-root, read-only root filesystem, no capabilities,
@@ -86,3 +113,4 @@ services:
 volumes:
   credassure_data:
   ollama_models:
+  mysql_data:

@@ -586,8 +586,8 @@ def _tool_factory(settings: Settings, engine: Engine) -> Callable[[AgentName], T
 
 
 def build_services(settings: Settings, llm: LLMPort | None) -> Services:
-    migrate.upgrade("case", settings.case_db)  # idempotent; seeds stay separate (#29)
-    engine = case_engine(settings.case_db)
+    migrate.upgrade("case", settings.case_target)  # idempotent; seeds stay separate (#29)
+    engine = case_engine(settings.case_target)  # SQLite file or MySQL URL (ADR 0039)
     ledger = SqlLedger(engine, settings.tenant_id)
     rechecks = {  # SUP-05: the stage's own recomputation; other stages keep the default
         Stage.ONBOARDING: onboarding.make_recheck(
@@ -601,7 +601,8 @@ def build_services(settings: Settings, llm: LLMPort | None) -> Services:
     }
     with transaction(engine) as s:
         rule = reads.get_config(s, settings.tenant_id, "boundary_rule") or settings.boundary_rule
-    saver = SqliteSaver(sqlite3.connect(settings.case_db, check_same_thread=False))
+    settings.checkpoints_path.parent.mkdir(parents=True, exist_ok=True)
+    saver = SqliteSaver(sqlite3.connect(settings.checkpoints_path, check_same_thread=False))
     supervisor = Supervisor(
         agents=_STAGE_AGENTS,
         store=ledger,
@@ -627,6 +628,7 @@ def build_services(settings: Settings, llm: LLMPort | None) -> Services:
         supervisor=supervisor,
         llm=supervisor.llm,
         jobs=JobRunner(engine, ledger, supervisor),
+        checkpointer=saver,
     )
     svc.service = SupervisorService(svc)
     svc.offer_preview = _offer_preview(settings, engine)

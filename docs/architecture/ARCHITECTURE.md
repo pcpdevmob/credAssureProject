@@ -91,7 +91,7 @@ flowchart TB
     PK["packages — core, guardrails, engines, ledger, llm, retrieval, security, tools, reports, lender-sim, observability"]
   end
   subgraph Stores
-    CDB[("case.db — SQLite WAL")]
+    CDB[("case.db — SQLite WAL or MySQL 8 (ADR 0039)")]
     HDB[("hr.db — read-only")]
     KDB[("corpus.db — FTS5")]
     CH[("Chroma — vectors")]
@@ -115,7 +115,7 @@ flowchart TB
 | `apps/gateway` | Composition root: authN/Z, tenancy and case scoping, `/v1` routers, agent router mounting, async job runner, SSE, OpenAPI export | FastAPI |
 | `agents/*` | One bounded agent each, with its own `api/` router (ADR 0005) | Python, LangGraph inside agents |
 | `packages/*` | Shared libraries with no knowledge of agents | Python |
-| Stores | System of record, HR (read-only), corpus, vectors | SQLite (WAL), Chroma |
+| Stores | System of record, HR (read-only), corpus, vectors | SQLite (WAL) or MySQL 8 for case.db (ADR 0039), Chroma |
 | `ingest` | Download, parse, chunk, embed, index | Python job |
 
 ### 5.2 Agent internal structure (C4 level 3, applies to every agent) — hexagonal
@@ -264,7 +264,8 @@ code validates it against the fixed order. `CriticFinding` drives regeneration.
 
 ### 8.3 Persistence and transactions
 Repository + unit-of-work over SQLAlchemy; Alembic migrations (upgrade and downgrade tested). A ledger write and its audit event
-commit in one transaction. SQLite in WAL mode with busy timeout; one active run per case via a lock row; optimistic concurrency
+commit in one transaction. SQLite in WAL mode with busy timeout, or MySQL 8 with a one-row write lock taken first in every
+transaction (ADR 0039); one active run per case via a lock row; optimistic concurrency
 (`row_version`) on cases and approvals. Every case-scoped table carries `tenant_id`.
 
 ### 8.4 API design
@@ -364,6 +365,7 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0036 | Local Ollama (qwen3:8b) is the evaluated path; course endpoint not used | Accepted |
 | 0037 | Three negotiation rounds by default; re-rank after every counted concession | Accepted |
 | 0038 | Accounts, MFA and segregation of duties in the gateway | Accepted |
+| 0039 | case.db on MySQL for the hosted deployment (SQLite kept where needed) | Proposed |
 
 Full index with phase and scope numbers: `docs/adr/README.md`.
 

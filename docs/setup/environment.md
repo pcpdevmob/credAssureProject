@@ -20,6 +20,8 @@ so the model profile wins for model settings. `MODELS` itself is a make variable
 | `LOG_LEVEL` | `INFO` | DEBUG, INFO, WARNING, ERROR |
 | `TENANT_ID` | `default` | Tenant of this gateway process. `make run-api`, `make db` and `make demo-reset` set `demo` (the dev/demo database `var/case.db`); an exported value wins over `--env-file` |
 | `CASE_DB` | `var/case.db` | Case, ledger and audit database. The e2e targets point it at `var/case-e2e.db` |
+| `CASE_DATABASE_URL` | unset | ADR 0039: `mysql+pymysql://user:pass@host/db` puts case.db on MySQL 8 (database collation `utf8mb4_bin`). Unset = SQLite at `CASE_DB` |
+| `CHECKPOINT_DB` | `var/checkpoints.db` | LangGraph checkpoints when case.db is on MySQL (inside case.db on SQLite) |
 | `UI_ORIGINS` | `http://localhost:3000,http://localhost:5173` | CORS allowlist, comma-separated |
 | `JWT_EXPIRY_MINUTES` | 30 | Token lifetime (max 30) |
 | `JWT_SESSION_MAX_MINUTES` | 240 | `POST /v1/auth/refresh` renews a token until this long after sign-in (max 720), then the user signs in again |
