@@ -4689,6 +4689,74 @@
       }
     },
     "/v1/cases/{case_id}/files": {
+      "get": {
+        "description": "What the case holds now: the newest upload per kind (newest wins, as the stages read it).",
+        "operationId": "files_v1_cases__case_id__files_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Files V1 Cases  Case Id  Files Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Files",
+        "tags": [
+          "cases"
+        ]
+      },
       "post": {
         "operationId": "upload_v1_cases__case_id__files_post",
         "parameters": [
@@ -4851,6 +4919,76 @@
           }
         ],
         "summary": "Funding",
+        "tags": [
+          "cases"
+        ]
+      }
+    },
+    "/v1/cases/{case_id}/history": {
+      "get": {
+        "description": "The case's events, oldest first, for any case member. Unknown event types are listed with\nno payload, so a new type never leaks a key before it is reviewed here.",
+        "operationId": "history_v1_cases__case_id__history_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response History V1 Cases  Case Id  History Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "History",
         "tags": [
           "cases"
         ]
@@ -5083,6 +5221,74 @@
       }
     },
     "/v1/cases/{case_id}/readiness": {
+      "get": {
+        "description": "Gate 1 as the Onboarding stage recorded it, with the HR records that evidence each rule.\n`decision` is null before the stage has run; nothing here re-evaluates a rule.",
+        "operationId": "readiness_v1_cases__case_id__readiness_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "case_id",
+            "required": true,
+            "schema": {
+              "title": "Case Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Readiness V1 Cases  Case Id  Readiness Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Validation error"
+          },
+          "4XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Client error"
+          },
+          "5XX": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Readiness",
+        "tags": [
+          "cases"
+        ]
+      },
       "post": {
         "description": "Run only the onboarding stage; earlier stages must be GO (SUP-03).",
         "operationId": "run_readiness_v1_cases__case_id__readiness_post",

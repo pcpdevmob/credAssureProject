@@ -36,7 +36,7 @@ describe('approval step-up', () => {
     render(<ProvenanceProvider><Review c={c} need={c.recommendedAmount} user={director} onChange={() => undefined} /></ProvenanceProvider>);
     expect(screen.getAllByText(INTERNAL).length).toBeGreaterThan(0);
     expect(screen.getByRole('button', { name: 'Approve proposal' })).toBeDisabled(); // P9: attest first
-    await userEvent.click(screen.getByLabelText(/I reviewed the Critic findings/));
+    await userEvent.click(screen.getByLabelText(/I reviewed the accuracy checks/));
     await userEvent.click(screen.getByRole('button', { name: 'Approve proposal' }));
     const confirm = screen.getByRole('button', { name: /Confirm: approve proposal/ });
     expect(confirm).toBeDisabled();
@@ -52,7 +52,7 @@ describe('approval step-up', () => {
       .mockResolvedValueOnce(undefined);
     render(<ProvenanceProvider><Review c={c} user={director} onChange={() => undefined} /></ProvenanceProvider>);
     expect(screen.getByRole('button', { name: 'Approve proposal' })).toBeDisabled(); // P9: attest first
-    await userEvent.click(screen.getByLabelText(/I reviewed the Critic findings/));
+    await userEvent.click(screen.getByLabelText(/I reviewed the accuracy checks/));
     await userEvent.click(screen.getByRole('button', { name: 'Approve proposal' }));
     expect(screen.queryByLabelText('Your password')).toBeNull();
     await userEvent.type(screen.getByLabelText('Type the case ID to confirm'), CASE_ID);

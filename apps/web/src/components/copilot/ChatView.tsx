@@ -2,7 +2,7 @@
 // every page. Every state is decided by the gateway reply; the browser only displays it. The answer text streams in only after
 // the gateway's Critic passed it. Follow-ups are the gateway's fixed list. Nothing is stored in the browser.
 import { useEffect, useRef, useState } from 'react';
-import { Info, ShieldAlert, Ban, PowerOff, Send, ThumbsUp, ThumbsDown, RotateCcw, BookOpen } from 'lucide-react';
+import { Info, ShieldAlert, Ban, PowerOff, Send, ThumbsUp, ThumbsDown, RotateCcw, BookOpen, Loader2 } from 'lucide-react';
 import { Button, Input, AiBadge } from '../ui';
 import ErrorBanner from '../ErrorBanner';
 import CitationPanel from '../case/CitationPanel';
@@ -12,7 +12,17 @@ const REFUSAL: Record<string, string> = {
   PROBE: 'Configuration and credentials', ACCEPTANCE: 'Accepting or signing an offer', APPROVAL_ODDS: 'Predicting approval or credit',
   GATE_OVERRIDE: 'Overriding a gate', LEGAL: 'Legal or tax advice', OTHER_CASE_WORDS: "Another case's data", OTHER_CASE: "Another case's data",
 };
-const STAGE: Record<string, string> = { routing: 'Choosing a source…', retrieving: 'Finding sources…', drafting: 'Drafting…', checking: 'Checking figures and citations…' };
+const STAGE: Record<string, string> = { routing: 'Choosing where to look…', retrieving: 'Finding sources…', drafting: 'Writing a draft answer…', checking: 'Checking sources: every figure and citation is verified before you see the answer…' };
+
+/** The wait before an answer: what step it is on and how long it has taken. Answers are shown only after the check, by design. */
+function Pending({ stage }: { stage?: string }) {
+  const [s, setS] = useState(0);
+  useEffect(() => { const t = setInterval(() => setS(x => x + 1), 1000); return () => clearInterval(t); }, []);
+  return (<span className="flex flex-col gap-1 text-ink-600">
+    <span className="flex items-center gap-2"><Loader2 aria-hidden className="h-4 w-4 animate-spin" />{STAGE[stage ?? ''] ?? 'Working…'} <span className="tabular-nums text-ink-500">{s}s</span></span>
+    {s >= 8 && <span className="text-xs text-ink-500">Answers usually take 15–45 seconds: the answer is checked against its sources before it is shown.</span>}
+  </span>);
+}
 const REASONS: [FeedbackReason, string][] = [['wrong', 'Wrong'], ['not_cited', 'Not cited'], ['unclear', 'Unclear'], ['unhelpful', 'Not helpful'], ['unsafe', 'Unsafe']];
 type Turn = { q: string; r?: ChatReply; live?: string; stage?: string; past?: boolean; rated?: Rating | 'sent' };
 type Open = { c: Citation; quote: string };
@@ -85,7 +95,7 @@ export default function ChatView({ caseId }: { caseId: string | null }) {
         {t.r?.injectionFlagged && <p className="flex gap-2 rounded-xl bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200"><ShieldAlert aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />Instructions inside retrieved text were ignored. Documents are treated as data, never as instructions.</p>}
         {t.r?.piiRedacted && <p className="flex gap-2 rounded-xl bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200"><ShieldAlert aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />Personal identifiers in your message were redacted.</p>}
         {t.r ? <Answer r={t.r} onOpen={o => { opener.current = document.activeElement as HTMLElement | null; setOpen(o); }} />
-          : <p className="rounded-xl bg-white p-3 text-sm ring-1 ring-line"><span className="whitespace-pre-wrap">{t.live}</span>{!t.live && <span className="text-ink-600">{STAGE[t.stage ?? ''] ?? 'Working…'}</span>}</p>}
+          : <p className="rounded-xl bg-white p-3 text-sm ring-1 ring-line"><span className="whitespace-pre-wrap">{t.live}</span>{!t.live && <Pending stage={t.stage} />}</p>}
         {t.r && !t.past && <Rate t={t} onRated={v => patch(i, { rated: v })} />}
       </div>)}
       <div ref={end} />

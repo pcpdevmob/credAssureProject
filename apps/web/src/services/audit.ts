@@ -1,8 +1,10 @@
-// Audit log: the gateway exposes it per case, to evaluators only.
-import type { AuditEvent } from '@/types';
+// Case history for every case member (GET /v1/cases/{id}/history); the raw audit log stays the evaluator's (/audit).
+import type { AuditEvent, HistoryEvent } from '@/types';
 import { gw, ok } from '@/lib/gateway';
 
-export interface AuditService { list(caseId?: string): Promise<AuditEvent[]>; chain(caseId: string): Promise<boolean> }
+type RawHistory = { events: { seq: number; ts: string; event_type: string; actor: string; actor_name: string | null; actor_role: string | null; details: Record<string, unknown> }[]; chain_ok: boolean };
+
+export interface AuditService { list(caseId?: string): Promise<AuditEvent[]>; chain(caseId: string): Promise<boolean>; history(caseId: string): Promise<{ events: HistoryEvent[]; chainOk: boolean }> }
 export const auditService: AuditService = {
   async list(caseId) {
     if (!caseId) return []; // no global list endpoint yet
@@ -13,5 +15,9 @@ export const auditService: AuditService = {
   async chain(caseId) {
     const r = await ok(gw.GET('/v1/cases/{case_id}/audit', { params: { path: { case_id: caseId } } })) as unknown as { chain_ok: boolean };
     return r.chain_ok === true;
+  },
+  async history(caseId) {
+    const r = await ok(gw.GET('/v1/cases/{case_id}/history', { params: { path: { case_id: caseId } } })) as unknown as RawHistory;
+    return { chainOk: r.chain_ok === true, events: r.events.map(e => ({ seq: e.seq, ts: e.ts, type: e.event_type, actor: e.actor, actorName: e.actor_name, actorRole: e.actor_role, details: e.details ?? {} })) };
   },
 };

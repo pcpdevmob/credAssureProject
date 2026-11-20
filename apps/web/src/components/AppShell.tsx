@@ -19,7 +19,7 @@ const NAV = [
   { href: '/cases/', label: 'Cases', icon: FolderKanban },
   { href: '/cases/new/', label: 'New case', icon: PlusCircle, roles: ['PREPARER'] },
   { href: '/approvals/', label: 'Approval inbox', icon: Inbox },
-  { href: '/audit/', label: 'Audit log', icon: ScrollText },
+  { href: '/audit/', label: 'Case history', icon: ScrollText },
   { href: '/evaluation/', label: 'Evaluation', icon: BarChart3, roles: ['EVALUATOR'] },
   { href: '/help/', label: 'Help', icon: LifeBuoy },
 ];
