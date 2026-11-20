@@ -10,7 +10,8 @@ import type { Role } from '@/types';
 import { ApiProblem, bannerOf } from '@/lib/problem';
 const say = (x: unknown) => { const b = bannerOf(x); return `${b.what} ${b.fix}`; };
 // A wrong code is not an ended session: say what to do instead of "sign in again".
-const sayCode = (x: unknown) => x instanceof ApiProblem && x.status === 401 ? 'That code did not work. Check that the time on your phone is set automatically, then enter the new code.' : say(x);
+// The gateway answers every 401 the same way (no oracle), so this covers a wrong code and a code step that timed out.
+const sayCode = (x: unknown) => x instanceof ApiProblem && x.status === 401 ? 'That code did not work. Check that the time on your phone is set automatically, then enter the new code. If it keeps failing, choose “Use a different account” and sign in again.' : say(x);
 
 export default function Login() {
   const [email, setEmail] = useState(''); const [pw, setPw] = useState(''); const [role, setRole] = useState<Role>('PREPARER');

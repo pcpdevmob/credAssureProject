@@ -27,7 +27,10 @@ export interface AuthService {
 const KEY = 'finbridge:user';
 const save = (u: User) => { try { localStorage.setItem(KEY, JSON.stringify(u)); } catch { /* */ } return u; };
 const read = (): User | null => { try { const r = typeof window === 'undefined' ? null : localStorage.getItem(KEY); return r ? JSON.parse(r) : null; } catch { return null; } };
-const clear = () => { try { localStorage.removeItem(KEY); } catch { /* */ } setToken(null); };
+// The profile in localStorage is shared by every tab; `mine` is the account this tab's in-memory token belongs to (review S2).
+let mine: string | null = null;
+let ids = new Map<string, string>(); // username → user_id, from the admin list (actions are by id on the gateway)
+const clear = () => { try { localStorage.removeItem(KEY); } catch { /* */ } setToken(null); mine = null; ids = new Map(); };
 const ROLE: Record<string, Role> = { preparer: 'PREPARER', director_finance: 'DIRECTOR_FINANCE', vp_finance: 'VP_FINANCE', evaluator: 'EVALUATOR' };
 
 // ---- gateway mode (ADR 0038): the gateway's own accounts. POST /v1/auth/token answers a FULL token or a short stage
@@ -45,8 +48,11 @@ const profile = (m: Me, stage: Stage): User => {
 async function settle(t: Tok, username: string): Promise<User> {
   const stage = take(t);
   // A code-step token opens only POST /v1/auth/mfa/verify, so there is nothing more to read yet.
-  if (stage === 'mfa') return save({ id: username, name: username, email: username, role: 'PREPARER', employeeId: '', username, stage: 'mfa', mfaEnabled: true });
-  return profile(await ok(gw.GET('/v1/me')) as unknown as Me, stage);
+  const u = stage === 'mfa'
+    ? save({ id: username, name: username, email: username, role: 'PREPARER', employeeId: '', username, stage: 'mfa', mfaEnabled: true })
+    : profile(await ok(gw.GET('/v1/me')) as unknown as Me, stage);
+  mine = u.id;
+  return u;
 }
 
 const direct: AuthService = {
@@ -57,7 +63,14 @@ const direct: AuthService = {
   },
   current: read,
   // The token lives only in memory, so after a reload there is none: the profile alone is not a session.
-  async verify() { if (hasToken()) return read(); clear(); return null; },
+  // Another tab signing in as someone else rewrites the shared profile: then this tab's token is not that person's, so this
+  // tab signs out (drops only its own token; the other tab's profile stays).
+  async verify() {
+    if (!hasToken()) { clear(); return null; }
+    const u = read();
+    if (u && u.id === mine) return u;
+    setToken(null); mine = null; return null;
+  },
   setActingRole: () => read(),
   async changePassword(current, next) {
     const t = await ok(gw.POST('/v1/auth/password', { body: { current_password: current, new_password: next } })) as unknown as Tok;
@@ -76,7 +89,8 @@ const direct: AuthService = {
     return r.backup_codes;
   },
   // Signs out everywhere (the gateway revokes every token this user holds), then forgets the local copy.
-  async logout() { if (hasToken()) { try { await gw.POST('/v1/auth/logout'); } catch { /* the token runs out anyway */ } } clear(); },
+  // A code-step token cannot sign out on the server (it opens only /mfa/verify; review S1): it expires within 5 minutes.
+  async logout() { if (hasToken() && read()?.stage !== 'mfa') { try { await gw.POST('/v1/auth/logout'); } catch { /* the token runs out anyway */ } } clear(); },
 };
 
 // ---- bridge mode: the finbridge auth service owns identity (password + TOTP MFA) and issues gateway tokens ----
@@ -118,7 +132,6 @@ export interface UserAdminService {
 }
 const GW_ROLE_LABEL: Record<string, string> = { preparer: 'Proposal Preparer', director_finance: 'Director, Finance', vp_finance: 'VP, Finance', evaluator: 'Evaluator', user_admin: 'User administrator' };
 type GwUser = { user_id: string; username: string; display_name: string | null; role: string; emp_id: string | null; active: boolean; must_change_password: boolean; mfa_enabled: boolean; created_at: string | null };
-let ids = new Map<string, string>(); // username → user_id, from the last list (actions are by id on the gateway)
 const names = () => new Map([...ids].map(([u, i]) => [i, u]));
 const managed = (u: GwUser): ManagedUser => ({ username: u.username, name: u.display_name || u.username, accountRole: u.role === 'user_admin' ? 'global_admin' : 'admin', roleLabel: GW_ROLE_LABEL[u.role] ?? u.role, hrId: u.emp_id, mustChangePassword: u.must_change_password, disabled: !u.active, mfaEnabled: u.mfa_enabled, createdAt: u.created_at ? Date.parse(u.created_at) / 1000 : undefined });
 async function gwList(): Promise<ManagedUser[]> {

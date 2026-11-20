@@ -157,3 +157,31 @@ describe('ADR 0038 user administration through the gateway', () => {
     expect(rows[0]).toMatchObject({ id: 7, at: Date.parse('2026-11-20T10:00:00Z') / 1000, actor: 'it.admin', action: 'MFA_RESET', target: 'demo.director' });
   });
 });
+
+describe('ADR 0038 review fixes', () => {
+  it('S1: leaving the code step does not call the server sign-out (a code-step token cannot)', async () => {
+    let calls = 0;
+    server.use(
+      http.post(`${API}/v1/auth/token`, () => HttpResponse.json(tok('stage-mfa', 'mfa', ['verify_mfa']))),
+      http.post(`${API}/v1/auth/logout`, () => { calls += 1; return HttpResponse.json({ code: 'UNAUTHENTICATED' }, { status: 401 }); }),
+    );
+    await authService.login('demo.director', 'pw', 'PREPARER');
+    await authService.logout();
+    expect(calls).toBe(0);
+    expect(hasToken()).toBe(false);
+  });
+
+  it('S2: a tab whose token belongs to someone else than the shared profile signs itself out', async () => {
+    server.use(
+      http.post(`${API}/v1/auth/token`, () => HttpResponse.json(tok('full-x', 'full', [], 1800))),
+      http.get(`${API}/v1/me`, () => HttpResponse.json(me())),
+    );
+    await authService.login('demo.director', 'pw', 'PREPARER');
+    expect(await authService.verify()).toMatchObject({ id: 'u-dir' });
+    // another tab signs in as the VP and rewrites the shared profile
+    localStorage.setItem('finbridge:user', JSON.stringify({ id: 'u-vp', name: 'Demo VP', email: 'demo.vp', role: 'VP_FINANCE', employeeId: '', username: 'demo.vp', stage: 'full' }));
+    expect(await authService.verify()).toBeNull();
+    expect(hasToken()).toBe(false);
+    expect(localStorage.getItem('finbridge:user')).not.toBeNull(); // the other tab keeps its profile
+  });
+});
