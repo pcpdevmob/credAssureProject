@@ -52,9 +52,9 @@ test('U3 funding, offers, negotiation', async ({ page }) => {
   await expect(c.getByText('Not affordable: repayments push cash below the minimum buffer.')).toBeVisible();
   await expect(c.getByText(/^Rank \d/)).toHaveCount(0);
   await expect(b.getByText('Rank 1')).toBeVisible();
-  await expect(b.getByRole('button', { name: /APR: 13\.00%/ })).toBeVisible();
+  await expect(b.getByRole('button', { name: /APR\): 13\.00%/ })).toBeVisible();
   await expect(a.getByText('Rank 2')).toBeVisible();
-  await expect(a.getByRole('button', { name: /APR: 17\.56%/ })).toBeVisible();
+  await expect(a.getByRole('button', { name: /APR\): 17\.56%/ })).toBeVisible();
   await expect(a.getByText(/Hidden charge/)).toBeVisible();
   await capture(page, 'offers');
 

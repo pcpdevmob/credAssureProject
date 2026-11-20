@@ -28,7 +28,7 @@ export default function Lenders({ c, view, canNegotiate, onChange }: { c: CaseRe
               : bad ? <span className="inline-flex items-center gap-1 rounded-full bg-rose-700 px-2.5 py-0.5 text-xs font-semibold text-white"><OctagonX aria-hidden className="h-3.5 w-3.5" />NOT RANKED</span>
               : o.rank !== null ? <Badge tone="green"><Trophy aria-hidden className="h-3.5 w-3.5" />Rank {o.rank}</Badge> : <Badge>Not ranked</Badge>}</div>
           {o.cheapest && <p className="mt-1 text-xs font-medium text-ink-700">▼ Lowest APR of these offers</p>}
-          <dl className="mt-3 space-y-1.5 text-sm">{k('APR', o.apr, true)}{k('Total cost', o.totalCost)}{k('Amount received', o.amountReceived)}{k('Total repayment', o.totalRepayment)}
+          <dl className="mt-3 space-y-1.5 text-sm">{k('Yearly cost (APR)', o.apr, true)}{k('Total cost', o.totalCost)}{k('Money actually received', o.amountReceived)}{k('Total repayment', o.totalRepayment)}
             <div className="flex justify-between gap-3"><dt className="text-ink-600">Affordable</dt><dd>{o.affordable === null ? 'Not yet checked' : o.affordable ? 'Yes' : <b className="text-rose-700">No</b>}</dd></div>
             <div className="flex justify-between gap-3"><dt className="text-ink-600">Comparable</dt><dd>{o.comparable ? 'Yes' : <b className="text-rose-700">No</b>}</dd></div></dl>
           {o.flags.length > 0 && <ul className="mt-3 space-y-1 border-t border-line pt-2">{o.flags.map(f => <li key={f} className={cn('flex gap-1.5 text-xs', BLOCKING.has(f) ? 'font-semibold text-rose-700' : 'text-ink-700')}><AlertTriangle aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0" /><span>{flagText(f)}</span></li>)}</ul>}

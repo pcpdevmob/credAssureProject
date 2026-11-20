@@ -6,21 +6,26 @@ work. The amount the system read appears under each field before you submit. If 
 text. The requested amount is only an input. The funding need is calculated from your cash-flow files.
 
 ## Upload
-**Documents** has one slot for each of the seven case files: order and opening position (JSON), and costs, receipts,
-receivables, payables and inventory (CSV). Lender offers (JSON) and their KFS documents and schedules of charges
-(Markdown) go in the **Lender offers and KFS** box. If a file is rejected, each problem is listed as row, field and
-reason. Fix those and upload the file again. Text that looks like an instruction is flagged and ignored, because
-documents are data.
+**Documents** has three ways in; all of them are checked the same way.
+- **Excel:** download the blank template (or the filled-in example), fill in the sheets you have, and upload the
+  workbook. It becomes the same case data. If anything is wrong, nothing is imported and each problem is listed by
+  sheet, row and column. Sheets left empty are skipped. PDF files cannot be read yet.
+- **Forms:** each of the seven sections (customer order, opening cash and credit lines, weekly costs, expected receipts,
+  customer invoices, supplier bills, stock movement) opens as a form or table. Type amounts as `1,42,00,000` or
+  `1.42 crore`, and paste rows copied from Excel.
+- **Files:** upload a section's JSON or CSV file directly.
 
-To write a new case in Excel and convert it to these files, see [case-authoring.md](case-authoring.md).
+Lender offers (JSON, or the Excel `offers` sheet) and their KFS documents and schedules of charges (Markdown) go in
+**Documents from lenders**. Text that looks like an instruction is flagged and ignored, because documents are data.
+To author test cases from the command line, see [case-authoring.md](case-authoring.md).
 
 ## Run
 On **Workflow**, press **Run**. Stages run in a fixed order: readiness, funding need, lender comparison, verification,
 then routing. **Live progress** shows each stage's result as it finishes.
 
 ## Questions
-If a stage needs data, the case stops with one question, for example a missing minimum cash buffer. Upload the
-corrected file in the question card and press **Resume**. Only the blocked stage runs again. Stages that already
+If a stage needs data, the case stops with one question, for example a missing minimum cash buffer. Correct it in the form
+in the question card and press **Continue**. Only the blocked stage runs again. Stages that already
 passed are kept.
 
 ## Ask CredAssure

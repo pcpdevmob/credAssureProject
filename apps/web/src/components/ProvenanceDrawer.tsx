@@ -5,7 +5,8 @@ import { ArrowLeft, Check, Copy, X } from 'lucide-react';
 import type { Target } from './Figure';
 import type { Lineage } from '@/services/lineage';
 import { lineageService } from '@/services/lineage';
-import { dt } from '@/lib/format';
+import { d, dt } from '@/lib/format';
+import { engineLabel, factLabel, fileLabel } from '@/lib/plain';
 import ErrorBanner from './ErrorBanner';
 import { Skeleton } from './ui';
 
@@ -34,11 +35,24 @@ function CopyTrace({ id }: { id: string }) {
   );
 }
 
-export function LineageView({ l, onOpenFact }: { l: Lineage; onOpenFact: (key: string) => void }) {
+export function LineageView({ l, onOpenFact, technical = false }: { l: Lineage; onOpenFact: (key: string) => void; technical?: boolean }) {
   const p = l.producer;
   const noProducer = !p.agent && !p.stage && !p.trace_id;
+  const latest = l.superseded_by === null;
   return (
     <>
+      <section className="px-5 pb-4" aria-label="In plain words">
+        <p className="text-sm text-ink-600">{factLabel(l.key)}</p>
+        <p className="num font-display text-3xl font-semibold text-ink-950">{l.value.display}</p>
+        <p className="mt-2 text-sm text-ink-800">{engineLabel(l.engine.name)} worked this out{l.created_at ? ` on ${dt(l.created_at)}` : ''}{l.files.length ? ' from the data you provided:' : l.inputs.length ? ' from these figures:' : '.'}</p>
+        {l.files.length > 0 && <ul className="mt-1 list-disc pl-5 text-sm text-ink-800">{[...new Map(l.files.map(f => [f.kind + f.name, f])).values()].map(f => <li key={f.sha256 + f.name}>{fileLabel(f.kind)}{f.kind === 'offer' || f.kind === 'kfs' ? ` (${f.name.replace(/^(offer|kfs):/, '')})` : ''}<span className="text-ink-500">, provided {d(f.uploaded_at)}</span></li>)}</ul>}
+        {l.inputs.some(i => i.fact_key) && <ul className="mt-1 space-y-1 text-sm">{l.inputs.filter(i => i.fact_key).map(i => <li key={i.ref}><button type="button" onClick={() => onOpenFact(i.fact_key!)} className="text-left text-brand-700 underline decoration-dotted underline-offset-4">{factLabel(i.fact_key!)}</button></li>)}</ul>}
+        {l.passages.length > 0 && <p className="mt-2 text-sm text-ink-800">Sources: {l.passages.map(p => p.title ?? 'a document').join('; ')}.</p>}
+        <p className={latest ? 'mt-2 text-sm text-emerald-800' : 'mt-2 text-sm font-medium text-rose-700'}>{latest ? 'This is the current figure.' : 'A newer figure has replaced this one.'}</p>
+        <p className="mt-1 text-xs text-ink-500">Calculated by fixed rules, not by the AI. The AI may only quote it.</p>
+      </section>
+      <details className="border-t border-line" open={technical}>
+        <summary className="cursor-pointer px-5 py-3 text-sm font-medium text-ink-700 hover:bg-sunken">Technical details (for auditors)</summary>
       <Section title="Value">
         <p className="num font-display text-2xl font-semibold text-ink-950">{l.value.display}</p>
         <p className="font-mono text-xs text-ink-600">{l.key} · v{l.version}{l.unit ? ` · ${l.unit}` : ''}</p>
@@ -79,6 +93,7 @@ export function LineageView({ l, onOpenFact }: { l: Lineage; onOpenFact: (key: s
         {p.trace_id && <p className="text-xs text-ink-500">The trace is the first run that wrote this value; an identical re-run adds no version.</p>}
         {l.audit ? <p className="text-xs">Audit event #{l.audit.seq} by <b className="font-medium">{l.audit.actor}</b> at {dt(l.audit.ts)}</p> : <None>No audit event linked.</None>}
       </Section>
+      </details>
     </>
   );
 }

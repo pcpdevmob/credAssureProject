@@ -72,6 +72,7 @@ from credassure.gateway.metrics import MeteredLLM, Metrics
 from credassure.gateway.routers import (
     admin,
     auth,
+    case_views,
     cases,
     citations,
     copilot,
@@ -767,6 +768,7 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
         auth,
         users,
         cases,
+        case_views,
         citations,
         lineage,
         workflow,

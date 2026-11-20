@@ -24,8 +24,17 @@ export interface CaseRecord {
   stage: CaseStage; rowVersion?: number; question?: string | null; nextAction?: string; routedTo?: Approver; selectedLenderId?: string; city?: string; negotiationRound?: number;
 }
 
-export interface Prerequisite { id: string; name: string; category: 'Onboarding' | 'Training' | 'Policy' | 'Authorisation'; mandatory: boolean; status: 'COMPLETE' | 'INCOMPLETE' | 'UNKNOWN'; evidence?: string; completedOn?: string; owner: string }
-export interface ReadinessResult { employeeId: string; employeeName: string; role: string; buddy: string; manager: string; decision: GateDecision; prerequisites: Prerequisite[]; blockers: string[]; checkedAt: string }
+/** One readiness rule as the Onboarding stage recorded it (onb.rule.*), with the HR record that evidences it. */
+export interface ReadinessRule {
+  rule: string; outcome: 'PASS' | 'FAIL' | 'UNKNOWN' | string; kind: 'role' | 'training' | 'policy';
+  role?: string; training?: { status: string; completed_on: string | null; expires_on: string | null } | null;
+  policyAck?: { version: string; acknowledged_on: string | null } | null;
+}
+export interface ReadinessResult {
+  decision: GateDecision; checkedAt: string | null; attempt: number;
+  preparer: { empId: string; name: string; role: string; department: string | null; active: boolean } | null;
+  rules: ReadinessRule[]; blockers: { code?: string | null; message?: string | null; nextAction?: string | null }[]; question: string | null;
+}
 
 
 export interface CashRow { week: number; inflow: Fig; outflow: Fig; cumulative: Fig; shortfall: boolean; belowBuffer: boolean | null }
@@ -62,8 +71,10 @@ export interface Negotiation {
 /** `preview` = audit and pricing only; affordability and ranking have not been checked. */
 export interface OfferView { caseId: string; source: 'ledger' | 'preview' | 'stale'; offers: OfferRow[]; ranking: string[]; negotiation: Negotiation | null; message?: string }
 
-export interface WorkflowGate { id: string; name: string; agent: string; decision: GateDecision; evidence: string; blockers: string[]; at?: string; next: string; aiDrafted?: boolean }
+export interface WorkflowGate { id: string; name: string; agent: string; decision: GateDecision; evidence: string; blockers: string[]; at?: string; next: string; aiDrafted?: boolean; by?: string; blockerActions?: string[] }
 
 export interface ApprovalDecision { caseId: string; decision: 'APPROVED' | 'REJECTED' | 'RETURNED'; comment: string; by: string; role: Role; at: string }
 
+/** A case event for any case member (GET /v1/cases/{id}/history): codes and an allowlist of details, worded in the UI. */
+export interface HistoryEvent { seq: number; ts: string; type: string; actor: string; actorName: string | null; actorRole: string | null; details: Record<string, unknown> }
 export interface AuditEvent { id: string; caseId: string; at: string; actor: string; actorType: 'HUMAN' | 'AGENT' | 'SUPERVISOR' | 'SYSTEM'; action: string; detail: string; severity: 'info' | 'warn' | 'critical' }

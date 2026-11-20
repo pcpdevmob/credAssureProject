@@ -7,7 +7,7 @@ export interface NewCaseInput { msmeName: string; orderRef: string; orderValuePa
 export type CaseTotals = { validated_cases: number; validated_need: Money; requested_for_validated: Money; over_borrowing_avoided: Money };
 export interface CaseService { list(): Promise<CaseRecord[]>; summary(): Promise<{ items: CaseRecord[]; totals: CaseTotals }>; get(id: string): Promise<CaseRecord | undefined>; create(i: NewCaseInput, by: User): Promise<CaseRecord> }
 
-export type Raw = { case_id: string; msme_name: string; order_ref: string; status: string; current_stage: string; route?: string | null; row_version: number; order_value: Money; indicative_amount: Money; recommended_amount?: Money | null; due_date: string; question?: string | null; next_action?: string; stages?: RawStage[] };
+export type Raw = { case_id: string; msme_name: string; order_ref: string; status: string; current_stage: string; route?: string | null; row_version: number; order_value: Money; indicative_amount: Money; recommended_amount?: Money | null; due_date: string; created_at?: string; updated_at?: string; question?: string | null; next_action?: string; stages?: RawStage[] };
 export type RawStage = { stage: string; decision: string | null; attempt: number; blockers: { code?: string; message?: string; next_action?: string }[]; question?: string | null; narrative?: string | null; narrative_source?: 'model' | 'template' | null; trace_id?: string };
 
 const BY_STAGE: Record<string, CaseStage> = { onboarding: 'READINESS', working_capital: 'FUNDING_ASSESSMENT', lendwise: 'LENDER_COMPARISON', critic: 'VERIFICATION', routing: 'VERIFICATION', approval: 'AWAITING_APPROVAL' };
@@ -16,7 +16,7 @@ const routed = (r?: string | null): Approver | undefined => r === 'vp_finance' ?
 
 export const toCase = (r: Raw): CaseRecord => ({
   id: r.case_id, msmeName: r.msme_name, sector: '—', gstinMasked: '—', customerName: '—', orderValue: fig(r.order_value), orderRef: r.order_ref, customerDueDate: r.due_date,
-  currency: 'INR', requestedAmount: fig(r.indicative_amount), recommendedAmount: r.recommended_amount ? fig(r.recommended_amount, 'wc.recommended_amount') : undefined, preparerId: '', preparerName: '—', createdAt: '', updatedAt: '',
+  currency: 'INR', requestedAmount: fig(r.indicative_amount), recommendedAmount: r.recommended_amount ? fig(r.recommended_amount, 'wc.recommended_amount') : undefined, preparerId: '', preparerName: '—', createdAt: r.created_at ?? '', updatedAt: r.updated_at ?? r.created_at ?? '',
   stage: BY_STATUS[r.status] ?? BY_STAGE[r.current_stage] ?? 'READINESS', routedTo: routed(r.route), rowVersion: r.row_version, question: r.question, nextAction: r.next_action,
 });
 

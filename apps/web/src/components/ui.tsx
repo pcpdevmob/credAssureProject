@@ -3,6 +3,7 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 import type { GateDecision } from '@/types';
 import { TiltCard } from './fx/motion';
+import { GATE_WORD } from '@/lib/plain';
 import { CheckCircle2, XCircle, HelpCircle, Clock, Loader2, PauseCircle, TriangleAlert } from 'lucide-react';
 
 export const Card = ({ className, ...p }: React.HTMLAttributes<HTMLDivElement>) => <div className={cn('rounded-[24px] border border-line bg-white shadow-[0_1px_2px_rgba(7,12,24,.04),0_10px_30px_-18px_rgba(7,12,24,.18)]', className)} {...p} />;
@@ -38,11 +39,11 @@ export const AiBadge = ({ className }: { className?: string }) => (
 );
 // Gate states are shape + text + tone, never colour alone (design-plan §5).
 export const GateBadge = ({ d }: { d: GateDecision }) => {
-  if (d === 'ERROR') return <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-rose-700 px-2.5 py-0.5 text-xs font-semibold text-white"><TriangleAlert aria-hidden className="h-3.5 w-3.5" />ERROR</span>;
+  if (d === 'ERROR') return <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-rose-700 px-2.5 py-0.5 text-xs font-semibold text-white"><TriangleAlert aria-hidden className="h-3.5 w-3.5" />{GATE_WORD.ERROR}</span>;
   const m: Record<Exclude<GateDecision, 'ERROR'>, [string, 'green' | 'red' | 'amber' | 'blue' | 'slate' | 'violet', React.ReactNode]> = {
-    GO: ['GO', 'green', <CheckCircle2 key="i" className="h-3.5 w-3.5" />], NO_GO: ['NO-GO', 'red', <XCircle key="i" className="h-3.5 w-3.5" />],
-    NEEDS_INPUT: ['NEEDS INPUT', 'amber', <HelpCircle key="i" className="h-3.5 w-3.5" />], PENDING: ['PENDING', 'slate', <Clock key="i" className="h-3.5 w-3.5" />],
-    RUNNING: ['IN PROGRESS', 'blue', <Loader2 key="i" className="h-3.5 w-3.5 animate-spin" />], HELD: ['HELD', 'slate', <PauseCircle key="i" className="h-3.5 w-3.5" />],
+    GO: [GATE_WORD.GO, 'green', <CheckCircle2 key="i" className="h-3.5 w-3.5" />], NO_GO: [GATE_WORD.NO_GO, 'red', <XCircle key="i" className="h-3.5 w-3.5" />],
+    NEEDS_INPUT: [GATE_WORD.NEEDS_INPUT, 'amber', <HelpCircle key="i" className="h-3.5 w-3.5" />], PENDING: [GATE_WORD.PENDING, 'slate', <Clock key="i" className="h-3.5 w-3.5" />],
+    RUNNING: [GATE_WORD.RUNNING, 'blue', <Loader2 key="i" className="h-3.5 w-3.5 animate-spin" />], HELD: [GATE_WORD.HELD, 'slate', <PauseCircle key="i" className="h-3.5 w-3.5" />],
   };
   const [l, t, i] = m[d]; return <Badge tone={t}>{i}{l}</Badge>;
 };
@@ -63,7 +64,7 @@ export const Tabs = <T extends string>({ tabs, value, onChange }: { tabs: { id: 
   </div>
 );
 export const STAGE_LABEL: Record<string, [string, 'green' | 'red' | 'amber' | 'blue' | 'slate' | 'violet']> = {
-  DRAFT: ['Draft', 'slate'], READINESS: ['Readiness check', 'blue'], DATA_COLLECTION: ['Data collection', 'blue'], FUNDING_ASSESSMENT: ['Funding assessment', 'blue'], LENDER_COMPARISON: ['Lender comparison', 'blue'], NEGOTIATION: ['Negotiation', 'blue'], VERIFICATION: ['Verification', 'blue'],
-  AWAITING_APPROVAL: ['Awaiting approval', 'amber'], APPROVED: ['Approved', 'green'], REJECTED: ['Rejected', 'red'], RETURNED: ['Returned for rework', 'red'], ROUTING_HELD: ['Routing held', 'violet'],
+  DRAFT: ['Draft', 'slate'], READINESS: ['Preparer check', 'blue'], DATA_COLLECTION: ['Data collection', 'blue'], FUNDING_ASSESSMENT: ['Funding assessment', 'blue'], LENDER_COMPARISON: ['Lender comparison', 'blue'], NEGOTIATION: ['Negotiation', 'blue'], VERIFICATION: ['Accuracy check', 'blue'],
+  AWAITING_APPROVAL: ['Awaiting approval', 'amber'], APPROVED: ['Approved', 'green'], REJECTED: ['Rejected', 'red'], RETURNED: ['Returned for rework', 'red'], ROUTING_HELD: ['On hold at ₹1.5 crore', 'violet'],
 };
 export const StageBadge = ({ s }: { s: string }) => { const [l, t] = STAGE_LABEL[s] ?? [s, 'slate']; return <Badge tone={t}>{l}</Badge>; };
