@@ -11,6 +11,7 @@ triggers, in a fresh database.
 
 import itertools
 import os
+import re
 import uuid
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -21,8 +22,14 @@ from sqlalchemy.engine import make_url
 from .session import MYSQL_COLLATION
 
 ENV = "CREDASSURE_TEST_MYSQL_URL"
+DEFINER = re.compile(r"DEFINER=`[^`]*`@`[^`]*`\s*")
 _count = itertools.count(1)
 _run = uuid.uuid4().hex[:8]
+
+
+def _literal(sql: str) -> str:
+    """Copied DDL as a driver statement: pymysql formats `%`, so double it (CI's root@'%')."""
+    return sql.replace("%", "%%")
 
 
 def mysql_url() -> str | None:
@@ -67,10 +74,10 @@ def clone_database(url: str, template_url: str, label: str) -> str:
         triggers = [c.exec_driver_sql(f"SHOW CREATE TRIGGER `{n}`").one()[2] for n in names]
         c.exec_driver_sql(f"USE `{target}`")
         for t, create in zip(tables, ddl, strict=True):
-            c.exec_driver_sql(create)
+            c.exec_driver_sql(_literal(create))
             c.exec_driver_sql(f"INSERT INTO `{t}` SELECT * FROM `{source}`.`{t}`")  # noqa: S608  # nosec B608
-        for create in triggers:
-            c.exec_driver_sql(create)
+        for create in triggers:  # without DEFINER=`user`@`%`: the copy runs as the current user
+            c.exec_driver_sql(_literal(DEFINER.sub("", create)))
         c.exec_driver_sql("SET FOREIGN_KEY_CHECKS = 1")
     eng.dispose()
     return target_url
