@@ -2,12 +2,27 @@ name: ci
 
 # Restored by ADR 0028. Runs the same targets as the local pre-push hook (ADR 0027), so a PR shows
 # pass/fail on GitHub even when someone pushed with --no-verify or without core.hooksPath.
+#
+# Minutes budget (ADR 0028 amendment, 20 Nov 2026; GitHub Free, private repo): the pre-push hook
+# already runs `make check` on every push, so CI runs ONCE per PR, not on every push:
+#   - when a PR is opened (not as a draft), reopened or marked ready for review;
+#   - again only on request: add the label `ci` to the PR (remove and re-add it to run again), or
+#     `gh workflow run ci.yml --ref <branch>` (results attach to the branch's head commit);
+#   - on pushes to main.
+# The MySQL job (ADR 0039) runs only when case.db code changed (packages/ledger, gateway settings
+# or main.py), with the label `ci-mysql`, or with `gh workflow run ci.yml --ref <branch> -f mysql=true`.
+# The dependency audit runs only when a lock file changed; the secret scan runs every time.
 on:
   push:
     branches: [main]
   pull_request:
-    # ready_for_review: draft PRs run no jobs (minutes budget, 2026-11-19); marking a PR ready runs CI once.
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, reopened, ready_for_review, labeled]
+  workflow_dispatch:
+    inputs:
+      mysql:
+        description: also run the ledger + gateway tests on MySQL 8 (ADR 0039)
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -17,9 +32,43 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Decides what runs. A draft PR runs nothing; a `labeled` event runs only for the labels above.
+  changes:
+    name: what to run
+    if: >-
+      github.event_name != 'pull_request' ||
+      (!github.event.pull_request.draft &&
+       (github.event.action != 'labeled' ||
+        github.event.label.name == 'ci' || github.event.label.name == 'ci-mysql'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read   # paths-filter lists the PR's changed files through the API
+    outputs:
+      ledger: ${{ steps.f.outputs.ledger }}
+      locks: ${{ steps.f.outputs.locks }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: f
+        with:
+          filters: |
+            ledger:
+              - 'packages/ledger/**'
+              - 'apps/gateway/src/credassure/gateway/settings.py'
+              - 'apps/gateway/src/credassure/gateway/main.py'
+            locks:
+              - 'uv.lock'
+              - 'package-lock.json'
+              - 'pnpm-lock.yaml'
+              - '**/pyproject.toml'
+
   python:
     name: make check (ruff, mypy, pytest incl. fuzz, bandit, PROGRESS.md)
-    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
+    needs: changes
+    # the `ci-mysql` label runs only the MySQL job
+    if: github.event.action != 'labeled' || github.event.label.name == 'ci'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -48,7 +97,10 @@ jobs:
 
   mysql:
     name: ledger + gateway tests on MySQL 8 (ADR 0039)
-    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
+    needs: changes
+    if: >-
+      needs.changes.outputs.ledger == 'true' ||
+      github.event.label.name == 'ci-mysql' || inputs.mysql == true
     runs-on: ubuntu-latest
     timeout-minutes: 45
     services:
@@ -73,7 +125,8 @@ jobs:
 
   audit:
     name: dependency audit + secret scan
-    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
+    needs: changes
+    if: github.event.action != 'labeled' || github.event.label.name == 'ci'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -83,12 +136,19 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: astral-sh/setup-uv@v5
-      - run: uv python install 3.12
-      - run: uv sync --locked --all-packages
-      - run: make audit
-      - run: make sbom  # scope #41: CycloneDX SBOM from the lock files
-      - uses: actions/upload-artifact@v4
+      # pip-audit and the SBOM only change when a lock file does (main always runs them)
+      - if: needs.changes.outputs.locks == 'true' || github.event_name != 'pull_request'
+        uses: astral-sh/setup-uv@v5
+      - if: needs.changes.outputs.locks == 'true' || github.event_name != 'pull_request'
+        run: uv python install 3.12
+      - if: needs.changes.outputs.locks == 'true' || github.event_name != 'pull_request'
+        run: uv sync --locked --all-packages
+      - if: needs.changes.outputs.locks == 'true' || github.event_name != 'pull_request'
+        run: make audit
+      - if: needs.changes.outputs.locks == 'true' || github.event_name != 'pull_request'
+        run: make sbom  # scope #41: CycloneDX SBOM from the lock files
+      - if: needs.changes.outputs.locks == 'true' || github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
         with:
           name: sbom-cyclonedx
           path: var/release/sbom.cdx.json
@@ -99,7 +159,8 @@ jobs:
 
   web:
     name: web (typecheck, vitest, build)
-    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
+    needs: changes
+    if: github.event.action != 'labeled' || github.event.label.name == 'ci'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:

@@ -35,3 +35,14 @@ Two supporting changes:
   one run is roughly 15–25 minutes).
 - Actions are pinned by major version tag; pinning by digest is part of #41 in Phase 12.
 - Course-endpoint and live-model checks never run in CI (no secrets in CI; FakeLLM only).
+
+## Amendment (20 Nov 2026): one CI run per PR (minutes budget)
+GitHub Free gives a private repository $12 of Actions compute a month. By 20 Nov $7.48 was used: CI
+ran on every push to a ready PR (about 25 billed minutes, about 45 with the MySQL job of ADR 0039),
+and the pre-push hook had already run the same `make check` locally. So CI now runs once per PR:
+when it is opened (not as a draft), reopened or marked ready, and again only on request (label `ci`,
+or `gh workflow run ci.yml --ref <branch>`), plus every push to main. The MySQL job runs only when
+case.db code changed (`packages/ledger`, gateway `settings.py` or `main.py`) or on request (label
+`ci-mysql`, or the `mysql` input). pip-audit and the SBOM run only when a lock file changed; the
+secret scan runs every time. The pre-push hook stays the per-push gate; a push with `--no-verify`
+gets no automatic remote check until the owner adds the label.
