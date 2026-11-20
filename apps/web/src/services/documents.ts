@@ -1,6 +1,7 @@
 // Case data upload (UI-02): JSON/CSV case files, offer JSON and KFS Markdown, validated field by field on the server.
 // A rejected file throws an ApiProblem whose fieldErrors carry field, row and reason. There is no list endpoint yet.
 import { gw, ok } from '@/lib/gateway';
+import { toProblem } from '@/lib/problem';
 
 export const FILE_KINDS = ['order', 'opening_position', 'costs', 'receipts', 'receivables', 'payables', 'inventory'] as const;
 export type FileKind = typeof FILE_KINDS[number] | 'offer' | 'kfs';
@@ -30,4 +31,23 @@ export const caseFiles = {
   /** A form's file, sent through the same upload endpoint (and the same validation) as a file the person picks. */
   save: (caseId: string, kind: FileKind, name: string, text: string) =>
     documentService.upload(caseId, new File([text], name, { type: name.endsWith('.json') ? 'application/json' : 'text/csv' }), kind),
+};
+
+/** ADR 0040: the case Excel workbook. The gateway converts it to the same JSON/CSV files and stores each through the same
+ * upload check; on any error nothing is stored and each error names sheet (field prefix), Excel row and column. */
+export type Imported = { name: string; kind: FileKind; rows: number; flagged: boolean };
+export const workbookService = {
+  async upload(caseId: string, file: File): Promise<Imported[]> {
+    const body = new FormData(); body.append('file', new File([file], file.name, { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+    const r = await ok(gw.POST('/v1/cases/{case_id}/workbook', { params: { path: { case_id: caseId } }, body: body as never, bodySerializer: (b: unknown) => b as FormData } as never)) as unknown as { files: { name: string; kind: FileKind; rows: number; injection_flags?: unknown[] }[] };
+    return r.files.map(f => ({ name: f.name, kind: f.kind, rows: f.rows, flagged: !!f.injection_flags?.length }));
+  },
+  /** Blank template (default) or the demo case filled in, downloaded with the signed-in user's token. */
+  async template(example = false): Promise<void> {
+    const { data, response } = await gw.GET('/v1/templates/case.xlsx', { params: { query: { example } }, parseAs: 'blob' } as never) as { data: Blob; response: Response };
+    if (!response.ok) throw toProblem(response.status, undefined);
+    const url = URL.createObjectURL(data);
+    Object.assign(document.createElement('a'), { href: url, download: example ? 'credassure-case-example.xlsx' : 'credassure-case-template.xlsx' }).click();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
+  },
 };

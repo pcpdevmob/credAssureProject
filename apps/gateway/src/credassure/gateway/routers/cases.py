@@ -492,13 +492,21 @@ async def upload(
         raise ProblemError(
             415, "file is not UTF-8 text", ApiErrorCode.UNSUPPORTED_MEDIA_TYPE
         ) from exc
+    return store_upload(svc, case, who.user_id, kind, raw, text)
+
+
+def store_upload(
+    svc: Svc, case: Case, user_id: str, kind: str, raw: bytes, text: str
+) -> dict[str, Any]:
+    """Validate, scan and store one case file (UI-02, BR-15). The single path every upload takes:
+    a file the person picked, a web form, or a sheet of an Excel workbook (ADR 0040)."""
     payload, count = validate_file(kind, text, case_id=case.id, audit=svc.ledger.audit)
     # BR-15: uploads are data. A hit is flagged and audited; nothing in the file is obeyed.
     flags = scan(text)
     if kind == "kfs" and payload["case_ref"] not in ("", case.id):
         flags.append("KFS_CASE_MISMATCH")  # the document names another case: recorded, kept
     stored = svc.ledger.store_case_file(
-        case.id, kind, json.dumps(payload), who.user_id, sha256=hashlib.sha256(raw).hexdigest()
+        case.id, kind, json.dumps(payload), user_id, sha256=hashlib.sha256(raw).hexdigest()
     )
     if flags:
         svc.ledger.audit(

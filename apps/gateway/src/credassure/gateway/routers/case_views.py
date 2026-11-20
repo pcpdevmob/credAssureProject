@@ -8,24 +8,33 @@ so a non-technical preparer or approver can see it without the evaluator's raw a
   plus one entry per offer and KFS document, so the web form can show and edit what is stored.
 - `GET /v1/cases/{id}/readiness`: the preparer's HR summary and each readiness rule the
   Onboarding stage recorded (`onb.rule.*` facts), with the HR record that evidences it.
+- `POST /v1/cases/{id}/workbook`: the case Excel workbook converted to the same JSON/CSV files and
+  stored through the same upload path (ADR 0040); `GET /v1/templates/case.xlsx` serves the template.
 - `GET /v1/cases/{id}/history`: the case's audit events with an allowlist of payload keys and the
   actor's display name (no hashes, no input hashes, no source refs). The hash-chain check stays on
   the evaluator's `/audit` route; `chain_ok` is repeated here as one yes/no for everyone.
 """
 
+import io
 import json
 from datetime import UTC, datetime
 from functools import lru_cache
 from pathlib import Path
-from typing import Any
+from typing import Annotated, Any
 
-from fastapi import APIRouter
+from fastapi import APIRouter, File, Query, Request, UploadFile
+from fastapi.responses import Response
+from openpyxl import load_workbook
 from sqlalchemy import Engine, select, text
 
-from credassure.gateway.deps import Svc, User, visible_case
+from credassure.core.errors import ApiErrorCode
+from credassure.gateway import workbook
+from credassure.gateway.deps import Svc, User, own_case, visible_case
+from credassure.gateway.problems import ProblemError
+from credassure.gateway.routers.cases import store_upload
 from credassure.ledger import reads
 from credassure.ledger.models import User as UserRow
-from credassure.ledger.session import hr_engine, transaction
+from credassure.ledger.session import hr_engine, run_in_progress, transaction
 
 router = APIRouter(prefix="/v1", tags=["cases"])
 
@@ -273,3 +282,104 @@ def history(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
             }
         )
     return {"case_id": case.id, "events": rows, "chain_ok": not broken}
+
+
+# ---- Excel workbook import (ADR 0040) ------------------------------------------------------------
+XLSX_TYPES = {
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/octet-stream",
+    "application/zip",
+}
+LOCKED = frozenset({"AWAITING_APPROVAL", "HELD", "APPROVED", "REJECTED"})
+
+
+@router.post("/cases/{case_id}/workbook", status_code=201)
+async def import_workbook(
+    request: Request,
+    case_id: str,
+    file: Annotated[UploadFile, File()],
+    who: User,
+    svc: Svc,
+) -> dict[str, Any]:
+    """The case template workbook → its JSON/CSV files, each validated and stored exactly as a
+    single upload (UI-02). All or nothing: on any error nothing is stored and every error names
+    the sheet, Excel row and column. Sheets left empty are skipped."""
+    case = own_case(svc, who, case_id)
+    if case.status in LOCKED:
+        raise ProblemError(409, f"case is {case.status}; inputs are locked", ApiErrorCode.CONFLICT)
+    if run_in_progress(svc.engine, case.id):
+        raise ProblemError(409, "a run is in progress on this case", ApiErrorCode.RUN_IN_PROGRESS)
+    limit = svc.settings.max_upload_bytes
+    declared = request.headers.get("content-length", "")
+    if declared.isdigit() and int(declared) > limit + 64 * 1024:
+        raise ProblemError(
+            413, f"file is larger than {limit} bytes", ApiErrorCode.PAYLOAD_TOO_LARGE
+        )
+    content_type = (file.content_type or "").split(";")[0].strip().lower()
+    if not (file.filename or "").lower().endswith(".xlsx") or content_type not in XLSX_TYPES:
+        raise ProblemError(
+            415, "upload an Excel .xlsx workbook", ApiErrorCode.UNSUPPORTED_MEDIA_TYPE
+        )
+    raw = await file.read(limit + 1)
+    if len(raw) > limit:
+        raise ProblemError(
+            413, f"file is larger than {limit} bytes", ApiErrorCode.PAYLOAD_TOO_LARGE
+        )
+    workbook.guard_zip(raw)
+    try:
+        files, errors = workbook.convert(io.BytesIO(raw), partial=True)
+    except ProblemError:
+        raise
+    except Exception as exc:  # openpyxl raises many types on a damaged file
+        raise ProblemError(
+            422,
+            "the workbook could not be read",
+            errors=[{"field": None, "row": None, "reason": "the workbook is damaged or not .xlsx"}],
+        ) from exc
+    if errors:
+        raise ProblemError(
+            422,
+            "workbook failed validation",
+            errors=[
+                {
+                    "field": f"{e.tab}.{e.column}" if e.column else e.tab,
+                    "row": e.row,
+                    "reason": e.reason,
+                }
+                for e in errors[:100]
+            ],
+        )
+    stored = []
+    for name, body in files.items():
+        kind = workbook.kind_of(name)
+        result = store_upload(svc, case, who.user_id, kind, body.encode("utf-8"), body)
+        stored.append({"name": name, **result})
+    return {"case_id": case.id, "files": stored}
+
+
+@router.get("/templates/case.xlsx", response_class=Response)
+def case_template(
+    who: User,
+    svc: Svc,
+    example: Annotated[bool, Query()] = False,
+) -> Response:
+    """The case workbook template. Default: blank (headers, types, dropdowns kept; the example rows
+    removed). example=true: the committed file with the demo case filled in."""
+    path = svc.settings.case_template
+    if not path.is_file():
+        raise ProblemError(404, "the case template is not installed", ApiErrorCode.NOT_FOUND)
+    data = path.read_bytes()
+    if not example:
+        wb = load_workbook(io.BytesIO(data))
+        for ws in wb.worksheets:
+            if ws.title != "README" and ws.max_row >= workbook.DATA_ROW:
+                ws.delete_rows(workbook.DATA_ROW, ws.max_row - workbook.DATA_ROW + 1)
+        buf = io.BytesIO()
+        wb.save(buf)
+        data = buf.getvalue()
+    name = "credassure-case-example.xlsx" if example else "credassure-case-template.xlsx"
+    return Response(
+        data,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f'attachment; filename="{name}"'},
+    )

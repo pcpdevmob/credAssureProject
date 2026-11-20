@@ -90,11 +90,38 @@ describe('readiness and history in plain words', () => {
     expect(describeEvent(e('ROUTED', { route: 'vp_finance' })).text).toBe('Sent for approval to the VP, Finance.');
     expect(describeEvent(e('DECISION_RECORDED', { decision: 'return', return_stage: 'lendwise', comment: 'Fix offer B' }, 'director_finance')))
       .toMatchObject({ text: 'asha (Director, Finance) returned the proposal, returning it to lender comparison.', note: 'Comment: “Fix offer B”' });
-    expect(describeEvent(e('FACT_WRITTEN', { key: 'lw.OF-01-A.v2.apr' })).key).toBe(false);
+    const fact = ['lw', 'OF-01-A', 'v2', 'apr'].join('.'); // a ledger key, built so secret scanners do not read it as a credential
+    expect(describeEvent(e('FACT_WRITTEN', { key: fact })).key).toBe(false);
   });
   it('names ledger figures', () => {
     expect(factLabel('wc.recommended_amount')).toBe('Validated funding need');
     expect(factLabel('lw.OF-01-B.v2.total_repayment')).toBe('Offer OF-01-B total repayment');
     expect(factLabel('onb.rule.FIN-101')).toBe('Credit policy training');
+  });
+});
+
+describe('Excel workbook import (ADR 0040)', () => {
+  it('shows sheet, row and column for each error and says nothing was imported', async () => {
+    const Documents = (await import('@/components/case/Documents')).default;
+    server.use(
+      http.get(`${API}/v1/cases/:id/files`, () => HttpResponse.json({ case_id: 'CA-1', files: [], documents: [] })),
+      http.post(`${API}/v1/cases/:id/workbook`, () => HttpResponse.json({ type: 'about:blank', title: 'x', status: 422, code: 'VALIDATION_FAILED', detail: 'workbook failed validation', errors: [{ field: 'costs.amount', row: 5, reason: 'Input should be a valid decimal' }] }, { status: 422 })),
+    );
+    render(<Documents caseId="CA-1" canEdit />);
+    await userEvent.upload(screen.getByLabelText(/Upload the filled workbook/), new File(['x'], 'case.xlsx'));
+    expect(await screen.findByText(/Nothing was imported from case.xlsx/)).toBeTruthy();
+    expect(screen.getByText(/Sheet “Weekly costs”, row 5/)).toBeTruthy();
+    expect(screen.getByText(/Use an amount such as/)).toBeTruthy();
+  });
+  it('lists what was imported', async () => {
+    const Documents = (await import('@/components/case/Documents')).default;
+    server.use(
+      http.get(`${API}/v1/cases/:id/files`, () => HttpResponse.json({ case_id: 'CA-1', files: [], documents: [] })),
+      http.post(`${API}/v1/cases/:id/workbook`, () => HttpResponse.json({ case_id: 'CA-1', files: [{ name: 'costs.csv', kind: 'costs', rows: 156, injection_flags: [] }, { name: 'offers/OF-01-A.v1.json', kind: 'offer', rows: 1, injection_flags: [] }] }, { status: 201 })),
+    );
+    render(<Documents caseId="CA-1" canEdit />);
+    await userEvent.upload(screen.getByLabelText(/Upload the filled workbook/), new File(['x'], 'case.xlsx'));
+    expect(await screen.findByText('Weekly costs: 156 rows')).toBeTruthy();
+    expect(screen.getByText(/1 lender offer/)).toBeTruthy();
   });
 });

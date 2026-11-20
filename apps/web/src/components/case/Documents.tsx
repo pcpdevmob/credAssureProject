@@ -2,13 +2,13 @@
 // section shows what the case holds now (GET /files). A file can still be uploaded instead; a rejected file or form lists
 // every field / row / reason the gateway returned, in plain words (never raw JSON).
 import { useCallback, useEffect, useState } from 'react';
-import { CheckCircle2, FileText, Loader2, ShieldAlert, AlertTriangle, ChevronDown, Circle, Lock, Pencil, Eye } from 'lucide-react';
+import { CheckCircle2, FileText, Loader2, ShieldAlert, AlertTriangle, ChevronDown, Circle, Lock, Pencil, Eye, FileSpreadsheet, Download } from 'lucide-react';
 import { Card, CardHeader, Button, Skeleton } from '../ui';
 import ErrorBanner from '../ErrorBanner';
 import dynamic from 'next/dynamic';
 import { plainReason } from '@/lib/caseForms';
 const DataEditor = dynamic(() => import('./DataEditor'), { ssr: false, loading: () => <Skeleton className="h-40" /> });
-import { documentService, caseFiles, type FileKind, type StoredFile, type StoredDoc } from '@/services/documents';
+import { documentService, caseFiles, workbookService, type FileKind, type StoredFile, type StoredDoc, type Imported } from '@/services/documents';
 import { ApiProblem } from '@/lib/problem';
 import { FORMS } from '@/lib/caseForms';
 import { ago, dt } from '@/lib/format';
@@ -89,6 +89,41 @@ function LenderDocs({ caseId, canEdit, docs, onUploaded }: { caseId: string; can
     </div></Card>);
 }
 
+
+/** ADR 0040: one Excel workbook for the whole case. Sheets left empty are skipped; on any error nothing is stored. */
+function ExcelImport({ caseId, onImported }: { caseId: string; onImported: () => void }) {
+  const [state, setState] = useState<{ busy?: boolean; done?: Imported[]; error?: unknown; name?: string }>({});
+  const [dlErr, setDlErr] = useState<unknown>();
+  const label = (sheet: string) => (sheet === 'offers' ? 'Lender offers' : FORMS[sheet]?.title ?? sheet);
+  const fe = state.error instanceof ApiProblem ? state.error.fieldErrors : [];
+  const docs = state.done?.filter(f => f.kind === 'offer').length ?? 0;
+  return (<Card className="ring-1 ring-brand-200"><CardHeader title="Have it in Excel? Upload one workbook" icon={<FileSpreadsheet className="h-4 w-4" />}
+      sub="Download the CredAssure Excel template, fill in the sheets you have (one sheet per section below, plus lender offers), and upload it. It is turned into the same case data and checked the same way. Sheets left empty are skipped." />
+    <div className="space-y-3 p-5">
+      <div className="flex flex-wrap gap-2">
+        <Button size="sm" variant="outline" onClick={() => workbookService.template(false).catch(setDlErr)}><Download aria-hidden className="h-4 w-4" />Blank template</Button>
+        <Button size="sm" variant="ghost" onClick={() => workbookService.template(true).catch(setDlErr)}>Example, filled in</Button>
+      </div>
+      {dlErr !== undefined && <ErrorBanner error={dlErr} />}
+      <div><label htmlFor="upload-workbook" className="block text-sm font-medium text-ink-900">Upload the filled workbook (.xlsx)</label>
+        <input id="upload-workbook" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" className="mt-1 max-w-full text-xs file:mr-2 file:rounded-full file:border-0 file:bg-ink-900 file:px-3 file:py-1.5 file:text-white"
+          onChange={async e => { const f = e.target.files?.[0]; e.target.value = ''; if (!f) return; setState({ busy: true, name: f.name });
+            try { const done = await workbookService.upload(caseId, f); setState({ done, name: f.name }); onImported(); } catch (err) { setState({ error: err, name: f.name }); } }} /></div>
+      {state.busy && <p className="flex items-center gap-1.5 text-sm text-ink-600"><Loader2 aria-hidden className="h-4 w-4 animate-spin" />Reading {state.name}…</p>}
+      {state.done && <div role="status" className="rounded-xl bg-emerald-50 p-3 text-sm text-emerald-900 ring-1 ring-emerald-200">
+        <p className="flex items-center gap-1.5 font-semibold"><CheckCircle2 aria-hidden className="h-4 w-4" />{state.name} imported</p>
+        <ul className="mt-1 list-disc pl-5">{state.done.filter(f => f.kind !== 'offer').map(f => <li key={f.name}>{FORMS[f.kind]?.title ?? f.kind}: {f.rows} {f.rows === 1 ? 'entry' : 'rows'}</li>)}
+          {docs > 0 && <li>{docs} lender {docs === 1 ? 'offer' : 'offers'} (add each offer's Key Facts Statement below)</li>}</ul>
+        {state.done.some(f => f.flagged) && <p className="mt-1 text-xs text-gold-800">Instruction-like text was found and ignored: documents are data, never instructions.</p>}
+      </div>}
+      {state.error !== undefined && (fe.length ? <div role="alert" className="rounded-xl bg-rose-50 p-3 text-sm ring-1 ring-rose-200">
+        <p className="flex items-center gap-1.5 font-semibold text-rose-700"><AlertTriangle aria-hidden className="h-4 w-4" />Nothing was imported from {state.name}. Fix these in the workbook and upload it again:</p>
+        <ul className="mt-2 space-y-1 text-ink-800">{fe.map((e, i) => { const [sheet, col] = e.field.split('.'); return <li key={i}><span className="font-medium">Sheet “{label(sheet)}”{e.row != null ? `, row ${e.row}` : ''}</span>{col && <> · column <code className="font-mono">{col}</code></>} · {plainReason(e.reason)}</li>; })}</ul>
+      </div> : <ErrorBanner error={state.error} />)}
+      <p className="text-xs text-ink-600">PDF files cannot be read yet. Type the figures into the template or the sections below.</p>
+    </div></Card>);
+}
+
 export default function Documents({ caseId, canEdit, locked, onChange }: { caseId: string; canEdit: boolean; locked?: boolean; onChange?: () => void }) {
   const [state, setState] = useState<{ files: StoredFile[]; documents: StoredDoc[] } | null>(null); const [err, setErr] = useState<unknown>();
   const [open, setOpen] = useState<string | null>(null);
@@ -98,6 +133,7 @@ export default function Documents({ caseId, canEdit, locked, onChange }: { caseI
   const edit = canEdit && !locked;
   const provided = state?.files.filter(f => f.uploadedAt).length ?? 0;
   return (<div className="space-y-6">
+    {edit && <ExcelImport caseId={caseId} onImported={saved} />}
     <Card><CardHeader title="Case data" sub={edit ? 'Fill in each section; it is checked as soon as you save it. When all seven are provided, go to the Workflow tab and press Run.' : 'What was submitted for this case.'}
       right={state && <span className={cn('rounded-full px-3 py-1 text-xs font-semibold', provided === 7 ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-800')}>{provided} of 7 provided</span>} />
       {locked && canEdit && <p className="mx-5 mt-4 flex items-center gap-2 rounded-xl bg-sunken p-3 text-sm text-ink-700"><Lock aria-hidden className="h-4 w-4" />The case is with the approver, so its data cannot be changed now.</p>}

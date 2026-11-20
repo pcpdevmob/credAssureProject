@@ -37,6 +37,8 @@ dependencies = [
     "tenacity>=9.0",
     "python-multipart>=0.0.18",
     "limits>=3.13",
+    "openpyxl>=3.1",  # Excel case workbook import (ADR 0040)
+    "defusedxml>=0.7",  # openpyxl parses untrusted XML through it when installed
 ]
 
 [project.optional-dependencies]
