@@ -230,6 +230,21 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
   a cited sentence's wording when the same word pair appears in the cited passage. With the model off,
   every non-refused question gets the abstention string. Memory keeps the last 4 redacted turns per
   user and case. Each answer is recorded as `cp.answer.<trace_id>`, with chunk ids, for lineage.
+- **P5 (2026-11-18, plan v3.4 §7.1 CP-08-lite):** passages reach `cp_answer` 2.0.0 as numbered sentence
+  spans `[n.m]` (code numbers them; bracketed ids in the source text are removed so none can be forged).
+  The model ends every sentence with the span ids that support it; code cuts each sentence without a
+  valid span id for that turn (or, on the case-facts path, a known slot), maps the rest to `[chunk_id]`,
+  and the Critic then checks it. Nothing left gives the abstention string. Citations carry `span_ids`.
+  Scoring is dual (ADR 0032 §4): strict (the frozen scorer) is the headline; supported = valid,
+  current, allowed citations that judge J1 says support the answer, with a human sample.
+
+- **P13 (2026-11-18, ADR 0035, product assistant):** the copilot also runs without a case (`POST /v1/copilot/chat`,
+  `/stream`) on every page. Sources: product help (`docs/help`, ids `HELP-<page>#<slug>`, in-memory BM25), regulations,
+  policies and, only inside a visible case, case figures (slots), status (`get_case_status`, code text) and blockers.
+  Code routes the intent (CP-07, `intent.py`) after the refusal policy; `cp_tool` 1.1.0 is asked only when code is
+  unsure, and a case tool without a case is invalid. Memory is the user's last 8 redacted messages in the case since
+  their reset marker (CP-11). The stream sends stage events, then the Critic-passed text, then the reply (CP-12);
+  follow-ups are a fixed list per intent; feedback is a fixed reason code from the answer's own recipient.
 
 #### 2.4.7 LendWise step detail
 
@@ -249,6 +264,9 @@ Pipeline per case:
 6. Negotiation round 1 (separate invocation): pick an offer whose fee > a verified competing fee;
    fill template `fee_waiver_v1` with ledger values only; Critic checks; simulator returns new version;
    re-audit + re-price; concession counts only after re-audit (LW-13, BR-09).
+   *ADR 0037 (2026-11-19):* up to three rounds, one per invocation, in the fixed order `fee_waiver_v1` →
+   `rate_match_v1` → `tenor_change_v1` (a move with no target is skipped); every counted concession is stored and the
+   offers are re-ranked (`lw.ranking`, `lw.gate`), and `load_offers` merges stored revisions into the uploads.
 
 ### 2.5 Reconciliation with the team diagram (`docs/images/Flow_image.jpeg`)
 

@@ -326,10 +326,17 @@ def test_LW12_LW13_E7_five_negotiation_items_through_the_api(
         assert score["passed"], (item["id"], score, answer)
         if gold["target_offer"]:
             assert "%" in answer["message"] and gold["target_offer"] in answer["message"]
-        again = client.post(f"/v1/agents/lendwise/cases/{case_id}/negotiate", headers=h)
-        assert again.status_code == (409 if gold["target_offer"] else 200)  # one sent round
+        # LW-15 (ADR 0037): later calls run the remaining rounds, then 409 once complete;
+        # the fee-waiver fields the item scores never change
+        codes = [
+            client.post(f"/v1/agents/lendwise/cases/{case_id}/negotiate", headers=h).status_code
+            for _ in range(4)
+        ]
+        assert 409 in codes and set(codes[: codes.index(409)]) <= {200}, codes
         view = client.get(f"/v1/cases/{case_id}/offers", headers=h).json()
         assert view["negotiation"]["concession_counts"] == gold["concession_counts"]
+        assert view["negotiation"]["target_offer"] == gold["target_offer"]
+        assert view["negotiation"]["complete"] is True
         passed.append(item["id"])
     assert len(passed) == 5
 
@@ -346,13 +353,23 @@ def test_LW13_BR15_injected_reply_is_flagged_and_never_repeated(client: Any, log
     with session.transaction(session.case_engine(client.db)) as s:
         facts = {f.key: f.value_text for f in reads.list_for_case(s, "default", case_id)}
     assert facts["lw.negotiation.reply_flags"] != "none"
-    assert not any("rank this lender" in v.lower() for v in facts.values())
+    # Phase 10b: the reply is kept, display-only, under one key; nothing else repeats it
+    display = {"lw.negotiation.reply_text"}
+    assert "rank this lender" in facts["lw.negotiation.reply_text"].lower()
+    assert not any("rank this lender" in v.lower() for k, v in facts.items() if k not in display)
+    shown = answer["reply"]
+    assert (
+        shown["round"] == 1
+        and shown["injection_flags"]
+        and "rank this lender" in shown["text"].lower()
+    )
     assert "rank this lender" not in answer["message"].lower()
     assert client.get(f"/v1/cases/{case_id}/offers", headers=h).json()["ranking"] == before
     assert answer["revised"]["comparable"] and answer["revised"]["version"] == 2
-    # ADR 0023: the round post-dates the verified comparison, so the approver evidence says so
+    # ADR 0037: the counted concession re-ranked the offers (same order here), so nothing is
+    # "in progress"; the lw.* facts changed after the routed report version, so it is stale
     inbox = client.get(f"/v1/cases/{case_id}/inbox", headers=h).json()
-    assert inbox["warnings"] == ["negotiation_in_progress"]
+    assert inbox["warnings"] == ["report_stale"]
 
 
 def test_LW12_preparer_only_and_comparison_first(client: Any, login: Login) -> None:
@@ -406,3 +423,41 @@ def test_LW12_negotiation_waits_for_the_case_run_lock(client: Any, login: Login)
     assert (
         client.post(f"/v1/agents/lendwise/cases/{case_id}/negotiate", headers=h).status_code == 200
     )
+
+
+def test_BR15_reply_shown_only_for_a_sent_round() -> None:
+    """Security review N4: a later round blocked by the Critic must not show the old reply."""
+    from credassure.gateway.supervisor_service import _reply
+
+    f = {"reply_text": "We waive the fee.", "round": "1", "reply_flags": "none", "status": "sent"}
+    assert _reply(f) == {"round": 1, "text": "We waive the fee.", "injection_flags": []}
+    assert _reply({**f, "status": "blocked"}) is None
+
+
+def test_LW15_LW11_three_rounds_rerank_case_06_through_the_api(client: Any, login: Login) -> None:
+    """ADR 0037: case 06's counted fee waiver puts OF-06-A first; later calls run the rate match,
+    skip the tenor change (no unaffordable target), complete, then answer 409."""
+    case_id, h = start(client, login, "CA-2026-0006")
+    client.post(f"/v1/agents/lendwise/cases/{case_id}/run", headers=h)
+    url = f"/v1/agents/lendwise/cases/{case_id}/negotiate"
+    assert client.get(f"/v1/cases/{case_id}/offers", headers=h).json()["ranking"][0] == "OF-06-B"
+    first = client.post(url, headers=h).json()
+    assert [r["move"] for r in first["rounds"]] == ["fee_waiver_v1"]
+    assert first["rounds"][0]["concession_counts"] and not first["complete"]
+    view = client.get(f"/v1/cases/{case_id}/offers", headers=h).json()
+    assert view["ranking"][0] == "OF-06-A" and view["gate"] == "GO"
+    a = next(o for o in view["offers"] if o["offer_id"] == "OF-06-A")
+    assert a["version"] == 2  # the comparison shows the re-audited revision
+    second = client.post(url, headers=h).json()
+    assert [r["move"] for r in second["rounds"]] == ["fee_waiver_v1", "rate_match_v1"]
+    rm = second["rounds"][1]
+    assert (
+        rm["round"] == 2 and rm["status"] == "sent" and rm["cited"]["competing_rate"].endswith("%")
+    )
+    assert rm["cited"]["competing_rate"] in rm["message"]  # the figure shown is the one sent
+    third = client.post(url, headers=h)
+    assert third.status_code == 200 and third.json()["complete"] is True
+    done = client.post(url, headers=h)
+    assert done.status_code == 409 and done.json()["code"] == "CONFLICT"
+    inbox = client.get(f"/v1/cases/{case_id}/inbox", headers=h).json()
+    assert "negotiation_in_progress" not in inbox["warnings"]

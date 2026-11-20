@@ -24,6 +24,17 @@ the BRD wins because Track B grading requires it. Where the guide is better on H
 1. **Integrate the UI early.** A walking skeleton visible in the UI by end of Week 1, not mid-Week 2.
 2. **LLM-unavailable mode.** `LLM_ENABLED=false` runs every gate, calculation, routing and approval; narratives fall back to templates; copilot returns "unavailable". Demo and tests must pass in this mode.
 3. **Proposal versioning.** Any change to an upstream ledger fact marks the proposal stale and requires regeneration (new version).
+   *Amended 2026-11-17 (Phase 10, user decision):* a stale report is shown to the approver as the warning `report_stale`
+   (recorded in `DECISION_RECORDED.evidence_warnings`); it does **not** block the approval. Regeneration is
+   `POST /v1/cases/{id}/report` (preparer). Reason: the live negotiation round runs after routing, and blocking would add a
+   step to the approval story without changing any validated figure that routing used.
+   *Amended again 2026-11-17 (Phase 10b, user decision; supersedes the paragraph above):* a stale report **blocks
+   approve**. `POST /v1/cases/{id}/decision` with `approve` answers 409 problem+json `REPORT_STALE` ("report stale,
+   regenerate"), checked under the case run lock; reject and return still work. The preparer regenerates with
+   `POST /v1/cases/{id}/report` (new version) and the approver then approves the figures they actually read. The demo
+   adds this beat after the live negotiation round (`docs/demo/demo-script.md`). The case inbox returns
+   `report_version`; the web client echoes it on approve, and a version that is no longer current is also 409
+   `REPORT_STALE`, so an approver who loaded v1 cannot approve after a regenerate to v2 without reloading.
 4. **Gates enforced server-side.** Navigation or direct API calls cannot skip a gate.
 5. **Demo reset.** `make demo-reset` restores the seeded cases, the blocked case and the happy-path case.
 6. **Daily discipline.** One concrete output per day; test in Swagger before wiring the UI; commit daily; switch to the documented fallback after 60–90 minutes blocked.

@@ -3,7 +3,8 @@
     TENANT_ID=demo uv run --env-file .env python scripts/demo_reset.py
 
 1. Refuses the e2e database, a TENANT_ID other than "demo", and a running gateway on :8000.
-2. First run on a database whose users are not in tenant "demo": purge every case (audited),
+2. A stamp that is not in this branch's migrations: online backup, delete the file, migrate fresh.
+   First run on a database whose users are not in tenant "demo": purge every case (audited),
    online backup, then migrate a fresh database and seed the users in tenant "demo".
    Later runs: back up, then purge only the demo tenant's cases (audited, chain re-verified).
 3. Through the API (the real app in-process, same routers, auth and job runner), one demo case per
@@ -25,6 +26,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from alembic.script import ScriptDirectory
 from fastapi.testclient import TestClient
 from sqlalchemy import text
 
@@ -149,6 +151,22 @@ def _backup(db: Path) -> Path:
     return out
 
 
+def _stamped(db: Path) -> str | None:
+    con = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
+    try:
+        row = con.execute("SELECT version_num FROM alembic_version").fetchone()
+    except sqlite3.OperationalError:
+        return None
+    finally:
+        con.close()
+    return row[0] if row else None
+
+
+def _known_case_revisions() -> set[str]:
+    script = ScriptDirectory(str(migrate.HERE / "case"))
+    return {rev.revision for rev in script.walk_revisions()}
+
+
 def _passwords(settings: Settings) -> dict[str, str]:
     env = {k: v for k, v in os.environ.items() if k.startswith("SEED_PASSWORD_")}
     if settings.seed_password is not None:
@@ -156,26 +174,36 @@ def _passwords(settings: Settings) -> dict[str, str]:
     return env
 
 
+def _drop_db(db: Path) -> None:
+    for suffix in ("", "-wal", "-shm"):
+        Path(f"{db}{suffix}").unlink(missing_ok=True)
+
+
 def reset_db(settings: Settings) -> None:
     db = settings.case_db
     if db.exists():
-        engine = case_engine(db)
-        with transaction(engine) as s:
-            tenants = set(s.execute(text("SELECT DISTINCT tenant_id FROM users")).scalars())
-            cases = s.execute(text("SELECT id, tenant_id FROM cases")).all()
-        if tenants and tenants != {TENANT}:  # first run: switch the database to tenant demo
-            for tenant in sorted({t for _, t in cases}):
-                with transaction(engine) as s:
-                    purge_cases.purge(s, [c for c, t in cases if t == tenant], dry_run=False)
-            engine.dispose()
-            print(f"backup (pre-demo database): {_backup(db)}")
-            for suffix in ("", "-wal", "-shm"):
-                Path(f"{db}{suffix}").unlink(missing_ok=True)
-        elif demo := [c for c, t in cases if t == TENANT]:
-            print(f"backup: {_backup(db)}")
+        stamped = _stamped(db)
+        if stamped is not None and stamped not in _known_case_revisions():
+            # foreign branch (no migration here for it); don't purge a schema we don't own
+            print(f"backup (unknown revision {stamped}): {_backup(db)}")
+            _drop_db(db)
+        else:
+            engine = case_engine(db)
             with transaction(engine) as s:
-                purge_cases.purge(s, demo, dry_run=False)
-        engine.dispose()
+                tenants = set(s.execute(text("SELECT DISTINCT tenant_id FROM users")).scalars())
+                cases = s.execute(text("SELECT id, tenant_id FROM cases")).all()
+            if tenants and tenants != {TENANT}:  # first run: switch the database to tenant demo
+                for tenant in sorted({t for _, t in cases}):
+                    with transaction(engine) as s:
+                        purge_cases.purge(s, [c for c, t in cases if t == tenant], dry_run=False)
+                engine.dispose()
+                print(f"backup (pre-demo database): {_backup(db)}")
+                _drop_db(db)
+            elif demo := [c for c, t in cases if t == TENANT]:
+                print(f"backup: {_backup(db)}")
+                with transaction(engine) as s:
+                    purge_cases.purge(s, demo, dry_run=False)
+            engine.dispose()
     migrate.upgrade("case", db)
     seed(db, _passwords(settings), tenant_id=TENANT)  # idempotent: existing users are kept
 

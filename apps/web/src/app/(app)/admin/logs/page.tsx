@@ -1,4 +1,5 @@
 'use client';
+import { toCsv } from '@/lib/csv';
 import { useEffect, useMemo, useState } from 'react';
 import { Download, RefreshCw } from 'lucide-react';
 import { useUser } from '@/components/AppShell';
@@ -24,8 +25,7 @@ export default function UserLogs() {
     && (!from || r.at >= Date.parse(from + 'T00:00:00+02:00') / 1000) && (!to || r.at <= Date.parse(to + 'T23:59:59+02:00') / 1000)
     && (!q || `${r.actor} ${r.target} ${r.action} ${r.detail} ${r.ip} ${r.ua}`.toLowerCase().includes(q.toLowerCase()))), [rows, user, action, q, from, to]);
   const csv = () => {
-    const esc = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-    const body = [['Time (SAST)', 'Username', 'Action', 'Target', 'Detail', 'IP', 'User agent'], ...list.map(r => [sast(r.at), r.actor, r.action, r.target, r.detail, r.ip, r.ua])].map(x => x.map(esc).join(',')).join('\n');
+    const body = toCsv([['Time (SAST)', 'Username', 'Action', 'Target', 'Detail', 'IP', 'User agent'], ...list.map(r => [sast(r.at), r.actor, r.action, r.target, r.detail, r.ip, r.ua])]);
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([body], { type: 'text/csv' })); a.download = `credassure-user-logs-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
   };
   if (me.accountRole !== 'global_admin') return <Card className="p-10 text-center">Global Admin only.</Card>;

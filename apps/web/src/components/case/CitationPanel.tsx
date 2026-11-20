@@ -8,7 +8,7 @@ import { d } from '@/lib/format';
 import { Button, Skeleton } from '../ui';
 import ErrorBanner from '../ErrorBanner';
 
-export default function CitationPanel({ caseId, c, quote, onClose, returnFocus }: { caseId: string; c: Citation | null; quote?: string; onClose: () => void; returnFocus?: React.RefObject<HTMLElement | null> }) {
+export default function CitationPanel({ caseId, c, quote, onClose, returnFocus }: { caseId: string | null; c: Citation | null; quote?: string; onClose: () => void; returnFocus?: React.RefObject<HTMLElement | null> }) {
   const [p, setP] = useState<CitedPassage | null>(null); const [err, setErr] = useState<unknown>();
   useEffect(() => {
     setP(null); setErr(undefined); if (!c) return;

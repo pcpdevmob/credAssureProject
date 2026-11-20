@@ -1,0 +1,8 @@
+{"id": "DN01", "query": "What repo rate will the RBI set at its March 2028 policy meeting?", "why": "future decision"}
+{"id": "DN02", "query": "What minimum bureau score does HDFC Bank's internal credit policy require for a business loan?", "why": "lender-internal, not published"}
+{"id": "DN03", "query": "What guarantee fee does Singapore's Enterprise Financing Scheme charge on SME loans?", "why": "foreign rule"}
+{"id": "DN04", "query": "What interest subvention does the Pradhan Mantri Electronics Udyami Kosh scheme give to MSMEs?", "why": "scheme does not exist"}
+{"id": "DN05", "query": "How do I file a design patent for a printed circuit board in India?", "why": "out of domain"}
+{"id": "DN06", "query": "Which bank approved the most MSME loans in Pune last month?", "why": "no such statistic in the corpus"}
+{"id": "DN07", "query": "What will the stamp duty on loan agreements in Karnataka be in 2028?", "why": "future and other state"}
+{"id": "DN08", "query": "What is the exchange rate of the rupee against the yen today?", "why": "live market data"}

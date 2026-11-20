@@ -2,6 +2,13 @@
 
 Scope #22: WAL, busy_timeout 5000 ms, foreign keys on, and every transaction starts with
 BEGIN IMMEDIATE so writers queue on the busy timeout instead of failing mid-transaction.
+
+ADR 0039: case.db may instead be a MySQL 8 database (``CASE_DATABASE_URL=mysql+pymysql://...``).
+The same guarantee is kept: every transaction first locks the single ``write_lock`` row
+(``SELECT ... FOR UPDATE``), so writers queue exactly as under BEGIN IMMEDIATE and every invariant
+that relies on it (audit seq = max + 1, case id allocation, last admin, code spend, job claim, run
+lock) holds unchanged. READ COMMITTED lets each statement see rows committed by the writer before.
+Migrations skip the lock (the table may not exist yet) with the ``no_write_lock`` option.
 """
 
 import sqlite3
@@ -11,7 +18,8 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any, cast
 
-from sqlalchemy import CursorResult, Engine, create_engine, delete, event, select, update
+from sqlalchemy import CursorResult, Engine, create_engine, delete, event, select, text, update
+from sqlalchemy.engine import make_url
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -22,13 +30,28 @@ HEARTBEAT = timedelta(seconds=30)  # a live run refreshes its lock this often (A
 STALE_LOCK = 3 * HEARTBEAT  # three missed heartbeats: the run is dead and its lock may be taken
 
 
+MYSQL_COLLATION = "utf8mb4_bin"  # case-sensitive, byte-exact like SQLite (ids, usernames, keys)
+NO_WRITE_LOCK = "no_write_lock"  # execution option: migrations run before write_lock exists
+
+
 class RunInProgressError(Exception):
     """A run already holds this case (scope #22): the API answers 409."""
 
 
-def case_engine(path: Path | str) -> Engine:
-    """Engine for case.db or corpus.db with the scope #22 pragmas."""
-    engine = create_engine(f"sqlite:///{path}")
+class DatabaseConfigError(RuntimeError):
+    """The configured MySQL database cannot give SQLite's guarantees (ADR 0039)."""
+
+
+def is_url(target: Path | str) -> bool:
+    """A database URL (MySQL, ADR 0039) rather than a SQLite file path."""
+    return "://" in str(target)
+
+
+def case_engine(target: Path | str) -> Engine:
+    """Engine for case.db (SQLite path or MySQL URL) or corpus.db with the scope #22 guarantees."""
+    if is_url(target):
+        return _mysql_engine(str(target))
+    engine = create_engine(f"sqlite:///{target}")
 
     @event.listens_for(engine, "connect")
     def _pragmas(con: Any, _record: Any) -> None:
@@ -44,6 +67,37 @@ def case_engine(path: Path | str) -> Engine:
         # ponytail: every transaction takes the write lock up front; split read/write engines if
         # read concurrency ever matters (one gateway process, capped harness concurrency today).
         conn.exec_driver_sql("BEGIN IMMEDIATE")
+
+    return engine
+
+
+def _mysql_engine(url: str) -> Engine:
+    u = make_url(url)
+    if u.get_backend_name() != "mysql":
+        raise DatabaseConfigError(f"unsupported database {u.get_backend_name()!r}: use mysql")
+    u = u.update_query_dict({"charset": "utf8mb4"})
+    engine = create_engine(
+        u, pool_pre_ping=True, pool_recycle=1800, isolation_level="READ COMMITTED"
+    )
+
+    @event.listens_for(engine, "connect")
+    def _session(con: Any, _record: Any) -> None:
+        cur = con.cursor()
+        cur.execute("SET time_zone = '+00:00'")  # naive DATETIMEs are UTC, as in SQLite
+        cur.execute("SET SESSION innodb_lock_wait_timeout = 30")
+        cur.execute("SELECT @@collation_database")
+        (collation,) = cur.fetchone()
+        cur.close()
+        if collation != MYSQL_COLLATION:
+            raise DatabaseConfigError(
+                f"database collation is {collation}; create it with "
+                f"CHARACTER SET utf8mb4 COLLATE {MYSQL_COLLATION} (ADR 0039)"
+            )
+
+    @event.listens_for(engine, "begin")
+    def _begin(conn: Any) -> None:
+        if not conn.get_execution_options().get(NO_WRITE_LOCK):
+            conn.execute(text("SELECT id FROM write_lock WHERE id = 1 FOR UPDATE"))
 
     return engine
 

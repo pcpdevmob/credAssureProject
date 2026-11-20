@@ -21,13 +21,35 @@ def mask(data: Any, **_: Any) -> Any:
     return redact_value(data)
 
 
-def make_exporter(client: Any) -> Callable[[str, dict[str, Any]], None]:
+def gen_ai_attributes(name: str, attrs: dict[str, Any], model: str | None) -> dict[str, Any]:
+    """OpenTelemetry GenAI semantic-convention keys for a model span (ADR 0029 R5)."""
+    if name != "llm":
+        return {}
+    out: dict[str, Any] = {"gen_ai.operation.name": "chat", "gen_ai.system": "openai_compatible"}
+    if model:
+        out["gen_ai.request.model"] = model
+    for ours, theirs in (
+        ("prompt_tokens", "gen_ai.usage.input_tokens"),
+        ("completion_tokens", "gen_ai.usage.output_tokens"),
+        ("prompt", "credassure.prompt.name"),
+        ("prompt_version", "credassure.prompt.version"),
+    ):
+        if attrs.get(ours) is not None:
+            out[theirs] = attrs[ours]
+    return out
+
+
+def make_exporter(client: Any, model: str | None = None) -> Callable[[str, dict[str, Any]], None]:
     def export(name: str, attrs: dict[str, Any]) -> None:
         try:
             trace_id = attrs.get("trace_id")  # one trace per run: every span joins it
             context = {"trace_id": trace_id} if isinstance(trace_id, str) else None
+            metadata = mask({**attrs, **gen_ai_attributes(name, attrs, model)})  # R5: mask last
             client.start_observation(
-                trace_context=context, name=name, as_type="span", metadata=mask(attrs)
+                trace_context=context,
+                name=name,
+                as_type="generation" if name == "llm" else "span",
+                metadata=metadata,
             ).end()
         except Exception:
             _log.warning("span export failed: %s", name, exc_info=True)
@@ -55,5 +77,5 @@ def configure(settings: Settings, client_factory: Callable[..., Any] | None = No
         _log.warning("Langfuse client could not start; tracing off", exc_info=True)
         set_exporter(None)
         return False
-    set_exporter(make_exporter(client))
+    set_exporter(make_exporter(client, settings.llm_model))
     return True

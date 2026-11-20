@@ -9,7 +9,7 @@ credassure/
 ├── SECURITY.md                   # how to report issues; threat-model link
 ├── CHANGELOG.md                  # Keep a Changelog + semver tags
 ├── LICENSE                       # MIT (code); data licences in docs/data/
-├── CLAUDE.md  START_HERE.md  PROGRESS.md
+├── CLAUDE.md  START_HERE.md  PROGRESS.md   # PROGRESS.md is generated from docs/progress/ (make progress)
 ├── pyproject.toml                # uv workspace root (members: agents/*, packages/*, apps/gateway, evaluation)
 ├── uv.lock
 ├── package.json  pnpm-workspace.yaml  pnpm-lock.yaml   # JS workspace (apps/web, packages/api-client)
@@ -115,7 +115,7 @@ credassure/
 │   └── build/                    # PHASE_PROMPTS.md, BUILD_SCOPE.md, REPO_STRUCTURE.md (this file)
 │
 ├── .github/
-│   ├── workflows/                # ci.yml (lint, types, tests, import-linter, licences, openapi diff), eval-fast.yml, release.yml
+│   ├── workflows/ci.yml          # restored (ADR 0028); .githooks/pre-push runs the same gates locally (ADR 0027)
 │   ├── CODEOWNERS                # one owner per agents/<x>/, shared packages need two reviewers
 │   └── pull_request_template.md  # requirement IDs, scope items, eval impact, screenshots for UI
 ├── .claude/                      # Claude Code settings, hooks, commands, subagents

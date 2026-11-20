@@ -47,10 +47,19 @@ def test_OBJ08_demo_case_run_and_approval_share_one_trace(
         director = login(client, "demo.director")
         r = client.post(
             f"/v1/cases/{case_id}/decision",
-            json={"decision": "approve", "comment": "ok", "expected_version": version},
+            json={
+                "decision": "approve",
+                "attested": True,
+                "comment": "ok",
+                "expected_version": version,
+            },
             headers=director,
         )
         assert r.status_code == 200, r.text
     traced = [s for s in spans if s.get("case_id") == case_id]
     assert {s["name"] for s in traced} >= {"plan", "stage", "route", "decision"}
     assert len({s["trace_id"] for s in traced}) == 1
+    # ADR 0029 (P3): rail events are spans in the same trace
+    rails = {(s["rail"], s["rule_id"], s["action"]) for s in traced if s["name"] == "guardrail"}
+    assert ("R3", "R3.tool_allowed", "pass") in rails
+    assert ("R4", "R4.critic_passed", "pass") in rails

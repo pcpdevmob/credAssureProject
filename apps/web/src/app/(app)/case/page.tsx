@@ -2,6 +2,7 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { ArrowLeft, GitBranch, UserCheck, Upload, LineChart, Scale, FileCheck2, ScrollText, MessageCircleQuestion, FileText } from 'lucide-react';
 import { useUser } from '@/components/AppShell';
 import { Card, StageBadge, Tabs, Skeleton, Badge } from '@/components/ui';
@@ -13,11 +14,12 @@ import Readiness from '@/components/case/Readiness';
 import Documents from '@/components/case/Documents';
 import Funding from '@/components/case/Funding';
 import Lenders from '@/components/case/Lenders';
-import Copilot from '@/components/case/Copilot';
 import Report from '@/components/case/Report';
 import Review from '@/components/case/Review';
 import AuditList from '@/components/AuditList';
 import { Figure } from '@/components/Figure';
+// The conversation loads when its tab opens (it is shared with the Ask CredAssure panel), keeping the case page in budget.
+const Copilot = dynamic(() => import('@/components/case/Copilot'), { ssr: false, loading: () => <Skeleton className="h-40" /> });
 
 type Tab = 'workflow' | 'readiness' | 'documents' | 'funding' | 'lenders' | 'review' | 'copilot' | 'report' | 'audit';
 const TABS = [
@@ -69,7 +71,7 @@ function CaseView() {
       {tab === 'lenders' && (cmp ? <Lenders c={c} view={cmp} canNegotiate={user.role === 'PREPARER'} onChange={load} /> : <NotYet what="The lender comparison" />)}
       {tab === 'review' && <Review c={c} need={a?.recommendedAmount} user={user} onChange={load} />}
       {tab === 'copilot' && <Copilot caseId={c.id} />}
-      {tab === 'report' && <Report caseId={c.id} a={a} offers={cmp} stamp={c.stage} />}
+      {tab === 'report' && <Report caseId={c.id} stamp={c.stage} canRegenerate={user.role === 'PREPARER'} />}
       {tab === 'audit' && (user.role === 'EVALUATOR' ? <AuditList caseId={c.id} /> : <NotYet what="The audit log (evaluators only)" />)}
     </div>
   </>);

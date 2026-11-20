@@ -6,7 +6,7 @@
 ## Setup and quality
 | Command | What it does |
 |---|---|
-| `make install` | `uv sync --all-packages`: all workspace members and the dev group |
+| `make install` | `uv sync --all-packages --all-extras`: all workspace members, the dev group and extras (`rerank`: sentence-transformers for embeddings and the reranker) |
 | `make check` | ruff, ruff format, mypy --strict, pytest, corpus refs, bandit, import-linter. **Green before every commit** |
 | `make check-fast` | ruff + tests not marked slow (the Claude stop hook runs it) |
 | `make test` | Full suite with coverage |
@@ -40,7 +40,10 @@
 ## Data and corpus
 | Command | What it does |
 |---|---|
-| `make data` | Seeded synthetic data into `data/frozen/v1` (idempotent) |
+| `make data` | Seeded synthetic data into `data/frozen/v1` (idempotent; refuses once frozen) |
+| `make hr-db` | Rebuild the gitignored `hr.db` from frozen `hr/profiles.json` (fresh clone, CI) |
+| `make progress` | Regenerate `PROGRESS.md` from `docs/progress/` (never edit it by hand) |
+| `make progress-check` | Fail if `PROGRESS.md` is stale or a progress entry is invalid (in `make check`, `check-fast`, CI) |
 | `make ingest` | Index the corpus + synthetic documents (FTS5 + Chroma). Re-run after changing `MODELS` or the corpus |
 | `make corpus-status` / `corpus-report` | Real, available and manual-pending counts against the 500 target |
 | `make corpus-harvest` / `corpus-download` | Network, 1 request/s, stops on a block |

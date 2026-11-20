@@ -11,7 +11,7 @@ from datetime import UTC, date, datetime
 from decimal import Decimal
 from typing import Any
 
-from sqlalchemy import func, select
+from sqlalchemy import CursorResult, func, inspect, select, text
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import StaleDataError
 
@@ -33,6 +33,7 @@ from .models import (
     StageRun,
     User,
 )
+from .reads import DELETED, verify_chain
 
 DECISIONS = {"approve": "APPROVED", "reject": "REJECTED", "return": "RETURNED"}
 FINAL = frozenset({"APPROVED", "REJECTED"})  # APR-04: nothing reopens these
@@ -54,7 +55,8 @@ def append_audit(
     event_type: str,
     payload: dict[str, Any],
 ) -> AuditLog:
-    """Next link of the chain. BEGIN IMMEDIATE (session.py) serialises writers, so seq is safe."""
+    """Next link of the chain. BEGIN IMMEDIATE (SQLite) or the write-lock row (MySQL, ADR 0039)
+    serialises writers, so seq is safe."""
     payload = canonical(payload)  # hash exactly what the JSON column will read back
     last = s.execute(select(AuditLog).order_by(AuditLog.seq.desc()).limit(1)).scalar_one_or_none()
     seq = 1 if last is None else last.seq + 1
@@ -172,10 +174,135 @@ def add_user(
         emp_id=emp_id,
         password_hash=password_hash,
         active=True,
+        created_at=_now(),
     )
     s.add(user)
     s.flush()
     return user
+
+
+# ---- accounts (ADR 0038) ------------------------------------------------------------------------
+ACCOUNT_EVENTS = frozenset(
+    {
+        "USER_CREATED",
+        "USER_ROLE_CHANGED",
+        "USER_DISABLED",
+        "USER_ENABLED",
+        "PASSWORD_RESET",
+        "PASSWORD_CHANGED",
+        "MFA_ENROLLED",
+        "MFA_RESET",
+        "BACKUP_CODE_USED",
+        "LOGIN_FAILED",
+        "SIGNED_OUT",
+    }
+)
+# What an account change may set, and what its audit payload may say: never a hash, a code or a
+# secret (only the field names that changed).
+_USER_FIELDS = frozenset(
+    {
+        "role",
+        "active",
+        "display_name",
+        "password_hash",
+        "must_change_password",
+        "mfa_enabled",
+        "mfa_secret",
+        "mfa_last_step",
+        "mfa_backup",
+    }
+)
+_ACCOUNT_PAYLOAD = frozenset({"user_id", "username", "role", "from_role", "by", "reason"})
+
+
+def create_user(
+    s: Session,
+    *,
+    tenant_id: str,
+    actor: str,
+    username: str,
+    role: str,
+    password_hash: str,
+    display_name: str | None = None,
+    emp_id: str | None = None,
+    must_change_password: bool = True,
+) -> User:
+    """An account made by an admin (or the bootstrap command): temporary password, audited."""
+    # Usernames are global: sign-in names no tenant, so one name is one person everywhere.
+    if s.scalar(select(User.id).where(User.username == username)) is not None:
+        raise ConflictError(f"username {username} is taken")
+    if emp_id is not None and s.scalar(  # one login per HR profile (ONB-01)
+        select(User.id).where(User.tenant_id == tenant_id, User.emp_id == emp_id)
+    ):
+        raise ConflictError(f"HR id {emp_id} is already bound to another user")
+    user = add_user(
+        s,
+        user_id=f"u-{uuid.uuid4().hex[:12]}",
+        tenant_id=tenant_id,
+        username=username,
+        role=role,
+        password_hash=password_hash,
+        emp_id=emp_id,
+    )
+    user.display_name, user.must_change_password = display_name, must_change_password
+    s.flush()
+    append_audit(
+        s,
+        tenant_id=tenant_id,
+        case_id=None,
+        actor=actor,
+        event_type="USER_CREATED",
+        payload={"user_id": user.id, "username": username, "role": role},
+    )
+    return user
+
+
+def update_user(
+    s: Session,
+    *,
+    user_id: str,
+    tenant_id: str,
+    actor: str,
+    changes: Mapping[str, Any],
+    event_type: str | None = None,
+    payload: Mapping[str, Any] | None = None,
+    revoke: bool = False,
+) -> User:
+    """Apply allow-listed changes; `revoke` bumps token_version so every issued token dies at once;
+    `event_type` (an ACCOUNT_EVENTS name) appends one audit row naming the fields, not values."""
+    user = s.get(User, user_id)
+    if user is None or user.tenant_id != tenant_id:
+        raise ConflictError(f"no user {user_id}")
+    unknown = set(changes) - _USER_FIELDS
+    if unknown:
+        raise ValueError(f"not an account field: {sorted(unknown)}")
+    for key, value in changes.items():
+        setattr(user, key, value)
+    if revoke:
+        user.token_version = (user.token_version or 0) + 1
+    user.updated_at = _now()
+    s.flush()
+    if event_type is not None:
+        if event_type not in ACCOUNT_EVENTS:
+            raise ValueError(f"not an account event: {event_type}")
+        body = {k: v for k, v in (payload or {}).items() if k in _ACCOUNT_PAYLOAD}
+        body |= {"user_id": user.id, "username": user.username, "fields": sorted(changes)}
+        append_audit(
+            s, tenant_id=tenant_id, case_id=None, actor=actor, event_type=event_type, payload=body
+        )
+    return user
+
+
+def account_event(
+    s: Session, *, tenant_id: str, actor: str, event_type: str, payload: Mapping[str, Any]
+) -> None:
+    """An account event with no field change (a failed login): same allow-list as update_user."""
+    if event_type not in ACCOUNT_EVENTS:
+        raise ValueError(f"not an account event: {event_type}")
+    body = {k: v for k, v in payload.items() if k in _ACCOUNT_PAYLOAD}
+    append_audit(
+        s, tenant_id=tenant_id, case_id=None, actor=actor, event_type=event_type, payload=body
+    )
 
 
 def create_case(
@@ -257,6 +384,7 @@ def record_decision(
     return_stage: str | None,
     comment: str,
     warnings: list[str] | None = None,
+    attested: bool = False,
 ) -> Approval:
     """APR-04: insert-only approval + case status + audit, at the case version the approver saw.
 
@@ -315,6 +443,7 @@ def record_decision(
             "comment": comment,
             "case_version": expected_version,
             "evidence_warnings": warnings or [],  # what the approver was shown (ADR 0023)
+            "attested": attested,  # P9: "I reviewed the Critic findings" (plan v3.4 §6, ASI09)
         },
     )
     return approval
@@ -464,6 +593,9 @@ def store_case_file(
 
     `sha256` is the hash of the bytes as uploaded, so the file can be matched to its source.
     """
+    found = s.scalar(select(Case.status).where(Case.tenant_id == tenant_id, Case.id == case_id))
+    if found == DELETED:  # ADR 0025: nothing is written into a tombstone
+        raise ConflictError(f"case {case_id} is deleted")
     digest = sha256
     row = CaseFile(
         tenant_id=tenant_id,
@@ -555,3 +687,58 @@ def add_chat_message(
             created_at=_now(),
         )
     )
+
+
+# ADR 0025: content tables a delete clears; ledger_facts, approvals and audit_log are append-only
+# and stay. Children first (foreign keys are ON).
+_CASE_CONTENT = (
+    "chat_messages",
+    "stage_runs",
+    "jobs",
+    "case_files",
+)
+
+
+def _rows(s: Session, sql: str, params: dict[str, str]) -> int:
+    result: CursorResult[Any] = s.execute(text(sql), params)  # type: ignore[assignment]
+    return int(result.rowcount)
+
+
+def delete_case(
+    s: Session, *, tenant_id: str, case_id: str, expected_version: int, actor: str
+) -> dict[str, int]:
+    """Scope #39, ADR 0025: remove the case content, keep the append-only record, leave a
+    tombstone, append CASE_DELETED, and re-verify the chain before commit (fail closed)."""
+    case = s.scalar(select(Case).where(Case.tenant_id == tenant_id, Case.id == case_id))
+    if case is None or case.status == DELETED:
+        raise ConflictError(f"no case {case_id}")
+    if case.row_version != expected_version:
+        raise ConflictError(f"case changed (version {case.row_version}, not {expected_version})")
+    params = {"t": tenant_id, "c": case_id}
+    removed: dict[str, int] = {}
+    for table in _CASE_CONTENT:  # constant names; ids are bound parameters
+        sql = f"DELETE FROM {table} WHERE tenant_id = :t AND case_id = :c"  # noqa: S608  # nosec B608
+        removed[table] = _rows(s, sql, params)
+    present = set(inspect(s.connection()).get_table_names())  # SQLite or MySQL (ADR 0039)
+    for table in ("checkpoints", "writes"):  # LangGraph state for the case thread, if it ran
+        if table in present:
+            sql = f"DELETE FROM {table} WHERE thread_id = :th"  # noqa: S608  # nosec B608
+            removed[table] = _rows(s, sql, {"th": f"{tenant_id}:{case_id}"})
+    case.status, case.current_stage = DELETED, None
+    case.msme_name = case.order_ref = "[deleted]"
+    try:
+        s.flush()
+    except StaleDataError as exc:
+        raise ConflictError("case changed concurrently") from exc
+    append_audit(
+        s,
+        tenant_id=tenant_id,
+        case_id=case_id,
+        actor=actor,
+        event_type="CASE_DELETED",
+        payload={"case_version": expected_version, "removed": removed},
+    )
+    s.flush()
+    if broken := verify_chain(s, tenant_id):
+        raise ConflictError(f"audit chain broken at {broken[:5]}; nothing deleted")
+    return removed

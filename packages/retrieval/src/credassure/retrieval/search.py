@@ -21,6 +21,7 @@ from typing import Any, Literal
 
 from chromadb.api import ClientAPI
 
+from credassure.retrieval import glossary
 from credassure.retrieval.chunking import Embed
 from credassure.retrieval.index import collection, date_key
 from credassure.security.pii import redact
@@ -42,12 +43,17 @@ class Filters:
 
 
 def _own(f: Filters) -> tuple[str, dict[str, Any]]:
-    """SQL for "this KFS was uploaded to the case" (exact text: doc_id and sha both match)."""
+    """SQL for "this KFS was uploaded to the case" (exact text: doc_id and sha both match), and
+    the document is shared (tenant NULL) or this tenant's: another tenant's KFS never matches,
+    even with the same id and bytes (SUP-08, BR-14). Binds ``:tenant_id`` from the caller."""
     if not f.own_kfs:
         return "0", {}
     names = {f"own{i}": v for i, v in enumerate(sorted(f.own_kfs))}
     marks = ", ".join(":" + n for n in names)
-    return f"(d.collection = 'kfs' AND d.doc_id || '@' || d.sha256 IN ({marks}))", names
+    return (
+        f"(d.collection = 'kfs' AND d.doc_id || '@' || d.sha256 IN ({marks})"
+        " AND (d.tenant_id IS NULL OR d.tenant_id = :tenant_id))"
+    ), names
 
 
 @dataclass(frozen=True)
@@ -119,11 +125,19 @@ class Searcher:
         as_of: date | None = None,
         tenant_id: str | None = None,
         ablation: str | None = None,
+        query_rewrite: bool = False,
+        min_score: float | None = None,
+        rerank_order: bool = True,
     ) -> None:
         self._db, self._chroma, self._embed = Path(corpus_db), chroma, embed
         self.reranker, self.strategy, self.as_of = reranker, strategy, as_of
         self.tenant_id = tenant_id
         self.ablation = ablation  # A3: semantic top five only (BRD §12)
+        self.query_rewrite = query_rewrite  # scope #62: glossary expansion, no model call
+        self.min_score = min_score  # scope #63: answerability gate on the best reranker score
+        # P4 ladder (2026-11-18): reranking cut dev recall@5 from 17/20 to 11/20, so with this off
+        # the reranker only scores (for the gate) and the hybrid order is kept (user decision).
+        self.rerank_order = rerank_order
 
     def _connect(self) -> sqlite3.Connection:
         return sqlite3.connect(f"file:{self._db}?mode=ro", uri=True)
@@ -191,7 +205,12 @@ class Searcher:
         if not query.strip() or self._chroma is None or self._embed is None:
             return []  # keyword-only searcher (no vector store configured)
         own_docs = sorted({o.split("@", 1)[0] for o in f.own_kfs})
-        mine: list[dict[str, Any]] = [{"doc_id": {"$in": own_docs}}] if own_docs else []
+        tenants = ["", tenant_id] if tenant_id else [""]  # "" = shared (tenant NULL)
+        mine: list[dict[str, Any]] = (
+            [{"$and": [{"doc_id": {"$in": own_docs}}, {"tenant_id": {"$in": tenants}}]}]
+            if own_docs
+            else []
+        )
         scope: list[dict[str, Any]] = [{"case_id": ""}, *mine]
         if case_id and tenant_id:
             scope.append({"$and": [{"case_id": case_id}, {"tenant_id": tenant_id}]})
@@ -276,18 +295,54 @@ class Searcher:
         k: int = 5,
         rerank: bool = True,
     ) -> list[Passage]:
+        """Top passages. With an answerability threshold set and the reranker on, a result whose
+        best score is below the threshold is empty, so the copilot abstains (CP-02, scope #63)."""
+        scored = self.scored(
+            query,
+            case_id=case_id,
+            tenant_id=tenant_id,
+            filters=filters,
+            strategy=strategy,
+            mode=mode,
+            k=DEPTH,  # the gate reads the best score over every candidate, as the curve measured
+            rerank=rerank,
+        )
+        scores = [score for _, score in scored if score is not None]
+        if self.min_score is not None and scores and max(scores) < self.min_score:
+            return []
+        scored = scored[:k]
+        return [p for p, _ in scored]
+
+    def scored(
+        self,
+        query: str,
+        *,
+        case_id: str | None = None,
+        tenant_id: str | None = None,
+        filters: Filters,
+        strategy: str | None = None,
+        mode: Mode = "hybrid",
+        k: int = 5,
+        rerank: bool = True,
+    ) -> list[tuple[Passage, float | None]]:
+        """(passage, reranker score or None) in rank order. Search reads the glossary-expanded
+        query when rewrite is on; the reranker always scores the user's own words."""
         strategy = strategy or self.strategy
+        expanded = glossary.rewrite(query) if self.query_rewrite else query
         rankings = []
         if mode in ("keyword", "hybrid"):
-            rankings.append(self.keyword(query, case_id, tenant_id, filters, strategy, DEPTH))
+            rankings.append(self.keyword(expanded, case_id, tenant_id, filters, strategy, DEPTH))
         if mode in ("dense", "hybrid"):
-            rankings.append(self.dense(query, case_id, tenant_id, filters, strategy, DEPTH))
+            rankings.append(self.dense(expanded, case_id, tenant_id, filters, strategy, DEPTH))
         passages = self._passages(rrf(rankings)[:DEPTH], case_id, tenant_id, filters)
         if rerank and self.reranker and passages:
             scores = self.reranker(query, [p.text for p in passages])
             order = sorted(range(len(passages)), key=lambda i: -scores[i])
-            passages = [passages[i] for i in order]
-        return passages[:k]
+            if not self.rerank_order:  # score only: keep the hybrid order, carry the scores
+                order = list(range(len(passages)))
+            ranked: list[tuple[Passage, float | None]] = [(passages[i], scores[i]) for i in order]
+            return ranked[:k]
+        return [(p, None) for p in passages[:k]]
 
     def resolve(
         self, ids: Sequence[str], case_id: str | None, filters: Filters
@@ -355,7 +410,8 @@ def resolve(
             # missing, so a citation cannot probe whether another case's document exists.
             exists = con.execute(
                 (_CHUNK_DOC if chunk else _DOC).format(own=own),
-                {"c": cid, "case": case_id, "tenant": tenant_id} | own_params,
+                {"c": cid, "case": case_id, "tenant": tenant_id, "tenant_id": tenant_id}
+                | own_params,
             ).fetchone()
             doc_id = str(exists[0]) if exists else cid.split("#", 1)[0]
             if exists is None:

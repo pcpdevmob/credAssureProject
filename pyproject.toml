@@ -22,6 +22,7 @@ dev = [
     "types-pyyaml>=6",
     "numpy-financial>=1.0",  # evaluation/gold only, never imported by packages/engines
     "types-openpyxl>=3.1",
+    "schemathesis>=4,<5",  # scope #51: API fuzzing against openapi.json
 ]
 
 [tool.uv]
@@ -37,6 +38,7 @@ members = [
     "agents/critic",
     "agents/copilot",
     "packages/core",
+    "packages/guardrails",
     "packages/engines",
     "packages/ledger",
     "packages/llm",
@@ -98,6 +100,7 @@ mypy_path = [
     "packages/reports/src",
     "packages/retrieval/src",
     "packages/security/src",
+    "packages/guardrails/src",
     "packages/tools/src",
     "packages/lender-sim/src",
     "evaluation/src",

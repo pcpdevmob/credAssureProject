@@ -51,11 +51,22 @@ class Settings(BaseSettings):
     llm_rate_per_minute: float = Field(default=60.0, gt=0)  # shared per team (NFR-04)
     llm_cache_path: str | None = "var/llm_cache.db"  # unset/empty turns the response cache off
     llm_enabled: bool = True
+    # Scope #17, ADR 0015: answer only from replies recorded in LLM_CACHE_PATH by a live run
+    replay_mode: bool = False
     embed_base_url: str | None = None
     embed_model: str | None = None
     reranker: Literal["none", "local_cross_encoder", "llm_pointwise"] = "none"
     reranker_model: str = "BAAI/bge-reranker-base"
     reranker_revision: str = "2cfc18c9415c912f9d8155881c133215df768a70"  # pinned (ADR 0013)
+    # Plan v3.4 P4 (scope #62, #63): off until tuned on the retrieval dev split
+    retrieval_query_rewrite: bool = False  # deterministic glossary expansion (config/glossary.yaml)
+    answerability_threshold: float | None = None  # abstain when the top reranker score is lower
+    rerank_order: bool = (
+        True  # false = the reranker only scores for the gate (P4 ladder, user decision)
+    )
+    # P11: the copilot reads its k passages primary instruments first (retrieval.source_priority);
+    # off until the retrieval dev split shows a gain (scripts/copilot_dev_citations.py)
+    source_priority: bool = False
 
     tracing_enabled: bool = True
     langfuse_host: str = "http://localhost:3000"
@@ -63,6 +74,11 @@ class Settings(BaseSettings):
     langfuse_secret_key: SecretStr | None = None
 
     case_db: Path = Path("var/case.db")
+    # ADR 0039: case.db on MySQL 8 (`mysql+pymysql://user:pass@host/db`, database created with
+    # utf8mb4_bin). Unset = the SQLite file above (dev, tests, evaluation). hr.db and corpus.db stay
+    # SQLite; LangGraph checkpoints then go to `checkpoint_db` (a SQLite file next to the gateway).
+    case_database_url: SecretStr | None = None
+    checkpoint_db: Path = Path("var/checkpoints.db")
     hr_db: Path = Path("data/frozen/v1/hr.db")  # opened read-only (ONB-05)
     seed_password: SecretStr | None = None  # demo users only (make db); tests pass their own
     rate_limit: str = "120/minute"  # per user (JWT sub), else per client IP (NFR-04)
@@ -71,22 +87,39 @@ class Settings(BaseSettings):
 
     jwt_secret: SecretStr | None = None
     jwt_expiry_minutes: int = Field(default=30, gt=0, le=30)
+    # H12: POST /v1/auth/refresh renews a valid token until this long after the password was typed
+    jwt_session_max_minutes: int = Field(default=240, gt=0, le=720)
+    # ADR 0038: TOTP second factor. The secret is sealed at rest with this key (base64 of 32 random
+    # bytes: `python -c "import os,base64;print(base64.b64encode(os.urandom(32)).decode())"`).
+    mfa_encryption_key: SecretStr | None = None
+    mfa_required_roles: str = "director_finance,vp_finance,user_admin"
+    # None = on everywhere except APP_ENV=test; the eval and red-team runners pass False so the
+    # frozen evaluation keeps signing in with a password only.
+    mfa_enforced: bool | None = None
     ui_origins: str = "http://localhost:3000,http://localhost:5173"
 
     gst_rate: Decimal = Decimal("0.18")
     # S22 reference rates (R-RATE-02), loaded once at startup; engines never read the file.
     reference_rates_file: Path = Path("data/reference/reference_rates.yaml")
-    lender_scripts_dir: Path = Path("data/frozen/v1/lender_scripts")  # S05, lender simulator
+    lender_scripts_dir: Path = Path("data/frozen/v2/lender_scripts")  # S05 v2, ADR 0037
     corpus_db: Path = Path("var/corpus.db")  # Critic citation checks (VER-02), opened read-only
     corpus_manifest: Path = Path("data/corpus/manifest.yaml")  # superseded but unindexed docs
     # Copilot search (9e): the vector store and embedder are the ingest's (CHROMA_PATH, EMBED_*);
     # "keyword" runs BM25 only (tests, or no vector store).
     chroma_path: Path = Path("var/chroma")
+    eval_dir: Path = Path("var/eval")  # P9 scorecards: `make eval` run folders (read-only)
+    baseline_dir: Path = Path("evaluation/baseline/results")  # `make baseline` S1-S3 results
     copilot_search_mode: Literal["hybrid", "keyword"] = "hybrid"
+    # ADR 0035: product help the copilot cites (docs/help, L5), indexed in memory at start.
+    help_dir: Path = Path("docs/help")
+    # CP-11: redacted messages replayed to the model, per user and case (a question and its
+    # answer are two). 0 turns memory off. Never crosses cases or people.
+    copilot_memory_messages: int = Field(default=8, ge=0, le=20)
     home_state: str = "IN-MH"  # ADR 0019 jurisdiction filter
     apr_convention: Literal["nominal", "effective"] = "nominal"
     boundary_rule: Literal["hold", "director", "vp"] = "hold"
     approval_threshold_paise: int = Field(default=1_500_000_000, gt=0)
+    approval_step_up: bool = True  # NFR-07: approving above ₹1.5 crore re-checks the password
     forecast_weeks: int = Field(default=26, gt=0)
     agent_max_steps: int = Field(default=10, gt=0, le=10)
     token_cap_per_stage: int = Field(default=6000, gt=0)
@@ -95,15 +128,39 @@ class Settings(BaseSettings):
 
     feature_stretch: bool = False
     planner_mode: Literal["fixed", "llm_proposes"] = "fixed"
-    ablation: Literal["A1", "A2", "A3", "A4", "A5"] | None = None
+    ablation: Literal["A1", "A2", "A3", "A4", "A5", "A6"] | None = None
 
-    @field_validator("ablation", "llm_ca_cert", mode="before")
+    @field_validator(
+        "ablation", "llm_ca_cert", "mfa_encryption_key", "case_database_url", mode="before"
+    )
     @classmethod
     def _empty_is_unset(cls, value: object) -> object:
         return None if value == "" else value
 
+    @property
+    def case_target(self) -> Path | str:
+        """What case_engine and migrate open: the MySQL URL if set, else the SQLite file."""
+        url = self.case_database_url
+        return url.get_secret_value() if url is not None else self.case_db
+
+    @property
+    def checkpoints_path(self) -> Path:
+        """LangGraph state: inside case.db on SQLite (as before), its own file beside MySQL."""
+        return self.checkpoint_db if self.case_database_url is not None else self.case_db
+
     @model_validator(mode="after")
     def _fail_closed(self) -> Self:
+        if self.app_env == "demo" and self.ablation == "A6":  # rails off never in a demo
+            raise ValueError("ABLATION=A6 (guardrails off) is refused in the demo profile")
+        if self.replay_mode and not self.llm_cache_path:
+            raise ValueError("REPLAY_MODE=true needs LLM_CACHE_PATH (the recorded replies)")
+        if self.mfa_encryption_key is not None:  # a malformed key fails at startup, not at login
+            from credassure.security.mfa import MfaError, load_key
+
+            try:
+                load_key(self.mfa_encryption_key.get_secret_value())
+            except MfaError as exc:
+                raise ValueError(str(exc)) from exc
         if self.app_env == "test":
             return self
         problems: list[str] = []
@@ -114,9 +171,19 @@ class Settings(BaseSettings):
             problems.append(f"JWT_SECRET must be at least {MIN_JWT_SECRET_LENGTH} characters")
         if self.llm_enabled and not self.llm_base_url:
             problems.append("LLM_BASE_URL is required when LLM_ENABLED=true")
+        if self.mfa_on and not self.mfa_encryption_key:
+            problems.append("MFA_ENCRYPTION_KEY is required while MFA is enforced (ADR 0038)")
         if problems:
             raise ValueError("; ".join(problems))
         return self
+
+    @property
+    def mfa_on(self) -> bool:
+        return self.app_env != "test" if self.mfa_enforced is None else self.mfa_enforced
+
+    def mfa_required_for(self, role: str) -> bool:
+        wanted = {r.strip() for r in self.mfa_required_roles.split(",") if r.strip()}
+        return self.mfa_on and role in wanted
 
     @property
     def ui_origin_list(self) -> list[str]:

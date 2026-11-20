@@ -5,7 +5,7 @@
 /** Money as the gateway sends it. */
 export type Money = { paise: number; display: string };
 /** A figure on screen: the exact display string, its paise when known, and the ledger key that explains it. */
-export type Fig = { display: string; paise?: number; key?: string };
+export type Fig = { display: string; paise?: number; key?: string; version?: number };
 
 const LAKH = 100_000n * 100n; // in paise
 const CRORE = 100n * LAKH;

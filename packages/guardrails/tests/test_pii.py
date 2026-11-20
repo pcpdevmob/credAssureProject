@@ -8,7 +8,7 @@ from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from credassure.core.money import format_inr
-from credassure.security import pii
+from credassure.guardrails import pii
 
 
 def aadhaar(body11: str) -> str:

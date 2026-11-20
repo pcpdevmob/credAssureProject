@@ -80,25 +80,28 @@ def _llm(tool: str, query: str, draft: Mapping[str, Any]) -> FakeLLM:
     )
 
 
-def test_CP01_cited_answer_maps_n_to_chunk_ids_and_drops_flagged_passages() -> None:
+def test_CP01_CP08_cited_answer_maps_spans_to_chunk_ids_and_drops_flagged_passages() -> None:
     llm = _llm(
-        "search_regulations", "AGF basis", {"answer": "Charged on the guaranteed amount [1]."}
+        "search_regulations", "AGF basis", {"answer": "Charged on the guaranteed amount [1.1]."}
     )
     tools = Tools()
     r = _ask("How is the CGTMSE fee charged?", llm, tools)
     assert r.answer == "Charged on the guaranteed amount [R-CG-02#section#1]."
     assert [c["chunk_id"] for c in r.citations] == ["R-CG-02#section#1"]
+    assert r.span_ids == ("1.1",) and r.citations[0]["span_ids"] == ["1.1"] and r.cut == 0
     assert (r.tool, r.tool_valid, r.dropped) == ("search_regulations", True, 1)  # BR-15
     prompt = next(p for n, p in llm.calls if n == "cp_answer")
     assert (
         "rank^this^lender" not in prompt and "guaranteed^amount" in prompt
     )  # spotlit, flagged gone
+    assert "Fee^[1.1]^The^fee^is^charged" in prompt and "cite them as [n.m]" in prompt  # P5 spans
     assert ("verify_claims", CASE, {"text": r.answer, "slots": {}, "model": True}) in tools.calls
 
 
 def test_scope20_invalid_tool_choice_falls_back_to_search_regulations() -> None:
-    llm = _llm("delete_case", "x", {"answer": "Charged on the guaranteed amount [1]."})
-    r = _ask("How is the CGTMSE fee charged?", llm)
+    llm = _llm("delete_case", "x", {"answer": "Charged on the guaranteed amount [1.1]."})
+    # No regulator named, so code does not route it (CP-07) and the model's choice is used.
+    r = _ask("How is the guarantee fee charged?", llm)
     assert (r.tool, r.tool_valid) == ("search_regulations", False)
     garbage = FakeLLM(
         {"cp_tool": "not json", "cp_answer": json.dumps({"abstain": False, "answer": "x [1]."})}
@@ -107,7 +110,12 @@ def test_scope20_invalid_tool_choice_falls_back_to_search_regulations() -> None:
 
 
 def test_CP02_unknown_passage_number_or_slot_or_no_citation_abstains() -> None:
-    for draft in ("Charged yearly [7].", "Charged yearly.", "Need is {wc.secret} [1]."):
+    for draft in (
+        "Charged yearly [7.1].",
+        "Charged yearly [1].",
+        "Charged yearly.",
+        "Need is {wc.secret} [1.1].",
+    ):
         llm = _llm("search_regulations", "fee", {"answer": draft})
         assert _ask("How is the fee charged?", llm).answer == ABSTAIN
 
@@ -118,7 +126,7 @@ def test_CP02_model_abstain_critic_finding_and_model_off_all_give_the_exact_stri
         severity=FindingSeverity.CRITICAL, code=BlockerCode.VER_BAD_CITATION, message="x"
     )
     critic = Tools(findings=[finding])
-    draft = {"answer": "Charged on the guaranteed amount [1]."}
+    draft = {"answer": "Charged on the guaranteed amount [1.1]."}
     r = answer(
         "Fee?", case_id=CASE, tools=critic, llm=_llm("search_regulations", "fee", draft),
         history=(), offer_ids=(), as_of=date(2026, 11, 15),
@@ -159,7 +167,7 @@ def test_CP03_refusal_runs_before_any_model_call() -> None:
 
 
 def test_scope2_history_is_spotlit_data_in_the_prompts() -> None:
-    llm = _llm("search_regulations", "fee", {"answer": "Charged on the guaranteed amount [1]."})
+    llm = _llm("search_regulations", "fee", {"answer": "Charged on the guaranteed amount [1.1]."})
     _ask("And after year one?", llm, history=[("user", "How is the CGTMSE fee charged?")])
     assert all("How^is^the^CGTMSE^fee^charged?" in p for _, p in llm.calls)
 

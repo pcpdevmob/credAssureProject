@@ -23,10 +23,9 @@ from credassure.ledger.session import case_engine, transaction
 from credassure.ledger.writes import append_audit
 
 TRIGGERS = ("ledger_facts", "approvals")
-# children first (foreign keys are ON); offer_evaluations hangs off offers
+# children first (foreign keys are ON)
 CHILDREN = (
     "chat_messages",
-    "negotiation_messages",
     "approvals",
     "ledger_facts",
     "stage_runs",
@@ -42,6 +41,8 @@ def _in(ids: list[str]) -> tuple[str, dict[str, str]]:
 
 
 def purge(s: Session, ids: list[str], *, dry_run: bool) -> dict[str, int]:
+    if s.get_bind().dialect.name != "sqlite":  # MySQL DDL commits implicitly: no atomic purge
+        raise SystemExit("purge_cases is SQLite-only (ADR 0039); use DELETE /v1/cases/{id}")
     marks, params = _in(ids)
     found = {r[0] for r in s.execute(text(f"SELECT id FROM cases WHERE id IN ({marks})"), params)}
     if missing := set(ids) - found:
@@ -57,12 +58,6 @@ def purge(s: Session, ids: list[str], *, dry_run: bool) -> dict[str, int]:
     tmarks = ", ".join(f":{k}" for k in threads)
 
     steps: list[tuple[str, str, dict[str, str]]] = [
-        (
-            "offer_evaluations",
-            f"offer_row_id IN (SELECT id FROM offers WHERE case_id IN ({marks}))",
-            params,
-        ),
-        ("offers", f"case_id IN ({marks})", params),
         *[(t, f"case_id IN ({marks})", params) for t in CHILDREN],
         ("checkpoints", f"thread_id IN ({tmarks})", threads),
         ("writes", f"thread_id IN ({tmarks})", threads),

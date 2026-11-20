@@ -121,6 +121,10 @@ class SupervisorPort(Protocol):
 
     def chat(self, actor: Any, case_id: str, message: str) -> dict[str, Any]: ...
 
+    def retry_stage(
+        self, actor: Any, case_id: str, stage: str, *, schedule: Callable[..., Any]
+    ) -> dict[str, Any]: ...
+
 
 class UnavailableSupervisor:
     """Default dependency in each agent's api/deps.py; the gateway overrides it."""
@@ -152,4 +156,9 @@ class UnavailableSupervisor:
         raise NotImplementedError("supervisor not wired")
 
     def chat(self, actor: Any, case_id: str, message: str) -> dict[str, Any]:
+        raise NotImplementedError("supervisor not wired")
+
+    def retry_stage(
+        self, actor: Any, case_id: str, stage: str, *, schedule: Callable[..., Any]
+    ) -> dict[str, Any]:
         raise NotImplementedError("supervisor not wired")

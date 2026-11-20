@@ -14,6 +14,8 @@ Code then routes the proposal: above ₹1.5 crore to the VP, Finance; below to t
 
 Requirements: [docs/requirements/BRD.md](docs/requirements/BRD.md) · Architecture: [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md) · Progress: [PROGRESS.md](PROGRESS.md)
 
+Responsible AI and security: [System card](docs/SYSTEM_CARD.md) · [Threat model](docs/THREAT_MODEL.md) · [OWASP LLM + ASI mapping](docs/security/owasp-asi-mapping.md) · Operations: [Runbook](docs/deployment/RUNBOOK.md) · Team: [CONTRIBUTIONS.md](CONTRIBUTIONS.md) · Changes: [CHANGELOG.md](CHANGELOG.md)
+
 ---
 
 ## Contents
@@ -26,15 +28,16 @@ Requirements: [docs/requirements/BRD.md](docs/requirements/BRD.md) · Architectu
 7. [Run the app](#7-run-the-app)
 8. [Tests and quality checks](#8-tests-and-quality-checks)
 9. [Evaluation](#9-evaluation)
-10. [Working with Claude Code](#10-working-with-claude-code)
-11. [Troubleshooting](#11-troubleshooting)
-12. [Repository layout](#12-repository-layout)
-13. [Status, data and licences](#13-status-data-and-licences)
+10. [Working with Claude Code](#10-working-with-claude-code-cursor-or-other-ai-tools)
+11. [Team workflow: branches, PRs and progress](#11-team-workflow-branches-prs-and-progress)
+12. [Troubleshooting](#12-troubleshooting)
+13. [Repository layout](#13-repository-layout)
+14. [Status, data and licences](#14-status-data-and-licences)
 
 **Quick start** (after §2–§3):
 ```bash
-make install && npm install
-make data && make db && make ingest
+make install && npm ci
+make hr-db && make db && make ingest          # data/frozen/v1 is committed (frozen); hr-db rebuilds hr.db
 OLLAMA_CONTEXT_LENGTH=8192 ollama serve      # terminal 1
 make run-api                                 # terminal 2 → http://localhost:8000/docs
 make run-ui                                  # terminal 3 → http://localhost:3000
@@ -64,7 +67,7 @@ Shared code: `packages/core` (contracts, `AgentResult` per ADR 0018, ports, erro
 | git | any recent | Xcode CLT | |
 | uv | latest | `curl -LsSf https://astral.sh/uv/install.sh \| sh` | Manages Python and the workspace |
 | Python | 3.12 | `uv python install 3.12` | Don't use the system Python |
-| Node.js + **npm** | Node 20 LTS | `brew install node@20` or nvm | The Makefile uses npm workspaces. Don't use yarn, and don't run `corepack enable` |
+| Node.js + **npm** | Node 22 LTS (≥ 22.12; vitest 5 needs it) | `brew install node@22` or nvm | The Makefile uses npm workspaces. Don't use yarn, and don't run `corepack enable` |
 | Ollama | latest | https://ollama.com/download | Local model (default) |
 | Docker + Compose | optional | Docker Desktop | Langfuse tracing and the containerised stack |
 | make, openssl, sqlite3 | system | preinstalled on macOS | |
@@ -74,7 +77,7 @@ Hardware: a 16 GB Apple Silicon Mac runs `qwen3:8b` fully on the GPU at an 8K co
 | Port | Service |
 |---|---|
 | 8000 | Gateway API (`make run-api`), Swagger at `/docs` |
-| 3000 | Web app (`make run-ui`) **and** Langfuse (Compose). They clash; see §11 |
+| 3000 | Web app (`make run-ui`) **and** Langfuse (Compose). They clash; see §12 |
 | 5173 | Web container (`make up`), or the UI's second dev port |
 | 11434 | Ollama |
 | 8001 / 3001 | Isolated e2e API / web |
@@ -111,8 +114,8 @@ Rules:
 ## 4. Install
 
 ```bash
-make install     # uv sync --all-packages: every workspace member + dev group
-npm install      # npm workspaces: apps/web and packages/api-client
+make install     # uv sync --all-packages --all-extras: every member, dev group, extras (rerank)
+npm ci           # npm workspaces from package-lock.json (npm install would rewrite the lock)
 uv run pre-commit install   # optional: ruff, mypy, bandit, gitleaks on commit
 ```
 
@@ -167,7 +170,7 @@ Add `MODELS=course` to **every** target that touches the model. Only set `LLM_SU
 ## 6. Data: databases, corpus, demo cases
 
 ```bash
-make data         # seeded synthetic data -> data/frozen/v1 + hr.db (idempotent; frozen files are hook-protected)
+make hr-db        # rebuild the gitignored hr.db from frozen hr/profiles.json (data/frozen/v1 is committed; `make data` refuses once frozen)
 make db           # migrate var/case.db + var/corpus.db, seed users into tenant "demo"
 make ingest       # chunk + embed the corpus into var/corpus.db (FTS5) + Chroma; re-runnable
 make demo-reset   # rebuild the demo cases. STOP `make run-api` FIRST
@@ -238,13 +241,21 @@ Sign in with your `SEED_PASSWORD`:
 
 Maker-checker: whoever prepares a case can't approve it. `prep.e0xx` users map to the 20 HR profiles, so some fail onboarding by design (expired training, wrong role and so on).
 
+### Author a case in Excel
+```bash
+make case-from-xlsx FILE=my_case.xlsx OUT=var/my_case   # validated like an upload; errors by tab, row, column
+make case-template                                      # regenerate data/templates/case_template.xlsx
+```
+Copy `data/templates/case_template.xlsx` (the shaded rows are the CA-2026-0016 demo example), fill it in, convert it,
+then upload the files from OUT. OUT can't be under `data/frozen/`. Details: [docs/help/case-authoring.md](docs/help/case-authoring.md).
+
 ### Tracing (Langfuse, self-hosted)
 ```bash
 cp deploy/env/langfuse.env.example deploy/env/langfuse.env   # replace every CHANGEME
 make langfuse-up             # UI on http://localhost:3000; create a project, put its keys in .env
 make langfuse-down
 ```
-Langfuse takes :3000, so run the web UI on 5173 meanwhile (§11). `TRACING_ENABLED=false` turns tracing off.
+Langfuse takes :3000, so run the web UI on 5173 meanwhile (§12). `TRACING_ENABLED=false` turns tracing off.
 
 ### Everything in Docker
 ```bash
@@ -255,13 +266,24 @@ make compose-demo            # gateway in demo mode + Langfuse
 make ollama-pull             # pulls into the Ollama container when it is running
 ```
 
+### Operations
+```bash
+make backup                          # online SQLite backup → var/backups/<time>/ (safe while the API runs)
+make restore FROM=var/backups/<dir>  # stop run-api first; verifies hashes, keeps a pre-restore copy
+make demo-reset                      # recreate the demo cases (stop run-api first)
+REPLAY_MODE=true make run-api        # demo fallback: recorded chat replies only, chat endpoint never called
+make release VERSION=1.0.0           # var/release/v1.0.0/: RELEASE.json, CycloneDX SBOM, eval reports
+make pin-images ARGS=--check         # list images not pinned to a digest (make pin-images pins them)
+```
+Incidents (endpoint down, quota, locked DB, corpus missing, demo reset): [docs/deployment/RUNBOOK.md](docs/deployment/RUNBOOK.md).
+
 ---
 
 ## 8. Tests and quality checks
 
 ```bash
-make check-fast    # ruff + tests not marked slow (the Claude stop hook runs this)
-make check         # ruff, ruff format, mypy --strict, pytest, corpus refs, bandit, import-linter. Must be green before commit
+make check-fast    # ruff + PROGRESS.md check + tests not marked slow (the Claude stop hook runs this)
+make check         # ruff, ruff format, mypy --strict, pytest (incl. the slow Schemathesis fuzz), corpus refs, bandit, import-linter, PROGRESS.md check. Must be green before commit
 make test          # full suite with coverage
 make audit         # pip-audit (accepted advisories: docs/security/risk-register.md)
 ```
@@ -299,7 +321,11 @@ make openapi && make client       # regenerates openapi.json and packages/api-cl
 | `make baseline` | Prompting strategies S1–S3 on the frozen 100-item test set |
 | `make copilot-live` | The 44 copilot items through the API on the configured model |
 | `make eval-fast` | Prompt change control: version-bump check + offline prompt subset |
-| `make eval` | Full 100-item harness (Phase 11, not yet implemented) |
+| `make eval` | Full 100-item harness through the API (`ARGS="--fake"` checks mechanics only) |
+| `make eval-ablations` | Ablations A1–A6 on the categories each affects |
+| `make eval-judge` / `make eval-kappa` | Judge J1 on free-text answers, then κ against the human-labelled 20% sample |
+| `make eval-report` | E13 report: full system vs best baseline, ablation effects (BRD §12 claim rule), failure taxonomy, cost |
+| `make load-smoke` | 10 concurrent demo cases; p95 per stage (Q6: funding < 60 s) |
 | `/eval E1 … E18` | Claude Code evaluation reports, saved to `evaluation/reports/` |
 | `/freeze-g1` | Writes `evaluation/FROZEN.sha256`, **only after** the human checks are done |
 
@@ -308,8 +334,9 @@ Frozen artefacts: the 100-item test set (25/10/15/15/5/6/8/8/3/5 by BRD §13 cat
 Current numbers (local `qwen3:8b`):
 - Onboarding **10/10**, cash flow **15/15**, LendWise offers **15/15**, negotiation **5/5**.
 - Copilot safety: refusal **8/8**, injection **8/8**, isolation **3/3**.
-- Retrieval recall@5: v1.0 **24/40**; silver strict **35/40**.
-- Copilot regulatory: **10/25**, limited by retrieval.
+- Retrieval recall@5: v1.0 **25/40** after contextual headers (P4 ladder); silver strict **35/40**.
+- Copilot regulatory: **10/25** before P5 (span-cited answers); the P5 strict and supported scores come from the next `make copilot-live`.
+- The 100-item score, ablations and safety_v2 are measured at Gate G4 (`make eval`, live model).
 
 The silver figure is high partly because silver labels and the retriever share signals; the human κ check measures that.
 
@@ -329,7 +356,7 @@ Open Claude Code in the repo root; it loads `CLAUDE.md` automatically.
 
 - **Build prompts:** `prompts/00–26` (phases), `CLAUDE_CODE_UI_PROMPT.md` (UI U0–U6), [docs/build/PHASE_PROMPTS.md](docs/build/PHASE_PROMPTS.md). One phase per session; stop at its gate.
 - **Commands:** `/status`, `/next`, `/phase <n>`, `/gate <G>`, `/eval <E#>`, `/review`, `/ui U<n>`, `/freeze-g1`.
-- **Progress:** `PROGRESS.md` is the single source of truth for done, open and deferred work.
+- **Progress:** read `PROGRESS.md` first; it is **generated**. Claude Code adds one entry file in `docs/progress/entries/`, updates the module file and runs `make progress`; `.claude/settings.json` denies hand edits of `PROGRESS.md` (§11).
 - **Subagents** (`.claude/agents/`): `brd-conformance`, `security-reviewer`, `money-auditor`, `test-writer`, `eval-analyst`.
 - **Hooks** (`.claude/hooks/`): `guard_paths.py` (blocks `.env`, certificates, raw corpus, frozen sets), `guard_bash.py` (blocks `git push`, recursive force delete, printing `.env`), `format_python.py`, `check_before_stop.py` (runs `make check-fast`).
 
@@ -343,7 +370,74 @@ Working rules:
 
 ---
 
-## 11. Troubleshooting
+## 11. Team workflow: branches, PRs and progress
+
+Six people work on different modules at the same time. Two rules keep that conflict-free: **everyone works on their own branch**, and **nobody edits `PROGRESS.md` by hand**.
+
+### Branches and pull requests
+| Rule | How |
+|---|---|
+| One branch per person and phase | `feature/<module>-<phase>`, e.g. `feature/copilot-p4`, created from an up-to-date `main` |
+| One PR per phase | Raised at the phase's stop point, after `make check` and the reviewer subagents pass |
+| Merge commits only | Squash and rebase are disabled in GitHub settings: evaluation reports and progress entries cite commit hashes, and squash or rebase would change them |
+| CI on every PR | `.github/workflows/ci.yml` (ADR 0028) runs `make check`, openapi-diff, eval-fast on prompt changes, audit and the web build — the same gates as `.githooks/pre-push` (ADR 0027) |
+| Resync after every merge | `git switch <your-branch> && git pull origin main` |
+| Claude Code never pushes | You review the diff, push, and open the PR |
+| Code owners review their module | `.github/CODEOWNERS` requires the module owner's approval |
+
+### Where progress lives
+| What | Where | Who edits |
+|---|---|---|
+| Live task status (who is doing what now) | **CredAssure Post-10b Plan** Sheet | Each owner, their own rows |
+| Evidence: commits, eval reports, decisions, open items | `docs/progress/` in the repo | Each owner, through their PR |
+| The combined view | `PROGRESS.md` | **Nobody: generated by `make progress`** |
+
+```
+docs/progress/
+  HISTORY.md          # everything up to 18 Nov 2026, frozen
+  modules/            # one file per module: owner, phases, status, open items
+    ui.md  copilot.md  auth.md  rai.md  guardrails.md  deployment.md  docs.md  evaluation.md
+  entries/            # one new file per PR, never edited by anyone else
+    TEMPLATE.md
+    2026-11-18-s1-1-progress-tracking-pritish.md
+  gates.md            # gate checklist, edited only when a gate is decided
+PROGRESS.md           # GENERATED — do not edit
+```
+
+### Entry file (one per PR)
+Name: `YYYY-MM-DD-<phase>-<step>-<slug>-<owner>.md`, copied from `entries/TEMPLATE.md`:
+```markdown
+---
+phase: P4
+step: "4.1"
+module: Copilot            # UI | Copilot | Authentication | Responsible AI |
+                           # AI Security and Guardrails | Deployment | Documentation | Evaluation
+owner: Suresh
+commits: [abc1234]
+evals: [E8]
+status: done               # done | in_progress | blocked
+---
+- Built: contextual headers on section chunks; one re-ingest; chunk_ids unchanged
+- Decisions: ADR 0028
+- Open: reranker waits for mentor approval
+```
+
+### Every PR, in order
+1. `git pull origin main` into your branch.
+2. Add **one** entry file in `docs/progress/entries/` and update **your own** module file in `docs/progress/modules/`.
+3. `make progress` to regenerate `PROGRESS.md`.
+4. `make check-fast`. It (and CI) fails if `PROGRESS.md` doesn't match the generated output, or if an entry's front matter is invalid.
+5. Commit, push, open the PR, and update your rows in the plan Sheet.
+
+### If `PROGRESS.md` conflicts during a merge
+Don't resolve it by hand. Take either side, run `make progress`, and commit the regenerated file. Entry and module files can't conflict, because each one is written by only one person.
+
+### Claude Code
+`CLAUDE.md` and every `prompts/*.md` tell Claude Code to write an entry file and update the module file, never `PROGRESS.md` itself. Each phase report it gives you should name the entry file it created.
+
+---
+
+## 12. Troubleshooting
 
 | Symptom | Cause | Fix |
 |---|---|---|
@@ -366,7 +460,7 @@ Working rules:
 
 ---
 
-## 12. Repository layout
+## 13. Repository layout
 
 ```
 CredAssure/
@@ -391,21 +485,24 @@ CredAssure/
 ├── deploy/                 # env profiles, Dockerfiles, compose, nginx, backup/restore scripts
 ├── docs/                   # requirements, architecture, adr, data, setup, security, ui, build
 ├── .claude/  .cursor/  .github/
-└── CLAUDE.md  PROGRESS.md  Makefile  pyproject.toml  package.json  openapi.json
+└── CLAUDE.md  PROGRESS.md (generated)  Makefile  pyproject.toml  package.json  openapi.json
 ```
 
 ---
 
-## 13. Status, data and licences
+## 14. Status, data and licences
 
 **Gates**
 - **G1:** provisionally frozen. Final after human judging and κ, the gold hand check, the APR second transcription, remaining owner names and the course baseline.
 - **G2:** passed (2026-11-15).
 - **G3, G4:** pending.
 
-**Done:** Phases 1–9e (Copilot CP-01 open on retrieval quality) and UI U1–U3.
+**Done:** Phases 1–10b, UI U0–U6 (U6 live checks pending: H15, H16), and plan v3.4 P0–P5 and P7–P10 (guardrails, copilot v2, evaluation harness,
+security and fairness, RAI UI, ship and RAI documents). Version **1.0.0** (`CHANGELOG.md`).
 
-**Next:** UI U4 and the demo pack, Phase 10 and G3, the course-endpoint switch, Phase 11, U5–U6, Phase 12, G4, the report.
+**Next:** the live runs on the model (E13 full evaluation, ablations, J1 κ, safety_v2 after its freeze, load smoke) for
+Gate G4 (P11), then the report, slides and demo (P12). P6 (course endpoint) waits for agreement. Open team decisions:
+[docs/plan/human-review.md](docs/plan/human-review.md).
 
 **Data**
 - All case, HR, offer and KFS data is **synthetic**.
@@ -422,19 +519,22 @@ CredAssure/
 - Third-party documents keep their own terms and are not redistributed in this repo.
 
 ### Feature flags
-Validated at startup by `apps/gateway/src/credassure/gateway/settings.py`; defaults are fail-safe.
+Validated at startup by `apps/gateway/src/credassure/gateway/settings.py`; defaults are fail-safe. Every setting is in
+[docs/setup/environment.md](docs/setup/environment.md) and `.env.example` (kept in sync by `test_settings.py`).
 
 | Variable | Default | Values | Effect |
 |---|---|---|---|
 | `APP_ENV` | `dev` | dev, test, demo | `test` relaxes the required-secret checks only |
 | `LLM_ENABLED` | `true` | bool | `false` = template fallbacks; `LLM_BASE_URL` then not required |
 | `TRACING_ENABLED` | `true` | bool | Langfuse tracing on/off (PII mask always applies) |
-| `RERANKER` | `none` | none, local_cross_encoder, llm_pointwise | ADR 0013 |
+| `RERANKER` | `none` | none, local_cross_encoder, llm_pointwise | ADR 0013, 0032 |
 | `APR_CONVENTION` | `nominal` | nominal, effective | ADR 0012 |
 | `BOUNDARY_RULE` | `hold` | hold, director, vp | Exactly ₹1.5 crore routing (APR-03) |
+| `APPROVAL_STEP_UP` | `true` | bool | Approving above ₹1.5 crore asks for the password again (NFR-07) |
 | `PLANNER_MODE` | `fixed` | fixed, llm_proposes | Scope #19; code validates any proposal |
 | `COPILOT_SEARCH_MODE` | `hybrid` | hybrid, keyword | Copilot retrieval |
 | `FEATURE_STRETCH` | `false` | bool | BRD §4.2 stretch items |
-| `ABLATION` | empty | A1..A5 | Evaluation only (BRD §12) |
+| `ABLATION` | empty | A1..A6 | Evaluation only (BRD §12); A6 (guardrails off) is refused in the demo profile |
+| `REPLAY_MODE` | `false` | bool | Demo fallback: recorded model replies only (ADR 0015) |
 
 > **Not financial or legal advice.** CredAssure is an academic prototype. Every proposal requires human approval, and the system never commits a business to a lender.

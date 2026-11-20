@@ -16,7 +16,7 @@ must be written into one of the shared files below.
 | Reviewers | Subagents in `.claude/agents/`: `brd-conformance`, `security-reviewer`, `money-auditor`, `test-writer`, `eval-analyst` | Ask the chat to review the diff against `.claude/agents/<name>.md` as a checklist | Same as Cursor |
 
 **Shared state (all tools):**
-- [PROGRESS.md](../../PROGRESS.md): the current phase, what's done (with requirement IDs), what's open, decisions and the next step.
+- [PROGRESS.md](../../PROGRESS.md): generated status (gates, latest step entries, modules, open items), built by `make progress` from `docs/progress/`; the history before 2026-11-18 is in `docs/progress/HISTORY.md`.
 - `agents/<module>/README.md` (agent card) and `agents/<module>/agent.yaml`: inputs, tools, ledger writes, gate rule, owner.
 - `docs/adr/`: every decision that changes a contract, a default or a rule (index: [docs/adr/README.md](../adr/README.md)).
 - `evaluation/reports/`: evidence for each evaluation run.
@@ -25,11 +25,10 @@ must be written into one of the shared files below.
 
 ## 2. Handing a module off (outgoing owner)
 1. `make check` is green.
-2. Update `PROGRESS.md`, in your module's notes section:
-   - what was done, with requirement IDs;
-   - what's open and why;
-   - decisions taken;
-   - the exact next step.
+2. Record progress (never edit `PROGRESS.md` by hand):
+   - add one entry file in `docs/progress/entries/` (copy `TEMPLATE.md`): what was done with requirement IDs, decisions, what's open;
+   - update your module file in `docs/progress/modules/` (status, open items, the exact next step);
+   - run `make progress`.
 3. Update `agents/<module>/README.md` if its inputs, tools, ledger writes, blockers or gate changed.
 4. New decision → a new ADR in `docs/adr/` plus a line in `docs/adr/README.md`.
 5. API changed → `make openapi && make client`. Evaluation run → report in `evaluation/reports/`.
@@ -39,9 +38,9 @@ Never pass `.env`, keys or passwords through chat or PRs; each person keeps thei
 
 ## 3. Picking a module up (incoming owner)
 1. `git pull`, then `make install && npm install`, then create your own `.env` ([environment.md](environment.md)).
-2. If `var/` is empty: `make data && make db && make ingest`, then `make check`.
+2. If `var/` is empty: `make hr-db && make db && make ingest`, then `make check`. (`make data` refuses once `data/frozen/v1` is frozen; the frozen files are in git and `make hr-db` rebuilds the gitignored HR store from them.)
 3. Read, in this order:
-   1. `PROGRESS.md`: current phase and your module's notes.
+   1. `PROGRESS.md` (generated) and your module file in `docs/progress/modules/`.
    2. `agents/<module>/README.md`.
    3. The module's rows in the [module map](#5-module-map) below: BRD section, design-detail section, ADRs.
 4. Start the AI session (next section).
@@ -63,12 +62,13 @@ Before proposing anything:
 1. Read AGENTS.md (or CLAUDE.md), PROGRESS.md, agents/<module>/README.md and the rules in .cursor/rules/.
 2. Read the requirement IDs in scope: <e.g. LW-04, LW-09> from docs/requirements/BRD.md and
    docs/architecture/design-detail.md §<2.4.x>, plus any ADR they cite.
-3. Summarise in 5 lines: what exists, what's open for this task in PROGRESS.md, and which rules apply.
+3. Summarise in 5 lines: what exists, what's open for this task in PROGRESS.md and the module file, and which rules apply.
 
 Then give a plan only (no code yet): files to change, tests to write first, requirement IDs, and the evaluation or
 acceptance line that proves it. Respect the non-negotiables: code calculates and gates, the model only explains;
 money in Decimal/paise; no agent-to-agent imports; frozen sets untouched; no offer acceptance path.
-After I approve: tests first, implement, run `make check`, update PROGRESS.md and the module card, and propose a
+After I approve: tests first, implement, run `make check`, add a progress entry and update the module file
+(docs/progress/, then make progress) and the module card, and propose a
 commit message `phase-N: <summary> [REQ-IDs]`. Don't push.
 ```
 
@@ -84,7 +84,7 @@ Claude Code's hooks block most of these automatically. In other tools, check the
 - [ ] Prompt changed → version bumped and `make eval-fast` passes.
 - [ ] API changed → `make openapi && make client`.
 - [ ] Requirement IDs in docstrings and test names; `make check` green.
-- [ ] `PROGRESS.md` and the module card updated.
+- [ ] Progress entry added, module file and module card updated, `make progress` run (`PROGRESS.md` never edited by hand).
 
 ## 5. Module map
 

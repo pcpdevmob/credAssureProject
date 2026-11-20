@@ -7,7 +7,6 @@ Known answers come from the placeholder WC fact (₹1,42,00,000, spec) and the f
 
 import hashlib
 import re
-import sqlite3
 from collections.abc import Callable
 from types import SimpleNamespace
 from typing import Any
@@ -15,6 +14,9 @@ from typing import Any
 import pytest
 from fastapi.testclient import TestClient
 from httpx import Response
+from sqlalchemy import text
+
+from credassure.ledger.session import case_engine
 
 PROBLEM_KEYS = {"type", "title", "status", "detail", "code", "instance"}
 RUN_STAGES = ("onboarding", "working_capital", "lendwise", "critic")
@@ -49,6 +51,8 @@ def _decide(
     client: TestClient, h: dict[str, str], case_id: str, decision: str, version: int, **extra: Any
 ) -> Response:
     body = {"decision": decision, "comment": "test", "expected_version": version, **extra}
+    if decision == "approve":
+        body.setdefault("attested", True)  # P9 approver attestation
     return client.post(f"/v1/cases/{case_id}/decision", json=body, headers=h)
 
 
@@ -220,17 +224,19 @@ def test_NFR07_unknown_user_is_401_and_still_runs_one_password_verify(
 def test_NFR07_me_returns_the_caller(fx: SimpleNamespace) -> None:
     r = fx.client.get("/v1/me", headers=fx.login("demo.director"))
     assert r.status_code == 200
-    assert r.json() == {
+    body = r.json()
+    assert {k: body[k] for k in ("user_id", "username", "role")} == {
         "user_id": "u-demo.director",
         "username": "demo.director",
         "role": "director_finance",
     }
+    # ADR 0038 adds the account state (additive; the original three keys are unchanged)
+    assert body["stage"] == "full" and body["mfa_enabled"] is False
 
 
 def test_NFR07_user_deactivated_after_login_gets_401(fx: SimpleNamespace) -> None:
     h = fx.login("demo.preparer")
-    with sqlite3.connect(fx.client.db) as con:
-        con.execute("UPDATE users SET active=0 WHERE username='demo.preparer'")
+    _sql(fx.client.db, "UPDATE users SET active=0 WHERE username='demo.preparer'")
     _problem(fx.client.get("/v1/me", headers=h), 401, "UNAUTHENTICATED")
 
 
@@ -604,13 +610,14 @@ def test_scope50_ready_reports_checks(fx: SimpleNamespace, llm_enabled: bool, mo
 
 
 def _spend(db: Any, case_id: str, tokens: int) -> None:
-    with sqlite3.connect(db) as con:
-        con.execute(
-            "INSERT INTO stage_runs (tenant_id, case_id, stage, attempt, decision, result_json,"
-            " trace_id, started_at) VALUES ('default', ?, 'onboarding', 99, 'GO', ?, 'tr-q',"
-            " '2026-11-07 00:00:00')",
-            (case_id, f'{{"tokens_used": {tokens}}}'),
-        )
+    _sql(
+        db,
+        "INSERT INTO stage_runs (tenant_id, case_id, stage, attempt, decision, result_json,"
+        " trace_id, started_at) VALUES ('default', :c, 'onboarding', 99, 'GO', :r, 'tr-q',"
+        " '2026-11-07 00:00:00')",
+        c=case_id,
+        r=f'{{"tokens_used": {tokens}}}',
+    )
 
 
 def test_scope16_quota_levels_and_run_warning_header(fx: SimpleNamespace) -> None:
@@ -643,3 +650,13 @@ def test_NFR04_over_rate_limit_is_429(fx: SimpleNamespace) -> None:
     responses = [c.get("/v1/me", headers=h) for _ in range(4)]
     assert responses[0].status_code == 200
     _problem(responses[-1], 429, "RATE_LIMITED")
+
+
+def _sql(db: Any, statement: str, **params: Any) -> None:
+    """A direct write on SQLite or MySQL (ADR 0039), outside the API."""
+    engine = case_engine(db)
+    try:
+        with engine.begin() as conn:
+            conn.execute(text(statement), params)
+    finally:
+        engine.dispose()

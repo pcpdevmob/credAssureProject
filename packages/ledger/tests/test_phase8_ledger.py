@@ -202,7 +202,7 @@ def test_scope29_phase8_migration_downgrades_one_step_and_upgrades_again(db: Pat
     migrate.upgrade("case", db)
     head = set(inspect(session.case_engine(db)).get_table_names())
     assert {"jobs", "audit_head"} <= head
-    migrate.downgrade("case", db, "-1")
+    migrate.downgrade("case", db, "37bd7037b99d")
     previous = set(inspect(session.case_engine(db)).get_table_names())
     assert "jobs" not in previous and "audit_head" not in previous
     assert "audit_log" in previous
@@ -318,3 +318,83 @@ def test_APR02_store_route_awaits_the_director(engine: Engine) -> None:
         case = reads.get_case(s, T, CASE)
         assert case is not None
         assert (case.status, case.route) == ("AWAITING_APPROVAL", "director_finance")
+
+
+# --- ADR 0023: offer tables dropped (Phase 10b, scope #29) ---------------------------------------
+
+OFFER_TABLES = {"offers", "offer_evaluations", "negotiation_messages"}
+
+
+def test_scope29_ADR0023_offer_tables_drop_up_down_up(db: Path) -> None:
+    migrate.upgrade("case", db)
+    assert not OFFER_TABLES & set(inspect(session.case_engine(db)).get_table_names())
+    migrate.downgrade("case", db, "5c1e0a8f2d47")  # just before the ADR 0023 drop
+    restored = set(inspect(session.case_engine(db)).get_table_names())
+    assert restored >= OFFER_TABLES
+    with sqlite3.connect(db) as conn:  # recreated empty
+        assert all(
+            conn.execute(f"SELECT count(*) FROM {t}").fetchone()[0] == 0  # noqa: S608
+            for t in OFFER_TABLES
+        )
+    migrate.upgrade("case", db)
+    assert not OFFER_TABLES & set(inspect(session.case_engine(db)).get_table_names())
+
+
+def test_scope29_ADR0023_offer_table_drop_refuses_a_non_empty_table(db: Path) -> None:
+    migrate.upgrade("case", db)
+    migrate.downgrade("case", db, "5c1e0a8f2d47")  # just before the ADR 0023 drop
+    with sqlite3.connect(db) as conn:  # the users table of that revision (no ADR 0038 columns)
+        conn.execute(
+            "INSERT INTO users (id, tenant_id, username, role, password_hash, active) "
+            "VALUES ('u', ?, 'u', 'preparer', 'x', 1)",
+            (T,),
+        )
+    eng = session.case_engine(db)
+    with session.transaction(eng) as s:
+        writes.create_case(
+            s,
+            tenant_id=T,
+            case_id=CASE,
+            msme_name="m",
+            order_ref="o",
+            order_value_paise=1,
+            indicative_amount_paise=1,
+            due_date=date(2026, 12, 1),
+            preparer_id="u",
+        )
+    with sqlite3.connect(db) as conn:
+        conn.execute(
+            "INSERT INTO negotiation_messages (tenant_id, case_id, offer_id, round, template_id, "
+            "slots_json, rendered_text, created_at) "
+            "VALUES (?, ?, 'O1', 1, 't', '{}', 'x', '2026-11-17')",
+            (T, CASE),
+        )
+    with pytest.raises(Exception, match="not empty") as refused:
+        migrate.upgrade("case", db)
+    assert type(refused.value).__name__ == "OfferTablesNotEmptyError"  # alembic loads it by path
+    assert set(inspect(session.case_engine(db)).get_table_names()) >= OFFER_TABLES  # untouched
+
+
+# --- own-KFS lineage refs carry the tenant term (Phase 10b item 3, SUP-08, BR-14) ---------------
+
+
+def test_SUP08_corpus_refs_own_kfs_requires_the_same_tenant(tmp_path: Path) -> None:
+    corpus = tmp_path / "corpus.db"
+    migrate.upgrade("corpus", corpus)
+    eng = session.case_engine(corpus)
+    with session.transaction(eng) as s:
+        s.add(
+            models.Document(
+                doc_id="KFS-9", title="k", collection="kfs", sha256="abc",
+                case_id="CA-2026-0001", tenant_id="demo",
+            )
+        )  # fmt: skip
+        s.flush()
+        s.add(models.Chunk(chunk_id="KFS-9#section#0", doc_id="KFS-9", strategy="section",
+                           ordinal=0, text="t"))  # fmt: skip
+    own = frozenset({"KFS-9@abc"})
+    with session.transaction(eng) as s:
+        mine = reads.corpus_refs(s, ["KFS-9#section#0"], "demo", "CA-2026-0016", own)
+        other = reads.corpus_refs(s, ["KFS-9#section#0"], "acme", "CA-2026-0016", own)
+    assert set(mine) == {"KFS-9#section#0"}
+    assert other == {}

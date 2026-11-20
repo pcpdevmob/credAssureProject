@@ -11,15 +11,18 @@ Model off and on (on: FakeLLM). Scored with the frozen scorers (evaluation/score
 
 import json
 import re
+import sqlite3
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import text
 
 from credassure.evaluation.check_corpus_refs import known_doc_ids
 from credassure.evaluation.scorers import ABSTAIN, score
+from credassure.ledger import session
 from credassure.llm.fake import FakeLLM
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -35,11 +38,29 @@ NEW_CASE = {
     "due_date": "2027-05-15",
 }
 Login = Callable[[TestClient, str], dict[str, str]]
+
+
+def _ingested() -> bool:
+    """`make db` creates an empty corpus.db on a fresh clone; these tests need `make ingest`."""
+    path = ROOT / "var/corpus.db"
+    if not path.exists():
+        return False
+
+    c = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+    try:
+        return bool(c.execute("SELECT 1 FROM chunks LIMIT 1").fetchone())
+    except sqlite3.Error:
+        return False
+    finally:
+        c.close()
+
+
+INGESTED = _ingested()
 PASSAGE = re.compile(r"(<<[0-9a-f]{16}>>) \[1\]\n(.*?)\n\1", re.DOTALL)
 
 
 class QuotingLLM(FakeLLM):
-    """cp_tool: search with the question; cp_answer: sentence 1 of passage [1], verbatim."""
+    """cp_tool: search with the question; cp_answer: span [1.1] of passage [1], verbatim (P5)."""
 
     def complete(self, prompt: str, *, name: str = "default", json_schema: Any = None) -> str:
         if name == "cp_tool":
@@ -52,9 +73,11 @@ class QuotingLLM(FakeLLM):
             m = PASSAGE.search(prompt)
             if not m:
                 return json.dumps({"abstain": True, "answer": ""})
-            text = m.group(2).split("\n", 1)[-1].replace("^", " ")  # drop section line
-            first = re.split(r"(?<=[.!?])\s", text.strip(), maxsplit=1)[0].rstrip(".")
-            return json.dumps({"abstain": False, "answer": f"{first} [1]."})
+            span = re.search(r"\[1\.1\]\^(.*?)(?:\^\[1\.2\]|$)", m.group(2), re.DOTALL)
+            if not span:
+                return json.dumps({"abstain": True, "answer": ""})
+            first = span.group(1).replace("^", " ").strip().rstrip(".")
+            return json.dumps({"abstain": False, "answer": f"{first} [1.1]."})
         return super().complete(prompt, name=name, json_schema=json_schema)
 
 
@@ -104,14 +127,14 @@ def _scored(answer: dict[str, Any]) -> dict[str, Any]:
     return answer | {"citations": sorted({c["doc_id"] for c in answer.get("citations", [])})}
 
 
-def _client(make_client: Callable[..., Any], llm_enabled: bool) -> Any:
+def _client(make_client: Callable[..., Any], llm_enabled: bool, **kw: Any) -> Any:
     client = make_client(
-        llm_enabled=False, rate_limit="10000/minute", copilot_search_mode="keyword"
+        llm_enabled=False, rate_limit="10000/minute", copilot_search_mode="keyword", **kw
     )
     if llm_enabled:
         llm = QuotingLLM()
         client = make_client(
-            llm_enabled=True, rate_limit="10000/minute", copilot_search_mode="keyword"
+            llm_enabled=True, rate_limit="10000/minute", copilot_search_mode="keyword", **kw
         )
         client.app.state.services.llm = llm
         client.app.state.services.supervisor.llm = llm
@@ -175,7 +198,7 @@ def test_BR15_injection_8_kfs_reply_and_chat_through_the_api(
     assert len(passed) == 8
 
 
-@pytest.mark.skipif(not (ROOT / "var/corpus.db").exists(), reason="needs make ingest (corpus.db)")
+@pytest.mark.skipif(not INGESTED, reason="needs make ingest (corpus.db with chunks)")
 @pytest.mark.parametrize("llm_enabled", [False, True])
 def test_CP01_CP02_KR04_regulatory_25_plumbing_and_safety(
     make_client: Callable[..., Any], login: Login, llm_enabled: bool
@@ -218,7 +241,8 @@ def test_scope2_40_memory_per_case_notice_once_stored_redacted_and_lineage_passa
     tool_prompts = [p for n, p in client.llm.calls if n == "cp_tool"]
     assert "How^is^the^CGTMSE" in tool_prompts[-1]  # #2: earlier turn, spotlit as data
     assert "ABCDE1234F" not in "".join(tool_prompts)  # ONB-06: never sent to the model
-    _chat(client, login, "demo.preparer", b, "What is TReDS?")
+    # A question code does not route (CP-07), so the model is asked and its prompt is checked.
+    _chat(client, login, "demo.preparer", b, "How does invoice financing work?")
     other = [p for n, p in client.llm.calls if n == "cp_tool"][-1]
     assert "How^is^the^CGTMSE" not in other and "(none)" in other  # memory never crosses cases
     with session.transaction(session.case_engine(client.db)) as s:
@@ -233,11 +257,18 @@ def test_scope2_40_memory_per_case_notice_once_stored_redacted_and_lineage_passa
         }
 
 
-@pytest.mark.skipif(not (ROOT / "var/corpus.db").exists(), reason="needs make ingest (corpus.db)")
+@pytest.mark.skipif(not INGESTED, reason="needs make ingest (corpus.db with chunks)")
+@pytest.mark.parametrize("tenant", ["demo", "default"])
 def test_SUP08_own_uploaded_kfs_cited_never_another_cases(
-    make_client: Callable[..., Any], login: Login
+    make_client: Callable[..., Any], login: Login, tenant: str
 ) -> None:
-    client = _client(make_client, True)
+    """The ingested synthetic KFS belong to tenant demo (make ingest). Tenant demo reads the
+    KFS it uploaded; tenant default uploads the same bytes and reads none (Phase 10b item 3)."""
+    client = _client(make_client, True, tenant_id=tenant)
+    engine = session.case_engine(client.db)  # the seeded users move to this test's tenant
+    with engine.begin() as conn:
+        conn.execute(text("UPDATE users SET tenant_id = :t"), {"t": tenant})
+    engine.dispose()
     a, _ = _case(client, login, "CA-2026-0001", run=False)
     own = {
         json.loads(p.read_text())["kfs_doc_id"]
@@ -252,4 +283,7 @@ def test_SUP08_own_uploaded_kfs_cited_never_another_cases(
         for c in answer["citations"]:
             if c["doc_id"].startswith("KFS-"):
                 seen.add(c["doc_id"].removesuffix("-SCH"))
-    assert seen and seen <= own, seen  # own KFS reachable (decision 2); no other case's
+    if tenant == "demo":
+        assert seen and seen <= own, seen  # own KFS reachable (decision 2); no other case's
+    else:
+        assert not seen & own, seen  # another tenant's copy never matches, same id and sha

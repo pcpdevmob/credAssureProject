@@ -22,6 +22,8 @@ from .models import (
     User,
 )
 
+DELETED = "DELETED"  # ADR 0025 tombstone status
+
 
 def get_case(s: Session, tenant_id: str, case_id: str) -> Case | None:
     return s.scalar(select(Case).where(Case.tenant_id == tenant_id, Case.id == case_id))
@@ -57,6 +59,22 @@ def audit_events(s: Session, tenant_id: str, case_id: str) -> list[AuditLog]:
             .order_by(AuditLog.seq)
         )
     )
+
+
+def notice_acknowledged(s: Session, tenant_id: str, user_id: str, version: str) -> str | None:
+    """Scope #40: when this user acknowledged this notice version (ISO time), if ever."""
+    for event in s.scalars(
+        select(AuditLog)
+        .where(
+            AuditLog.tenant_id == tenant_id,
+            AuditLog.event_type == "CHAT_NOTICE_ACKNOWLEDGED",
+            AuditLog.actor == user_id,
+        )
+        .order_by(AuditLog.seq)
+    ):
+        if event.payload.get("version") == version:
+            return event.ts
+    return None
 
 
 def audit_head(s: Session, tenant_id: str) -> AuditHead | None:
@@ -112,8 +130,48 @@ def user_by_name(s: Session, username: str) -> User | None:
     return s.scalar(select(User).where(User.username == username))
 
 
+def list_users(s: Session, tenant_id: str) -> list[User]:
+    return list(s.scalars(select(User).where(User.tenant_id == tenant_id).order_by(User.username)))
+
+
+def active_admins(s: Session, tenant_id: str) -> int:
+    """ADR 0038: the last active user_admin can be neither disabled nor demoted."""
+    return len(
+        s.scalars(
+            select(User.id).where(
+                User.tenant_id == tenant_id, User.role == "user_admin", User.active.is_(True)
+            )
+        ).all()
+    )
+
+
+def account_events(s: Session, tenant_id: str, limit: int = 200) -> list[AuditLog]:
+    """Newest first: audit rows for account changes and sign-in failures (no case)."""
+    from .writes import ACCOUNT_EVENTS  # writes imports reads; keep the cycle local
+
+    return list(
+        s.scalars(
+            select(AuditLog)
+            .where(
+                AuditLog.tenant_id == tenant_id,
+                AuditLog.case_id.is_(None),
+                AuditLog.event_type.in_(sorted(ACCOUNT_EVENTS)),
+            )
+            .order_by(AuditLog.seq.desc())
+            .limit(limit)
+        )
+    )
+
+
 def list_cases(s: Session, tenant_id: str) -> list[Case]:
-    return list(s.scalars(select(Case).where(Case.tenant_id == tenant_id).order_by(Case.id)))
+    """Live cases only: a DELETED tombstone (ADR 0025) is never listed."""
+    return list(
+        s.scalars(
+            select(Case)
+            .where(Case.tenant_id == tenant_id, Case.status != DELETED)
+            .order_by(Case.id)
+        )
+    )
 
 
 def stage_runs(s: Session, tenant_id: str, case_id: str) -> list[StageRun]:
@@ -219,7 +277,11 @@ def corpus_refs(
     visible = (
         Document.case_id.is_(None)
         | ((Document.case_id == case_id) & (Document.tenant_id == tenant_id))
-        | ((Document.collection == "kfs") & (Document.doc_id + "@" + Document.sha256).in_(own_kfs))
+        | (
+            (Document.collection == "kfs")
+            & (Document.doc_id + "@" + Document.sha256).in_(own_kfs)
+            & (Document.tenant_id.is_(None) | (Document.tenant_id == tenant_id))
+        )
     )
     for chunk, doc in s.execute(
         select(Chunk, Document).join(Document).where(Chunk.chunk_id.in_(ids), visible)
@@ -233,19 +295,57 @@ def corpus_refs(
 def chat_history(
     s: Session, tenant_id: str, case_id: str, user_id: str, n: int
 ) -> list[ChatMessage]:
-    """The last ``n`` redacted messages of this user in this case, oldest first (scope #2).
-    Keyed by (tenant, case, user): memory never crosses cases or people."""
+    """The last ``n`` redacted messages of this user in this case since their last reset, oldest
+    first (scope #2, CP-11). Keyed by (tenant, case, user): memory never crosses cases or people.
+    A reset is a stored marker row (role ``reset``); nothing before it is returned."""
+    if n <= 0:
+        return []
+    scope = (
+        ChatMessage.tenant_id == tenant_id,
+        ChatMessage.case_id == case_id,
+        ChatMessage.user_id == user_id,
+    )
+    last_reset = s.scalar(
+        select(func.max(ChatMessage.id)).where(*scope, ChatMessage.role == "reset")
+    )
     rows = s.scalars(
         select(ChatMessage)
-        .where(
-            ChatMessage.tenant_id == tenant_id,
-            ChatMessage.case_id == case_id,
-            ChatMessage.user_id == user_id,
-        )
+        .where(*scope, ChatMessage.id > (last_reset or 0), ChatMessage.role != "reset")
         .order_by(ChatMessage.id.desc())
         .limit(n)
     )
     return list(reversed(list(rows)))
+
+
+def feedback_given(s: Session, tenant_id: str, user_id: str, trace_id: str) -> bool:
+    """CP-12: has this user already rated the answer ``trace_id``? (one rating per answer)"""
+    return (
+        s.scalar(
+            select(AuditLog.seq)
+            .where(
+                AuditLog.tenant_id == tenant_id,
+                AuditLog.actor == user_id,
+                AuditLog.event_type == "COPILOT_FEEDBACK",
+                func.json_extract(AuditLog.payload, "$.trace_id") == trace_id,
+            )
+            .limit(1)
+        )
+        is not None
+    )
+
+
+def chat_turn_by_trace(
+    s: Session, tenant_id: str, user_id: str, trace_id: str
+) -> ChatMessage | None:
+    """CP-12: this user's stored answer with ``trace_id`` (never another person's)."""
+    return s.scalar(
+        select(ChatMessage).where(
+            ChatMessage.tenant_id == tenant_id,
+            ChatMessage.user_id == user_id,
+            ChatMessage.trace_id == trace_id,
+            ChatMessage.role == "assistant",
+        )
+    )
 
 
 def own_kfs(s: Session, tenant_id: str, case_id: str) -> frozenset[str]:

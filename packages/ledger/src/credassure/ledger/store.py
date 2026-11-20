@@ -6,17 +6,19 @@ transaction, so a fact or a stage result commits together with its audit event (
 """
 
 import hashlib
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from datetime import date
 from decimal import Decimal
 from typing import Any
 
 from sqlalchemy import Engine
+from sqlalchemy.orm import Session
 
 from credassure.core.results import AgentResult
 
 from . import reads, writes
-from .models import Approval, Case, CaseFile, Job
+from .errors import ConflictError
+from .models import Approval, Case, CaseFile, Job, User
 from .session import transaction
 
 
@@ -91,13 +93,20 @@ class SqlLedger:
                 actor=self.actor,
             )
 
-    def audit(self, case_id: str | None, event_type: str, payload: dict[str, Any]) -> None:
+    def audit(
+        self,
+        case_id: str | None,
+        event_type: str,
+        payload: dict[str, Any],
+        *,
+        actor: str | None = None,
+    ) -> None:
         with transaction(self.engine) as s:
             writes.append_audit(
                 s,
                 tenant_id=self.tenant_id,
                 case_id=case_id,
-                actor=self.actor,
+                actor=actor or self.actor,
                 event_type=event_type,
                 payload=payload,
             )
@@ -188,6 +197,7 @@ class SqlLedger:
         return_stage: str | None,
         comment: str,
         warnings: list[str] | None = None,
+        attested: bool = False,
     ) -> Approval:
         with transaction(self.engine) as s:
             return writes.record_decision(
@@ -201,6 +211,17 @@ class SqlLedger:
                 return_stage=return_stage,
                 comment=comment,
                 warnings=warnings,
+                attested=attested,
+            )
+
+    def delete_case(self, case_id: str, *, expected_version: int, actor: str) -> dict[str, int]:
+        with transaction(self.engine) as s:
+            return writes.delete_case(
+                s,
+                tenant_id=self.tenant_id,
+                case_id=case_id,
+                expected_version=expected_version,
+                actor=actor,
             )
 
     def create_job(
@@ -234,3 +255,74 @@ class SqlLedger:
     def set_password_hash(self, user_id: str, password_hash: str) -> None:
         with transaction(self.engine) as s:
             writes.set_password_hash(s, user_id=user_id, password_hash=password_hash)
+
+    # ---- accounts (ADR 0038): the gateway changes users only through these, one transaction each
+    def create_user(self, **fields: Any) -> User:
+        with transaction(self.engine) as s:
+            return writes.create_user(s, **fields)
+
+    def update_user(
+        self,
+        user_id: str,
+        *,
+        tenant_id: str,
+        actor: str,
+        changes: Mapping[str, Any],
+        event_type: str | None = None,
+        payload: Mapping[str, Any] | None = None,
+        revoke: bool = False,
+        check: Callable[[Session, User], None] | None = None,
+    ) -> User:
+        """`check(session, user)` runs in the same transaction (BEGIN IMMEDIATE) before the write,
+        so a rule such as "keep one active admin" cannot race another request."""
+        with transaction(self.engine) as s:
+            user = reads.get_user(s, user_id)
+            if user is None or user.tenant_id != tenant_id:
+                raise ConflictError(f"no user {user_id}")
+            if check is not None:
+                check(s, user)
+            return writes.update_user(
+                s,
+                user_id=user_id,
+                tenant_id=tenant_id,
+                actor=actor,
+                changes=changes,
+                event_type=event_type,
+                payload=payload,
+                revoke=revoke,
+            )
+
+    def spend(
+        self,
+        user_id: str,
+        *,
+        actor: str,
+        decide: Callable[[User], tuple[dict[str, Any], str | None] | None],
+    ) -> bool:
+        """Re-read the user inside the write transaction and let `decide` check a one-time code
+        against that fresh row; its (changes, event) are written in the same transaction."""
+        with transaction(self.engine) as s:
+            user = reads.get_user(s, user_id)
+            if user is None:
+                return False
+            outcome = decide(user)
+            if outcome is None:
+                return False
+            changes, event = outcome
+            writes.update_user(
+                s,
+                user_id=user.id,
+                tenant_id=user.tenant_id,
+                actor=actor,
+                changes=changes,
+                event_type=event,
+            )
+            return True
+
+    def account_event(
+        self, *, tenant_id: str, actor: str, event_type: str, payload: Mapping[str, Any]
+    ) -> None:
+        with transaction(self.engine) as s:
+            writes.account_event(
+                s, tenant_id=tenant_id, actor=actor, event_type=event_type, payload=payload
+            )

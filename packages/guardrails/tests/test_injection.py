@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from credassure.security import injection, spotlight
+from credassure.guardrails import injection, spotlight
 
 ROOT = Path(__file__).resolve().parents[3]
 FROZEN = ROOT / "data/frozen/v1"

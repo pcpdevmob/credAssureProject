@@ -43,3 +43,9 @@ def load_profile(engine: Engine, emp_id: str) -> dict[str, Any] | None:
         "trainings": trainings,
         "policy_ack_version": ack,
     }
+
+
+def display_names(engine: Engine) -> list[str]:
+    """Every employee's display name, for exact-match masking in free text (H13, ADR 0030 §2)."""
+    with engine.connect() as con:
+        return [str(r[0]) for r in con.execute(text("SELECT display_name FROM employees")) if r[0]]

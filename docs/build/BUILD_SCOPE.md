@@ -1,4 +1,4 @@
-# CredAssure — Complete build scope (53 items, all in scope)
+# CredAssure — Complete build scope (53 items + 16 plan v3.4 items)
 
 Every item below is part of the baseline build, built in the phase named in its row and verified by the evaluation listed in prompts/.
 Nothing here is optional. If time runs short, the only permitted cut order is #35, #41, #38, #37, and each cut needs an ADR.
@@ -11,7 +11,7 @@ Block → phase map: A=0, B=1, C=2, D=3, E=8 then 5, F=4, G=6, H=7, I1..I5=9a..9
 |---|---|---|---|
 | 1 | Ablation switch paths | eval/ablation_modes.py + hooks behind ABLATION=A1..A5 (A1 model calculates, A4 model decides gates) | 11 (built in 4/8 hooks) |
 | 2 | Copilot conversation state | agents/copilot/memory.py: last N redacted turns per case, never cross-case | 9e |
-| 3 | Model card / responsible AI | docs/MODEL_CARD.md | 12 |
+| 3 | Model card / responsible AI | docs/security/model-card.md + docs/SYSTEM_CARD.md (P10) | 12 |
 | 4 | Loop detection | repeated identical tool call (name+args hash) → ERROR | 8 |
 | 5 | Cost per query | tokens × configurable notional price, per stage and item | 11 |
 | 6 | Proposal versioning / staleness | reports/versioning.py stores ledger fact versions | 10 |
@@ -37,7 +37,7 @@ Block → phase map: A=0, B=1, C=2, D=3, E=8 then 5, F=4, G=6, H=7, I1..I5=9a..9
 | 22 | Concurrency | SQLite WAL, busy_timeout 5000, one active run per case, harness concurrency ≤ rate limit, LendWise per-offer calls in parallel under shared limiter | 5, 6 |
 | 23 | Timeouts and cancellation | 30 s per model call, 5 min per stage, state saved, TIMEOUT blocker | 6 |
 | 24 | Agent registry + data-access matrix | agents/registry.yaml enforced in tool layer | 1 |
-| 25 | Agent versioning + stage retry | agent_version in AgentResult (ADR — contract change); POST /v1/cases/{id}/stages/{stage}/retry (evaluator) | 1, 9 |
+| 25 | Agent versioning + stage retry | agent_version in AgentResult (ADR — contract change); POST /v1/agents/supervisor/cases/{id}/stages/{stage}/retry (evaluator, FAILED case only) | 1, 9 |
 | 26 | ADR on excluded patterns | no agent-to-agent messaging, no inter-agent bus, no cross-case memory, no dynamic spawning | 1 |
 
 ## C. Enterprise practices at capstone scale
@@ -74,6 +74,29 @@ Block → phase map: A=0, B=1, C=2, D=3, E=8 then 5, F=4, G=6, H=7, I1..I5=9a..9
 | 51 | API fuzzing | Schemathesis against openapi.json in CI | 10 |
 | 52 | Web security headers | CSP, CORS allowlist, no tokens in localStorage | UI U1 |
 | 53 | Architecture conformance check | /eval E18 at G3 and G4 | 10, 12 |
+
+## F. Plan v3.4 additions (2026-11-18; `docs/plan/CredAssure_RAI_Security_Copilot_Plan_v3.4.md`)
+| # | Item | Build | Phase |
+|---|---|---|---|
+| 54 | Injection design-pattern tests | plan-then-execute, map-reduce isolation, context-minimisation tests (plan §3.2) | P2 |
+| 55 | Guardrails package | `packages/guardrails` (R1–R5) consolidating Phase 6 controls behind the same interfaces; import-linter contracts | P3 |
+| 56 | Guardrail events + policy | `guardrail_event` (blocks, redactions, flags → audit; passes → traces); `config/guardrails.yaml` versioned and hashed | P3 |
+| 57 | PII v2 | Presidio (no NER) + GSTIN, UPI ID, card, Udyam recognisers; typed irreversible placeholders; regex fallback fails closed | P3 |
+| 58 | Money-preservation gate | rupee figures never masked; 20,000-number Aadhaar checksum agreement; E4 re-run READY | P3 |
+| 59 | Data classes + trace-leak test | C1–C4 tags; planted identifiers → 0 hits in traces; CSV formula escaping on exports | P3 |
+| 60 | Retrieval dev split | 15–20 new labelled queries, never overlapping the frozen 40 | P0 |
+| 61 | Contextual chunk headers | deterministic header on existing section chunks; chunk_ids stable; one re-ingest | P4 |
+| 62 | Glossary query rewrite | deterministic expansion from a domain glossary | P4 |
+| 63 | Answerability gate | abstain threshold tuned on the dev split | P4 |
+| 64 | Span-cited answers + dual scoring | Critic cuts sentences without a valid span; strict + supported scores (ADR) | P5 |
+| 65 | safety_v2 suite + A6 | 40 items frozen before first run; ≥38/40, 0 critical; guardrails-off ablation | P8 |
+| 66 | OWASP LLM + ASI tests | one test per threat-model row | P8 |
+| 67 | Fairness invariance | name/city/state invariance of gates, amount and ranking; protected-attribute denylist | P8 |
+| 68 | RAI UI | AI-generated badge, approver attestation, safety panel | P9 |
+| 69 | System card + threat model | SYSTEM_CARD, THREAT_MODEL (LLM + ASI), Sutra mapping (RBI + MeitY), DPDP gap note | P10 |
+
+### Cut by plan v3.4 ([ADR 0032](../adr/0032-copilot-v2-scope-and-v34-cuts.md); rows above are kept, not deleted)
+Stretch items not built: UI-09, UI-10, WC-08, VER-06, ONB-07, CP-04 (LW-15 built after all: [ADR 0037](../adr/0037-three-negotiation-rounds-and-reranking.md)). Deferred copilot items: full two-call CP-08, A7 guard-model ablation, adaptive red-team round (CP-07, CP-10, CP-11 and CP-12 were built in P13, [ADR 0035](../adr/0035-copilot-v3-product-assistant.md)). Reversible token vault replaced by irreversible placeholders.
 
 ## E. Decisions settled (no open questions block the build)
 | Decision | Default now | Evidence or switch | ADR |

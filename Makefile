@@ -15,18 +15,25 @@ ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 # The dev/demo database (var/case.db) is tenant "demo" (make demo-reset); an exported variable beats --env-file.
 DEMO_TENANT := TENANT_ID=demo
 
-.PHONY: e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
-        db demo-reset copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
-        langfuse-up langfuse-down ollama-pull backup restore eval-fast llm-probe retrieval-eval retrieval-pool retrieval-silver judge kappa
+.PHONY: admin redteam rag-baseline load-smoke eval-judge eval-kappa eval-report eval-ablations progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
+        db demo-reset live-run copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
+        langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe retrieval-eval retrieval-ladder retrieval-pool retrieval-silver judge kappa release sbom pin-images
+
+progress:  ## Regenerate PROGRESS.md from docs/progress/ (never edit PROGRESS.md by hand; README §12)
+	uv run python scripts/progress.py
+
+progress-check:  ## Fail if PROGRESS.md is stale or a progress entry is invalid
+	uv run python scripts/progress.py --check
 
 help:  ## List targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
 
-install:  ## Sync the uv workspace (all members + dev group)
-	uv sync --all-packages
+install:  ## Sync the uv workspace (all members, dev group and extras such as rerank)
+	uv sync --all-packages --all-extras
 
-check:  ## ruff, ruff format, mypy --strict, pytest, bandit
+check:  ## ruff, ruff format, mypy --strict, pytest, bandit, PROGRESS.md check
 	uv run ruff check .
+	uv run python scripts/progress.py --check
 	uv run ruff format --check .
 	uv run mypy --strict $(PY_SRC)
 	uv run pytest -q
@@ -34,8 +41,9 @@ check:  ## ruff, ruff format, mypy --strict, pytest, bandit
 	uv run bandit -q -c pyproject.toml -r $(PY_SRC)
 	uv run lint-imports
 
-check-fast:  ## ruff + fast tests (used by the Claude stop hook)
+check-fast:  ## ruff + PROGRESS.md check + fast tests (used by the Claude stop hook)
 	uv run ruff check .
+	uv run python scripts/progress.py --check
 	uv run pytest -q -m "not slow"
 
 test:  ## Full test suite with coverage
@@ -84,6 +92,9 @@ run-ui-e2e:  ## E2E web dev server on :3001, talking to :8001
 openapi:  ## Export openapi.json (ADR 0004)
 	uv run python -m credassure.gateway.openapi
 
+openapi-diff:  ## Fail on a breaking openapi.json change against main (BASE=<ref> to override)
+	uv run python scripts/openapi_diff.py $(or $(BASE),main)
+
 client: openapi  ## Generate the TypeScript API client from openapi.json
 	npm run generate -w packages/api-client
 
@@ -93,11 +104,20 @@ up: langfuse-env-check  ## Gateway, web, Ollama and Langfuse (dev profile)
 down:  ## Stop the dev stack
 	$(COMPOSE) --profile dev --profile langfuse down
 
-backup:  ## Database backup (Phase 12)
+backup:  ## Online backup of case.db, corpus.db, llm_cache.db to var/backups/<time>/
 	deploy/scripts/backup.sh
 
-restore:  ## Database restore (Phase 12)
-	deploy/scripts/restore.sh
+release:  ## Release bundle var/release/v$(VERSION)/ (RELEASE.json, SBOM, eval reports): VERSION=1.0.0
+	uv run python scripts/release.py --version "$(VERSION)"
+
+sbom:  ## CycloneDX SBOM from uv.lock and package-lock.json -> var/release/sbom.cdx.json
+	uv run python scripts/sbom.py
+
+pin-images:  ## Pin Dockerfile and Compose images to registry digests (needs Docker + network); ARGS=--check
+	uv run python scripts/pin_images.py $(ARGS)
+
+restore:  ## Restore a backup: FROM=var/backups/<dir> (stop run-api first)
+	deploy/scripts/restore.sh "$(FROM)"
 
 LANGFUSE_ENV := deploy/env/langfuse.env
 
@@ -125,6 +145,9 @@ run-ui:  ## Next.js dev server for the web app on http://localhost:3000
 
 data:  ## Seeded synthetic data -> data/frozen/v1 + hr.db (Phase 2, idempotent)
 	uv run python -m credassure.datagen
+
+hr-db:  ## Rebuild the gitignored hr.db from frozen hr/profiles.json (fresh clone, CI; allowed after G1)
+	uv run python -m credassure.datagen hr-db
 
 corpus-audit:  ## Legal-basis and schema audit of data/corpus/manifest.yaml (scope #14, ADR 0019)
 	uv run python -m credassure.datagen.harvest audit
@@ -170,6 +193,11 @@ ingest:  ## Index data/corpus + synthetic KFS/policies: corpus.db, FTS5, Chroma 
 retrieval-eval:  ## KR-05 recall@5/@10 for 3 retrievers x 3 chunkings x rerank -> evaluation/reports/retrieval-<date>.md
 	uv run $(ENV_FILE) python -m credassure.evaluation.retrieval_eval
 
+retrieval-ladder:  ## P4 ladder: RUNG=0..3 LABEL=.. [REWRITE=1] [RERANK=1]; CURVE=1 picks the dev-only threshold; REPORT=1 writes the report
+	@if [ -n "$(CURVE)" ]; then uv run $(ENV_FILE) python -m credassure.evaluation.retrieval_ladder curve; \
+	elif [ -n "$(REPORT)" ]; then uv run python -m credassure.evaluation.retrieval_ladder report; \
+	else uv run $(ENV_FILE) python -m credassure.evaluation.retrieval_ladder run --rung $(RUNG) --label "$(LABEL)" $(if $(REWRITE),--rewrite) $(if $(RERANK),--rerank); fi
+
 retrieval-pool:  ## Blind pooled top-5 of all 18 configs -> evaluation/retrieval/v1/judging/ (E8 M1)
 	uv run $(ENV_FILE) python -m credassure.evaluation.retrieval_judging pool
 
@@ -184,16 +212,42 @@ judge:  ## Judge the blind human sample, one passage at a time, resumable (JUDGE
 kappa:  ## Cohen's kappa, silver vs JUDGE on the human sample (run after make judge)
 	uv run python -m credassure.evaluation.retrieval_judging kappa --judge $(JUDGE)
 
-eval:  ## Run the 100-item test set through the API (Phase 11)
-	@echo "eval: not implemented until Phase 11"; exit 1
+eval:  ## Run the 100 items through the API on the configured model (Phase 11/P7); ARGS="--ablation A1" | "--fake --only routing"
+	APP_ENV=dev LOG_LEVEL=WARNING uv run $(ENV_FILE) python scripts/eval_harness.py $(ARGS)
+
+eval-judge:  ## J1 grades the run's regulatory answers and writes a 20% human sample: RUN=var/eval/<run>
+	uv run $(ENV_FILE) python -m credassure.evaluation.judge_j1 judge --run $(RUN)
+
+eval-kappa:  ## Kappa between J1 and the labelled human sample (ADR 0014): RUN=var/eval/<run>
+	uv run python -m credassure.evaluation.judge_j1 kappa --run $(RUN)
+
+eval-report:  ## E13 report: RUN=var/eval/<run> ABL="var/eval/<run>-A1 ..." OUT=evaluation/reports/E13-<date>.md
+	uv run python -m credassure.evaluation.eval_report --full $(RUN) --ablation $(ABL) --calibration $(RUN)/j1-calibration.json --out $(OUT)
+
+load-smoke:  ## Scope #35: 10 concurrent demo cases through the API, p95 per stage (ARGS="--fake" for locking only)
+	APP_ENV=dev LOG_LEVEL=WARNING uv run $(ENV_FILE) python scripts/load_smoke.py $(ARGS)
+
+eval-ablations:  ## A1-A5 on the configured model, each on its affected categories only (ablations.yaml)
+	for a in A1 A2 A3 A4 A5; do $(MAKE) eval ARGS="--ablation $$a"; done
 
 # ponytail: offline subset; the API-driven fast eval subset replaces it with the Phase 11 harness
 eval-fast:  ## Prompt change control (#36): version-bump check + offline prompt subset (FakeLLM)
 	uv run python -m credassure.core.prompts check --base $${PROMPTS_BASE:-origin/main}
+	uv run python -m credassure.guardrails.policy check
 	uv run pytest -q packages/llm/tests agents/supervisor/tests/test_resilience.py tests/e2e
 
 llm-probe:  ## Does the endpoint honour guided JSON? Decides LLM_SUPPORTS_GUIDED_JSON (ADR 0017)
 	uv run $(ENV_FILE) python -m credassure.llm.probe
+
+admin:  ## ADR 0038: first account admin of the tenant: BOOTSTRAP_ADMIN_PASSWORD=... make admin NAME=<username>
+	@test -n "$(NAME)" || (echo "usage: BOOTSTRAP_ADMIN_PASSWORD=... make admin NAME=<username>" && exit 1)
+	$(DEMO_TENANT) uv run $(ENV_FILE) python -m credassure.ledger.seed $${CASE_DB:-var/case.db} --bootstrap-admin $(NAME)
+
+redteam:  ## K6 red-team log: 20 frozen prompts + 5 E14 probes through the API, verdicts by code (writes var/redteam/<run>/redteam.md); ARGS="--fake"
+	APP_ENV=dev LOG_LEVEL=WARNING uv run $(ENV_FILE) python scripts/redteam_run.py $(ARGS)
+
+rag-baseline:  ## RAG-only baseline: S1 prompt + copilot hybrid top-5, no agents, regulatory 25 (writes var/rag-only-baseline.jsonl)
+	uv run $(ENV_FILE) python scripts/rag_only_baseline.py
 
 baseline:  ## Prompt baselines S1-S3 on the 100 items (EVAL_BASE_URL / EVAL_MODEL; default local Ollama, ADR 0017)
 	uv run $(ENV_FILE) python -m credassure.evaluation.baseline.run --strategy all
@@ -207,8 +261,21 @@ db:  ## Migrate var/case.db + var/corpus.db and seed users (needs SEED_PASSWORD;
 	uv run python -m credassure.ledger.migrate upgrade corpus var/corpus.db
 	$(DEMO_TENANT) uv run $(ENV_FILE) python -m credassure.gateway.seed  # SEED_PASSWORD via Settings, into CASE_DB
 
+live-run:  ## Live full-feature run on the configured model: every feature through the API (var/live-run/); see scripts/live_run.sh
+	APP_ENV=dev LLM_ENABLED=true LOG_LEVEL=WARNING uv run $(ENV_FILE) python scripts/live_run.py $(ARGS)
+
 copilot-live:  ## E8 live: the 44 copilot items through the API on the configured model (var/e8-live)
 	uv run $(ENV_FILE) python scripts/copilot_live.py $(ARGS)
+
+case-template:  ## Regenerate data/templates/case_template.xlsx and sample_case/ from the upload schemas
+	uv run python scripts/case_xlsx.py template
+	uv run python scripts/case_xlsx.py convert data/templates/case_template.xlsx data/templates/sample_case
+	mkdir -p data/templates/sample_case/kfs
+	cp data/frozen/v1/kfs/KFS-OF-01-[ABC]-v1.md data/frozen/v1/kfs/KFS-OF-01-[ABC]-v1-SCH.md data/templates/sample_case/kfs/
+
+case-from-xlsx:  ## Filled template -> case CSV/JSON + offers, validated like an upload: FILE=... OUT=...
+	@test -n "$(FILE)" -a -n "$(OUT)" || { echo "usage: make case-from-xlsx FILE=case.xlsx OUT=var/my_case"; exit 2; }
+	uv run python scripts/case_xlsx.py convert "$(FILE)" "$(OUT)"
 
 demo-reset:  ## Recreate the demo cases in var/case.db through the API (tenant demo; stop run-api first)
 	$(DEMO_TENANT) uv run $(ENV_FILE) python scripts/demo_reset.py

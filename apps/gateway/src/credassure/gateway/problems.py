@@ -5,6 +5,7 @@ errors never leak exception text to the client; the request ID ties the reply to
 """
 
 import logging
+import re
 from typing import Any
 
 from fastapi import FastAPI, Request
@@ -15,6 +16,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from credassure.core.errors import ApiErrorCode
 from credassure.ledger.errors import ConflictError
 from credassure.ledger.session import RunInProgressError
+from credassure.observability.log import log_context
 from credassure.security.auth import AuthError, ForbiddenError
 from credassure.tools.registry import RegistryError
 
@@ -39,6 +41,7 @@ _TITLES = {
     401: "Unauthenticated",
     403: "Forbidden",
     404: "Not found",
+    405: "Method not allowed",
     409: "Conflict",
     413: "Payload too large",
     415: "Unsupported media type",
@@ -79,9 +82,30 @@ def problem_response(
         "code": code.value,
         "instance": request.url.path,
     }
+    rid = getattr(request.state, "request_id", None)
+    if rid:
+        body["request_id"] = rid  # quote it when reporting a problem; matches X-Request-ID
     if errors is not None:
         body["errors"] = errors
-    return JSONResponse(body, status_code=status, media_type=MEDIA_TYPE)
+    response = JSONResponse(body, status_code=status, media_type=MEDIA_TYPE)
+    if rid:
+        response.headers["X-Request-ID"] = rid  # a 500 is answered outside the middleware
+    return response
+
+
+def _allowed(request: Request) -> str:
+    """The methods the OpenAPI schema documents for this path (what clients and fuzzers check)."""
+    methods: set[str] = set()
+    for template, ops in request.app.openapi()["paths"].items():
+        pattern = re.sub(
+            r"\{[^}]+\}", "[^/]+", re.escape(template).replace(r"\{", "{").replace(r"\}", "}")
+        )
+        if re.fullmatch(pattern, request.url.path):
+            methods |= {m.upper() for m in ops if m in _HTTP_METHODS}
+    return ", ".join(sorted(methods))
+
+
+_HTTP_METHODS = frozenset({"get", "post", "put", "patch", "delete", "head", "options"})
 
 
 async def handle(request: Request, exc: Exception) -> JSONResponse:
@@ -90,7 +114,11 @@ async def handle(request: Request, exc: Exception) -> JSONResponse:
         return problem_response(request, exc.status, exc.detail, exc.code, exc.errors)
     if isinstance(exc, StarletteHTTPException):
         code = _BY_STATUS.get(exc.status_code, ApiErrorCode.VALIDATION_FAILED)
-        return problem_response(request, exc.status_code, str(exc.detail), code)
+        response = problem_response(request, exc.status_code, str(exc.detail), code)
+        response.headers.update(exc.headers or {})  # e.g. WWW-Authenticate
+        if exc.status_code == 405:  # RFC 9110: every method of every route on this path (#51)
+            response.headers["Allow"] = _allowed(request)
+        return response
     if isinstance(exc, RequestValidationError):
         errors = [
             {
@@ -117,7 +145,12 @@ async def handle(request: Request, exc: Exception) -> JSONResponse:
         return problem_response(request, 409, str(exc), ApiErrorCode.CONFLICT)
     if isinstance(exc, RegistryError):
         return problem_response(request, 403, "tool not allowed", exc.code)
-    _log.exception("unhandled error", exc_info=exc)
+    rid = getattr(request.state, "request_id", None)
+    with log_context(request_id=rid):  # the 500 is handled outside the request middleware
+        _log.exception("unhandled error", exc_info=exc)
+    metrics = getattr(request.app.state, "metrics", None)
+    if metrics is not None:
+        metrics.unhandled_error()
     return problem_response(request, 500, "internal error", ApiErrorCode.INTERNAL_ERROR)
 
 

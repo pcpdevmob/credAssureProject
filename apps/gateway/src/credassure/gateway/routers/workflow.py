@@ -10,19 +10,23 @@ import logging
 import time
 import uuid
 from collections.abc import AsyncIterator
+from decimal import Decimal
 from typing import Annotated, Any, Literal
 
-from fastapi import APIRouter, BackgroundTasks, Header, Response
+from fastapi import APIRouter, BackgroundTasks, Header, Request, Response
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, SecretStr
 
 from credassure.core.enums import Stage
 from credassure.core.errors import ApiErrorCode, NoPendingApproval
+from credassure.engines.routing import THRESHOLD
+from credassure.gateway import accounts, report
 from credassure.gateway.deps import Svc, User, case_ref, role, visible_case
 from credassure.gateway.jobs import job_view
 from credassure.gateway.problems import ProblemError
 from credassure.gateway.quota import quota
+from credassure.gateway.routers.auth import HOURLY_FAILURES, LOGIN_FAILURES
 from credassure.gateway.supervisor_service import approval_warnings
 from credassure.ledger import reads
 from credassure.ledger.session import run_in_progress, run_lock, transaction
@@ -33,6 +37,7 @@ from credassure.security.auth import (
     Role,
     can_decide,
     may_decide_route,
+    verify_password,
 )
 from credassure.security.pii import redact
 
@@ -192,8 +197,11 @@ def inbox(who: User, svc: Svc) -> dict[str, Any]:
 @router.get("/cases/{case_id}/inbox")
 def case_inbox(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
     case = visible_case(svc, who, case_id)
+    with transaction(svc.engine) as s:
+        shown = report.state(s, case)["version"]
     return {
         "warnings": _warnings(svc, case),
+        "report_version": shown,  # the client echoes it on approve (Decision.report_version)
         "case_id": case.id,
         "status": case.status,
         "route": case.route,
@@ -203,19 +211,99 @@ def case_inbox(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
 
 
 def _warnings(svc: Svc, case: Any) -> list[str]:
+    """APR-04 evidence for the approver. ``report_stale``: the figures changed after the routed
+    proposal was rendered; it blocks approve (Phase 10b, ADR 0003 §3), not reject or return."""
     with transaction(svc.engine) as s:
-        return approval_warnings(reads.list_for_case(s, case.tenant_id, case.id))
+        found = approval_warnings(reads.list_for_case(s, case.tenant_id, case.id))
+        if report.state(s, case)["stale"]:
+            found.append("report_stale")
+    return found
 
 
 class Decision(BaseModel):
     decision: Literal["approve", "reject", "return"]
     return_stage: Literal["onboarding", "working_capital", "lendwise"] | None = None
     comment: str = Field(default="", max_length=2000)
-    expected_version: int = Field(ge=0)
+    expected_version: int = Field(ge=0, le=2**31 - 1)
+    # NFR-07 step-up: the approver's own password, required to approve above ₹1.5 crore.
+    password: SecretStr | None = Field(default=None, max_length=256)
+    # ADR 0038: with MFA enrolled, the step-up also needs a current code from the app.
+    mfa_code: SecretStr | None = Field(default=None, max_length=16)
+    # #6: the report version the approver was shown; approve is refused if it is no longer current.
+    report_version: int | None = Field(default=None, ge=0, le=2**31 - 1)
+    # P9 (plan v3.4 §6, OWASP ASI09): the approver attests they reviewed the Critic findings and
+    # safety events before approving; reject and return need no attestation.
+    attested: bool = False
+
+
+def _report_current(svc: Svc, case: Any, shown: int | None) -> None:
+    """#6, ADR 0003 §3: approve only a fresh report, and (when the client says which version it
+    displayed) only that version. Reject and return never call this."""
+    with transaction(svc.engine) as s:
+        st = report.state(s, case)
+    if st["stale"] or (shown is not None and shown != st["version"]):
+        raise ProblemError(409, "report stale, regenerate", ApiErrorCode.REPORT_STALE)
+
+
+def _step_up(
+    svc: Svc,
+    who: Principal,
+    case: Any,
+    password: SecretStr | None,
+    request: Request,
+    mfa_code: SecretStr | None = None,
+) -> None:
+    """Re-authenticate an approval of more than the routing threshold (engines.routing.THRESHOLD,
+    the same number routing uses). Failures share the login limit; 403, never 401, so the web
+    client keeps the session. A missing validated amount fails closed (step-up required)."""
+    with transaction(svc.engine) as s:
+        gate = reads.get_latest(s, case.tenant_id, case.id, "wc.gate")
+        need = reads.get_latest(s, case.tenant_id, case.id, "wc.recommended_amount")
+        user = reads.get_user(s, who.user_id)
+    if gate and gate.value_text == "GO" and need and Decimal(need.value_text) <= THRESHOLD:
+        return
+    limiter = request.app.state.login_limiter
+    key = (f"step-up:{who.user_id}",)  # per user, not per IP: a stolen token cannot rotate IPs
+    if not limiter.test(LOGIN_FAILURES, *key) or not limiter.test(HOURLY_FAILURES, *key):
+        raise ProblemError(
+            429, "too many failed confirmations; wait a minute", ApiErrorCode.RATE_LIMITED
+        )
+    if (
+        password is None
+        or user is None
+        or not verify_password(user.password_hash, password.get_secret_value())
+    ):
+        if password is not None:
+            limiter.hit(LOGIN_FAILURES, *key)
+            limiter.hit(HOURLY_FAILURES, *key)
+            svc.ledger.audit(case.id, "STEP_UP_FAILED", {"by": who.user_id})
+        raise ProblemError(
+            403,
+            "approving more than ₹1,50,00,000 needs your password again",
+            ApiErrorCode.STEP_UP_REQUIRED,
+        )
+    if user.mfa_enabled and (
+        mfa_code is None
+        or not accounts.check_second_factor(
+            svc, user, mfa_code.get_secret_value(), actor=who.user_id
+        )
+    ):
+        if mfa_code is not None:
+            limiter.hit(LOGIN_FAILURES, *key)
+            limiter.hit(HOURLY_FAILURES, *key)
+            svc.ledger.audit(case.id, "STEP_UP_FAILED", {"by": who.user_id, "factor": "mfa"})
+        raise ProblemError(
+            403,
+            "approving more than ₹1,50,00,000 needs your password and a code from your app",
+            ApiErrorCode.STEP_UP_REQUIRED,
+        )
+    svc.ledger.audit(case.id, "STEP_UP_VERIFIED", {"by": who.user_id})
 
 
 @router.post("/cases/{case_id}/decision")
-def decide(case_id: str, body: Decision, who: Approver, svc: Svc) -> dict[str, Any]:
+def decide(
+    case_id: str, body: Decision, who: Approver, svc: Svc, request: Request
+) -> dict[str, Any]:
     """Only the routed approver; never the preparer (maker-checker); internal only (APR-06)."""
     case = visible_case(svc, who, case_id)
     if not can_decide(who, case_ref(case)):
@@ -226,6 +314,17 @@ def decide(case_id: str, body: Decision, who: Approver, svc: Svc) -> dict[str, A
             "return needs return_stage; approve and reject must not have one",
             errors=[{"field": "return_stage", "row": None, "reason": "inconsistent"}],
         )
+    if body.decision == "approve" and not body.attested:  # before the step-up password prompt
+        raise ProblemError(
+            422,
+            "confirm you reviewed the Critic findings and safety events before approving",
+            ApiErrorCode.ATTESTATION_REQUIRED,
+            errors=[{"field": "attested", "row": None, "reason": "must be true to approve"}],
+        )
+    if body.decision == "approve":  # cheap pre-check: no password prompt for a stale report
+        _report_current(svc, case, body.report_version)
+    if body.decision == "approve" and svc.settings.approval_step_up:
+        _step_up(svc, who, case, body.password, request, body.mfa_code)
     back = Stage(body.return_stage) if body.return_stage else None
     # One writer per case: a decision never races a running stage (ADR 0007).
     with run_lock(svc.engine, who.tenant_id, case.id, f"decision-{uuid.uuid4().hex}"):
@@ -233,6 +332,8 @@ def decide(case_id: str, body: Decision, who: Approver, svc: Svc) -> dict[str, A
             # S1: fail closed. The return is not recorded as applied; the case is FAILED.
             svc.supervisor.fail_return(case.id, back)
             raise ProblemError(409, "no approval is pending for this case", ApiErrorCode.CONFLICT)
+        if body.decision == "approve":  # authoritative, under the lock: no change before the record
+            _report_current(svc, case, body.report_version)
         # NFR-07: the comment is redacted before it reaches the approval row and its audit event.
         approval = svc.ledger.record_decision(
             case.id,
@@ -243,6 +344,7 @@ def decide(case_id: str, body: Decision, who: Approver, svc: Svc) -> dict[str, A
             return_stage=body.return_stage,
             comment=redact(body.comment),
             warnings=_warnings(svc, case),
+            attested=body.attested,
         )
         try:
             svc.supervisor.decide(case.id, decision=body.decision, return_stage=back)

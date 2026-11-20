@@ -22,3 +22,15 @@
 /packages/api-client/           @credassure-owner-uilead
 /packages/core/                 @credassure-owner-name1 @credassure-owner-pritish
 /packages/security/             @credassure-owner-name1 @credassure-owner-name5
+
+# Progress tracking (README §12): each owner edits only their module file; entries are new files per PR.
+/docs/progress/modules/ui.md            @credassure-owner-uilead
+/docs/progress/modules/copilot.md       @credassure-owner-name6 @credassure-owner-name3 @credassure-owner-name2
+/docs/progress/modules/auth.md          @credassure-owner-name1
+/docs/progress/modules/rai.md           @credassure-owner-pritish
+/docs/progress/modules/guardrails.md    @credassure-owner-pritish @credassure-owner-name5
+/docs/progress/modules/deployment.md    @credassure-owner-name1
+/docs/progress/modules/docs.md          @credassure-owner-pritish
+/docs/progress/modules/evaluation.md    @credassure-owner-name5 @credassure-owner-name2
+/docs/progress/gates.md                 @credassure-owner-name1 @credassure-owner-pritish
+/.github/workflows/                     @credassure-owner-name1 @credassure-owner-pritish

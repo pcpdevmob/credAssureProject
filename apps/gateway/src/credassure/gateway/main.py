@@ -13,8 +13,9 @@ import json
 import logging
 import os
 import sqlite3
+import time
 import uuid
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Mapping, Sequence
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
@@ -23,6 +24,7 @@ from typing import Any
 import yaml
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.utils import get_openapi
 from langgraph.checkpoint.sqlite import SqliteSaver
 from limits import parse
 from limits.storage import MemoryStorage
@@ -66,18 +68,35 @@ from credassure.engines import (
 from credassure.gateway import problems, tracing
 from credassure.gateway.deps import Services, current_user
 from credassure.gateway.jobs import JobRunner
-from credassure.gateway.routers import admin, auth, cases, citations, health, lineage, workflow
+from credassure.gateway.metrics import MeteredLLM, Metrics
+from credassure.gateway.routers import (
+    admin,
+    auth,
+    cases,
+    citations,
+    copilot,
+    health,
+    lineage,
+    telemetry,
+    users,
+    workflow,
+)
 from credassure.gateway.settings import Settings, get_settings
 from credassure.gateway.supervisor_service import SupervisorService
+from credassure.guardrails import switch as rail_switch
 from credassure.ledger import hr, migrate, reads
+from credassure.ledger.hr import display_names as hr_display_names
 from credassure.ledger.session import case_engine, hr_engine, transaction
 from credassure.ledger.store import SqlLedger
 from credassure.lender_sim import ScriptedLender
 from credassure.observability.log import configure_logging, log_context, set_redactor
+from credassure.retrieval.help import PREFIX as HELP_PREFIX
+from credassure.retrieval.help import HelpIndex
 from credassure.retrieval.search import Filters, Searcher, make_reranker, resolve
+from credassure.retrieval.source_priority import prioritise
 from credassure.security import pii
 from credassure.security.auth import verify_token
-from credassure.tools.registry import RegistryError, authorize_fact
+from credassure.tools.registry import RegistryError, authorize_fact, is_display_only
 from credassure.tools.runner import ToolRunner
 
 _log = logging.getLogger("credassure.gateway")
@@ -134,6 +153,7 @@ def _default_llm(settings: Settings) -> LLMPort | None:
         disable_thinking=settings.llm_disable_thinking,
         thinking_switch=settings.llm_thinking_switch,
         http_client=httpx2.Client(verify=ssl.create_default_context(cafile=ca)) if ca else None,
+        replay=settings.replay_mode,
     )
 
 
@@ -185,7 +205,8 @@ def _reference_rates(settings: Settings) -> tuple[lendwise.ReferenceRate, ...]:
 
 
 def _offer_inputs(settings: Settings, engine: Engine) -> Callable[[str], lendwise.Inputs]:
-    """Case -> its uploaded offers and KFS schedules plus its funding position (read-only)."""
+    """Case -> its uploaded offers and KFS schedules, plus every negotiated revision whose
+    concession counted (ADR 0037), and its funding position (read-only)."""
     funding, rates = _case_inputs(settings, engine), _reference_rates(settings)
     week1 = calendar.week1_start(settings.as_of_date)
 
@@ -197,6 +218,11 @@ def _offer_inputs(settings: Settings, engine: Engine) -> Callable[[str], lendwis
                 for r in rows
                 if r.kind in ("offer", "kfs")
             ]
+            negotiated = {  # the last version wins
+                f.key: f.value_text
+                for f in reads.list_for_case(s, settings.tenant_id, case_id)
+                if f.key.startswith(lendwise.NEGOTIATION)
+            }
         wc = funding(case_id)
         position = (
             None
@@ -204,7 +230,9 @@ def _offer_inputs(settings: Settings, engine: Engine) -> Callable[[str], lendwis
             else lendwise.position(wc.files, wc.indicative, wc.weeks, week1)
         )
         cls = str(wc.files.order.get("enterprise_class", "")) if wc.files else ""
-        return lendwise.load_inputs(uploads, cls, position, rates)
+        return lendwise.with_revisions(
+            lendwise.load_inputs(uploads, cls, position, rates), negotiated
+        )
 
     return load
 
@@ -225,22 +253,42 @@ def _filters(settings: Settings, engine: Engine, case_id: str, **kw: Any) -> Fil
     return Filters(as_of=settings.as_of_date, home_state=settings.home_state, own_kfs=own, **kw)
 
 
+@functools.cache
+def _help_index(directory: Path) -> HelpIndex:
+    """ADR 0035: product help, parsed once per process (docs/help is read-only at run time)."""
+    return HelpIndex.load(directory)
+
+
 def _resolver(settings: Settings, engine: Engine) -> Callable[[str], Resolve | None]:
-    """VER-02: a per-case citation resolver over the indexed corpus (None before `make ingest`;
-    the Critic then fails any citation closed)."""
+    """VER-02: a per-case citation resolver over the indexed corpus and product help. Corpus ids
+    are None-resolved before `make ingest` (the Critic then fails them closed); HELP- ids always
+    resolve against docs/help (ADR 0035)."""
+    help_index = _help_index(settings.help_dir)
 
     def for_case(case_id: str) -> Resolve | None:
-        if not settings.corpus_db.exists():
-            return None
-        filters = _filters(settings, engine, case_id)
-        return lambda ids: resolve(
-            settings.corpus_db,
-            ids,
-            case_id=case_id,
-            tenant_id=settings.tenant_id,
-            filters=filters,
-            known=_superseded_index(settings.corpus_manifest),
-        )
+        corpus: Resolve | None = None
+        if settings.corpus_db.exists():
+            filters = _filters(settings, engine, case_id)
+
+            def corpus(ids: Sequence[str]) -> Mapping[str, tuple[str, str]]:
+                return resolve(
+                    settings.corpus_db,
+                    ids,
+                    case_id=case_id,
+                    tenant_id=settings.tenant_id,
+                    filters=filters,
+                    known=_superseded_index(settings.corpus_manifest),
+                )
+
+        def both(ids: Sequence[str]) -> Mapping[str, tuple[str, str]]:
+            helps = [i for i in ids if i.startswith(HELP_PREFIX)]
+            rest = [i for i in ids if not i.startswith(HELP_PREFIX)]
+            out = dict(help_index.resolve(helps))
+            if rest:
+                out |= corpus(rest) if corpus else {i: ("missing", "") for i in rest}
+            return out
+
+        return both
 
     return for_case
 
@@ -248,7 +296,8 @@ def _resolver(settings: Settings, engine: Engine) -> Callable[[str], Resolve | N
 def _facts(settings: Settings, engine: Engine, case_id: str) -> dict[str, Fact]:
     with transaction(engine) as s:
         rows = reads.list_for_case(s, settings.tenant_id, case_id)  # key, version order
-    return {f.key: Fact(f.value_text, f.unit) for f in rows}  # the last version wins
+    # the last version wins; display-only text (the lender's reply) never counts as a figure
+    return {f.key: Fact(f.value_text, f.unit) for f in rows if not is_display_only(f.key)}
 
 
 def _verify_claims(settings: Settings, engine: Engine) -> Callable[..., list[CriticFinding]]:
@@ -392,8 +441,13 @@ def _searcher(settings: Settings) -> Callable[[], Searcher]:
         reranker = make_reranker(
             settings.reranker, settings.reranker_model, settings.reranker_revision
         )
+        rewrite, gate = settings.retrieval_query_rewrite, settings.answerability_threshold
+        order = settings.rerank_order
         if settings.copilot_search_mode == "keyword":
-            return Searcher(settings.corpus_db, None, None, reranker=reranker)
+            return Searcher(
+                settings.corpus_db, None, None, reranker=reranker, query_rewrite=rewrite,
+                min_score=gate, rerank_order=order,
+            )  # fmt: skip
         from credassure.retrieval.cli import embedder
         from credassure.retrieval.index import open_chroma
 
@@ -403,28 +457,40 @@ def _searcher(settings: Settings) -> Callable[[], Searcher]:
             embedder(os.environ),
             reranker=reranker,
             tenant_id=settings.tenant_id,
+            query_rewrite=rewrite,
+            min_score=gate,
+            rerank_order=order,
         )
 
     return build
 
 
 def _copilot_handlers(settings: Settings, engine: Engine) -> dict[str, Callable[..., Any]]:
-    """The copilot's four fixed tools (scope #20) plus the Critic. case_id is injected by the
-    tool runner (SUP-08); collections and filters are fixed here, never chosen by the model."""
+    """The copilot's fixed tools (scope #20, ADR 0035) plus the Critic. case_id is injected by the
+    tool runner (SUP-08); "" means no case is open, and then no case's KFS is searchable and the
+    case tools are never reached (the agent refuses them first). Collections and filters are fixed
+    here, never chosen by the model."""
     searcher = _searcher(settings)
+    help_index = _help_index(settings.help_dir)
 
     def search(collections: tuple[str, ...]) -> Callable[..., list[dict[str, Any]]]:
         def run(case_id: str, query: str) -> list[dict[str, Any]]:
             if not settings.corpus_db.exists():
                 return []
+            if not case_id:  # no open case: never another case's KFS (BR-14)
+                collections_ = tuple(c for c in collections if c != "kfs")
+            else:
+                collections_ = collections
             hits = searcher().search_knowledge(
                 query,
                 case_id=case_id,
                 tenant_id=settings.tenant_id,
-                filters=_filters(settings, engine, case_id, collections=collections),
+                filters=_filters(settings, engine, case_id, collections=collections_),
                 mode=settings.copilot_search_mode,
                 k=5,
             )
+            if settings.source_priority:  # same five passages, primary instruments first
+                hits = prioritise(hits)
             return [
                 {
                     **dataclasses.asdict(p),
@@ -445,6 +511,27 @@ def _copilot_handlers(settings: Settings, engine: Engine) -> dict[str, Callable[
             out[key] = {"value": fact.value, "unit": fact.unit}
         return out
 
+    def case_status(case_id: str) -> dict[str, Any]:
+        """CP-10: workflow state only (status, stage decisions, route); no figure, no HR detail."""
+        with transaction(engine) as s:
+            case = reads.get_case(s, settings.tenant_id, case_id)
+            runs = reads.stage_runs(s, settings.tenant_id, case_id)
+        if case is None:
+            return {"status": None, "stages": []}
+        latest = {r.stage: r for r in runs}  # attempts ascend
+        order = [st.value for st in Stage]
+        return {
+            "status": case.status,
+            "current_stage": case.current_stage,
+            "route": case.route,
+            "stages": [
+                {"stage": st, "decision": latest[st].decision}
+                for st in order
+                if st in latest and latest[st].decision
+            ],
+            "blockers": any(r.decision not in ("GO", None) for r in latest.values()),
+        }
+
     def explain_blocker(case_id: str) -> dict[str, Any]:
         with transaction(engine) as s:
             runs = reads.stage_runs(s, settings.tenant_id, case_id)
@@ -462,7 +549,9 @@ def _copilot_handlers(settings: Settings, engine: Engine) -> dict[str, Callable[
     return {
         "search_regulations": search(("public",)),
         "search_policies": search(("policy", "kfs")),
+        "search_help": lambda case_id, query: help_index.search(query),
         "get_case_facts": case_facts,
+        "get_case_status": case_status,
         "explain_blocker": explain_blocker,
         "verify_claims": _verify_claims(settings, engine),
     }
@@ -497,8 +586,8 @@ def _tool_factory(settings: Settings, engine: Engine) -> Callable[[AgentName], T
 
 
 def build_services(settings: Settings, llm: LLMPort | None) -> Services:
-    migrate.upgrade("case", settings.case_db)  # idempotent; seeds stay separate (#29)
-    engine = case_engine(settings.case_db)
+    migrate.upgrade("case", settings.case_target)  # idempotent; seeds stay separate (#29)
+    engine = case_engine(settings.case_target)  # SQLite file or MySQL URL (ADR 0039)
     ledger = SqlLedger(engine, settings.tenant_id)
     rechecks = {  # SUP-05: the stage's own recomputation; other stages keep the default
         Stage.ONBOARDING: onboarding.make_recheck(
@@ -512,7 +601,8 @@ def build_services(settings: Settings, llm: LLMPort | None) -> Services:
     }
     with transaction(engine) as s:
         rule = reads.get_config(s, settings.tenant_id, "boundary_rule") or settings.boundary_rule
-    saver = SqliteSaver(sqlite3.connect(settings.case_db, check_same_thread=False))
+    settings.checkpoints_path.parent.mkdir(parents=True, exist_ok=True)
+    saver = SqliteSaver(sqlite3.connect(settings.checkpoints_path, check_same_thread=False))
     supervisor = Supervisor(
         agents=_STAGE_AGENTS,
         store=ledger,
@@ -538,6 +628,7 @@ def build_services(settings: Settings, llm: LLMPort | None) -> Services:
         supervisor=supervisor,
         llm=supervisor.llm,
         jobs=JobRunner(engine, ledger, supervisor),
+        checkpointer=saver,
     )
     svc.service = SupervisorService(svc)
     svc.offer_preview = _offer_preview(settings, engine)
@@ -562,19 +653,51 @@ def _rate_key(settings: Settings, request: Request) -> str:
     return "ip:" + (request.client.host if request.client else "unknown")
 
 
+_METHODS = frozenset({"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"})
+
+API_SECURITY_HEADERS = {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'",
+    "Referrer-Policy": "no-referrer",
+    "Cache-Control": "no-store",  # case data and tokens are never cached by a browser or proxy
+}
+
+
+def _load_employee_names(settings: Settings) -> None:
+    """H13 (ADR 0030 §2): exact-match masking of hr.db employee names. A missing hr.db (fresh
+    clone before `make hr-db`) leaves name masking off and says so; nothing else changes."""
+    try:
+        count = pii.set_known_names(hr_display_names(hr_engine(settings.hr_db)))
+    except Exception as exc:  # hr.db missing or unreadable
+        pii.set_known_names([])
+        if settings.app_env == "demo":  # never demo without name masking
+            raise RuntimeError("hr.db is not readable: run make hr-db before the demo") from exc
+        _log.warning("employee-name masking off: hr.db not readable (run make hr-db)")
+        return
+    _log.info("employee-name masking on", extra={"names": count})
+
+
 def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) -> FastAPI:
     settings = settings or get_settings()
     configure_logging(settings.log_level)
     set_redactor(pii.redact)  # NFR-07: Verhoeff-aware redaction for every log line
+    _load_employee_names(settings)  # H13: hr.db names masked in chat, logs and traces
     tracing.configure(settings)
-    svc = build_services(settings, llm if llm is not None else _default_llm(settings))
+    rail_switch.set_off(rail_switch.SWITCHABLE if settings.ablation == "A6" else ())  # P8.5
+    metrics = Metrics()
+    inner = llm if llm is not None else _default_llm(settings)
+    svc = build_services(settings, MeteredLLM(inner, metrics) if inner is not None else None)
     app = FastAPI(title="CredAssure API", version="0.2.0")
     app.state.settings = settings
     app.state.services = svc
+    app.state.metrics = metrics
     problems.install(app)
     # ponytail: in-memory buckets per process; use limits' Redis storage if the gateway scales out.
     limiter, rate = MovingWindowRateLimiter(MemoryStorage()), parse(settings.rate_limit)
     app.state.login_limiter = MovingWindowRateLimiter(MemoryStorage())  # S4, routers/auth.py
+    app.state.client_error_limiter = MovingWindowRateLimiter(MemoryStorage())  # telemetry.py
+    app.state.copilot_limiter = MovingWindowRateLimiter(MemoryStorage())  # routers/copilot.py
 
     @app.middleware("http")
     async def rate_limit(
@@ -589,13 +712,46 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
         )
 
     @app.middleware("http")
+    async def upload_cap(
+        request: Request, call_next: Callable[[Request], Awaitable[Response]]
+    ) -> Response:
+        """E10 SHOULD-1: refuse an oversized upload from its Content-Length, before multipart
+        parsing. The route still checks the file itself (chunked bodies have no length)."""
+        size = request.headers.get("content-length", "")
+        cap = settings.max_upload_bytes + _MULTIPART_OVERHEAD
+        if request.url.path.endswith("/files") and size.isdigit() and int(size) > cap:
+            return problems.problem_response(
+                request,
+                413,
+                f"file is larger than {settings.max_upload_bytes} bytes",
+                ApiErrorCode.PAYLOAD_TOO_LARGE,
+            )
+        return await call_next(request)
+
+    @app.middleware("http")
     async def request_id(
         request: Request, call_next: Callable[[Request], Awaitable[Response]]
     ) -> Response:
         rid = uuid.uuid4().hex
+        request.state.request_id = rid  # problem+json bodies and the 500 handler read it
+        started = time.monotonic()
+
+        def route_of() -> str:
+            path = getattr(request.scope.get("route"), "path", None)
+            return path if isinstance(path, str) else "unmatched"
+
+        method = request.method if request.method in _METHODS else "OTHER"  # bounded label
         with log_context(request_id=rid, tenant_id=settings.tenant_id):
-            response = await call_next(request)
+            try:
+                response = await call_next(request)
+            except Exception:  # the 500 handler answers outside this middleware; count it here
+                metrics.http(method, route_of(), 500, time.monotonic() - started)
+                raise
+        metrics.http(method, route_of(), response.status_code, time.monotonic() - started)
         response.headers["X-Request-ID"] = rid
+        if request.url.path.startswith("/v1/"):  # P8.4 (scope #52, OWASP API8): JSON API only;
+            for name, value in API_SECURITY_HEADERS.items():  # /docs keeps Swagger's own assets
+                response.headers.setdefault(name, value)  # a route's own CSP/cache header wins
         return response
 
     # Added last, so outermost: 429s and 500s still carry CORS headers for the web app (N2).
@@ -606,13 +762,86 @@ def create_app(settings: Settings | None = None, *, llm: LLMPort | None = None) 
         allow_headers=["Authorization", "Content-Type", "Idempotency-Key"],
     )
 
-    for module in (health, auth, cases, citations, lineage, workflow, admin):
+    for module in (
+        health,
+        auth,
+        users,
+        cases,
+        citations,
+        lineage,
+        workflow,
+        admin,
+        telemetry,
+        copilot,
+    ):
         app.include_router(module.router)
     for name, agent_router, deps in _AGENT_ROUTERS:
         app.include_router(agent_router, prefix=f"/v1/agents/{name}")
         app.dependency_overrides[deps.get_supervisor] = lambda: svc.service
         app.dependency_overrides[deps.get_principal] = current_user
+    app.openapi = lambda: _openapi(app)  # type: ignore[method-assign]
     return app
+
+
+_MULTIPART_OVERHEAD = 64 * 1024  # boundaries and part headers around one file
+_PROBLEM = {
+    "type": "object",
+    "required": ["type", "title", "status", "detail", "code"],
+    "properties": {
+        "type": {"type": "string"},
+        "title": {"type": "string"},
+        "status": {"type": "integer"},
+        "detail": {"type": "string"},
+        "code": {"type": "string"},
+        "instance": {"type": "string"},
+        "request_id": {"type": "string", "description": "Same as the X-Request-ID header"},
+        "errors": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "field": {"type": ["string", "null"]},
+                    "row": {"type": ["integer", "null"]},
+                    "reason": {"type": "string"},
+                },
+            },
+        },
+    },
+}
+
+
+def _openapi(app: FastAPI) -> dict[str, Any]:
+    """E10 SHOULD-2, scope #51: the schema says what the runtime does. Every error is RFC 9457
+    problem+json (4XX, 5XX, and 422 in place of FastAPI's default), and the agent routers' case
+    routes need the same bearer token as the core routes (their auth is a gateway override, which
+    FastAPI cannot see)."""
+    if app.openapi_schema:
+        return app.openapi_schema
+    schema = get_openapi(title=app.title, version=app.version, routes=app.routes)
+    components = schema.setdefault("components", {})
+    components.setdefault("securitySchemes", {})["HTTPBearer"] = {
+        "type": "http",
+        "scheme": "bearer",
+    }
+    components.setdefault("schemas", {})["Problem"] = _PROBLEM
+    problem = {
+        "content": {
+            "application/problem+json": {"schema": {"$ref": "#/components/schemas/Problem"}}
+        }
+    }
+    for path, item in schema["paths"].items():
+        for op in item.values():
+            responses = op.setdefault("responses", {})
+            if "422" in responses:
+                responses["422"] = {"description": "Validation error", **problem}
+            responses["4XX"] = {"description": "Client error", **problem}
+            responses["5XX"] = {"description": "Server error", **problem}
+            if path.startswith("/v1/agents/") and "/cases/" in path:
+                op.setdefault("security", [{"HTTPBearer": []}])
+    schema["components"]["schemas"].pop("HTTPValidationError", None)
+    schema["components"]["schemas"].pop("ValidationError", None)
+    app.openapi_schema = schema
+    return schema
 
 
 def app() -> FastAPI:

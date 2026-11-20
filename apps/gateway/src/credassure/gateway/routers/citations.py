@@ -18,14 +18,15 @@ from pydantic import BaseModel
 from credassure.core.errors import ApiErrorCode
 from credassure.gateway.deps import Svc, User, visible_case
 from credassure.gateway.problems import ProblemError
+from credassure.guardrails.events import record as guardrail
+from credassure.guardrails.excerpt import EXCERPT_LIMIT, FULL_TEXT_BASES, excerpt
+from credassure.guardrails.switch import on as rail_on
 from credassure.ledger import reads
 from credassure.ledger.session import transaction
 from credassure.retrieval.search import Filters, Searcher
 from credassure.security.injection import scan
 
 router = APIRouter(prefix="/v1", tags=["cases"])
-FULL_TEXT_BASES = frozenset({"L1", "L2", "L5"})  # anything else is capped: fail closed
-EXCERPT_LIMIT = 600  # characters of a capped passage that may be shown
 
 
 class CitationPassage(BaseModel):
@@ -43,22 +44,6 @@ class CitationPassage(BaseModel):
     injection_flags: list[str]
 
 
-def excerpt(text: str, quote: str | None, limit: int = EXCERPT_LIMIT) -> str:
-    """At most ``limit`` characters, centred on the longest word of ``quote`` found in the text
-    (else the start). A window, not a summary: the characters are the source's own."""
-    if len(text) <= limit:
-        return text
-    centre, lowered = 0, text.lower()
-    words = {w for w in (quote or "").lower().split() if len(w) >= 4}
-    for word in sorted(words, key=len, reverse=True):
-        at = lowered.find(word)
-        if at >= 0:
-            centre = at + len(word) // 2
-            break
-    start = max(0, min(centre - limit // 2, len(text) - limit))
-    return text[start : start + limit]
-
-
 @router.get("/cases/{case_id}/citations/{chunk_id:path}", response_model=CitationPassage)
 def citation(
     case_id: Annotated[str, PathParam(min_length=1, max_length=32)],
@@ -68,20 +53,52 @@ def citation(
     quote: Annotated[str | None, Query(max_length=1000)] = None,
 ) -> CitationPassage:
     case = visible_case(svc, who, case_id)  # 404 for a case this caller cannot see
+    with transaction(svc.engine) as s:
+        own = reads.own_kfs(s, case.tenant_id, case.id)
+    return _passage(svc, case.id, case.tenant_id, own, chunk_id, quote)
+
+
+@router.get("/citations/{chunk_id:path}", response_model=CitationPassage)
+def citation_outside_a_case(
+    chunk_id: Annotated[str, PathParam(min_length=1, max_length=160)],
+    who: User,
+    svc: Svc,
+    quote: Annotated[str | None, Query(max_length=1000)] = None,
+) -> CitationPassage:
+    """A passage cited by an answer given outside a case (ADR 0035): the same filter with no
+    case, so every case's KFS is a 404 here."""
+    return _passage(svc, None, who.tenant_id, frozenset(), chunk_id, quote)
+
+
+def _passage(
+    svc: Svc,
+    case_id: str | None,
+    tenant_id: str,
+    own: frozenset[str],
+    chunk_id: str,
+    quote: str | None,
+) -> CitationPassage:
     settings = svc.settings
     found = None
     if settings.corpus_db.exists():
-        with transaction(svc.engine) as s:
-            own = reads.own_kfs(s, case.tenant_id, case.id)
         filters = Filters(as_of=settings.as_of_date, home_state=settings.home_state, own_kfs=own)
-        found = Searcher(settings.corpus_db, None, None, tenant_id=case.tenant_id).passage(
-            chunk_id, case.id, case.tenant_id, filters
+        found = Searcher(settings.corpus_db, None, None, tenant_id=tenant_id).passage(
+            chunk_id, case_id, tenant_id, filters
         )
     if found is None:
         raise ProblemError(404, "no such passage for this case", ApiErrorCode.NOT_FOUND)
-    short = found.legal_basis not in FULL_TEXT_BASES and len(found.text) > EXCERPT_LIMIT
+    short = (  # R2 excerpt cap; off only under the A6 ablation (guardrails.switch)
+        rail_on("R2")
+        and found.legal_basis not in FULL_TEXT_BASES
+        and len(found.text) > EXCERPT_LIMIT
+    )
     text = excerpt(found.text, quote) if short else found.text
     flags = scan(text)
+    # ADR 0029 R2: a read, so the events stay in the trace (no audit row per citation view)
+    if short:
+        guardrail("R2", "R2.citation_excerpt_capped", "cap", case_id=case_id, chunk_id=chunk_id)
+    if flags:
+        guardrail("R2", "R2.passage_injection_flagged", "flag", case_id=case_id, flags=flags)
     return CitationPassage(
         chunk_id=found.chunk_id,
         doc_id=found.doc_id,

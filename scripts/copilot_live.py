@@ -19,9 +19,10 @@ from typing import Any
 
 from fastapi.testclient import TestClient
 
+from credassure.evaluation import dual_scoring
 from credassure.evaluation.check_corpus_refs import known_doc_ids
 from credassure.evaluation.scorers import score
-from credassure.gateway.main import create_app
+from credassure.gateway.main import _default_llm, create_app
 from credassure.gateway.settings import Settings
 from credassure.ledger import reads
 from credassure.ledger.seed import seed
@@ -86,6 +87,7 @@ def main() -> int:
     seed(db, {"SEED_PASSWORD": password})
     settings = Settings(
         case_db=db,
+        mfa_enforced=False,  # ADR 0038: evaluation tools sign in with a password only
         jwt_secret=secrets.token_urlsafe(48),
         tenant_id="default",
         tracing_enabled=False,
@@ -95,6 +97,13 @@ def main() -> int:
         sys.exit("LLM_ENABLED is false: the live run measures the model (use the test suite)")
     items = [json.loads(x) for x in (ROOT / "evaluation/testset/v1/items.jsonl").open()]
     known = known_doc_ids()
+    current = dual_scoring.current_doc_ids()
+    llm = _default_llm(settings)  # J1 judge for the supported score (P5.2, ADR 0032 §4)
+    judge = (
+        dual_scoring.llm_judge(lambda p: llm.complete(p, name="j1_supported"))
+        if llm is not None
+        else None
+    )
     rows: list[dict[str, Any]] = []
     with TestClient(create_app(settings)) as c:
         h = _login(c, "demo.preparer", password)
@@ -137,6 +146,16 @@ def main() -> int:
                 "citations": sorted({x["doc_id"] for x in answer.get("citations") or []})
             }
             result = score(item, scored, known)
+            dual: dual_scoring.Dual | None = None
+            if item["category"] == "regulatory":
+                texts = []
+                for x in answer.get("citations") or []:
+                    p = c.get(f"/v1/cases/{cid}/citations/{x['chunk_id']}", headers=h)
+                    if p.status_code == 200:
+                        texts.append(str(p.json().get("text", "")))
+                dual = dual_scoring.score(
+                    item, scored, texts, known=known, current=current, judge=judge
+                )
             rows.append(
                 {
                     "id": item["id"],
@@ -150,7 +169,20 @@ def main() -> int:
                     "refusal_code": answer.get("refusal_code"),
                     "trace_id": answer.get("trace_id"),
                     "latency_s": round(time.monotonic() - t0, 1),
+                    "span_ids": [
+                        s for x in answer.get("citations") or [] for s in x.get("span_ids") or []
+                    ],
                 }
+                | (
+                    {
+                        "strict": dual.strict,
+                        "supported": dual.supported,
+                        "judged": dual.judged,
+                        "dual_detail": dual.detail,
+                    }
+                    if dual
+                    else {}
+                )
             )
             print(f"{item['id']} {'PASS' if result['passed'] else 'FAIL'} {result['detail']}")
     out = args.out_dir / "results.jsonl"
@@ -162,6 +194,22 @@ def main() -> int:
     for cat in CATEGORIES:
         if total[cat]:
             print(f"{cat:<11} {ok[cat]}/{total[cat]}")
+    reg = [r for r in rows if r["category"] == "regulatory"]
+    if reg:  # P5.2: strict stays the headline; supported beside it; judged rows to a human sample
+        answered = [r for r in reg if r["answer"] and "can't verify" not in str(r["answer"])]
+        covered = [r for r in answered if r["citations"] and r["span_ids"]]
+        print(
+            f"regulatory  strict {dual_scoring.summary(reg)['strict']}/{len(reg)}"
+            f"  supported {dual_scoring.summary(reg)['supported']}/{len(reg)}"
+            f"  span-citation coverage {len(covered)}/{len(answered)} answered"
+        )
+        sample = args.out_dir / "human-sample.jsonl"
+        sample.write_text(
+            "".join(
+                json.dumps(r, ensure_ascii=False) + "\n" for r in dual_scoring.human_sample(reg)
+            )
+        )
+        print(f"human sample (J1 verdicts to check): {sample}")
     print(f"results: {out}")
     return 0
 

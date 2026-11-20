@@ -143,6 +143,14 @@ def test_WC03_CP02_scorers_money_rate_and_citation_rules() -> None:
         == "invented_citation"
     )
     assert (
+        scorers.citation(cite, {"answer": "x", "citations": []}, known)["failure_class"]
+        == "no_citation"
+    )
+    wrong = {"answer": "x", "citations": ["R-CG-02"]}
+    other = cite | {"relevant_doc_ids": ["R-CG-05"]}
+    assert scorers.citation(other, wrong, known)["failure_class"] == "wrong_citation"
+    assert scorers.BRD_CLASS["no_citation"] == scorers.BRD_CLASS["wrong_citation"] == "search_miss"
+    assert (
         scorers.citation(cite, {"answer": "outstanding", "citations": ["R-MSME-03"]}, known)[
             "failure_class"
         ]
@@ -243,6 +251,10 @@ def test_BRD12_parse_json_takes_the_last_object() -> None:
     assert parse_json("no json here") is None
 
 
+@pytest.mark.skipif(
+    "R-CG-02" not in check_corpus_refs.Corpus().texts(),
+    reason="corpus text not extracted locally (data/corpus is gitignored; fresh clone or CI)",
+)
 def test_G1_readiness_lists_items_without_an_available_document() -> None:
     blocked = freeze.readiness()
     assert all(": " in b for b in blocked)  # reported, and --write refuses while any remain

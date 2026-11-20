@@ -1,9 +1,14 @@
 """``make data``: regenerate data/frozen/v1 from the seed. Same seed, same bytes.
 
 Refuses to run once ``data/frozen/v1/FROZEN`` exists (G1); later changes go to v2.
+
+``python -m credassure.datagen hr-db`` (``make hr-db``) only rebuilds the gitignored ``hr.db``
+from the frozen, hashed ``hr/profiles.json``. It is allowed after the freeze, so a fresh clone or
+CI can run the tests that read the HR store; ``hr.db`` is not in SHA256SUMS.
 """
 
 import hashlib
+import json
 import shutil
 import sys
 from collections import Counter
@@ -58,5 +63,15 @@ def main() -> int:
     return 0
 
 
+def build_hr_db() -> int:
+    """Rebuild hr.db from the frozen profiles; never touches a hashed file."""
+    profiles = json.loads((OUT / "hr" / "profiles.json").read_text(encoding="utf-8"))
+    hr.build_db(profiles)
+    print(f"wrote {OUT / 'hr.db'} ({len(profiles)} profiles)")
+    return 0
+
+
 if __name__ == "__main__":
+    if sys.argv[1:] == ["hr-db"]:
+        raise SystemExit(build_hr_db())
     raise SystemExit(main())

@@ -29,6 +29,7 @@ from credassure.retrieval.chunking import (
     fixed,
     semantic,
 )
+from credassure.retrieval.context import CONTEXT_VERSION, embed_text
 from credassure.retrieval.sources import SourceDoc
 from credassure.security.injection import scan
 
@@ -99,7 +100,9 @@ Row = tuple[str, str, int, str, str | None, list[str]]
 NEVER = 99991231  # superseded_from of a document nothing replaces
 
 
-def index_version(doc: SourceDoc, embed_model: str, superseded_from: int = NEVER) -> str:
+def index_version(
+    doc: SourceDoc, embed_model: str, superseded_from: int = NEVER, *, headers: bool = False
+) -> str:
     """Skip key: text, chunker, embedder AND every filter field, so a metadata-only change (a
     document newly superseded, re-dated or re-scoped) is re-indexed (KR-04)."""
     fields = [
@@ -115,7 +118,8 @@ def index_version(doc: SourceDoc, embed_model: str, superseded_from: int = NEVER
         str(superseded_from),
     ]
     meta = hashlib.sha256("\0".join(fields).encode()).hexdigest()[:16]
-    return f"{doc.sha256}:{meta}:{CHUNKER_VERSION}:{embed_model}"
+    base = f"{doc.sha256}:{meta}:{CHUNKER_VERSION}:{embed_model}"
+    return f"{base}:{CONTEXT_VERSION}" if headers else base  # a toggle re-indexes (scope #61)
 
 
 def _scan(text: str, path: str | None) -> list[str]:
@@ -146,6 +150,7 @@ def _index(
     version: str,
     embed: Embed,
     superseded_from: int,
+    headers: bool = False,
 ) -> dict[str, Any] | None:
     rows: list[Row] = [
         (f"{doc.doc_id}#{strategy}#{ordinal}", strategy, ordinal, text, path, _scan(text, path))
@@ -169,7 +174,9 @@ def _index(
             batch = mine[start : start + _BATCH]
             collection(chroma, strategy).add(
                 ids=[r[0] for r in batch],
-                embeddings=embed([r[3] for r in batch]),  # type: ignore[arg-type]
+                embeddings=embed(  # type: ignore[arg-type]
+                    [embed_text(doc, strategy, r[3], r[4], on=headers) for r in batch]
+                ),
                 metadatas=cast(Any, [meta | {"injection_flag": bool(r[5])} for r in batch]),
             )
     con.execute(
@@ -213,6 +220,7 @@ def ingest(
     embed_model: str,
     audit: Audit,
     progress: Callable[[str], None] | None = None,
+    contextual_headers: bool = False,
 ) -> Summary:
     summary = Summary()
     con = _connect(corpus_db)
@@ -228,12 +236,14 @@ def ingest(
             superseded_from = (
                 NEVER if not doc.superseded_by else date_key(replaced) if replaced else 0
             )
-            version = index_version(doc, embed_model, superseded_from)
+            version = index_version(doc, embed_model, superseded_from, headers=contextual_headers)
             if existing.get(doc.doc_id) == version:
                 summary.unchanged += 1
             else:
                 with con:
-                    payload = _index(con, chroma, doc, version, embed, superseded_from)
+                    payload = _index(
+                        con, chroma, doc, version, embed, superseded_from, contextual_headers
+                    )
                 if payload:  # audited only once the corpus rows are committed
                     audit(doc.case_id, "INJECTION_FLAGGED", payload)
                 summary.indexed += 1

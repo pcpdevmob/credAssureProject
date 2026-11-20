@@ -21,9 +21,23 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
 )
+from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 TENANT = String(64)
+
+
+# ADR 0039: on MySQL keep what SQLite stores. Microsecond timestamps (the audit hash covers
+# `ts`); JSON and long text as text: native JSON rewrites numbers and key order, TEXT ends at 64KB.
+@compiles(DateTime, "mysql")
+def _mysql_datetime(_type: Any, _compiler: Any, **_kw: Any) -> str:
+    return "DATETIME(6)"
+
+
+@compiles(JSON, "mysql")
+@compiles(Text, "mysql")
+def _mysql_longtext(_type: Any, _compiler: Any, **_kw: Any) -> str:
+    return "LONGTEXT"
 
 
 class CaseBase(DeclarativeBase):
@@ -45,6 +59,16 @@ class User(CaseBase):
     )  # S19 binding; never taken from chat (ONB-01)
     password_hash: Mapped[str] = mapped_column(String(255))
     active: Mapped[bool] = mapped_column(Boolean, default=True)
+    # ADR 0038 (account management, MFA, revocation); every change is audited by ledger.writes.
+    display_name: Mapped[str | None] = mapped_column(String(128))
+    must_change_password: Mapped[bool] = mapped_column(Boolean, default=False)
+    mfa_enabled: Mapped[bool] = mapped_column(Boolean, default=False)
+    mfa_secret: Mapped[str | None] = mapped_column(Text)  # AES-GCM sealed (security.mfa.seal)
+    mfa_last_step: Mapped[int | None] = mapped_column(Integer)  # TOTP replay protection
+    mfa_backup: Mapped[list[str] | None] = mapped_column(JSON)  # argon2 hashes, each used once
+    token_version: Mapped[int] = mapped_column(Integer, default=0)  # bump = revoke all tokens
+    created_at: Mapped[datetime | None] = mapped_column(DateTime)
+    updated_at: Mapped[datetime | None] = mapped_column(DateTime)
 
 
 class Case(CaseBase):
@@ -105,53 +129,10 @@ class LedgerFact(CaseBase):
     value_text: Mapped[str] = mapped_column(Text)  # Decimal/int as exact text
     unit: Mapped[str] = mapped_column(String(16))
     source_type: Mapped[str] = mapped_column(String(32))
-    source_ref: Mapped[str] = mapped_column(String(255))
+    # Text: a fact can cite every file it was computed from (ADR 0039: MySQL enforces lengths).
+    source_ref: Mapped[str] = mapped_column(Text)
     produced_by: Mapped[str] = mapped_column(String(128))  # engine/agent + version
     input_hash: Mapped[str] = mapped_column(String(64))
-    created_at: Mapped[datetime] = mapped_column(DateTime)
-
-
-class Offer(CaseBase):
-    __tablename__ = "offers"
-    __table_args__ = (UniqueConstraint("case_id", "offer_id", "version"),)
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    tenant_id: Mapped[str] = mapped_column(TENANT, index=True)
-    case_id: Mapped[str] = mapped_column(ForeignKey("cases.id"), index=True)
-    lender_id: Mapped[str] = mapped_column(String(32))
-    offer_id: Mapped[str] = mapped_column(String(32))
-    version: Mapped[int] = mapped_column(Integer)
-    payload_json: Mapped[str] = mapped_column(Text)
-    kfs_doc_id: Mapped[str | None] = mapped_column(String(64))
-    created_at: Mapped[datetime] = mapped_column(DateTime)
-
-
-class OfferEvaluation(CaseBase):
-    __tablename__ = "offer_evaluations"
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    tenant_id: Mapped[str] = mapped_column(TENANT, index=True)
-    offer_row_id: Mapped[int] = mapped_column(ForeignKey("offers.id"), index=True)
-    comparable: Mapped[bool] = mapped_column(Boolean)
-    affordable: Mapped[bool | None] = mapped_column(Boolean)
-    amount_received_paise: Mapped[int | None] = mapped_column(BigInteger)
-    total_repayment_paise: Mapped[int | None] = mapped_column(BigInteger)
-    total_cost_paise: Mapped[int | None] = mapped_column(BigInteger)
-    apr_text: Mapped[str | None] = mapped_column(String(32))
-    flags_json: Mapped[str] = mapped_column(Text, default="[]")
-    rank: Mapped[int | None] = mapped_column(Integer)
-
-
-class NegotiationMessage(CaseBase):
-    __tablename__ = "negotiation_messages"
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    tenant_id: Mapped[str] = mapped_column(TENANT, index=True)
-    case_id: Mapped[str] = mapped_column(ForeignKey("cases.id"), index=True)
-    offer_id: Mapped[str] = mapped_column(String(32))
-    round: Mapped[int] = mapped_column(Integer)
-    template_id: Mapped[str] = mapped_column(String(64))
-    slots_json: Mapped[str] = mapped_column(Text)
-    rendered_text: Mapped[str] = mapped_column(Text)
-    critic_status: Mapped[str | None] = mapped_column(String(16))
-    response_version: Mapped[int | None] = mapped_column(Integer)
     created_at: Mapped[datetime] = mapped_column(DateTime)
 
 
@@ -208,6 +189,13 @@ class RunLock(CaseBase):
     tenant_id: Mapped[str] = mapped_column(TENANT)
     run_id: Mapped[str] = mapped_column(String(64))
     acquired_at: Mapped[datetime] = mapped_column(DateTime)
+
+
+class WriteLock(CaseBase):
+    """One row (id 1) every MySQL transaction locks first: SQLite's BEGIN IMMEDIATE (ADR 0039)."""
+
+    __tablename__ = "write_lock"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
 
 
 class AuditHead(CaseBase):

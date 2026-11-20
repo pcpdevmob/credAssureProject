@@ -27,7 +27,9 @@ TOOL_NAMES: tuple[str, ...] = (
     "search_knowledge",
     "search_regulations",
     "search_policies",
+    "search_help",
     "get_case_facts",
+    "get_case_status",
     "explain_blocker",
     "verify_claims",
     "route_proposal",
@@ -67,14 +69,21 @@ def authorize(
         raise RegistryError(ApiErrorCode.CASE_REQUIRED)
 
 
+def is_display_only(key: str) -> bool:
+    """True for a fact people may read but no agent may (registry ``display_only`` key suffixes)."""
+    return key.endswith(tuple(str(x) for x in _load().get("display_only") or []))
+
+
 def authorize_fact(agent: AgentName | str, key: str, *, write: bool = False) -> None:
     """Raise ``RegistryError`` unless ``agent`` may read (or, with ``write``, write) fact ``key``.
 
     Deny by default: an agent without a ``ledger_prefixes`` entry may touch no fact.
-    ``ledger_read_prefixes`` adds keys it may only read.
+    ``ledger_read_prefixes`` adds keys it may only read. ``display_only`` keys are never read.
     """
     name = agent.value if isinstance(agent, AgentName) else agent
     loaded = _load()
+    if not write and is_display_only(key):
+        raise RegistryError(ApiErrorCode.TOOL_NOT_ALLOWED)
     prefixes = loaded.get("ledger_prefixes") or {}
     reads = {} if write else loaded.get("ledger_read_prefixes") or {}
     if not isinstance(prefixes, dict) or not isinstance(reads, dict):

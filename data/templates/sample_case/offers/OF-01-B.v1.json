@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "lender_id": "L02",
+  "lender_name": "Brahmaputra Industrial Bank (synthetic)",
+  "offer_id": "OF-01-B",
+  "version": 1,
+  "product": "wc_term_loan",
+  "principal": "15700000",
+  "rate_type": "fixed",
+  "annual_rate": "0.1205",
+  "tenure_months": 24,
+  "moratorium_months": 5,
+  "repayment": {
+    "frequency": "monthly",
+    "method": "emi"
+  },
+  "stated_instalment": "911777",
+  "issue_date": "2026-11-13",
+  "disbursal_date": "2026-11-18",
+  "first_repayment_date": "2027-05-18",
+  "fees": [
+    {
+      "name": "Processing fee",
+      "basis": "pct_of_principal",
+      "value": "0.0084",
+      "timing": "upfront",
+      "gst_applicable": true
+    },
+    {
+      "name": "Documentation charges",
+      "basis": "fixed",
+      "value": "15000",
+      "timing": "upfront",
+      "gst_applicable": true
+    }
+  ],
+  "prepayment_terms": "0% of the principal prepaid (R-BANK-03 range)",
+  "kfs_doc_id": "KFS-OF-01-B-v1",
+  "lender_type": "commercial_bank"
+}

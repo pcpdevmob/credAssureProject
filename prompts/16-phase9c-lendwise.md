@@ -10,7 +10,7 @@
 Run Phase 9c (or /phase 9c) in agents/lendwise: per-offer KFS extraction in parallel under the shared limiter, pricing,
 affordability, ranking, gate, negotiation round with re-audit; api/ (offers, negotiate).
 Also build scope items: 22 (parallel calls) (docs/BUILD_SCOPE.md).
-Follow CLAUDE.md rules: plan first, tests first, make check green, reviewer subagents, update PROGRESS.md, commit.
+Follow CLAUDE.md rules: plan first, tests first, make check green, reviewer subagents, add one progress entry in docs/progress/entries/ (from TEMPLATE.md) and update your module file in docs/progress/modules/, run make progress (never edit PROGRESS.md by hand), commit.
 When done, run the evaluation(s): E7 (.claude/commands/eval.md) and fix every MUST finding.
 Done when: 15/15 offers, 5/5 negotiation; commit phase-9c.
 ```

@@ -52,7 +52,6 @@ docs/**/*.pdf
 
 # Baseline response cache (re-runs are free; results and summary are committed)
 evaluation/baseline/cache/
-evaluation/baseline/results/
 
 # Next.js build output (apps/web)
 apps/web/.next/
@@ -62,3 +61,4 @@ apps/web/tsconfig.tsbuildinfo
 apps/web/test-results/
 apps/web/playwright-report/
 apps/web/e2e/.demo-case.json
+

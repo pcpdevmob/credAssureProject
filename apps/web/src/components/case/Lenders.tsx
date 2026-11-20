@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 // "Cheapest" is the gateway's `cheapest_headline_rate` flag (lowest APR); rank and affordability are never derived here either.
 
 export default function Lenders({ c, view, canNegotiate, onChange }: { c: CaseRecord; view: OfferView; canNegotiate: boolean; onChange: () => void }) {
+  if (view.source === 'stale') return <p role="alert" className="flex gap-2 rounded-xl bg-amber-50 p-4 text-sm font-medium text-amber-900 ring-1 ring-amber-200"><Info aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />{view.message ?? 'Stale, re-run LendWise.'}</p>;
   const preview = view.source === 'preview';
   const unusable = (o: OfferRow) => !preview && (o.affordable === false || !o.comparable || o.flags.some(f => BLOCKING.has(f)));
   const trap = preview ? undefined : view.offers.find(o => o.cheapest && unusable(o));

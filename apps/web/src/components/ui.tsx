@@ -31,6 +31,11 @@ export const Badge = ({ className, children, tone = 'slate' }: { className?: str
   <span className={cn('inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset',
     { slate: 'bg-slate-50 text-slate-700 ring-slate-200', green: 'bg-emerald-50 text-emerald-700 ring-emerald-200', red: 'bg-rose-50 text-rose-700 ring-rose-200', amber: 'bg-amber-50 text-amber-800 ring-amber-200', blue: 'bg-brand-50 text-brand-700 ring-brand-200', violet: 'bg-violet-50 text-violet-700 ring-violet-200' }[tone], className)}>{children}</span>
 );
+// P9 (plan v3.4 §6 transparency): every model-written text carries this label; code-written text never does.
+export const AiBadge = ({ className }: { className?: string }) => (
+  <span className={cn('inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-medium text-violet-800 ring-1 ring-inset ring-violet-200', className)} title="Drafted by the language model and checked by the Verification Critic. Figures come from the fact ledger.">
+    <span aria-hidden>✦</span>AI-generated draft</span>
+);
 // Gate states are shape + text + tone, never colour alone (design-plan §5).
 export const GateBadge = ({ d }: { d: GateDecision }) => {
   if (d === 'ERROR') return <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-rose-700 px-2.5 py-0.5 text-xs font-semibold text-white"><TriangleAlert aria-hidden className="h-3.5 w-3.5" />ERROR</span>;

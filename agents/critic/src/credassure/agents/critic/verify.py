@@ -13,8 +13,9 @@ the code-rendered slot values the text was built from, and a citation resolver.
 - Grounded wording (9e): inside a citing sentence, a banned or reason word is allowed only when the
   same words appear in a passage it cites ("guaranteed amount" quoted from R-CG-02 passes; "will be
   approved" is in no source, so it is still blocked).
-- VER-02 citations: each [R-…]/[KFS-…]/[POL-…]/[FAQ-…] resolves to an indexed passage that is in
-  force, allowed and of this case; every figure in the citing sentence appears in the passage.
+- VER-02 citations: each [R-…]/[KFS-…]/[POL-…]/[FAQ-…]/[HELP-…] (help, ADR 0035) resolves to an
+  indexed passage that is in force, allowed and of this case; every figure in the citing sentence
+  appears in the passage.
 - VER-03 banned content (banned.yaml, S-VER-02) and personal identifiers.
 - VER-04 report sections (``report_completeness``).
 """
@@ -40,7 +41,7 @@ Resolve = Callable[[Sequence[str]], Mapping[str, tuple[str, str]]]
 
 MONEY_TOL = Decimal("1")  # VER-01: amounts to ₹1
 RATE_TOL = Decimal("0.00005")  # half of 0.01 pp: a two-decimal display of the fact
-CITE = re.compile(r"\[((?:R|KFS|POL|FAQ)-[A-Za-z0-9][\w.#:\-]*)\]")
+CITE = re.compile(r"\[((?:R|KFS|POL|FAQ|HELP)-[A-Za-z0-9][\w.#:\-]*)\]")
 SENTENCE = re.compile(r"(?<=[.!?;])\s+|\n+")
 CAUSAL = re.compile(
     r"\b(?:because|due to|since|as a result|owing to|given that|thanks to|which means|means that"
@@ -216,6 +217,32 @@ def _reasons(
 
 
 _TERMS = re.compile(r"(?:guaranteed|sanctioned)\s+(?:amount|portion|limits?|cover)\b", re.I)
+# Who approves inside the company (the approval matrix), never whether anything will be approved:
+# only these word forms, never "approve"/"approved" ("will approve", "is approved" are predictions).
+_AUTHORITY = re.compile(r"approv(?:es|als?|ers?)\b", re.I)
+# A sentence about a lender, a bank or a sanction is never excused, whatever it cites.
+_LENDERISH = re.compile(r"\b(?:lender\w*|bank\w*|nbfc\w*|sanction\w*|loan offer\w*)\b", re.I)
+# Team-owned internal policy collection (WC-POL, approval matrix, FAQ); public and KFS text never.
+_POLICY_IDS = ("POL-", "FAQ-")
+# P11 K2: rules whose words a copilot answer may quote word for word from a cited public or policy
+# passage (statutes say "day of acceptance", "date immediately following", "weighted average
+# lending rate"). Approval predictions, lender choice and gate words are never excused this way.
+_QUOTABLE_RULES = frozenset({"acceptance", "false_urgency", "invented_rate"})
+# Lender-controlled (KFS, where injection plants live) and product-help text never grounds a quote.
+_UNQUOTABLE_IDS = ("KFS-", "HELP-")
+# Acceptance wording about a loan, borrower, offer, agreement or credit is never a quote to excuse.
+_DEALISH = re.compile(
+    r"\b(?:loan\w*|borrow\w*|offer\w*|agreement\w*|contract\w*|facilit\w*|credit\w*)\b", re.I
+)
+# Words about the case or its people: a quote never applies to them ("the proposal is accepted by
+# the Director", "the deadline is today for the proposal"; security review K2).
+_CASEISH = re.compile(
+    r"\b(?:proposal\w*|application\w*|applicant\w*|director\w*|vp|approver\w*|cases?)\b", re.I
+)
+# A sentence addressed to the user or about this case is advice, not a quote.
+_ADDRESSED = re.compile(
+    r"\b(?:you|your|yours|we|our|ours|us|this (?:case|proposal|loan|offer))\b", re.I
+)
 
 
 def _banned(
@@ -224,21 +251,31 @@ def _banned(
     model: bool,
     stage: Stage | None,
     grounded: Callable[[int, int, str], bool] = lambda a, b, w: False,
+    authority: Callable[[int, int, str], bool] = lambda a, b, w: False,
+    quoted: Callable[[int, int, str], bool] = lambda a, b, r: False,
 ) -> list[CriticFinding]:
     b = banned()
     rules = list(b.all)
     if model and stage is not None:
         rules += b.model_only.get(stage.value, ())
 
-    def excused(m: re.Match[str]) -> bool:
+    def excused(m: re.Match[str], rule: str) -> bool:
         # Only a quoted noun term ("guaranteed amount") is excused, never a prediction or
         # acceptance phrase, however common its word pair is in passages (9e security review).
         term = _TERMS.match(text, m.start())
-        return term is not None and grounded(m.start(), term.end(), term[0])
+        if term is not None and grounded(m.start(), term.end(), term[0]):
+            return True
+        # An approval-matrix fact ("the VP, Finance approves proposals above ...") stated by a cited
+        # internal policy passage that uses the same word (P11, VER-03 false positive).
+        word = _AUTHORITY.fullmatch(m[0])
+        if word is not None and authority(m.start(), m.end(), word[0]):
+            return True
+        # P11 K2: statute or rate wording quoted word for word from a cited passage.
+        return rule in _QUOTABLE_RULES and quoted(m.start(), m.end(), rule)
 
     out = []
     for name, rx in rules:
-        m = next((m for m in rx.finditer(text) if not excused(m)), None)
+        m = next((m for m in rx.finditer(text) if not excused(m, name)), None)
         if m:
             out.append(
                 _finding(
@@ -260,8 +297,13 @@ def _citations(
     if found is None:
         return [_finding(BlockerCode.VER_BAD_CITATION, "no source library to check", stage)]
     out = []
+    sentences = _sentences_with_offsets(text)
+
+    def sentence_of(pos: int) -> str:
+        return next(s for a, s in sentences if a <= pos < a + len(s))
+
     for cid, pos in cited:
-        status, passage = found.get(cid, ("missing", ""))
+        status = found.get(cid, ("missing", ""))[0]
         if status == "superseded":
             out.append(
                 _finding(BlockerCode.VER_SUPERSEDED_SOURCE, f"{cid} is not in force", stage, cid)
@@ -271,12 +313,25 @@ def _citations(
             why = "does not exist" if status == "missing" else "is not allowed for this case"
             out.append(_finding(BlockerCode.VER_BAD_CITATION, f"{cid} {why}", stage, cid))
             continue
-        sentence = next(s for s in _sentences_with_offsets(text) if s[0] <= pos < s[0] + len(s[1]))[
-            1
-        ]
+        sentence = sentence_of(pos)
         claimed = [h for h in find_all(CITE.sub(" ", sentence)) if h.kind != "unparsed"]
-        held = find_all(passage)
+        # P11 K2: a figure is grounded by any in-force passage the same sentence cites
+        # ("8.51 per cent in May [A], 8.52 per cent in July [B]"); each id is still checked above.
+        # A KFS or help passage never lends a figure to a regulation or policy citation
+        # (security review K2): it grounds only its own citation.
+        same = (
+            [cid]
+            if cid.startswith(_UNQUOTABLE_IDS)
+            else [c for c in CITE.findall(sentence) if not c.startswith(_UNQUOTABLE_IDS)]
+        )
+        together = " \n".join(
+            p for st, p in (found.get(c, ("missing", "")) for c in same) if st == "ok"
+        )
+        held = find_all(together)
+        counted = _counted_words(together)
         for h in claimed:
+            if h.kind == "number" and h.value in counted:
+                continue
             if not any(p.kind == h.kind and _same(h.kind, p.value, h.value) for p in held):
                 out.append(
                     _finding(
@@ -287,6 +342,76 @@ def _citations(
                     )
                 )
                 break
+    return out
+
+
+_ONES = {
+    w: i
+    for i, w in enumerate(
+        [
+            "zero",
+            "one",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "eleven",
+            "twelve",
+            "thirteen",
+            "fourteen",
+            "fifteen",
+            "sixteen",
+            "seventeen",
+            "eighteen",
+            "nineteen",
+        ]
+    )
+}
+_TENS = {
+    w: 10 * i
+    for i, w in enumerate(
+        ["_", "_", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"]
+    )
+    if i >= 2
+}
+_UNIT = r"(?:working\s+)?(?:days?|weeks?|months?|years?|instalments?)"
+_WORDS = "|".join(sorted([*_ONES, *_TENS], key=len, reverse=True))
+_COUNT_WORDS = re.compile(
+    rf"\b((?:(?:{_WORDS})(?:[\s-]+hundred)?(?:[\s-]+(?:and[\s-]+)?)?)+)\s*{_UNIT}\b", re.I
+)
+
+
+def _cardinal(phrase: str) -> int | None:
+    """English cardinal 0-999 ("forty-five", "one hundred and twenty"), or None."""
+    total, seen = 0, False
+    for w in re.findall(r"[a-z]+", phrase.lower()):
+        if w == "and":
+            continue
+        if w == "hundred":
+            if not 0 < total < 10:
+                return None
+            total *= 100
+            continue
+        v = _ONES.get(w, _TENS.get(w))
+        if v is None:
+            return None
+        total, seen = total + v, True
+    return total if seen else None
+
+
+def _counted_words(passage: str) -> set[Decimal]:
+    """Counts written in words before a period unit ("forty-five days", R-MSME-01 s.15): Acts
+    write them out, so a cited "45 days" is checked against them too (P11, VER-02)."""
+    out = set()
+    for m in _COUNT_WORDS.finditer(passage):
+        n = _cardinal(m.group(1))
+        if n is not None:
+            out.add(Decimal(n))
     return out
 
 
@@ -354,7 +479,68 @@ def verify(
     findings += _stale(slots, facts, stage)
     if model:
         findings += _reasons(plain, slots, stage, grounded)
-    findings += _banned(plain, model=model, stage=stage, grounded=grounded)
+
+    def authority(start: int, end: int, word: str) -> bool:
+        """An approval-matrix word inside a citing sentence that cites only internal policy
+        passages, one of which uses the same word, and that names no lender, bank or sanction."""
+        for a, b, sentence in sentences:
+            if not (a <= start and end <= b):
+                continue
+            ids = CITE.findall(sentence)
+            if not ids or not all(i.startswith(_POLICY_IDS) for i in ids):
+                return False
+            if _LENDERISH.search(plain[a:b]) or _ADDRESSED.search(plain[a:b]):
+                return False  # "approves your proposal" is a prediction (security review K2)
+            held = [(found or {}).get(i, ("missing", "")) for i in ids]
+            verb = word.lower()
+            # P11 K2: "approves" is grounded by the verb "approve" (policy: "shall approve");
+            # the noun "approval" never grounds it.
+            forms = {"approves", "approve"} if verb == "approves" else {verb}
+            return any(
+                st == "ok" and forms & set(re.findall(r"[a-z]+", p.lower())) for st, p in held
+            )
+        return False
+
+    def quoted(start: int, end: int, rule: str) -> bool:
+        """P11 K2: the flagged words, with a neighbouring word on each side (two before at the
+        sentence end), appear word for word in an in-force public or policy passage the sentence
+        cites (four neighbouring words in all). Never for a sentence addressed to the user or
+        about the case, proposal or its approvers, and acceptance wording
+        never in a sentence about a lender, bank, loan, borrower, offer, agreement or credit."""
+        for a, b, sentence in sentences:
+            if not (a <= start and end <= b):
+                continue
+            body = plain[a:b]
+            deal = _LENDERISH.search(body) or _DEALISH.search(body)
+            if _ADDRESSED.search(body) or _CASEISH.search(body) or (rule == "acceptance" and deal):
+                return False
+            ids = [i for i in CITE.findall(sentence) if not i.startswith(_UNQUOTABLE_IDS)]
+            held = ((found or {}).get(i, ("missing", "")) for i in ids)
+            ok = [_norm(p) for st, p in held if st == "ok"]
+            words = re.findall(r"[\w-]+", plain[start:end])
+            before = re.findall(r"[\w-]+", plain[a:start])
+            after = re.findall(r"[\w-]+", plain[end:b])
+            # Two neighbouring words on each side; at a sentence edge, more on the other side. Short
+            # stock phrases ("is accepted by", "the deadline is") are too common to prove a quote.
+            n_after = min(2, len(after))
+            n_before = 4 - n_after
+            if len(before) < n_before:
+                return False
+            window = before[len(before) - n_before :] + words + after[:n_after]
+            phrase = _norm(" ".join(window))
+            return any(f" {phrase} " in f" {p} " for p in ok)
+        return False
+
+    # The quote exemption is for copilot answers only (model text, no stage): never narratives or
+    # negotiation messages (security review K2).
+    findings += _banned(
+        plain,
+        model=model,
+        stage=stage,
+        grounded=grounded,
+        authority=authority,
+        quoted=quoted if model and stage is None else (lambda a, b, r: False),
+    )
     findings += _citations(text, found, stage)
     return findings
 

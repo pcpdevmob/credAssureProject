@@ -52,6 +52,7 @@ from credassure.core.prompts import prompt_sha, prompt_version
 from credassure.core.prompts import registry as prompts
 from credassure.core.results import AgentResult, Blocker
 from credassure.engines.routing import route as route_amount
+from credassure.guardrails.events import record as guardrail
 from credassure.observability.tracing import span
 from credassure.security.pii import redact
 from credassure.tools.registry import RegistryError, authorize_fact
@@ -216,9 +217,16 @@ class _AuditedTools:
         error: str | None = None
         try:
             with span("tool", tool=name, agent=self._agent.value, case_id=case_id):
-                return self._tools.call(name, case_id, args)
+                out = self._tools.call(name, case_id, args)
+            guardrail("R3", "R3.tool_allowed", "pass", case_id=case_id, tool=name)
+            return out
         except Exception as exc:
             error = type(exc).__name__
+            rule = {"RegistryError": "R3.tool_not_allowed", "LoopDetected": "R3.loop_detected"}
+            if error in rule:  # ADR 0029 R3: the refusal is a guardrail block, audited
+                guardrail(
+                    "R3", rule[error], "block", case_id=case_id, audit=self._store.audit, tool=name
+                )
             raise
         finally:  # arguments stay out of the audit log: the tool's own facts carry provenance
             self._store.audit(
@@ -740,8 +748,19 @@ class Supervisor:
         while result.decision is not Decision.ERROR and result.narrative:
             found = [f for f in self.critic(result) if f.severity is FindingSeverity.CRITICAL]
             if not found:
+                guardrail("R4", "R4.critic_passed", "pass", case_id=case_id, stage=stage.value)
                 return result
             codes = sorted({f.code.value for f in found})
+            # ADR 0029 R4: the block is audited as CRITIC_BLOCKED below; the span names that event
+            guardrail(
+                "R4",
+                "R4.critic_blocked",
+                "block",
+                case_id=case_id,
+                stage=stage.value,
+                codes=codes,
+                audited_as="CRITIC_BLOCKED",
+            )
             self.store.audit(
                 case_id,
                 "CRITIC_BLOCKED",

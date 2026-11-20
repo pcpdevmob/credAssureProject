@@ -10,6 +10,7 @@ import io
 import json
 import math
 import re
+import uuid
 from datetime import UTC, date, datetime
 from decimal import Decimal
 from typing import Annotated, Any, Literal, get_args
@@ -19,6 +20,7 @@ from fastapi import APIRouter, File, Query, Request, UploadFile
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, Field, ValidationError
 
+from credassure.core import narrative
 from credassure.core.enums import Stage
 from credassure.core.errors import ApiErrorCode
 from credassure.core.money import format_inr, from_paise, to_paise
@@ -34,11 +36,17 @@ from credassure.core.schemas import (
 )
 from credassure.core.schemas.offer import KFS_DOC_ID, OFFER_ID
 from credassure.engines.normaliser import parse_money
+from credassure.gateway import report
 from credassure.gateway.deps import Svc, User, case_ref, own_case, role, visible_case
 from credassure.gateway.problems import ProblemError
+from credassure.guardrails.events import AuditSink
+from credassure.guardrails.events import record as guardrail
+from credassure.guardrails.policy import load as guardrail_policy
+from credassure.guardrails.protected import find as find_protected
+from credassure.guardrails.switch import on as rail_on
 from credassure.ledger import reads
 from credassure.ledger.models import Case
-from credassure.ledger.session import run_in_progress, transaction
+from credassure.ledger.session import run_in_progress, run_lock, transaction
 from credassure.security.auth import Principal, Role, can_view_case
 from credassure.security.injection import scan
 from credassure.security.pii import find as pii_find
@@ -69,10 +77,10 @@ _SCHEMAS: dict[str, type[BaseModel]] = {
 _JSON_KINDS = frozenset({"order", "opening_position", "offer"})
 _KFS_ID, _OFFER_ID = re.compile(KFS_DOC_ID), re.compile(OFFER_ID)
 _LOCKED = frozenset({"AWAITING_APPROVAL", "HELD", "APPROVED", "REJECTED"})
-INTERNAL_APPROVAL = (
-    "Approval in CredAssure is an internal sign-off on this proposal only. It is not loan "
-    "acceptance: the MSME chooses its lender outside the system (APR-06, BR-13)."
-)
+
+
+MAX_PAISE = 10**15  # ₹1,00,00,00,00,00,000: far above any MSME order; fits SQLite INTEGER (#51)
+MAX_INT = 2**31 - 1  # versions and counters (same bound as the lineage route)
 
 
 def money(paise: int) -> dict[str, Any]:
@@ -82,8 +90,8 @@ def money(paise: int) -> dict[str, Any]:
 class NewCase(BaseModel):
     msme_name: str = Field(min_length=1, max_length=200)
     order_ref: str = Field(min_length=1, max_length=64)
-    order_value_paise: int = Field(gt=0)
-    indicative_amount_paise: int = Field(ge=0)
+    order_value_paise: int = Field(gt=0, le=MAX_PAISE)
+    indicative_amount_paise: int = Field(ge=0, le=MAX_PAISE)
     due_date: date
 
 
@@ -114,6 +122,20 @@ _NEXT_ACTION = {
 }
 
 
+NARRATIVE_PREFIX = {"onboarding": "onb.", "working_capital": "wc.", "lendwise": "lw."}
+
+
+def _narrative_source(svc: Svc, case: Case, stage: str) -> str | None:
+    """P9 AI badge: "model" when the stage narrative is model-drafted, "template" when code wrote
+    it (fallback or model off), None when the stage has no stored narrative."""
+    prefix = NARRATIVE_PREFIX.get(stage)
+    raw = svc.ledger.get(case.id, f"{prefix}narrative") if prefix else None
+    parsed = narrative.parse(raw)
+    if parsed is None:
+        return None
+    return "model" if parsed[1] else "template"
+
+
 def _stage_views(svc: Svc, case: Case) -> list[dict[str, Any]]:
     with transaction(svc.engine) as s:
         runs = reads.stage_runs(s, case.tenant_id, case.id)
@@ -127,6 +149,7 @@ def _stage_views(svc: Svc, case: Case) -> list[dict[str, Any]]:
             "blockers": result.get("blockers", []),
             "question": result.get("question"),
             "narrative": result.get("narrative"),
+            "narrative_source": _narrative_source(svc, case, run.stage),
             "trace_id": run.trace_id,
         }
     order = [s.value for s in Stage]
@@ -336,6 +359,67 @@ def _parse(kind: str, text: str) -> tuple[Any, int]:
     return rows, len(rows)
 
 
+def validate_file(
+    kind: str, text: str, *, case_id: str | None = None, audit: AuditSink | None = None
+) -> tuple[Any, int]:
+    """Everything an upload checks about the file text itself (UI-02, NFR-07); also used by
+    scripts/case_xlsx.py so authored files are validated by exactly this code."""
+    # NFR-07: personal identifiers are refused, never stored. IFSC, phone and email are not
+    # checked here: the IFSC shape matches ordinary IDs (see guardrails.pii).
+    refuse = guardrail_policy().refuse_pii_kinds if rail_on("R1") else frozenset()  # A6
+    ids = [h for h in pii_find(text) if h.kind in refuse]
+    if ids:  # ADR 0029 R1: a block, audited with the kinds and count only, never the text
+        guardrail(
+            "R1",
+            "R1.upload_pii_refused",
+            "block",
+            case_id=case_id,
+            audit=audit,
+            file_kind=kind,
+            kinds=sorted({h.kind for h in ids}),
+            count=len(ids),
+        )
+        raise ProblemError(
+            422,
+            f"{kind} contains a personal identifier",
+            errors=[
+                {
+                    "field": None,
+                    "row": text.count("\n", 0, h.start) + 1,
+                    "reason": f"{h.kind} number not allowed in case files",
+                }
+                for h in ids[:20]
+            ],
+        )
+    # P8.3 scope #67: no protected-attribute field reaches a gate or prompt (R1; A6 turns it off)
+    if kind != "kfs" and rail_on("R1"):
+        protected = find_protected(text, is_json=kind in _JSON_KINDS)
+        if protected:
+            guardrail(
+                "R1",
+                "R1.upload_protected_attribute",
+                "block",
+                case_id=case_id,
+                audit=audit,
+                file_kind=kind,
+                fields=[f[:64] for f in protected[:20]],
+                count=len(protected),
+            )
+            raise ProblemError(
+                422,
+                f"{kind} contains a protected-attribute field",
+                errors=[
+                    {
+                        "field": f[:64],
+                        "row": None,
+                        "reason": "protected attributes are not used and not accepted",
+                    }
+                    for f in protected[:20]
+                ],
+            )
+    return _parse(kind, text)
+
+
 @router.post("/cases/{case_id}/files", status_code=201)
 async def upload(
     request: Request,
@@ -384,23 +468,7 @@ async def upload(
         raise ProblemError(
             415, "file is not UTF-8 text", ApiErrorCode.UNSUPPORTED_MEDIA_TYPE
         ) from exc
-    # NFR-07: personal identifiers are refused, never stored. IFSC, phone and email are not
-    # checked here: the IFSC shape matches ordinary IDs (see security.pii).
-    ids = [h for h in pii_find(text) if h.kind in {"AADHAAR", "PAN", "ACCOUNT"}]
-    if ids:
-        raise ProblemError(
-            422,
-            f"{kind} contains a personal identifier",
-            errors=[
-                {
-                    "field": None,
-                    "row": text.count("\n", 0, h.start) + 1,
-                    "reason": f"{h.kind} number not allowed in case files",
-                }
-                for h in ids[:20]
-            ],
-        )
-    payload, count = _parse(kind, text)
+    payload, count = validate_file(kind, text, case_id=case.id, audit=svc.ledger.audit)
     # BR-15: uploads are data. A hit is flagged and audited; nothing in the file is obeyed.
     flags = scan(text)
     if kind == "kfs" and payload["case_ref"] not in ("", case.id):
@@ -412,6 +480,14 @@ async def upload(
         svc.ledger.audit(
             case.id, "INJECTION_FLAGGED", {"kind": kind, "sha256": stored.sha256, "flags": flags}
         )
+        for rule, hit in (
+            ("R1.upload_case_mismatch", [f for f in flags if f == "KFS_CASE_MISMATCH"]),
+            ("R1.upload_injection_flagged", [f for f in flags if f != "KFS_CASE_MISMATCH"]),
+        ):
+            if hit:  # audited above as INJECTION_FLAGGED; the span names that event
+                guardrail(
+                    "R1", rule, "flag", case_id=case.id, flags=hit, audited_as="INJECTION_FLAGGED"
+                )
     return {"kind": kind, "sha256": stored.sha256, "rows": count, "injection_flags": flags}
 
 
@@ -467,53 +543,111 @@ REPORT_HEADERS = {  # N7: a stored report can never run script or be sniffed as 
     "X-Content-Type-Options": "nosniff",
     "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'",
 }
-_MD_SPECIAL = re.compile(r"([\\`*_{}\[\]()<>#!|])")
 
 
-def _md(text: str) -> str:
-    """S6: user text is literal in Markdown (no links, images or HTML)."""
-    return _MD_SPECIAL.sub(r"\\\1", text)
-
-
-@router.get("/cases/{case_id}/report", response_class=PlainTextResponse)
-def report(
-    case_id: str, who: User, svc: Svc, fmt: Annotated[Literal["md", "html"], Query()] = "md"
-) -> PlainTextResponse:
-    """Skeleton report (Phase 10 renders the full template): stages, decisions, trace IDs."""
+@router.get("/cases/{case_id}/report", response_model=None)
+def get_report(
+    case_id: str,
+    who: User,
+    svc: Svc,
+    fmt: Annotated[Literal["md", "html", "json"], Query()] = "md",
+    version: Annotated[int | None, Query(ge=1, le=MAX_INT)] = None,
+) -> PlainTextResponse | dict[str, Any]:
+    """The proposal report (UI-08) at `version` (default: latest; a draft when none exists).
+    Rendered from the ledger fact versions it pinned; `stale` when the figures changed since
+    (scope #6). `fmt=json` gives each section's text with its figures' ledger keys (#33)."""
     case = visible_case(svc, who, case_id)
     with transaction(svc.engine) as s:
-        decisions = reads.approvals(s, case.tenant_id, case.id)
-    lines = [
-        f"# Proposal {case.id} — {_md(case.msme_name)}",
-        "",
-        f"Status: {case.status} · Route: {case.route or '—'}",
-        f"Indicative request: {money(case.indicative_amount_paise)['display']}",
-        "",
-        "## Stages",
-        *[
-            f"- {v['stage']}: {v['decision']} (attempt {v['attempt']}, trace {v['trace_id']})"
-            for v in _stage_views(svc, case)
-        ],
-        "",
-        "## Decision history",
-        *[f"- {a.created_at.isoformat()} {a.role}: {a.decision}" for a in decisions],
-        "",
-        "## Approval scope",
-        INTERNAL_APPROVAL,
-    ]
-    text = "\n".join(lines) + "\n"
+        found = report.render(s, case, version)
+    if found is None:
+        raise ProblemError(404, f"no report version {version}", ApiErrorCode.NOT_FOUND)
+    if fmt == "json":
+        return found
+    text = report.markdown(found)
+    headers = {**REPORT_HEADERS, "X-Report-Stale": str(found["stale"]).lower()}
     if fmt == "html":
         return PlainTextResponse(
             f"<!doctype html><meta charset='utf-8'><pre>{html.escape(text)}</pre>",
             media_type="text/html",
-            headers=REPORT_HEADERS,
+            headers=headers,
         )
-    return PlainTextResponse(text, media_type="text/markdown")
+    return PlainTextResponse(text, media_type="text/markdown", headers=headers)
+
+
+@router.post("/cases/{case_id}/report", status_code=201)
+def new_report(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
+    """A new report version from the current figures (scope #6). The case preparer only. A
+    report that is current keeps its version; one stale on an upload stays stale until the
+    stage re-runs on the new file."""
+    case = own_case(svc, who, case_id)
+    report.snapshot(svc.engine, case, svc.ledger.put_fact)
+    with transaction(svc.engine) as s:
+        st = report.state(s, case)
+    return {k: st[k] for k in ("version", "stale", "reasons")}
+
+
+@router.delete("/cases/{case_id}")
+def delete_case(
+    case_id: str,
+    who: Evaluator,
+    svc: Svc,
+    expected_version: Annotated[int, Query(ge=0, le=MAX_INT)],
+) -> dict[str, Any]:
+    """Scope #39, ADR 0025 (evaluator only): remove the case content, keep the append-only record
+    (facts, approvals, audit) as a tombstone; the hash chain still verifies. Under the run lock,
+    at the case version the caller saw."""
+    case = visible_case(svc, who, case_id)
+    with run_lock(svc.engine, case.tenant_id, case.id, f"delete-{uuid.uuid4().hex}"):
+        removed = svc.ledger.delete_case(
+            case.id, expected_version=expected_version, actor=who.user_id
+        )
+        if svc.settings.case_database_url is not None and svc.checkpointer is not None:
+            # ADR 0039: LangGraph state lives beside MySQL, not in it; remove the thread there too.
+            svc.checkpointer.delete_thread(f"{case.tenant_id}:{case.id}")
+    return {"case_id": case.id, "status": "DELETED", "removed": removed}
+
+
+# P9 safety panel (plan v3.4 §6): the guardrail and Critic events of one case. Payload keys are an
+# allowlist of codes and counts; audit payloads never hold raw text or identifiers (ADR 0029).
+SAFETY_EVENTS = {
+    "GUARDRAIL_EVENT",
+    "INJECTION_FLAGGED",
+    "CRITIC_BLOCKED",
+    "CRITIC_FALLBACK",
+    "LLM_FALLBACK",
+    "GATE_OVERRIDE",
+}
+SAFETY_KEYS: tuple[str, ...] = ("rail", "rule_id", "action", "kinds", "count", "flags", "fields")
+SAFETY_KEYS += ("file_kind", "stage", "codes", "reason", "kind")
+
+
+@router.get("/cases/{case_id}/safety")
+def safety(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
+    """Blocks, redactions, injection flags, Critic blocks and fallbacks for a case member."""
+    case = visible_case(svc, who, case_id)
+    with transaction(svc.engine) as s:
+        events = [
+            e
+            for e in reads.audit_events(s, case.tenant_id, case.id)
+            if e.event_type in SAFETY_EVENTS
+        ]
+    rows: list[dict[str, Any]] = []
+    for e in events:
+        payload = e.payload or {}
+        rows.append(
+            {"seq": e.seq, "ts": e.ts, "event_type": e.event_type}
+            | {k: payload[k] for k in SAFETY_KEYS if k in payload}
+        )
+    counts: dict[str, int] = {}
+    for r in rows:
+        key = str(r.get("action") or str(r["event_type"]).lower())
+        counts[key] = counts.get(key, 0) + 1
+    return {"case_id": case.id, "counts": counts, "events": rows}
 
 
 @router.get("/cases/{case_id}/audit")
 def audit(case_id: str, who: Evaluator, svc: Svc) -> dict[str, Any]:
-    case = visible_case(svc, who, case_id)
+    case = visible_case(svc, who, case_id, include_deleted=True)  # the tombstone stays auditable
     with transaction(svc.engine) as s:
         events = reads.audit_events(s, case.tenant_id, case.id)
         broken = reads.verify_chain(s, who.tenant_id)
