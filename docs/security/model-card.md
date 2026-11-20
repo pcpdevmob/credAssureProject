@@ -1,6 +1,6 @@
 # CredAssure model card
 
-Status: v1.0.0, 2026-11-18 (scope #3). Intended use, users, out-of-scope uses, refusal policy, evaluation results,
+Status: v1.1.0, 2026-11-20 (scope #3). Intended use, users, out-of-scope uses, refusal policy, evaluation results,
 fairness, limitations and the Sutra mapping are in the system card: [../SYSTEM_CARD.md](../SYSTEM_CARD.md). This page keeps
 the model and data details.
 
@@ -12,8 +12,22 @@ the model and data details.
 | Reranker | BAAI/bge-reranker-base at a pinned revision | Scores for the answerability gate only (`RERANK_ORDER=false`) |
 | Judge J1 | Same chat model | Calibrated on a 20% human sample; humans score free text if kappa < 0.7 (ADR 0014) |
 
-Swapping the model is configuration only (`MODELS=local|course`, quality scenario Q7). Prompts are versioned, hashed YAML files
+Swapping the model is configuration only (`MODELS=local|course|hf`, quality scenario Q7).
+
+| Where the same Qwen3-8B runs | Build | Measured |
+|---|---|---|
+| Local Ollama `qwen3:8b` (`MODELS=local`, the evaluated path, ADR 0036) | 4-bit | 88/100; every reported number |
+| Course endpoint `Qwen/Qwen3-8B` (`MODELS=course`) | full precision | 53/66 vs 54/66 on the model-dependent items (≈ 87/100; only T003 differs); latency p50 3.0 s vs 23.4 s on regulatory items; embeddings identical to the local index (cosine 1.00000 on 40 chunks) |
+| Hugging Face router, provider Featherless `Qwen/Qwen3-8B:featherless-ai` (`MODELS=hf`) | FP8 | Not yet run; planned as the hosted deployment's fallback when the course endpoint is unreachable |
+
+Detail and commands: [../evaluation/course-endpoint.md](../evaluation/course-endpoint.md). A different endpoint is a
+comparison, not a new headline: switching the evaluated path would need a new ADR and a full rerun. Prompts are versioned, hashed YAML files
 (`prompts/*.yaml` in each package, `credassure.core.prompts`); a version bump is a cache miss, so a changed prompt is never answered from an old reply.
+
+Results, ablations, safety checks and limitations are in [system card §9 and §13](../SYSTEM_CARD.md#9-evaluation-and-adversarial-results).
+In short: 88/100 (team target 92) against 23/100 for the best single-prompt baseline on the same model; the model is
+kept out of arithmetic and gate decisions because, when it does them (ablations A1, A4), those categories fall from
+41/41 to 10/41 and from 45/45 to 13/45.
 
 ## What the model does and does not do
 | Does | Does not |
