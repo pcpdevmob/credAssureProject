@@ -14,14 +14,13 @@ export default function MfaSetup() {
   const [codes, setCodes] = useState<string[] | null>(null); const [saved, setSaved] = useState(false);
   const [err, setErr] = useState(''); const [busy, setBusy] = useState(false); const [pw, setPw] = useState('');
   // The gateway shows a new authenticator secret only after the password is typed again (ADR 0038).
-  const start = async (password?: string) => { setErr(''); setBusy(true); try { const s = await authService.startMfaSetup(password); setSecret(s.secret); setQr(await QRCode.toDataURL(s.otpauthUri, { margin: 1, width: 220, color: { dark: '#0E1628', light: '#ffffff' } })); setPw(''); } catch (e) { setErr((e as Error).message); } setBusy(false); };
+  const start = async (password: string) => { setErr(''); setBusy(true); try { const s = await authService.startMfaSetup(password); setSecret(s.secret); setQr(await QRCode.toDataURL(s.otpauthUri, { margin: 1, width: 220, color: { dark: '#0E1628', light: '#ffffff' } })); setPw(''); } catch (e) { setErr((e as Error).message); } setBusy(false); };
   useEffect(() => {
     authService.verify().then(async x => {
       if (!x || x.stage === 'mfa') return r.replace('/login/');
       if (x.mustChangePassword) return r.replace('/change-password/');
       if (x.stage === 'full' || x.mfaEnabled) return r.replace('/dashboard/');
       setU(x);
-      if (!authService.mfaSetupNeedsPassword) await start();
     });
   }, [r]);
   const confirm = async (e: React.FormEvent) => { e.preventDefault(); setErr(''); setBusy(true); try { setCodes(await authService.enableMfa(code.replace(/\s/g, ''))); } catch (x) { setErr((x as Error).message); setCode(''); } setBusy(false); };
@@ -40,7 +39,7 @@ export default function MfaSetup() {
       <Button className="mt-5 w-full" size="lg" disabled={!saved} onClick={() => r.replace(authService.current()?.adminOnly ? '/admin/users/' : '/dashboard/')}>Continue to CredAssure</Button>
     </AuthLayout>
   );
-  if (!secret && authService.mfaSetupNeedsPassword) return (
+  if (!secret) return (
     <AuthLayout>
       <h1 className="text-2xl font-bold tracking-tight text-slate-900">Set up two-step verification</h1>
       <p className="mt-1 text-slate-500">Your role needs a code from an authenticator app at every sign-in. First, confirm it is you.</p>

@@ -26,7 +26,7 @@ describe('ADR 0038 sign-in with a second factor', () => {
       http.post(`${API}/v1/auth/mfa/verify`, async ({ request }) => { await keep(request); return HttpResponse.json(tok('full-1', 'full', [], 1800)); }),
       http.get(`${API}/v1/me`, async ({ request }) => { await keep(request); return HttpResponse.json(me()); }),
     );
-    const u = await authService.login('demo.director', 'pw', 'PREPARER');
+    const u = await authService.login('demo.director', 'pw');
     expect(u.stage).toBe('mfa');
     expect(seen.map(s => s.path)).toEqual(['/v1/auth/token']); // /v1/me is closed to an MFA stage token
     const full = await authService.verifyMfa('123456');
@@ -43,7 +43,7 @@ describe('ADR 0038 sign-in with a second factor', () => {
       http.post(`${API}/v1/auth/mfa/verify`, ({ request }) => { auths.push(request.headers.get('Authorization') ?? ''); n += 1; return n === 1 ? HttpResponse.json({ code: 'UNAUTHENTICATED', detail: 'invalid code' }, { status: 401 }) : HttpResponse.json(tok('full-2', 'full', [], 1800)); }),
       http.get(`${API}/v1/me`, () => HttpResponse.json(me())),
     );
-    await authService.login('demo.director', 'pw', 'PREPARER');
+    await authService.login('demo.director', 'pw');
     await expect(authService.verifyMfa('000000')).rejects.toBeTruthy();
     expect(hasToken()).toBe(true);
     await authService.verifyMfa('123456');
@@ -59,9 +59,8 @@ describe('ADR 0038 sign-in with a second factor', () => {
       http.post(`${API}/v1/auth/mfa/setup`, async ({ request }) => { await keep(request); return HttpResponse.json({ secret: 'JBSWY3DPEHPK3PXP', otpauth_uri: 'otpauth://totp/CredAssure:demo.director?secret=JBSWY3DPEHPK3PXP&issuer=CredAssure' }); }),
       http.post(`${API}/v1/auth/mfa/enable`, async ({ request }) => { await keep(request); enrolled = true; return HttpResponse.json({ backup_codes: ['aaaa-bbbb', 'cccc-dddd'], ...tok('full-3', 'full', [], 1800) }); }),
     );
-    const u = await authService.login('demo.director', 'pw', 'PREPARER');
+    const u = await authService.login('demo.director', 'pw');
     expect(u).toMatchObject({ stage: 'setup', mustChangePassword: false, mfaEnabled: false });
-    expect(authService.mfaSetupNeedsPassword).toBe(true);
     const s = await authService.startMfaSetup('pw');
     expect(s.otpauthUri).toMatch(/^otpauth:\/\/totp\//);
     expect(seen.find(x => x.path === '/v1/auth/mfa/setup')).toMatchObject({ auth: 'Bearer stage-setup', body: { current_password: 'pw' } });
@@ -79,9 +78,8 @@ describe('ADR 0038 sign-in with a second factor', () => {
       http.get(`${API}/v1/me`, ({ request }) => HttpResponse.json(me({ stage: 'setup', mfa_enabled: false, must_change_password: request.headers.get('Authorization') === 'Bearer stage-setup' }))),
       http.post(`${API}/v1/auth/password`, async ({ request }) => { await keep(request); return HttpResponse.json(tok('stage-setup-2', 'setup', ['enrol_mfa'])); }),
     );
-    const u = await authService.login('demo.director', 'temp', 'PREPARER');
+    const u = await authService.login('demo.director', 'temp');
     expect(u.mustChangePassword).toBe(true);
-    expect(authService.passwordNeedsCode).toBe(false);
     const after = await authService.changePassword('temp', 'a-new-long-passphrase-42');
     expect(seen[0]).toMatchObject({ auth: 'Bearer stage-setup', body: { current_password: 'temp', new_password: 'a-new-long-passphrase-42' } });
     expect(after).toMatchObject({ stage: 'setup', mustChangePassword: false });
@@ -92,7 +90,7 @@ describe('ADR 0038 sign-in with a second factor', () => {
       http.post(`${API}/v1/auth/token`, () => HttpResponse.json(tok('full-a', 'full', [], 1800))),
       http.get(`${API}/v1/me`, () => HttpResponse.json(me({ user_id: 'u-adm', username: 'it.admin', display_name: 'IT Admin', role: 'user_admin' }))),
     );
-    const u = await authService.login('it.admin', 'pw', 'PREPARER');
+    const u = await authService.login('it.admin', 'pw');
     expect(u).toMatchObject({ accountRole: 'global_admin', adminOnly: true });
   });
 
@@ -103,7 +101,7 @@ describe('ADR 0038 sign-in with a second factor', () => {
       http.get(`${API}/v1/me`, () => HttpResponse.json(me())),
       http.post(`${API}/v1/auth/logout`, ({ request }) => { auths.push(request.headers.get('Authorization') ?? ''); return HttpResponse.json({ signed_out: true }); }),
     );
-    await authService.login('demo.director', 'pw', 'PREPARER');
+    await authService.login('demo.director', 'pw');
     await authService.logout();
     expect(auths).toEqual(['Bearer full-4']);
     expect(hasToken()).toBe(false);
@@ -165,7 +163,7 @@ describe('ADR 0038 review fixes', () => {
       http.post(`${API}/v1/auth/token`, () => HttpResponse.json(tok('stage-mfa', 'mfa', ['verify_mfa']))),
       http.post(`${API}/v1/auth/logout`, () => { calls += 1; return HttpResponse.json({ code: 'UNAUTHENTICATED' }, { status: 401 }); }),
     );
-    await authService.login('demo.director', 'pw', 'PREPARER');
+    await authService.login('demo.director', 'pw');
     await authService.logout();
     expect(calls).toBe(0);
     expect(hasToken()).toBe(false);
@@ -176,12 +174,23 @@ describe('ADR 0038 review fixes', () => {
       http.post(`${API}/v1/auth/token`, () => HttpResponse.json(tok('full-x', 'full', [], 1800))),
       http.get(`${API}/v1/me`, () => HttpResponse.json(me())),
     );
-    await authService.login('demo.director', 'pw', 'PREPARER');
+    await authService.login('demo.director', 'pw');
     expect(await authService.verify()).toMatchObject({ id: 'u-dir' });
     // another tab signs in as the VP and rewrites the shared profile
     localStorage.setItem('finbridge:user', JSON.stringify({ id: 'u-vp', name: 'Demo VP', email: 'demo.vp', role: 'VP_FINANCE', employeeId: '', username: 'demo.vp', stage: 'full' }));
     expect(await authService.verify()).toBeNull();
     expect(hasToken()).toBe(false);
     expect(localStorage.getItem('finbridge:user')).not.toBeNull(); // the other tab keeps its profile
+  });
+});
+
+describe('ADR 0038 AUTH-10 step-up', () => {
+  it('sends the authenticator code with the password when approving above ₹1.5 crore', async () => {
+    let body: Record<string, unknown> = {};
+    server.use(http.post(`${API}/v1/cases/:id/decision`, async ({ request }) => { body = await request.json() as Record<string, unknown>; return HttpResponse.json({ ok: true }); }));
+    setToken('full-vp', 1800);
+    const { approvalService } = await import('@/services/approvals');
+    await approvalService.decide({ id: 'CA-2026-0018', rowVersion: 3 } as never, 'APPROVED', '', undefined, 'pw', 2, true, '654321');
+    expect(body).toMatchObject({ decision: 'approve', password: 'pw', mfa_code: '654321', attested: true, report_version: 2 });
   });
 });

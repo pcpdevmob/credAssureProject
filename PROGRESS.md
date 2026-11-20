@@ -108,7 +108,7 @@ From the latest entry of each step. Module-level items live in each module file.
 ### Authentication
 
 - P14 14.1: web step E: one auth mode on the gateway; login follows `stage`/`next`; MFA and first-sign-in screens; Admin → Users on the new API; acting-role switch removed. Step F: retire `deploy/auth/`, help pages, threat model and system card rows. Security review. `make redteam` (PR #26) needs `mfa_enforced=False` once both merge. ([entry](docs/progress/entries/2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md))
-- P14 14.2: course-endpoint run on the Mac; retire `deploy/auth/` (step F); role change button (API exists). ([entry](docs/progress/entries/2026-11-20-p14-14.2-web-accounts-mfa-pritish.md))
+- P14 14.2: course-endpoint run on the Mac (owner); role change button (API exists). ([entry](docs/progress/entries/2026-11-20-p14-14.2-web-accounts-mfa-pritish.md))
 
 ### Responsible AI
 

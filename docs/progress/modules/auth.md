@@ -7,4 +7,4 @@
 ## Open items
 - JWT expiry and refresh, login rate limit, CSP and headers review, upload limits (plan v3.4 §5.3).
 - CORS allowlist lacks DELETE (HISTORY "Phase 10b notes", Open).
-- Retiring `deploy/auth/` (ADR 0038 step F); role change from the admin screen (API exists, no button yet).
+- Role change from the admin screen (API exists, no button yet). Bridge auth service retired 2026-11-20 (step F).

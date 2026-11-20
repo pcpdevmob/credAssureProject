@@ -12,8 +12,6 @@ def test_web_does_not_call_fetch_directly() -> None:
     for path in WEB.rglob("*"):
         if path.suffix not in {".ts", ".tsx"}:
             continue
-        if path.name == "http.ts":  # same-origin auth service only (ADR 0022)
-            continue
         if "fetch(" in path.read_text(encoding="utf-8"):
             offenders.append(str(path.relative_to(ROOT)))
     assert offenders == []

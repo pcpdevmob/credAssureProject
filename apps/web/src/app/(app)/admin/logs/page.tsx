@@ -5,13 +5,13 @@ import { Download, RefreshCw } from 'lucide-react';
 import { useUser } from '@/components/AppShell';
 import { PageHeader } from '@/components/PageHeader';
 import { Badge, Button, Card, Input } from '@/components/ui';
-import { AUTH_LIVE, userAdminService } from '@/services';
+import { userAdminService } from '@/services';
 import type { UserLogEvent } from '@/types';
 
-// Bridge: the old auth service's SAST log. Gateway: the team's time zone (IST).
-const [TZ, TZL] = AUTH_LIVE ? ['Africa/Johannesburg', 'SAST'] : ['Asia/Kolkata', 'IST'];
+// The team's time zone (IST).
+const [TZ, TZL] = ['Asia/Kolkata', 'IST'];
 const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: TZ, year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-const OFF = AUTH_LIVE ? '+02:00' : '+05:30';
+const OFF = '+05:30';
 const sast = (s: number) => fmt.format(new Date(s * 1000)) + ' ' + TZL;
 const tone = (a: string) => a.includes('FAIL') ? 'red' : a.startsWith('LOGIN_SUCCESS') ? 'green' : a.startsWith('USER_') || a.includes('MFA') ? 'violet' : a.includes('PASSWORD') ? 'amber' : 'slate';
 const browser = (ua: string | null) => !ua ? '—' : ua === 'cli' ? 'Server CLI' : /Edg\//.test(ua) ? 'Edge' : /Chrome\//.test(ua) ? 'Chrome' : /Firefox\//.test(ua) ? 'Firefox' : /Safari\//.test(ua) ? 'Safari' : ua.slice(0, 24);

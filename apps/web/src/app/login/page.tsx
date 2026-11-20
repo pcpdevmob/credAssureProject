@@ -3,10 +3,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import AuthLayout from '@/components/AuthLayout';
-import RolePicker from '@/components/RolePicker';
 import { Button, Input, Label } from '@/components/ui';
-import { authService, AUTH_LIVE } from '@/services';
-import type { Role } from '@/types';
+import { authService } from '@/services';
 import { ApiProblem, bannerOf } from '@/lib/problem';
 const say = (x: unknown) => { const b = bannerOf(x); return `${b.what} ${b.fix}`; };
 // A wrong code is not an ended session: say what to do instead of "sign in again".
@@ -14,7 +12,7 @@ const say = (x: unknown) => { const b = bannerOf(x); return `${b.what} ${b.fix}`
 const sayCode = (x: unknown) => x instanceof ApiProblem && x.status === 401 ? 'That code did not work. Check that the time on your phone is set automatically, then enter the new code. If it keeps failing, choose “Use a different account” and sign in again.' : say(x);
 
 export default function Login() {
-  const [email, setEmail] = useState(''); const [pw, setPw] = useState(''); const [role, setRole] = useState<Role>('PREPARER');
+  const [email, setEmail] = useState(''); const [pw, setPw] = useState('');
   const [err, setErr] = useState(''); const [busy, setBusy] = useState(false); const r = useRouter();
   const [mfa, setMfa] = useState(false); const [code, setCode] = useState('');
   const [expired, setExpired] = useState(false);
@@ -33,13 +31,12 @@ export default function Login() {
       <button type="button" onClick={async () => { await authService.logout(); setMfa(false); setPw(''); }} className="mt-6 w-full text-center text-sm text-slate-500 hover:text-slate-800">Use a different account</button>
     </AuthLayout>
   );
-  const submit = async (e: React.FormEvent) => { e.preventDefault(); setErr(''); setBusy(true); try { const u = await authService.login(email, pw, role); if (u.stage === 'mfa') { setMfa(true); setBusy(false); return; } r.push(u.stage === 'setup' ? (u.mustChangePassword ? '/change-password/' : '/mfa-setup/') : u.adminOnly ? '/admin/users/' : '/dashboard/'); } catch (x) { setErr(say(x)); setBusy(false); } };
+  const submit = async (e: React.FormEvent) => { e.preventDefault(); setErr(''); setBusy(true); try { const u = await authService.login(email, pw); if (u.stage === 'mfa') { setMfa(true); setBusy(false); return; } r.push(u.stage === 'setup' ? (u.mustChangePassword ? '/change-password/' : '/mfa-setup/') : u.adminOnly ? '/admin/users/' : '/dashboard/'); } catch (x) { setErr(say(x)); setBusy(false); } };
   return (
     <AuthLayout>
       <h1 className="text-2xl font-bold tracking-tight text-slate-900">Welcome back</h1><p className="mt-1 text-slate-500">Sign in to continue to your workspace.</p>
       {expired && <p role="status" className="mt-6 rounded-xl bg-gold-50 p-3 text-sm text-gold-800 ring-1 ring-gold-200">Your session expired. Sign in again to continue.</p>}
       <form onSubmit={submit} className="mt-8 space-y-5">
-        {AUTH_LIVE && <div><Label>Act as (workflow role)</Label><RolePicker value={role} onChange={setRole} /></div>}
         <div><Label htmlFor="username">Username</Label><Input id="username" name="username" autoComplete="username" autoCapitalize="none" required value={email} onChange={e => setEmail(e.target.value)} /></div>
         <div><Label htmlFor="password">Password</Label><Input id="password" type="password" autoComplete="current-password" required value={pw} onChange={e => setPw(e.target.value)} /></div>
         {err && <p role="alert" className="rounded-xl bg-rose-50 p-3 text-sm text-rose-700">{err}</p>}

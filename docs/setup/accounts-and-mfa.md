@@ -12,9 +12,8 @@ the red-team runner always sign in with a password only, so none of this changes
    ```
    Keep the key: if it changes, every enrolled user must be reset by an admin. `MFA_REQUIRED_ROLES` defaults to
    `director_finance,vp_finance,user_admin`; preparers and evaluators sign in with a password only.
-2. Leave `NEXT_PUBLIC_AUTH_MODE` unset (or `gateway`). `bridge` is the old auth service.
-3. Fresh demo cases and users: `make demo-reset` (users get `SEED_PASSWORD`).
-4. First user administrator (once per tenant; the password must not contain the username):
+2. Fresh demo cases and users: `make demo-reset` (users get `SEED_PASSWORD`).
+3. First user administrator (once per tenant; the password must not contain the username):
    `BOOTSTRAP_ADMIN_PASSWORD='<12+ characters>' make admin NAME=it.admin`
 
 ## Run
@@ -30,6 +29,7 @@ Tokens live only in the browser's memory: a page reload or a typed URL means sig
 | `demo.director` (or `demo.vp`) | Sign in → confirm password → scan the QR with Google/Microsoft Authenticator → type the code | 8 backup codes shown once; then the dashboard, "MFA on" in the sidebar |
 | same | Sign out → sign in → wrong code `000000` | "That code did not work…", still on the code step |
 | same | Right code (or one backup code, `xxxx-xxxx`) | Dashboard; approve a routed case (Review & approval) |
+| `demo.vp` | Approve a case above ₹1.5 crore (e.g. CA-2026-0018) | Asks for your password **and** a code from the app (AUTH-10); wrong code refused, right code approves |
 | `it.admin` | Sign in with the bootstrap password | Must set an own password, then enrol MFA; sees only User management, User logs, Help |
 | `it.admin` | Add user (role Evaluator or Director), Reset MFA, Disable/Enable | Temporary password shown once; every change listed in User logs (IST) |
 | new user | Sign in with the temporary password | Must change it; approvers then enrol MFA |
