@@ -3,7 +3,8 @@
 # Run from the repo root on the server:
 #   docker compose -f deploy/compose/production.yaml up -d --build
 # Needs on the host: .env (from deploy/env/server.env.example, chmod 600), var/corpus.db,
-# var/chroma-local-bge/, var/certs/course-ca.pem, data/frozen/v1/hr.db (make hr-db on the Mac).
+# the vector index folder (see models-hosted.env), var/certs/course-ca.pem, data/frozen/v1/hr.db
+# (make hr-db on the Mac).
 # The 5 Dec demo still runs on the Mac (ADR 0036); this is the evaluators' link and its backup.
 name: credassure-prod
 
@@ -42,7 +43,7 @@ services:
       UI_ORIGINS: https://${DOMAIN}
     expose: ["8000"]
     volumes:
-      - ../../var:/app/var # case.db, corpus.db, chroma-local-bge, certs, backups (uid 10001)
+      - ../../var:/app/var # case.db, corpus.db, the vector index, certs, backups (uid 10001)
       - ../../data:/app/data:ro # frozen data, hr.db, reference tables, lender scripts
       - ../../scripts:/app/scripts:ro # demo_reset.py, run once with `run --rm`
       - ../../evaluation/baseline/results:/app/evaluation/baseline/results:ro
