@@ -170,3 +170,39 @@ def test_scope30_every_setting_is_documented_and_in_env_example() -> None:
     assert fields - documented == set()
     assert fields - example == set()
     assert readme_flags and readme_flags <= fields
+
+
+def test_deploy_llm_fallback_is_unset_by_default_and_wraps_only_when_set() -> None:
+    """Deployment plan §5.3: no fallback unless LLM_FALLBACK_BASE_URL is set; key kept secret."""
+    from credassure.gateway.main import _default_llm
+    from credassure.llm.client import OpenAICompatLLM
+    from credassure.llm.failover import FailoverLLM
+
+    base: dict[str, Any] = {
+        "app_env": "test",
+        "llm_base_url": "http://course.test/v1",
+        "llm_cache_path": "",
+    }
+    plain = Settings(_env_file=None, **base, llm_fallback_base_url="")
+    assert plain.llm_fallback_base_url is None
+    assert isinstance(_default_llm(plain), OpenAICompatLLM)
+
+    both = Settings(
+        _env_file=None,
+        **base,
+        llm_model="Qwen/Qwen3-8B",
+        llm_fallback_base_url="http://hf.test/v1",
+        llm_fallback_api_key="hf-secret-token",
+    )
+    assert "hf-secret-token" not in repr(both)
+    llm = _default_llm(both)
+    assert isinstance(llm, FailoverLLM)
+    assert (llm.primary.model, llm.fallback.model) == ("Qwen/Qwen3-8B", "Qwen/Qwen3-8B")
+    assert llm.circuit_state == "closed"
+    replay = Settings(
+        _env_file=None,
+        **{**base, "llm_cache_path": "var/x.db"},
+        llm_fallback_base_url="http://hf.test/v1",
+        replay_mode=True,
+    )
+    assert isinstance(_default_llm(replay), OpenAICompatLLM)  # replay never reaches an endpoint
