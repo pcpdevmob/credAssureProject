@@ -43,6 +43,21 @@ describe('approval step-up', () => {
     await userEvent.type(screen.getByLabelText('Type the case ID to confirm'), CASE_ID);
     expect(confirm).toBeEnabled();
   });
+  it('APR-03: a case held at exactly ₹1.5 crore gives the VP the decision form, and nobody else', async () => {
+    const held = { ...toCase(caseSummary as never), stage: 'ROUTING_HELD', routedTo: 'HELD_PENDING_POLICY' } as never;
+    const vp: User = { id: 'v', name: 'Demo VP', email: 'v', role: 'VP_FINANCE', employeeId: '' };
+    const { approvalService } = await import('@/services/approvals');
+    expect(approvalService.canDecide(held, vp)).toBe(true);
+    expect(approvalService.canDecide(held, director)).toBe(false);
+    const first = render(<ProvenanceProvider><Review c={held} user={vp} onChange={() => undefined} /></ProvenanceProvider>);
+    expect(screen.getByText('Held at exactly ₹1.5 crore')).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Your decision' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Approve proposal' })).toBeInTheDocument();
+    first.unmount();
+    render(<ProvenanceProvider><Review c={held} user={director} onChange={() => undefined} /></ProvenanceProvider>);
+    expect(screen.queryByRole('group', { name: 'Your decision' })).toBeNull();
+    expect(screen.getByText(/Awaiting decision from/).textContent).toContain('VP, Finance');
+  });
   it('asks for the password only when the gateway answers STEP_UP_REQUIRED, then sends it (NFR-07)', async () => {
     const c = { ...toCase(caseSummary as never), stage: 'AWAITING_APPROVAL', routedTo: 'DIRECTOR_FINANCE' } as never;
     const { approvalService } = await import('@/services/approvals');
