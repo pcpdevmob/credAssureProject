@@ -180,6 +180,11 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
 - **Writes:** `stage_runs`, audit events `STAGE_STARTED/COMPLETED/GATE_OVERRIDE/PAUSED/RESUMED/ROUTED`.
 - **Blockers:** `SUP_UPSTREAM_NOT_GO`, `SUP_BUDGET_EXCEEDED`, `SUP_SCHEMA_INVALID`, `SUP_RECHECK_MISMATCH`, `SUP_ROUTE_HELD`.
 - **Tests:** isolation 3/3, routing 6/6, end-to-end ≥4/5; forced-GO agent outputs still blocked.
+- **As built (SUP-02, 2026-11-21):** chat intent is decided in code inside the copilot turn, after the refusal policy
+  and the injection scan (`agents/copilot/intent.py::chat_action`): a data correction or an approval action gets a
+  fixed reply naming the form or the Review & approval tab, and changes nothing; every other message is a copilot
+  question (CP-07 routing), a refusal or an abstention. `sup_intent` (a model classifier) was never built. S18
+  fixtures: 15/15 on intent, form and step.
 
 #### 2.4.2 Employee Onboarding Agent — Gate 1 Readiness (owner: Tejas)
 - **Inputs:** preparer `emp_id` from the authenticated user (never from chat — ONB-01); hr.db (read-only).

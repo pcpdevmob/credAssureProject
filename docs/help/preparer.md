@@ -22,6 +22,11 @@ the Key Facts Statement and schedule of charges PDFs, tick that you checked, and
 be read (not scans), and bank statements are not read. Text that looks like an instruction is flagged and ignored, because documents are data.
 To author test cases from the command line, see [case-authoring.md](case-authoring.md).
 
+An offer whose terms cannot be priced is shown as **NOT RANKED** with the reason: for example a loan amount or
+interest rate of zero, a rate typed as 12.5 instead of 12.5%, a moratorium as long as the tenure, a negative fee,
+insurance added to the loan (financed) or an unusual guarantee-fee basis. Correct the offer and run the case again; the
+other offers are still compared.
+
 ## Run
 On **Workflow**, press **Run**. Stages run in a fixed order: readiness, funding need, lender comparison, verification,
 then routing. **Live progress** shows each stage's result as it finishes.
