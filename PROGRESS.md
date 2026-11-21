@@ -66,6 +66,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P11 | 11.13 | Evaluation | done | Pritish | 2026-11-20 | — | E14 | [2026-11-20-p11-11.13-redteam-live-run-pritish.md](docs/progress/entries/2026-11-20-p11-11.13-redteam-live-run-pritish.md) |
 | P11 | 11.14 | Evaluation | done | Pritish | 2026-11-20 | — | — | [2026-11-20-p11-11.14-safety-v2-h24-pritish.md](docs/progress/entries/2026-11-20-p11-11.14-safety-v2-h24-pritish.md) |
 | P12 | 12.10 | Responsible AI | done | Pritish | 2026-11-20 | — | — | [2026-11-20-p12-12.10-system-card-release-hashes-pritish.md](docs/progress/entries/2026-11-20-p12-12.10-system-card-release-hashes-pritish.md) |
+| P12 | 12.11 | Documentation | done | Pritish | 2026-11-21 | — | — | [2026-11-21-p12-12.11-demo-script-ui-names-pritish.md](docs/progress/entries/2026-11-21-p12-12.11-demo-script-ui-names-pritish.md) |
 | P13 | 13.0 | Copilot | done | Pritish | 2026-11-18 | 2c3088d, bbe5f62, 0148fe0 | — | [2026-11-18-p13-13.0-copilot-product-assistant-pritish.md](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md) |
 | P14 | 14.1 | Authentication | in_progress | Pritish | 2026-11-20 | — | — | [2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md](docs/progress/entries/2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md) |
 | P14 | 14.2 | Authentication | done | Pritish | 2026-11-20 | — | — | [2026-11-20-p14-14.2-web-accounts-mfa-pritish.md](docs/progress/entries/2026-11-20-p14-14.2-web-accounts-mfa-pritish.md) |
@@ -151,6 +152,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - P11 11.6: H21 APR transcription and H22 gold hand check (G1 final). ([entry](docs/progress/entries/2026-11-19-p11-11.6-human-review-pack-pritish.md))
 - P11 11.6: H1/H2 dev labels and H14 J1 labels (Abhishek); `judge_j1` all-rows option (Eval thread). ([entry](docs/progress/entries/2026-11-19-p11-11.6-human-review-pack-pritish.md))
 - P11 11.6: ADR text for D1, D2, D3, D9 after the team call; H18 owner names and handles. ([entry](docs/progress/entries/2026-11-19-p11-11.6-human-review-pack-pritish.md))
+- P12 12.11: drop any CHANGELOG 1.1.0 line whose PR has not merged before the tag; rehearse the script once on the Mac after #37 merges. ([entry](docs/progress/entries/2026-11-21-p12-12.11-demo-script-ui-names-pritish.md))
 
 ### Evaluation
 

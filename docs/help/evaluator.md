@@ -10,7 +10,7 @@ ever says **Hash chain broken**, an event was changed or removed: report it at o
 events across all cases.
 
 ## Safety events
-**Review & approval** on a case shows the **Safety events** panel: counts and codes of what the guardrails and the
+**Review & approval** on a case shows the **Safety checks on this case** panel: counts and codes of what the guardrails and the
 Verification Critic blocked, redacted or flagged. The panel never shows the blocked text itself.
 
 ## Eval runs
