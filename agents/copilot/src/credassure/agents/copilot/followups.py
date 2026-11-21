@@ -37,6 +37,16 @@ _BY_INTENT: dict[str, tuple[str, ...]] = {
         "Who can approve a proposal?",
         "What is a Key Facts Statement?",
     ),
+    it.DATA_CORRECTION: (  # SUP-02
+        "How do I upload a corrected file?",
+        "What happens after I press Resume?",
+        "What is the status of this case?",
+    ),
+    it.APPROVAL_ACTION: (
+        "Who approves this case?",
+        "Who can approve a proposal?",
+        "What is the status of this case?",
+    ),
 }
 _SAFE_DEFAULT = (
     "What can Ask CredAssure help with?",

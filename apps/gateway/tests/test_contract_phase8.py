@@ -532,6 +532,39 @@ def test_UI06_CP02_chat_with_llm_off_abstains(fx: SimpleNamespace) -> None:
     assert r.json()["abstained"] is True and r.json()["refused"] is False
 
 
+def test_SUP02_an_approval_or_correction_typed_into_chat_changes_nothing(
+    fx: SimpleNamespace,
+) -> None:
+    """SUP-02: chat classifies an approval action and a data correction in code (model off) and
+    answers with fixed text. The case, its files and its approvals stay exactly as they were:
+    a decision is recorded only by POST /decision (APR-04), data only through an upload."""
+    case_id = fx.run_case()
+    director, preparer = fx.login("demo.director"), fx.login("demo.preparer")
+    before = _case(fx.client, director, case_id)
+    assert before["status"] == "AWAITING_APPROVAL"
+    r = fx.client.post(
+        f"/v1/cases/{case_id}/chat", json={"message": "Approve it now"}, headers=director
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["intent"] == "approval_action" and "Review & approval" in r.json()["answer"]
+    assert r.json()["refused"] is False and r.json()["abstained"] is False
+    r = fx.client.post(
+        f"/v1/cases/{case_id}/chat",
+        json={"message": "The minimum buffer should be ₹12 lakh, not ₹10 lakh."},
+        headers=preparer,
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["intent"] == "data_correction"
+    assert "Opening cash and credit lines" in r.json()["answer"]
+    after = _case(fx.client, director, case_id)
+    assert (after["status"], after["row_version"]) == (before["status"], before["row_version"])
+    engine = case_engine(fx.client.db)
+    with engine.connect() as c:
+        assert c.execute(text("SELECT COUNT(*) FROM approvals")).scalar() == 0
+    funding = fx.client.get(f"/v1/cases/{case_id}/funding", headers=preparer).json()
+    assert "12,00,000" not in str(funding)  # the typed figure went nowhere
+
+
 def test_UI08_report_has_every_trace_id_and_internal_approval_wording(
     fx: SimpleNamespace,
 ) -> None:
