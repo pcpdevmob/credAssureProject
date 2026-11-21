@@ -111,7 +111,7 @@ errors also carry `errors: [{field, row, reason}]`. Every response has `X-Reques
 - `GET /v1/health/live` (no auth) → `{status:"ok"}`.
 - `GET /v1/health/ready` (no auth) → `{status: "ok"|"degraded", checks:{db, chroma, model, quota}}`, where:
   - `db` is "ok" or "error";
-  - `chroma` is "not_configured" until Phase 7;
+  - `chroma` is "not_configured" in keyword mode, "missing" until the index is built, else "ok" (reported, not gated);
   - `model` is "closed", "open" or "disabled";
   - `quota` is `{used, limit, level}`, with `level` one of "ok", "warn_70", "warn_90" or "exhausted".
 - Quota rules:

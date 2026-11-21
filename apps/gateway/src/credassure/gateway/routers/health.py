@@ -5,7 +5,7 @@ from typing import Any
 from fastapi import APIRouter
 from sqlalchemy import text
 
-from credassure.gateway.deps import Svc
+from credassure.gateway.deps import Services, Svc
 from credassure.gateway.quota import quota
 
 router = APIRouter(prefix="/v1/health", tags=["health"])
@@ -14,6 +14,17 @@ router = APIRouter(prefix="/v1/health", tags=["health"])
 @router.get("/live")
 def live() -> dict[str, str]:
     return {"status": "ok"}
+
+
+def _index(svc: Services) -> str:
+    """The copilot's vector index, checked on disk without loading it (no model, no query):
+    `not_configured` in keyword mode, `missing` when `CHROMA_PATH` holds no index (run `make
+    ingest` with the same MODELS), else `ok`. It is reported, not gated: gates, figures, routing
+    and approval do not use the index; only cited copilot answers do."""
+    settings = svc.settings
+    if settings.copilot_search_mode == "keyword":
+        return "not_configured"
+    return "ok" if (settings.chroma_path / "chroma.sqlite3").is_file() else "missing"
 
 
 @router.get("/ready")
@@ -29,7 +40,7 @@ def ready(svc: Svc) -> dict[str, Any]:
         model = "replay"  # recorded replies only (scope #17, ADR 0015)
     checks: dict[str, Any] = {
         "db": db,
-        "chroma": "not_configured",  # Phase 7 adds the embedded Chroma client
+        "chroma": _index(svc),
         "model": model,
         "quota": quota(svc) if db == "ok" else None,
     }

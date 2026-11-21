@@ -465,7 +465,10 @@ def test_LW15_LW11_three_rounds_rerank_case_06_through_the_api(client: Any, logi
 
 # ---- LW-01 / BR-06: an offer that cannot be priced is flagged; it never stops the case ----------
 _BAD_OFFERS: dict[str, tuple[dict[str, Any], str]] = {
-    "financed_insurance": ({"insurance": {"premium": "25000", "financed": True}}, "insurance.financed"),
+    "financed_insurance": (
+        {"insurance": {"premium": "25000", "financed": True}},
+        "insurance.financed",
+    ),
     "cgtmse_basis_sanctioned": (
         {
             "guarantee": {

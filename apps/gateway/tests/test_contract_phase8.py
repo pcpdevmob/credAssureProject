@@ -8,6 +8,7 @@ Known answers come from the placeholder WC fact (₹1,42,00,000, spec) and the f
 import hashlib
 import re
 from collections.abc import Callable
+from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 
@@ -597,16 +598,34 @@ def test_scope50_live_needs_no_auth(fx: SimpleNamespace) -> None:
 
 
 @pytest.mark.parametrize(("llm_enabled", "model"), [(False, "disabled"), (True, "closed")])
-def test_scope50_ready_reports_checks(fx: SimpleNamespace, llm_enabled: bool, model: str) -> None:
-    c = fx.make_client(llm_enabled=llm_enabled)
+def test_scope50_ready_reports_checks(
+    fx: SimpleNamespace, tmp_path: Path, llm_enabled: bool, model: str
+) -> None:
+    c = fx.make_client(llm_enabled=llm_enabled, chroma_path=tmp_path / "no-index")
     r = c.get("/v1/health/ready")
     assert r.status_code == 200
     checks = r.json()["checks"]
     assert set(checks) == {"db", "chroma", "model", "quota"}
     assert checks["db"] == "ok"
-    assert checks["chroma"] == "not_configured"
+    assert checks["chroma"] == "missing"  # hybrid search (the default) with no index built
     assert checks["model"] == model
     assert checks["quota"]["level"] == "ok"
+
+
+def test_scope50_ready_reports_the_vector_index_on_disk(
+    fx: SimpleNamespace, tmp_path: Path
+) -> None:
+    """Scope #50: `chroma` was a constant. Hybrid search now reports `missing` until the index
+    exists at CHROMA_PATH and `ok` once it does; the overall status does not depend on it."""
+    index = tmp_path / "index"
+    c = fx.make_client(chroma_path=index)
+    body = c.get("/v1/health/ready").json()
+    assert (body["checks"]["chroma"], body["status"]) == ("missing", "ok")
+    index.mkdir()
+    (index / "chroma.sqlite3").write_bytes(b"")
+    assert c.get("/v1/health/ready").json()["checks"]["chroma"] == "ok"
+    keyword = fx.make_client(copilot_search_mode="keyword", chroma_path=index)
+    assert keyword.get("/v1/health/ready").json()["checks"]["chroma"] == "not_configured"
 
 
 def _spend(db: Any, case_id: str, tokens: int) -> None:
