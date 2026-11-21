@@ -1,6 +1,6 @@
 # ADR 0040 — Excel workbook import for case data; PDF stays out of scope
 
-Status: Accepted (owner decision 2026-11-20: "user should be able to upload Excel … and the system should convert it to
+Status: Accepted, PDF section amended by ADR 0041 (owner decision 2026-11-20: "user should be able to upload Excel … and the system should convert it to
 the needed CSV or JSON"; Excel now, PDF later) · Date: 2026-11-20 · Amends BRD Q-08 and §4.3 (uploads), ADR 0003
 (uploads row) · Requirements UI-02, API-01, BR-15, NFR-07
 

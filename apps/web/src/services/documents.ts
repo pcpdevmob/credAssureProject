@@ -2,6 +2,7 @@
 // A rejected file throws an ApiProblem whose fieldErrors carry field, row and reason. There is no list endpoint yet.
 import { gw, ok } from '@/lib/gateway';
 import { toProblem } from '@/lib/problem';
+import type { OfferDraft, ChargeRow } from '@/lib/offerPdf';
 
 export const FILE_KINDS = ['order', 'opening_position', 'costs', 'receipts', 'receivables', 'payables', 'inventory'] as const;
 export type FileKind = typeof FILE_KINDS[number] | 'offer' | 'kfs';
@@ -50,4 +51,18 @@ export const workbookService = {
     Object.assign(document.createElement('a'), { href: url, download: example ? 'credassure-case-example.xlsx' : 'credassure-case-template.xlsx' }).click();
     setTimeout(() => URL.revokeObjectURL(url), 0);
   },
+};
+
+/** ADR 0041: lender PDFs. `read` returns the PDF text and a draft (nothing stored); the person reviews it, then the offer is
+ * saved with caseFiles.save('offer') and the KFS / schedule with saveKfs, both through the ordinary upload check. */
+export type PdfDoc = 'offer' | 'kfs' | 'schedule';
+export type PdfRead = { text: string; draft: OfferDraft & { rows?: ChargeRow[] } };
+export const pdfService = {
+  async read(caseId: string, doc: PdfDoc, file: File): Promise<PdfRead> {
+    const body = new FormData(); body.append('file', new File([file], file.name, { type: 'application/pdf' }));
+    const r = await ok(gw.POST('/v1/cases/{case_id}/pdf', { params: { path: { case_id: caseId }, query: { doc } }, body: body as never, bodySerializer: (b: unknown) => b as FormData } as never)) as unknown as PdfRead;
+    return r;
+  },
+  saveKfs: (caseId: string, body: { kfs_doc_id: string; offer_id: string; version: number; which: 'kfs' | 'schedule'; title: string; text: string; rows: ChargeRow[] }) =>
+    ok(gw.POST('/v1/cases/{case_id}/kfs-document', { params: { path: { case_id: caseId } }, body })),
 };

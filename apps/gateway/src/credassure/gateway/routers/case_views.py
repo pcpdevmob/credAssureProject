@@ -15,20 +15,23 @@ so a non-technical preparer or approver can see it without the evaluator's raw a
   the evaluator's `/audit` route; `chain_ok` is repeated here as one yes/no for everyone.
 """
 
+import hashlib
 import io
 import json
 from datetime import UTC, datetime
 from functools import lru_cache
 from pathlib import Path
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, File, Query, Request, UploadFile
 from fastapi.responses import Response
 from openpyxl import load_workbook
+from pydantic import BaseModel, Field
 from sqlalchemy import Engine, select, text
 
 from credassure.core.errors import ApiErrorCode
-from credassure.gateway import workbook
+from credassure.core.schemas.offer import KFS_DOC_ID, OFFER_ID
+from credassure.gateway import pdf_intake, workbook
 from credassure.gateway.deps import Svc, User, own_case, visible_case
 from credassure.gateway.problems import ProblemError
 from credassure.gateway.routers.cases import store_upload
@@ -215,6 +218,7 @@ def readiness(case_id: str, who: User, svc: Svc) -> dict[str, Any]:
 HISTORY_KEYS: dict[str, tuple[str, ...]] = {
     "CASE_CREATED": ("order_ref",),
     "FILE_UPLOADED": ("kind",),
+    "PDF_DRAFTED": ("doc", "model", "drafted", "dropped"),
     "INJECTION_FLAGGED": ("kind", "flags"),
     "STAGE_COMPLETED": ("stage", "attempt", "decision"),
     "STATE_CHANGED": ("status", "current_stage"),
@@ -383,3 +387,108 @@ def case_template(
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         headers={"Content-Disposition": f'attachment; filename="{name}"'},
     )
+
+
+# ---- ADR 0041: lender PDFs -> a draft the preparer reviews -----------------------------------
+PDF_TYPES = {"application/pdf", "application/x-pdf", "application/octet-stream"}
+
+
+def _open_inputs(svc: Svc, who: Any, case_id: str) -> Any:
+    case = own_case(svc, who, case_id)
+    if case.status in LOCKED:
+        raise ProblemError(409, f"case is {case.status}; inputs are locked", ApiErrorCode.CONFLICT)
+    if run_in_progress(svc.engine, case.id):
+        raise ProblemError(409, "a run is in progress on this case", ApiErrorCode.RUN_IN_PROGRESS)
+    return case
+
+
+@router.post("/cases/{case_id}/pdf")
+async def read_pdf(
+    request: Request,
+    case_id: str,
+    doc: Annotated[pdf_intake.DocKind, Query()],
+    file: Annotated[UploadFile, File()],
+    who: User,
+    svc: Svc,
+) -> dict[str, Any]:
+    """A text-layer PDF -> its text and, for an offer letter or schedule of charges, a draft the
+    model quoted and code read (ADR 0041). Nothing is stored: the preparer reviews the draft and
+    saves it through the ordinary upload path. Scanned PDFs are refused (no OCR, BRD §4.3)."""
+    case = _open_inputs(svc, who, case_id)
+    limit = svc.settings.max_upload_bytes
+    declared = request.headers.get("content-length", "")
+    if declared.isdigit() and int(declared) > limit + 64 * 1024:
+        raise ProblemError(
+            413, f"file is larger than {limit} bytes", ApiErrorCode.PAYLOAD_TOO_LARGE
+        )
+    content_type = (file.content_type or "").split(";")[0].strip().lower()
+    if not (file.filename or "").lower().endswith(".pdf") or content_type not in PDF_TYPES:
+        raise ProblemError(415, "upload a .pdf file", ApiErrorCode.UNSUPPORTED_MEDIA_TYPE)
+    raw = await file.read(limit + 1)
+    if len(raw) > limit:
+        raise ProblemError(
+            413, f"file is larger than {limit} bytes", ApiErrorCode.PAYLOAD_TOO_LARGE
+        )
+    text = pdf_intake.pdf_text(raw)
+    llm = svc.llm if svc.settings.llm_enabled else None
+    if doc == "offer":
+        draft = pdf_intake.draft_offer(llm, text)
+    elif doc == "schedule":
+        draft = pdf_intake.draft_schedule(llm, text)
+    else:
+        draft = {"model": "not needed"}
+    sha = hashlib.sha256(raw).hexdigest()
+    # OBJ-08: the AI's part in data entry is on the record (counts only, never the text)
+    svc.ledger.audit(
+        case.id,
+        "PDF_DRAFTED",
+        {
+            "doc": doc,
+            "sha256": sha,
+            "model": draft["model"],
+            "drafted": len(draft.get("fields", {})) + len(draft.get("fees", draft.get("rows", []))),
+            "dropped": draft.get("dropped", 0),
+        },
+    )
+    return {"case_id": case.id, "doc": doc, "sha256": sha, "text": text, "draft": draft}
+
+
+class ChargeRow(BaseModel):
+    name: str = Field(min_length=1, max_length=120)
+    timing: Literal["upfront", "monthly", "annual"]
+    amount: str = Field(min_length=1, max_length=200)
+
+
+class KfsDocument(BaseModel):
+    kfs_doc_id: str = Field(pattern=KFS_DOC_ID)
+    offer_id: str = Field(pattern=OFFER_ID)
+    version: int = Field(ge=1, le=99)
+    which: Literal["kfs", "schedule"]
+    title: str = Field(min_length=1, max_length=200)
+    text: str = Field(max_length=pdf_intake.MAX_CHARS)
+    rows: list[ChargeRow] = Field(default_factory=list, max_length=40)
+
+
+@router.post("/cases/{case_id}/kfs-document", status_code=201)
+def save_kfs_document(case_id: str, body: KfsDocument, who: User, svc: Svc) -> dict[str, Any]:
+    """A reviewed KFS or schedule of charges from a PDF, stored as the KFS document LendWise reads
+    (ADR 0041). The rows the person confirmed become the charge table; the PDF text follows as
+    data. Stored through the same validation, injection scan and audit as any upload."""
+    case = _open_inputs(svc, who, case_id)
+    if body.which == "schedule" and not body.rows:
+        raise ProblemError(
+            422,
+            "a schedule of charges needs at least one charge",
+            errors=[{"field": "rows", "row": None, "reason": "add the charges from the PDF"}],
+        )
+    doc_id = body.kfs_doc_id + ("-SCH" if body.which == "schedule" else "")
+    markdown = pdf_intake.kfs_markdown(
+        doc_id=doc_id,
+        case_id=case.id,
+        offer_id=body.offer_id,
+        version=body.version,
+        title=body.title,
+        body=body.text,
+        rows=[r.model_dump() for r in body.rows],
+    )
+    return store_upload(svc, case, who.user_id, "kfs", markdown.encode("utf-8"), markdown)
