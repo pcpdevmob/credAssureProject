@@ -1,0 +1,38 @@
+# Hosted deployment (deploy/compose/production.yaml). Caddy gets and renews the HTTPS certificate
+# for {$DOMAIN} by itself (Let's Encrypt; ports 80 and 443 must be open and the DNS A record set).
+{
+	servers {
+		protocols h1 h2
+	}
+}
+
+{$DOMAIN} {
+	encode zstd gzip
+
+	# API: the gateway serves everything under /v1 (its /docs page is not routed, so not public).
+	handle /v1/* {
+		# SSE progress and copilot streams: flush at once, allow long-lived responses.
+		reverse_proxy gateway:8000 {
+			flush_interval -1
+			transport http {
+				read_timeout 10m
+			}
+		}
+	}
+
+	# Everything else: the web app (it sends its own security headers, scope #52).
+	handle {
+		reverse_proxy web:8080
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Robots-Tag "noindex, nofollow"
+		-Server
+	}
+
+	log {
+		output stdout
+		format json
+	}
+}

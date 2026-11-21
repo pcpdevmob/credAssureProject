@@ -133,29 +133,54 @@ def _default_llm(settings: Settings) -> LLMPort | None:
     import ssl
 
     import httpx2
+    from pydantic import SecretStr
 
     from credassure.llm.cache import ResponseCache
     from credassure.llm.client import OpenAICompatLLM
+    from credassure.llm.failover import FailoverLLM
     from credassure.llm.resilience import CircuitBreaker, configure_shared_limiter
 
-    key = settings.llm_api_key.get_secret_value() if settings.llm_api_key else None
     ca = settings.llm_ca_cert
-    return OpenAICompatLLM(
-        settings.llm_base_url,
-        key,
-        settings.llm_model or "default",
-        call_timeout=settings.llm_call_timeout_s,
-        retries=settings.llm_max_retries,
-        breaker=CircuitBreaker(settings.llm_circuit_failures, settings.llm_circuit_open_s),
-        limiter=configure_shared_limiter(settings.llm_rate_per_minute),
-        cache=ResponseCache(settings.llm_cache_path) if settings.llm_cache_path else None,
-        guided_json=settings.llm_supports_guided_json,
-        max_tokens=settings.llm_max_tokens,
-        disable_thinking=settings.llm_disable_thinking,
-        thinking_switch=settings.llm_thinking_switch,
-        http_client=httpx2.Client(verify=ssl.create_default_context(cafile=ca)) if ca else None,
-        replay=settings.replay_mode,
+    limiter = configure_shared_limiter(settings.llm_rate_per_minute)
+    cache = ResponseCache(settings.llm_cache_path) if settings.llm_cache_path else None
+
+    def client(
+        url: str, secret: SecretStr | None, model: str, ca_file: Path | None
+    ) -> OpenAICompatLLM:
+        return OpenAICompatLLM(
+            url,
+            secret.get_secret_value() if secret else None,
+            model,
+            call_timeout=settings.llm_call_timeout_s,
+            retries=settings.llm_max_retries,
+            breaker=CircuitBreaker(settings.llm_circuit_failures, settings.llm_circuit_open_s),
+            limiter=limiter,
+            cache=cache,
+            guided_json=settings.llm_supports_guided_json,
+            max_tokens=settings.llm_max_tokens,
+            disable_thinking=settings.llm_disable_thinking,
+            thinking_switch=settings.llm_thinking_switch,
+            http_client=(
+                httpx2.Client(verify=ssl.create_default_context(cafile=ca_file))
+                if ca_file
+                else None
+            ),
+            replay=settings.replay_mode,
+        )
+
+    primary = client(
+        settings.llm_base_url, settings.llm_api_key, settings.llm_model or "default", ca
     )
+    if not settings.llm_fallback_base_url or settings.replay_mode:
+        return primary
+    # The course CA applies to the course host only; the fallback uses the public CA store.
+    fallback = client(
+        settings.llm_fallback_base_url,
+        settings.llm_fallback_api_key,
+        settings.llm_fallback_model or settings.llm_model or "default",
+        None,
+    )
+    return FailoverLLM(primary, fallback)
 
 
 def _profile_loader(settings: Settings, engine: Engine) -> Callable[[str], dict[str, Any] | None]:
