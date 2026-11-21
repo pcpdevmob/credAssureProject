@@ -544,3 +544,42 @@ def test_LW01_BR06_an_unpriceable_offer_is_flagged_and_the_case_still_runs(
     case = client.get(f"/v1/cases/{case_id}", headers=h).json()
     assert case["status"] != "FAILED", case
     check(view())
+
+
+# ---- APR-03 / BRD §5.1: a case held at exactly ₹1.5 crore is the VP's to decide -----------------
+def test_APR03_held_boundary_case_is_decided_by_the_vp_only(client: Any, login: Login) -> None:
+    """Frozen case CA-2026-0010 needs exactly ₹1,50,00,000: BOUNDARY_RULE=hold parks it as HELD.
+    It appears in the VP's inbox only, and only the VP can decide it (the web form relies on it)."""
+    frozen = "CA-2026-0010"
+    h = login(client, "demo.preparer")
+    case_id = client.post("/v1/cases", json=NEW_CASE, headers=h).json()["case_id"]
+    for kind in KINDS:
+        name = f"{kind}.json" if kind in ("order", "opening_position") else f"{kind}.csv"
+        post(client, h, case_id, kind, DATA / "cases" / frozen / name)
+    for kind, path in offer_files(frozen):
+        post(client, h, case_id, kind, path)
+    assert client.post(f"/v1/cases/{case_id}/run", headers=h).status_code == 202
+    case = client.get(f"/v1/cases/{case_id}", headers=h).json()
+    assert (case["status"], case["route"]) == ("HELD", "HELD"), case
+
+    def inbox(user: str) -> list[str]:
+        r = client.get("/v1/inbox", headers=login(client, user))
+        assert r.status_code == 200, r.text
+        return [i["case_id"] for i in r.json()["items"]]
+
+    assert case_id in inbox("demo.vp") and case_id not in inbox("demo.director")
+    body = {"decision": "approve", "comment": "held case", "attested": True}
+    version = case["row_version"]
+    for user in ("demo.director", "demo.preparer"):
+        r = client.post(
+            f"/v1/cases/{case_id}/decision",
+            json=body | {"expected_version": version},
+            headers=login(client, user),
+        )
+        assert r.status_code in (403, 404), (user, r.text)  # 404: the director cannot see it
+    vp = login(client, "demo.vp")
+    r = client.post(
+        f"/v1/cases/{case_id}/decision", json=body | {"expected_version": version}, headers=vp
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["status"] == "APPROVED"
