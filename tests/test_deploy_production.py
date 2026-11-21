@@ -61,3 +61,35 @@ def test_deploy_scripts_are_executable() -> None:
     for name in ("server-setup.sh", "prod.sh", "smoke.sh", "nightly-backup.sh"):
         mode = (ROOT / "deploy/scripts" / name).stat().st_mode
         assert mode & stat.S_IXUSR, name
+
+
+def test_deploy_gateway_image_copies_every_workspace_member_it_installs() -> None:
+    """The image runs `uv sync --all-packages`: a member whose folder is not copied fails the
+    build ("Distribution not found"). The agents were missing until 21 Nov 2026."""
+    import tomllib
+
+    members = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["tool"]["uv"][
+        "workspace"
+    ]["members"]
+    docker = (ROOT / "deploy/docker/Dockerfile.gateway").read_text(encoding="utf-8")
+    copied = re.findall(r"^COPY (?!--from)(\S+) \S+$", docker, re.M)
+    assert "--all-packages" in docker
+    for member in members:
+        for needed in (f"{member}/pyproject.toml", f"{member}/src"):
+            assert any(needed == c or needed.startswith(c + "/") for c in copied), needed
+    ignore = (ROOT / ".dockerignore").read_text(encoding="utf-8").splitlines()
+    assert "!evaluation/src/" in ignore and "!data/generators/" in ignore  # not ignored away
+
+
+def test_deploy_web_image_installs_from_the_lockfile_ci_uses() -> None:
+    docker = (ROOT / "deploy/docker/Dockerfile.web").read_text(encoding="utf-8")
+    assert "package-lock.json" in docker and "npm ci" in docker
+    assert "pnpm" not in docker.replace("the pnpm lockfile is not kept current", "")
+    ci = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    assert "npm ci" in ci  # same installer, so a green CI build means the image builds
+
+
+def test_deploy_compose_gateways_mount_the_data_the_image_leaves_out() -> None:
+    dev = yaml.safe_load((ROOT / "deploy/compose/compose.yaml").read_text(encoding="utf-8"))
+    assert "../../data:/app/data:ro" in dev["x-gateway"]["volumes"]
+    assert "../../data:/app/data:ro" in list(services()["gateway"]["volumes"])  # type: ignore[call-overload]

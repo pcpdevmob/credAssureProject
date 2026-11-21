@@ -69,7 +69,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P14 | 14.1 | Authentication | in_progress | Pritish | 2026-11-20 | — | — | [2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md](docs/progress/entries/2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md) |
 | P15 | 15.1 | Deployment | done | Pritish | 2026-11-20 | ea86837 | — | [2026-11-20-p15-15.1-case-db-mysql-pritish.md](docs/progress/entries/2026-11-20-p15-15.1-case-db-mysql-pritish.md) |
 | P15 | 15.2 | Evaluation | in_progress | Pritish | 2026-11-20 | — | — | [2026-11-20-p15-15.2-course-endpoint-comparison-pritish.md](docs/progress/entries/2026-11-20-p15-15.2-course-endpoint-comparison-pritish.md) |
-| P15 | 15.3 | Deployment | done | Pritish | 2026-11-21 | 2708b78 | — | [2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md](docs/progress/entries/2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md) |
+| P15 | 15.3 | Deployment | done | Pritish | 2026-11-21 | 2708b78, a1d4d9a | — | [2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md](docs/progress/entries/2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md) |
 
 ## Modules
 
