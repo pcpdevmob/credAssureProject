@@ -692,7 +692,7 @@ def test_LW01_a_guarantee_not_passed_to_the_borrower_is_not_a_pricing_problem() 
 
 
 def test_LW01_every_frozen_offer_and_scripted_revision_is_valid() -> None:
-    """The check is a fail-closed guard for typed or imported offers: it changes no frozen result."""
+    """A fail-closed guard for typed or imported offers: it changes no frozen result."""
     paths = sorted((DATA / "offers").glob("*/*.json"))
     assert len(paths) >= 45
     for path in paths:

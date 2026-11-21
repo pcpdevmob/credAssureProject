@@ -1,9 +1,9 @@
 """Offer audit (LW-01/02/03/04/08, BR-06, ADR 0021). Pure.
 
 Comparable = every material term present and priceable, stated instalment within ₹1 of the
-recomputed one, and the first repayment date consistent with the disbursal and moratorium. Hidden charges come
-from the caller (the LendWise agent reads the KFS schedule; code checks it); they are flagged here
-and priced by ``loancost``. Benchmark and guarantee findings are warnings, not gates.
+recomputed one, and the first repayment date consistent with the disbursal and moratorium. Hidden
+charges come from the caller (the LendWise agent reads the KFS schedule; code checks it); they are
+flagged here and priced by ``loancost``. Benchmark and guarantee findings are warnings, not gates.
 """
 
 import re
@@ -65,12 +65,12 @@ def invalid_terms(offer: Mapping[str, Any]) -> tuple[str, ...]:
     if rate is None or not 0 < rate <= 1:  # stored as a fraction: 0.1205 is 12.05% a year
         bad.append("annual_rate")
     tenure, moratorium = _number(offer["tenure_months"]), _number(offer.get("moratorium_months", 0))
-    tenure_ok = tenure is not None and tenure == int(tenure) and 1 <= tenure <= MAX_TENURE_MONTHS
-    if not tenure_ok:
+    if tenure is None or tenure != int(tenure) or not 1 <= tenure <= MAX_TENURE_MONTHS:
         bad.append("tenure_months")
-    if moratorium is None or moratorium != int(moratorium) or moratorium < 0:
-        bad.append("moratorium_months")
-    elif tenure_ok and tenure is not None and moratorium >= tenure:
+        tenure = None
+    whole = moratorium is not None and moratorium == int(moratorium) and moratorium >= 0
+    no_month_left = whole and tenure is not None and moratorium is not None and moratorium >= tenure
+    if not whole or no_month_left:
         bad.append("moratorium_months")
     for fee in offer["fees"] or ():
         value = _number(fee.get("value"))
