@@ -8,13 +8,28 @@ COPY packages packages
 COPY config config
 # ADR 0035: the copilot cites product help (HELP_DIR, default docs/help).
 COPY docs/help docs/help
-RUN uv sync --frozen --no-dev --all-packages
+# Hosted build (production.yaml): HOSTED=true adds the rerank extra (sentence-transformers) and
+# bakes the evaluated in-process models into the image, so the container never downloads at run
+# time (HF_HUB_OFFLINE=1). Default false keeps the dev/demo image as before.
+ARG HOSTED=false
+RUN if [ "$HOSTED" = "true" ]; then uv sync --frozen --no-dev --all-packages --all-extras; \
+    else uv sync --frozen --no-dev --all-packages; fi
+# Embedder (EMBED_BASE_URL=local, same 384-dim space as the course bge-small) and reranker
+# (ADR 0013, revision pinned like RERANKER_REVISION). EMBED_REVISION: pin to the Mac's index.
+ARG EMBED_MODEL=BAAI/bge-small-en-v1.5
+ARG EMBED_REVISION=main
+ARG RERANK_MODEL=BAAI/bge-reranker-base
+ARG RERANK_REVISION=2cfc18c9415c912f9d8155881c133215df768a70
+ENV HF_HOME=/app/hf
+RUN mkdir -p /app/hf && if [ "$HOSTED" = "true" ]; then .venv/bin/python -c "\
+from huggingface_hub import snapshot_download as d; \
+d('$EMBED_MODEL', revision='$EMBED_REVISION'); d('$RERANK_MODEL', revision='$RERANK_REVISION')"; fi
 
 FROM python:3.12-slim-bookworm
 RUN useradd --create-home --uid 10001 credassure
 WORKDIR /app
 COPY --from=build --chown=credassure:credassure /app /app
-ENV PATH="/app/.venv/bin:$PATH"
+ENV PATH="/app/.venv/bin:$PATH" HF_HOME=/app/hf
 USER credassure
 EXPOSE 8000
 CMD ["uvicorn", "credassure.gateway.main:app", "--factory", "--host", "0.0.0.0", "--port", "8000"]

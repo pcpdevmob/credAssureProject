@@ -172,7 +172,7 @@ def test_scope30_every_setting_is_documented_and_in_env_example() -> None:
     assert readme_flags and readme_flags <= fields
 
 
-def test_deploy_llm_fallback_is_unset_by_default_and_wraps_only_when_set() -> None:
+def test_deploy_llm_fallback_is_unset_by_default_and_wraps_only_when_set(tmp_path: Path) -> None:
     """Deployment plan §5.3: no fallback unless LLM_FALLBACK_BASE_URL is set; key kept secret."""
     from credassure.gateway.main import _default_llm
     from credassure.llm.client import OpenAICompatLLM
@@ -201,8 +201,41 @@ def test_deploy_llm_fallback_is_unset_by_default_and_wraps_only_when_set() -> No
     assert llm.circuit_state == "closed"
     replay = Settings(
         _env_file=None,
-        **{**base, "llm_cache_path": "var/x.db"},
+        **{**base, "llm_cache_path": str(tmp_path / "c.db")},
         llm_fallback_base_url="http://hf.test/v1",
         replay_mode=True,
     )
     assert isinstance(_default_llm(replay), OpenAICompatLLM)  # replay never reaches an endpoint
+
+
+def test_deploy_hosted_profile_matches_the_evaluated_retrieval_and_holds_no_secrets() -> None:
+    """Deployment plan §5.1: the hosted gateway must load the retrieval settings that were
+    evaluated (models-local.env), with course chat first and the Hugging Face fallback."""
+    env = REPO_ROOT / "deploy" / "env"
+
+    def pairs(name: str) -> dict[str, str]:
+        out = {}
+        for line in (env / name).read_text(encoding="utf-8").splitlines():
+            key, sep, value = line.partition("=")
+            if sep and not line.startswith("#"):
+                out[key] = value
+        return out
+
+    hosted, local = pairs("models-hosted.env"), pairs("models-local.env")
+    for key in (
+        "EMBED_BASE_URL",
+        "CHROMA_PATH",
+        "RETRIEVAL_CONTEXT_HEADERS",
+        "RETRIEVAL_QUERY_REWRITE",
+        "RERANKER",
+        "RERANK_ORDER",
+        "ANSWERABILITY_THRESHOLD",
+    ):
+        assert hosted[key] == local[key], key
+    assert not [k for k, v in hosted.items() if k.endswith(("_API_KEY", "_CA_CERT")) and v]
+    s = Settings(
+        _env_file=env / "models-hosted.env", jwt_secret=GOOD_SECRET, mfa_encryption_key=MFA_KEY
+    )
+    assert (s.llm_model, s.llm_fallback_model) == ("Qwen/Qwen3-8B", "Qwen/Qwen3-8B:featherless-ai")
+    assert s.llm_fallback_base_url == pairs("models-hf.env")["LLM_BASE_URL"]
+    assert s.mfa_on and s.app_env == "demo" and s.tenant_id == "demo"
