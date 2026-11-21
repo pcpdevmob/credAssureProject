@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from credassure.core.errors import ApiErrorCode
 from credassure.gateway import eval_runs
@@ -29,62 +29,17 @@ def set_config(body: Config, who: Evaluator, svc: Svc) -> dict[str, Any]:
     return {"key": body.key, "value": body.value}
 
 
-Category = Literal[
-    "regulatory",
-    "onboarding",
-    "cashflow",
-    "offers",
-    "negotiation",
-    "routing",
-    "injection",
-    "refusal",
-    "isolation",
-    "e2e",
-]
-
-
-class EvalRun(BaseModel):
-    """What `make eval ARGS=...` takes: an ablation, some categories, or FakeLLM mechanics."""
-
-    ablation: Literal["A1", "A2", "A3", "A4", "A5"] | None = None
-    only: list[Category] | None = Field(default=None, max_length=10)
-    fake: bool = False
-
-
-@router.post("/eval/runs", status_code=202)
-def start_eval(body: EvalRun, who: Evaluator, svc: Svc) -> dict[str, Any]:
-    """BRD §6.1: run the test set or an ablation (evaluator). Starts the `make eval` harness as its
-    own process with a throwaway database; this gateway's cases are untouched. One run at a time.
-    A hosted demo deployment refuses (the shared model endpoint is for evaluators' cases)."""
-    settings = svc.settings
-    if settings.app_env == "demo":
-        raise ProblemError(
-            409,
-            "evaluation runs are started from the command line on this deployment (make eval)",
-            ApiErrorCode.CONFLICT,
-        )
-    if not body.fake and not settings.llm_enabled:
-        raise ProblemError(
-            409, "the model is off: start a real run with it on, or use fake", ApiErrorCode.CONFLICT
-        )
-    try:
-        run_id = eval_runs.start(
-            settings.eval_dir, ablation=body.ablation, only=list(body.only or []), fake=body.fake
-        )
-    except eval_runs.HarnessMissingError as exc:
-        raise ProblemError(
-            501,
-            "the evaluation harness is not installed on this server",
-            ApiErrorCode.NOT_IMPLEMENTED,
-        ) from exc
-    except eval_runs.RunActiveError as exc:
-        raise ProblemError(
-            409, f"evaluation run {exc} is still in progress", ApiErrorCode.CONFLICT
-        ) from exc
-    svc.ledger.audit(
-        None, "EVAL_RUN_STARTED", {"by": who.user_id, "run_id": run_id} | body.model_dump()
+@router.post("/eval/runs")
+def start_eval(who: Evaluator) -> None:
+    """BRD §6.1 lists this route. It is refused on purpose: a run is hours of model calls in its own
+    process, and the gateway starts no process (ASI05). Start it with `make eval`; read its progress
+    with GET /v1/eval/runs/{run_id} and the scorecard."""
+    raise ProblemError(
+        501,
+        "evaluation runs are started from the command line (make eval); "
+        "read progress at /v1/eval/runs/{run_id}",
+        ApiErrorCode.NOT_IMPLEMENTED,
     )
-    return {"run_id": run_id, "status": "running", "url": f"/v1/eval/runs/{run_id}"}
 
 
 def _by_category(rows: list[dict[str, Any]]) -> dict[str, list[int]]:
@@ -141,8 +96,9 @@ def scorecard(who: Evaluator, svc: Svc) -> dict[str, Any]:
 
 @router.get("/eval/runs/{run_id}")
 def get_eval(run_id: str, who: Evaluator, svc: Svc) -> dict[str, Any]:
-    """Progress and per-category counts of one run, read from what the harness has written
-    (results.jsonl, summary.json). `status`: running, finished, failed or incomplete."""
+    """Progress and per-category counts of one `make eval` run, read from what the harness has
+    written (results.jsonl, summary.json). `run_id` is the folder name the harness prints.
+    `status`: finished, or unfinished with `updated_at` (running, or stopped early)."""
     view = eval_runs.status(svc.settings.eval_dir, run_id)
     if view is None:
         raise ProblemError(404, "no such evaluation run", ApiErrorCode.NOT_FOUND)

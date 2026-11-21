@@ -307,7 +307,7 @@ The team's agent-centric diagram matches this design on users, UI → FastAPI �
 | POST /cases/{id}/decision | routed approver | approve / reject / return{stage}, comment | APR-04/05 |
 | GET /cases/{id}/report?fmt=md|html | case members | Report with trace IDs | UI-08 |
 | GET /cases/{id}/audit | evaluator | Audit log (read-only) + hash-chain verify | OBJ-08 |
-| POST /eval/runs | evaluator | Run test set / ablation | — |
+| POST /eval/runs | evaluator | Run test set / ablation (as built: 501, runs start with `make eval`; the gateway starts no process, ASI05) | — |
 | GET /eval/runs/{id} | evaluator | Scores per category | — |
 | POST /admin/config | evaluator | Boundary rule, buffers (audited) | APR-03 |
 

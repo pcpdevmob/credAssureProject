@@ -462,63 +462,6 @@
         "title": "EngineRef",
         "type": "object"
       },
-      "EvalRun": {
-        "description": "What `make eval ARGS=...` takes: an ablation, some categories, or FakeLLM mechanics.",
-        "properties": {
-          "ablation": {
-            "anyOf": [
-              {
-                "enum": [
-                  "A1",
-                  "A2",
-                  "A3",
-                  "A4",
-                  "A5"
-                ],
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Ablation"
-          },
-          "fake": {
-            "default": false,
-            "title": "Fake",
-            "type": "boolean"
-          },
-          "only": {
-            "anyOf": [
-              {
-                "items": {
-                  "enum": [
-                    "regulatory",
-                    "onboarding",
-                    "cashflow",
-                    "offers",
-                    "negotiation",
-                    "routing",
-                    "injection",
-                    "refusal",
-                    "isolation",
-                    "e2e"
-                  ],
-                  "type": "string"
-                },
-                "maxItems": 10,
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Only"
-          }
-        },
-        "title": "EvalRun",
-        "type": "object"
-      },
       "FactValue": {
         "properties": {
           "display": {
@@ -6563,40 +6506,16 @@
     },
     "/v1/eval/runs": {
       "post": {
-        "description": "BRD \u00a76.1: run the test set or an ablation (evaluator). Starts the `make eval` harness as its\nown process with a throwaway database; this gateway's cases are untouched. One run at a time.\nA hosted demo deployment refuses (the shared model endpoint is for evaluators' cases).",
+        "description": "BRD \u00a76.1 lists this route. It is refused on purpose: a run is hours of model calls in its own\nprocess, and the gateway starts no process (ASI05). Start it with `make eval`; read its progress\nwith GET /v1/eval/runs/{run_id} and the scorecard.",
         "operationId": "start_eval_v1_eval_runs_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EvalRun"
-              }
-            }
-          },
-          "required": true
-        },
         "responses": {
-          "202": {
+          "200": {
             "content": {
               "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Start Eval V1 Eval Runs Post",
-                  "type": "object"
-                }
+                "schema": {}
               }
             },
             "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "Validation error"
           },
           "4XX": {
             "content": {
@@ -6632,7 +6551,7 @@
     },
     "/v1/eval/runs/{run_id}": {
       "get": {
-        "description": "Progress and per-category counts of one run, read from what the harness has written\n(results.jsonl, summary.json). `status`: running, finished, failed or incomplete.",
+        "description": "Progress and per-category counts of one `make eval` run, read from what the harness has\nwritten (results.jsonl, summary.json). `run_id` is the folder name the harness prints.\n`status`: finished, or unfinished with `updated_at` (running, or stopped early).",
         "operationId": "get_eval_v1_eval_runs__run_id__get",
         "parameters": [
           {

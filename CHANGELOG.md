@@ -29,7 +29,7 @@ PR did not merge.
 - Gap review of 21 Nov (`docs/plan/gap-review-2026-11-21.md`): an offer that cannot be priced is flagged
   `LW_OFFER_INVALID` instead of failing the case (LW-01); the VP decides a case held at exactly ₹1.5 crore in the
   web app (APR-03); chat recognises data corrections and approval actions in code and changes nothing (SUP-02);
-  `POST /v1/eval/runs` and `GET /v1/eval/runs/{id}` work (BRD §6.1); `/v1/health/ready` reports the vector index.
+  `GET /v1/eval/runs/{id}` reports the progress of a `make eval` run (BRD §6.1; starting a run stays on the command line); `/v1/health/ready` reports the vector index.
 ### Fixed
 - The gateway and web images build (the gateway image left out `agents/`; the web image used a stale pnpm lockfile).
 ### Changed

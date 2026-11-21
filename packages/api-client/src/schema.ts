@@ -1417,9 +1417,9 @@ export interface paths {
         put?: never;
         /**
          * Start Eval
-         * @description BRD §6.1: run the test set or an ablation (evaluator). Starts the `make eval` harness as its
-         *     own process with a throwaway database; this gateway's cases are untouched. One run at a time.
-         *     A hosted demo deployment refuses (the shared model endpoint is for evaluators' cases).
+         * @description BRD §6.1 lists this route. It is refused on purpose: a run is hours of model calls in its own
+         *     process, and the gateway starts no process (ASI05). Start it with `make eval`; read its progress
+         *     with GET /v1/eval/runs/{run_id} and the scorecard.
          */
         post: operations["start_eval_v1_eval_runs_post"];
         delete?: never;
@@ -1437,8 +1437,9 @@ export interface paths {
         };
         /**
          * Get Eval
-         * @description Progress and per-category counts of one run, read from what the harness has written
-         *     (results.jsonl, summary.json). `status`: running, finished, failed or incomplete.
+         * @description Progress and per-category counts of one `make eval` run, read from what the harness has
+         *     written (results.jsonl, summary.json). `run_id` is the folder name the harness prints.
+         *     `status`: finished, or unfinished with `updated_at` (running, or stopped early).
          */
         get: operations["get_eval_v1_eval_runs__run_id__get"];
         put?: never;
@@ -1819,21 +1820,6 @@ export interface components {
             name: string;
             /** Version */
             version: string | null;
-        };
-        /**
-         * EvalRun
-         * @description What `make eval ARGS=...` takes: an ablation, some categories, or FakeLLM mechanics.
-         */
-        EvalRun: {
-            /** Ablation */
-            ablation?: ("A1" | "A2" | "A3" | "A4" | "A5") | null;
-            /**
-             * Fake
-             * @default false
-             */
-            fake: boolean;
-            /** Only */
-            only?: ("regulatory" | "onboarding" | "cashflow" | "offers" | "negotiation" | "routing" | "injection" | "refusal" | "isolation" | "e2e")[] | null;
         };
         /** FactValue */
         FactValue: {
@@ -5931,30 +5917,15 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EvalRun"];
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description Successful Response */
-            202: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["Problem"];
+                    "application/json": unknown;
                 };
             };
             /** @description Client error */

@@ -154,7 +154,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - P11 11.6: H1/H2 dev labels and H14 J1 labels (Abhishek); `judge_j1` all-rows option (Eval thread). ([entry](docs/progress/entries/2026-11-19-p11-11.6-human-review-pack-pritish.md))
 - P11 11.6: ADR text for D1, D2, D3, D9 after the team call; H18 owner names and handles. ([entry](docs/progress/entries/2026-11-19-p11-11.6-human-review-pack-pritish.md))
 - P12 12.11: drop any CHANGELOG 1.1.0 line whose PR has not merged before the tag; rehearse the script once on the Mac after #37 merges. ([entry](docs/progress/entries/2026-11-21-p12-12.11-demo-script-ui-names-pritish.md))
-- P16 16.1: screens for case deletion, evaluator retry, the boundary rule, role change and starting an evaluation run (APIs exist). ([entry](docs/progress/entries/2026-11-21-p16-16.1-implementation-gap-review-pritish.md))
+- P16 16.1: screens for case deletion, evaluator retry, the boundary rule, and role change (APIs exist); `POST /v1/eval/runs` (owner decision). ([entry](docs/progress/entries/2026-11-21-p16-16.1-implementation-gap-review-pritish.md))
 - P16 16.1: rerun negotiation, offers, e2e and regulatory items on the Mac before K3 (LendWise audit and copilot routing changed; expected unchanged). ([entry](docs/progress/entries/2026-11-21-p16-16.1-implementation-gap-review-pritish.md))
 
 ### Evaluation

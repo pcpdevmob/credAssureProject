@@ -82,12 +82,9 @@ def main() -> int:
         action="store_true",
         help="reuse cached model replies (debugging only; a scored run always calls the model)",
     )
-    ap.add_argument("--stamp", default=None, help="run folder name (set by POST /v1/eval/runs)")
     args = ap.parse_args()
 
-    stamp = args.stamp or (
-        time.strftime("%Y%m%dT%H%M%S") + (f"-{args.ablation}" if args.ablation else "")
-    )
+    stamp = time.strftime("%Y%m%dT%H%M%S") + (f"-{args.ablation}" if args.ablation else "")
     out = args.out_dir / stamp
     out.mkdir(parents=True, exist_ok=True)
     db = out / "case.db"
