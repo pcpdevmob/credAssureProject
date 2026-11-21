@@ -35,6 +35,18 @@ describe('offers', () => {
     expect(within(screen.getByRole('listitem', { name: 'Offer OF-01-B' })).getByText('Rank 1')).toBeTruthy();
     expect(within(screen.getByRole('listitem', { name: 'Offer OF-01-A' })).getByText(flagText('LW_HIDDEN_CHARGE'))).toBeTruthy();
   });
+  it('LW-01: an offer that cannot be priced says which term to correct and is never ranked', () => {
+    const bad = { ...demo, offers: [demo.offers[1], demo.offers[0],
+      offer('OF-01-D', '0', { apr_pct: null, amount_received: null, total_repayment: null, total_cost: null, comparable: false, affordable: null,
+        flags: ['LW_OFFER_INVALID'], invalid_terms: ['insurance.financed', 'annual_rate'] })] };
+    render(<Lenders c={c} view={mapOffers(c.id, bad)!} canNegotiate={false} onChange={() => undefined} />);
+    const card = screen.getByRole('listitem', { name: 'Offer OF-01-D' });
+    expect(within(card).getByText('NOT RANKED')).toBeTruthy();
+    expect(within(card).getByText(/cannot be priced/)).toBeTruthy();
+    expect(within(card).getByText(/Insurance added to the loan \(financed\) is not priced/)).toBeTruthy();
+    expect(within(card).getByText(/interest rate must be more than 0% and at most 100%/)).toBeTruthy();
+    expect(within(card).queryByText('Yearly cost (APR)')).toBeNull();
+  });
   it('labels the preview and shows no rank or affordability verdict', () => {
     const prev = { ...demo, source: 'preview' as const, ranking: [], offers: demo.offers.map(o => ({ ...o, rank: null, affordable: null })) };
     render(<Lenders c={c} view={mapOffers(c.id, prev)!} canNegotiate onChange={() => undefined} />);

@@ -11,6 +11,7 @@ import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 
+from credassure.core.blockers import BlockerCode
 from credassure.engines import (
     affordability,
     calendar,
@@ -585,3 +586,117 @@ def test_LW11_apr_tie_at_two_decimals_goes_to_total_cost() -> None:
     cheap = ranking.Candidate("B", True, Decimal("0.134249"), Decimal(100), d)
     dear = ranking.Candidate("A", True, Decimal("0.134201"), Decimal(200), d)
     assert ranking.rank([dear, cheap], Decimal(1)).order == ("B", "A")
+
+
+# ---- LW-01 / BR-06: an offer the engine cannot price honestly is flagged, never priced ----------
+FULL = BASE | {
+    "rate_type": "fixed",
+    "disbursal_date": "2026-12-01",
+    "first_repayment_date": "2027-01-01",
+}
+
+
+@pytest.mark.parametrize(
+    ("change", "term"),
+    [
+        ({"principal": "0"}, "principal"),
+        ({"principal": "-100"}, "principal"),
+        ({"annual_rate": "0"}, "annual_rate"),
+        ({"annual_rate": "-0.05"}, "annual_rate"),
+        ({"annual_rate": "12.5"}, "annual_rate"),  # a percentage typed where a fraction is stored
+        ({"tenure_months": 0}, "tenure_months"),
+        ({"tenure_months": 100000}, "tenure_months"),
+        ({"moratorium_months": -1}, "moratorium_months"),
+        ({"moratorium_months": 60}, "moratorium_months"),  # no repayment month left
+        (
+            {
+                "fees": [
+                    {
+                        "name": "Processing fee",
+                        "basis": "fixed",
+                        "value": "-5000",
+                        "timing": "upfront",
+                        "gst_applicable": True,
+                    }
+                ]
+            },
+            "fees",
+        ),
+        (
+            {
+                "fees": [
+                    {
+                        "name": "Processing fee",
+                        "basis": "pct_of_principal",
+                        "value": "2",
+                        "timing": "upfront",
+                        "gst_applicable": True,
+                    }
+                ]
+            },
+            "fees",
+        ),
+        ({"insurance": {"premium": "-1", "financed": False}}, "insurance.premium"),
+        ({"insurance": {"premium": "25000", "financed": True}}, "insurance.financed"),
+        (
+            {
+                "guarantee": {
+                    "scheme": "CGTMSE",
+                    "annual_fee_pct": "0.0085",
+                    "basis": "sanctioned",
+                    "passed_to_borrower": True,
+                    "gst_applicable": True,
+                }
+            },
+            "guarantee.basis",
+        ),
+        (
+            {
+                "guarantee": {
+                    "scheme": "CGTMSE",
+                    "annual_fee_pct": "1.5",
+                    "passed_to_borrower": True,
+                    "gst_applicable": True,
+                }
+            },
+            "guarantee.annual_fee_pct",
+        ),
+    ],
+)
+def test_LW01_BR06_invalid_or_unpriced_terms_make_an_offer_non_comparable(
+    change: dict[str, Any], term: str
+) -> None:
+    """Values no loan has (zero or negative amounts, a rate over 100%, no repayment month) and terms
+    ADR 0021 leaves unpriced (financed insurance, other CGTMSE bases) must not reach pricing: they
+    used to crash the stage (ZeroDivision, IRR not found, NotImplementedError) or lower an APR."""
+    offer = FULL | change
+    assert term in offer_audit.invalid_terms(offer)
+    audit = offer_audit.audit(offer, [], "small")
+    assert not audit.comparable
+    assert f"{BlockerCode.LW_OFFER_INVALID}:{term}" in audit.flags
+    assert term in audit.invalid_terms
+
+
+def test_LW01_a_guarantee_not_passed_to_the_borrower_is_not_a_pricing_problem() -> None:
+    assert offer_audit.invalid_terms(FULL) == () and offer_audit.audit(FULL, [], "small").comparable
+    offer = FULL | {
+        "guarantee": {
+            "scheme": "CGTMSE",
+            "annual_fee_pct": "0.0085",
+            "basis": "sanctioned",
+            "passed_to_borrower": False,
+            "gst_applicable": True,
+        }
+    }
+    assert offer_audit.invalid_terms(offer) == ()
+
+
+def test_LW01_every_frozen_offer_and_scripted_revision_is_valid() -> None:
+    """The check is a fail-closed guard for typed or imported offers: it changes no frozen result."""
+    paths = sorted((DATA / "offers").glob("*/*.json"))
+    assert len(paths) >= 45
+    for path in paths:
+        offer = json.loads(path.read_text(encoding="utf-8"))
+        if [t for t in offer_audit.MATERIAL_TERMS if t not in offer]:
+            continue  # LW-02 plants: audited as missing terms, as before
+        assert offer_audit.invalid_terms(offer) == (), path.name

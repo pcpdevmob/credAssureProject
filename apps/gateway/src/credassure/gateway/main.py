@@ -392,15 +392,19 @@ def _lendwise_handlers(settings: Settings, engine: Engine) -> dict[str, Callable
     lender = ScriptedLender(settings.lender_scripts_dir)
 
     def price(case_id: str, offers: list[dict[str, Any]], hidden: dict[str, Any]) -> Any:
-        return {
-            o["offer_id"]: (
-                loancost.price(
-                    o, hidden.get(o["offer_id"], ()), gst_rate=gst, convention=convention
-                ),
-                loancost.gst_total(o, hidden.get(o["offer_id"], ()), gst_rate=gst),
-            )
-            for o in offers
-        }
+        """An offer the engine cannot price is left out of the result; LendWise then flags it
+        LW_OFFER_INVALID and compares the rest (LW-01, fail closed). Nothing is guessed."""
+        out: dict[str, Any] = {}
+        for o in offers:
+            extra = hidden.get(o["offer_id"], ())
+            try:
+                out[o["offer_id"]] = (
+                    loancost.price(o, extra, gst_rate=gst, convention=convention),
+                    loancost.gst_total(o, extra, gst_rate=gst),
+                )
+            except (ArithmeticError, ValueError, NotImplementedError):
+                _log.warning("offer not priced", extra={"case_id": case_id, "offer": o["offer_id"]})
+        return out
 
     def afford(
         case_id: str, position: lendwise.Position, offers: list[dict[str, Any]], flows: Any
