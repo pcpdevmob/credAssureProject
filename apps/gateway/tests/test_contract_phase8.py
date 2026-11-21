@@ -143,7 +143,16 @@ def _s429(fx: SimpleNamespace) -> Response:
 
 
 def _s501(fx: SimpleNamespace) -> Response:
-    return fx.client.post("/v1/eval/runs", json={}, headers=fx.login("demo.evaluator"))
+    """A server without the evaluation harness (an image that ships code only) says so."""
+    from credassure.gateway import eval_runs
+
+    found, eval_runs.HARNESS = eval_runs.HARNESS, Path("no/such/harness.py")
+    try:
+        return fx.client.post(
+            "/v1/eval/runs", json={"fake": True}, headers=fx.login("demo.evaluator")
+        )
+    finally:
+        eval_runs.HARNESS = found
 
 
 @pytest.mark.parametrize(
@@ -612,13 +621,52 @@ def test_APR03_preparer_cannot_set_config(fx: SimpleNamespace) -> None:
 
 def test_API01_eval_runs_not_implemented_for_evaluator(fx: SimpleNamespace) -> None:
     h = fx.login("demo.evaluator")
-    _problem(fx.client.post("/v1/eval/runs", json={}, headers=h), 501, "NOT_IMPLEMENTED")
-    _problem(fx.client.get("/v1/eval/runs/x", headers=h), 501, "NOT_IMPLEMENTED")
+    _problem(fx.client.post("/v1/eval/runs", json={}, headers=h), 409, "CONFLICT")  # model off
+    _problem(fx.client.get("/v1/eval/runs/x", headers=h), 404, "NOT_FOUND")
+    _problem(fx.client.get("/v1/eval/runs/20260101T000000", headers=h), 404, "NOT_FOUND")
+    r = fx.client.post("/v1/eval/runs", json={"ablation": "A9"}, headers=h)
+    assert r.status_code == 422
 
 
 def test_API01_eval_runs_forbidden_for_preparer(fx: SimpleNamespace) -> None:
     r = fx.client.post("/v1/eval/runs", json={}, headers=fx.login("demo.preparer"))
     _problem(r, 403, "FORBIDDEN")
+
+
+def test_BRD61_evaluator_starts_a_run_and_reads_its_progress(
+    fx: SimpleNamespace, tmp_path: Path
+) -> None:
+    """BRD §6.1 `POST /eval/runs`: the same harness as `make eval`, in its own process with its own
+    database. FakeLLM mechanics on the six routing items (no model); one run at a time."""
+    import time
+
+    c = fx.make_client(eval_dir=tmp_path / "eval")
+    h = fx.login("demo.evaluator", c)
+    r = c.post("/v1/eval/runs", json={"fake": True, "only": ["routing"]}, headers=h)
+    assert r.status_code == 202, r.text
+    run_id = r.json()["run_id"]
+    assert r.json() == {"run_id": run_id, "status": "running", "url": f"/v1/eval/runs/{run_id}"}
+    again = c.post("/v1/eval/runs", json={"fake": True, "only": ["routing"]}, headers=h)
+    _problem(again, 409, "CONFLICT")
+    view: dict[str, Any] = {}
+    for _ in range(180):
+        view = c.get(f"/v1/eval/runs/{run_id}", headers=h).json()
+        if view["status"] != "running":
+            break
+        time.sleep(1)
+    assert view["status"] == "finished", view
+    assert (view["done"], view["passed"], view["by_category"]) == (6, 6, {"routing": [6, 6]})
+    assert view["meta"]["model"] == "FakeLLM"
+    assert not (tmp_path / "eval" / run_id / "case.db").samefile(c.db)  # its own database
+    _problem(
+        c.get(f"/v1/eval/runs/{run_id}", headers=fx.login("demo.preparer", c)), 403, "FORBIDDEN"
+    )
+
+
+def test_BRD61_a_hosted_demo_deployment_refuses_eval_runs(fx: SimpleNamespace) -> None:
+    from credassure.gateway.routers import admin
+
+    assert "demo" in admin.start_eval.__doc__  # the rule is stated where it is enforced
 
 
 # --- Health and quota (scope #16, #50, NFR-03) ----------------------------------------------------
