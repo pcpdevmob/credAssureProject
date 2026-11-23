@@ -8,6 +8,7 @@ import ErrorBanner from '../ErrorBanner';
 import dynamic from 'next/dynamic';
 import { plainReason } from '@/lib/caseForms';
 const DataEditor = dynamic(() => import('./DataEditor'), { ssr: false, loading: () => <Skeleton className="h-40" /> });
+const PdfOffer = dynamic(() => import('./PdfOffer'), { ssr: false, loading: () => <Skeleton className="h-24" /> });
 import { documentService, caseFiles, workbookService, type FileKind, type StoredFile, type StoredDoc, type Imported } from '@/services/documents';
 import { ApiProblem } from '@/lib/problem';
 import { FORMS } from '@/lib/caseForms';
@@ -78,11 +79,12 @@ function Section({ caseId, file, canEdit, open, setOpen, onSaved }: { caseId: st
 
 function LenderDocs({ caseId, canEdit, docs, onUploaded }: { caseId: string; canEdit: boolean; docs: StoredDoc[]; onUploaded: () => void }) {
   const [list, update] = useResults(caseId, 'offers');
-  return (<Card><CardHeader title="Documents from lenders" sub="Each lender's offer (a .json file) and its Key Facts Statement and schedule of charges (.md files), exactly as the lender sent them. Needed for the lender comparison." icon={<FileText className="h-4 w-4" />} />
+  return (<Card><CardHeader title="Documents from lenders" sub="Each lender's offer with its Key Facts Statement and schedule of charges. Needed for the lender comparison." icon={<FileText className="h-4 w-4" />} />
     <div className="space-y-4 p-5">
       {docs.length > 0 ? <ul className="divide-y divide-line rounded-xl ring-1 ring-line">{docs.map(d => <li key={d.name} className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 text-sm"><span className="flex items-center gap-2"><CheckCircle2 aria-hidden className="h-4 w-4 text-emerald-600" />{d.name}</span><span className="text-xs text-ink-500">{ago(d.uploadedAt)}</span></li>)}</ul>
         : <p className="text-sm text-amber-800">No lender documents yet.</p>}
-      {canEdit && <div><label htmlFor="upload-offers" className="block text-sm font-medium text-ink-900">Add lender documents (you can pick several at once)</label>
+      {canEdit && <div className="rounded-xl p-4 ring-1 ring-brand-200"><h4 className="mb-2 font-medium text-ink-950">Add an offer from the lender&apos;s PDFs</h4><PdfOffer caseId={caseId} onSaved={onUploaded} /></div>}
+      {canEdit && <div><label htmlFor="upload-offers" className="block text-sm font-medium text-ink-900">Or add the lender&apos;s files directly (offer .json, KFS .md; you can pick several at once)</label>
         <input id="upload-offers" type="file" multiple accept=".json,.md" className="mt-1 max-w-full text-xs file:mr-2 file:rounded-full file:border-0 file:bg-ink-900 file:px-3 file:py-1.5 file:text-white"
           onChange={async e => { const files = Array.from(e.target.files ?? []); e.target.value = ''; for (const f of files) { const k = documentService.kindOf(f.name); if (k) await send(caseId, f, k, update); } onUploaded(); }} />
         <ul className="mt-2 space-y-2">{list.map(r => <li key={r.name}><Outcome r={r} /></li>)}</ul></div>}
@@ -120,7 +122,7 @@ function ExcelImport({ caseId, onImported }: { caseId: string; onImported: () =>
         <p className="flex items-center gap-1.5 font-semibold text-rose-700"><AlertTriangle aria-hidden className="h-4 w-4" />Nothing was imported from {state.name}. Fix these in the workbook and upload it again:</p>
         <ul className="mt-2 space-y-1 text-ink-800">{fe.map((e, i) => { const [sheet, col] = e.field.split('.'); return <li key={i}><span className="font-medium">Sheet “{label(sheet)}”{e.row != null ? `, row ${e.row}` : ''}</span>{col && <> · column <code className="font-mono">{col}</code></>} · {plainReason(e.reason)}</li>; })}</ul>
       </div> : <ErrorBanner error={state.error} />)}
-      <p className="text-xs text-ink-600">PDF files cannot be read yet. Type the figures into the template or the sections below.</p>
+      <p className="text-xs text-ink-600">Lender offers can also be added from their PDFs under “Documents from lenders”. Bank statements are not read: type the figures into the template or the sections below.</p>
     </div></Card>);
 }
 
