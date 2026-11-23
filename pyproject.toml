@@ -59,7 +59,7 @@ credassure-observability = { workspace = true }
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-extend-exclude = ["docs", "prompts", ".claude"]
+extend-exclude = ["docs", "prompts", ".claude", "agents/onboarding/prototype"]  # prototype kept as written (Mousita)
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF", "N"]
@@ -108,7 +108,7 @@ mypy_path = [
 plugins = ["pydantic.mypy"]
 
 [tool.pytest.ini_options]
-addopts = "--import-mode=importlib"
+addopts = "--import-mode=importlib --ignore=agents/onboarding/prototype"  # own suite: make onboarding-prototype
 testpaths = ["apps", "agents", "packages", "evaluation", "data/generators", "tests"]
 markers = ["slow: excluded from make check-fast"]
 

@@ -20,6 +20,7 @@
 | `make run-api` | Gateway on :8000, tenant `demo`, `var/case.db` |
 | `make run-ui` | Next.js web app on :3000 |
 | `make db` | Migrate `var/case.db` + `var/corpus.db`, seed users (needs `SEED_PASSWORD`) |
+| `make onboarding-prototype` | Tests of Mousita's stand-alone onboarding prototype (`agents/onboarding/prototype`, not wired into the app); part of `make check` |
 | `make demo-reset` | Rebuild the 10 demo cases through the API. **Stop `make run-api` first** |
 | `make e2e-db` / `run-api-e2e` / `run-ui-e2e` / `e2e` | Isolated Playwright stack (:8001, :3001, `var/case-e2e.db`) |
 
