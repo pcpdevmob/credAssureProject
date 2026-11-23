@@ -8,7 +8,7 @@ so the model profile wins for model settings. `MODELS` itself is a make variable
 | Variable | Used by | Meaning |
 |---|---|---|
 | `JWT_SECRET` | gateway | Signs login tokens; 32+ characters. The API won't start without it (outside `APP_ENV=test`) |
-| `SEED_PASSWORD` | `make db`, `make demo-reset` | 12+ characters; password of every seeded user. `SEED_PASSWORD_<USERNAME>` overrides one user |
+| `SEED_PASSWORD_<USERNAME>` | `make db`, `make passwords`, `make demo-reset`, safety_v2 | Optional: one account's own password (12+ characters; two accounts may not share one). Accounts without it get a random first password in `var/initial-passwords.txt`, changed at first sign-in. `make demo-reset` needs `SEED_PASSWORD_DEMO_PREPARER`. A shared `SEED_PASSWORD` is ignored (ADR 0038) |
 | `LLM_BASE_URL` | gateway | Required while `LLM_ENABLED=true`; the profile file sets it |
 | `CORPUS_CONTACT_EMAIL` | `make corpus-harvest`, `make corpus-download` | Optional. Adds `; contact: <email>` to the scripted User-Agent (ADR 0020). Takes precedence over `CORPUS_CONTACT_URL`. If set but not a valid address, the commands stop. Set it in `.env`; never hard-code it. |
 | `CORPUS_CONTACT_URL` | same | Optional. Used when no email is set: adds `; +<url>` (http or https). With neither set, the User-Agent is `CredAssure-capstone/1.0 (IIT KGP academic project)`. |

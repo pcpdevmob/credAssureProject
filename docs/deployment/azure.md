@@ -15,7 +15,7 @@ browser ──HTTPS──▶ Caddy (80/443, certificate) ──▶ web (static a
 | `deploy/compose/production.yaml` | Caddy + gateway + web; only Caddy publishes ports (80, 443); restart on failure; health check; logs capped (5 × 10 MB per service) |
 | `deploy/caddy/Caddyfile` | HTTPS for `$DOMAIN`; `/v1/*` → gateway (streams unbuffered), everything else → web |
 | `deploy/env/models-hosted.env` | Course model first, Hugging Face fallback; the evaluated retrieval settings (same as `models-local.env`); MFA on |
-| `deploy/env/server.env.example` | Template for the server's `.env`: domain, keys, secrets, seed passwords |
+| `deploy/env/server.env.example` | Template for the server's `.env`: domain, keys, secrets, two accounts' own passwords |
 | `deploy/scripts/server-setup.sh` | One-time VM setup: Docker, firewall (22/80/443), swap, sqlite3, security updates, nightly backup |
 | `deploy/scripts/prod.sh` | `docker compose` for this stack (`up -d --build`, `ps`, `logs`, `restart`, `down`) |
 | `deploy/scripts/smoke.sh` | From any laptop: certificate, web, health, sign-in, cases, copilot, sign-out → PASS/FAIL per step |
@@ -58,7 +58,8 @@ the evaluation are unchanged.
    cp deploy/env/server.env.example .env && chmod 600 .env
    openssl rand -base64 48   # → JWT_SECRET
    openssl rand -base64 32   # → MFA_ENCRYPTION_KEY
-   nano .env                 # fill: LLM_API_KEY, LLM_FALLBACK_API_KEY, JWT_SECRET, MFA_ENCRYPTION_KEY, SEED_PASSWORD
+   nano .env                 # fill: LLM_API_KEY, LLM_FALLBACK_API_KEY, JWT_SECRET, MFA_ENCRYPTION_KEY,
+                             #       SEED_PASSWORD_DEMO_PREPARER, SEED_PASSWORD_PREP_E001 (different)
    ```
    The repository is public; `git clone` needs no login. Use the `main` branch (merged code only).
 7. **Copy the data** (from the Mac, in the repo folder). These files stay on the VM (legal basis L4: local use only):
@@ -84,12 +85,14 @@ the evaluation are unchanged.
      gateway python -m credassure.ledger.seed var/case.db --bootstrap-admin it.admin
    deploy/scripts/prod.sh up -d
    ```
+   Every other account's first password is in `var/initial-passwords.txt` on the VM (`chmod 600`): hand each one to
+   its owner, then delete the file. Each is changed at first sign-in.
 10. **Check the model path** (on the VM): `deploy/scripts/prod.sh logs gateway | grep -c "llm failover"` after a copilot
     question. 0 = the course endpoint answered. Every call failing over = the course endpoint is not reachable from
     Azure (VPN-only?): switch to Hugging Face only with the commented block in `.env`, then `prod.sh up -d`.
 11. **Smoke test** (from the Mac):
     ```bash
-    SMOKE_USER=prep.e001 SMOKE_PASSWORD='<its password>' deploy/scripts/smoke.sh https://credassure.sharentest.com
+    SMOKE_USER=prep.e001 SMOKE_PASSWORD='<SEED_PASSWORD_PREP_E001>' deploy/scripts/smoke.sh https://credassure.sharentest.com
     ```
     All lines PASS. Then sign in as `it.admin` in the browser: change the temporary password, enrol MFA, create one
     evaluator account per mentor (Accounts page).

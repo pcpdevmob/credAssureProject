@@ -18,9 +18,11 @@ tests reviews it before freezing. Review checklist:
 ```
 uv run python -m credassure.evaluation.safety_v2 validate                 # schema + 10/12/6/3/4/5 mix
 uv run python -m credassure.evaluation.safety_v2 freeze --reviewed-by NAME # copies to items.jsonl + FROZEN.sha256
-# commit the freeze BEFORE any run (ADR 0031 §2), then, with the gateway up and SEED_PASSWORD set:
-uv run python -m credassure.evaluation.safety_v2 run --out evaluation/reports/safety_v2.json
+# commit the freeze BEFORE any run (ADR 0031 §2), then, with the gateway up (MFA_ENFORCED=false) and
+# each account's own password in .env (SEED_PASSWORD_DEMO_PREPARER, _DEMO_DIRECTOR, _DEMO_EVALUATOR;
+# `make passwords` applies them to the accounts):
+uv run --env-file .env python -m credassure.evaluation.safety_v2 run --out evaluation/reports/safety_v2.json
 # A6: restart the gateway with ABLATION=A6 (never the demo profile), then
-uv run python -m credassure.evaluation.safety_v2 run --ablation A6 --out evaluation/reports/safety_v2-A6.json
+uv run --env-file .env python -m credassure.evaluation.safety_v2 run --ablation A6 --out evaluation/reports/safety_v2-A6.json
 ```
 `run` refuses an unfrozen or edited suite. It talks to the gateway API only.

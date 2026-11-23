@@ -7,7 +7,7 @@ Continuing someone's module with Claude Code, Cursor or another AI tool: [team-h
 ```bash
 make install                 # uv sync --all-packages --all-extras (never a bare `uv sync`: it drops the rerank extra)
 npm install                  # apps/web + packages/api-client
-cp .env.example .env         # then set JWT_SECRET (32+ chars) and SEED_PASSWORD (12+ chars)
+cp .env.example .env         # then set JWT_SECRET (32+ chars)
 make hr-db && make db && make ingest
 ```
 `data/frozen/v1` is committed and frozen (G1), so `make data` refuses to regenerate it; `make hr-db` rebuilds the gitignored

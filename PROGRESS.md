@@ -77,6 +77,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P15 | 15.3 | Deployment | done | Pritish | 2026-11-21 | 2708b78, a1d4d9a | — | [2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md](docs/progress/entries/2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md) |
 | P15 | 15.4 | Deployment | done | Pritish | 2026-11-23 | — | — | [2026-11-23-p15-15.4-one-command-start-pritish.md](docs/progress/entries/2026-11-23-p15-15.4-one-command-start-pritish.md) |
 | P16 | 16.1 | Documentation | done | Pritish | 2026-11-21 | 3578f53, fb8a7a9, ef67786 | — | [2026-11-21-p16-16.1-implementation-gap-review-pritish.md](docs/progress/entries/2026-11-21-p16-16.1-implementation-gap-review-pritish.md) |
+| P16 | 16.2 | Authentication | done | Pritish | 2026-11-23 | — | — | [2026-11-23-p16-16.2-own-password-per-account-pritish.md](docs/progress/entries/2026-11-23-p16-16.2-own-password-per-account-pritish.md) |
 
 ## Modules
 
@@ -117,6 +118,7 @@ From the latest entry of each step. Module-level items live in each module file.
 
 - P14 14.1: web step E: one auth mode on the gateway; login follows `stage`/`next`; MFA and first-sign-in screens; Admin → Users on the new API; acting-role switch removed. Step F: retire `deploy/auth/`, help pages, threat model and system card rows. Security review. `make redteam` (PR #26) needs `mfa_enforced=False` once both merge. ([entry](docs/progress/entries/2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md))
 - P14 14.2: course-endpoint run on the Mac (owner); role change button (API exists). ([entry](docs/progress/entries/2026-11-20-p14-14.2-web-accounts-mfa-pritish.md))
+- P16 16.2: on the Mac, run `make passwords` once (or delete `SEED_PASSWORD` from `.env` first) and hand out `var/initial-passwords.txt`. ([entry](docs/progress/entries/2026-11-23-p16-16.2-own-password-per-account-pritish.md))
 
 ### Responsible AI
 

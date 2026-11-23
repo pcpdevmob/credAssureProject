@@ -102,7 +102,7 @@ Then edit `.env` by hand:
 
 | Key | When | Value |
 |---|---|---|
-| `SEED_PASSWORD` | always | 12+ characters; the password for the 5 seeded demo users |
+| `SEED_PASSWORD_<USERNAME>` | optional | One account's own password (12+ characters, never shared). Others get a random first password in `var/initial-passwords.txt` |
 | `MODELS` | always | `local` (default) or `course` |
 | `CORPUS_CONTACT_EMAIL` / `CORPUS_CONTACT_URL` | optional | Goes into the polite User-Agent the harvester sends, so a site admin can reach you rather than block you |
 | `LLM_API_KEY`, `EVAL_API_KEY`, `EMBED_API_KEY` | course only | From the course portal |
@@ -221,7 +221,7 @@ open http://localhost:8000/docs           # Swagger
 npm run dev -w apps/web                   # React on http://localhost:3000
 ```
 
-Sign in as one of the seeded users. The password is your `SEED_PASSWORD`.
+Sign in as one of the seeded users with its own first password from `var/initial-passwords.txt`; you are asked to change it.
 
 | Role | Can do |
 |---|---|

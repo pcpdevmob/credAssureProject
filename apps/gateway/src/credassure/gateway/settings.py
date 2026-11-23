@@ -85,7 +85,6 @@ class Settings(BaseSettings):
     checkpoint_db: Path = Path("var/checkpoints.db")
     hr_db: Path = Path("data/frozen/v1/hr.db")  # opened read-only (ONB-05)
     case_template: Path = Path("data/templates/case_template.xlsx")  # Excel import (ADR 0040)
-    seed_password: SecretStr | None = None  # demo users only (make db); tests pass their own
     rate_limit: str = "120/minute"  # per user (JWT sub), else per client IP (NFR-04)
     token_quota: int = Field(default=2_000_000, gt=0)  # team quota; warnings at 70% / 90% (#16)
     max_upload_bytes: int = Field(default=2 * 1024 * 1024, gt=0)  # 2 MB (UI-02)
