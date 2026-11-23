@@ -74,6 +74,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P15 | 15.1 | Deployment | done | Pritish | 2026-11-20 | ea86837 | — | [2026-11-20-p15-15.1-case-db-mysql-pritish.md](docs/progress/entries/2026-11-20-p15-15.1-case-db-mysql-pritish.md) |
 | P15 | 15.2 | Evaluation | in_progress | Pritish | 2026-11-20 | — | — | [2026-11-20-p15-15.2-course-endpoint-comparison-pritish.md](docs/progress/entries/2026-11-20-p15-15.2-course-endpoint-comparison-pritish.md) |
 | P15 | 15.3 | Deployment | done | Pritish | 2026-11-21 | 2708b78, a1d4d9a | — | [2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md](docs/progress/entries/2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md) |
+| P15 | 15.4 | Deployment | done | Pritish | 2026-11-23 | — | — | [2026-11-23-p15-15.4-one-command-start-pritish.md](docs/progress/entries/2026-11-23-p15-15.4-one-command-start-pritish.md) |
 | P16 | 16.1 | Documentation | done | Pritish | 2026-11-21 | 3578f53, fb8a7a9, ef67786 | — | [2026-11-21-p16-16.1-implementation-gap-review-pritish.md](docs/progress/entries/2026-11-21-p16-16.1-implementation-gap-review-pritish.md) |
 
 ## Modules
@@ -141,6 +142,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - P15 15.3: images not built here (no registry access from the cloud session): first build on the VM on deployment day (Mon 23), then `smoke.sh` all PASS. ([entry](docs/progress/entries/2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md))
 - P15 15.3: EMBED_REVISION is `main`; pin it to the revision the Mac's index was built with if they differ. ([entry](docs/progress/entries/2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md))
 - P15 15.3: `make llm-probe MODELS=course` from the VM (is the course endpoint reachable from Azure?). ([entry](docs/progress/entries/2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md))
+- P15 15.4: first run on the Mac with Ollama and Langfuse (not available in the cloud workspace). ([entry](docs/progress/entries/2026-11-23-p15-15.4-one-command-start-pritish.md))
 
 ### Documentation
 

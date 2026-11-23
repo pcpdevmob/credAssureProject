@@ -15,6 +15,8 @@
 ## Run
 | Command | What it does |
 |---|---|
+| `make start` | Everything at once: Ollama (8192 context), Langfuse if set up, API, web; demo cases on first run. `ARGS="--reset --no-model --no-langfuse --no-ui --install"`, `MODELS=course\|hf` |
+| `make stop` | Stop what `make start` started (Langfuse: `make langfuse-down`) |
 | `make run-api` | Gateway on :8000, tenant `demo`, `var/case.db` |
 | `make run-ui` | Next.js web app on :3000 |
 | `make db` | Migrate `var/case.db` + `var/corpus.db`, seed users (needs `SEED_PASSWORD`) |

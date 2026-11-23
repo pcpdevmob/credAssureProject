@@ -17,6 +17,8 @@ PR did not merge.
 - LendWise: three negotiation rounds in a fixed order (fee waiver, rate match, tenor change) with re-ranking after every
   counted concession (ADR 0037, K12).
 - case.db on MySQL 8 behind `CASE_DATABASE_URL`, SQLite kept as the default (ADR 0039, K13).
+- `make start` / `make stop` (`scripts/start.sh`): one command brings up the model, Langfuse when set up, the API and
+  the web app with the evaluated configuration, waits for each and prints the URLs.
 - Excel workbook import for case data (ADR 0040); plain-language UI for non-technical operators: forms, readiness,
   case history, Indian dates (P9 9.2–9.3).
 - Hosted deployment for evaluators (P15 15.3): model failover from the course endpoint to Hugging Face → Featherless

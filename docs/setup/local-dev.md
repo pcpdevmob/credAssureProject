@@ -14,6 +14,11 @@ make hr-db && make db && make ingest
 `data/frozen/v1/hr.db` from the frozen `hr/profiles.json`. `make db` migrates `var/case.db` and
 `var/corpus.db` and seeds users in tenant `demo`. `make ingest` builds the search index for the current `MODELS` profile.
 
+## Run everything
+`make start` brings up the model (Ollama), Langfuse when it is set up, the API and the web app, waits until each
+answers and prints the URLs; `make stop` (or Ctrl-C) stops them. Options and details: [README §7](../../README.md#7-run-the-app).
+The sections below are the same steps one at a time.
+
 ## Run the API
 ```bash
 OLLAMA_CONTEXT_LENGTH=8192 ollama serve    # skip with LLM_ENABLED=false
