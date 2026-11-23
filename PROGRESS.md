@@ -142,7 +142,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - P15 15.3: images not built here (no registry access from the cloud session): first build on the VM on deployment day (Mon 23), then `smoke.sh` all PASS. ([entry](docs/progress/entries/2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md))
 - P15 15.3: EMBED_REVISION is `main`; pin it to the revision the Mac's index was built with if they differ. ([entry](docs/progress/entries/2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md))
 - P15 15.3: `make llm-probe MODELS=course` from the VM (is the course endpoint reachable from Azure?). ([entry](docs/progress/entries/2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md))
-- P15 15.4: first run on the Mac with Ollama and Langfuse (not available in the cloud workspace). ([entry](docs/progress/entries/2026-11-23-p15-15.4-one-command-start-pritish.md))
+- P15 15.4: first run on the Mac with the VPN, and with `MODELS=local` and Langfuse (not available in the cloud workspace). ([entry](docs/progress/entries/2026-11-23-p15-15.4-one-command-start-pritish.md))
 
 ### Documentation
 

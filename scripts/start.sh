@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
 # One command to run CredAssure locally with everything it needs: `make start` (or bash scripts/start.sh).
 #
-#   make start                          # local model (Ollama qwen3:8b), API, web, Langfuse if set up
-#   make start ARGS="--reset"           # also rebuild the 10 demo cases first
+#   make start                          # course endpoint (Qwen3-8B), API, web, Langfuse if set up
+#   make start MODELS=local             # local Ollama qwen3:8b instead (the evaluated model, ADR 0036)
+#   make start MODELS=hf                # Hugging Face -> Featherless (token in .env)
 #   make start ARGS="--no-model"        # no model at all (LLM_ENABLED=false): gates, figures, routing still work
 #   make start ARGS="--no-langfuse"     # skip tracing
-#   make start MODELS=course            # course endpoint (VPN); MODELS=hf for Hugging Face (token in .env)
 #   make stop                           # stop what `make start` started (also after a closed terminal)
 #
-# Order: tools -> .env present -> install if missing -> HR store, databases, demo cases -> model -> Langfuse
-# -> API (waits for /v1/health/ready) -> web -> URLs. Ctrl-C stops the API, the web app and an Ollama it
-# started; Langfuse keeps running (make langfuse-down). Logs and process ids go to var/start/.
-# The evaluated configuration is the one `make run-api` loads (.env, then deploy/env/models-<MODELS>.env).
+# Order: tools -> .env present -> install if missing -> HR store, database and users -> model -> Langfuse
+# -> API (waits for /v1/health/ready) -> web -> URLs. No demo cases are created.
+# Ctrl-C stops the API, the web app and an Ollama it started; Langfuse keeps running (make langfuse-down).
+# Logs and process ids go to var/start/. Settings are what `make run-api MODELS=<profile>` loads (.env, then
+# deploy/env/models-<profile>.env). Only make start defaults to course; run-api and eval keep MODELS=local.
 # This script never reads or prints .env: it only checks that the file exists; the API refuses to start
-# without JWT_SECRET, and the demo users' password is the SEED_PASSWORD you set there.
+# without JWT_SECRET, and the users' password is the SEED_PASSWORD you set there.
 # macOS bash 3.2 compatible (no associative arrays).
 set -uo pipefail
 cd "$(dirname "$0")/.." || exit 1
@@ -21,8 +22,8 @@ ROOT=$(pwd)
 RUN=var/start
 mkdir -p "$RUN"
 
-MODELS=${MODELS:-local}
-RESET=0 NO_MODEL=0 NO_LANGFUSE=0 NO_UI=0 FORCE_INSTALL=0
+MODELS=${MODELS:-course}
+NO_MODEL=0 NO_LANGFUSE=0 NO_UI=0 FORCE_INSTALL=0
 API_PORT=8000
 
 say() { printf '\n\033[1m== %s\033[0m\n' "$*"; }
@@ -65,7 +66,6 @@ usage() { sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'; }
 for arg in "$@"; do
   case "$arg" in
     stop) say "Stopping"; stop_all; echo "   Langfuse keeps running: make langfuse-down"; exit 0 ;;
-    --reset) RESET=1 ;;
     --no-model) NO_MODEL=1 ;;
     --no-langfuse) NO_LANGFUSE=1 ;;
     --no-ui) NO_UI=1 ;;
@@ -104,12 +104,11 @@ fi
 say "3/7 Data"
 [ -f data/frozen/v1/hr.db ] || { mk hr-db || die "make hr-db failed"; }
 ok "HR store data/frozen/v1/hr.db"
-if [ "$RESET" = 1 ] || [ ! -f var/case.db ]; then
-  echo "   building the demo cases (make demo-reset; about a minute)"
-  mk demo-reset > "$RUN/demo-reset.log" 2>&1 || die "make demo-reset failed: see $RUN/demo-reset.log"
-  ok "10 demo cases in var/case.db (tenant demo)"
+if [ -f var/case.db ]; then
+  ok "database var/case.db"
 else
-  ok "var/case.db kept (make start ARGS=--reset rebuilds the demo cases)"
+  mk db > "$RUN/db.log" 2>&1 || die "make db failed: see $RUN/db.log (SEED_PASSWORD must be set in .env)"
+  ok "database var/case.db created with the users (no cases)"
 fi
 CHROMA=$(sed -n 's/^CHROMA_PATH=//p' "$MODELS_FILE" | tail -1)
 if [ -f var/corpus.db ] && [ -n "$CHROMA" ] && [ -d "$CHROMA" ]; then
@@ -139,8 +138,19 @@ elif [ "$MODELS" = local ]; then
   ollama run qwen3:8b "hi" > /dev/null 2>&1 || die "qwen3:8b did not answer: see $RUN/ollama.log"
   ollama ps | sed 's/^/   /'
 else
-  warn "remote model: the key and CA settings come from .env; MODELS=course needs the VPN"
-  warn "check the endpoint with: make llm-probe MODELS=$MODELS"
+  # Reachability only: no key is sent. Exit 0, or 60 (the server answered with a certificate curl's own
+  # store does not trust: the course CA, which the API loads from LLM_CA_CERT), means the host answered;
+  # 6, 7 and 28 mean it did not. Anything else (a proxy in the way, say) is reported as unconfirmed.
+  sed -nE 's/^(LLM|EMBED)_BASE_URL=(https:.*)$/\2/p' "$MODELS_FILE" | while read -r url; do
+    curl -s -o /dev/null --connect-timeout 5 --max-time 8 "$url/models"
+    rc=$?
+    case $rc in
+      0 | 60) ok "$url answers" ;;
+      6 | 7 | 28) warn "$url does not answer: connect the course VPN, or run make start MODELS=local" ;;
+      *) warn "$url could not be confirmed (curl exit $rc); the API reports the model on /v1/health/ready" ;;
+    esac
+  done
+  warn "keys and the CA file come from .env (LLM_API_KEY, EMBED_API_KEY, LLM_CA_CERT)"
 fi
 
 # ---- 5. Langfuse ----------------------------------------------------------------------------------
@@ -206,11 +216,12 @@ else
 fi
 
 say "CredAssure is running"
-[ "$NO_UI" = 1 ] || echo "   Web app   http://localhost:$UI_PORT   (sign in as demo.preparer, demo.director, demo.vp, demo.evaluator"
-[ "$NO_UI" = 1 ] || echo "                                         with your SEED_PASSWORD; MFA users enrol on first sign-in)"
+[ "$NO_UI" = 1 ] || echo "   Web app   http://localhost:$UI_PORT   (users demo.preparer, demo.director, demo.vp, demo.evaluator,"
+[ "$NO_UI" = 1 ] || echo "                                         password SEED_PASSWORD; MFA users enrol on first sign-in)"
 echo "   API       http://localhost:$API_PORT/docs"
 [ "${TRACING_ENABLED:-true}" = false ] || echo "   Langfuse  http://localhost:3000"
-echo "   Logs      $ROOT/$RUN/{api,web,ollama,langfuse,demo-reset}.log"
+echo "   Model     $MODELS$([ "$NO_MODEL" = 1 ] && echo ' (off)')"
+echo "   Logs      $ROOT/$RUN/{api,web,ollama,langfuse,db}.log"
 echo "   Stop      Ctrl-C here, or make stop from another terminal"
 while :; do
   sleep 5

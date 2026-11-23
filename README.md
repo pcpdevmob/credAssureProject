@@ -217,18 +217,19 @@ Corpus rules (non-negotiable):
 
 ### One command
 ```bash
-make start                          # Ollama qwen3:8b (8192 context), Langfuse if set up, API :8000, web :3000
-make start ARGS="--reset"           # also rebuild the 10 demo cases first
+make start                          # course endpoint Qwen3-8B (VPN), Langfuse if set up, API :8000, web :3000
+make start MODELS=local             # local Ollama qwen3:8b instead (the evaluated model, ADR 0036); or MODELS=hf
 make start ARGS="--no-model"        # no model (LLM_ENABLED=false); --no-langfuse, --no-ui, --install also work
-make start MODELS=course            # or MODELS=hf; keys and CA paths stay in .env
 make stop                           # from another terminal (Ctrl-C in the first one does the same)
 ```
-`scripts/start.sh` checks the tools and that `.env` exists (it never reads it), installs what is missing, builds
-`hr.db` and the demo cases on first run, starts Ollama with `OLLAMA_CONTEXT_LENGTH=8192` and loads the model, starts
-Langfuse when Docker is running and `deploy/env/langfuse.env` is filled in (the web app then moves to :5173), starts
-the API and waits for `/v1/health/ready`, then the web app, and prints the URLs. Logs: `var/start/`. Ctrl-C stops the
-API, the web app and an Ollama it started; Langfuse keeps running (`make langfuse-down`). It runs the same evaluated
-configuration as `make run-api`.
+`scripts/start.sh` checks the tools and that `.env` exists (it never reads it; the course keys and `LLM_CA_CERT` stay
+there), installs what is missing, builds `hr.db` and, on first run, `var/case.db` with the users and no cases
+(`make db`). For the course endpoint it checks that both hosts answer (VPN); for `MODELS=local` it starts Ollama with
+`OLLAMA_CONTEXT_LENGTH=8192` and loads the model. It starts Langfuse when Docker is running and
+`deploy/env/langfuse.env` is filled in (the web app then moves to :5173), starts the API and waits for
+`/v1/health/ready`, then the web app, and prints the URLs. Logs: `var/start/`. Ctrl-C stops the API, the web app and
+an Ollama it started; Langfuse keeps running (`make langfuse-down`). Only `make start` defaults to the course endpoint:
+`make run-api`, `make eval` and the scored runs keep `MODELS=local`.
 
 ### Step by step
 

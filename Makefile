@@ -66,8 +66,10 @@ ollama-pull:  ## Download qwen3:8b and nomic-embed-text (ADR 0017; not part of m
 		exit 1; \
 	fi
 
-start:  ## Everything in one command: model, Langfuse if set up, API, web (scripts/start.sh; ARGS="--reset --no-model --no-langfuse --no-ui --install")
-	MODELS=$(MODELS) bash scripts/start.sh $(ARGS)
+# make start defaults to the course endpoint; MODELS=local or MODELS=hf on the command line (or in the environment) wins.
+START_MODELS := $(if $(filter command line environment environment override,$(origin MODELS)),$(MODELS),course)
+start:  ## Everything in one command: course model (MODELS=local|hf), Langfuse if set up, API, web (ARGS="--no-model --no-langfuse --no-ui --install")
+	MODELS=$(START_MODELS) bash scripts/start.sh $(ARGS)
 
 stop:  ## Stop what make start started (API, web, an Ollama it started); Langfuse: make langfuse-down
 	bash scripts/start.sh stop

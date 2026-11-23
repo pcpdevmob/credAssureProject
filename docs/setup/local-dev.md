@@ -15,8 +15,9 @@ make hr-db && make db && make ingest
 `var/corpus.db` and seeds users in tenant `demo`. `make ingest` builds the search index for the current `MODELS` profile.
 
 ## Run everything
-`make start` brings up the model (Ollama), Langfuse when it is set up, the API and the web app, waits until each
-answers and prints the URLs; `make stop` (or Ctrl-C) stops them. Options and details: [README §7](../../README.md#7-run-the-app).
+`make start` connects to the course endpoint (`MODELS=local` for Ollama), starts Langfuse when it is set up, the API
+and the web app, waits until each answers and prints the URLs; `make stop` (or Ctrl-C) stops them. It creates the
+database with the users on first run and no cases. Options and details: [README §7](../../README.md#7-run-the-app).
 The sections below are the same steps one at a time.
 
 ## Run the API
