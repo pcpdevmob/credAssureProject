@@ -30,6 +30,10 @@ PR did not merge.
   `LW_OFFER_INVALID` instead of failing the case (LW-01); the VP decides a case held at exactly ₹1.5 crore in the
   web app (APR-03); chat recognises data corrections and approval actions in code and changes nothing (SUP-02);
   `GET /v1/eval/runs/{id}` reports the progress of a `make eval` run (BRD §6.1; starting a run stays on the command line); `/v1/health/ready` reports the vector index.
+- Onboarding agent 0.3.0 (design: Mousita, PR #43): the agent's own rule checker runs beside the rules engine and stops
+  the stage with ERROR on any difference (never GO); the Supervisor's re-check uses that checker (SUP-05); every
+  blocker says who fixes it (you, your manager or HR); each `onb.rule.*` fact cites its own HR record. Rules, HR data
+  and the 10 onboarding items unchanged.
 ### Fixed
 - The gateway and web images build (the gateway image left out `agents/`; the web image used a stale pnpm lockfile).
 ### Changed

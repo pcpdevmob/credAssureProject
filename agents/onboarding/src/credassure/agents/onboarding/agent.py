@@ -1,17 +1,29 @@
 """Employee Onboarding agent, Gate 1 readiness (design-detail §2.4.2; ONB-01..06, BR-03/04).
 
 Code decides: the HR profile comes from the case's preparer binding (ONB-01, never chat), the
-rules engine sets every rule and the gate (ONB-02/03). The model only words the explanation of
-failed rules (onb_explain) with {rule.<id>} slots that code renders; a draft that misses a failed
-rule or has any figure outside a slot falls back to the template (ONB-04).
-No tool writes HR data (ONB-05).
+rules engine sets every rule and the gate (ONB-02/03). The agent's own checker (`checker.py`, a
+separate implementation of the same rule book) runs beside it; any difference stops the stage with
+ERROR, never GO (SUP-05, BR-11), and the Supervisor's re-check uses the checker. Every blocker says
+who fixes it (you, your manager or HR) and what to do; each `onb.rule.<id>` fact cites the HR record
+it was decided on. The model only words the explanation of failed rules (onb_explain) with
+{rule.<id>} slots that code renders; a draft that misses a failed rule or has any figure outside a
+slot falls back to the template (ONB-04). No tool writes HR data (ONB-05).
+0.3.0: design from Mousita (PR #43).
 """
 
 from collections.abc import Callable, Mapping
 from datetime import date
 from typing import Any
 
-from credassure.agents.onboarding import __version__
+from credassure.agents.onboarding import __version__, checker
+from credassure.agents.onboarding.rules import (
+    BLOCKERS,
+    NO_RECORD,
+    RULE_NAMES,
+    BlockerText,
+    next_action,
+    source_ref,
+)
 from credassure.core import narrative, slots
 from credassure.core.blockers import BlockerCode
 from credassure.core.enums import AgentName, Decision
@@ -19,47 +31,20 @@ from credassure.core.ports import LedgerPort, StageContext
 from credassure.core.prompts import prompt_version
 from credassure.core.prompts import registry as prompts
 from credassure.core.results import AgentResult, Blocker, EvidenceRef
-from credassure.engines.onboarding_rules import Readiness, evaluate
+from credassure.engines.onboarding_rules import Readiness
 
 PROMPT = "onb_explain"
 ENGINE = "engines.onboarding_rules"
 GATES = {"GO": Decision.GO, "NO_GO": Decision.NO_GO, "NEEDS_INPUT": Decision.NEEDS_INPUT}
-RULE_NAMES = {
-    "role": "authorised preparer role",
-    "AML-201": "AML/KYC training (AML-201)",
-    "DPDP-101": "Data Protection training (DPDP-101)",
-    "FIN-101": "Credit Policy training (FIN-101)",
-    "policy_ack": "working-capital policy acknowledgement (WC-POL v3)",
-}
-TEXT: dict[BlockerCode, tuple[str, str]] = {  # message, next action
-    BlockerCode.ONB_ROLE_NOT_AUTHORISED: (
-        "Your HR role is not authorised to prepare loan proposals.",
-        "Ask a credit proposal officer or senior finance analyst to prepare this case.",
-    ),
-    BlockerCode.ONB_TRAINING_EXPIRED: (
-        "This mandatory training has expired.",
-        "Retake the course and ask HR to update your training record.",
-    ),
-    BlockerCode.ONB_TRAINING_INCOMPLETE: (
-        "This mandatory training is not completed.",
-        "Finish the course; HR records the completion.",
-    ),
-    BlockerCode.ONB_TRAINING_MISSING: (
-        "HR has no record of this mandatory training.",
-        "Ask HR to add your completion record, or enrol in the course.",
-    ),
-    BlockerCode.ONB_ACK_MISSING: (
-        "You have not acknowledged the working-capital policy.",
-        "Read and acknowledge WC-POL v3 in the HR portal.",
-    ),
-    BlockerCode.ONB_ACK_OLD_VERSION: (
-        "You acknowledged an older version of the working-capital policy.",
-        "Read and acknowledge the current version, WC-POL v3.",
-    ),
-}
 GO_TEXT = (
-    "Preparer readiness confirmed: authorised role, mandatory trainings current,"
-    " WC-POL v3 acknowledged."
+    "Preparer readiness confirmed: your role is authorised to prepare loan proposals, your"
+    " mandatory trainings are current and you have acknowledged the current working-capital policy."
+)
+BLOCKED = "Preparer readiness is blocked. Each item says who fixes it and what to do:"
+CLOSING = "When the HR records are updated, run the preparer check again."
+MISMATCH = (
+    "Preparer readiness could not be confirmed: two separate checks of the same HR record gave"
+    " different results, so the case stops here."
 )
 
 
@@ -67,34 +52,43 @@ def version() -> str:
     return __version__
 
 
-def _blockers(readiness: Readiness) -> list[Blocker]:
+def _text(b: Blocker) -> BlockerText:
+    return BLOCKERS.get(b.code, NO_RECORD)
+
+
+def _blockers(found: tuple[tuple[str, BlockerCode], ...]) -> list[Blocker]:
     out = []
-    for rule, code in readiness.blockers:
-        message, action = TEXT[code]
+    for rule, code in found:
+        text = BLOCKERS[code]
         out.append(
             Blocker(
                 code=code,
-                message=f"{RULE_NAMES[rule]} [{rule}]: {message}",
+                message=f"{RULE_NAMES[rule]} [{rule}]: {text.message}",
                 field=rule,
-                next_action=action,
+                next_action=next_action(text),
             )
         )
     return out
 
 
 def template(blockers: list[Blocker]) -> str:
+    """The readiness message when the model is off or its draft fails: no figures of its own (the
+    rule ids and the policy version are names), one line per blocker with who fixes it."""
     if not blockers:
         return GO_TEXT
-    lines = [f"- {b.message} Next: {b.next_action}" for b in blockers]
-    return "Preparer readiness is blocked:\n" + "\n".join(lines)
+    lines = [
+        f"- {b.message} Who fixes it: {_text(b).who}. Next: {_text(b).action}" for b in blockers
+    ]
+    return "\n".join([BLOCKED, *lines, CLOSING])
 
 
 def narrative_slots(blockers: list[Blocker]) -> dict[str, str]:
-    """ONB-04: failed rules only; a passed rule has no slot, so naming one rejects the draft."""
+    """ONB-04: failed rules only; a passed rule has no slot, so naming one rejects the draft.
+    The {next.<id>} slot is the action alone: the model's sentence carries no "who" line."""
     out: dict[str, str] = {}
     for b in blockers:
         out[f"rule.{b.field}"] = RULE_NAMES.get(str(b.field), str(b.field))
-        action = str(b.next_action or "").rstrip(".")
+        action = _text(b).action.rstrip(".")
         out[f"next.{b.field}"] = action[:1].lower() + action[1:]
     return out
 
@@ -122,11 +116,13 @@ def run(ctx: StageContext) -> AgentResult:
     if profile is None:
         missing = Blocker(
             code=BlockerCode.ONB_TRAINING_MISSING,
-            message="HR has no active record for the preparer of this case.",
+            message=NO_RECORD.message,
             field="hr_profile",
-            next_action="Ask HR to create your employee record.",
+            next_action=next_action(NO_RECORD),
         )
-        text = template([missing])
+        text = "\n".join(
+            [BLOCKED, f"- {NO_RECORD.message} Who fixes it: HR. Next: {NO_RECORD.action}"]
+        )
         narrative.record(
             ctx,
             "onb.",
@@ -150,14 +146,19 @@ def run(ctx: StageContext) -> AgentResult:
         "evaluate_onboarding_rules", ctx.case_id, {"profile": dict(profile)}
     )
     steps += 1
-    blockers = _blockers(readiness)
+    own = checker.check(profile, ctx.clock.today())
+    disagree = checker.differences(own, readiness.gate, readiness.rules, readiness.blockers)
+    if disagree:
+        return _mismatch(ctx, str(profile["emp_id"]), disagree, steps)
+    blockers = _blockers(readiness.blockers)
     drafted, used = _explain(ctx, readiness, blockers)
     versions = {}
     if used is not None:
         steps += 1
         versions[used] = prompt_version(used)
     # Facts after the model call: a ModelUnavailable retry (template path) writes them once.
-    ref = f"hr.db:employees:{profile['emp_id']}"
+    emp_id = str(profile["emp_id"])
+    ref = source_ref(emp_id, "role")
     evidence = []
     for rule, outcome in sorted(readiness.rules.items()):
         key = f"onb.rule.{rule}"
@@ -167,7 +168,7 @@ def run(ctx: StageContext) -> AgentResult:
             outcome,
             unit="enum",
             source_type="hr_record",
-            source_ref=ref,
+            source_ref=source_ref(emp_id, rule),  # the record this rule was decided on
             produced_by=ENGINE,
         )
         evidence.append(EvidenceRef(kind="ledger_fact", ref_id=key))
@@ -209,6 +210,34 @@ def run(ctx: StageContext) -> AgentResult:
     )
 
 
+def _mismatch(ctx: StageContext, emp_id: str, disagree: list[str], steps: int) -> AgentResult:
+    """The engine and the agent's checker differ: no rule fact and no gate is written, the stage
+    ends in ERROR (state saved; an evaluator retries after the cause is fixed). Never GO."""
+    who, action = (
+        "the evaluator",
+        "Compare the HR record with the rule book, then run the check again.",
+    )
+    blocker = Blocker(
+        code=BlockerCode.SUP_RECHECK_MISMATCH,
+        message="The readiness rules and the agent's own check disagree on: "
+        + ", ".join(disagree)
+        + ".",
+        field="rules",
+        next_action=f"{action} Who fixes it: {who}.",
+    )
+    text = f"{MISMATCH}\nWho fixes it: {who}. Next: {action}"
+    narrative.record(
+        ctx,
+        "onb.",
+        text,
+        model=False,
+        slots={},
+        source_ref=source_ref(emp_id, "role"),
+        produced_by=f"agents.onboarding@{__version__}",
+    )
+    return _result(ctx, Decision.ERROR, [blocker], [], text, steps, {})
+
+
 def _result(
     ctx: StageContext,
     decision: Decision,
@@ -240,7 +269,8 @@ def _result(
 def make_recheck(
     load_profile: Callable[[str], Mapping[str, Any] | None], as_of: date
 ) -> Callable[[AgentResult, LedgerPort], list[Blocker]]:
-    """SUP-05: recompute readiness from hr.db on every GO; any disagreement overrides the agent."""
+    """SUP-05: recompute readiness from hr.db on every GO with the agent's own checker (not the
+    engine the stage used); any disagreement with the ledger overrides the agent."""
 
     def recheck(result: AgentResult, ledger: LedgerPort) -> list[Blocker]:
         profile = load_profile(result.case_id)
@@ -251,11 +281,9 @@ def make_recheck(
                     message="recheck: HR has no record for the preparer",
                 )
             ]
-        readiness = evaluate(profile, as_of)
-        failed = _blockers(readiness)
-        facts = {f"onb.rule.{r}": o for r, o in readiness.rules.items()} | {
-            "onb.gate": readiness.gate
-        }
+        mine = checker.check(profile, as_of)
+        failed = _blockers(mine.blockers)
+        facts = {f"onb.rule.{r}": o for r, o in mine.rules.items()} | {"onb.gate": mine.gate}
         for key, want in sorted(facts.items()):
             got = ledger.get(result.case_id, key)
             if got != want:

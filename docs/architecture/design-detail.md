@@ -195,6 +195,12 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
 - **Gate (code):** all PASS → GO; any FAIL → NO_GO; any UNKNOWN and no FAIL → NEEDS_INPUT. Re-runs when HR records change.
 - **Safety:** no write tool to HR (ONB-05); PII redaction on chat (ONB-06).
 - **Tests:** onboarding 10/10.
+- **As built (0.3.0, 2026-11-23; design: Mousita, PR #43):** the agent's own checker (`checker.py`, rule book
+  `rules.py`) implements the same rules without the engine and runs beside it on every stage run; any difference in a
+  rule, the gate or the blockers ends the stage in ERROR with `SUP_RECHECK_MISMATCH` and writes no rule fact (never GO).
+  The SUP-05 re-check uses the checker, so the stage and its re-check run different code. Each blocker's next action
+  ends with who fixes it (you, your manager, HR); each `onb.rule.<id>` cites its own record (`hr.db:employees:<emp>`,
+  `hr.db:training_records:<emp>/<course>`, `hr.db:policy_acknowledgements:<emp>/WC-POL`).
 
 #### 2.4.3 Working Capital Advisory Agent — Gate 2 Funding Need (owner: Suresh)
 - **Inputs:** case files (order, opening_position, costs, receipts, receivables, payables, inventory).

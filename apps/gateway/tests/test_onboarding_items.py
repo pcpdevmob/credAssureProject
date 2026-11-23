@@ -153,3 +153,24 @@ def test_ONB06_chat_identifiers_are_refused_redacted_and_never_recorded(
         svc.chat(who, case_id, message)
     assert spans and aadhaar not in str(spans) and "[REDACTED_AADHAAR]" in str(spans)
     assert aadhaar not in dump
+
+
+def test_ONB04_v030_blockers_say_who_fixes_it_and_each_rule_cites_its_record(
+    client: Any, login: Callable[..., dict[str, str]]
+) -> None:
+    """Onboarding 0.3.0 (design: PR #43) through the API: the readiness view shows who fixes each
+    blocker, and a rule fact's lineage names the HR record it was decided on."""
+    result = run_item(client, login, "prep.e009")
+    h = login(client, "prep.e009")
+    view = client.get(f"/v1/cases/{result['case_id']}/readiness", headers=h).json()
+    assert [b["next_action"] for b in view["blockers"]] == [
+        "Retake the course and ask HR to update your training record. Who fixes it: you."
+    ]
+    r = client.get(
+        f"/v1/cases/{result['case_id']}/facts/onb.rule.FIN-101/lineage", headers=h
+    ).json()
+    assert r["source_ref"] == "hr.db:training_records:E009/FIN-101"
+    assert r["inputs"] == [
+        {"kind": "hr_record", "ref": "hr.db:training_records:E009/FIN-101", "fact_key": None}
+    ]
+    assert result["agent_version"] == "0.3.0"
