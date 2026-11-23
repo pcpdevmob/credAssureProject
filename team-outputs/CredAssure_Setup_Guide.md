@@ -128,7 +128,7 @@ Two files hold the settings. `.env` holds your secrets and is never committed; `
    | Key | What to put |
    | --- | --- |
    | `JWT_SECRET` | 32 or more random characters, e.g. the output of `openssl rand -hex 32` |
-   | `SEED_PASSWORD` | 12 or more characters; every seeded user signs in with it |
+   | `SEED_PASSWORD_<USERNAME>` | Optional: one account's own password (12+ characters, never shared). Others get a random first password in `var/initial-passwords.txt` |
 
    Leave the model keys empty for local runs. Never commit `.env`, paste it into chat, or share it.
 2. Check the model settings. `make` reads `deploy/env/models-local.env` by default (`MODELS=local`). It points at Ollama (`http://localhost:11434/v1`, `qwen3:8b`), embeds and reranks locally (`bge-small`, `bge-reranker-base`), and sets the copilot's answerability threshold. Don't edit it for a normal setup.
@@ -206,7 +206,7 @@ Use two terminals, with Ollama already running (menu bar on Mac, system tray on 
    make run-ui
    ```
 
-   Open http://localhost:3000 and sign in with your `SEED_PASSWORD`.
+   Open http://localhost:3000 and sign in with the account's first password from `var/initial-passwords.txt`; you are asked to change it.
 
 | Username | Role |
 | --- | --- |

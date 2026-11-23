@@ -14,7 +14,8 @@
 # Logs and process ids go to var/start/. Settings are what `make run-api MODELS=<profile>` loads (.env, then
 # deploy/env/models-<profile>.env). Only make start defaults to course; run-api and eval keep MODELS=local.
 # This script never reads or prints .env: it only checks that the file exists; the API refuses to start
-# without JWT_SECRET, and the users' password is the SEED_PASSWORD you set there.
+# without JWT_SECRET. Every account has its own password: the first run writes them to
+# var/initial-passwords.txt (each is changed at first sign-in; make passwords issues new ones).
 # macOS bash 3.2 compatible (no associative arrays).
 set -uo pipefail
 cd "$(dirname "$0")/.." || exit 1
@@ -83,7 +84,7 @@ say "1/7 Tools"
 for t in uv make curl; do have "$t" || die "$t is not installed (docs/setup/prerequisites.md)"; done
 [ "$NO_UI" = 1 ] || have npm || die "npm is not installed (Node 20+); or run with --no-ui"
 ok "uv, make, curl$([ "$NO_UI" = 1 ] || echo ', npm')"
-[ -f .env ] || die ".env is missing: cp .env.example .env, then set JWT_SECRET (32+ chars) and SEED_PASSWORD (12+ chars)"
+[ -f .env ] || die ".env is missing: cp .env.example .env, then set JWT_SECRET (32+ chars)"
 ok ".env present (not read here)"
 if up "http://localhost:$API_PORT/v1/health/live"; then
   die "an API already answers on :$API_PORT. Stop it (make stop, or Ctrl-C in its terminal) and run again"
@@ -107,8 +108,9 @@ ok "HR store data/frozen/v1/hr.db"
 if [ -f var/case.db ]; then
   ok "database var/case.db"
 else
-  mk db > "$RUN/db.log" 2>&1 || die "make db failed: see $RUN/db.log (SEED_PASSWORD must be set in .env)"
+  mk db > "$RUN/db.log" 2>&1 || die "make db failed: see $RUN/db.log"
   ok "database var/case.db created with the users (no cases)"
+  ok "each account's first password: var/initial-passwords.txt (hand out, then delete the file)"
 fi
 CHROMA=$(sed -n 's/^CHROMA_PATH=//p' "$MODELS_FILE" | tail -1)
 if [ -f var/corpus.db ] && [ -n "$CHROMA" ] && [ -d "$CHROMA" ]; then
@@ -194,7 +196,7 @@ if ! api_up; then
   # last lines of the error, without pydantic's input_value (it could hold a value from .env)
   grep -v "input_value" "$RUN/api.log" | tail -n 12 | sed 's/^/   | /'
   stop_all
-  die "the API did not start: see $RUN/api.log (a missing JWT_SECRET or SEED_PASSWORD in .env is the usual cause)"
+  die "the API did not start: see $RUN/api.log (a missing JWT_SECRET, or MFA_ENFORCED=true without MFA_ENCRYPTION_KEY, in .env is the usual cause)"
 fi
 READY=$(curl -s --max-time 10 "http://localhost:$API_PORT/v1/health/ready" || true)
 ok "API on http://localhost:$API_PORT (Swagger /docs)"
@@ -217,7 +219,7 @@ fi
 
 say "CredAssure is running"
 [ "$NO_UI" = 1 ] || echo "   Web app   http://localhost:$UI_PORT   (users demo.preparer, demo.director, demo.vp, demo.evaluator,"
-[ "$NO_UI" = 1 ] || echo "                                         password SEED_PASSWORD; MFA users enrol on first sign-in)"
+[ "$NO_UI" = 1 ] || echo "                                         each its own password; new ones: make passwords)"
 echo "   API       http://localhost:$API_PORT/docs"
 [ "${TRACING_ENABLED:-true}" = false ] || echo "   Langfuse  http://localhost:3000"
 echo "   Model     $MODELS$([ "$NO_MODEL" = 1 ] && echo ' (off)')"

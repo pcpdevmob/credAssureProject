@@ -97,7 +97,7 @@ Then edit `.env` by hand:
 
 | Key | When | Value |
 |---|---|---|
-| `SEED_PASSWORD` | always | 12+ characters; password for every seeded user (`SEED_PASSWORD_<USERNAME>` overrides one) |
+| `SEED_PASSWORD_<USERNAME>` | optional | Sets one account's own password (12+ characters, different for each account), e.g. `SEED_PASSWORD_DEMO_PREPARER` for `make demo-reset` and safety_v2. Every other account gets a random first password in `var/initial-passwords.txt` (ADR 0038). A shared `SEED_PASSWORD` is no longer used |
 | `LLM_ENABLED` | optional | `false` runs everything without a model (template narratives) |
 | `CORPUS_CONTACT_EMAIL` / `CORPUS_CONTACT_URL` | optional | Added to the harvester's User-Agent so a site admin can reach you rather than block you |
 | `LLM_API_KEY`, `EVAL_API_KEY`, `EMBED_API_KEY` | course only | From the course portal |
@@ -171,7 +171,7 @@ Add `MODELS=course` to **every** target that touches the model. Only set `LLM_SU
 
 ```bash
 make hr-db        # rebuild the gitignored hr.db from frozen hr/profiles.json (data/frozen/v1 is committed; `make data` refuses once frozen)
-make db           # migrate var/case.db + var/corpus.db, seed users into tenant "demo"
+make db           # migrate var/case.db + var/corpus.db, create the accounts in tenant "demo" (own first passwords: var/initial-passwords.txt)
 make ingest       # chunk + embed the corpus into var/corpus.db (FTS5) + Chroma; re-runnable
 make demo-reset   # rebuild the demo cases. STOP `make run-api` FIRST
 ```
@@ -248,7 +248,9 @@ open http://localhost:8000/docs           # Swagger
 make run-ui                               # Next.js on http://localhost:3000
 ```
 
-Sign in with your `SEED_PASSWORD`:
+Every account has its own password. The first ones are in `var/initial-passwords.txt` (readable only by you): hand each
+one to its owner, then delete the file. Each is asked to change it at first sign-in; approvers then set up the
+authenticator app. `make passwords` issues new ones (it signs those accounts out; MFA stays set up).
 
 | Username | Role | Can do |
 |---|---|---|

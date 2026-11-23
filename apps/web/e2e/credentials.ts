@@ -2,12 +2,11 @@
 // E2E_USERNAME defaults to the seeded demo preparer (a username, not a secret).
 export const E2E_USERNAME = process.env.E2E_USERNAME || 'demo.preparer';
 
-// E2E_PASSWORD, else the seed's own rule: SEED_PASSWORD_<USER> (dots → underscores, upper case), then SEED_PASSWORD.
-export function e2ePassword(username: string = E2E_USERNAME): string {
-  const env = process.env;
-  const perUser = env[`SEED_PASSWORD_${username.replace(/\./g, '_').toUpperCase()}`];
-  const pw = env.E2E_PASSWORD || perUser || env.SEED_PASSWORD;
-  if (!pw) throw new Error('Set E2E_PASSWORD or SEED_PASSWORD to run login tests.');
+// E2E_PASSWORD: the one fixture password `make e2e-db` gives every user of the throwaway e2e database
+// (the app's own accounts each have their own password; ADR 0038).
+export function e2ePassword(_username: string = E2E_USERNAME): string {
+  const pw = process.env.E2E_PASSWORD;
+  if (!pw) throw new Error('Set E2E_PASSWORD (12+ characters), then make e2e-db, to run login tests.');
   return pw;
 }
 

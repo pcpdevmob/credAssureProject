@@ -12,7 +12,11 @@ the red-team runner always sign in with a password only, so none of this changes
    ```
    Keep the key: if it changes, every enrolled user must be reset by an admin. `MFA_REQUIRED_ROLES` defaults to
    `director_finance,vp_finance,user_admin`; preparers and evaluators sign in with a password only.
-2. Fresh demo cases and users: `make demo-reset` (users get `SEED_PASSWORD`).
+2. Accounts: `make db` (or `make start` on its first run) gives every account its own random first password, in
+   `var/initial-passwords.txt` (readable only by you; hand each one out, then delete the file). Each is changed at
+   first sign-in. `make passwords` issues new ones for every seeded account (signs them out; MFA stays set up).
+   `SEED_PASSWORD_<USERNAME>` in `.env` sets one account's own password instead (never shared between accounts).
+   Demo cases (optional): `SEED_PASSWORD_DEMO_PREPARER` in `.env`, then `make demo-reset`.
 3. First user administrator (once per tenant; the password must not contain the username):
    `BOOTSTRAP_ADMIN_PASSWORD='<12+ characters>' make admin NAME=it.admin`
 
@@ -26,7 +30,7 @@ Tokens live only in the browser's memory: a page reload or a typed URL means sig
 ## What to test
 | Who | Steps | Expected |
 |---|---|---|
-| `demo.director` (or `demo.vp`) | Sign in → confirm password → scan the QR with Google/Microsoft Authenticator → type the code | 8 backup codes shown once; then the dashboard, "MFA on" in the sidebar |
+| `demo.director` (or `demo.vp`) | Sign in with its first password → set an own password → confirm password → scan the QR with Google/Microsoft Authenticator → type the code | 8 backup codes shown once; then the dashboard, "MFA on" in the sidebar |
 | same | Sign out → sign in → wrong code `000000` | "That code did not work…", still on the code step |
 | same | Right code (or one backup code, `xxxx-xxxx`) | Dashboard; approve a routed case (Review & approval) |
 | `demo.vp` | Approve a case above ₹1.5 crore (e.g. CA-2026-0018) | Asks for your password **and** a code from the app (AUTH-10); wrong code refused, right code approves |
