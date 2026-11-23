@@ -3,7 +3,40 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow semver.
 
 ## [Unreleased]
+
+## [1.1.0] - draft for the 24 Nov 2026 code freeze (K11; tag after the last freeze-scope PR merges)
+Synthetic data only; approval is internal, never loan acceptance. Evaluated configuration unchanged: local Ollama
+`qwen3:8b` on the Mac (ADR 0036). Release bundle: `make release` hashes the image digests, `data/frozen/v1`,
+`data/frozen/v2/SHA256SUMS` and `evaluation/safety_v2/FROZEN.sha256` (K11). Before tagging, drop any line below whose
+PR did not merge.
 ### Added
+- Accounts, MFA and segregation of duties (ADR 0038, K14): gateway logins per HR employee, TOTP for Director, VP and
+  account admin, staged sign-in, backup codes, user admin pages that never open a case, step-up with password and code
+  above ₹1.5 crore (AUTH-10). Web sign-in, MFA set-up and user admin wired to the gateway (PR #37); the separate web
+  auth service is retired.
+- LendWise: three negotiation rounds in a fixed order (fee waiver, rate match, tenor change) with re-ranking after every
+  counted concession (ADR 0037, K12).
+- case.db on MySQL 8 behind `CASE_DATABASE_URL`, SQLite kept as the default (ADR 0039, K13).
+- Excel workbook import for case data (ADR 0040); plain-language UI for non-technical operators: forms, readiness,
+  case history, Indian dates (P9 9.2–9.3).
+- Hosted deployment for evaluators (P15 15.3): model failover from the course endpoint to Hugging Face → Featherless
+  (`LLM_FALLBACK_*`, unset by default), production Compose with Caddy HTTPS, hosted profile with the evaluated
+  retrieval settings, server set-up, smoke and nightly-backup scripts, runbook `docs/deployment/azure.md`.
+- Evaluation: honest labels and no cached replies in scored runs, RAG-only and oracle-context baselines, Critic
+  tracing and quote grounding (K2), red-team runner and live log (K6: 25/25 resisted), course-endpoint comparison
+  tooling (`make compare-runs`, `embed-parity`), safety_v2 H24 rule (state change or moved outcome is critical).
+- System card and model card with measured results (K8); demo script, evidence slide and Q&A for three rounds.
+- Gap review of 21 Nov (`docs/plan/gap-review-2026-11-21.md`): an offer that cannot be priced is flagged
+  `LW_OFFER_INVALID` instead of failing the case (LW-01); the VP decides a case held at exactly ₹1.5 crore in the
+  web app (APR-03); chat recognises data corrections and approval actions in code and changes nothing (SUP-02);
+  `GET /v1/eval/runs/{id}` reports the progress of a `make eval` run (BRD §6.1; starting a run stays on the command line); `/v1/health/ready` reports the vector index.
+### Fixed
+- The gateway and web images build (the gateway image left out `agents/`; the web image used a stale pnpm lockfile).
+### Changed
+- G4 result: 88/100 on the frozen test set (local qwen3:8b); course full-precision endpoint within one item.
+- CI runs once per PR and on request; the MySQL job only for case.db changes (ADR 0028 amendment).
+- Critic: number words in cited passages and approval-matrix wording no longer raise false positives (VER-02, VER-03).
+### Added (copilot v3, merged after the 1.0.0 tag)
 - Ask CredAssure on every page (ADR 0035): product help as a cited source, code intent routing (CP-07), case status from
   code (CP-10), per-case memory with "New conversation" (CP-11), Critic-first streaming, fixed follow-ups and answer
   ratings (CP-12). New help pages: *Ask CredAssure*, *AI safety and your data*.

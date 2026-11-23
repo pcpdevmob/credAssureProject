@@ -22,7 +22,7 @@ const WARNING: Record<string, string> = {
   report_stale: 'Report stale: figures changed after this proposal was rendered. The preparer must regenerate it before it can be approved; reject and return still work.',
 };
 
-const APPROVER = { VP_FINANCE: 'VP, Finance', DIRECTOR_FINANCE: 'Director, Finance', HELD_PENDING_POLICY: 'a human decision' } as const;
+const APPROVER = { VP_FINANCE: 'VP, Finance', DIRECTOR_FINANCE: 'Director, Finance', HELD_PENDING_POLICY: 'VP, Finance (held at ₹1.5 crore)' } as const;
 export const INTERNAL = 'Approval is internal, not loan acceptance.';
 export const STALE_REASON = 'Approve is unavailable: the report is stale. Ask the preparer to regenerate it.';
 const ACTION: Record<ApprovalDecision['decision'], string> = { APPROVED: 'Approve proposal', REJECTED: 'Reject proposal', RETURNED: 'Return to stage' };
@@ -36,7 +36,9 @@ function Internal() {
 export default function Review({ c, need, user, onChange }: { c: CaseRecord; need?: Fig; user: User; onChange: () => void }) {
   const [choice, setChoice] = useState<ApprovalDecision['decision']>('APPROVED');
   const [comment, setComment] = useState(''); const [back, setBack] = useState<ReturnStage>('working_capital');
-  const [open, setOpen] = useState(false); const [typed, setTyped] = useState(''); const [pw, setPw] = useState(''); const [pwNeeded, setPwNeeded] = useState(false);
+  const [open, setOpen] = useState(false); const [typed, setTyped] = useState(''); const [pw, setPw] = useState(''); const [pwNeeded, setPwNeeded] = useState(false); const [code, setCode] = useState('');
+  // ADR 0038 AUTH-10: once the approver has MFA, the step-up above ₹1.5 crore also needs a current code from the app.
+  const codeNeeded = pwNeeded && !!user.mfaEnabled;
   const [busy, setBusy] = useState(false); const [err, setErr] = useState<unknown>(); const [done, setDone] = useState('');
   const [warnings, setWarnings] = useState<string[]>([]); const [shown, setShown] = useState<number | null>(null); const [warnErr, setWarnErr] = useState(false);
   const [attested, setAttested] = useState(false); const [tick, setTick] = useState(0); const [regen, setRegen] = useState(false); const [regenErr, setRegenErr] = useState<unknown>();
@@ -50,8 +52,8 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
   const needsComment = choice !== 'APPROVED' && !comment.trim();
   const confirm = async () => {
     setBusy(true); setErr(undefined);
-    try { await approvalService.decide(c, choice, comment, back, pwNeeded ? pw : undefined, shown, attested); setOpen(false); setPw(''); setDone(`${DONE[choice]}: ${c.id}.`); onChange(); }
-    catch (e) { setErr(e); if (e instanceof ApiProblem && e.code === 'STEP_UP_REQUIRED') { setPwNeeded(true); setPw(''); } }
+    try { await approvalService.decide(c, choice, comment, back, pwNeeded ? pw : undefined, shown, attested, codeNeeded ? code.replace(/\s/g, '') : undefined); setOpen(false); setPw(''); setCode(''); setDone(`${DONE[choice]}: ${c.id}.`); onChange(); }
+    catch (e) { setErr(e); if (e instanceof ApiProblem && e.code === 'STEP_UP_REQUIRED') { setPwNeeded(true); setPw(''); setCode(''); } }
     setBusy(false);
   };
   return (<div className="grid gap-6 pb-24 lg:grid-cols-3 lg:pb-0">
@@ -76,8 +78,8 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
         <p className="font-semibold text-ink-900">Report stale</p><p className="mt-1 text-sm text-ink-700">Figures changed after the report was made, so it cannot be approved. Regenerate it to make a new version from the current figures.</p>
         {regenErr !== undefined && <ErrorBanner className="mt-3" error={regenErr} />}
         <Button className="mt-3 w-full" loading={regen} onClick={regenerate}>Regenerate report</Button></Card>}
-      {c.stage === 'ROUTING_HELD' && <Card className="p-5 ring-1 ring-ink-300"><p className="flex items-center gap-2 font-semibold text-ink-900"><PauseCircle className="h-5 w-5" />Routing held</p><p className="mt-2 text-sm text-ink-700">The validated amount is exactly ₹1.5 crore. Company policy holds it for a person to decide who approves.</p></Card>}
-      {c.stage === 'AWAITING_APPROVAL' && (can ? (
+      {c.stage === 'ROUTING_HELD' && <Card className="p-5 ring-1 ring-ink-300"><p className="flex items-center gap-2 font-semibold text-ink-900"><PauseCircle className="h-5 w-5" />Held at exactly ₹1.5 crore</p><p className="mt-2 text-sm text-ink-700">The validated amount is exactly ₹1.5 crore, the boundary between the two approvers. Company policy holds such a case for the VP, Finance to decide.</p></Card>}
+      {(c.stage === 'AWAITING_APPROVAL' || c.stage === 'ROUTING_HELD') && (can ? (
         <Card className="p-5 ring-2 ring-brand-500/40">
           <fieldset><legend className="font-semibold">Your decision</legend>
             <div className="mt-3 space-y-2 text-sm">{(Object.keys(ACTION) as ApprovalDecision['decision'][]).map(d =>
@@ -92,7 +94,7 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
             {blocked && <p id="stale-reason" className="mb-2 text-sm font-medium text-amber-900">{STALE_REASON}</p>}
             <Button className="w-full" aria-describedby={blocked ? 'stale-reason' : undefined} variant={choice === 'REJECTED' ? 'danger' : choice === 'RETURNED' ? 'outline' : 'success'} disabled={needsComment || blocked || unattested} onClick={() => { setTyped(''); setErr(undefined); setOpen(true); }}>{ACTION[choice]}</Button>
           </div>
-        </Card>) : <Card className="p-5 text-sm text-ink-600"><Lock className="mb-2 h-5 w-5 text-ink-400" />Awaiting decision from <Badge tone="blue">{c.routedTo ? APPROVER[c.routedTo] : 'the routed approver'}</Badge>. {user.role === 'PREPARER' ? 'Preparers cannot approve.' : 'This case is routed to a different approver.'}</Card>)}
+        </Card>) : <Card className="p-5 text-sm text-ink-600"><Lock className="mb-2 h-5 w-5 text-ink-400" />Awaiting decision from <Badge tone="blue">{c.stage === 'ROUTING_HELD' ? APPROVER.VP_FINANCE : c.routedTo ? APPROVER[c.routedTo] : 'the routed approver'}</Badge>. {user.role === 'PREPARER' ? 'Preparers cannot approve.' : 'This case is routed to a different approver.'}</Card>)}
     </div>
     <Dialog.Root open={open} onOpenChange={o => { setOpen(o); if (!o) setPw(''); }}>
       <Dialog.Portal>
@@ -106,10 +108,12 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
           <Input id="stepup" className="mt-1 font-mono" autoComplete="off" value={typed} onChange={e => setTyped(e.target.value)} placeholder={c.id} />
           {pwNeeded && <><label htmlFor="stepup-pw" className="mt-4 block text-sm font-medium text-ink-900">Your password</label>
             <Input id="stepup-pw" type="password" className="mt-1" autoComplete="current-password" value={pw} onChange={e => setPw(e.target.value)} /></>}
+          {codeNeeded && <><label htmlFor="stepup-code" className="mt-4 block text-sm font-medium text-ink-900">Code from your authenticator app</label>
+            <Input id="stepup-code" inputMode="numeric" autoComplete="one-time-code" maxLength={12} className="mt-1 font-mono tracking-[.3em]" placeholder="123456" value={code} onChange={e => setCode(e.target.value)} /></>}
           {err !== undefined && <ErrorBanner className="mt-3" error={err} />}
           <div className="mt-5 flex justify-end gap-2">
             <Dialog.Close asChild><Button variant="outline">Cancel</Button></Dialog.Close>
-            <Button variant={choice === 'REJECTED' ? 'danger' : 'success'} disabled={typed.trim() !== c.id || (pwNeeded && !pw)} loading={busy} onClick={confirm}>Confirm: {ACTION[choice].toLowerCase()}</Button>
+            <Button variant={choice === 'REJECTED' ? 'danger' : 'success'} disabled={typed.trim() !== c.id || (pwNeeded && !pw) || (codeNeeded && !code.trim())} loading={busy} onClick={confirm}>Confirm: {ACTION[choice].toLowerCase()}</Button>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

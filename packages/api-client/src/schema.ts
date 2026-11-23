@@ -1084,6 +1084,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/cases/{case_id}/kfs-document": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Save Kfs Document
+         * @description A reviewed KFS or schedule of charges from a PDF, stored as the KFS document LendWise reads
+         *     (ADR 0041). The rows the person confirmed become the charge table; the PDF text follows as
+         *     data. Stored through the same validation, injection scan and audit as any upload.
+         */
+        post: operations["save_kfs_document_v1_cases__case_id__kfs_document_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/cases/{case_id}/offers": {
         parameters: {
             query?: never;
@@ -1099,6 +1121,28 @@ export interface paths {
         get: operations["offers_v1_cases__case_id__offers_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/cases/{case_id}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Read Pdf
+         * @description A text-layer PDF -> its text and, for an offer letter or schedule of charges, a draft the
+         *     model quoted and code read (ADR 0041). Nothing is stored: the preparer reviews the draft and
+         *     saves it through the ordinary upload path. Scanned PDFs are refused (no OCR, BRD §4.3).
+         */
+        post: operations["read_pdf_v1_cases__case_id__pdf_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1371,7 +1415,12 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Start Eval */
+        /**
+         * Start Eval
+         * @description BRD §6.1 lists this route. It is refused on purpose: a run is hours of model calls in its own
+         *     process, and the gateway starts no process (ASI05). Start it with `make eval`; read its progress
+         *     with GET /v1/eval/runs/{run_id} and the scorecard.
+         */
         post: operations["start_eval_v1_eval_runs_post"];
         delete?: never;
         options?: never;
@@ -1386,7 +1435,12 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get Eval */
+        /**
+         * Get Eval
+         * @description Progress and per-category counts of one `make eval` run, read from what the harness has
+         *     written (results.jsonl, summary.json). `run_id` is the folder name the harness prints.
+         *     `status`: finished, or unfinished with `updated_at` (running, or stopped early).
+         */
         get: operations["get_eval_v1_eval_runs__run_id__get"];
         put?: never;
         post?: never;
@@ -1618,10 +1672,27 @@ export interface components {
             /** File */
             file: string;
         };
+        /** Body_read_pdf_v1_cases__case_id__pdf_post */
+        Body_read_pdf_v1_cases__case_id__pdf_post: {
+            /** File */
+            file: string;
+        };
         /** Body_upload_v1_cases__case_id__files_post */
         Body_upload_v1_cases__case_id__files_post: {
             /** File */
             file: string;
+        };
+        /** ChargeRow */
+        ChargeRow: {
+            /** Amount */
+            amount: string;
+            /** Name */
+            name: string;
+            /**
+             * Timing
+             * @enum {string}
+             */
+            timing: "upfront" | "monthly" | "annual";
         };
         /** Chat */
         Chat: {
@@ -1779,6 +1850,26 @@ export interface components {
             kind: string;
             /** Ref */
             ref: string;
+        };
+        /** KfsDocument */
+        KfsDocument: {
+            /** Kfs Doc Id */
+            kfs_doc_id: string;
+            /** Offer Id */
+            offer_id: string;
+            /** Rows */
+            rows?: components["schemas"]["ChargeRow"][];
+            /** Text */
+            text: string;
+            /** Title */
+            title: string;
+            /** Version */
+            version: number;
+            /**
+             * Which
+             * @enum {string}
+             */
+            which: "kfs" | "schedule";
         };
         /** Lineage */
         Lineage: {
@@ -4927,6 +5018,61 @@ export interface operations {
             };
         };
     };
+    save_kfs_document_v1_cases__case_id__kfs_document_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KfsDocument"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Client error */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Server error */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     offers_v1_cases__case_id__offers_get: {
         parameters: {
             query?: never;
@@ -4937,6 +5083,63 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Client error */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Server error */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    read_pdf_v1_cases__case_id__pdf_post: {
+        parameters: {
+            query: {
+                doc: "offer" | "kfs" | "schedule";
+            };
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_read_pdf_v1_cases__case_id__pdf_post"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -5762,7 +5965,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation error */

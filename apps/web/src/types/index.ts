@@ -4,8 +4,8 @@ export type Role = 'PREPARER' | 'VP_FINANCE' | 'DIRECTOR_FINANCE' | 'EVALUATOR';
 export const ROLE_LABEL: Record<Role, string> = { PREPARER: 'Proposal Preparer', VP_FINANCE: 'VP, Finance', DIRECTOR_FINANCE: 'Director, Finance', EVALUATOR: 'Evaluator' };
 
 export type AccountRole = 'global_admin' | 'admin';
-export interface User { id: string; name: string; email: string; role: Role; employeeId: string; username?: string; accountRole?: AccountRole; mustChangePassword?: boolean; mfaEnabled?: boolean; stage?: 'setup' | 'mfa' | 'full' }
-export interface ManagedUser { username: string; name: string; accountRole: AccountRole; mustChangePassword: boolean; disabled: boolean; mfaEnabled?: boolean; createdAt?: number }
+export interface User { id: string; name: string; email: string; role: Role; employeeId: string; username?: string; accountRole?: AccountRole; mustChangePassword?: boolean; mfaEnabled?: boolean; stage?: 'setup' | 'mfa' | 'full'; adminOnly?: boolean; mfaRequired?: boolean }
+export interface ManagedUser { username: string; name: string; accountRole: AccountRole; roleLabel?: string; hrId?: string | null; mustChangePassword: boolean; disabled: boolean; mfaEnabled?: boolean; createdAt?: number }
 export interface UserLogEvent { id: number; at: number; actor: string; action: string; target: string; ip: string; ua: string | null; detail: string | null }
 
 export type GateDecision = 'GO' | 'NO_GO' | 'NEEDS_INPUT' | 'ERROR' | 'PENDING' | 'RUNNING' | 'HELD';
@@ -47,6 +47,8 @@ export interface FundingAssessment {
 /** One offer at its latest version, exactly as the gateway computed it. `affordable` and `rank` are null in the read-only preview. */
 export interface OfferRow {
   id: string; version: number; flags: string[]; comparable: boolean; affordable: boolean | null; rank: number | null;
+  /** LW-01: terms to correct on an offer the gateway flagged LW_OFFER_INVALID; empty otherwise. */
+  invalidTerms?: string[];
   /** Set by the gateway on the lowest-APR offer(s). The UI never compares APRs itself. */
   cheapest: boolean;
   apr: Fig | null; aprPct: string | null; amountReceived: Fig | null; totalRepayment: Fig | null; totalCost: Fig | null;

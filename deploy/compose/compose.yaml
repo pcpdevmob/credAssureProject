@@ -12,7 +12,11 @@ x-gateway: &gateway
     context: ../..
     dockerfile: deploy/docker/Dockerfile.gateway
   ports: ["127.0.0.1:8000:8000"]
-  volumes: [credassure_data:/app/var]
+  volumes:
+    - credassure_data:/app/var
+    # The image holds code only: reference tables, lender scripts, frozen cases and hr.db
+    # (make hr-db) come from the checkout, read-only.
+    - ../../data:/app/data:ro
   restart: unless-stopped
 
 x-ollama-env: &ollama-env

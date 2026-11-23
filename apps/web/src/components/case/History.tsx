@@ -23,6 +23,8 @@ export function describe(e: HistoryEvent): Line {
   const x = e.details;
   switch (e.type) {
     case 'CASE_CREATED': return { icon: FolderPlus, tone: 'plain', key: true, text: `${who(e)} created the case${x.order_ref ? ` for order ${s(x.order_ref)}` : ''}.` };
+    case 'PDF_DRAFTED': { const doc = ({ offer: 'an offer letter', kfs: 'a Key Facts Statement', schedule: 'a schedule of charges' } as Record<string, string>)[s(x.doc)] ?? 'a PDF';
+      return { icon: FileUp, tone: 'plain', key: false, text: `${who(e)} read ${doc} from a PDF${s(x.model) === 'used' ? `; the AI suggested ${s(x.drafted)} value(s) for review` : ''}. Nothing is saved until the person checks it.` }; }
     case 'FILE_UPLOADED': return { icon: FileUp, tone: 'plain', key: true, text: `${who(e)} provided “${fileLabel(s(x.kind))}”.` };
     case 'INJECTION_FLAGGED': {
       const flags = Array.isArray(x.flags) ? x.flags.map(String) : [];

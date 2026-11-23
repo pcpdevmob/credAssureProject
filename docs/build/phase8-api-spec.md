@@ -107,11 +107,11 @@ errors also carry `errors: [{field, row, reason}]`. Every response has `X-Reques
 
 ### Admin, eval and health
 - `POST /v1/admin/config` (evaluator), body `{key:"boundary_rule", value:"hold|director|vp"}` → 200; any other role → 403.
-- `POST /v1/eval/runs` and `GET /v1/eval/runs/{id}` → 501 NOT_IMPLEMENTED for an evaluator, 403 for anyone else.
+- `POST /v1/eval/runs` (evaluator) → 501 on purpose: a run is started from the command line (`make eval`), because the gateway starts no process (ASI05, `tests/test_p8_owasp_asi.py`). `GET /v1/eval/runs/{id}` (evaluator; `id` is the run folder name `make eval` prints) → `status` (finished, or unfinished with `updated_at`), `done`, `passed`, `by_category`, `meta`, read from the run's `results.jsonl` and `summary.json`; 404 for an unknown id. 403 for anyone else. (The read route was built on 21 Nov 2026; it answered 501 until then.)
 - `GET /v1/health/live` (no auth) → `{status:"ok"}`.
 - `GET /v1/health/ready` (no auth) → `{status: "ok"|"degraded", checks:{db, chroma, model, quota}}`, where:
   - `db` is "ok" or "error";
-  - `chroma` is "not_configured" until Phase 7;
+  - `chroma` is "not_configured" in keyword mode, "missing" until the index is built, else "ok" (reported, not gated);
   - `model` is "closed", "open" or "disabled";
   - `quota` is `{used, limit, level}`, with `level` one of "ok", "warn_70", "warn_90" or "exhausted".
 - Quota rules:

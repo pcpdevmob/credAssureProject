@@ -12,6 +12,10 @@ answers four kinds of question:
 - **The open case:** its status, why it is blocked, who it is routed to, and its verified figures. These questions
   work only when a case is open, so one case's data never appears in another conversation.
 
+It answers questions; it never changes anything. If you type a correction ("the buffer should be ₹12 lakh") it tells
+you which form on the **Case data** tab to correct, and if you type "approve it" it points to the **Review & approval**
+tab: data changes only through the forms, and a decision is recorded only by the routed approver there.
+
 It does not predict approval, score credit, give legal or tax advice, accept or sign an offer, override a gate or show
 another case's data. When nothing it can cite supports an answer it says "I can't verify that from the available
 sources", which is not an error.

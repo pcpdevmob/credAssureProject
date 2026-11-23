@@ -59,8 +59,7 @@ credassure-observability = { workspace = true }
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-# deploy/auth is the vendored finbridge auth service (stdlib, dense style, ADR 0022); it is reviewed, not reformatted.
-extend-exclude = ["docs", "prompts", ".claude", "deploy/auth"]
+extend-exclude = ["docs", "prompts", ".claude"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF", "N"]

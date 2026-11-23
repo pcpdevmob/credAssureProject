@@ -1,9 +1,9 @@
-"""Offer audit (LW-02/03/04/08, BR-06, ADR 0021). Pure.
+"""Offer audit (LW-01/02/03/04/08, BR-06, ADR 0021). Pure.
 
-Comparable = every material term present, stated instalment within ₹1 of the recomputed one,
-and the first repayment date consistent with the disbursal and moratorium. Hidden charges come
-from the caller (the LendWise agent reads the KFS schedule; code checks it); they are flagged here
-and priced by ``loancost``. Benchmark and guarantee findings are warnings, not gates.
+Comparable = every material term present and priceable, stated instalment within ₹1 of the
+recomputed one, and the first repayment date consistent with the disbursal and moratorium. Hidden
+charges come from the caller (the LendWise agent reads the KFS schedule; code checks it); they are
+flagged here and priced by ``loancost``. Benchmark and guarantee findings are warnings, not gates.
 """
 
 import re
@@ -17,7 +17,7 @@ from credassure.core.blockers import BlockerCode
 from credassure.core.money import MONEY
 
 from .calendar import add_months
-from .loancost import Charge, dec, instalment
+from .loancost import CGTMSE_BASIS, Charge, dec, instalment
 from .normaliser import find_all
 
 MATERIAL_TERMS = (
@@ -31,6 +31,7 @@ MATERIAL_TERMS = (
     "rate_type",
 )
 INSTALMENT_TOLERANCE = Decimal(1)
+MAX_TENURE_MONTHS = 360  # 30 years; a working-capital term loan is far shorter
 _ROW = re.compile(r"^\|\s*([^|]+?)\s*\|\s*(upfront|monthly|annual)\s*\|\s*([^|]+?)\s*\|$")
 _UNTAXED = re.compile(r"\b(gst[ -]exempt|exempt from gst|no gst|without gst|gst nil)\b", re.I)
 
@@ -41,6 +42,57 @@ class Audit:
     comparable: bool
     flags: tuple[str, ...]
     missing_terms: tuple[str, ...] = field(default=())
+    invalid_terms: tuple[str, ...] = field(default=())
+
+
+def _number(value: Any) -> Decimal | None:
+    try:
+        number = dec(value)
+    except (ArithmeticError, TypeError, ValueError):
+        return None
+    return number if number.is_finite() else None
+
+
+def invalid_terms(offer: Mapping[str, Any]) -> tuple[str, ...]:
+    """Terms of a complete offer that cannot be priced (LW-01, fail closed): a value no loan has
+    (a typing slip such as 12.5 for 12.5%, a zero rate, no repayment month left) or a term ADR 0021
+    leaves unpriced (financed insurance, a CGTMSE basis other than year-1-guaranteed). The offer is
+    then non-comparable and never priced, instead of failing the stage or lowering an APR."""
+    bad: list[str] = []
+    principal, rate = _number(offer["principal"]), _number(offer["annual_rate"])
+    if principal is None or principal <= 0:
+        bad.append("principal")
+    if rate is None or not 0 < rate <= 1:  # stored as a fraction: 0.1205 is 12.05% a year
+        bad.append("annual_rate")
+    tenure, moratorium = _number(offer["tenure_months"]), _number(offer.get("moratorium_months", 0))
+    if tenure is None or tenure != int(tenure) or not 1 <= tenure <= MAX_TENURE_MONTHS:
+        bad.append("tenure_months")
+        tenure = None
+    whole = moratorium is not None and moratorium == int(moratorium) and moratorium >= 0
+    no_month_left = whole and tenure is not None and moratorium is not None and moratorium >= tenure
+    if not whole or no_month_left:
+        bad.append("moratorium_months")
+    for fee in offer["fees"] or ():
+        value = _number(fee.get("value"))
+        cap = Decimal(1) if fee.get("basis") == "pct_of_principal" else None
+        if value is None or value < 0 or (cap is not None and value > cap):
+            bad.append("fees")
+            break
+    insurance = offer.get("insurance")
+    if insurance:
+        premium = _number(insurance.get("premium"))
+        if premium is None or premium < 0:
+            bad.append("insurance.premium")
+        if insurance.get("financed"):
+            bad.append("insurance.financed")
+    guarantee = offer.get("guarantee")
+    if guarantee and guarantee.get("passed_to_borrower"):
+        pct = _number(guarantee.get("annual_fee_pct"))
+        if pct is None or not 0 <= pct < 1:
+            bad.append("guarantee.annual_fee_pct")
+        if guarantee.get("basis", CGTMSE_BASIS) != CGTMSE_BASIS:
+            bad.append("guarantee.basis")
+    return tuple(bad)
 
 
 def audit(
@@ -55,6 +107,10 @@ def audit(
     if missing:
         missing_flags = tuple(f"{BlockerCode.LW_MISSING_MATERIAL_TERM}:{t}" for t in missing)
         return Audit(str(offer["offer_id"]), False, missing_flags, missing)
+    invalid = invalid_terms(offer)
+    if invalid:  # nothing below can be computed on these values (instalment, dates, pricing)
+        invalid_flags = tuple(f"{BlockerCode.LW_OFFER_INVALID}:{t}" for t in invalid)
+        return Audit(str(offer["offer_id"]), False, invalid_flags, (), invalid)
     flags: list[str] = []
     disbursal = date.fromisoformat(str(offer["disbursal_date"]))
     first_due = add_months(disbursal, int(offer.get("moratorium_months", 0)) + 1)
