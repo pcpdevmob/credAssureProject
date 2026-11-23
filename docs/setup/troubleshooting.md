@@ -6,6 +6,7 @@
 | API exits on startup | `JWT_SECRET` missing or shorter than 32 characters; or `LLM_BASE_URL` unset while `LLM_ENABLED=true` | Set them in `.env` (see [environment.md](environment.md)), or `LLM_ENABLED=false` |
 | `ModuleNotFoundError: credassure.agents…` | A bare `uv sync` removed workspace members | `make install` |
 | `make check` fails right after `uv sync` | Same | `make install` |
+| Copilot start fails: `No module named 'sentence_transformers'` | Installed without the `rerank` extra (bare `uv sync`) | `make install` (it adds every extra); never a bare `uv sync` |
 | `make db` or `make demo-reset` fails: seed password | `SEED_PASSWORD` missing or under 12 characters | Set it in `.env` |
 | `make demo-reset` refuses, or "database locked" | A gateway is running on :8000 | Stop `make run-api`, then retry |
 | `make demo-reset` or `make e2e-db` refuses | Guard against the wrong database | Use the make target; it sets the right `CASE_DB` and `TENANT_ID` |
