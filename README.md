@@ -14,7 +14,7 @@ Code then routes the proposal: above ₹1.5 crore to the VP, Finance; below to t
 
 Requirements: [docs/requirements/BRD.md](docs/requirements/BRD.md) · Architecture: [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md) · Progress: [PROGRESS.md](PROGRESS.md)
 
-Responsible AI and security: [System card](docs/SYSTEM_CARD.md) · [Threat model](docs/THREAT_MODEL.md) · [OWASP LLM + ASI mapping](docs/security/owasp-asi-mapping.md) · Operations: [Runbook](docs/deployment/RUNBOOK.md) · Team: [CONTRIBUTIONS.md](CONTRIBUTIONS.md) · Changes: [CHANGELOG.md](CHANGELOG.md)
+Responsible AI and security: [System card](docs/SYSTEM_CARD.md) · [Threat model](docs/THREAT_MODEL.md) · [OWASP LLM + ASI mapping](docs/security/owasp-asi-mapping.md) · Operations: [Runbook](docs/deployment/RUNBOOK.md) · [Hosted deployment](docs/deployment/azure.md) · Team: [CONTRIBUTIONS.md](CONTRIBUTIONS.md) · Changes: [CHANGELOG.md](CHANGELOG.md)
 
 ---
 

@@ -50,6 +50,10 @@ class Settings(BaseSettings):
     llm_circuit_open_s: float = Field(default=60.0, gt=0)
     llm_rate_per_minute: float = Field(default=60.0, gt=0)  # shared per team (NFR-04)
     llm_cache_path: str | None = "var/llm_cache.db"  # unset/empty turns the response cache off
+    # Deployment plan §5.3: a second endpoint (same model) tried when the primary is unavailable
+    llm_fallback_base_url: str | None = None
+    llm_fallback_model: str | None = None
+    llm_fallback_api_key: SecretStr | None = None
     llm_enabled: bool = True
     # Scope #17, ADR 0015: answer only from replies recorded in LLM_CACHE_PATH by a live run
     replay_mode: bool = False
@@ -132,7 +136,14 @@ class Settings(BaseSettings):
     ablation: Literal["A1", "A2", "A3", "A4", "A5", "A6"] | None = None
 
     @field_validator(
-        "ablation", "llm_ca_cert", "mfa_encryption_key", "case_database_url", mode="before"
+        "ablation",
+        "llm_ca_cert",
+        "mfa_encryption_key",
+        "case_database_url",
+        "llm_fallback_base_url",
+        "llm_fallback_model",
+        "llm_fallback_api_key",
+        mode="before",
     )
     @classmethod
     def _empty_is_unset(cls, value: object) -> object:
