@@ -15,7 +15,7 @@ ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 # The dev/demo database (var/case.db) is tenant "demo" (make demo-reset); an exported variable beats --env-file.
 DEMO_TENANT := TENANT_ID=demo
 
-.PHONY: admin redteam rag-baseline load-smoke eval-judge eval-kappa eval-report eval-ablations progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
+.PHONY: start stop admin redteam rag-baseline load-smoke eval-judge eval-kappa eval-report eval-ablations progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset live-run copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe embed-parity compare-runs retrieval-eval retrieval-ladder retrieval-pool retrieval-silver judge kappa release sbom pin-images
 
@@ -65,6 +65,14 @@ ollama-pull:  ## Download qwen3:8b and nomic-embed-text (ADR 0017; not part of m
 		echo "No Ollama found. Install it and run 'OLLAMA_CONTEXT_LENGTH=8192 ollama serve', or start 'make compose-dev'."; \
 		exit 1; \
 	fi
+
+# make start defaults to the course endpoint; MODELS=local or MODELS=hf on the command line (or in the environment) wins.
+START_MODELS := $(if $(filter command line environment environment override,$(origin MODELS)),$(MODELS),course)
+start:  ## Everything in one command: course model (MODELS=local|hf), Langfuse if set up, API, web (ARGS="--no-model --no-langfuse --no-ui --install")
+	MODELS=$(START_MODELS) bash scripts/start.sh $(ARGS)
+
+stop:  ## Stop what make start started (API, web, an Ollama it started); Langfuse: make langfuse-down
+	bash scripts/start.sh stop
 
 run-api:  ## FastAPI on :8000 (docs at /docs)
 	$(DEMO_TENANT) uv run $(ENV_FILE) uvicorn credassure.gateway.main:app --factory --reload --port 8000

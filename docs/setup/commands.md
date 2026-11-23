@@ -15,6 +15,8 @@
 ## Run
 | Command | What it does |
 |---|---|
+| `make start` | Everything at once: course endpoint by default (`MODELS=local\|hf`), Langfuse if set up, API, web; database and users on first run, no cases. `ARGS="--no-model --no-langfuse --no-ui --install"` |
+| `make stop` | Stop what `make start` started (Langfuse: `make langfuse-down`) |
 | `make run-api` | Gateway on :8000, tenant `demo`, `var/case.db` |
 | `make run-ui` | Next.js web app on :3000 |
 | `make db` | Migrate `var/case.db` + `var/corpus.db`, seed users (needs `SEED_PASSWORD`) |
