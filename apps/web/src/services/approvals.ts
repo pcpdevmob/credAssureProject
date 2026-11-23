@@ -14,7 +14,8 @@ export const approvalService: ApprovalService & { inbox(): Promise<InboxItem[]> 
     const r = await ok(gw.GET('/v1/inbox')) as unknown as { items: { case_id: string; msme_name: string; status: string; route: string | null }[] };
     return r.items.map(i => ({ caseId: i.case_id, msmeName: i.msme_name, status: i.status, route: i.route, held: i.status === 'HELD' }));
   },
-  canDecide: (c, u) => c.stage === 'AWAITING_APPROVAL' && c.routedTo === u.role, // UX hint only; the server enforces the role (APR-05)
+  // UX hint only; the server enforces the role (APR-05). A case held at exactly ₹1.5 crore (APR-03, rule "hold") is the VP's to decide (BRD §5.1).
+  canDecide: (c, u) => (c.stage === 'AWAITING_APPROVAL' && c.routedTo === u.role) || (c.stage === 'ROUTING_HELD' && u.role === 'VP_FINANCE'),
   async decide(c, decision, comment, returnStage, password, reportVersion, attested, mfaCode) {
     if (decision !== 'APPROVED' && !comment.trim()) throw new Error('A comment is required to reject or return a proposal.');
     try { await ok(gw.POST('/v1/cases/{case_id}/decision', { params: { path: { case_id: c.id } }, body: { decision: WIRE[decision], return_stage: decision === 'RETURNED' ? returnStage ?? 'working_capital' : null, comment, expected_version: c.rowVersion ?? 0, attested: decision === 'APPROVED' && attested === true, ...(password ? { password } : {}), ...(mfaCode ? { mfa_code: mfaCode } : {}), ...(decision === 'APPROVED' && reportVersion != null ? { report_version: reportVersion } : {}) } as never })); }

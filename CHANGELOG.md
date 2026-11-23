@@ -26,6 +26,12 @@ PR did not merge.
   tracing and quote grounding (K2), red-team runner and live log (K6: 25/25 resisted), course-endpoint comparison
   tooling (`make compare-runs`, `embed-parity`), safety_v2 H24 rule (state change or moved outcome is critical).
 - System card and model card with measured results (K8); demo script, evidence slide and Q&A for three rounds.
+- Gap review of 21 Nov (`docs/plan/gap-review-2026-11-21.md`): an offer that cannot be priced is flagged
+  `LW_OFFER_INVALID` instead of failing the case (LW-01); the VP decides a case held at exactly ₹1.5 crore in the
+  web app (APR-03); chat recognises data corrections and approval actions in code and changes nothing (SUP-02);
+  `GET /v1/eval/runs/{id}` reports the progress of a `make eval` run (BRD §6.1; starting a run stays on the command line); `/v1/health/ready` reports the vector index.
+### Fixed
+- The gateway and web images build (the gateway image left out `agents/`; the web image used a stale pnpm lockfile).
 ### Changed
 - G4 result: 88/100 on the frozen test set (local qwen3:8b); course full-precision endpoint within one item.
 - CI runs once per PR and on request; the MySQL job only for case.db changes (ADR 0028 amendment).

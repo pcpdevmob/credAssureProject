@@ -1415,7 +1415,12 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Start Eval */
+        /**
+         * Start Eval
+         * @description BRD §6.1 lists this route. It is refused on purpose: a run is hours of model calls in its own
+         *     process, and the gateway starts no process (ASI05). Start it with `make eval`; read its progress
+         *     with GET /v1/eval/runs/{run_id} and the scorecard.
+         */
         post: operations["start_eval_v1_eval_runs_post"];
         delete?: never;
         options?: never;
@@ -1430,7 +1435,12 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get Eval */
+        /**
+         * Get Eval
+         * @description Progress and per-category counts of one `make eval` run, read from what the harness has
+         *     written (results.jsonl, summary.json). `run_id` is the folder name the harness prints.
+         *     `status`: finished, or unfinished with `updated_at` (running, or stopped early).
+         */
         get: operations["get_eval_v1_eval_runs__run_id__get"];
         put?: never;
         post?: never;
@@ -5955,7 +5965,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation error */

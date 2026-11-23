@@ -4,6 +4,12 @@ Code routes a question when its wording is unambiguous; otherwise it returns Non
 picks a tool from the fixed list (scope #20), which code still validates. The model can never pick a
 case tool without a case, and code never routes a question that names a regulator, scheme or tax to
 product help: those stay on the cited regulatory path the frozen evaluation measures.
+
+SUP-02 (chat actions): before routing a question, code recognises the two chat inputs that are not
+questions: a data correction ("the buffer should be ₹12 lakh") and an approval action ("approve
+it"). Neither is ever carried out from chat: the reply is fixed text that sends the person to the
+form or the decision screen. Everything else is a copilot question (or is refused or abstained on,
+which is how out-of-scope input ends).
 """
 
 import re
@@ -122,3 +128,96 @@ def case_needed(message: str) -> bool:
         _THIS_CASE.search(message)
         and (_STATUS.search(message) or _BLOCKER.search(message) or _FIGURES.search(message))
     )
+
+
+# ---- SUP-02: chat inputs that are actions, not questions ----------------------------------------
+DATA_CORRECTION, APPROVAL_ACTION = "data_correction", "approval_action"
+
+
+@dataclass(frozen=True)
+class ChatAction:
+    """What the message tries to do. `clarify`: a correction that names no data (ask which)."""
+
+    intent: str
+    file_kind: str | None = None  # the case-data form to open (order, receipts, offer, ...)
+    field: str | None = None
+    reopen_stage: str | None = None  # the step that runs again after the correction
+    clarify: bool = False
+
+
+_ASKS = re.compile(
+    r"^\s*(?:who|what|which|why|how|when|where|is|are|was|were|does|do|did|should|"
+    r"(?:can|could|may|will|would) (?:i|we|the|a|an|it|this|they|he|she))\b",
+    re.IGNORECASE,
+)
+_REQUEST = re.compile(r"^\s*(?:please|kindly|pls|(?:can|could|would|will) you)\b", re.IGNORECASE)
+_APPROVAL_ACTION = re.compile(
+    r"^\s*(?:(?:please|kindly|pls)\s+|(?:can|could|would|will) you\s+(?:please\s+)?|"
+    r"go ahead and\s+|let'?s\s+|"
+    r"(?:i|we)\s+(?:hereby\s+)?(?:(?:want|would like|wish) to\s+)?)?"
+    r"(?:approve|reject|decline|sign off(?: on)?|send (?:it|this|the (?:case|proposal)) back|"
+    r"return (?:it|this|the (?:case|proposal))|"
+    r"mark (?:it|this|the (?:case|proposal)) (?:as )?(?:approved|rejected))\b",
+    re.IGNORECASE,
+)
+_CORRECTION = re.compile(
+    r"\b(?:should (?:be|read|have been)|(?:is|are|was|were) (?:wrong|incorrect)|typo|"
+    r"correct(?:ed|ing|ion)\b|fix(?:ed)?\b|updated?\b|re-?upload\w*|uploading|revised|"
+    r"went (?:up|down)|changed to|will now|is now|later than|earlier than|is due in|"
+    r"filled in|attached|looks? off|new value)",
+    re.IGNORECASE,
+)
+# First match wins: an offer correction usually names a lender; opening-position words come before
+# the files they could be confused with ("limit letter", "buffer").
+_KINDS: tuple[tuple[str, re.Pattern[str]], ...] = tuple(
+    (kind, re.compile(pattern, re.IGNORECASE))
+    for kind, pattern in (
+        ("offer", r"\boffers?\b|\blenders?\b|\btenure\b|instal?lment|\bemi\b|\bkfs\b|key facts"),
+        (
+            "opening_position",
+            r"\bbuffer\b|opening (?:cash|position)|overdraft|credit lines?|\blimits?\b|"
+            r"undrawn|mitigation",
+        ),
+        ("receipts", r"\breceipts?\b|milestone|\badvance\b|unconfirmed"),
+        ("receivables", r"receivables?|\binvoices?\b|\binv-"),
+        ("payables", r"payables?|\bsuppliers?\b|\bbills?\b|\bbill-"),
+        ("costs", r"\bcosts?\b|labour|components|logistics|overheads|packaging"),
+        ("inventory", r"\binventory\b|\bstock\b"),
+        ("order", r"\border\b|purchase order|delivery weeks?"),
+    )
+)
+_FIELDS: tuple[tuple[str, str, re.Pattern[str]], ...] = tuple(
+    (kind, name, re.compile(pattern, re.IGNORECASE))
+    for kind, name, pattern in (
+        ("opening_position", "min_cash_buffer", r"\bbuffer\b"),
+        ("opening_position", "opening_cash", r"opening cash"),
+        ("opening_position", "credit_lines", r"overdraft|credit lines?|\blimits?\b|undrawn"),
+        ("receipts", "confirmed", r"\b(?:un)?confirmed\b"),
+        ("receipts", "week", r"\bweek\b"),
+        ("receivables", "invoice_id", r"invoice id|duplicate"),
+        ("receivables", "expected_week", r"\bexpected\b|\blater\b|\bearlier\b"),
+        ("payables", "due_week", r"\bdue\b"),
+        ("offer", "tenure_months", r"\btenure\b"),
+        ("offer", "stated_instalment", r"instal?lment|\bemi\b"),
+    )
+)
+
+
+def chat_action(message: str) -> ChatAction | None:
+    """SUP-02 in code: a data correction or an approval action, else None (a copilot question).
+    Classifying never changes anything: data changes only through the case-data forms and a
+    decision only through POST /decision (APR-04), whatever this returns."""
+    if _REGULATORY.search(message) or _POLICY.search(message) or _ASKS.search(message):
+        return None  # a question about the rulebook or the product stays a question
+    if "?" in message and not _REQUEST.search(message):
+        return None  # "My case is stuck, what should I fix?" asks; "Can you update it?" requests
+    if _APPROVAL_ACTION.search(message):
+        return ChatAction(APPROVAL_ACTION)
+    if not _CORRECTION.search(message):
+        return None
+    kind = next((k for k, pattern in _KINDS if pattern.search(message)), None)
+    if kind is None:
+        return ChatAction(DATA_CORRECTION, clarify=True)
+    found = next((n for k, n, pattern in _FIELDS if k == kind and pattern.search(message)), None)
+    stage = "lendwise" if kind == "offer" else "working_capital"
+    return ChatAction(DATA_CORRECTION, file_kind=kind, field=found, reopen_stage=stage)

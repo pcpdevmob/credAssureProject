@@ -65,6 +65,34 @@ OPEN_CASE = (
     "Open the case from **Cases** first: questions about a case's status, blockers or figures are "
     "answered only inside that case, so one case's data never appears in another conversation."
 )
+# SUP-02: chat never changes data or decides a case; these fixed replies say where that happens.
+FORM_NAME = {  # the form names on the Case data tab (apps/web lib/plain.ts FILE_LABEL)
+    "order": "Customer order",
+    "opening_position": "Opening cash and credit lines",
+    "costs": "Weekly costs",
+    "receipts": "Expected receipts",
+    "receivables": "Customer invoices due",
+    "payables": "Supplier bills",
+    "inventory": "Stock movement",
+    "offer": "Lender offer",
+}
+CORRECTION_REPLY = (
+    "I can't change case data from chat: every figure comes from the saved case data and is "
+    "recalculated by code. To correct it, the preparer opens the **Case data** tab, corrects "
+    "“{form}” and saves, then runs the case again from the **Workflow** tab. The {step} step and "
+    "the steps after it run again; earlier steps are kept."
+)
+CORRECTION_CLARIFY = (
+    "Which data do you want to correct? Name it, for example “Opening cash and credit lines”, "
+    "“Expected receipts”, “Supplier bills” or a lender offer, and I will point you to its form. "
+    "I can't change case data from chat."
+)
+APPROVAL_REPLY = (
+    "I can't approve, reject or return a proposal from chat. The routed approver decides on the "
+    "**Review & approval** tab, where the decision is recorded with their name and comment. The "
+    "person who prepared a case cannot approve it."
+)
+_STEP_NAME = {"working_capital": "Funding need", "lendwise": "Lender comparison"}
 _STAGE = {
     "onboarding": "Readiness",
     "working_capital": "Funding need",
@@ -146,7 +174,9 @@ class Reply:
     facts: tuple[str, ...] = ()  # ledger keys rendered as slots (lineage inputs)
     cut: int = 0  # answer sentences cut for lacking a valid span id (P5)
     span_ids: tuple[str, ...] = ()  # "n.m" spans cited by the kept sentences
-    intent: str | None = None  # CP-07: help, case_status, case_figures, blocker, regulatory, policy
+    # CP-07: help, case_status, case_figures, blocker, regulatory, policy; SUP-02: data_correction,
+    # approval_action
+    intent: str | None = None
     routed_by: str | None = None  # code | model
 
     @property
@@ -294,6 +324,17 @@ def answer(
         text = INJECTION_REPLY.format(ranking=", ".join(ranking) or NO_RANKING)
         return Reply(text, injection_flagged=True, ranking=ranking, refusal_code="INJECTION")
     tick("routing")
+    action = it.chat_action(message)  # SUP-02: not a question; nothing is changed from chat
+    if action is not None:
+        if action.intent == it.APPROVAL_ACTION:
+            text = APPROVAL_REPLY
+        elif action.clarify or action.file_kind is None:
+            text = CORRECTION_CLARIFY
+        else:
+            text = CORRECTION_REPLY.format(
+                form=FORM_NAME[action.file_kind], step=_STEP_NAME[action.reopen_stage or ""]
+            )
+        return Reply(text, intent=action.intent, routed_by="code")
     routed = it.route(message, has_case=case_id is not None)
     if case_id is None and (
         (routed is not None and routed.intent in it.CASE_INTENTS) or it.case_needed(message)

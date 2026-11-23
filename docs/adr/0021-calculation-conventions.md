@@ -49,6 +49,12 @@ them, and this ADR settles them. Gold and engines are still implemented independ
   floating rate not on EBLR) are **warnings**. They do not make an offer non-comparable.
 - **Not priced yet:** financed insurance, and CGTMSE bases other than "year 1 guaranteed, then outstanding". Gold
   raises an error on them until a convention is agreed.
+  *Amended 2026-11-21 (LW-01, BR-06):* the engine still prices neither, but an offer that carries one no longer
+  stops the comparison. `offer_audit.invalid_terms()` makes it non-comparable with the flag
+  `LW_OFFER_INVALID:<term>` before any calculation, as it does for a value no loan has (principal or rate ≤ 0, a
+  rate above 100% a year, tenure outside 1–360 months, no repayment month, a negative fee or premium). The offer
+  is never priced or ranked, the offers view names the terms (`invalid_terms`), and the other offers are compared.
+  No frozen offer has such a term, so gold and every frozen result are unchanged.
 
 **Phase 9c-a additions**
 - **GST split:** the GST on each offer is reported as CGST + SGST in equal halves (paise, half-up), treating the

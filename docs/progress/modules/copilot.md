@@ -5,6 +5,7 @@
 **Status:** 9e done except CP-01 (regulatory 10/25 live, OPEN); KR-05 recall@5 24/40 (v1.0) OPEN. **P4 code done 2026-11-18** (contextual headers, glossary rewrite, answerability gate, ladder script); Mac run done: frozen recall@5 23 -> 25/40 (headers), dev 13 -> 17/20 (headers + glossary); reranker only scores for the abstain gate (threshold 0.4066); `evaluation/reports/retrieval-ladder-2026-11-18.md`. **P5 code done 2026-11-18**: span-cited answers (cp_answer 2.0.0, unsupported sentences cut) and dual strict/supported scoring in copilot-live; live re-run pending on the Mac. **P13 built 2026-11-18** (ADR 0035): Ask CredAssure on every page; product help as a cited source; CP-07 code routing; CP-10 case status; CP-11 per-case memory with reset; CP-12 Critic-first streaming, fixed follow-ups, feedback
 
 ## Open items
+- SUP-02 built 21 Nov (P16 16.1): chat classifies data corrections and approval actions in code (`intent.chat_action`), fixed replies, nothing changes from chat; rerun regulatory items on the Mac before K3 (expected unchanged).
 - CP-01: strict ≥ 16/25 with supported reported (ADR 0032, adjustable during testing; BRD ≥ 20/25 reported as original) — retrieval-bound (HISTORY "Phase 9e notes", "Phase 10b notes" item 9).
 - KR-05 recall@5 target 34/40 (plan v3.4 interim ≥ 30/40) (HISTORY "Current phase").
 - Reranker on (ADR 0032, user decision 2026-11-18); report with and without.

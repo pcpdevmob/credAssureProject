@@ -6506,6 +6506,7 @@
     },
     "/v1/eval/runs": {
       "post": {
+        "description": "BRD \u00a76.1 lists this route. It is refused on purpose: a run is hours of model calls in its own\nprocess, and the gateway starts no process (ASI05). Start it with `make eval`; read its progress\nwith GET /v1/eval/runs/{run_id} and the scorecard.",
         "operationId": "start_eval_v1_eval_runs_post",
         "responses": {
           "200": {
@@ -6550,6 +6551,7 @@
     },
     "/v1/eval/runs/{run_id}": {
       "get": {
+        "description": "Progress and per-category counts of one `make eval` run, read from what the harness has\nwritten (results.jsonl, summary.json). `run_id` is the folder name the harness prints.\n`status`: finished, or unfinished with `updated_at` (running, or stopped early).",
         "operationId": "get_eval_v1_eval_runs__run_id__get",
         "parameters": [
           {
@@ -6566,7 +6568,11 @@
           "200": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Get Eval V1 Eval Runs  Run Id  Get",
+                  "type": "object"
+                }
               }
             },
             "description": "Successful Response"
