@@ -17,6 +17,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 
 | Phase | Step | Module | Status | Owner | Date | Commits | Evals | Entry |
 |---|---|---|---|---|---|---|---|---|
+| 9a | 0.3.0 | Evaluation | done | Mousita | 2026-11-21 | — | E5 | [2026-11-21-9a-0.3.0-onboarding-checker-mousita.md](docs/progress/entries/2026-11-21-9a-0.3.0-onboarding-checker-mousita.md) |
 | S1 | 1 | Documentation | done | Pritish | 2026-11-18 | 9969751, 9b63b13 | — | [2026-11-18-s1-1-progress-tracking-pritish.md](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md) |
 | S2 | 1 | Documentation | done | Pritish | 2026-11-18 | 07ea5b7 | — | [2026-11-18-s2-1-plan-v34-base-files-pritish.md](docs/progress/entries/2026-11-18-s2-1-plan-v34-base-files-pritish.md) |
 | P0 | 0.2 | Documentation | done | Pritish | 2026-11-18 | b4eb8dd | — | [2026-11-18-p0-0.2-plan-v34-adrs-pritish.md](docs/progress/entries/2026-11-18-p0-0.2-plan-v34-adrs-pritish.md) |
@@ -159,6 +160,7 @@ From the latest entry of each step. Module-level items live in each module file.
 
 ### Evaluation
 
+- 9a 0.3.0: CODEOWNERS for agents/onboarding to be updated to Mousita ([entry](docs/progress/entries/2026-11-21-9a-0.3.0-onboarding-checker-mousita.md))
 - P2 2.2: re-record one live-model demo run with a Langfuse trace at P4 (Mac). ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
 - P2 2.2: E18 SHOULDs S1/S2 (ARCHITECTURE says React SPA/nginx; §6.3 omits RETURNED) — P10 docs. ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
 - P5 5.2: Human review of the J1 sample after the live run (human review list H14). ([entry](docs/progress/entries/2026-11-18-p5-5.2-dual-scoring-pritish.md))
