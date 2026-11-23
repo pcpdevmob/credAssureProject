@@ -36,7 +36,9 @@ function Internal() {
 export default function Review({ c, need, user, onChange }: { c: CaseRecord; need?: Fig; user: User; onChange: () => void }) {
   const [choice, setChoice] = useState<ApprovalDecision['decision']>('APPROVED');
   const [comment, setComment] = useState(''); const [back, setBack] = useState<ReturnStage>('working_capital');
-  const [open, setOpen] = useState(false); const [typed, setTyped] = useState(''); const [pw, setPw] = useState(''); const [pwNeeded, setPwNeeded] = useState(false);
+  const [open, setOpen] = useState(false); const [typed, setTyped] = useState(''); const [pw, setPw] = useState(''); const [pwNeeded, setPwNeeded] = useState(false); const [code, setCode] = useState('');
+  // ADR 0038 AUTH-10: once the approver has MFA, the step-up above ₹1.5 crore also needs a current code from the app.
+  const codeNeeded = pwNeeded && !!user.mfaEnabled;
   const [busy, setBusy] = useState(false); const [err, setErr] = useState<unknown>(); const [done, setDone] = useState('');
   const [warnings, setWarnings] = useState<string[]>([]); const [shown, setShown] = useState<number | null>(null); const [warnErr, setWarnErr] = useState(false);
   const [attested, setAttested] = useState(false); const [tick, setTick] = useState(0); const [regen, setRegen] = useState(false); const [regenErr, setRegenErr] = useState<unknown>();
@@ -50,8 +52,8 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
   const needsComment = choice !== 'APPROVED' && !comment.trim();
   const confirm = async () => {
     setBusy(true); setErr(undefined);
-    try { await approvalService.decide(c, choice, comment, back, pwNeeded ? pw : undefined, shown, attested); setOpen(false); setPw(''); setDone(`${DONE[choice]}: ${c.id}.`); onChange(); }
-    catch (e) { setErr(e); if (e instanceof ApiProblem && e.code === 'STEP_UP_REQUIRED') { setPwNeeded(true); setPw(''); } }
+    try { await approvalService.decide(c, choice, comment, back, pwNeeded ? pw : undefined, shown, attested, codeNeeded ? code.replace(/\s/g, '') : undefined); setOpen(false); setPw(''); setCode(''); setDone(`${DONE[choice]}: ${c.id}.`); onChange(); }
+    catch (e) { setErr(e); if (e instanceof ApiProblem && e.code === 'STEP_UP_REQUIRED') { setPwNeeded(true); setPw(''); setCode(''); } }
     setBusy(false);
   };
   return (<div className="grid gap-6 pb-24 lg:grid-cols-3 lg:pb-0">
@@ -106,10 +108,12 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
           <Input id="stepup" className="mt-1 font-mono" autoComplete="off" value={typed} onChange={e => setTyped(e.target.value)} placeholder={c.id} />
           {pwNeeded && <><label htmlFor="stepup-pw" className="mt-4 block text-sm font-medium text-ink-900">Your password</label>
             <Input id="stepup-pw" type="password" className="mt-1" autoComplete="current-password" value={pw} onChange={e => setPw(e.target.value)} /></>}
+          {codeNeeded && <><label htmlFor="stepup-code" className="mt-4 block text-sm font-medium text-ink-900">Code from your authenticator app</label>
+            <Input id="stepup-code" inputMode="numeric" autoComplete="one-time-code" maxLength={12} className="mt-1 font-mono tracking-[.3em]" placeholder="123456" value={code} onChange={e => setCode(e.target.value)} /></>}
           {err !== undefined && <ErrorBanner className="mt-3" error={err} />}
           <div className="mt-5 flex justify-end gap-2">
             <Dialog.Close asChild><Button variant="outline">Cancel</Button></Dialog.Close>
-            <Button variant={choice === 'REJECTED' ? 'danger' : 'success'} disabled={typed.trim() !== c.id || (pwNeeded && !pw)} loading={busy} onClick={confirm}>Confirm: {ACTION[choice].toLowerCase()}</Button>
+            <Button variant={choice === 'REJECTED' ? 'danger' : 'success'} disabled={typed.trim() !== c.id || (pwNeeded && !pw) || (codeNeeded && !code.trim())} loading={busy} onClick={confirm}>Confirm: {ACTION[choice].toLowerCase()}</Button>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

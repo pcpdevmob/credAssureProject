@@ -65,6 +65,28 @@ describe('approval step-up', () => {
     expect(decide.mock.calls[1][4]).toBe('pw-123');
     decide.mockRestore();
   });
+  it('ADR 0038 AUTH-10: an approver with MFA gives the password and a code from the app, and both are sent', async () => {
+    const c = { ...toCase(caseSummary as never), stage: 'AWAITING_APPROVAL', routedTo: 'DIRECTOR_FINANCE' } as never;
+    const { approvalService } = await import('@/services/approvals');
+    const { ApiProblem } = await import('@/lib/problem');
+    const decide = vi.spyOn(approvalService, 'decide')
+      .mockRejectedValueOnce(new ApiProblem(403, 'STEP_UP_REQUIRED', { what: 'needs your password and a code from your app', fix: '' }, []))
+      .mockResolvedValueOnce(undefined);
+    render(<ProvenanceProvider><Review c={c} user={{ ...director, mfaEnabled: true }} onChange={() => undefined} /></ProvenanceProvider>);
+    await userEvent.click(screen.getByLabelText(/I reviewed the accuracy checks/));
+    await userEvent.click(screen.getByRole('button', { name: 'Approve proposal' }));
+    await userEvent.type(screen.getByLabelText('Type the case ID to confirm'), CASE_ID);
+    const confirm = screen.getByRole('button', { name: /Confirm: approve proposal/ });
+    await userEvent.click(confirm);
+    expect(decide.mock.calls[0][7]).toBeUndefined();
+    await userEvent.type(screen.getByLabelText('Your password'), 'pw-123');
+    expect(confirm).toBeDisabled(); // the code is required too
+    await userEvent.type(screen.getByLabelText('Code from your authenticator app'), '123 456');
+    await userEvent.click(confirm);
+    expect(decide.mock.calls[1][4]).toBe('pw-123');
+    expect(decide.mock.calls[1][7]).toBe('123456');
+    decide.mockRestore();
+  });
 });
 
 describe('stale report (ADR 0003 §3, Phase 10b)', () => {
