@@ -1,6 +1,6 @@
 name: onboarding
-version: "0.2.1"
-owner: "Tejas"
+version: "0.3.0"
+owner: "Mousita"  # 0.3.0; Tejas built 0.1-0.2
 requirement_ids: [ONB-01, ONB-02, ONB-03, ONB-04, ONB-05, ONB-06, BR-03, BR-04]
 tools: [get_hr_profile, evaluate_onboarding_rules]  # read-only; enforced by agents/registry.yaml
 readable_data:
@@ -8,4 +8,5 @@ readable_data:
   - "onb.*"     # ledger facts; no case financials (registry ledger_prefixes, scope #24)
 prompts: [onb_explain]
 gate: "code: engines.onboarding_rules (all PASS -> GO; any FAIL -> NO_GO; else UNKNOWN -> NEEDS_INPUT)"
-recheck: "SUP-05: Supervisor recomputes readiness from hr.db on every GO"
+recheck: "SUP-05: Supervisor recomputes readiness from hr.db on every GO with the agent's own checker"
+cross_check: "checker.py vs engines.onboarding_rules on every run; any difference -> ERROR, never GO"
