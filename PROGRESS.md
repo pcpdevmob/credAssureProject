@@ -160,7 +160,7 @@ From the latest entry of each step. Module-level items live in each module file.
 
 ### Evaluation
 
-- 9a 0.3.0: PR #43 can be closed once this merges (or retargeted to `feature/LendWise` with its entry module corrected); its `PROGRESS.md` edit was by hand. ([entry](docs/progress/entries/2026-11-23-9a-0.3.0-onboarding-checker-pritish.md))
+- 9a 0.3.0: none. PR #43 was merged as it was (owner decision, 23 Nov): its entry records the design; this entry records the code. ([entry](docs/progress/entries/2026-11-23-9a-0.3.0-onboarding-checker-pritish.md))
 - P2 2.2: re-record one live-model demo run with a Langfuse trace at P4 (Mac). ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
 - P2 2.2: E18 SHOULDs S1/S2 (ARCHITECTURE says React SPA/nginx; §6.3 omits RETURNED) — P10 docs. ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
 - P5 5.2: Human review of the J1 sample after the live run (human review list H14). ([entry](docs/progress/entries/2026-11-18-p5-5.2-dual-scoring-pritish.md))
