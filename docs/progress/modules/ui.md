@@ -8,6 +8,7 @@
 Plain-language UI for non-technical operators: case-data forms instead of CSV/JSON, readiness with HR evidence, case history for every member, no "Invalid Date", plain wording for steps, questions, safety and provenance.
 
 ## Open items
+- 9.6 (24 Nov): walk the VP approval above ₹1.5 crore on the Mac with the model on (password and code now asked up front).
 - Run e2e u2/u3/u4/u6 on the Mac after 9.2 (expectations updated for the new wording).
 - U6: run `make e2e` (u6 spec) and Lighthouse on the Mac (human review H15, H16).
 - No `ui-reviewer` subagent exists; UI reviews use the UI rules with a general reviewer (HISTORY "UI U4 notes").

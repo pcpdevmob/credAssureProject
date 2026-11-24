@@ -83,7 +83,7 @@ export default function DataEditor({ caseId, kind, stored, canEdit, onSaved, foc
     const out = build(def, s);
     if (!out.text) { setProblems(out.problems); top.current?.scrollIntoView({ block: 'nearest' }); return; }
     setBusy(true); setProblems([]);
-    try { const r = await caseFiles.save(caseId, kind, out.name, out.text); setSaved(`Saved · ${r.rows} ${r.rows === 1 ? 'entry' : 'rows'}${r.flagged ? ' (instruction-like text was found and ignored)' : ''}`); onSaved?.(); }
+    try { const r = await caseFiles.save(caseId, kind, out.name, out.text); setSaved(`Saved · ${r.rows} ${r.rows === 1 ? 'entry' : 'rows'}${r.flagged ? ' (instruction-like text was found and ignored)' : ''}${r.otherCase ? ' (it names a different case number: flagged for review)' : ''}`); onSaved?.(); }
     catch (e) {
       const fe = e instanceof ApiProblem ? e.fieldErrors : [];
       if (fe.length) setProblems(fe.map(x => { const p = placeServerError(def, x); return { ...p, reason: plainReason(p.reason) }; }));

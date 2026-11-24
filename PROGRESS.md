@@ -18,6 +18,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | Phase | Step | Module | Status | Owner | Date | Commits | Evals | Entry |
 |---|---|---|---|---|---|---|---|---|
 | 9 | 9.5 | UI | done | Pritish | 2026-11-24 | — | — | [2026-11-24-9-9.5-lender-file-question-pritish.md](docs/progress/entries/2026-11-24-9-9.5-lender-file-question-pritish.md) |
+| 9 | 9.6 | UI | done | Pritish | 2026-11-24 | — | — | [2026-11-24-9-9.6-walkthrough-fixes-pritish.md](docs/progress/entries/2026-11-24-9-9.6-walkthrough-fixes-pritish.md) |
 | 9a | 0.3.0 | Evaluation | done | Pritish | 2026-11-23 | — | E5 | [2026-11-23-9a-0.3.0-onboarding-checker-pritish.md](docs/progress/entries/2026-11-23-9a-0.3.0-onboarding-checker-pritish.md) |
 | 9a | 0.3.1 | Documentation | done | Pritish | 2026-11-23 | ca5f0bb | — | [2026-11-23-9a-0.3.1-onboarding-prototype-pritish.md](docs/progress/entries/2026-11-23-9a-0.3.1-onboarding-prototype-pritish.md) |
 | S1 | 1 | Documentation | done | Pritish | 2026-11-18 | 9969751, 9b63b13 | — | [2026-11-18-s1-1-progress-tracking-pritish.md](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md) |
@@ -101,6 +102,7 @@ From the latest entry of each step. Module-level items live in each module file.
 ### UI
 
 - 9 9.5: walk the card once on the Mac with a case stopped at the lender comparison. ([entry](docs/progress/entries/2026-11-24-9-9.5-lender-file-question-pritish.md))
+- 9 9.6: walk the VP approval once on the Mac with the model on. ([entry](docs/progress/entries/2026-11-24-9-9.6-walkthrough-fixes-pritish.md))
 - P9 9.2: e2e u2/u3/u4/u6 text expectations updated but not run here (live model needed): run them on the Mac. ([entry](docs/progress/entries/2026-11-20-p9-9.2-plain-language-ui-pritish.md))
 - P9 9.2: copilot answer and injection steps of the app-path walk need the Mac (sandbox runs with the model off). ([entry](docs/progress/entries/2026-11-20-p9-9.2-plain-language-ui-pritish.md))
 - P9 9.3: PDF intake (design in ADR 0040: model drafts fields from the PDF text, person reviews in the form, code validates) after 27 Nov. ([entry](docs/progress/entries/2026-11-20-p9-9.3-excel-workbook-import-pritish.md))
