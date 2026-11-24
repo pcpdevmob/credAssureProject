@@ -14,6 +14,12 @@ are filled in.
 - Need = max(0, peak shortfall + buffer − undrawn limits − mitigations), rounded **up** to ₹1 lakh.
 - APR = monthly IRR × 12 on: (principal − upfront fees × 1.18 − insurance − year-1 CGTMSE fee) at month 0, then
   interest-only months, then the EMI, plus any charges. GST is applied to fees, never to interest.
+- Charges for the APR come from **two** files: the offer (`offers/<case>/<offer>.v1.json`) and its schedule of
+  charges (`kfs/<kfs_doc_id>-SCH.md`). A charge listed in the schedule but missing from the offer is priced like
+  any other fee (ADR 0021). Row 6 has one.
+- Annual charges are paid at month 0 and again at each anniversary before the loan ends (months 12, 24, …). The
+  CGTMSE fee is charged on the full loan at month 0 and on the amount still owed at each anniversary, with GST
+  only if the offer says `gst_applicable: true`. Row 7 (18 months) has a second fee at month 12.
 - Match = both checkers equal the gold value to ₹1 (amounts), 0.01 percentage points (APR), or exactly (routes,
   gates, rule names). A mismatch is not fixed here: write it under "Discrepancies" and tell the eval owner.
 

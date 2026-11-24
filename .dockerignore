@@ -13,6 +13,7 @@ data/
 !data/generators/
 evaluation/
 !evaluation/pyproject.toml
+!evaluation/src/
 docs/
 !docs/help/
 prompts/
@@ -23,3 +24,7 @@ prompts/
 **/.mypy_cache
 **/.ruff_cache
 node_modules/
+**/node_modules
+**/.next
+**/.next-e2e
+apps/web/out

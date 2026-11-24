@@ -15,7 +15,7 @@ ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 # The dev/demo database (var/case.db) is tenant "demo" (make demo-reset); an exported variable beats --env-file.
 DEMO_TENANT := TENANT_ID=demo
 
-.PHONY: admin redteam rag-baseline load-smoke eval-judge eval-kappa eval-report eval-ablations progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
+.PHONY: start stop admin passwords onboarding-prototype redteam rag-baseline load-smoke eval-judge eval-kappa eval-report eval-ablations progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset live-run copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe embed-parity compare-runs retrieval-eval retrieval-ladder retrieval-pool retrieval-silver judge kappa release sbom pin-images
 
@@ -40,6 +40,10 @@ check:  ## ruff, ruff format, mypy --strict, pytest, bandit, PROGRESS.md check
 	uv run python -m credassure.evaluation.check_corpus_refs
 	uv run bandit -q -c pyproject.toml -r $(PY_SRC)
 	uv run lint-imports
+	$(MAKE) --no-print-directory onboarding-prototype
+
+onboarding-prototype:  ## Mousita's stand-alone onboarding prototype: its own 127 tests (agents/onboarding/prototype; not wired into the app)
+	cd agents/onboarding/prototype && uv run python -m pytest -q
 
 check-fast:  ## ruff + PROGRESS.md check + fast tests (used by the Claude stop hook)
 	uv run ruff check .
@@ -66,6 +70,14 @@ ollama-pull:  ## Download qwen3:8b and nomic-embed-text (ADR 0017; not part of m
 		exit 1; \
 	fi
 
+# make start defaults to the course endpoint; MODELS=local or MODELS=hf on the command line (or in the environment) wins.
+START_MODELS := $(if $(filter command line environment environment override,$(origin MODELS)),$(MODELS),course)
+start:  ## Everything in one command: course model (MODELS=local|hf), Langfuse if set up, API, web (ARGS="--no-model --no-langfuse --no-ui --install")
+	MODELS=$(START_MODELS) bash scripts/start.sh $(ARGS)
+
+stop:  ## Stop what make start started (API, web, an Ollama it started); Langfuse: make langfuse-down
+	bash scripts/start.sh stop
+
 run-api:  ## FastAPI on :8000 (docs at /docs)
 	$(DEMO_TENANT) uv run $(ENV_FILE) uvicorn credassure.gateway.main:app --factory --reload --port 8000
 
@@ -77,7 +89,7 @@ e2e-db:  ## Fresh migrated + seeded e2e database (var/case-e2e.db); refuses the 
 	$(E2E_GUARD)
 	rm -f $(E2E_DB) $(E2E_DB)-wal $(E2E_DB)-shm
 	uv run python -m credassure.ledger.migrate upgrade case $(E2E_DB)
-	CASE_DB=$(E2E_DB) uv run $(ENV_FILE) python -m credassure.gateway.seed
+	uv run $(ENV_FILE) python -m credassure.ledger.seed $(E2E_DB) --password-env E2E_PASSWORD  # test DB: one fixture password
 
 run-api-e2e:  ## E2E gateway on :8001 using var/case-e2e.db (CORS for :3001); refuses the demo database
 	$(E2E_GUARD)
@@ -263,10 +275,13 @@ testset:  ## Rebuild evaluation/testset/v1 and the retrieval/red-team/fixture as
 	uv run python -m credassure.evaluation.build_testset
 	uv run python -m credassure.evaluation.build_assets
 
-db:  ## Migrate var/case.db + var/corpus.db and seed users (needs SEED_PASSWORD; ADR 0005, scope #29)
+db:  ## Migrate var/case.db + var/corpus.db and create missing accounts, each with its own first password (var/initial-passwords.txt)
 	uv run python -m credassure.ledger.migrate upgrade case var/case.db
 	uv run python -m credassure.ledger.migrate upgrade corpus var/corpus.db
-	$(DEMO_TENANT) uv run $(ENV_FILE) python -m credassure.gateway.seed  # SEED_PASSWORD via Settings, into CASE_DB
+	$(DEMO_TENANT) uv run $(ENV_FILE) python -m credassure.gateway.seed  # SEED_PASSWORD_<USER> sets one account's password
+
+passwords:  ## New own password for every seeded account (signs them out; MFA kept): var/initial-passwords.txt
+	$(DEMO_TENANT) uv run $(ENV_FILE) python -m credassure.gateway.seed --reissue
 
 live-run:  ## Live full-feature run on the configured model: every feature through the API (var/live-run/); see scripts/live_run.sh
 	APP_ENV=dev LLM_ENABLED=true LOG_LEVEL=WARNING uv run $(ENV_FILE) python scripts/live_run.py $(ARGS)

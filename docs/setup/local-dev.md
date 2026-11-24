@@ -7,12 +7,18 @@ Continuing someone's module with Claude Code, Cursor or another AI tool: [team-h
 ```bash
 make install                 # uv sync --all-packages --all-extras (never a bare `uv sync`: it drops the rerank extra)
 npm install                  # apps/web + packages/api-client
-cp .env.example .env         # then set JWT_SECRET (32+ chars) and SEED_PASSWORD (12+ chars)
+cp .env.example .env         # then set JWT_SECRET (32+ chars)
 make hr-db && make db && make ingest
 ```
 `data/frozen/v1` is committed and frozen (G1), so `make data` refuses to regenerate it; `make hr-db` rebuilds the gitignored
 `data/frozen/v1/hr.db` from the frozen `hr/profiles.json`. `make db` migrates `var/case.db` and
 `var/corpus.db` and seeds users in tenant `demo`. `make ingest` builds the search index for the current `MODELS` profile.
+
+## Run everything
+`make start` connects to the course endpoint (`MODELS=local` for Ollama), starts Langfuse when it is set up, the API
+and the web app, waits until each answers and prints the URLs; `make stop` (or Ctrl-C) stops them. It creates the
+database with the users on first run and no cases. Options and details: [README §7](../../README.md#7-run-the-app).
+The sections below are the same steps one at a time.
 
 ## Run the API
 ```bash

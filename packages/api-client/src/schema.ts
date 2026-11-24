@@ -1015,7 +1015,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * Files
+         * @description What the case holds now: the newest upload per kind (newest wins, as the stages read it).
+         */
+        get: operations["files_v1_cases__case_id__files_get"];
         put?: never;
         /** Upload */
         post: operations["upload_v1_cases__case_id__files_post"];
@@ -1042,6 +1046,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/cases/{case_id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * History
+         * @description The case's events, oldest first, for any case member. Unknown event types are listed with
+         *     no payload, so a new type never leaks a key before it is reviewed here.
+         */
+        get: operations["history_v1_cases__case_id__history_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/cases/{case_id}/inbox": {
         parameters: {
             query?: never;
@@ -1053,6 +1078,28 @@ export interface paths {
         get: operations["case_inbox_v1_cases__case_id__inbox_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/cases/{case_id}/kfs-document": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Save Kfs Document
+         * @description A reviewed KFS or schedule of charges from a PDF, stored as the KFS document LendWise reads
+         *     (ADR 0041). The rows the person confirmed become the charge table; the PDF text follows as
+         *     data. Stored through the same validation, injection scan and audit as any upload.
+         */
+        post: operations["save_kfs_document_v1_cases__case_id__kfs_document_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1074,6 +1121,28 @@ export interface paths {
         get: operations["offers_v1_cases__case_id__offers_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/cases/{case_id}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Read Pdf
+         * @description A text-layer PDF -> its text and, for an offer letter or schedule of charges, a draft the
+         *     model quoted and code read (ADR 0041). Nothing is stored: the preparer reviews the draft and
+         *     saves it through the ordinary upload path. Scanned PDFs are refused (no OCR, BRD §4.3).
+         */
+        post: operations["read_pdf_v1_cases__case_id__pdf_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1107,7 +1176,12 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * Readiness
+         * @description Gate 1 as the Onboarding stage recorded it, with the HR records that evidence each rule.
+         *     `decision` is null before the stage has run; nothing here re-evaluates a rule.
+         */
+        get: operations["readiness_v1_cases__case_id__readiness_get"];
         put?: never;
         /**
          * Run Readiness
@@ -1199,6 +1273,28 @@ export interface paths {
          * @description Run only the critic stage; earlier stages must be GO (SUP-03).
          */
         post: operations["run_verify_v1_cases__case_id__verify_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/cases/{case_id}/workbook": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Import Workbook
+         * @description The case template workbook → its JSON/CSV files, each validated and stored exactly as a
+         *     single upload (UI-02). All or nothing: on any error nothing is stored and every error names
+         *     the sheet, Excel row and column. Sheets left empty are skipped.
+         */
+        post: operations["import_workbook_v1_cases__case_id__workbook_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1319,7 +1415,12 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Start Eval */
+        /**
+         * Start Eval
+         * @description BRD §6.1 lists this route. It is refused on purpose: a run is hours of model calls in its own
+         *     process, and the gateway starts no process (ASI05). Start it with `make eval`; read its progress
+         *     with GET /v1/eval/runs/{run_id} and the scorecard.
+         */
         post: operations["start_eval_v1_eval_runs_post"];
         delete?: never;
         options?: never;
@@ -1334,7 +1435,12 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get Eval */
+        /**
+         * Get Eval
+         * @description Progress and per-category counts of one `make eval` run, read from what the harness has
+         *     written (results.jsonl, summary.json). `run_id` is the folder name the harness prints.
+         *     `status`: finished, or unfinished with `updated_at` (running, or stopped early).
+         */
         get: operations["get_eval_v1_eval_runs__run_id__get"];
         put?: never;
         post?: never;
@@ -1527,6 +1633,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/templates/case.xlsx": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Case Template
+         * @description The case workbook template. Default: blank (headers, types, dropdowns kept; the example rows
+         *     removed). example=true: the committed file with the demo case filled in.
+         */
+        get: operations["case_template_v1_templates_case_xlsx_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1540,10 +1667,32 @@ export interface components {
             /** Ts */
             ts: string;
         };
+        /** Body_import_workbook_v1_cases__case_id__workbook_post */
+        Body_import_workbook_v1_cases__case_id__workbook_post: {
+            /** File */
+            file: string;
+        };
+        /** Body_read_pdf_v1_cases__case_id__pdf_post */
+        Body_read_pdf_v1_cases__case_id__pdf_post: {
+            /** File */
+            file: string;
+        };
         /** Body_upload_v1_cases__case_id__files_post */
         Body_upload_v1_cases__case_id__files_post: {
             /** File */
             file: string;
+        };
+        /** ChargeRow */
+        ChargeRow: {
+            /** Amount */
+            amount: string;
+            /** Name */
+            name: string;
+            /**
+             * Timing
+             * @enum {string}
+             */
+            timing: "upfront" | "monthly" | "annual";
         };
         /** Chat */
         Chat: {
@@ -1701,6 +1850,26 @@ export interface components {
             kind: string;
             /** Ref */
             ref: string;
+        };
+        /** KfsDocument */
+        KfsDocument: {
+            /** Kfs Doc Id */
+            kfs_doc_id: string;
+            /** Offer Id */
+            offer_id: string;
+            /** Rows */
+            rows?: components["schemas"]["ChargeRow"][];
+            /** Text */
+            text: string;
+            /** Title */
+            title: string;
+            /** Version */
+            version: number;
+            /**
+             * Which
+             * @enum {string}
+             */
+            which: "kfs" | "schedule";
         };
         /** Lineage */
         Lineage: {
@@ -4588,6 +4757,57 @@ export interface operations {
             };
         };
     };
+    files_v1_cases__case_id__files_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Client error */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Server error */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     upload_v1_cases__case_id__files_post: {
         parameters: {
             query: {
@@ -4696,6 +4916,57 @@ export interface operations {
             };
         };
     };
+    history_v1_cases__case_id__history_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Client error */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Server error */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     case_inbox_v1_cases__case_id__inbox_get: {
         parameters: {
             query?: never;
@@ -4709,6 +4980,61 @@ export interface operations {
         responses: {
             /** @description Successful Response */
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Client error */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Server error */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    save_kfs_document_v1_cases__case_id__kfs_document_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KfsDocument"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -4798,6 +5124,63 @@ export interface operations {
             };
         };
     };
+    read_pdf_v1_cases__case_id__pdf_post: {
+        parameters: {
+            query: {
+                doc: "offer" | "kfs" | "schedule";
+            };
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_read_pdf_v1_cases__case_id__pdf_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Client error */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Server error */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     run_proposal_v1_cases__case_id__proposal_post: {
         parameters: {
             query?: never;
@@ -4813,6 +5196,57 @@ export interface operations {
         responses: {
             /** @description Successful Response */
             202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Client error */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Server error */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    readiness_v1_cases__case_id__readiness_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -5164,6 +5598,61 @@ export interface operations {
             };
         };
     };
+    import_workbook_v1_cases__case_id__workbook_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                case_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_import_workbook_v1_cases__case_id__workbook_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Client error */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Server error */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     citation_outside_a_case_v1_citations__chunk_id__get: {
         parameters: {
             query?: {
@@ -5476,7 +5965,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation error */
@@ -5902,6 +6393,53 @@ export interface operations {
                 };
                 content: {
                     "text/plain": unknown;
+                };
+            };
+            /** @description Client error */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Server error */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    case_template_v1_templates_case_xlsx_get: {
+        parameters: {
+            query?: {
+                example?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
                 };
             };
             /** @description Client error */

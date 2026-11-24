@@ -461,3 +461,128 @@ def test_LW15_LW11_three_rounds_rerank_case_06_through_the_api(client: Any, logi
     assert done.status_code == 409 and done.json()["code"] == "CONFLICT"
     inbox = client.get(f"/v1/cases/{case_id}/inbox", headers=h).json()
     assert "negotiation_in_progress" not in inbox["warnings"]
+
+
+# ---- LW-01 / BR-06: an offer that cannot be priced is flagged; it never stops the case ----------
+_BAD_OFFERS: dict[str, tuple[dict[str, Any], str]] = {
+    "financed_insurance": (
+        {"insurance": {"premium": "25000", "financed": True}},
+        "insurance.financed",
+    ),
+    "cgtmse_basis_sanctioned": (
+        {
+            "guarantee": {
+                "scheme": "CGTMSE",
+                "annual_fee_pct": "0.0085",
+                "basis": "sanctioned",
+                "passed_to_borrower": True,
+                "gst_applicable": True,
+            }
+        },
+        "guarantee.basis",
+    ),
+    "rate_zero": ({"annual_rate": "0"}, "annual_rate"),
+    "rate_typed_as_percent": ({"annual_rate": "12.5"}, "annual_rate"),
+    "rate_negative": ({"annual_rate": "-0.05"}, "annual_rate"),
+    "tenure_zero": ({"tenure_months": 0}, "tenure_months"),
+    "no_repayment_month": ({"moratorium_months": 60}, "moratorium_months"),
+    "negative_fee": (
+        {
+            "fees": [
+                {
+                    "name": "Processing fee",
+                    "basis": "fixed",
+                    "value": "-5000",
+                    "timing": "upfront",
+                    "gst_applicable": True,
+                }
+            ]
+        },
+        "fees",
+    ),
+}
+
+
+@pytest.mark.parametrize("variant", list(_BAD_OFFERS))
+def test_LW01_BR06_an_unpriceable_offer_is_flagged_and_the_case_still_runs(
+    client: Any, login: Login, tmp_path: Path, variant: str
+) -> None:
+    """Before: these values crashed the Lender comparison step (case FAILED) and GET /offers
+    answered 500; a negative rate or fee was priced and could rank. Now the offer is not comparable,
+    never priced or ranked, names the term to correct, and the other offers are compared."""
+    change, term = _BAD_OFFERS[variant]
+    h = login(client, "demo.preparer")
+    case_id = client.post("/v1/cases", json=NEW_CASE, headers=h).json()["case_id"]
+    for kind in KINDS:
+        name = f"{kind}.json" if kind in ("order", "opening_position") else f"{kind}.csv"
+        post(client, h, case_id, kind, DATA / "cases" / "CA-2026-0001" / name)
+    bad_id = ""
+    for kind, path in offer_files("CA-2026-0001"):
+        if kind == "offer" and not bad_id:
+            offer = json.loads(path.read_text()) | change
+            offer.pop("stated_instalment", None)
+            bad_id = offer["offer_id"]
+            path = tmp_path / path.name
+            path.write_text(json.dumps(offer))
+        post(client, h, case_id, kind, path)
+
+    def view() -> dict[str, Any]:
+        r = client.get(f"/v1/cases/{case_id}/offers", headers=h)
+        assert r.status_code == 200, r.text  # the preview and the stored view both answer
+        body: dict[str, Any] = r.json()
+        return body
+
+    def check(body: dict[str, Any]) -> None:
+        bad = next(o for o in body["offers"] if o["offer_id"] == bad_id)
+        assert bad["flags"] == ["LW_OFFER_INVALID"] and not bad["comparable"]
+        assert term in bad["invalid_terms"]
+        assert bad["apr_pct"] is None and bad["rank"] is None and bad["total_cost"] is None
+        assert bad_id not in body["ranking"]
+        others = [o for o in body["offers"] if o["offer_id"] != bad_id]
+        assert len(others) == 2 and all(o["apr_pct"] is not None for o in others)
+        assert all(o["invalid_terms"] == [] for o in others)
+
+    check(view())  # read-only preview before the funding step has run
+    assert client.post(f"/v1/cases/{case_id}/run", headers=h).status_code == 202
+    case = client.get(f"/v1/cases/{case_id}", headers=h).json()
+    assert case["status"] != "FAILED", case
+    check(view())
+
+
+# ---- APR-03 / BRD §5.1: a case held at exactly ₹1.5 crore is the VP's to decide -----------------
+def test_APR03_held_boundary_case_is_decided_by_the_vp_only(client: Any, login: Login) -> None:
+    """Frozen case CA-2026-0010 needs exactly ₹1,50,00,000: BOUNDARY_RULE=hold parks it as HELD.
+    It appears in the VP's inbox only, and only the VP can decide it (the web form relies on it)."""
+    frozen = "CA-2026-0010"
+    h = login(client, "demo.preparer")
+    case_id = client.post("/v1/cases", json=NEW_CASE, headers=h).json()["case_id"]
+    for kind in KINDS:
+        name = f"{kind}.json" if kind in ("order", "opening_position") else f"{kind}.csv"
+        post(client, h, case_id, kind, DATA / "cases" / frozen / name)
+    for kind, path in offer_files(frozen):
+        post(client, h, case_id, kind, path)
+    assert client.post(f"/v1/cases/{case_id}/run", headers=h).status_code == 202
+    case = client.get(f"/v1/cases/{case_id}", headers=h).json()
+    assert (case["status"], case["route"]) == ("HELD", "HELD"), case
+
+    def inbox(user: str) -> list[str]:
+        r = client.get("/v1/inbox", headers=login(client, user))
+        assert r.status_code == 200, r.text
+        return [i["case_id"] for i in r.json()["items"]]
+
+    assert case_id in inbox("demo.vp") and case_id not in inbox("demo.director")
+    body = {"decision": "approve", "comment": "held case", "attested": True}
+    version = case["row_version"]
+    for user in ("demo.director", "demo.preparer"):
+        r = client.post(
+            f"/v1/cases/{case_id}/decision",
+            json=body | {"expected_version": version},
+            headers=login(client, user),
+        )
+        assert r.status_code in (403, 404), (user, r.text)  # 404: the director cannot see it
+    vp = login(client, "demo.vp")
+    r = client.post(
+        f"/v1/cases/{case_id}/decision", json=body | {"expected_version": version}, headers=vp
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["status"] == "APPROVED"

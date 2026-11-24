@@ -180,6 +180,11 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
 - **Writes:** `stage_runs`, audit events `STAGE_STARTED/COMPLETED/GATE_OVERRIDE/PAUSED/RESUMED/ROUTED`.
 - **Blockers:** `SUP_UPSTREAM_NOT_GO`, `SUP_BUDGET_EXCEEDED`, `SUP_SCHEMA_INVALID`, `SUP_RECHECK_MISMATCH`, `SUP_ROUTE_HELD`.
 - **Tests:** isolation 3/3, routing 6/6, end-to-end ≥4/5; forced-GO agent outputs still blocked.
+- **As built (SUP-02, 2026-11-21):** chat intent is decided in code inside the copilot turn, after the refusal policy
+  and the injection scan (`agents/copilot/intent.py::chat_action`): a data correction or an approval action gets a
+  fixed reply naming the form or the Review & approval tab, and changes nothing; every other message is a copilot
+  question (CP-07 routing), a refusal or an abstention. `sup_intent` (a model classifier) was never built. S18
+  fixtures: 15/15 on intent, form and step.
 
 #### 2.4.2 Employee Onboarding Agent — Gate 1 Readiness (owner: Tejas)
 - **Inputs:** preparer `emp_id` from the authenticated user (never from chat — ONB-01); hr.db (read-only).
@@ -190,6 +195,12 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
 - **Gate (code):** all PASS → GO; any FAIL → NO_GO; any UNKNOWN and no FAIL → NEEDS_INPUT. Re-runs when HR records change.
 - **Safety:** no write tool to HR (ONB-05); PII redaction on chat (ONB-06).
 - **Tests:** onboarding 10/10.
+- **As built (0.3.0, 2026-11-23; design: Mousita, PR #43):** the agent's own checker (`checker.py`, rule book
+  `rules.py`) implements the same rules without the engine and runs beside it on every stage run; any difference in a
+  rule, the gate or the blockers ends the stage in ERROR with `SUP_RECHECK_MISMATCH` and writes no rule fact (never GO).
+  The SUP-05 re-check uses the checker, so the stage and its re-check run different code. Each blocker's next action
+  ends with who fixes it (you, your manager, HR); each `onb.rule.<id>` cites its own record (`hr.db:employees:<emp>`,
+  `hr.db:training_records:<emp>/<course>`, `hr.db:policy_acknowledgements:<emp>/WC-POL`).
 
 #### 2.4.3 Working Capital Advisory Agent — Gate 2 Funding Need (owner: Suresh)
 - **Inputs:** case files (order, opening_position, costs, receipts, receivables, payables, inventory).
@@ -302,7 +313,7 @@ The team's agent-centric diagram matches this design on users, UI → FastAPI �
 | POST /cases/{id}/decision | routed approver | approve / reject / return{stage}, comment | APR-04/05 |
 | GET /cases/{id}/report?fmt=md|html | case members | Report with trace IDs | UI-08 |
 | GET /cases/{id}/audit | evaluator | Audit log (read-only) + hash-chain verify | OBJ-08 |
-| POST /eval/runs | evaluator | Run test set / ablation | — |
+| POST /eval/runs | evaluator | Run test set / ablation (as built: 501, runs start with `make eval`; the gateway starts no process, ASI05) | — |
 | GET /eval/runs/{id} | evaluator | Scores per category | — |
 | POST /admin/config | evaluator | Boundary rule, buffers (audited) | APR-03 |
 

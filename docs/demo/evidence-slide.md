@@ -1,34 +1,37 @@
-# Evidence slide — honest numbers (as of 2026-11-17)
+# Evidence slide — honest numbers (as of 2026-11-20)
 
-All runs below are on the **local** model (Ollama qwen3:8b, thinking off) and the frozen v1 test set (provisional freeze, 2026-11-15).
-"Through the API" means the same endpoints the UI uses.
+All runs are on the **local** model (Ollama qwen3:8b, 8192 context, thinking off, response cache off; ADR 0036) and the frozen
+v1 test set. "Through the API" means the same endpoints the UI uses. Full write-up with run ids:
+`evaluation/reports/G4-draft-2026-11-19.md`; system card §9.
 
-| Area | Result | Target | Status | Source |
+**88/100, against 23/100 for the best single prompt on the same model (S2). The team's own target of 92 is not met.**
+
+| Area | Best single prompt (S2) | CredAssure | Target | Status |
 |---|---|---|---|---|
-| Onboarding decisions | **10/10** | 10 | Met | E5-2026-11-15 |
-| Cash-flow / funding need (to ₹1) | **15/15** | 15 | Met | E6-2026-11-15 |
-| LendWise offers: audit, affordability, ranking | **15/15** | 15 | Met | E7-2026-11-16 |
-| Negotiation safety | **5/5** | 5 | Met | E7-2026-11-16 |
-| Prompt injection | **8/8** | 8 | Met | E8-2026-11-16 (live and CI, model off and on) |
-| Refusal and out of scope | **8/8** | 8 | Met | E8-2026-11-16 |
-| Case isolation | **3/3** | 3 | Met | E8-2026-11-16 |
-| Critic: planted bad citations | **12/12** blocked | all | Met | E4-2026-11-16 |
-| **Copilot regulatory (valid citation)** | **10/25** | ≥20 | **OPEN** | E8-2026-11-16 §2 |
-| **Retrieval recall@5, v1.0 labels** | **24/40** | ≥34 | **OPEN** | E8-2026-11-15 add. 3 |
-| Retrieval recall@5, v1.1-silver strict | 35/40 | ≥34 | Not claimed | E8-2026-11-15 add. 2–3 |
-| Automated tests | **1,317 passed** (`make check-fast`) + web 109/109 | green | Met | PROGRESS U4 follow-ups, 2026-11-17 |
+| Onboarding decisions | 3/10 | **10/10** | 10 | Met |
+| Cash flow / funding need (to ₹1) | 0/15 | **15/15** | 15 | Met |
+| Offers: audit, affordability, ranking | 0/15 | **15/15** | 15 | Met |
+| Negotiation safety | 1/5 | **5/5** | 5 | Met |
+| Approval routing (incl. ₹1.5 crore ± ₹1) | 4/6 | **6/6** | 6 | Met |
+| Prompt injection | 0/8 (followed 8/8) | **8/8** | 8 | Met |
+| Refusal and out of scope | 6/8 | **8/8** | 8 | Met |
+| Case isolation | 3/3 | **3/3** | 3 | Met |
+| End to end | 0/5 | **5/5** | ≥ 4 | Met |
+| **Regulatory (valid citation)** | 6/25 | **13/25** (± 1) | ≥ 20 | **Not met** |
+| **Total** | **23** | **88** | ≥ 92 | **Not met** |
 
-**Why the copilot is 10/25: it is limited by retrieval, not by answering.** At the copilot's own settings, a gold document reaches the
-top 5 for only **10 of the 19** answerable items. Even a perfect answerer would score about **16/25** (10 reachable plus 6 abstentions).
-In the live failures, 6 answers were correct but cited a non-gold document, and 2 quoted outdated passages that are not yet tagged superseded (R-CG-C-274,
-R-SIDBI-P-008). No unsupported paraphrase was seen: answers share ≥80% of their content words with the cited passage. The frozen items were not tuned against.
+| Also measured | Result |
+|---|---|
+| Ablations | Model calculates (A1): 41/41 → 10/41. Model decides gates (A4): 45/45 → 13/45. Injection defence off (A5): T082 follows the plant. Ledger + Critic off (A2) and dense-only search (A3): no measurable change on these scorers |
+| Regulatory, 19 answerable questions | No documents 0 · RAG without agents 6 (**7 false answers**) · CredAssure 6–8 (**1–2 false**) · gold passages 8, 10 after the Critic fix |
+| Red team (20 frozen prompts + 5 probes, live) | **25/25 resisted**, no state change, no leak |
+| Retrieval recall@5 (frozen 40) | 22/40 with the shipped configuration (target 34); dev split 17/20 |
+| Course endpoint (full-precision Qwen3-8B) | Within one item (≈ 87), 4–8× lower latency |
+| Negotiation | Three rounds, re-rank after each counted concession; unit and API tested (not in the 100) |
 
-**Read the 35/40 with care.** The silver labels were judged by an LLM, only on passages these same 18 configurations returned. That pooling bias makes
-recall optimistic by construction. It is useful for comparing configurations, not as a claim. The 24/40 figure dropped from 26
-when labels moved to section level. The drop removed document-level inflation and is not a regression. **KR-05 stays OPEN until humans agree with the silver labels (weighted κ ≥ 0.7).**
+**Why regulatory stops at 13/25.** Search is not the bottleneck: with the gold passages handed over, the system gets the same 8 of 19.
+The limit is the 8B model writing a sentence that covers the key fact and that the Critic can tie to a passage. The Critic gives up
+some correct answers to keep unsupported claims near zero; what the agents add over plain RAG is mostly safety (5–6 fewer false answers).
 
-**Pending, and not shown as done**
-- G1-final human checks: the 249-item label sample (κ), the 10-row gold hand check, and the two-person APR transcription matching RBI's 17.07%.
-- Graded baseline S1–S3 and every graded run on the **course endpoint** (Qwen3-8B). All numbers here are local.
-- G3 (traced real case end to end, as a gate sign-off) and G4 (full 100-item evaluation, ablations A1–A5 measured, red-team log, Docker).
-- Copilot fix path: human-checked labels → tag outdated documents `superseded_by` → only then ≤2 answer regenerations.
+**Pending before submission (not shown as done):** final full run on the merged code (expected 88 ± 1), judge J1 agreement with
+human labels (kappa), safety_v2 (40 items) and its guardrails-off ablation A6.

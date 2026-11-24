@@ -4,10 +4,11 @@
 **Approvals** lists the proposals routed to your role. A validated need above ₹1,50,00,000 goes to the VP, Finance and
 one below it goes to the Director, Finance. Exactly ₹1,50,00,000 is held for a human decision.
 
-A case held at exactly ₹1,50,00,000 is marked **HELD**. The inbox shows only what the service returns for your role.
+A case held at exactly ₹1,50,00,000 is marked **HELD**. It appears in the VP, Finance's inbox, and the VP decides it on
+**Review & approval** like any other case. The inbox shows only what the service returns for your role.
 
 ## Decision
-Open the case on **Review & approval**. Read the **Safety events** panel first: it lists what the guardrails and the
+Open the case on **Review & approval**. Read the **Safety checks on this case** panel first: it lists what the guardrails and the
 Verification Critic blocked, redacted or flagged on this case (codes only, never the text). To approve, tick *I reviewed
 the Critic findings and the safety events*; the approval records that you did. Text marked **AI-generated draft** was
 written by the language model and checked by the Critic; every figure in it comes from the fact ledger. Choose approve, reject, or return to a named stage. A comment is required to

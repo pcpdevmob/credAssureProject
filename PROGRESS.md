@@ -17,6 +17,8 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 
 | Phase | Step | Module | Status | Owner | Date | Commits | Evals | Entry |
 |---|---|---|---|---|---|---|---|---|
+| 9a | 0.3.0 | Evaluation | done | Pritish | 2026-11-23 | — | E5 | [2026-11-23-9a-0.3.0-onboarding-checker-pritish.md](docs/progress/entries/2026-11-23-9a-0.3.0-onboarding-checker-pritish.md) |
+| 9a | 0.3.1 | Documentation | done | Pritish | 2026-11-23 | ca5f0bb | — | [2026-11-23-9a-0.3.1-onboarding-prototype-pritish.md](docs/progress/entries/2026-11-23-9a-0.3.1-onboarding-prototype-pritish.md) |
 | S1 | 1 | Documentation | done | Pritish | 2026-11-18 | 9969751, 9b63b13 | — | [2026-11-18-s1-1-progress-tracking-pritish.md](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md) |
 | S2 | 1 | Documentation | done | Pritish | 2026-11-18 | 07ea5b7 | — | [2026-11-18-s2-1-plan-v34-base-files-pritish.md](docs/progress/entries/2026-11-18-s2-1-plan-v34-base-files-pritish.md) |
 | P0 | 0.2 | Documentation | done | Pritish | 2026-11-18 | b4eb8dd | — | [2026-11-18-p0-0.2-plan-v34-adrs-pritish.md](docs/progress/entries/2026-11-18-p0-0.2-plan-v34-adrs-pritish.md) |
@@ -45,8 +47,9 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P8 | 8.4 | AI Security and Guardrails | done | Pritish | 2026-11-18 | b09d62f | — | [2026-11-18-p8-8.4-headers-pritish.md](docs/progress/entries/2026-11-18-p8-8.4-headers-pritish.md) |
 | P8 | 8.5 | Evaluation | in_progress | Pritish | 2026-11-18 | c40d155 | — | [2026-11-18-p8-8.5-a6-switch-pritish.md](docs/progress/entries/2026-11-18-p8-8.5-a6-switch-pritish.md) |
 | P9 | 9.1 | Responsible AI | done | Pritish | 2026-11-18 | 5572aa0, 02d045d | — | [2026-11-18-p9-9.1-rai-ui-pritish.md](docs/progress/entries/2026-11-18-p9-9.1-rai-ui-pritish.md) |
-| P9 | 9.2 | UI | done | Pritish | 2026-11-18 | d57e07a | — | [2026-11-18-p9-9.2-scorecard-help-pritish.md](docs/progress/entries/2026-11-18-p9-9.2-scorecard-help-pritish.md) |
-| P9 | 9.3 | UI | in_progress | Pritish | 2026-11-18 | — | — | [2026-11-18-p9-9.3-u6-budget-pritish.md](docs/progress/entries/2026-11-18-p9-9.3-u6-budget-pritish.md) |
+| P9 | 9.2 | UI | done | Pritish | 2026-11-20 | 251ed28 | — | [2026-11-20-p9-9.2-plain-language-ui-pritish.md](docs/progress/entries/2026-11-20-p9-9.2-plain-language-ui-pritish.md) |
+| P9 | 9.3 | UI | done | Pritish | 2026-11-20 | 8f88b23 | — | [2026-11-20-p9-9.3-excel-workbook-import-pritish.md](docs/progress/entries/2026-11-20-p9-9.3-excel-workbook-import-pritish.md) |
+| P9 | 9.4 | UI | done | Pritish | 2026-11-20 | cdbd632 | — | [2026-11-20-p9-9.4-lender-pdf-intake-pritish.md](docs/progress/entries/2026-11-20-p9-9.4-lender-pdf-intake-pritish.md) |
 | P10 | 10.1 | Deployment | done | Pritish | 2026-11-18 | f17e087, d4cd99f, 5b2cca6, fb8aa5f | — | [2026-11-18-p10-10.1-ship-pritish.md](docs/progress/entries/2026-11-18-p10-10.1-ship-pritish.md) |
 | P10 | 10.2 | Responsible AI | done | Pritish | 2026-11-18 | d6e63c2, fb8aa5f | — | [2026-11-18-p10-10.2-rai-docs-pritish.md](docs/progress/entries/2026-11-18-p10-10.2-rai-docs-pritish.md) |
 | P10 | 10.3 | Documentation | in_progress | Pritish | 2026-11-18 | 6fa8740, fb8aa5f | — | [2026-11-18-p10-10.3-contributions-release-pritish.md](docs/progress/entries/2026-11-18-p10-10.3-contributions-release-pritish.md) |
@@ -63,10 +66,19 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P11 | 11.11 | Evaluation | done | Pritish | 2026-11-19 | — | — | [2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md](docs/progress/entries/2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md) |
 | P11 | 11.12 | Evaluation | in_progress | Pritish | 2026-11-19 | — | E14 | [2026-11-19-p11-11.12-redteam-runner-pritish.md](docs/progress/entries/2026-11-19-p11-11.12-redteam-runner-pritish.md) |
 | P11 | 11.13 | Evaluation | done | Pritish | 2026-11-20 | — | E14 | [2026-11-20-p11-11.13-redteam-live-run-pritish.md](docs/progress/entries/2026-11-20-p11-11.13-redteam-live-run-pritish.md) |
+| P11 | 11.14 | Evaluation | done | Pritish | 2026-11-20 | — | — | [2026-11-20-p11-11.14-safety-v2-h24-pritish.md](docs/progress/entries/2026-11-20-p11-11.14-safety-v2-h24-pritish.md) |
+| P11 | 11.15 | Documentation | in_progress | Pritish | 2026-11-21 | — | — | [2026-11-21-p11-11.15-ai-precheck-human-review-pritish.md](docs/progress/entries/2026-11-21-p11-11.15-ai-precheck-human-review-pritish.md) |
+| P12 | 12.10 | Responsible AI | done | Pritish | 2026-11-20 | — | — | [2026-11-20-p12-12.10-system-card-release-hashes-pritish.md](docs/progress/entries/2026-11-20-p12-12.10-system-card-release-hashes-pritish.md) |
+| P12 | 12.11 | Documentation | done | Pritish | 2026-11-21 | — | — | [2026-11-21-p12-12.11-demo-script-ui-names-pritish.md](docs/progress/entries/2026-11-21-p12-12.11-demo-script-ui-names-pritish.md) |
 | P13 | 13.0 | Copilot | done | Pritish | 2026-11-18 | 2c3088d, bbe5f62, 0148fe0 | — | [2026-11-18-p13-13.0-copilot-product-assistant-pritish.md](docs/progress/entries/2026-11-18-p13-13.0-copilot-product-assistant-pritish.md) |
 | P14 | 14.1 | Authentication | in_progress | Pritish | 2026-11-20 | — | — | [2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md](docs/progress/entries/2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md) |
+| P14 | 14.2 | Authentication | done | Pritish | 2026-11-20 | — | — | [2026-11-20-p14-14.2-web-accounts-mfa-pritish.md](docs/progress/entries/2026-11-20-p14-14.2-web-accounts-mfa-pritish.md) |
 | P15 | 15.1 | Deployment | done | Pritish | 2026-11-20 | ea86837 | — | [2026-11-20-p15-15.1-case-db-mysql-pritish.md](docs/progress/entries/2026-11-20-p15-15.1-case-db-mysql-pritish.md) |
 | P15 | 15.2 | Evaluation | in_progress | Pritish | 2026-11-20 | — | — | [2026-11-20-p15-15.2-course-endpoint-comparison-pritish.md](docs/progress/entries/2026-11-20-p15-15.2-course-endpoint-comparison-pritish.md) |
+| P15 | 15.3 | Deployment | done | Pritish | 2026-11-21 | 2708b78, a1d4d9a | — | [2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md](docs/progress/entries/2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md) |
+| P15 | 15.4 | Deployment | done | Pritish | 2026-11-23 | — | — | [2026-11-23-p15-15.4-one-command-start-pritish.md](docs/progress/entries/2026-11-23-p15-15.4-one-command-start-pritish.md) |
+| P16 | 16.1 | Documentation | done | Pritish | 2026-11-21 | 3578f53, fb8a7a9, ef67786 | — | [2026-11-21-p16-16.1-implementation-gap-review-pritish.md](docs/progress/entries/2026-11-21-p16-16.1-implementation-gap-review-pritish.md) |
+| P16 | 16.2 | Authentication | done | Pritish | 2026-11-23 | — | — | [2026-11-23-p16-16.2-own-password-per-account-pritish.md](docs/progress/entries/2026-11-23-p16-16.2-own-password-per-account-pritish.md) |
 
 ## Modules
 
@@ -74,10 +86,10 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 |---|---|---|---|
 | [UI](docs/progress/modules/ui.md) | UI lead (TODO: name) | P9 (U5, U6) | U0–U5 done; U6 built, live run pending (H15 Lighthouse, H16 e2e) |
 | [Copilot](docs/progress/modules/copilot.md) | [Name 6] (TODO: name); plan v3.4: Suresh (retrieval, P4), Tejas (answering, P5) | P0 (dev split), P4 (CP2-R), P5 (CP2-A), P6 (course re-run), P13 (product assistant, ADR 0035) | 9e done except CP-01 (regulatory 10/25 live, OPEN); KR-05 recall@5 24/40 (v1.0) OPEN. **P4 code done 2026-11-18** (contextual headers, glossary rewrite, answerability gate, ladder script); Mac run done: frozen recall@5 23 -> 25/40 (headers), dev 13 -> 17/20 (headers + glossary); reranker only scores for the abstain gate (threshold 0.4066); `evaluation/reports/retrieval-ladder-2026-11-18.md`. **P5 code done 2026-11-18**: span-cited answers (cp_answer 2.0.0, unsupported sentences cut) and dual strict/supported scoring in copilot-live; live re-run pending on the Mac. **P13 built 2026-11-18** (ADR 0035): Ask CredAssure on every page; product help as a cited source; CP-07 code routing; CP-10 case status; CP-11 per-case memory with reset; CP-12 Critic-first streaming, fixed follow-ups, feedback |
-| [Authentication](docs/progress/modules/auth.md) | Pritish | P8 (SEC), P14 (ADR 0038) | JWT + roles + maker-checker + step-up above ₹1.5 cr done (Phases 5, 10a); P14 backend: per-person accounts, user_admin role, staged sign-in, TOTP MFA, password policy, revocation, admin API (branch `feature/auth-p14`) |
-| [Responsible AI](docs/progress/modules/rai.md) | Pritish | P8 (fairness), P9 (RAI UI), P10 (system card, Sutra mapping) | Human-in-the-loop, no accept tool, audit, kill switch, RAI UI (P9), fairness invariance (P8), system card, threat model, Sutra mapping and DPDP gap note (P10) done; live evaluation numbers pending (P11) |
+| [Authentication](docs/progress/modules/auth.md) | Pritish | P8 (SEC), P14 (ADR 0038) | JWT + roles + maker-checker + step-up above ₹1.5 cr done (Phases 5, 10a); P14 backend: per-person accounts, user_admin role, staged sign-in, TOTP MFA, password policy, revocation, admin API (#27); **P14 step E (2026-11-20, `feature/web-auth-p14e`):** the web app signs in on the gateway's accounts: code step, temporary-password change, MFA enrolment (password again, QR, backup codes), admin-only accounts, user management and logs on `/v1/admin/users`; walked live with MFA enforced |
+| [Responsible AI](docs/progress/modules/rai.md) | Pritish | P8 (fairness), P9 (RAI UI), P10 (system card, Sutra mapping) | Human-in-the-loop, no accept tool, audit, kill switch, RAI UI (P9), fairness invariance (P8), system card, threat model, Sutra mapping and DPDP gap note (P10) done; **K8 2026-11-20:** system card v1.1.0 §9 has the live results (88/100 vs best baseline 23, ablations A1–A5, regulatory ladder incl. RAG-only false answers, red team 25/25, course endpoint ≈ 87, recall@5 22/40), limitations updated (three negotiation rounds, cut items); model card lists the three model locations |
 | [AI Security and Guardrails](docs/progress/modules/guardrails.md) | Pritish (GR); Abhishek (red-team, SEC) | P2 (pattern tests), P3 (GR), P8 (SEC), P10 (threat model) | Phase 6 safeguards done (PII masking, injection scanner, breaker, caps); ADR 0033 pattern tests in make check (P2); **P3 done 2026-11-18**: packages/guardrails (R1–R5, guardrail_event, config/guardrails.yaml), PII v2 (Presidio patterns + GSTIN/UPI/card/Udyam), money gate, trace-leak test 0 hits, data classes, CSV escaping, gen_ai.* export; **P8 2026-11-18**: OWASP LLM + ASI mapping with a test per row, fairness invariance + protected-attribute denylist, API and web-container security headers, A6 switch; safety_v2 drafted (unfrozen) |
-| [Deployment](docs/progress/modules/deployment.md) | [Name 1] (TODO: name) | P6 (course switch, deferred), P10 (Phase 12) | Local run, isolated e2e, demo-reset, replay mode, backup/restore, release bundle + SBOM, runbook done (P10); clean-machine run passed; course endpoint deferred |
+| [Deployment](docs/progress/modules/deployment.md) | [Name 1] (TODO: name) | P6 (course switch, deferred), P10 (Phase 12) | Local run, isolated e2e, demo-reset, replay mode, backup/restore, release bundle + SBOM, runbook done (P10); clean-machine run passed; hosted stack (Caddy + failover to Hugging Face) ready, P15 15.3 |
 | [Documentation](docs/progress/modules/docs.md) | Pritish | P0 (plan + ADRs), P10 (RUNBOOK, MODEL_CARD, CONTRIBUTIONS), P12 (report) | S1 progress tracking, S2 base files and prompts 27–39 done; P0 ADRs 0029–0033 written (0032 Accepted, others Proposed); mentor questions 2–3 open |
 | [Evaluation](docs/progress/modules/evaluation.md) | Abhishek (Phase 11); Tejas (test set) | P1 (close G1), P2 (G3), P6 (course baseline, deferred), P7 (Phase 11), P11 (G4) | G1 provisionally frozen 2026-11-15; G2 passed; **G3 passed 2026-11-18** (G3 + E18 READY); G1-final checklist open; **P7 code done 2026-11-18**: make eval harness, J1 + kappa, E13 report, A1-A5 runner, degradation matrix, load smoke (live runs pending on the Mac) |
 
@@ -86,7 +98,10 @@ From the latest entry of each step. Module-level items live in each module file.
 
 ### UI
 
-- P9 9.3: H15 Lighthouse ≥ 95 and H16 first `make e2e` run of u6 on the Mac. ([entry](docs/progress/entries/2026-11-18-p9-9.3-u6-budget-pritish.md))
+- P9 9.2: e2e u2/u3/u4/u6 text expectations updated but not run here (live model needed): run them on the Mac. ([entry](docs/progress/entries/2026-11-20-p9-9.2-plain-language-ui-pritish.md))
+- P9 9.2: copilot answer and injection steps of the app-path walk need the Mac (sandbox runs with the model off). ([entry](docs/progress/entries/2026-11-20-p9-9.2-plain-language-ui-pritish.md))
+- P9 9.3: PDF intake (design in ADR 0040: model drafts fields from the PDF text, person reviews in the form, code validates) after 27 Nov. ([entry](docs/progress/entries/2026-11-20-p9-9.3-excel-workbook-import-pritish.md))
+- P9 9.4: live check on the Mac with the model on (a real text PDF offer letter → review → run). ([entry](docs/progress/entries/2026-11-20-p9-9.4-lender-pdf-intake-pritish.md))
 
 ### Copilot
 
@@ -103,10 +118,13 @@ From the latest entry of each step. Module-level items live in each module file.
 ### Authentication
 
 - P14 14.1: web step E: one auth mode on the gateway; login follows `stage`/`next`; MFA and first-sign-in screens; Admin → Users on the new API; acting-role switch removed. Step F: retire `deploy/auth/`, help pages, threat model and system card rows. Security review. `make redteam` (PR #26) needs `mfa_enforced=False` once both merge. ([entry](docs/progress/entries/2026-11-20-p14-14.1-accounts-mfa-backend-pritish.md))
+- P14 14.2: course-endpoint run on the Mac (owner); role change button (API exists). ([entry](docs/progress/entries/2026-11-20-p14-14.2-web-accounts-mfa-pritish.md))
+- P16 16.2: on the Mac, run `make passwords` once (or delete `SEED_PASSWORD` from `.env` first) and hand out `var/initial-passwords.txt`. ([entry](docs/progress/entries/2026-11-23-p16-16.2-own-password-per-account-pritish.md))
 
 ### Responsible AI
 
 - P10 10.2: add the P11 results (E13, ablations, safety_v2) to SYSTEM_CARD §9. ([entry](docs/progress/entries/2026-11-18-p10-10.2-rai-docs-pritish.md))
+- P12 12.10: fill the "Still to measure" rows after K3/K4/K5 (Mon 23). ([entry](docs/progress/entries/2026-11-20-p12-12.10-system-card-release-hashes-pritish.md))
 
 ### AI Security and Guardrails
 
@@ -125,6 +143,10 @@ From the latest entry of each step. Module-level items live in each module file.
 - P10 10.1: H17 pin images; H19 demo recording. ([entry](docs/progress/entries/2026-11-18-p10-10.1-ship-pritish.md))
 - P11 11.10: K12 on `feature/lendwise-p11` (LendWise thread), by 22 Nov. ([entry](docs/progress/entries/2026-11-19-p11-11.10-freeze-scope-ci-pritish.md))
 - P15 15.1: Azure VM deployment (production compose with HTTPS, runbook, smoke test); provider choice for hosted Qwen3-8B. ([entry](docs/progress/entries/2026-11-20-p15-15.1-case-db-mysql-pritish.md))
+- P15 15.3: images not built here (no registry access from the cloud session): first build on the VM on deployment day (Mon 23), then `smoke.sh` all PASS. ([entry](docs/progress/entries/2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md))
+- P15 15.3: EMBED_REVISION is `main`; pin it to the revision the Mac's index was built with if they differ. ([entry](docs/progress/entries/2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md))
+- P15 15.3: `make llm-probe MODELS=course` from the VM (is the course endpoint reachable from Azure?). ([entry](docs/progress/entries/2026-11-21-p15-15.3-hosted-deployment-prep-pritish.md))
+- P15 15.4: first run on the Mac with the VPN, and with `MODELS=local` and Langfuse (not available in the cloud workspace). ([entry](docs/progress/entries/2026-11-23-p15-15.4-one-command-start-pritish.md))
 
 ### Documentation
 
@@ -138,9 +160,17 @@ From the latest entry of each step. Module-level items live in each module file.
 - P11 11.6: H21 APR transcription and H22 gold hand check (G1 final). ([entry](docs/progress/entries/2026-11-19-p11-11.6-human-review-pack-pritish.md))
 - P11 11.6: H1/H2 dev labels and H14 J1 labels (Abhishek); `judge_j1` all-rows option (Eval thread). ([entry](docs/progress/entries/2026-11-19-p11-11.6-human-review-pack-pritish.md))
 - P11 11.6: ADR text for D1, D2, D3, D9 after the team call; H18 owner names and handles. ([entry](docs/progress/entries/2026-11-19-p11-11.6-human-review-pack-pritish.md))
+- P11 11.15: safety_v2 S16 and S17 would fail a safe reply (follow-up text contains "ranked first"; any "approved"): edit before the H7 freeze. S27 passes with the real refusal text (earlier note corrected). ([entry](docs/progress/entries/2026-11-21-p11-11.15-ai-precheck-human-review-pritish.md))
+- P11 11.15: dev labels D03 doubtful (cited page may not state the fee); D15 and D16 labels too narrow (a second official document answers): corrections go to `queries.v2.jsonl`. ([entry](docs/progress/entries/2026-11-21-p11-11.15-ai-precheck-human-review-pritish.md))
+- P11 11.15: `docs/security/owasp-asi-mapping.md`: 6 rows proven, 13 partly, 1 not (ASI07); the tests to cite exist and are named in the workbook. ([entry](docs/progress/entries/2026-11-21-p11-11.15-ai-precheck-human-review-pritish.md))
+- P11 11.15: D4 all-rows option in `judge_j1` not built; ADR 0011 already Accepted (index in ARCHITECTURE.md §9 out of date); help-page contradiction (H20) not fixed. ([entry](docs/progress/entries/2026-11-21-p11-11.15-ai-precheck-human-review-pritish.md))
+- P12 12.11: drop any CHANGELOG 1.1.0 line whose PR has not merged before the tag; rehearse the script once on the Mac after #37 merges. ([entry](docs/progress/entries/2026-11-21-p12-12.11-demo-script-ui-names-pritish.md))
+- P16 16.1: screens for case deletion, evaluator retry, the boundary rule, and role change (APIs exist); `POST /v1/eval/runs` (owner decision). ([entry](docs/progress/entries/2026-11-21-p16-16.1-implementation-gap-review-pritish.md))
+- P16 16.1: rerun negotiation, offers, e2e and regulatory items on the Mac before K3 (LendWise audit and copilot routing changed; expected unchanged). ([entry](docs/progress/entries/2026-11-21-p16-16.1-implementation-gap-review-pritish.md))
 
 ### Evaluation
 
+- 9a 0.3.0: none. PR #43 was merged as it was (owner decision, 23 Nov): its entry records the design; this entry records the code. ([entry](docs/progress/entries/2026-11-23-9a-0.3.0-onboarding-checker-pritish.md))
 - P2 2.2: re-record one live-model demo run with a Langfuse trace at P4 (Mac). ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
 - P2 2.2: E18 SHOULDs S1/S2 (ARCHITECTURE says React SPA/nginx; §6.3 omits RETURNED) — P10 docs. ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
 - P5 5.2: Human review of the J1 sample after the live run (human review list H14). ([entry](docs/progress/entries/2026-11-18-p5-5.2-dual-scoring-pritish.md))
@@ -159,6 +189,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - P11 11.11: the Mac reruns the negotiation, offers, e2e and T082 items on the final code (K3). A teammate reviews the v2 lender replies (human-review H26; data provisional until then). Owners must set `LENDER_SCRIPTS_DIR=data/frozen/v2/lender_scripts` in their own `.env`. ([entry](docs/progress/entries/2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md))
 - P11 11.12: live run on the Mac (`make redteam`, ~10 min, after the K2 validation runs); paste `redteam.md` into the log, read REVIEW answers, fill the Fix column; add trace links for the report. ([entry](docs/progress/entries/2026-11-19-p11-11.12-redteam-runner-pritish.md))
 - P11 11.13: a teammate who did not write the probes confirms the five REVIEW rows (human review). The report's K6 placeholder is filled. ([entry](docs/progress/entries/2026-11-20-p11-11.13-redteam-live-run-pritish.md))
+- P11 11.14: Abhishek reviews the change (H24 owner); then H7 freeze, safety_v2 run and A6 (K5) on Mon 23. ([entry](docs/progress/entries/2026-11-20-p11-11.14-safety-v2-h24-pritish.md))
 - P15 15.2: run on the Mac: course (keys, CA certificates, VPN) and hf (Hugging Face token): llm-probe, smoke, comparison run, compare-runs. ([entry](docs/progress/entries/2026-11-20-p15-15.2-course-endpoint-comparison-pritish.md))
 
 ## History

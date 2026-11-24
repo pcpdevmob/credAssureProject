@@ -43,6 +43,13 @@ the seeded users; a real deployment removes that line and sets the key.
 - The audit log names the person for every decision; maker-checker holds between people with the same role.
 - The web app needs one auth mode against the gateway: a login page that follows `stage`/`next`, an MFA prompt,
   first-sign-in password change and enrolment, Admin → Users on the new API, and no acting-role switch (next step).
+- **Web step done (2026-11-20, progress 14.2, owner decision "wire web to gateway TOTP", then "close" the bridge):** the
+  web app follows `stage`/`next` (code step, temporary-password change, enrolment with the password again → QR → backup
+  codes), sends `mfa_code` with the step-up above ₹1.5 crore (AUTH-10), shows `user_admin` only the admin pages, and
+  manages users on `/v1/admin/users`. The bridge is retired: `deploy/auth/` (service and unit), the web bridge mode
+  (`NEXT_PUBLIC_AUTH_MODE`, acting-role picker, same-origin `/api` client) and the nginx `/api/auth`, `/api/users` and
+  `auth_request` blocks are removed; `FB_*` settings are gone. A host that ran the bridge stops `finbridge-auth` and
+  deletes its database; its accounts are not migrated (the gateway's users are the record).
 - After merge, `make run-api` in the dev profile needs `MFA_ENCRYPTION_KEY` (or `MFA_ENFORCED=false`). Existing users
   keep working: the migration adds the columns with no forced change, no MFA and version 0.
 - Tokens stay in browser memory only (no storage, ADR 0004/#52): a reload means signing in again within the 30-minute

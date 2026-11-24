@@ -14,7 +14,7 @@ Code then routes the proposal: above ₹1.5 crore to the VP, Finance; below to t
 
 Requirements: [docs/requirements/BRD.md](docs/requirements/BRD.md) · Architecture: [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md) · Progress: [PROGRESS.md](PROGRESS.md)
 
-Responsible AI and security: [System card](docs/SYSTEM_CARD.md) · [Threat model](docs/THREAT_MODEL.md) · [OWASP LLM + ASI mapping](docs/security/owasp-asi-mapping.md) · Operations: [Runbook](docs/deployment/RUNBOOK.md) · Team: [CONTRIBUTIONS.md](CONTRIBUTIONS.md) · Changes: [CHANGELOG.md](CHANGELOG.md)
+Responsible AI and security: [System card](docs/SYSTEM_CARD.md) · [Threat model](docs/THREAT_MODEL.md) · [OWASP LLM + ASI mapping](docs/security/owasp-asi-mapping.md) · Operations: [Runbook](docs/deployment/RUNBOOK.md) · [Hosted deployment](docs/deployment/azure.md) · Team: [CONTRIBUTIONS.md](CONTRIBUTIONS.md) · Changes: [CHANGELOG.md](CHANGELOG.md)
 
 ---
 
@@ -97,7 +97,7 @@ Then edit `.env` by hand:
 
 | Key | When | Value |
 |---|---|---|
-| `SEED_PASSWORD` | always | 12+ characters; password for every seeded user (`SEED_PASSWORD_<USERNAME>` overrides one) |
+| `SEED_PASSWORD_<USERNAME>` | optional | Sets one account's own password (12+ characters, different for each account), e.g. `SEED_PASSWORD_DEMO_PREPARER` for `make demo-reset` and safety_v2. Every other account gets a random first password in `var/initial-passwords.txt` (ADR 0038). A shared `SEED_PASSWORD` is no longer used |
 | `LLM_ENABLED` | optional | `false` runs everything without a model (template narratives) |
 | `CORPUS_CONTACT_EMAIL` / `CORPUS_CONTACT_URL` | optional | Added to the harvester's User-Agent so a site admin can reach you rather than block you |
 | `LLM_API_KEY`, `EVAL_API_KEY`, `EMBED_API_KEY` | course only | From the course portal |
@@ -171,7 +171,7 @@ Add `MODELS=course` to **every** target that touches the model. Only set `LLM_SU
 
 ```bash
 make hr-db        # rebuild the gitignored hr.db from frozen hr/profiles.json (data/frozen/v1 is committed; `make data` refuses once frozen)
-make db           # migrate var/case.db + var/corpus.db, seed users into tenant "demo"
+make db           # migrate var/case.db + var/corpus.db, create the accounts in tenant "demo" (own first passwords: var/initial-passwords.txt)
 make ingest       # chunk + embed the corpus into var/corpus.db (FTS5) + Chroma; re-runnable
 make demo-reset   # rebuild the demo cases. STOP `make run-api` FIRST
 ```
@@ -215,6 +215,24 @@ Corpus rules (non-negotiable):
 
 ## 7. Run the app
 
+### One command
+```bash
+make start                          # course endpoint Qwen3-8B (VPN), Langfuse if set up, API :8000, web :3000
+make start MODELS=local             # local Ollama qwen3:8b instead (the evaluated model, ADR 0036); or MODELS=hf
+make start ARGS="--no-model"        # no model (LLM_ENABLED=false); --no-langfuse, --no-ui, --install also work
+make stop                           # from another terminal (Ctrl-C in the first one does the same)
+```
+`scripts/start.sh` checks the tools and that `.env` exists (it never reads it; the course keys and `LLM_CA_CERT` stay
+there), installs what is missing, builds `hr.db` and, on first run, `var/case.db` with the users and no cases
+(`make db`). For the course endpoint it checks that both hosts answer (VPN); for `MODELS=local` it starts Ollama with
+`OLLAMA_CONTEXT_LENGTH=8192` and loads the model. It starts Langfuse when Docker is running and
+`deploy/env/langfuse.env` is filled in (the web app then moves to :5173), starts the API and waits for
+`/v1/health/ready`, then the web app, and prints the URLs. Logs: `var/start/`. Ctrl-C stops the API, the web app and
+an Ollama it started; Langfuse keeps running (`make langfuse-down`). Only `make start` defaults to the course endpoint:
+`make run-api`, `make eval` and the scored runs keep `MODELS=local`.
+
+### Step by step
+
 **Terminal 1: Ollama** (§5, skip with `LLM_ENABLED=false`)
 
 **Terminal 2: API**
@@ -230,7 +248,9 @@ open http://localhost:8000/docs           # Swagger
 make run-ui                               # Next.js on http://localhost:3000
 ```
 
-Sign in with your `SEED_PASSWORD`:
+Every account has its own password. The first ones are in `var/initial-passwords.txt` (readable only by you): hand each
+one to its owner, then delete the file. Each is asked to change it at first sign-in; approvers then set up the
+authenticator app. `make passwords` issues new ones (it signs those accounts out; MFA stays set up).
 
 | Username | Role | Can do |
 |---|---|---|

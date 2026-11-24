@@ -19,6 +19,7 @@ import yaml
 from fastapi import APIRouter, File, Query, Request, UploadFile
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, Field, ValidationError
+from sqlalchemy import func, select
 
 from credassure.core import narrative
 from credassure.core.enums import Stage
@@ -45,7 +46,7 @@ from credassure.guardrails.policy import load as guardrail_policy
 from credassure.guardrails.protected import find as find_protected
 from credassure.guardrails.switch import on as rail_on
 from credassure.ledger import reads
-from credassure.ledger.models import Case
+from credassure.ledger.models import AuditLog, Case
 from credassure.ledger.session import run_in_progress, run_lock, transaction
 from credassure.security.auth import Principal, Role, can_view_case
 from credassure.security.injection import scan
@@ -107,16 +108,34 @@ def _summary(case: Case) -> dict[str, Any]:
         "order_value": money(case.order_value_paise),
         "indicative_amount": money(case.indicative_amount_paise),  # UI-01: never the result
         "due_date": case.due_date.isoformat(),
+        "created_at": _iso(case.created_at),
     }
 
 
+def _iso(value: datetime) -> str:
+    """ISO-8601 with an explicit UTC offset (SQLite hands back naive UTC datetimes)."""
+    return (value if value.tzinfo else value.replace(tzinfo=UTC)).isoformat()
+
+
+def _last_activity(s: Any, tenant_id: str, case_ids: list[str]) -> dict[str, str]:
+    """Newest audit event per case (ISO text, as the audit log stores it): the "Updated" column."""
+    if not case_ids:
+        return {}
+    rows = s.execute(
+        select(AuditLog.case_id, func.max(AuditLog.ts))
+        .where(AuditLog.tenant_id == tenant_id, AuditLog.case_id.in_(case_ids))
+        .group_by(AuditLog.case_id)
+    )
+    return {str(case_id): str(ts) for case_id, ts in rows if ts}
+
+
 _NEXT_ACTION = {
-    "CREATED": "Upload the case files, then run the workflow.",
-    "PAUSED": "Answer the question, correct the data, then run again.",
-    "FAILED": "A stage failed; an evaluator can inspect the trace and retry.",
-    "RETURNED": "The approver returned the case; fix the named stage and run again.",
+    "CREATED": "Fill in the case data on the Documents tab, then run the checks.",
+    "PAUSED": "Answer the question on the Workflow tab, then press Continue.",
+    "FAILED": "A step stopped with a problem. Ask your administrator or evaluator to retry it.",
+    "RETURNED": "The approver sent the case back. Read their comment in History, fix, run again.",
     "AWAITING_APPROVAL": "Waiting for the routed approver.",
-    "HELD": "Held at exactly ₹1.5 crore; waiting for the VP (APR-03).",
+    "HELD": "Exactly ₹1.5 crore: on hold until a person decides who approves.",
     "APPROVED": "Approved internally. The MSME chooses its lender outside the system.",
     "REJECTED": "Rejected.",
 }
@@ -183,9 +202,16 @@ def _recommended(s: Any, case: Case) -> int | None:
     return to_paise(Decimal(amount.value_text))
 
 
-def _with_need(s: Any, case: Case) -> dict[str, Any]:
+def _with_need(s: Any, case: Case, updated: dict[str, str] | None = None) -> dict[str, Any]:
     need = _recommended(s, case)
-    return {**_summary(case), "recommended_amount": money(need) if need is not None else None}
+    last = (updated if updated is not None else _last_activity(s, case.tenant_id, [case.id])).get(
+        case.id
+    )
+    return {
+        **_summary(case),
+        "recommended_amount": money(need) if need is not None else None,
+        "updated_at": last or _iso(case.created_at),
+    }
 
 
 @router.get("/cases")
@@ -193,11 +219,9 @@ def list_cases(who: User, svc: Svc) -> dict[str, Any]:
     """Cases plus dashboard totals, summed here in integer paise so no client adds money (BR-05)."""
     # ponytail: two fact reads per case; one grouped query if the list grows past a few hundred.
     with transaction(svc.engine) as s:
-        items = [
-            _with_need(s, c)
-            for c in reads.list_cases(s, who.tenant_id)
-            if can_view_case(who, case_ref(c))
-        ]
+        visible = [c for c in reads.list_cases(s, who.tenant_id) if can_view_case(who, case_ref(c))]
+        updated = _last_activity(s, who.tenant_id, [c.id for c in visible])
+        items = [_with_need(s, c, updated) for c in visible]
     done = [i for i in items if i["recommended_amount"]]
     need = sum(i["recommended_amount"]["paise"] for i in done)
     asked = sum(i["indicative_amount"]["paise"] for i in done)
@@ -468,13 +492,21 @@ async def upload(
         raise ProblemError(
             415, "file is not UTF-8 text", ApiErrorCode.UNSUPPORTED_MEDIA_TYPE
         ) from exc
+    return store_upload(svc, case, who.user_id, kind, raw, text)
+
+
+def store_upload(
+    svc: Svc, case: Case, user_id: str, kind: str, raw: bytes, text: str
+) -> dict[str, Any]:
+    """Validate, scan and store one case file (UI-02, BR-15). The single path every upload takes:
+    a file the person picked, a web form, or a sheet of an Excel workbook (ADR 0040)."""
     payload, count = validate_file(kind, text, case_id=case.id, audit=svc.ledger.audit)
     # BR-15: uploads are data. A hit is flagged and audited; nothing in the file is obeyed.
     flags = scan(text)
     if kind == "kfs" and payload["case_ref"] not in ("", case.id):
         flags.append("KFS_CASE_MISMATCH")  # the document names another case: recorded, kept
     stored = svc.ledger.store_case_file(
-        case.id, kind, json.dumps(payload), who.user_id, sha256=hashlib.sha256(raw).hexdigest()
+        case.id, kind, json.dumps(payload), user_id, sha256=hashlib.sha256(raw).hexdigest()
     )
     if flags:
         svc.ledger.audit(

@@ -8,7 +8,7 @@ so the model profile wins for model settings. `MODELS` itself is a make variable
 | Variable | Used by | Meaning |
 |---|---|---|
 | `JWT_SECRET` | gateway | Signs login tokens; 32+ characters. The API won't start without it (outside `APP_ENV=test`) |
-| `SEED_PASSWORD` | `make db`, `make demo-reset` | 12+ characters; password of every seeded user. `SEED_PASSWORD_<USERNAME>` overrides one user |
+| `SEED_PASSWORD_<USERNAME>` | `make db`, `make passwords`, `make demo-reset`, safety_v2 | Optional: one account's own password (12+ characters; two accounts may not share one). Accounts without it get a random first password in `var/initial-passwords.txt`, changed at first sign-in. `make demo-reset` needs `SEED_PASSWORD_DEMO_PREPARER`. A shared `SEED_PASSWORD` is ignored (ADR 0038) |
 | `LLM_BASE_URL` | gateway | Required while `LLM_ENABLED=true`; the profile file sets it |
 | `CORPUS_CONTACT_EMAIL` | `make corpus-harvest`, `make corpus-download` | Optional. Adds `; contact: <email>` to the scripted User-Agent (ADR 0020). Takes precedence over `CORPUS_CONTACT_URL`. If set but not a valid address, the commands stop. Set it in `.env`; never hard-code it. |
 | `CORPUS_CONTACT_URL` | same | Optional. Used when no email is set: adds `; +<url>` (http or https). With neither set, the User-Agent is `CredAssure-capstone/1.0 (IIT KGP academic project)`. |
@@ -48,6 +48,7 @@ so the model profile wins for model settings. `MODELS` itself is a make variable
 | `LLM_CIRCUIT_FAILURES` / `LLM_CIRCUIT_OPEN_S` | 5 / 60 | Circuit breaker, then template fallbacks |
 | `LLM_RATE_PER_MINUTE` | 60 | Shared limiter (profiles: local 600, course 55) |
 | `LLM_CACHE_PATH` | `var/llm_cache.db` | Response cache; empty turns it off |
+| `LLM_FALLBACK_BASE_URL`, `LLM_FALLBACK_MODEL`, `LLM_FALLBACK_API_KEY` | unset | Second endpoint with the same model, tried once when the primary is unavailable (outage, timeout, wrong key, circuit open); a rejected request is not retried there. Own circuit breaker; same limiter and cache. Deployment plan §5.3 |
 | `REPLAY_MODE` | `false` | Demo fallback (ADR 0015): answer only from replies recorded in `LLM_CACHE_PATH`; a miss falls back to templates and the chat endpoint is never called (embeddings still use their cache, then the endpoint) |
 | `TOKEN_QUOTA` | 2,000,000 | Team quota; warnings at 70% and 90% |
 | `EVAL_BASE_URL`, `EVAL_MODEL`, `EVAL_API_KEY`, `EVAL_MAX_TOKENS`, `EVAL_NUM_CTX` | profile | Model used by baselines and evaluation scripts |
@@ -76,6 +77,7 @@ Paths are relative to the repo root. The defaults point at the frozen synthetic 
 | Variable | Default | Meaning |
 |---|---|---|
 | `HR_DB` | `data/frozen/v1/hr.db` | Synthetic HR store, opened read-only (ONB-01, ONB-05) |
+| `CASE_TEMPLATE` | `data/templates/case_template.xlsx` | Excel case template served for download and read by the workbook import (ADR 0040) |
 | `REFERENCE_RATES_FILE` | `data/reference/reference_rates.yaml` | Repo rate and bank EBLR/RLLR as of `AS_OF_DATE`; prices floating-rate offers (LW-08, S22) |
 | `LENDER_SCRIPTS_DIR` | `data/frozen/v2/lender_scripts` | Scripted lender replies for the three negotiation rounds (S05 v2, LW-13/15, ADR 0037). A v1 directory answers only round 1 |
 | `CORPUS_MANIFEST` | `data/corpus/manifest.yaml` | Lets the Critic and copilot call a cited document superseded even when it was never indexed (VER-02, KR-04) |

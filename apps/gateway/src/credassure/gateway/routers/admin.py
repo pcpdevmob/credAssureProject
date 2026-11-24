@@ -8,6 +8,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 
 from credassure.core.errors import ApiErrorCode
+from credassure.gateway import eval_runs
 from credassure.gateway.deps import Svc, role
 from credassure.gateway.problems import ProblemError
 from credassure.security.auth import Principal, Role
@@ -30,7 +31,15 @@ def set_config(body: Config, who: Evaluator, svc: Svc) -> dict[str, Any]:
 
 @router.post("/eval/runs")
 def start_eval(who: Evaluator) -> None:
-    raise ProblemError(501, "evaluation runs arrive in Phase 11", ApiErrorCode.NOT_IMPLEMENTED)
+    """BRD §6.1 lists this route. It is refused on purpose: a run is hours of model calls in its own
+    process, and the gateway starts no process (ASI05). Start it with `make eval`; read its progress
+    with GET /v1/eval/runs/{run_id} and the scorecard."""
+    raise ProblemError(
+        501,
+        "evaluation runs are started from the command line (make eval); "
+        "read progress at /v1/eval/runs/{run_id}",
+        ApiErrorCode.NOT_IMPLEMENTED,
+    )
 
 
 def _by_category(rows: list[dict[str, Any]]) -> dict[str, list[int]]:
@@ -86,5 +95,11 @@ def scorecard(who: Evaluator, svc: Svc) -> dict[str, Any]:
 
 
 @router.get("/eval/runs/{run_id}")
-def get_eval(run_id: str, who: Evaluator) -> None:
-    raise ProblemError(501, "evaluation runs arrive in Phase 11", ApiErrorCode.NOT_IMPLEMENTED)
+def get_eval(run_id: str, who: Evaluator, svc: Svc) -> dict[str, Any]:
+    """Progress and per-category counts of one `make eval` run, read from what the harness has
+    written (results.jsonl, summary.json). `run_id` is the folder name the harness prints.
+    `status`: finished, or unfinished with `updated_at` (running, or stopped early)."""
+    view = eval_runs.status(svc.settings.eval_dir, run_id)
+    if view is None:
+        raise ProblemError(404, "no such evaluation run", ApiErrorCode.NOT_FOUND)
+    return view

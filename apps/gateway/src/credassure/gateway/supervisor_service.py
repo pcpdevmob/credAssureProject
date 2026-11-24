@@ -524,6 +524,8 @@ def offer_view(facts: dict[str, str]) -> dict[str, Any]:
                 "version": ver,
                 "flags": [] if f.get("flags", "none") == "none" else f["flags"].split(","),
                 "comparable": f.get("comparable") == "true",
+                # LW-01: which terms to correct on an offer flagged LW_OFFER_INVALID (else empty)
+                "invalid_terms": [t for t in f.get("invalid_terms", "").split(",") if t],
                 "affordable": None if "affordable" not in f else f["affordable"] == "true",
                 "rank": int(f["rank"]) if "rank" in f else None,
                 "apr_pct": None

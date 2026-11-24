@@ -8,6 +8,7 @@ Known answers come from the placeholder WC fact (₹1,42,00,000, spec) and the f
 import hashlib
 import re
 from collections.abc import Callable
+from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 
@@ -142,6 +143,7 @@ def _s429(fx: SimpleNamespace) -> Response:
 
 
 def _s501(fx: SimpleNamespace) -> Response:
+    """Starting an evaluation run is refused on purpose: the gateway starts no process (ASI05)."""
     return fx.client.post("/v1/eval/runs", json={}, headers=fx.login("demo.evaluator"))
 
 
@@ -531,6 +533,39 @@ def test_UI06_CP02_chat_with_llm_off_abstains(fx: SimpleNamespace) -> None:
     assert r.json()["abstained"] is True and r.json()["refused"] is False
 
 
+def test_SUP02_an_approval_or_correction_typed_into_chat_changes_nothing(
+    fx: SimpleNamespace,
+) -> None:
+    """SUP-02: chat classifies an approval action and a data correction in code (model off) and
+    answers with fixed text. The case, its files and its approvals stay exactly as they were:
+    a decision is recorded only by POST /decision (APR-04), data only through an upload."""
+    case_id = fx.run_case()
+    director, preparer = fx.login("demo.director"), fx.login("demo.preparer")
+    before = _case(fx.client, director, case_id)
+    assert before["status"] == "AWAITING_APPROVAL"
+    r = fx.client.post(
+        f"/v1/cases/{case_id}/chat", json={"message": "Approve it now"}, headers=director
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["intent"] == "approval_action" and "Review & approval" in r.json()["answer"]
+    assert r.json()["refused"] is False and r.json()["abstained"] is False
+    r = fx.client.post(
+        f"/v1/cases/{case_id}/chat",
+        json={"message": "The minimum buffer should be ₹12 lakh, not ₹10 lakh."},
+        headers=preparer,
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["intent"] == "data_correction"
+    assert "Opening cash and credit lines" in r.json()["answer"]
+    after = _case(fx.client, director, case_id)
+    assert (after["status"], after["row_version"]) == (before["status"], before["row_version"])
+    engine = case_engine(fx.client.db)
+    with engine.connect() as c:
+        assert c.execute(text("SELECT COUNT(*) FROM approvals")).scalar() == 0
+    funding = fx.client.get(f"/v1/cases/{case_id}/funding", headers=preparer).json()
+    assert "12,00,000" not in str(funding)  # the typed figure went nowhere
+
+
 def test_UI08_report_has_every_trace_id_and_internal_approval_wording(
     fx: SimpleNamespace,
 ) -> None:
@@ -578,13 +613,48 @@ def test_APR03_preparer_cannot_set_config(fx: SimpleNamespace) -> None:
 
 def test_API01_eval_runs_not_implemented_for_evaluator(fx: SimpleNamespace) -> None:
     h = fx.login("demo.evaluator")
-    _problem(fx.client.post("/v1/eval/runs", json={}, headers=h), 501, "NOT_IMPLEMENTED")
-    _problem(fx.client.get("/v1/eval/runs/x", headers=h), 501, "NOT_IMPLEMENTED")
+    r = fx.client.post("/v1/eval/runs", json={}, headers=h)
+    _problem(r, 501, "NOT_IMPLEMENTED")
+    assert "make eval" in r.json()["detail"]  # says where a run is started
+    _problem(fx.client.get("/v1/eval/runs/x", headers=h), 404, "NOT_FOUND")
+    _problem(fx.client.get("/v1/eval/runs/20260101T000000", headers=h), 404, "NOT_FOUND")
 
 
 def test_API01_eval_runs_forbidden_for_preparer(fx: SimpleNamespace) -> None:
     r = fx.client.post("/v1/eval/runs", json={}, headers=fx.login("demo.preparer"))
     _problem(r, 403, "FORBIDDEN")
+
+
+def test_BRD61_evaluator_reads_the_progress_of_a_make_eval_run(
+    fx: SimpleNamespace, tmp_path: Path
+) -> None:
+    """BRD §6.1 `GET /eval/runs/{id}`: counts read from what the harness has written so far.
+    Nothing is computed here, no log text is returned, and an infra error is not scored."""
+    import json
+
+    run = tmp_path / "eval" / "20261121T101500-A2"
+    run.mkdir(parents=True)
+    rows = [
+        {"id": "T091", "category": "routing", "passed": True},
+        {"id": "T092", "category": "routing", "passed": False},
+        {"id": "T001", "category": "regulatory", "passed": None, "error": "timeout"},
+    ]
+    (run / "results.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows))
+    c = fx.make_client(eval_dir=tmp_path / "eval")
+    h = fx.login("demo.evaluator", c)
+    view = c.get(f"/v1/eval/runs/{run.name}", headers=h).json()
+    assert (view["status"], view["done"], view["passed"]) == ("unfinished", 3, 1)
+    assert view["by_category"] == {"routing": [1, 2]} and view["meta"] is None
+    assert view["updated_at"].endswith("+00:00")
+    (run / "summary.json").write_text(json.dumps({"meta": {"model": "FakeLLM"}, "total": 2}))
+    view = c.get(f"/v1/eval/runs/{run.name}", headers=h).json()
+    assert (view["status"], view["meta"]) == ("finished", {"model": "FakeLLM"})
+    assert set(view) == {"run_id", "status", "done", "passed", "by_category", "updated_at", "meta"}
+    for bad in ("..", "20261121T101500-A9", "20261121T101500-A2x"):  # only a run folder name
+        _problem(c.get(f"/v1/eval/runs/{bad}", headers=h), 404, "NOT_FOUND")
+    _problem(
+        c.get(f"/v1/eval/runs/{run.name}", headers=fx.login("demo.preparer", c)), 403, "FORBIDDEN"
+    )
 
 
 # --- Health and quota (scope #16, #50, NFR-03) ----------------------------------------------------
@@ -597,16 +667,34 @@ def test_scope50_live_needs_no_auth(fx: SimpleNamespace) -> None:
 
 
 @pytest.mark.parametrize(("llm_enabled", "model"), [(False, "disabled"), (True, "closed")])
-def test_scope50_ready_reports_checks(fx: SimpleNamespace, llm_enabled: bool, model: str) -> None:
-    c = fx.make_client(llm_enabled=llm_enabled)
+def test_scope50_ready_reports_checks(
+    fx: SimpleNamespace, tmp_path: Path, llm_enabled: bool, model: str
+) -> None:
+    c = fx.make_client(llm_enabled=llm_enabled, chroma_path=tmp_path / "no-index")
     r = c.get("/v1/health/ready")
     assert r.status_code == 200
     checks = r.json()["checks"]
     assert set(checks) == {"db", "chroma", "model", "quota"}
     assert checks["db"] == "ok"
-    assert checks["chroma"] == "not_configured"
+    assert checks["chroma"] == "missing"  # hybrid search (the default) with no index built
     assert checks["model"] == model
     assert checks["quota"]["level"] == "ok"
+
+
+def test_scope50_ready_reports_the_vector_index_on_disk(
+    fx: SimpleNamespace, tmp_path: Path
+) -> None:
+    """Scope #50: `chroma` was a constant. Hybrid search now reports `missing` until the index
+    exists at CHROMA_PATH and `ok` once it does; the overall status does not depend on it."""
+    index = tmp_path / "index"
+    c = fx.make_client(chroma_path=index)
+    body = c.get("/v1/health/ready").json()
+    assert (body["checks"]["chroma"], body["status"]) == ("missing", "ok")
+    index.mkdir()
+    (index / "chroma.sqlite3").write_bytes(b"")
+    assert c.get("/v1/health/ready").json()["checks"]["chroma"] == "ok"
+    keyword = fx.make_client(copilot_search_mode="keyword", chroma_path=index)
+    assert keyword.get("/v1/health/ready").json()["checks"]["chroma"] == "not_configured"
 
 
 def _spend(db: Any, case_id: str, tokens: int) -> None:

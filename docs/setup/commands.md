@@ -15,9 +15,13 @@
 ## Run
 | Command | What it does |
 |---|---|
+| `make start` | Everything at once: course endpoint by default (`MODELS=local\|hf`), Langfuse if set up, API, web; database and users on first run, no cases. `ARGS="--no-model --no-langfuse --no-ui --install"` |
+| `make stop` | Stop what `make start` started (Langfuse: `make langfuse-down`) |
 | `make run-api` | Gateway on :8000, tenant `demo`, `var/case.db` |
 | `make run-ui` | Next.js web app on :3000 |
-| `make db` | Migrate `var/case.db` + `var/corpus.db`, seed users (needs `SEED_PASSWORD`) |
+| `make db` | Migrate `var/case.db` + `var/corpus.db`, create missing accounts, each with its own first password (`var/initial-passwords.txt`) |
+| `make passwords` | New own password for every seeded account (`var/initial-passwords.txt`); signs them out, keeps MFA |
+| `make onboarding-prototype` | Tests of Mousita's stand-alone onboarding prototype (`agents/onboarding/prototype`, not wired into the app); part of `make check` |
 | `make demo-reset` | Rebuild the 10 demo cases through the API. **Stop `make run-api` first** |
 | `make e2e-db` / `run-api-e2e` / `run-ui-e2e` / `e2e` | Isolated Playwright stack (:8001, :3001, `var/case-e2e.db`) |
 

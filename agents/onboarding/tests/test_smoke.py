@@ -4,4 +4,4 @@ from credassure.agents.onboarding.agent import version
 
 
 def test_smoke_version() -> None:
-    assert version() == "0.2.1"
+    assert version() == "0.3.0"

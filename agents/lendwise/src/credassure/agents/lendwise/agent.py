@@ -49,6 +49,7 @@ ENGINE = "engines.loancost"
 ENGINE_VERSION = "1"  # bump when an LW engine changes a result (lineage, scope #33)
 REASONS = {  # plain words for each flag; the narrative's reason slots add the computed detail
     BlockerCode.LW_MISSING_MATERIAL_TERM: "it is missing a material term, so it is not compared",
+    BlockerCode.LW_OFFER_INVALID: "one of its terms cannot be priced, so it is not compared",
     BlockerCode.LW_INSTALMENT_MISMATCH: "its stated instalment does not match the recomputed one",
     BlockerCode.LW_SCHEDULE_DATE_MISMATCH: "its first repayment date does not match its schedule",
     BlockerCode.LW_NOT_AFFORDABLE: "its repayments would push cash below the minimum buffer",
@@ -253,11 +254,24 @@ def compare(
     priceable = [
         o
         for o in inputs.offers
-        if not audits[o["offer_id"]].missing_terms and o["offer_id"] in schedules
+        if not audits[o["offer_id"]].missing_terms
+        and not audits[o["offer_id"]].invalid_terms  # LW-01: never priced, never ranked
+        and o["offer_id"] in schedules
     ]
     priced: dict[str, tuple[loancost.Priced, Decimal]] = tools.call(
         "price_offer", case_id, {"offers": priceable, "hidden": hidden}
     )
+    # Fail closed (LW-01, BR-06): an offer the engine could not price (no rate solves its cash
+    # flows) is flagged and left out; it never stops the other offers from being compared.
+    for o in priceable:
+        if (oid := o["offer_id"]) not in priced:
+            audits[oid] = replace(
+                audits[oid],
+                comparable=False,
+                flags=(*audits[oid].flags, f"{BlockerCode.LW_OFFER_INVALID}:pricing"),
+                invalid_terms=("pricing",),
+            )
+    priceable = [o for o in priceable if o["offer_id"] in priced]
     for oid, apr in (apr_override or {}).items():  # ablation A1: the model's APR, not the engine's
         if oid in priced:
             priced[oid] = (replace(priced[oid][0], apr=apr), priced[oid][1])
@@ -310,6 +324,8 @@ def facts_for(c: Comparison, inputs: Inputs) -> dict[str, tuple[Decimal | int | 
         k = r.key
         out[f"{k}.flags"] = (",".join(r.flags) or "none", "codes")
         out[f"{k}.comparable"] = (str(r.audit.comparable).lower(), "bool")
+        if r.audit.invalid_terms:  # which values to correct (LW-01); only on an invalid offer
+            out[f"{k}.invalid_terms"] = (",".join(r.audit.invalid_terms), "codes")
         if r.priced is not None and r.gst is not None:
             # paise, half-up; CGST + SGST as an intra-state supply (home state IN-MH, ADR 0021)
             gst = r.gst.quantize(PAISE, rounding=ROUND_HALF_UP)

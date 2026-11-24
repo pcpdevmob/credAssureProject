@@ -2,6 +2,9 @@
 
 Status: Accepted · Date: 2026-11-14 · Amends ADR 0005 (Vite → Next.js static export); closes the open decision in ADR 0003
 
+**Amended 2026-11-20 by ADR 0038:** the bridge auth mode below is retired; the web app signs in with the gateway's own accounts
+(sign-in stages, TOTP MFA, user admin). The `bridge` and `FB_*` lines are kept as history.
+
 ## Decision
 `apps/web` is the `SureN8088/finbridge` front-end (Next.js 14 static export, Tailwind) instead of the Vite stub.
 - Every call goes through `@credassure/api-client` (`createClient`) in `src/lib/gateway.ts`. The bearer token is held in memory only.

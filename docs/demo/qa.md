@@ -13,9 +13,10 @@ There are four layers. (a) The model never types a figure: code fills every `{sl
 the stage from the stored files (SUP-05). A mismatch overrides the agent and is audited. (d) Independent gold, written in floats with
 numpy-financial and no engine import, agrees on 15/15 cash-flow and 15/15 offer cases. It also reproduces RBI's published 17.07% APR example. Every figure has a lineage drawer.
 
-**3. Why is the copilot at 10/25?**
-Retrieval is the limit. The gold document is in the top 5 for only 10 of the 19 answerable items, so the ceiling is about 16/25. The answers
-we do give quote their passages faithfully. The fix is better labels and corpus tagging, not prompts tuned to the test. It stays OPEN.
+**3. Why is the copilot at 13/25?**
+Not search: given the gold passages it still gets 8 of 19 answerable questions, the same as with real search. The limit is the 8B
+model writing a sentence the Critic can tie to a passage, and the Critic gives up some correct answers to keep false ones out. Plain
+RAG without our agents gets 6 of 19 but states 7 false answers with citations; we state 1–2 and abstain on all 6 unanswerable ones.
 
 **4. What did you do to compensate for a small model?**
 Each weakness has a design choice and an ablation (BRD §12). Arithmetic goes to tested engines (A1). Invented numbers and citations meet the ledger plus the Critic (A2).
@@ -32,7 +33,7 @@ Out of scope: OCR, scans and images; live banks, GST, ERP, HR or bureau integrat
 application, acceptance, signing or disbursal; real personal data; pricing cash credit, overdraft or invoice discounting (BRD §4.3).
 
 **7. What is needed for production?**
-Production would need a real identity provider and SSO; PostgreSQL in place of SQLite (the repository layer already allows it); a durable workflow engine; the
+Production would need a real identity provider and SSO; a server database in place of SQLite (case.db already runs on MySQL behind one setting, ADR 0039); a durable workflow engine; the
 production model endpoint with quotas; human-checked retrieval labels and a maintained corpus with supersession tagging; a security
 review and pen test; DPDP compliance work; and monitoring and on-call. Live lender integration stays out of scope.
 

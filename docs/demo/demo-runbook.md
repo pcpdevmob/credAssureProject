@@ -34,9 +34,10 @@ Do these in order. Each step depends on the one before it.
    ```
 6. **Browser.** Set zoom to **125%** and hide bookmarks. Use **one browser profile (or one private window) per role**, because the token is held in memory only.
    - Window 1: `demo.preparer`, open CA-2026-0024 Workflow in one tab and CA-2026-0016 Funding in another.
-   - Window 2: `demo.director`, open the Inbox.
+   - Window 2: `demo.director`, open the **Approval inbox** (signed in with password + phone code).
    - Window 3: `demo.evaluator`, open CA-2026-0016 Audit, and `localhost:8000/docs` already **Authorize**d with an evaluator token.
-   Passwords come from `SEED_PASSWORD*` in `.env`. Never show the `.env` file on screen.
+   Each account has its own password (`var/initial-passwords.txt` or `SEED_PASSWORD_<USER>` in `.env`). Never show
+   either file on screen.
 7. **Warm the model.** In a throwaway preparer tab on a **different** demo case (for example CA-2026-0017), ask T007 once. This loads the model and caches embeddings.
    Do **not** click Negotiate or Approve on CA-2026-0016 during warm-up. Both are one-shot actions, and redoing them needs demo-reset.
 8. **Ready state:** notifications off, the terminals out of view (keep one visible for the fallback), and this runbook open on a second screen.
