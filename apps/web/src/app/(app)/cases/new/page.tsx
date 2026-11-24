@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Building2, ShoppingCart, IndianRupee, Info, Lock } from 'lucide-react';
+import { Building2, ShoppingCart, IndianRupee, Info, Lock, FileStack } from 'lucide-react';
 import { useUser } from '@/components/AppShell';
 import { PageHeader } from '@/components/PageHeader';
 import { Card, CardHeader, Input, Label, Button } from '@/components/ui';
@@ -10,18 +10,20 @@ import ErrorBanner from '@/components/ErrorBanner';
 import { caseService } from '@/services';
 import { inrFromPaise, paiseFromInput } from '@/lib/money';
 import { ApiProblem } from '@/lib/problem';
+import { ACCEPT, pendingUploads } from '@/lib/intake';
 const ORDER = '₹4,20,00,000', REQUEST = '2 crore';
 
 export default function NewCase() {
   const u = useUser(); const r = useRouter(); const [busy, setBusy] = useState(false); const [err, setErr] = useState<unknown>();
   const [f, setF] = useState({ msmeName: 'Indus Circuitworks Pvt Ltd', orderRef: 'PO-AUR-3307', customerDueDate: '2027-03-15' });
+  const [docs, setDocs] = useState<File[]>([]);
   const [order, setOrder] = useState(paiseFromInput(ORDER)); const [req, setReq] = useState(paiseFromInput(REQUEST));
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement>) => setF({ ...f, [k]: e.target.value });
   const fe = (field: string) => err instanceof ApiProblem ? err.fieldErrors.find(x => x.field === field)?.reason : undefined;
   if (u.role !== 'PREPARER') return <Card className="mx-auto mt-10 max-w-md p-8 text-center"><Lock className="mx-auto h-8 w-8 text-slate-400" /><p className="mt-3 font-semibold">Only Proposal Preparers can create cases.</p><p className="text-sm text-slate-500">Approvers review cases from the approval inbox.</p></Card>;
   const submit = async (e: React.FormEvent) => {
     e.preventDefault(); if (order === null || req === null) return; setBusy(true); setErr(undefined);
-    try { const c = await caseService.create({ ...f, orderValuePaise: order, requestedPaise: req }, u); r.push(`/case/?id=${c.id}&tab=documents`); } catch (x) { setErr(x); setBusy(false); }
+    try { const c = await caseService.create({ ...f, orderValuePaise: order, requestedPaise: req }, u); pendingUploads.put(c.id, docs); r.push(`/case/?id=${c.id}&tab=documents`); } catch (x) { setErr(x); setBusy(false); }
   };
   return (<>
     <PageHeader title="Create case" sub="Step 1 of the workflow. The Supervisor will run the readiness check as soon as you create it." />
@@ -38,6 +40,12 @@ export default function NewCase() {
         <Card><CardHeader title="Indicative financing request" icon={<IndianRupee className="h-4 w-4" />} /><div className="grid gap-4 p-5 sm:grid-cols-2">
           <MoneyInput label="Requested amount" initial={REQUEST} onPaise={setReq} error={fe('indicative_amount_paise')} />
           <div><Label htmlFor="cur">Currency</Label><Input id="cur" value="INR (₹)" disabled /></div>
+        </div></Card>
+        <Card><CardHeader title="Documents (optional)" sub="Add the case's Excel workbook and the lenders' PDFs now; they are read as soon as the case is created. You can also add them later." icon={<FileStack className="h-4 w-4" />} /><div className="space-y-2 p-5">
+          <Label htmlFor="new-docs">Excel workbook (.xlsx) and lender PDFs (offer letter, Key Facts Statement, schedule of charges)</Label>
+          <input id="new-docs" type="file" multiple accept={ACCEPT} className="max-w-full text-xs file:mr-2 file:rounded-full file:border-0 file:bg-ink-900 file:px-3 file:py-1.5 file:text-white"
+            onChange={e => setDocs(Array.from(e.target.files ?? []))} />
+          {docs.length > 0 && <ul className="list-disc pl-5 text-sm text-slate-700">{docs.map(d => <li key={d.name}>{d.name}</li>)}</ul>}
         </div></Card>
       </div>
       <div className="space-y-4">

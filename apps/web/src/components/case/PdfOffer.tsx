@@ -1,7 +1,7 @@
 'use client';
 // ADR 0041: add a lender offer from its PDFs. The AI suggests values (each shown with the words it found them in);
 // the person checks every field against the PDF and saves. Saving goes through the same upload checks as a typed file.
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AlertTriangle, CheckCircle2, FileUp, Loader2, Plus, Trash2, Sparkles } from 'lucide-react';
 import { Button, Input, AiBadge } from '../ui';
 import ErrorBanner from '../ErrorBanner';
@@ -9,6 +9,7 @@ import { ApiProblem } from '@/lib/problem';
 import { plainReason } from '@/lib/caseForms';
 import { OFFER_FIELDS, reviewFromDraft, buildOffer, cleanRows, type Review, type ChargeRow, type OfferDraft } from '@/lib/offerPdf';
 import { caseFiles, pdfService, type PdfDoc } from '@/services/documents';
+import type { PdfGroup } from '@/lib/intake';
 
 const LENDER_TYPES: [string, string][] = [['', 'Not stated'], ['commercial_bank', 'Commercial bank'], ['nbfc', 'NBFC'], ['sfb', 'Small finance bank'], ['coop_bank', 'Co-operative bank']];
 const TIMING: [ChargeRow['timing'], string][] = [['upfront', 'Upfront'], ['monthly', 'Monthly'], ['annual', 'Yearly']];
@@ -88,7 +89,8 @@ export function MissingDocPdf({ caseId, docId, onSaved }: { caseId: string; docI
   </div>);
 }
 
-export default function PdfOffer({ caseId, onSaved }: { caseId: string; onSaved: () => void }) {
+/** `preset`: PDFs already chosen in the one-step upload (QuickUpload); they are read straight away into the same review. */
+export default function PdfOffer({ caseId, onSaved, preset }: { caseId: string; onSaved: () => void; preset?: PdfGroup }) {
   const [letter, setLetter] = useState<{ name: string; draft: OfferDraft } | null>(null);
   const [review, setReview] = useState<Review | null>(null);
   const [kfs, setKfs] = useState<{ name: string; text: string } | null>(null);
@@ -96,6 +98,21 @@ export default function PdfOffer({ caseId, onSaved }: { caseId: string; onSaved:
   const [checked, setChecked] = useState(false);
   const [state, setState] = useState<{ busy?: boolean; error?: unknown; done?: string; problems?: Record<string, string> }>({});
   const [id] = useState(newId);
+  const [reading, setReading] = useState<string>(); const [readErr, setReadErr] = useState<unknown>();
+  const ran = useRef(false);
+  useEffect(() => {
+    if (!preset || ran.current) return; ran.current = true;
+    (async () => {
+      const busy = (f: File, doc: PdfDoc) => { setReading(`${f.name}${doc !== 'kfs' ? ' — the AI is finding the figures, this can take up to a minute' : ''}`); return pdfService.read(caseId, doc, f); };
+      try {
+        const r = await busy(preset.offer, 'offer'); setLetter({ name: preset.offer.name, draft: r.draft }); setReview(reviewFromDraft(r.draft));
+        if (preset.kfs) { const k = await busy(preset.kfs, 'kfs'); setKfs({ name: preset.kfs.name, text: k.text }); }
+        if (preset.schedule) { const c = await busy(preset.schedule, 'schedule'); setSch({ name: preset.schedule.name, text: c.text, rows: c.draft.rows ?? [], ai: c.draft.model === 'used' }); }
+      } catch (x) { setReadErr(x); } finally { setReading(undefined); }
+    })();
+  }, [caseId, preset]);
+  const readState = <>{reading && <p className="flex items-center gap-1.5 text-sm text-ink-600"><Loader2 aria-hidden className="h-4 w-4 animate-spin" />Reading {reading}…</p>}
+    {readErr !== undefined && <ErrorBanner error={readErr} />}</>;
 
   const set = (k: string, v: string) => setReview(r => r && { ...r, values: { ...r.values, [k]: v } });
   const quotes = letter?.draft.fields ?? {};
@@ -117,6 +134,7 @@ export default function PdfOffer({ caseId, onSaved }: { caseId: string; onSaved:
   }
 
   if (!letter || !review) return (<div className="space-y-3">
+    {readState}
     {state.done && <p role="status" className="flex items-center gap-1.5 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-900 ring-1 ring-emerald-200"><CheckCircle2 aria-hidden className="h-4 w-4" />The offer from {state.done} was saved.</p>}
     <PdfPicker id="pdf-offer-letter" label="1. The lender's offer letter or sanction letter (PDF)" doc="offer" caseId={caseId}
       onRead={r => { setLetter({ name: r.name, draft: r.draft }); setReview(reviewFromDraft(r.draft)); setState({}); }} />
@@ -132,6 +150,7 @@ export default function PdfOffer({ caseId, onSaved }: { caseId: string; onSaved:
       <Button size="sm" variant="ghost" onClick={reset}>Start again</Button>
     </div>
 
+    {readState}
     <fieldset className="grid gap-4 sm:grid-cols-2"><legend className="mb-2 text-sm font-semibold text-ink-950">Offer terms</legend>
       {OFFER_FIELDS.map(f => <div key={f.name}>
         <label htmlFor={`pdf-${f.name}`} className="block text-sm font-medium text-ink-900">{f.label}{f.material && <span className="text-ink-500"> (needed to compare)</span>}</label>
