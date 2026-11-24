@@ -1,0 +1,56 @@
+{
+  "passed": 88,
+  "total": 100,
+  "by_category": {
+    "cashflow": "15/15",
+    "e2e": "5/5",
+    "injection": "8/8",
+    "isolation": "3/3",
+    "negotiation": "5/5",
+    "offers": "15/15",
+    "onboarding": "10/10",
+    "refusal": "8/8",
+    "regulatory": "13/25",
+    "routing": "6/6"
+  },
+  "taxonomy": {
+    "search_miss": 12
+  },
+  "tokens": 190107,
+  "llm_calls": 245,
+  "cost": 0.0,
+  "latency_p50_s": 20.76,
+  "latency_p95_s": 68.93,
+  "meta": {
+    "model": "qwen3:8b",
+    "endpoint": "http://localhost:11434/v1",
+    "ablation": null,
+    "categories": "all",
+    "items": 100,
+    "prompt_versions": {
+      "cp_answer": "2.0.0",
+      "cp_tool": "1.1.0",
+      "regenerate": "1.0.0",
+      "a1_lw_apr": "1.0.0",
+      "lw_explain": "1.2.0",
+      "lw_kfs_extract": "1.0.0",
+      "onb_explain": "2.0.0",
+      "sup_gate_a4": "1.0.0",
+      "sup_plan": "1.0.0",
+      "a1_wc_calc": "1.0.0",
+      "wc_explain": "2.0.0",
+      "intake_offer_quotes": "1.0.0",
+      "intake_schedule_rows": "1.0.0"
+    },
+    "corpus_lock": "2354a6dc4ca8d516",
+    "data_hashes": {
+      "data/frozen/v1/SHA256SUMS": "c65d5ee7584fd5ec17385bba26c3d156aac15816e3d4a91733b7a7ccede3128b",
+      "data/frozen/v2/SHA256SUMS": "54fb31f377d17581fe8fb1ee3f38face657f5a36076e71e87e58e77be94c1765"
+    },
+    "lender_scripts_dir": "data/frozen/v2/lender_scripts",
+    "reranker": "local_cross_encoder",
+    "llm_cache": false,
+    "price_per_1k": 0.0,
+    "started": "20261124T220648"
+  }
+}

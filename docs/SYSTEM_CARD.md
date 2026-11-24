@@ -114,10 +114,12 @@ All ten OWASP LLM (2026) and ten Agentic ASI (2026) risks map to controls and te
 
 ## 9. Evaluation and adversarial results
 All model runs: local Ollama `qwen3:8b` (ADR 0036), 8192-token context, thinking off, response cache off, on one
-16 GB Apple Silicon Mac. Write-up with every run id: `evaluation/reports/G4-draft-2026-11-19.md`.
+16 GB Apple Silicon Mac. Final results: `evaluation/reports/G4-2026-11-24.md` (earlier run ids and method: `G4-draft-2026-11-19.md`).
 
 **Headline: 88/100 against the team's own BRD target of 92 (not met), and +65 over the best single-prompt baseline.**
-Reference run `var/eval/20261119T091531`; reproduced on `main` on 20 Nov (`20261120T121853` + `20261120T140004`, 88).
+Final run on the submitted code (K3, 24 Nov, `main` at `5a88b56`): `20261124T220648`, 88/100, regulatory 13/25
+(files in `evaluation/reports/k3/`). The same 88 on 19 Nov (`20261119T091531`) and 20 Nov (`20261120T121853` +
+`20261120T140004`).
 
 | Category | Items | Best baseline (S2) | System | Target |
 |---|---|---|---|---|
@@ -143,7 +145,7 @@ on a rerun):
 | Ablation | Full | Ablated | Effect |
 |---|---|---|---|
 | A1 model calculates (no engines) | 41/41 | 10/41 | Yes (4 categories, identical on rerun) |
-| A2 ledger and Critic off | 39/51 | 38/51 | Not measurable on these scorers |
+| A2 ledger and Critic off | 39/51 | 38/51 (rerun 24 Nov, same) | No score effect; with the Critic off 11 (not 8) of 19 answerable questions get an unsupported answer and 2 (not 4) abstain |
 | A3 dense top 5 only | 13/25 | 12/25 | Within run-to-run variation |
 | A4 model decides gates | 45/45 | 13/45 | Yes (4 categories, identical on rerun) |
 | A5 injection defence off | 13/13 | 12/13 (T082 followed the plant) | Yes (reproduced) |
@@ -178,7 +180,7 @@ and is reported as post-diagnosis (dev split 10 → 11/20, oracle 8 → 10/19, s
 | Architecture conformance | PASS | `evaluation/reports/E18-2026-11-18.md` |
 
 **Still to measure before submission** (freeze scope; this card claims none of them until they are in):
-the final full run on the merged code (K3, expected 88 ± 1) and A2 rerun; judge J1 agreement with human labels
+judge J1 agreement with human labels
 (Cohen's kappa) and the "supported" copilot score (K4); safety_v2 (40 items, target ≥ 38/40 with 0 critical) and its
 guardrails-off ablation A6 (K5).
 
