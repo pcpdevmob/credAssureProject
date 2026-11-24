@@ -22,6 +22,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | 9 | 9.7 | UI | done | Pritish | 2026-11-24 | — | — | [2026-11-24-9-9.7-one-step-upload-pritish.md](docs/progress/entries/2026-11-24-9-9.7-one-step-upload-pritish.md) |
 | 9a | 0.3.0 | Evaluation | done | Pritish | 2026-11-23 | — | E5 | [2026-11-23-9a-0.3.0-onboarding-checker-pritish.md](docs/progress/entries/2026-11-23-9a-0.3.0-onboarding-checker-pritish.md) |
 | 9a | 0.3.1 | Documentation | done | Pritish | 2026-11-23 | ca5f0bb | — | [2026-11-23-9a-0.3.1-onboarding-prototype-pritish.md](docs/progress/entries/2026-11-23-9a-0.3.1-onboarding-prototype-pritish.md) |
+| 11 | 11.16 | Evaluation | done | Pritish | 2026-11-24 | — | K3 | [2026-11-24-11-11.16-k3-final-run-pritish.md](docs/progress/entries/2026-11-24-11-11.16-k3-final-run-pritish.md) |
 | 12 | 12.12 | Documentation | done | Pritish | 2026-11-24 | — | — | [2026-11-24-12-12.12-e2e-test-pack-pritish.md](docs/progress/entries/2026-11-24-12-12.12-e2e-test-pack-pritish.md) |
 | S1 | 1 | Documentation | done | Pritish | 2026-11-18 | 9969751, 9b63b13 | — | [2026-11-18-s1-1-progress-tracking-pritish.md](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md) |
 | S2 | 1 | Documentation | done | Pritish | 2026-11-18 | 07ea5b7 | — | [2026-11-18-s2-1-plan-v34-base-files-pritish.md](docs/progress/entries/2026-11-18-s2-1-plan-v34-base-files-pritish.md) |
@@ -179,6 +180,7 @@ From the latest entry of each step. Module-level items live in each module file.
 ### Evaluation
 
 - 9a 0.3.0: none. PR #43 was merged as it was (owner decision, 23 Nov): its entry records the design; this entry records the code. ([entry](docs/progress/entries/2026-11-23-9a-0.3.0-onboarding-checker-pritish.md))
+- 11 11.16: K4 judge + human labels + kappa on `20261124T220648`; K5 safety_v2 + A6; K7 trace links. ([entry](docs/progress/entries/2026-11-24-11-11.16-k3-final-run-pritish.md))
 - P2 2.2: re-record one live-model demo run with a Langfuse trace at P4 (Mac). ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
 - P2 2.2: E18 SHOULDs S1/S2 (ARCHITECTURE says React SPA/nginx; §6.3 omits RETURNED) — P10 docs. ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
 - P5 5.2: Human review of the J1 sample after the live run (human review list H14). ([entry](docs/progress/entries/2026-11-18-p5-5.2-dual-scoring-pritish.md))
