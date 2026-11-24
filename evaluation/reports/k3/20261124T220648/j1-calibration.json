@@ -1,0 +1,11 @@
+{
+  "n": 19,
+  "pending": 0,
+  "judged": 19,
+  "human_correct": 10,
+  "j1_correct": 10,
+  "agreement": 0.895,
+  "kappa": 0.789,
+  "j1_version": "1.0.0",
+  "free_text_scored_by": "J1"
+}
