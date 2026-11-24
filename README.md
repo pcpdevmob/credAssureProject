@@ -261,6 +261,31 @@ authenticator app. `make passwords` issues new ones (it signs those accounts out
 
 Maker-checker: whoever prepares a case can't approve it. `prep.e0xx` users map to the 20 HR profiles, so some fail onboarding by design (expired training, wrong role and so on).
 
+### Sign in and test (teammates)
+Step-by-step guide: **[docs/setup/e2e-testing.md](docs/setup/e2e-testing.md)**. Test data for every use case:
+**[data/test-pack/](data/test-pack/)** (an Excel workbook, lender PDFs and lender files per scenario, with the expected
+result of each).
+
+```bash
+# .env (edit it yourself): MFA_ENFORCED=true and MFA_ENCRYPTION_KEY=<32 random bytes, base64> for two-step sign-in
+make db                       # first time: every account gets its own first password
+make passwords                # later: new first passwords for all 25 seeded accounts (MFA set-up is kept)
+cat var/initial-passwords.txt # username, role, first password; hand each out privately, then delete the file
+BOOTSTRAP_ADMIN_PASSWORD='<12+ chars, not containing admin>' make admin NAME=it.admin   # first IT admin, once
+make start                    # then open http://localhost:3000
+```
+1. Sign in with the first password; choose your own. Directors, VPs and the admin then scan the QR code with Google
+   or Microsoft Authenticator and keep the backup codes.
+2. As `demo.preparer`: **New case** → pick the scenario's workbook and lender PDFs (or lender files) → **Create case**
+   → **Workflow → Run**. Compare with the expected result in the guide.
+3. As `demo.director` / `demo.vp`: **Approval inbox** → the case → **Review & approval**. The VP's approval above
+   ₹1.5 crore asks for the password and a fresh code.
+4. Lost a password: nobody can read it back. `make passwords` re-issues the seeded accounts; the admin uses
+   **User management → Reset password / Reset MFA** for anyone.
+
+The user manual (PDF, with screenshots of every screen) and the walk-through video are shared with the team in the
+Project; they show the same flows.
+
 ### Author a case in Excel
 ```bash
 make case-from-xlsx FILE=my_case.xlsx OUT=var/my_case   # validated like an upload; errors by tab, row, column

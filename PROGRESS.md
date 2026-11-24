@@ -22,6 +22,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | 9 | 9.7 | UI | done | Pritish | 2026-11-24 | — | — | [2026-11-24-9-9.7-one-step-upload-pritish.md](docs/progress/entries/2026-11-24-9-9.7-one-step-upload-pritish.md) |
 | 9a | 0.3.0 | Evaluation | done | Pritish | 2026-11-23 | — | E5 | [2026-11-23-9a-0.3.0-onboarding-checker-pritish.md](docs/progress/entries/2026-11-23-9a-0.3.0-onboarding-checker-pritish.md) |
 | 9a | 0.3.1 | Documentation | done | Pritish | 2026-11-23 | ca5f0bb | — | [2026-11-23-9a-0.3.1-onboarding-prototype-pritish.md](docs/progress/entries/2026-11-23-9a-0.3.1-onboarding-prototype-pritish.md) |
+| 12 | 12.12 | Documentation | done | Pritish | 2026-11-24 | — | — | [2026-11-24-12-12.12-e2e-test-pack-pritish.md](docs/progress/entries/2026-11-24-12-12.12-e2e-test-pack-pritish.md) |
 | S1 | 1 | Documentation | done | Pritish | 2026-11-18 | 9969751, 9b63b13 | — | [2026-11-18-s1-1-progress-tracking-pritish.md](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md) |
 | S2 | 1 | Documentation | done | Pritish | 2026-11-18 | 07ea5b7 | — | [2026-11-18-s2-1-plan-v34-base-files-pritish.md](docs/progress/entries/2026-11-18-s2-1-plan-v34-base-files-pritish.md) |
 | P0 | 0.2 | Documentation | done | Pritish | 2026-11-18 | b4eb8dd | — | [2026-11-18-p0-0.2-plan-v34-adrs-pritish.md](docs/progress/entries/2026-11-18-p0-0.2-plan-v34-adrs-pritish.md) |
