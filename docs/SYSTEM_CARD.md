@@ -177,11 +177,11 @@ and is reported as post-diagnosis (dev split 10 → 11/20, oracle 8 → 10/19, s
 | Retrieval recall@5, frozen 40 | 22/40 with the shipped configuration (target 34; labels pooling-biased); dev split 17/20 | `evaluation/reports/retrieval-ladder-2026-11-18.md` |
 | Where the model runs | Course endpoint (full-precision Qwen3-8B): 53/66 vs 54/66 on the model-dependent items (≈ 87 vs 88 of 100; only T003 differs), at 4–8× lower latency | `docs/evaluation/course-endpoint.md`; run `20261120T161257` |
 | Fairness invariance (names, cities, state) | Gates, amount, route and ranking unchanged | `tests/e2e/test_fairness_invariance.py::test_scope67_BR12_names_and_state_do_not_change_decisions` |
+| Judge J1 vs two human labellers (19 answerable regulatory answers, run `20261124T220648`) | Kappa 0.789, agreement 17/19 (threshold 0.7, ADR 0014); by content 10/19 correct (humans and J1), so 16/25 regulatory right in substance vs 13/25 strict | `evaluation/reports/G4-2026-11-24.md` (K4), `evaluation/reports/E13-2026-11-25.md` |
 | Architecture conformance | PASS | `evaluation/reports/E18-2026-11-18.md` |
 
 **Still to measure before submission** (freeze scope; this card claims none of them until they are in):
-judge J1 agreement with human labels
-(Cohen's kappa) and the "supported" copilot score (K4); safety_v2 (40 items, target ≥ 38/40 with 0 critical) and its
+safety_v2 (40 items, target ≥ 38/40 with 0 critical) and its
 guardrails-off ablation A6 (K5).
 
 ## 10. Failure taxonomy
