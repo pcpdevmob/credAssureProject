@@ -6,7 +6,12 @@ import type { OfferDraft, ChargeRow } from '@/lib/offerPdf';
 
 export const FILE_KINDS = ['order', 'opening_position', 'costs', 'receipts', 'receivables', 'payables', 'inventory'] as const;
 export type FileKind = typeof FILE_KINDS[number] | 'offer' | 'kfs';
-export type Uploaded = { rows: number; flagged: boolean };
+/** `flagged`: instruction-like text was found and ignored. `otherCase`: a lender document names a different case number
+ * (KFS_CASE_MISMATCH: kept and flagged for review). The gateway reports both in `injection_flags`; they mean different things. */
+export type Uploaded = { rows: number; flagged: boolean; otherCase: boolean };
+export const CASE_MISMATCH = 'KFS_CASE_MISMATCH';
+export const flagNotes = (flags: unknown[] | undefined) => ({
+  flagged: !!flags?.some(f => f !== CASE_MISMATCH), otherCase: !!flags?.includes(CASE_MISMATCH) });
 
 const TYPE = (name: string) => name.endsWith('.json') ? 'application/json' : name.endsWith('.md') ? 'text/markdown' : 'text/csv';
 
@@ -15,7 +20,7 @@ export const documentService = {
     // The part's type comes from the extension: browsers send '' for .md and vnd.ms-excel for .csv on some systems.
     const body = new FormData(); body.append('file', new File([file], file.name, { type: TYPE(file.name) }));
     const r = await ok(gw.POST('/v1/cases/{case_id}/files', { params: { path: { case_id: caseId }, query: { kind } as never }, body: body as never, bodySerializer: (b: unknown) => b as FormData } as never)) as unknown as { rows?: number; injection_flags?: unknown[] };
-    return { rows: r.rows ?? 0, flagged: !!r.injection_flags?.length };
+    return { rows: r.rows ?? 0, ...flagNotes(r.injection_flags) };
   },
   /** Offers are JSON, KFS documents and schedules of charges are Markdown. */
   kindOf: (name: string): FileKind | null => name.endsWith('.json') ? 'offer' : name.endsWith('.md') ? 'kfs' : null,
@@ -36,12 +41,12 @@ export const caseFiles = {
 
 /** ADR 0040: the case Excel workbook. The gateway converts it to the same JSON/CSV files and stores each through the same
  * upload check; on any error nothing is stored and each error names sheet (field prefix), Excel row and column. */
-export type Imported = { name: string; kind: FileKind; rows: number; flagged: boolean };
+export type Imported = { name: string; kind: FileKind; rows: number; flagged: boolean; otherCase: boolean };
 export const workbookService = {
   async upload(caseId: string, file: File): Promise<Imported[]> {
     const body = new FormData(); body.append('file', new File([file], file.name, { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
     const r = await ok(gw.POST('/v1/cases/{case_id}/workbook', { params: { path: { case_id: caseId } }, body: body as never, bodySerializer: (b: unknown) => b as FormData } as never)) as unknown as { files: { name: string; kind: FileKind; rows: number; injection_flags?: unknown[] }[] };
-    return r.files.map(f => ({ name: f.name, kind: f.kind, rows: f.rows, flagged: !!f.injection_flags?.length }));
+    return r.files.map(f => ({ name: f.name, kind: f.kind, rows: f.rows, ...flagNotes(f.injection_flags) }));
   },
   /** Blank template (default) or the demo case filled in, downloaded with the signed-in user's token. */
   async template(example = false): Promise<void> {

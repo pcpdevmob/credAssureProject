@@ -32,6 +32,62 @@ function Found({ quote }: { quote?: string }) {
     : <p className="mt-1 text-xs text-amber-800">Not found in the PDF — type it from the document, or leave blank if it is not stated.</p>;
 }
 
+/** The charges of a schedule, one row each, as the person confirms them against the PDF. */
+function ChargeRows({ rows, onChange }: { rows: ChargeRow[]; onChange: (rows: ChargeRow[]) => void }) {
+  return (<>
+    <ul className="space-y-2">{rows.map((r, i) => { const upd = (p: Partial<ChargeRow>) => onChange(rows.map((y, j) => j === i ? { ...y, ...p } : y)); return (
+      <li key={i} className="grid items-end gap-2 sm:grid-cols-[2fr_1fr_2fr_auto]">
+        <div><label className="text-xs text-ink-700" htmlFor={`sch-n-${i}`}>Charge</label><Input id={`sch-n-${i}`} value={r.name} onChange={e => upd({ name: e.target.value })} /></div>
+        <div><label className="text-xs text-ink-700" htmlFor={`sch-t-${i}`}>When</label><select id={`sch-t-${i}`} className={select} value={r.timing} onChange={e => upd({ timing: e.target.value as ChargeRow['timing'] })}>{TIMING.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select></div>
+        <div><label className="text-xs text-ink-700" htmlFor={`sch-a-${i}`}>Amount as written</label><Input id={`sch-a-${i}`} placeholder="e.g. 1% of the loan amount + GST" value={r.amount} onChange={e => upd({ amount: e.target.value })} /></div>
+        <Button size="sm" variant="ghost" aria-label={`Remove ${r.name || 'charge'}`} onClick={() => onChange(rows.filter((_, j) => j !== i))}><Trash2 aria-hidden className="h-4 w-4" /></Button>
+      </li>); })}</ul>
+    <Button size="sm" variant="outline" onClick={() => onChange([...rows, { name: '', timing: 'upfront', amount: '' }])}><Plus aria-hidden className="h-4 w-4" />Add a charge</Button>
+  </>);
+}
+
+/** The offer a KFS document id belongs to: KFS-OF-07-A-v1-SCH → schedule of OF-07-A version 1. */
+export function lenderDocOf(docId: string): { kfsDocId: string; offerId: string; version: number; which: 'kfs' | 'schedule' } | null {
+  const m = /^KFS-(.+)-v(\d+)(-SCH)?$/.exec(docId);
+  return m ? { kfsDocId: `KFS-${m[1]}-v${m[2]}`, offerId: m[1], version: Number(m[2]), which: m[3] ? 'schedule' : 'kfs' } : null;
+}
+
+/** ADR 0041 for one missing document of an offer already in the case (the lender comparison asked for it by name):
+ *  read the lender's PDF, check the charges (schedule) or the text (KFS), save it under that offer. */
+export function MissingDocPdf({ caseId, docId, onSaved }: { caseId: string; docId: string; onSaved?: () => void }) {
+  const doc = lenderDocOf(docId);
+  const [read, setRead] = useState<{ name: string; text: string; rows: ChargeRow[]; ai: boolean } | null>(null);
+  const [checked, setChecked] = useState(false);
+  const [state, setState] = useState<{ busy?: boolean; error?: unknown; done?: boolean }>({});
+  if (!doc) return null;
+  const what = doc.which === 'schedule' ? 'schedule of charges' : 'Key Facts Statement';
+  async function save() {
+    if (!doc || !read) return;
+    setState({ busy: true });
+    try {
+      await pdfService.saveKfs(caseId, { kfs_doc_id: doc.kfsDocId, offer_id: doc.offerId, version: doc.version, which: doc.which,
+        title: `${doc.which === 'schedule' ? 'Schedule of charges' : 'Key Facts Statement'} - ${doc.offerId}`, text: read.text, rows: doc.which === 'schedule' ? cleanRows(read.rows) : [] });
+      setState({ done: true }); setRead(null); setChecked(false); onSaved?.();
+    } catch (x) { setState({ error: x }); }
+  }
+  if (state.done) return <p role="status" className="flex items-center gap-1.5 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-900 ring-1 ring-emerald-200"><CheckCircle2 aria-hidden className="h-4 w-4" />The {what} for {doc.offerId} was saved. Press Continue.</p>;
+  if (!read) return <PdfPicker id="pdf-missing-doc" label={`The lender's ${what} for ${doc.offerId} (PDF)`} doc={doc.which} caseId={caseId}
+    onRead={r => { setRead({ name: r.name, text: r.text, rows: r.draft.rows ?? [], ai: r.draft.model === 'used' }); setState({}); }} />;
+  const fe = state.error instanceof ApiProblem ? state.error.fieldErrors : [];
+  return (<div className="space-y-3">
+    <p className="flex items-center gap-1.5 text-sm"><CheckCircle2 aria-hidden className="h-4 w-4 text-emerald-600" />{read.name} <Button size="sm" variant="ghost" onClick={() => { setRead(null); setChecked(false); }}>Choose another</Button></p>
+    {doc.which === 'schedule' ? <>
+      <p className="text-xs text-ink-600">{read.ai ? 'The AI listed these charges. Check each row against the PDF:' : 'List each charge from the PDF:'} the comparison looks for charges the offer leaves out.</p>
+      <ChargeRows rows={read.rows} onChange={rows => setRead({ ...read, rows })} />
+    </> : <p className="text-xs text-ink-600">The Key Facts Statement is kept as the lender wrote it ({read.text.length.toLocaleString('en-IN')} characters read); no AI is used for it.</p>}
+    {fe.length > 0 ? <div role="alert" className="rounded-xl bg-rose-50 p-3 text-sm ring-1 ring-rose-200"><p className="font-semibold text-rose-700">Not saved. Please fix:</p>
+      <ul className="mt-1 list-disc pl-5">{fe.map((e, i) => <li key={i}>{plainReason(e.reason)}</li>)}</ul></div>
+      : state.error !== undefined && <ErrorBanner error={state.error} />}
+    <label className="flex items-start gap-2 text-sm"><input type="checkbox" className="mt-1" checked={checked} onChange={e => setChecked(e.target.checked)} />I checked this against the lender&apos;s PDF.</label>
+    <Button onClick={save} disabled={!checked || state.busy} loading={state.busy}><FileUp aria-hidden className="h-4 w-4" />Save the {what}</Button>
+  </div>);
+}
+
 export default function PdfOffer({ caseId, onSaved }: { caseId: string; onSaved: () => void }) {
   const [letter, setLetter] = useState<{ name: string; draft: OfferDraft } | null>(null);
   const [review, setReview] = useState<Review | null>(null);
@@ -117,14 +173,7 @@ export default function PdfOffer({ caseId, onSaved }: { caseId: string; onSaved:
       {sch ? <div className="space-y-2">
           <p className="flex items-center gap-1.5 text-sm"><CheckCircle2 aria-hidden className="h-4 w-4 text-emerald-600" />Schedule of charges: {sch.name} <Button size="sm" variant="ghost" onClick={() => setSch(null)}>Remove</Button></p>
           <p className="text-xs text-ink-600">{sch.ai ? 'The AI listed these charges. Check each row against the PDF:' : 'List each charge from the PDF:'} the comparison looks for charges the offer letter leaves out.</p>
-          <ul className="space-y-2">{sch.rows.map((r, i) => { const upd = (p: Partial<ChargeRow>) => setSch({ ...sch, rows: sch.rows.map((y, j) => j === i ? { ...y, ...p } : y) }); return (
-            <li key={i} className="grid items-end gap-2 sm:grid-cols-[2fr_1fr_2fr_auto]">
-              <div><label className="text-xs text-ink-700" htmlFor={`sch-n-${i}`}>Charge</label><Input id={`sch-n-${i}`} value={r.name} onChange={e => upd({ name: e.target.value })} /></div>
-              <div><label className="text-xs text-ink-700" htmlFor={`sch-t-${i}`}>When</label><select id={`sch-t-${i}`} className={select} value={r.timing} onChange={e => upd({ timing: e.target.value as ChargeRow['timing'] })}>{TIMING.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select></div>
-              <div><label className="text-xs text-ink-700" htmlFor={`sch-a-${i}`}>Amount as written</label><Input id={`sch-a-${i}`} placeholder="e.g. 1% of the loan amount + GST" value={r.amount} onChange={e => upd({ amount: e.target.value })} /></div>
-              <Button size="sm" variant="ghost" aria-label={`Remove ${r.name || 'charge'}`} onClick={() => setSch({ ...sch, rows: sch.rows.filter((_, j) => j !== i) })}><Trash2 aria-hidden className="h-4 w-4" /></Button>
-            </li>); })}</ul>
-          <Button size="sm" variant="outline" onClick={() => setSch({ ...sch, rows: [...sch.rows, { name: '', timing: 'upfront', amount: '' }] })}><Plus aria-hidden className="h-4 w-4" />Add a charge</Button>
+          <ChargeRows rows={sch.rows} onChange={rows => setSch({ ...sch, rows })} />
         </div>
         : <PdfPicker id="pdf-schedule" label="3. Schedule of charges (PDF)" doc="schedule" caseId={caseId} onRead={r => setSch({ name: r.name, text: r.text, rows: r.draft.rows ?? [], ai: r.draft.model === 'used' })} />}
     </fieldset>

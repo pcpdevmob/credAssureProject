@@ -44,6 +44,8 @@ If any error is found, nothing is written and the exit code is 1. OUT can't be u
 ## 3. Upload
 Create a case and upload the files from OUT on **Documents** (or `POST /v1/cases/{id}/files?kind=...`). The KFS and
 schedule-of-charges documents are free text, so they aren't in the workbook: upload each offer's `<kfs_doc_id>.md`
-separately.
+separately, or add the offer from the lender's PDFs (offer letter, KFS, schedule of charges) under **Documents from
+lenders**. If the lender comparison stops and asks for one KFS or schedule of charges by name, its question card takes
+that document from the lender's PDF (you check the charges, then save) or as the `.md` file.
 
 After a schema change, regenerate the template with `make case-template`. A test fails until you do.

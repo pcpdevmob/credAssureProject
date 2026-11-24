@@ -21,3 +21,12 @@ Copilot regulatory accuracy is 10/25 live against a BRD target of ≥ 20/25. Ret
 ## Log
 - 2026-11-18: accepted with reranker on and strict ≥ 16/25.
 - 2026-11-18: §6 amended by [ADR 0035](0035-copilot-v3-product-assistant.md): CP-07, CP-10, CP-11 and CP-12 built (user decision); CP-08 full, A7 and the adaptive round stay deferred.
+
+## Amendment 2026-11-24 (human review H6, decision D2): the reranker scores, it does not reorder
+Decision 2 says "reranker on". What ships, by owner decision on 2026-11-18 after the dev-split ladder, is narrower:
+the cross-encoder scores the retrieved passages for the **answerability gate only** (`RERANKER=local_cross_encoder`,
+`RERANK_ORDER=false`, threshold 0.4066 chosen on the dev split); the passage order stays the hybrid search order.
+Reordering lowered dev recall@5 from 17/20 to 11/20 (`evaluation/reports/retrieval-ladder-2026-11-18.md`), so it is
+off and the experiment is not reopened. Read "reranker on" in this ADR, in ADR 0013 and in the report as
+"reranker scores the answerability gate; no reordering". Team acceptance of this wording is tracked as H6.
+

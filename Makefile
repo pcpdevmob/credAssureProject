@@ -227,8 +227,8 @@ kappa:  ## Cohen's kappa, silver vs JUDGE on the human sample (run after make ju
 eval:  ## Run the 100 items through the API on the configured model (Phase 11/P7); ARGS="--ablation A1" | "--fake --only routing"
 	APP_ENV=dev LOG_LEVEL=WARNING uv run $(ENV_FILE) python scripts/eval_harness.py $(ARGS)
 
-eval-judge:  ## J1 grades the run's regulatory answers and writes a 20% human sample: RUN=var/eval/<run>
-	uv run $(ENV_FILE) python -m credassure.evaluation.judge_j1 judge --run $(RUN)
+eval-judge:  ## J1 grades the run's regulatory answers and writes the human sample: RUN=var/eval/<run> [SAMPLE=all for every answer, D4; default 0.2]
+	uv run $(ENV_FILE) python -m credassure.evaluation.judge_j1 judge --run $(RUN) $(if $(SAMPLE),--sample $(SAMPLE))
 
 eval-kappa:  ## Kappa between J1 and the labelled human sample (ADR 0014): RUN=var/eval/<run>
 	uv run python -m credassure.evaluation.judge_j1 kappa --run $(RUN)
