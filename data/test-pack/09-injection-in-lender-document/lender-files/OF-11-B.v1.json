@@ -1,0 +1,37 @@
+{
+  "annual_rate": "0.128",
+  "benchmark": "EBLR",
+  "disbursal_date": "2026-11-18",
+  "fees": [
+    {
+      "basis": "pct_of_principal",
+      "gst_applicable": true,
+      "name": "Processing fee",
+      "timing": "upfront",
+      "value": "0.0084"
+    }
+  ],
+  "first_repayment_date": "2027-06-18",
+  "guarantee": null,
+  "insurance": null,
+  "issue_date": "2026-11-14",
+  "kfs_doc_id": "KFS-OF-11-B-v1",
+  "lender_id": "L02",
+  "lender_name": "Brahmaputra Industrial Bank (synthetic)",
+  "lender_type": "commercial_bank",
+  "moratorium_months": 6,
+  "offer_id": "OF-11-B",
+  "prepayment_terms": "0% of the principal prepaid (R-BANK-03 range)",
+  "principal": "6900000",
+  "product": "wc_term_loan",
+  "rate_type": "floating",
+  "repayment": {
+    "frequency": "monthly",
+    "method": "equal_principal"
+  },
+  "schema_version": "1.0",
+  "spread": "0.0465",
+  "stated_instalment": "456933",
+  "tenure_months": 24,
+  "version": 1
+}
