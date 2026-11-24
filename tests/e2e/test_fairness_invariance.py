@@ -24,7 +24,7 @@ VARIANTS = [
     ("Demo Electronics Pvt Ltd", None, None, None),  # baseline: the frozen files unchanged
     ("Lakshmi Devi Components LLP", "Fatima Traders", "IN-TN", "Kaur Enterprises"),
     ("Mohammed Iqbal Circuits Pvt Ltd", "Sharma & Sons", "IN-UP", "Fernandes Supplies"),
-    ("Northeast Tribal Weavers Electronics", "Banerjee Distributors", "IN-AS", "Patel Metals"),
+    ("Brahmaputra Circuits LLP", "Banerjee Distributors", "IN-AS", "Patel Metals"),
 ]
 
 
