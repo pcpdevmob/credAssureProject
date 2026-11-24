@@ -1,5 +1,7 @@
 // UI-07, APR-04..06: the routed approver decides with a step-up confirm (type the case ID; the password too when the
-// gateway answers STEP_UP_REQUIRED, which it does for approvals above ₹1.5 crore, NFR-07). The server enforces the role
+// gateway answers STEP_UP_REQUIRED, which it does for approvals above ₹1.5 crore, NFR-07). When the validated need is known
+// to be above ₹1.5 crore the dialog asks for them up front, so the approver is not refused once first; the server still
+// decides (engines.routing.THRESHOLD) and the STEP_UP_REQUIRED path stays for any other case. The server enforces the role
 // and maker-checker; the UI only hides controls it would refuse. Approval is internal, never loan acceptance.
 import { useEffect, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -27,6 +29,8 @@ export const INTERNAL = 'Approval is internal, not loan acceptance.';
 export const STALE_REASON = 'Approve is unavailable: the report is stale. Ask the preparer to regenerate it.';
 const ACTION: Record<ApprovalDecision['decision'], string> = { APPROVED: 'Approve proposal', REJECTED: 'Reject proposal', RETURNED: 'Return to stage' };
 const DONE: Record<ApprovalDecision['decision'], string> = { APPROVED: 'Proposal approved', REJECTED: 'Proposal rejected', RETURNED: 'Proposal returned' };
+/** ₹1,50,00,000 in paise: the routing threshold above which approval needs the password again (shown only, never decided here). */
+export const STEP_UP_ABOVE_PAISE = 1_500_000_000;
 const STAGE_LABEL: Record<ReturnStage, string> = { onboarding: 'Preparer check', working_capital: 'Funding need (case data)', lendwise: 'Lender comparison' };
 
 function Internal() {
@@ -38,7 +42,9 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
   const [comment, setComment] = useState(''); const [back, setBack] = useState<ReturnStage>('working_capital');
   const [open, setOpen] = useState(false); const [typed, setTyped] = useState(''); const [pw, setPw] = useState(''); const [pwNeeded, setPwNeeded] = useState(false); const [code, setCode] = useState('');
   // ADR 0038 AUTH-10: once the approver has MFA, the step-up above ₹1.5 crore also needs a current code from the app.
-  const codeNeeded = pwNeeded && !!user.mfaEnabled;
+  const above = choice === 'APPROVED' && need?.paise !== undefined && need.paise > STEP_UP_ABOVE_PAISE;
+  const askPw = pwNeeded || above;
+  const codeNeeded = askPw && !!user.mfaEnabled;
   const [busy, setBusy] = useState(false); const [err, setErr] = useState<unknown>(); const [done, setDone] = useState('');
   const [warnings, setWarnings] = useState<string[]>([]); const [shown, setShown] = useState<number | null>(null); const [warnErr, setWarnErr] = useState(false);
   const [attested, setAttested] = useState(false); const [tick, setTick] = useState(0); const [regen, setRegen] = useState(false); const [regenErr, setRegenErr] = useState<unknown>();
@@ -52,7 +58,7 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
   const needsComment = choice !== 'APPROVED' && !comment.trim();
   const confirm = async () => {
     setBusy(true); setErr(undefined);
-    try { await approvalService.decide(c, choice, comment, back, pwNeeded ? pw : undefined, shown, attested, codeNeeded ? code.replace(/\s/g, '') : undefined); setOpen(false); setPw(''); setCode(''); setDone(`${DONE[choice]}: ${c.id}.`); onChange(); }
+    try { await approvalService.decide(c, choice, comment, back, askPw ? pw : undefined, shown, attested, codeNeeded ? code.replace(/\s/g, '') : undefined); setOpen(false); setPw(''); setCode(''); setDone(`${DONE[choice]}: ${c.id}.`); onChange(); }
     catch (e) { setErr(e); if (e instanceof ApiProblem && e.code === 'STEP_UP_REQUIRED') { setPwNeeded(true); setPw(''); setCode(''); } }
     setBusy(false);
   };
@@ -106,14 +112,15 @@ export default function Review({ c, need, user, onChange }: { c: CaseRecord; nee
           <div className="mt-3"><Internal /></div>
           <label htmlFor="stepup" className="mt-4 block text-sm font-medium text-ink-900">Type the case ID to confirm</label>
           <Input id="stepup" className="mt-1 font-mono" autoComplete="off" value={typed} onChange={e => setTyped(e.target.value)} placeholder={c.id} />
-          {pwNeeded && <><label htmlFor="stepup-pw" className="mt-4 block text-sm font-medium text-ink-900">Your password</label>
+          {above && !pwNeeded && <p className="mt-3 text-sm text-ink-700">Above ₹1.5 crore, confirm with your password{user.mfaEnabled ? ' and a code from your authenticator app' : ''}.</p>}
+          {askPw && <><label htmlFor="stepup-pw" className="mt-4 block text-sm font-medium text-ink-900">Your password</label>
             <Input id="stepup-pw" type="password" className="mt-1" autoComplete="current-password" value={pw} onChange={e => setPw(e.target.value)} /></>}
           {codeNeeded && <><label htmlFor="stepup-code" className="mt-4 block text-sm font-medium text-ink-900">Code from your authenticator app</label>
             <Input id="stepup-code" inputMode="numeric" autoComplete="one-time-code" maxLength={12} className="mt-1 font-mono tracking-[.3em]" placeholder="123456" value={code} onChange={e => setCode(e.target.value)} /></>}
           {err !== undefined && <ErrorBanner className="mt-3" error={err} />}
           <div className="mt-5 flex justify-end gap-2">
             <Dialog.Close asChild><Button variant="outline">Cancel</Button></Dialog.Close>
-            <Button variant={choice === 'REJECTED' ? 'danger' : 'success'} disabled={typed.trim() !== c.id || (pwNeeded && !pw) || (codeNeeded && !code.trim())} loading={busy} onClick={confirm}>Confirm: {ACTION[choice].toLowerCase()}</Button>
+            <Button variant={choice === 'REJECTED' ? 'danger' : 'success'} disabled={typed.trim() !== c.id || (askPw && !pw) || (codeNeeded && !code.trim())} loading={busy} onClick={confirm}>Confirm: {ACTION[choice].toLowerCase()}</Button>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

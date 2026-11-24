@@ -15,7 +15,9 @@ import { FORMS } from '@/lib/caseForms';
 import { ago, dt } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
-type Result = { name: string; state: 'busy' | 'ok' | 'error'; rows?: number; flagged?: boolean; error?: unknown };
+export const INSTRUCTION_LIKE = 'Instruction-like text found and ignored: documents are data, never instructions.';
+export const OTHER_CASE = 'This document names a different case number. It was kept and flagged for review: check it is the right lender document for this case.';
+type Result = { name: string; state: 'busy' | 'ok' | 'error'; rows?: number; flagged?: boolean; otherCase?: boolean; error?: unknown };
 export const SLOTS: { kind: FileKind; label: string; ext: string; what: string }[] = (['order', 'opening_position', 'costs', 'receipts', 'receivables', 'payables', 'inventory'] as const)
   .map(kind => ({ kind, label: FORMS[kind].title, ext: kind === 'order' || kind === 'opening_position' ? '.json' : '.csv', what: FORMS[kind].intro }));
 
@@ -38,7 +40,8 @@ function Outcome({ r }: { r: Result }) {
   if (r.state === 'busy') return <p className="flex items-center gap-1.5 text-xs text-ink-600"><Loader2 aria-hidden className="h-3.5 w-3.5 animate-spin" />Uploading {r.name}…</p>;
   if (r.state === 'ok') return (<div className="text-xs">
     <p className="flex items-center gap-1.5 text-brand-700"><CheckCircle2 aria-hidden className="h-3.5 w-3.5" />{r.name} accepted · {r.rows} {r.rows === 1 ? 'row' : 'rows'}</p>
-    {r.flagged && <p className="mt-1 flex gap-1.5 text-gold-800"><ShieldAlert aria-hidden className="h-3.5 w-3.5 shrink-0" />Instruction-like text found and ignored: documents are data, never instructions.</p>}
+    {r.otherCase && <p className="mt-1 flex gap-1.5 text-gold-800"><ShieldAlert aria-hidden className="h-3.5 w-3.5 shrink-0" />{OTHER_CASE}</p>}
+    {r.flagged && <p className="mt-1 flex gap-1.5 text-gold-800"><ShieldAlert aria-hidden className="h-3.5 w-3.5 shrink-0" />{INSTRUCTION_LIKE}</p>}
   </div>);
   const fe = r.error instanceof ApiProblem ? r.error.fieldErrors : [];
   if (!fe.length) return <ErrorBanner className="p-3 text-xs" error={r.error} />;
@@ -122,7 +125,8 @@ function ExcelImport({ caseId, onImported }: { caseId: string; onImported: () =>
         <p className="flex items-center gap-1.5 font-semibold"><CheckCircle2 aria-hidden className="h-4 w-4" />{state.name} imported</p>
         <ul className="mt-1 list-disc pl-5">{state.done.filter(f => f.kind !== 'offer').map(f => <li key={f.name}>{FORMS[f.kind]?.title ?? f.kind}: {f.rows} {f.rows === 1 ? 'entry' : 'rows'}</li>)}
           {docs > 0 && <li>{docs} lender {docs === 1 ? 'offer' : 'offers'} (add each offer's Key Facts Statement below)</li>}</ul>
-        {state.done.some(f => f.flagged) && <p className="mt-1 text-xs text-gold-800">Instruction-like text was found and ignored: documents are data, never instructions.</p>}
+        {state.done.some(f => f.otherCase) && <p className="mt-1 text-xs text-gold-800">{OTHER_CASE}</p>}
+        {state.done.some(f => f.flagged) && <p className="mt-1 text-xs text-gold-800">{INSTRUCTION_LIKE}</p>}
       </div>}
       {state.error !== undefined && (fe.length ? <div role="alert" className="rounded-xl bg-rose-50 p-3 text-sm ring-1 ring-rose-200">
         <p className="flex items-center gap-1.5 font-semibold text-rose-700"><AlertTriangle aria-hidden className="h-4 w-4" />Nothing was imported from {state.name}. Fix these in the workbook and upload it again:</p>
