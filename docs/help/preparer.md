@@ -6,7 +6,15 @@ work. The amount the system read appears under each field before you submit. If 
 text. The requested amount is only an input. The funding need is calculated from your cash-flow files.
 
 ## Upload
-**Documents** has three ways in; all of them are checked the same way.
+**All at once:** pick the case's Excel workbook and the lenders' PDFs together, either on **New case** (under
+**Documents (optional)**, read as soon as the case is created) or in **Add all the documents at once** at the top of
+**Documents**. Each file goes to the right place below and is checked the same way: the workbook becomes the case data,
+lender files (.json, .md) are added as they are, and each offer letter PDF opens for review together with the Key Facts
+Statement and schedule of charges PDFs whose names match it (for example the lender's name). Nothing read from a PDF is
+saved until you check it. A PDF whose name says "KFS" or "schedule" is taken as that document; any other PDF is taken as
+an offer letter.
+
+**Documents** also has three ways in for each part; all of them are checked the same way.
 - **Excel:** download the blank template (or the filled-in example), fill in the sheets you have, and upload the
   workbook. It becomes the same case data. If anything is wrong, nothing is imported and each problem is listed by
   sheet, row and column. Sheets left empty are skipped.
