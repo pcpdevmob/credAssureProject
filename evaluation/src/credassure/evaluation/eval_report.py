@@ -88,6 +88,15 @@ def _cell(v: tuple[int, int] | None) -> str:
     return f"{v[0]}/{v[1]}" if v else "—"
 
 
+def _human_score(calibration: Mapping[str, Any]) -> str:
+    """D4: when people labelled every judged answer, their score is the one reported."""
+    n, correct = calibration.get("n"), calibration.get("human_correct")
+    if correct is None or not n:
+        return ""
+    scope = "every judged answer" if calibration.get("judged") == n else "a sample"
+    return f" ({scope}): humans {correct}/{n} correct, J1 {calibration.get('j1_correct')}/{n}"
+
+
 def render(
     full_dir: Path,
     ablation_dirs: Sequence[Path],
@@ -177,7 +186,8 @@ def render(
     if calibration:
         k = calibration.get("kappa")
         out.append(
-            f"Human sample {calibration.get('n')} items · agreement {calibration.get('agreement')} · "
+            f"Human sample {calibration.get('n')} items{_human_score(calibration)} · "
+            f"agreement {calibration.get('agreement')} · "
             f"kappa {k} → {'J1 scores free text' if k is not None and k >= 0.7 else 'humans score free text (kappa < 0.7)'}"
         )
     else:

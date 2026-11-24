@@ -9,7 +9,7 @@ TODO owner: Tejas.
 ```
 make eval                                   # 100 items through the API on the configured model -> var/eval/<run>/
 make eval-ablations                         # A1-A5, each on its affected categories (ablations.yaml)
-make eval-judge RUN=var/eval/<run>          # J1 grades regulatory answers; writes a blind 20% human sample CSV
+make eval-judge RUN=var/eval/<run> SAMPLE=all   # J1 grades regulatory answers; writes a blind CSV of every judged answer for human labels (D4; without SAMPLE: a 20% sample)
 make eval-kappa RUN=var/eval/<run>          # after labelling: kappa >= 0.7 -> J1 scores free text, else humans
 make eval-report RUN=var/eval/<run> ABL="var/eval/<run>-A1 ..." OUT=evaluation/reports/E13-<date>.md
 make load-smoke                             # 10 concurrent demo cases, p95 per stage (Q6: funding < 60 s)

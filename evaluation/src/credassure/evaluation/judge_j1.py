@@ -3,8 +3,11 @@
 J1 grades a regulatory answer CORRECT when it states the gold key facts and nothing the gold
 evidence contradicts. Calibration: a seeded 20% sample of judged items is exported for a human;
 Cohen's kappa between J1 and the human decides who scores free text (kappa < 0.7 → humans).
+`--sample all` exports every judged answer instead (human review D4: about 15 answers, where 20%
+is too few for a meaningful kappa); the human score is then reported beside J1's.
 
     uv run python -m credassure.evaluation.judge_j1 judge  --run var/eval/<run>   # needs the model
+    uv run python -m credassure.evaluation.judge_j1 judge  --run var/eval/<run> --sample all
     uv run python -m credassure.evaluation.judge_j1 kappa  --run var/eval/<run>   # after labelling
 """
 
@@ -52,8 +55,11 @@ def judge_one(complete: Grade, item: Mapping[str, Any], answer: str) -> bool:
         return False  # unparseable: not correct (fail closed)
 
 
-def judge_run(run: Path, complete: Grade, *, seed: int = 20261118) -> list[dict[str, Any]]:
-    """Grade every answered regulatory row; write j1.jsonl and the human sample CSV."""
+def judge_run(
+    run: Path, complete: Grade, *, seed: int = 20261118, fraction: float = SAMPLE_FRACTION
+) -> list[dict[str, Any]]:
+    """Grade every answered regulatory row; write j1.jsonl and the human sample CSV
+    (`fraction` of the judged answers, 1.0 = every one, in id order)."""
     items = {i["id"]: i for i in load(ITEMS)}
     rows = [json.loads(x) for x in (run / "results.jsonl").read_text().splitlines() if x]
     judged = []
@@ -72,8 +78,10 @@ def judge_run(run: Path, complete: Grade, *, seed: int = 20261118) -> list[dict[
             }
         )
     (run / "j1.jsonl").write_text("".join(json.dumps(j, ensure_ascii=False) + "\n" for j in judged))
-    k = max(1, round(len(judged) * SAMPLE_FRACTION)) if judged else 0
+    k = max(1, round(len(judged) * fraction)) if judged else 0
     sample = random.Random(seed).sample(judged, k) if k else []  # noqa: S311  # nosec B311 - seeded sampling only
+    if k == len(judged):
+        sample = judged  # every answer: keep the run's order
     with (run / "j1-human-sample.csv").open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["id", "question", "key_facts", "answer", "human_correct (y/n)"])
@@ -98,6 +106,9 @@ def calibrate(run: Path) -> dict[str, Any]:
     out: dict[str, Any] = {
         "n": len(ids),
         "pending": len(labels) - len(ids),
+        "judged": len(j1),  # n == judged: every judged answer has a human label (D4)
+        "human_correct": sum(h),
+        "j1_correct": sum(a),
         "agreement": round(sum(x == y for x, y in zip(a, h, strict=True)) / len(ids), 3),
         "kappa": kappa,
         "j1_version": J1_VERSION,
@@ -111,7 +122,15 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="credassure.evaluation.judge_j1")
     ap.add_argument("command", choices=["judge", "kappa"])
     ap.add_argument("--run", type=Path, required=True)
+    ap.add_argument(
+        "--sample",
+        default=str(SAMPLE_FRACTION),
+        help="share of judged answers exported for human labels: a fraction, or 'all' (D4)",
+    )
     a = ap.parse_args(argv)
+    fraction = 1.0 if a.sample == "all" else float(a.sample)
+    if not 0 < fraction <= 1:
+        ap.error("--sample is a fraction in (0, 1] or 'all'")
     if a.command == "kappa":
         print(json.dumps(calibrate(a.run)))
         return 0
@@ -123,8 +142,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     judged = judge_run(
         a.run,
         lambda p: chat.complete([{"role": "user", "content": p}], temperature=0.0, seed=0)[0],
+        fraction=fraction,
     )
-    print(f"J1 graded {len(judged)} answers; label {a.run / 'j1-human-sample.csv'} then run kappa")
+    share = "every answer" if fraction == 1 else f"a {fraction:.0%} sample"
+    print(
+        f"J1 graded {len(judged)} answers; label {a.run / 'j1-human-sample.csv'} ({share}), "
+        "then run kappa"
+    )
     return 0
 
 

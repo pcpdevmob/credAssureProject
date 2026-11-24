@@ -15,7 +15,7 @@ Do these in order. Each step depends on the one before it.
    ```
    If `ollama ps` shows a 4096 context or less than 100% GPU, close other GPU apps and restart Ollama (troubleshooting.md).
 2. **Stop the API.** Stop `make run-api` (Ctrl-C) and confirm that `lsof -i :8000` prints nothing. demo-reset refuses to run while :8000 is busy.
-3. **`make demo-reset`.** It backs up `var/case.db`, purges the demo cases (an audited purge, and the chain is re-verified), then drives 10 cases through the real API.
+3. **`make demo-reset`.** It creates the cases as `demo.preparer`, so `SEED_PASSWORD_DEMO_PREPARER` (that account's own password) must be in `.env`; if the account already exists with another password, run `make passwords` first. It backs up `var/case.db`, purges the demo cases (an audited purge, and the chain is re-verified), then drives 10 cases through the real API.
    With the live model this takes several minutes (it can wait up to 15 minutes per case). Check the table it prints:
    ```
    CA-2026-0016  AWAITING_APPROVAL  route=director_finance  …   ← main case
@@ -25,7 +25,8 @@ Do these in order. Each step depends on the one before it.
 4. **Start the API, then the UI** (two terminals):
    ```sh
    make run-api      # :8000, tenant demo
-   make run-ui       # :3000 (CORS allows :3000 only)
+   make run-ui       # :3000
+   # or both with one command, on the evaluated local model: make start MODELS=local
    ```
 5. **Health checks**
    ```sh

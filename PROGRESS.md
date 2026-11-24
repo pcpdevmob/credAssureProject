@@ -79,6 +79,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | P15 | 15.4 | Deployment | done | Pritish | 2026-11-23 | — | — | [2026-11-23-p15-15.4-one-command-start-pritish.md](docs/progress/entries/2026-11-23-p15-15.4-one-command-start-pritish.md) |
 | P16 | 16.1 | Documentation | done | Pritish | 2026-11-21 | 3578f53, fb8a7a9, ef67786 | — | [2026-11-21-p16-16.1-implementation-gap-review-pritish.md](docs/progress/entries/2026-11-21-p16-16.1-implementation-gap-review-pritish.md) |
 | P16 | 16.2 | Authentication | done | Pritish | 2026-11-23 | — | — | [2026-11-23-p16-16.2-own-password-per-account-pritish.md](docs/progress/entries/2026-11-23-p16-16.2-own-password-per-account-pritish.md) |
+| P16 | 16.3 | Evaluation | done | Pritish | 2026-11-24 | — | — | [2026-11-24-p16-16.3-human-review-support-pritish.md](docs/progress/entries/2026-11-24-p16-16.3-human-review-support-pritish.md) |
 
 ## Modules
 
@@ -191,6 +192,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - P11 11.13: a teammate who did not write the probes confirms the five REVIEW rows (human review). The report's K6 placeholder is filled. ([entry](docs/progress/entries/2026-11-20-p11-11.13-redteam-live-run-pritish.md))
 - P11 11.14: Abhishek reviews the change (H24 owner); then H7 freeze, safety_v2 run and A6 (K5) on Mon 23. ([entry](docs/progress/entries/2026-11-20-p11-11.14-safety-v2-h24-pritish.md))
 - P15 15.2: run on the Mac: course (keys, CA certificates, VPN) and hf (Hugging Face token): llm-probe, smoke, comparison run, compare-runs. ([entry](docs/progress/entries/2026-11-20-p15-15.2-course-endpoint-comparison-pritish.md))
+- P16 16.3: human steps only: H1/H2 labels, H7 freeze (then K5 run + A6), H9, H10, H11 confirmation, H14 labels after K3, H18 names, H20, H21/H22 hand checks, H26; team acceptance of ADRs 0029–0031, 0033, 0042 and the 0032 amendment. ([entry](docs/progress/entries/2026-11-24-p16-16.3-human-review-support-pritish.md))
 
 ## History
 
