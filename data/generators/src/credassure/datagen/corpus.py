@@ -3,7 +3,8 @@
 - ``audit``: every manifest entry has a canonical doc_id, https URL, legal basis L1-L4,
   jurisdiction ``IN`` or ``IN-XX``, ``applies_to`` and an ``effective_from`` key (null warns).
   ``superseded_by`` names another entry. Real plus synthetic documents stay at or under 2,000. No
-  raw or extracted third-party file is tracked by git, and no PDF under docs/ or data/.
+  raw or extracted third-party file is tracked by git, and no PDF under docs/ or data/, except the
+  team-generated synthetic test pack (``data/test-pack/``, L5; each of its PDFs says synthetic).
 - ``Gate``: the only way the scripts touch the network. It honours robots.txt, waits one second
   before every request, never requests a manual-only host, and stops a host for the rest of the
   run on 403, 429, 418, 444, a network or TLS error, or a bot-challenge page. There are no
@@ -70,6 +71,8 @@ MAX_SCRIPT_BYTES = 100 * 1024 * 1024  # script downloads only; hand imports have
 CHALLENGE = ("captcha", "cf-chl", "access denied", "request unsuccessful", "are you a robot")
 MIN_PDF_TEXT = 200  # fewer characters means a scan with page numbers only, not a text layer
 EXTENSIONS = {".pdf": "pdf", ".html": "html", ".htm": "html"}
+# Team-generated synthetic PDFs (L5) that may be tracked; a test checks each says it is synthetic.
+SYNTHETIC_PDF_DIRS = ("data/test-pack/",)
 
 
 def audit(
@@ -126,7 +129,9 @@ def audit(
             warnings.append(f"host {host}: terms of use not recorded yet")
     for path in tracked:
         under_corpus = path.startswith(("data/corpus/raw/", "data/corpus/text/"))
-        if under_corpus or (path.lower().endswith(".pdf") and path.startswith(("docs/", "data/"))):
+        synthetic = path.startswith(SYNTHETIC_PDF_DIRS)
+        pdf = path.lower().endswith(".pdf") and path.startswith(("docs/", "data/"))
+        if under_corpus or (pdf and not synthetic):
             errors.append(
                 f"{path}: third-party file tracked by git (L3/L4 must not be redistributed)"
             )

@@ -10,6 +10,7 @@ import httpx
 
 from credassure.datagen.common import REPO, read_yaml
 from credassure.datagen.corpus import (
+    SYNTHETIC_PDF_DIRS,
     Gate,
     audit,
     download,
@@ -80,6 +81,32 @@ def test_scope14_audit_fails_on_tracked_third_party_files(
         ["data/corpus/raw/R-X-001.pdf", "docs/source/170MD.pdf", "README.md"],
     )
     assert len(errors) == 2
+
+
+def test_scope14_only_the_synthetic_test_pack_may_track_pdfs(
+    entry: Callable[..., dict[str, Any]],
+) -> None:
+    errors, _ = audit(
+        {"documents": [entry()]},
+        [
+            "data/test-pack/01-director-route/lender-pdfs/a.pdf",
+            "data/test-packs/x.pdf",
+            "data/x.pdf",
+        ],
+    )
+    assert len(errors) == 2  # only the exact synthetic folder is allowed
+
+
+def test_scope14_every_tracked_test_pack_pdf_says_it_is_synthetic() -> None:
+    from pypdf import PdfReader
+
+    pdfs = [
+        REPO / p for p in tracked_files() if p.startswith(SYNTHETIC_PDF_DIRS) and p.endswith(".pdf")
+    ]
+    assert pdfs  # the pack is tracked
+    for p in pdfs:
+        text = " ".join(page.extract_text() or "" for page in PdfReader(p).pages).lower()
+        assert "synthetic" in text, p
 
 
 def test_scope14_repo_tracks_no_third_party_file() -> None:
