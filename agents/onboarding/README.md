@@ -16,4 +16,9 @@ readiness (design-detail §2.4.2).
 | Re-check | The Supervisor recomputes readiness from hr.db on every GO with the agent's own checker (not the engine the stage used); a disagreeing fact → NO_GO + `GATE_OVERRIDE` (SUP-05) |
 | Eval | 10 onboarding items (T026–T035), E5 |
 
+Prototype: `prototype/` (Mousita, 21 Nov; PR #43 commit `6936705`) is a stand-alone readiness service with its own
+synthetic rule set and HR data, kept for reference and not wired into the app; its tests run with
+`make onboarding-prototype`. Its design (independent checker, who fixes each blocker, a source record per rule) is
+built into this agent as 0.3.0.
+
 Stage runs go through `SupervisorPort.start_run` on the gateway. This agent calls no other agent and has no path that accepts a lender offer.

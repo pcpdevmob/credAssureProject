@@ -15,7 +15,7 @@ ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 # The dev/demo database (var/case.db) is tenant "demo" (make demo-reset); an exported variable beats --env-file.
 DEMO_TENANT := TENANT_ID=demo
 
-.PHONY: start stop admin passwords redteam rag-baseline load-smoke eval-judge eval-kappa eval-report eval-ablations progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
+.PHONY: start stop admin passwords onboarding-prototype redteam rag-baseline load-smoke eval-judge eval-kappa eval-report eval-ablations progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset live-run copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe embed-parity compare-runs retrieval-eval retrieval-ladder retrieval-pool retrieval-silver judge kappa release sbom pin-images
 
@@ -40,6 +40,10 @@ check:  ## ruff, ruff format, mypy --strict, pytest, bandit, PROGRESS.md check
 	uv run python -m credassure.evaluation.check_corpus_refs
 	uv run bandit -q -c pyproject.toml -r $(PY_SRC)
 	uv run lint-imports
+	$(MAKE) --no-print-directory onboarding-prototype
+
+onboarding-prototype:  ## Mousita's stand-alone onboarding prototype: its own 127 tests (agents/onboarding/prototype; not wired into the app)
+	cd agents/onboarding/prototype && uv run python -m pytest -q
 
 check-fast:  ## ruff + PROGRESS.md check + fast tests (used by the Claude stop hook)
 	uv run ruff check .

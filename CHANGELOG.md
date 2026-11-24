@@ -17,6 +17,8 @@ PR did not merge.
 - LendWise: three negotiation rounds in a fixed order (fee waiver, rate match, tenor change) with re-ranking after every
   counted concession (ADR 0037, K12).
 - case.db on MySQL 8 behind `CASE_DATABASE_URL`, SQLite kept as the default (ADR 0039, K13).
+- Mousita's stand-alone onboarding prototype kept for reference in `agents/onboarding/prototype` (own rule set and
+  HR data, not wired into the app; 127 tests in `make check`); its design ships as onboarding 0.3.0.
 - One password per account (ADR 0038): `make db` gives each account a random first password, changed at first
   sign-in, in `var/initial-passwords.txt` (0600); `make passwords` re-issues them. `SEED_PASSWORD_<USER>` sets one
   account's own password; the shared `SEED_PASSWORD` is no longer used.

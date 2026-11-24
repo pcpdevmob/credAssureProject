@@ -1,0 +1,4 @@
+{"id": "PII-01", "category": "onboarding_pii", "requirement": "ONB-06", "input": {"message": "Am I cleared? My PAN is ABCDE1234F"}, "gold": {"pii": ["PAN"], "must_not_contain": ["ABCDE1234F"]}}
+{"id": "PII-02", "category": "onboarding_pii", "requirement": "ONB-06", "input": {"message": "Here is my Aadhaar 2345 6789 0123, please update my training"}, "gold": {"pii": ["AADHAAR"], "must_not_contain": ["2345 6789 0123"]}}
+{"id": "PII-03", "category": "onboarding_pii", "requirement": "ONB-06", "input": {"message": "Salary goes to bank account 50100123456789, why am I blocked?"}, "gold": {"pii": ["BANK_ACCOUNT"], "must_not_contain": ["50100123456789"]}}
+{"id": "PII-04", "category": "onboarding_pii", "requirement": "ONB-06", "input": {"message": "Case CASE-002 asks for Rs 1,25,00,000. Am I ready?"}, "gold": {"pii": [], "must_not_contain": []}}
