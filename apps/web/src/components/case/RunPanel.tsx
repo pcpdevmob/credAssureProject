@@ -1,13 +1,16 @@
 // Run / resume with live progress (SSE, ADR 0007) and the stage's one question (SUP-06, design-plan principle 2).
 // The question is answered in the form for the file it names (or by uploading that file); Resume re-runs only the
 // blocked stage (the server decides). Progress and questions are worded for a non-technical preparer (lib/plain.ts).
+// A lender-comparison question (a missing offer, KFS or schedule of charges) is answered by adding the lender's file,
+// so the card shows that upload and names the file, not the case-data forms.
 import { useEffect, useState } from 'react';
 import { HelpCircle, Play, RotateCcw, Loader2 } from 'lucide-react';
 import { Button, Card } from '../ui';
 import ErrorBanner from '../ErrorBanner';
 import dynamic from 'next/dynamic';
-import { SLOTS, UploadSlot } from './Documents';
+import { LenderUpload, SLOTS, UploadSlot } from './Documents';
 // The form loads only when a stage asks a question (U6 budget).
+const MissingDocPdf = dynamic(() => import('./PdfOffer').then(m => m.MissingDocPdf), { ssr: false });
 const DataEditor = dynamic(() => import('./DataEditor'), { ssr: false });
 import { STAGES, gate, supervisorService, type EndEvent } from '@/services/supervisor';
 import { caseFiles, type StoredFile } from '@/services/documents';
@@ -24,6 +27,15 @@ const FILE_RE = new RegExp(`\\b(${KINDS.join('|')})\\.(json|csv)\\b`, 'g');
 
 /** The case file a stage question asks for, from the file name it mentions. */
 export const fileAskedFor = (q?: string | null) => { const m = q ? new RegExp(FILE_RE.source).exec(q) : null; return m ? m[1] : null; };
+/** The lender's file a lender-comparison question asks for: its file name when the question names a document
+ *  ("…schedule of charges KFS-OF-07-A-v1-SCH…" → "KFS-OF-07-A-v1-SCH.md"), '' when it asks for lender files in
+ *  general, null when the question is about case data. */
+export const lenderFileAskedFor = (q?: string | null): string | null => {
+  if (!q || fileAskedFor(q)) return null;
+  const doc = /\bKFS-[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\b/.exec(q);
+  if (doc) return `${doc[0]}.md`;
+  return /\b(lender offers?|schedule of charges|key facts statement)\b/i.test(q) ? '' : null;
+};
 /** The question with file and field names replaced by the names on the form. */
 export const plainQuestion = plainText;
 
@@ -40,12 +52,12 @@ function Elapsed() {
 export default function RunPanel({ c, gates, canRun, live, setLive, onDone }: {
   c: CaseRecord; gates: WorkflowGate[]; canRun: boolean; live: Live | null; setLive: (l: Live | null) => void; onDone: () => void;
 }) {
-  const asked = fileAskedFor(c.question);
+  const asked = fileAskedFor(c.question); const lenderFile = lenderFileAskedFor(c.question);
   const [err, setErr] = useState<unknown>(); const [kind, setKind] = useState<string>(asked ?? 'opening_position');
   const [stored, setStored] = useState<StoredFile[] | null>(null);
   useEffect(() => { if (asked) setKind(asked); }, [asked]);
   const showQuestion = canRun && !LOCKED.includes(c.stage) && !!c.question && !live?.active;
-  useEffect(() => { if (showQuestion) caseFiles.list(c.id).then(r => setStored(r.files), () => setStored([])); }, [showQuestion, c.id]);
+  useEffect(() => { if (showQuestion && lenderFile === null) caseFiles.list(c.id).then(r => setStored(r.files), () => setStored([])); }, [showQuestion, lenderFile, c.id]);
   const locked = !canRun || LOCKED.includes(c.stage); // no Run or Resume, but the last run's log stays
   if (locked && !live) return null;
   const blocked = gates.find(g => g.decision === 'NEEDS_INPUT' || g.decision === 'NO_GO' || g.decision === 'ERROR');
@@ -75,15 +87,19 @@ export default function RunPanel({ c, gates, canRun, live, setLive, onDone }: {
       <Card className="p-5 ring-2 ring-gold-500/50">
         <p className="flex items-center gap-2 text-sm font-semibold text-gold-800"><HelpCircle aria-hidden className="h-5 w-5" />{blocked ? `${blocked.name} needs one thing from you` : 'One question'}</p>
         <p className="mt-2 text-lg text-ink-950" data-testid="stage-question">{plainQuestion(c.question!)}</p>
-        <p className="mt-1 text-sm text-ink-600">Correct it below and save, then press Continue. Only the step that stopped runs again; finished steps are kept.</p>
+        <p className="mt-1 text-sm text-ink-600">{lenderFile !== null ? 'Add the lender\u2019s file below, then press Continue.' : 'Correct it below and save, then press Continue.'} Only the step that stopped runs again; finished steps are kept.</p>
         <div className="mt-4 space-y-4">
-          {!asked && <label className="block text-sm text-ink-700">Section to correct
+          {lenderFile !== null ? <div className="rounded-2xl p-4 ring-1 ring-line" data-testid="lender-file-needed"><h4 className="mb-1 font-medium text-ink-950">Documents from lenders</h4>
+            <p className="mb-3 text-sm text-ink-700">{lenderFile ? <>File needed: <span className="font-mono">{lenderFile}</span>, the lender&apos;s schedule of charges or Key Facts Statement for that offer. Add it from the lender&apos;s PDF or as a file. </> : <>Add the offer from the lender&apos;s PDFs on the Case data tab, or as files below. </>}Each offer needs three files from the lender: the offer (.json), its Key Facts Statement (.md) and its schedule of charges (.md, name ending in -SCH). They are also listed on the Case data tab under “Documents from lenders”.</p>
+            {lenderFile && <div className="mb-4 rounded-xl p-3 ring-1 ring-brand-200"><MissingDocPdf caseId={c.id} docId={lenderFile.replace(/\.md$/, '')} /></div>}
+            <LenderUpload caseId={c.id} id="upload-lender-file" label={lenderFile ? 'Or, if you have it as a file already (.md, or the offer .json):' : 'Choose the lender’s file or files (.json, .md)'} /></div>
+          : <>{!asked && <label className="block text-sm text-ink-700">Section to correct
             <select value={kind} onChange={e => setKind(e.target.value)} className="ml-2 h-9 rounded-lg border border-ink-400 bg-white px-2 text-sm">{SLOTS.map(s => <option key={s.kind} value={s.kind}>{s.label}</option>)}</select>
           </label>}
           <div className="rounded-2xl p-4 ring-1 ring-line"><h4 className="mb-3 font-medium text-ink-950">{slot.label}</h4>
             {stored === null ? <p className="flex items-center gap-2 text-sm text-ink-600"><Loader2 aria-hidden className="h-4 w-4 animate-spin" />Loading what you entered…</p>
               : <DataEditor key={slot.kind} caseId={c.id} kind={slot.kind} stored={file?.data} canEdit />}
-            <div className="mt-4 border-t border-line pt-3"><UploadSlot key={slot.kind} caseId={c.id} slot={slot} canEdit /></div></div>
+            <div className="mt-4 border-t border-line pt-3"><UploadSlot key={slot.kind} caseId={c.id} slot={slot} canEdit /></div></div></>}
           <Button onClick={start}><RotateCcw className="h-4 w-4" />Continue</Button>
         </div>
       </Card>)}

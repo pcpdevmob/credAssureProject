@@ -6,7 +6,7 @@ which lender is affordable, checks every figure, and hands the decision to a hum
 
 Before the demo, run the [runbook](demo-runbook.md) checklist, then **warm the model** a minute before you start
 (`ollama run qwen3:8b "hi" >/dev/null && ollama ps` shows CONTEXT 8192): Ollama unloads it after about five idle minutes and the
-first copilot answer would otherwise take much longer. Run the app the evaluated way: `make run-api` + `make run-ui`.
+first copilot answer would otherwise take much longer. Run the app the evaluated way: `make run-api` + `make run-ui` (or the one command `make start MODELS=local`; plain `make start` uses the course endpoint instead of the evaluated local model).
 **Sign-in codes (ADR 0038).** The Director, the VP and the account admin sign in with their password **and a 6-digit code**
 from an authenticator app. Enrol `demo.director` and `demo.vp` on the presenter's phone during the rehearsal (first sign-in
 → *Set up two-step verification* → scan the QR code → keep the backup codes), and have the phone unlocked at 8:00. The web app

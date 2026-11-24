@@ -37,7 +37,7 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | [0029](0029-guardrail-pipeline.md) | Guardrail pipeline: one package, rails R1–R5, fail closed | Proposed | P0 → P3 | 55, 56 |
 | [0030](0030-pii-policy-presidio.md) | PII policy: data classes, Presidio, money never masked | Proposed | P0 → P3 | 57, 58, 59 |
 | [0031](0031-safety-v2-suite.md) | safety_v2: separately frozen 40-item safety suite | Proposed | P0 → P8 | 65, 66 |
-| [0032](0032-copilot-v2-scope-and-v34-cuts.md) | Copilot v2 reduced scope, dual scoring, reranker on, plan v3.4 cuts (amends 0013) | Accepted | P0 → P4, P5 | 60–64 |
+| [0032](0032-copilot-v2-scope-and-v34-cuts.md) | Copilot v2 reduced scope, dual scoring, reranker on (scores the answerability gate only, amended 2026-11-24), plan v3.4 cuts (amends 0013) | Accepted | P0 → P4, P5 | 60–64 |
 | [0033](0033-injection-design-patterns.md) | Prompt-injection design patterns as architecture | Proposed | P0 → P2 | 54 |
 | [0034](0034-image-digest-pinning-deferred.md) | Image digest pinning: tooling now, pins from a networked machine | Accepted | P10 | 41 |
 | [0035](0035-copilot-v3-product-assistant.md) | Copilot v3: Ask CredAssure as the product assistant on every page (amends 0032 §6) | Accepted | P13 | 2, 20 |
@@ -47,3 +47,4 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | [0039](0039-case-db-on-mysql.md) | case.db on MySQL for the hosted deployment; SQLite stays for hr.db, corpus.db (FTS5), checkpoints and eval (amends 0001) | Proposed | P15 | 22, 29, 38, 49 |
 | [0040](0040-excel-workbook-import.md) | Excel workbook import for case data (same files, same upload checks); PDF stays out of scope (amends BRD Q-08, 0003) | Accepted | P9 | — |
 | [0041](0041-lender-pdf-intake.md) | Lender PDFs: text layer, AI-suggested offer fields as quotes read by code, human review before saving (amends 0040) | Accepted | P9 | — |
+| [0042](0042-retrieval-result-reported-as-measured.md) | Retrieval reported as measured on the frozen labels (22/40, shipped configuration chosen on the dev split); the miss is accepted, no relabelling (D1, H5) | Proposed | P4 | 60–63 |

@@ -341,7 +341,7 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0008 | Model resilience: timeouts, retries, circuit breaker, fallbacks | Accepted |
 | 0009 | Excluded multi-agent patterns (no agent-to-agent messaging, no inter-agent bus, no cross-case memory, no dynamic spawning) | Accepted |
 | 0010 | Rounding policy | Accepted |
-| 0011 | Repayment date → week mapping | Proposed |
+| 0011 | Repayment date → week mapping | Accepted |
 | 0012 | APR annualisation: nominal, proven by RBI Annex B reproduction test | Accepted |
 | 0013 | Reranker: none by default; local cross-encoder if mentor approves | Accepted (amended by 0032: reranker on) |
 | 0014 | Automated judge J1, calibrated; human scoring if kappa < 0.7 | Accepted |
@@ -358,7 +358,7 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0029 | Guardrail pipeline: one package, rails R1–R5, fail closed | Proposed |
 | 0030 | PII policy: data classes, Presidio, money never masked | Proposed |
 | 0031 | safety_v2: separately frozen 40-item safety suite | Proposed |
-| 0032 | Copilot v2 reduced scope, dual scoring, reranker on, plan v3.4 cuts | Accepted (LW-15 cut reversed by 0037) |
+| 0032 | Copilot v2 reduced scope, dual scoring, reranker on (scores the answerability gate only, amended 2026-11-24), plan v3.4 cuts | Accepted (LW-15 cut reversed by 0037) |
 | 0033 | Prompt-injection design patterns as architecture | Proposed |
 | 0034 | Image digest pinning: tooling now, pins from a networked machine | Accepted |
 | 0035 | Copilot v3: product assistant on every page (help source, CP-07, CP-10..12) | Accepted |
@@ -368,6 +368,7 @@ as CSS custom properties; accessibility to WCAG 2.2 AA; provenance drawer as a g
 | 0039 | case.db on MySQL for the hosted deployment (SQLite kept where needed) | Proposed |
 | 0040 | Excel workbook import for case data; PDF out of scope | Accepted (PDF amended by 0041) |
 | 0041 | Lender PDFs: text-layer intake, AI-suggested offer fields, human review before saving | Accepted |
+| 0042 | Retrieval reported as measured on the frozen labels (22/40); the miss is accepted | Proposed |
 
 Full index with phase and scope numbers: `docs/adr/README.md`.
 

@@ -22,6 +22,13 @@ PR did not merge.
 - One password per account (ADR 0038): `make db` gives each account a random first password, changed at first
   sign-in, in `var/initial-passwords.txt` (0600); `make passwords` re-issues them. `SEED_PASSWORD_<USER>` sets one
   account's own password; the shared `SEED_PASSWORD` is no longer used.
+- Web: when the lender comparison asks for a lender's file (offer, Key Facts Statement or schedule of charges), the
+  question card shows the lender file upload and names the file instead of the case-data forms; a named KFS or
+  schedule of charges can also be added there from the lender's PDF and is saved under the offer already in the case.
+- Human review support: `make eval-judge SAMPLE=all` exports every judged answer for human labels and the kappa
+  step reports the human score beside J1's (D4); a model-off test keeps the fixed replies from tripping a safety_v2
+  chat item's own checks; the OWASP map cites the tests that fail when a control is removed (H11); ADR 0042
+  (proposed) reports retrieval as measured, 22/40; ADR 0032 amended: the reranker scores, it does not reorder.
 - `make start` / `make stop` (`scripts/start.sh`): one command connects to the course endpoint (`MODELS=local` for
   Ollama), starts Langfuse when set up, the API and the web app, waits for each and prints the URLs; no demo cases.
 - Excel workbook import for case data (ADR 0040); plain-language UI for non-technical operators: forms, readiness,
