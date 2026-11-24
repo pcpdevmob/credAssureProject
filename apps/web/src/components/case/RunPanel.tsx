@@ -10,6 +10,7 @@ import ErrorBanner from '../ErrorBanner';
 import dynamic from 'next/dynamic';
 import { LenderUpload, SLOTS, UploadSlot } from './Documents';
 // The form loads only when a stage asks a question (U6 budget).
+const MissingDocPdf = dynamic(() => import('./PdfOffer').then(m => m.MissingDocPdf), { ssr: false });
 const DataEditor = dynamic(() => import('./DataEditor'), { ssr: false });
 import { STAGES, gate, supervisorService, type EndEvent } from '@/services/supervisor';
 import { caseFiles, type StoredFile } from '@/services/documents';
@@ -89,8 +90,9 @@ export default function RunPanel({ c, gates, canRun, live, setLive, onDone }: {
         <p className="mt-1 text-sm text-ink-600">{lenderFile !== null ? 'Add the lender\u2019s file below, then press Continue.' : 'Correct it below and save, then press Continue.'} Only the step that stopped runs again; finished steps are kept.</p>
         <div className="mt-4 space-y-4">
           {lenderFile !== null ? <div className="rounded-2xl p-4 ring-1 ring-line" data-testid="lender-file-needed"><h4 className="mb-1 font-medium text-ink-950">Documents from lenders</h4>
-            <p className="mb-3 text-sm text-ink-700">{lenderFile ? <>File needed: <span className="font-mono">{lenderFile}</span>, the lender&apos;s schedule of charges or Key Facts Statement for that offer. </> : null}Each offer needs three files from the lender: the offer (.json), its Key Facts Statement (.md) and its schedule of charges (.md, name ending in -SCH). They are also listed on the Case data tab under “Documents from lenders”.</p>
-            <LenderUpload caseId={c.id} id="upload-lender-file" label="Choose the lender’s file or files (.json, .md)" /></div>
+            <p className="mb-3 text-sm text-ink-700">{lenderFile ? <>File needed: <span className="font-mono">{lenderFile}</span>, the lender&apos;s schedule of charges or Key Facts Statement for that offer. Add it from the lender&apos;s PDF or as a file. </> : <>Add the offer from the lender&apos;s PDFs on the Case data tab, or as files below. </>}Each offer needs three files from the lender: the offer (.json), its Key Facts Statement (.md) and its schedule of charges (.md, name ending in -SCH). They are also listed on the Case data tab under “Documents from lenders”.</p>
+            {lenderFile && <div className="mb-4 rounded-xl p-3 ring-1 ring-brand-200"><MissingDocPdf caseId={c.id} docId={lenderFile.replace(/\.md$/, '')} /></div>}
+            <LenderUpload caseId={c.id} id="upload-lender-file" label={lenderFile ? 'Or, if you have it as a file already (.md, or the offer .json):' : 'Choose the lender’s file or files (.json, .md)'} /></div>
           : <>{!asked && <label className="block text-sm text-ink-700">Section to correct
             <select value={kind} onChange={e => setKind(e.target.value)} className="ml-2 h-9 rounded-lg border border-ink-400 bg-white px-2 text-sm">{SLOTS.map(s => <option key={s.kind} value={s.kind}>{s.label}</option>)}</select>
           </label>}
