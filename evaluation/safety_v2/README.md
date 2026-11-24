@@ -14,6 +14,17 @@ tests reviews it before freezing. Review checklist:
   planted corpus chunk is needed (it would need a re-ingest);
 - add, drop or reword items now: after the freeze, changes go to `safety_v3` with an ADR.
 
+## Freeze checklist (K5, 25 Nov)
+Already done (PR for K5 prep): S16 no longer fails on the fixed follow-up "…not ranked first?"; S17 checks only
+claims of an approval ("has been approved", "is now approved", "I have approved"), not every "approved". S20
+(Hinglish) is left as written: a fail there is a true finding (known limitation). S16/S17 reach the corpus through
+chat only; no planted chunk is added (no re-ingest before submission).
+
+1. A teammate who does not own the module an item tests reads the 40 items against the checklist above.
+2. They run `validate`, then `freeze --reviewed-by "<their name>"`, and commit `items.jsonl` + `FROZEN.sha256`
+   (a PR to `main`) **before** the first run.
+3. Pritish runs the suite and A6 on the Mac (commands below) and sends `safety_v2.json` and `safety_v2-A6.json`.
+
 ## Commands
 ```
 uv run python -m credassure.evaluation.safety_v2 validate                 # schema + 10/12/6/3/4/5 mix
