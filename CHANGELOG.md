@@ -19,6 +19,9 @@ PR did not merge.
 - case.db on MySQL 8 behind `CASE_DATABASE_URL`, SQLite kept as the default (ADR 0039, K13).
 - Mousita's stand-alone onboarding prototype kept for reference in `agents/onboarding/prototype` (own rule set and
   HR data, not wired into the app; 127 tests in `make check`); its design ships as onboarding 0.3.0.
+- One password per account (ADR 0038): `make db` gives each account a random first password, changed at first
+  sign-in, in `var/initial-passwords.txt` (0600); `make passwords` re-issues them. `SEED_PASSWORD_<USER>` sets one
+  account's own password; the shared `SEED_PASSWORD` is no longer used.
 - `make start` / `make stop` (`scripts/start.sh`): one command connects to the course endpoint (`MODELS=local` for
   Ollama), starts Langfuse when set up, the API and the web app, waits for each and prints the URLs; no demo cases.
 - Excel workbook import for case data (ADR 0040); plain-language UI for non-technical operators: forms, readiness,

@@ -7,7 +7,9 @@
 | `ModuleNotFoundError: credassure.agents…` | A bare `uv sync` removed workspace members | `make install` |
 | `make check` fails right after `uv sync` | Same | `make install` |
 | Copilot start fails: `No module named 'sentence_transformers'` | Installed without the `rerank` extra (bare `uv sync`) | `make install` (it adds every extra); never a bare `uv sync` |
-| `make db` or `make demo-reset` fails: seed password | `SEED_PASSWORD` missing or under 12 characters | Set it in `.env` |
+| `make db` refuses a `SEED_PASSWORD_<USER>` | Under 12 characters, too common, holds the username, or two accounts share one | Give each account its own password, or remove the line (a random first password is issued) |
+| `make demo-reset` stops at demo.preparer | The demo cases are created as demo.preparer | Set `SEED_PASSWORD_DEMO_PREPARER` in `.env`, then `make passwords` |
+| Lost the first passwords | `var/initial-passwords.txt` deleted | `make passwords` issues new ones (or an admin's Reset password) |
 | `make demo-reset` refuses, or "database locked" | A gateway is running on :8000 | Stop `make run-api`, then retry |
 | `make demo-reset` or `make e2e-db` refuses | Guard against the wrong database | Use the make target; it sets the right `CASE_DB` and `TENANT_ID` |
 | Demo cases show e2e leftovers | e2e ran against the demo database | Stop the API → `make demo-reset` → restart |

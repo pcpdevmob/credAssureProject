@@ -34,8 +34,14 @@ def _settings(db: Path, tenant: str = "demo") -> Any:
         tenant_id=tenant,
         llm_enabled=False,
         tracing_enabled=False,
-        seed_password="fixture-password-123",
     )
+
+
+@pytest.fixture(autouse=True)
+def _preparer_password(monkeypatch: pytest.MonkeyPatch) -> None:
+    """ADR 0038: the cases are created as demo.preparer, which has its own password."""
+    monkeypatch.delenv("SEED_PASSWORD", raising=False)
+    monkeypatch.setenv("SEED_PASSWORD_DEMO_PREPARER", "prep-own-pass-01")
 
 
 def _frozen_hash() -> str:
@@ -133,3 +139,16 @@ def test_demo_reset_refuses_e2e_db_and_other_tenant(tmp_path: Path) -> None:
     with pytest.raises(SystemExit, match="TENANT_ID"):
         demo_reset.main(_settings(tmp_path / "case.db", tenant="default"), check_port=False)
     assert not (tmp_path / "case.db").exists()
+
+
+def test_demo_reset_needs_the_preparers_own_password_and_hands_out_the_rest(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv("SEED_PASSWORD_DEMO_PREPARER")
+    monkeypatch.setenv("SEED_PASSWORD", "shared-pass-0001")  # not used for any account
+    with pytest.raises(SystemExit, match="SEED_PASSWORD_DEMO_PREPARER"):
+        demo_reset.main(_settings(tmp_path / "case.db"), check_port=False)
+    handout = (tmp_path / "initial-passwords.txt").read_text(encoding="utf-8")
+    rows = [line.split() for line in handout.splitlines() if line and not line.startswith("#")]
+    assert len(rows) == 25 and len({r[2] for r in rows}) == 25
+    assert "shared-pass-0001" not in handout

@@ -126,7 +126,7 @@ class Result:
 @dataclass
 class Runner:
     client: Client
-    password: str
+    password: str | Mapping[str, str]  # one per account (username → password); str: test fixtures
     prompts: list[str] = field(default_factory=list)
     _headers: dict[str, dict[str, str]] = field(default_factory=dict)
     _baseline: dict[str, Any] | None = None
@@ -135,11 +135,15 @@ class Runner:
     # -- plumbing
     def login(self, who: str) -> dict[str, str]:
         if who not in self._headers:
-            r = self.client.post(
-                "/v1/auth/token", json={"username": USERS[who], "password": self.password}
-            )
+            pw = self.password if isinstance(self.password, str) else self.password[USERS[who]]
+            r = self.client.post("/v1/auth/token", json={"username": USERS[who], "password": pw})
             if r.status_code != 200:
                 raise RuntimeError(f"login failed for {USERS[who]} ({r.status_code})")
+            if r.json().get("stage", "full") != "full":  # temporary password or MFA still due
+                raise RuntimeError(
+                    f"{USERS[who]} cannot finish sign-in by password ({r.json()['stage']}): "
+                    "run make passwords, and start the gateway with MFA_ENFORCED=false"
+                )
             self._headers[who] = {"Authorization": f"Bearer {r.json()['access_token']}"}
         return self._headers[who]
 
@@ -433,7 +437,7 @@ def summarise(results: list[Result], ablation: str | None) -> dict[str, Any]:
 
 def run(
     client: Client,
-    password: str,
+    password: str | Mapping[str, str],
     items: list[dict[str, Any]],
     *,
     ablation: str | None = None,
@@ -468,11 +472,13 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     import httpx
 
-    password = os.environ.get("SEED_PASSWORD", "")  # never printed
-    if not password:
-        parser.error("set SEED_PASSWORD for the demo accounts")
+    # each account has its own password (ADR 0038): SEED_PASSWORD_<USER>, never printed
+    keys = {u: "SEED_PASSWORD_" + u.replace(".", "_").upper() for u in USERS.values()}
+    passwords = {u: os.environ.get(k, "") for u, k in keys.items()}
+    if missing := [k for u, k in keys.items() if not passwords[u]]:
+        parser.error("set each demo account's own password: " + ", ".join(missing))
     with httpx.Client(base_url=args.base_url, timeout=300) as client:
-        report = run(client, password, load(ITEMS), ablation=args.ablation)
+        report = run(client, passwords, load(ITEMS), ablation=args.ablation)
     args.out.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(
         f"{report['verdict']} {report['passed']}/{report['total']} critical={report['critical_failures']}"

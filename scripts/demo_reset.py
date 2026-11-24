@@ -11,7 +11,9 @@
    row of DEMO_CASES (a mix of outcomes: Director, VP, held at the boundary, lender gate blocked,
    paused for data); 10 cases. None is approved. Each lists which frozen case it copies.
 Case ids are max(id)+1, so after the purge every run gives the same ids and states (idempotent).
-Reads data/frozen/v1 only; never writes anything outside CASE_DB and its backups.
+Accounts: each has its own password (ADR 0038). The cases are created as demo.preparer, so it needs
+SEED_PASSWORD_DEMO_PREPARER in .env; new accounts get first passwords in var/initial-passwords.txt.
+Reads data/frozen/v1 only; writes CASE_DB, its backups and that hand-out file.
 """
 
 # ponytail: minimal Phase 12 pull-forward; replay cache and the blocked/approved cases come later.
@@ -31,9 +33,10 @@ from fastapi.testclient import TestClient
 from sqlalchemy import text
 
 from credassure.gateway.main import create_app
+from credassure.gateway.seed import handout_path, write_handout
 from credassure.gateway.settings import Settings, get_settings
 from credassure.ledger import migrate
-from credassure.ledger.seed import seed
+from credassure.ledger.seed import env_key, issue_passwords
 from credassure.ledger.session import case_engine, transaction
 
 HERE = Path(__file__).resolve().parent
@@ -167,11 +170,9 @@ def _known_case_revisions() -> set[str]:
     return {rev.revision for rev in script.walk_revisions()}
 
 
-def _passwords(settings: Settings) -> dict[str, str]:
-    env = {k: v for k, v in os.environ.items() if k.startswith("SEED_PASSWORD_")}
-    if settings.seed_password is not None:
-        env["SEED_PASSWORD"] = settings.seed_password.get_secret_value()
-    return env
+def _passwords() -> dict[str, str]:
+    """Per-account passwords only (SEED_PASSWORD_<USER>); a shared SEED_PASSWORD is not used."""
+    return {k: v for k, v in os.environ.items() if k.startswith("SEED_PASSWORD_")}
 
 
 def _drop_db(db: Path) -> None:
@@ -205,18 +206,30 @@ def reset_db(settings: Settings) -> None:
                     purge_cases.purge(s, demo, dry_run=False)
             engine.dispose()
     migrate.upgrade("case", db)
-    seed(db, _passwords(settings), tenant_id=TENANT)  # idempotent: existing users are kept
+    # existing users are kept; new ones get their own password (hand-out file, changed at sign-in)
+    issued = issue_passwords(db, _passwords(), tenant_id=TENANT)
+    if write_handout(handout_path(settings), issued, str(db)):
+        print(f"first passwords for new accounts: {handout_path(settings)}")
 
 
-def _login(client: TestClient, settings: Settings, username: str) -> dict[str, str]:
-    env = _passwords(settings)
-    key = "SEED_PASSWORD_" + username.replace(".", "_").upper()
-    password = env.get(key) or env.get("SEED_PASSWORD")
+def _login(client: TestClient, username: str) -> dict[str, str]:
+    key = env_key(username)
+    password = _passwords().get(key)
     if not password:
-        raise SystemExit(f"no password for {username}: set SEED_PASSWORD or {key}")
+        raise SystemExit(
+            f"the demo cases are created as {username}: set {key} in .env (that account's own "
+            "password, 12+ characters), then run make passwords"
+        )
     r = client.post("/v1/auth/token", json={"username": username, "password": password})
+    if r.status_code == 401:
+        raise SystemExit(f"{username} did not accept {key}: run make passwords to apply it")
     r.raise_for_status()
-    return {"Authorization": f"Bearer {r.json()['access_token']}"}
+    body = r.json()
+    if body.get("stage") != "full":
+        raise SystemExit(
+            f"{username} must finish sign-in first ({body.get('stage')}): run make passwords"
+        )
+    return {"Authorization": f"Bearer {body['access_token']}"}
 
 
 def _upload(client: TestClient, h: dict[str, str], cid: str, kind: str, path: Path) -> None:
@@ -277,7 +290,7 @@ def drive(settings: Settings) -> dict[str, dict[str, Any]]:
     # the script is the only caller of its in-process app: lift the per-user NFR-04 limit for it
     app = create_app(settings.model_copy(update={"rate_limit": "100000/minute"}))
     with TestClient(app) as client:
-        h = _login(client, settings, "demo.preparer")
+        h = _login(client, "demo.preparer")
         for frozen, name, offers, status, route, why in DEMO_CASES:
             cid = _case(client, h, frozen, name, offers)
             v = client.get(f"/v1/cases/{cid}", headers=h).json()

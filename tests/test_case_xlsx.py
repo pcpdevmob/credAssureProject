@@ -142,9 +142,12 @@ def test_out_under_frozen_is_refused(template: Path) -> None:
 
 
 @pytest.mark.slow
-def test_api_results_identical(template: Path, tmp_path: Path) -> None:
+def test_api_results_identical(
+    template: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """Frozen files and xlsx-converted files, uploaded to two cases, give the same funding and
     offer views (same KFS for both)."""
+    monkeypatch.setenv("SEED_PASSWORD_DEMO_PREPARER", "prep-own-pass-01")  # ADR 0038: own password
     demo = _load("demo_reset")
     settings = Settings(
         _env_file=None,  # type: ignore[call-arg]
@@ -154,7 +157,6 @@ def test_api_results_identical(template: Path, tmp_path: Path) -> None:
         tenant_id="demo",
         llm_enabled=False,
         tracing_enabled=False,
-        seed_password="fixture-password-123",
     )
     demo.reset_db(settings)
     tree = tmp_path / "tree"
@@ -166,7 +168,7 @@ def test_api_results_identical(template: Path, tmp_path: Path) -> None:
     app = create_app(settings.model_copy(update={"rate_limit": "100000/minute"}))
     views = []
     with TestClient(app) as client:
-        h = demo._login(client, settings, "demo.preparer")
+        h = demo._login(client, "demo.preparer")
         for root in (FROZEN, tree):
             demo.FROZEN = root
             cid = demo._case(client, h, CASE, "Demo Electronics Pvt Ltd", True)
