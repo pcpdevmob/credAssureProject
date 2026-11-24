@@ -9,6 +9,7 @@ import dynamic from 'next/dynamic';
 import { plainReason } from '@/lib/caseForms';
 const DataEditor = dynamic(() => import('./DataEditor'), { ssr: false, loading: () => <Skeleton className="h-40" /> });
 const PdfOffer = dynamic(() => import('./PdfOffer'), { ssr: false, loading: () => <Skeleton className="h-24" /> });
+const QuickUpload = dynamic(() => import('./QuickUpload'), { ssr: false, loading: () => <Skeleton className="h-24" /> });
 import { documentService, caseFiles, workbookService, type FileKind, type StoredFile, type StoredDoc, type Imported } from '@/services/documents';
 import { ApiProblem } from '@/lib/problem';
 import { FORMS } from '@/lib/caseForms';
@@ -145,6 +146,7 @@ export default function Documents({ caseId, canEdit, locked, onChange }: { caseI
   const edit = canEdit && !locked;
   const provided = state?.files.filter(f => f.uploadedAt).length ?? 0;
   return (<div className="space-y-6">
+    {edit && <QuickUpload caseId={caseId} onChanged={saved} />}
     {edit && <ExcelImport caseId={caseId} onImported={saved} />}
     <Card><CardHeader title="Case data" sub={edit ? 'Fill in each section; it is checked as soon as you save it. When all seven are provided, go to the Workflow tab and press Run.' : 'What was submitted for this case.'}
       right={state && <span className={cn('rounded-full px-3 py-1 text-xs font-semibold', provided === 7 ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-800')}>{provided} of 7 provided</span>} />
