@@ -1,37 +1,36 @@
-# Ownership per docs/REPO_STRUCTURE.md (scope #42). Replace the @placeholder handles with real
-# Git host usernames before enabling branch protection. Shared packages need two reviewers.
-# Display names: name1 = Abhishek (supervisor, gateway; also name5), name2 = Tejas, name3 = Suresh (working
-# capital, UI, deployment), pritish = Pritish, name5 = Abhishek, name6 = Adesh, uilead = Suresh. Owners set 25 Nov.
-# /agents/onboarding/ -> Mousita (her request, PR #43).
-*                               @credassure-owner-name1
-/agents/supervisor/             @credassure-owner-name1
-/apps/gateway/                  @credassure-owner-name1
-/deploy/                        @credassure-owner-name3
+# Ownership per docs/build/REPO_STRUCTURE.md (scope #42). Owners set by Pritish on 25 Nov 2026.
+# Handles: pcpdevmob = Pritish Patil, pareekabhishek = Abhishek, tejast12 = Tejas, SureN8088 = Suresh,
+# adeshsurroach = Adesh, mousitaD = Mousita Dhar. Shared packages need two reviewers.
+# A handle only takes effect once that person has write access to the repository.
+*                               @pcpdevmob
+/agents/supervisor/             @pareekabhishek
+/apps/gateway/                  @pareekabhishek
+/deploy/                        @SureN8088
 /agents/onboarding/             @mousitaD
-/evaluation/testset/            @credassure-owner-name2
-/agents/working-capital/        @credassure-owner-name3
-/agents/lendwise/               @credassure-owner-pritish
-/packages/lender-sim/           @credassure-owner-pritish
-/packages/engines/              @credassure-owner-name3 @credassure-owner-pritish
-/agents/critic/                 @credassure-owner-name5
-/packages/observability/        @credassure-owner-name5 @credassure-owner-name1
-/evaluation/ablations/          @credassure-owner-name5
-/agents/copilot/                @credassure-owner-name6
-/packages/retrieval/            @credassure-owner-name6 @credassure-owner-name2
-/data/corpus/                   @credassure-owner-name2 @credassure-owner-pritish
-/apps/web/                      @credassure-owner-uilead
-/packages/api-client/           @credassure-owner-uilead
-/packages/core/                 @credassure-owner-name1 @credassure-owner-pritish
-/packages/security/             @credassure-owner-name1 @credassure-owner-name5
+/evaluation/testset/            @tejast12
+/agents/working-capital/        @SureN8088
+/agents/lendwise/               @pcpdevmob
+/packages/lender-sim/           @pcpdevmob
+/packages/engines/              @SureN8088 @pcpdevmob
+/agents/critic/                 @pareekabhishek
+/packages/observability/        @pareekabhishek @pcpdevmob
+/evaluation/ablations/          @pareekabhishek
+/agents/copilot/                @adeshsurroach
+/packages/retrieval/            @adeshsurroach @tejast12
+/data/corpus/                   @tejast12 @pcpdevmob
+/apps/web/                      @SureN8088
+/packages/api-client/           @SureN8088
+/packages/core/                 @pareekabhishek @pcpdevmob
+/packages/security/             @pareekabhishek @pcpdevmob
 
 # Progress tracking (README §12): each owner edits only their module file; entries are new files per PR.
-/docs/progress/modules/ui.md            @credassure-owner-uilead
-/docs/progress/modules/copilot.md       @credassure-owner-name6 @credassure-owner-name3 @credassure-owner-name2
-/docs/progress/modules/auth.md          @credassure-owner-name1
-/docs/progress/modules/rai.md           @credassure-owner-pritish
-/docs/progress/modules/guardrails.md    @credassure-owner-pritish @credassure-owner-name5
-/docs/progress/modules/deployment.md    @credassure-owner-name3
-/docs/progress/modules/docs.md          @credassure-owner-pritish
-/docs/progress/modules/evaluation.md    @credassure-owner-name5 @credassure-owner-name2
-/docs/progress/gates.md                 @credassure-owner-name1 @credassure-owner-pritish
-/.github/workflows/                     @credassure-owner-name1 @credassure-owner-pritish
+/docs/progress/modules/ui.md            @SureN8088
+/docs/progress/modules/copilot.md       @adeshsurroach @SureN8088 @tejast12
+/docs/progress/modules/auth.md          @pareekabhishek
+/docs/progress/modules/rai.md           @pcpdevmob
+/docs/progress/modules/guardrails.md    @pcpdevmob @pareekabhishek
+/docs/progress/modules/deployment.md    @SureN8088
+/docs/progress/modules/docs.md          @pcpdevmob
+/docs/progress/modules/evaluation.md    @pareekabhishek @tejast12
+/docs/progress/gates.md                 @pareekabhishek @pcpdevmob
+/.github/workflows/                     @pareekabhishek @pcpdevmob
