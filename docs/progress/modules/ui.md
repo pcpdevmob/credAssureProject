@@ -1,6 +1,6 @@
 # UI
 
-**Owner:** UI lead (TODO: name)
+**Owner:** Suresh
 **Phases:** P9 (U5, U6)
 **Status:** U0–U5 done; U6 built, live run pending (H15 Lighthouse, H16 e2e)
 

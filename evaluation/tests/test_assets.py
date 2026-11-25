@@ -34,24 +34,28 @@ QUERIES = [
 ]
 
 
-# Owner of the agent each category grades (BRD §5.2, docs/build/REPO_STRUCTURE.md). Placeholders are still unnamed.
+# Owner of the agent each category grades (BRD §5.2, docs/build/REPO_STRUCTURE.md; owners set 25 Nov).
 CATEGORY_OWNER = {
-    "regulatory": "[Name 6]",  # copilot
-    "onboarding": "Tejas",
+    "regulatory": "Adesh",  # copilot
+    "onboarding": "Mousita",
     "cashflow": "Suresh",
     "offers": "Pritish",
     "negotiation": "Pritish",
-    "routing": "[Name 1]",  # supervisor
-    "injection": "[Name 6]",
-    "refusal": "[Name 6]",
-    "isolation": "[Name 1]",
-    "e2e": "[Name 1]",
+    "routing": "Abhishek",  # supervisor
+    "injection": "Adesh",
+    "refusal": "Adesh",
+    "isolation": "Abhishek",  # gateway case scoping
+    "e2e": "Abhishek",
 }
+# Disclosed exception (CONTRIBUTIONS.md): the 3 isolation items were written on 15 Nov, before their author was named
+# owner of the gateway on 25 Nov. They are decided by code (403/404) and the frozen set is never re-authored.
+OWN_GOLD_EXCEPTIONS = {"isolation"}
 
 
 def test_BRD5_nobody_writes_gold_for_their_own_agent() -> None:
     assert set(build_testset.AUTHOR) == set(CATEGORY_OWNER)
-    assert all(build_testset.AUTHOR[c] != CATEGORY_OWNER[c] for c in CATEGORY_OWNER)
+    own = {c for c in CATEGORY_OWNER if build_testset.AUTHOR[c] == CATEGORY_OWNER[c]}
+    assert own == OWN_GOLD_EXCEPTIONS
     assert all(i["author"] == build_testset.AUTHOR[i["category"]] for i in ITEMS)
 
 
