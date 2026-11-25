@@ -48,3 +48,26 @@ def test_report_files(tmp_path: Path) -> None:
     assert ws.cell(3, 6).value == "Fail"
     page = (tmp_path / "r.html").read_text()
     assert "Failures" in page and "1 / 2" in page and "CA-2026-0001" in page
+
+
+def test_live_accounts_file_round_trip(tmp_path: Path) -> None:
+    f = tmp_path / "e2e-live.env"
+    f.write_text(
+        "# comment\nBASE_URL=https://example.test\nROLE_PREPARER=prep.e002\nROLE_DIRECTOR=e2e.director\n"
+        "ROLE_VP=e2e.vp\nROLE_EVALUATOR=e2e.evaluator\nPW_prep.e002=first-1\nPW_e2e.vp=\n"
+    )
+    acc = er.Accounts.load(f)
+    assert acc.base_url == "https://example.test" and acc.role["director"] == "e2e.director"
+    assert acc.pw == {"prep.e002": "first-1"}  # an empty value is not a password
+    acc.pw["prep.e002"], acc.totp["e2e.vp"] = "changed-2", "JBSWY3DPEHPK3PXP"
+    acc.save()
+    text = f.read_text()
+    assert "PW_prep.e002=changed-2" in text and "TOTP_e2e.vp=JBSWY3DPEHPK3PXP" in text
+    assert text.startswith("# comment") and (f.stat().st_mode & 0o777) == 0o600
+    assert er.Accounts.load(f).totp == {"e2e.vp": "JBSWY3DPEHPK3PXP"}
+
+
+def test_example_accounts_file_loads() -> None:
+    acc = er.Accounts.load(ROOT / "deploy" / "env" / "e2e-live.env.example")
+    assert acc.base_url.startswith("https://") and acc.role["preparer"] == "prep.e002"
+    assert not acc.pw  # the example holds no passwords

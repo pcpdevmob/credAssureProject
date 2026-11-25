@@ -389,3 +389,26 @@ layout (the Playwright specs, `make e2e`).
 
 To check that a deployed site is up without touching its data, add `ARGS="--smoke-url https://<site>"`: it only
 reads the sign-in page and `/v1/health/live` and `/ready`; no sign-in, no cases.
+
+### On the deployed site (`--live`)
+
+The same checks can run **on the deployed site itself**. This creates cases named "E2E test NN (synthetic)" there,
+decides them (approve, return, reject), runs a negotiation round, and creates and disables one throwaway account
+(`e2e.tmp<time>`). Run it only when the team agrees, not while mentors are using the site.
+
+1. In **User management**, `it.admin` creates `e2e.director` (Director, Finance), `e2e.vp` (VP, Finance),
+   `e2e.evaluator` (Evaluator) and `e2e.admin` (Account admin), each with no HR id. Never use `demo.director` or
+   `demo.vp`: the run changes the password and sets up the authenticator of every account it uses.
+2. Preparers must be **seeded** accounts, because the preparer check reads the HR record bound to the account:
+   `prep.e002` and `prep.e003`, and for the HR-profile checks `prep.e009`, `e012`, `e014`, `e017`, `e019`, `e020`.
+   Their first passwords are in `var/initial-passwords.txt` on the server.
+3. On your Mac (the run needs the site, not the server's shell):
+   ```bash
+   cp deploy/env/e2e-live.env.example e2e-live.env && chmod 600 e2e-live.env   # git-ignored
+   # fill in the temporary passwords
+   make e2e-report ARGS="--live e2e-live.env"      # asks you to type the site name before it starts
+   ```
+   It keeps under the site's rate limit (90 requests a minute), so it takes about 15 to 25 minutes. The new
+   passwords and authenticator keys are written back to `e2e-live.env`: keep the file for the next run. To start
+   over, an admin resets those accounts and you put the new temporary passwords in.
+4. Afterwards, the E2E test cases can be removed on the server with the audited purge (`scripts/purge_cases.py`).

@@ -122,6 +122,68 @@ def dotenv_value(key: str) -> str:
     return ""
 
 
+LOCAL_ROLES = {
+    "preparer": "demo.preparer",
+    "preparer2": "demo.preparer2",
+    "director": "demo.director",
+    "vp": "demo.vp",
+    "evaluator": "demo.evaluator",
+    "admin": "it.admin",
+}
+
+
+@dataclass
+class Accounts:
+    """Who plays each role, and their passwords and authenticator keys.
+
+    Local: the seeded accounts with one fixture password. Live: read from an accounts file
+    (ROLE_<role>=<username>, PW_<username>=..., TOTP_<username>=...); the tool writes the new
+    passwords and authenticator keys back to that file (0600), so the next run signs in again.
+    """
+
+    role: dict[str, str]
+    pw: dict[str, str] = field(default_factory=dict)
+    totp: dict[str, str] = field(default_factory=dict)
+    fixture: str = ""
+    file: Path | None = None
+    base_url: str = ""
+
+    @classmethod
+    def load(cls, path: Path) -> Accounts:
+        acc = cls(role={}, file=path)
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if "=" not in line or line.lstrip().startswith("#"):
+                continue
+            k, v = (x.strip() for x in line.split("=", 1))
+            if k.startswith("ROLE_"):
+                acc.role[k[5:].lower()] = v
+            elif k.startswith("PW_") and v:
+                acc.pw[k[3:]] = v
+            elif k.startswith("TOTP_") and v:
+                acc.totp[k[5:]] = v
+            elif k == "BASE_URL":
+                acc.base_url = v
+        missing = [r for r in ("preparer", "director", "vp", "evaluator") if r not in acc.role]
+        if missing:
+            raise SystemExit(f"{path}: set ROLE_{missing[0].upper()}=<username> (see --help)")
+        return acc
+
+    def save(self) -> None:
+        if not self.file:
+            return
+        lines = self.file.read_text(encoding="utf-8").splitlines()
+        want = {f"PW_{u}": v for u, v in self.pw.items()} | {
+            f"TOTP_{u}": v for u, v in self.totp.items()
+        }
+        out = []
+        for line in lines:
+            k = line.split("=", 1)[0].strip()
+            out.append(f"{k}={want.pop(k)}" if k in want else line)
+        out += [f"{k}={v}" for k, v in want.items()]
+        self.file.write_text("\n".join(out) + "\n", encoding="utf-8")
+        self.file.chmod(0o600)
+
+
 UVICORN = [sys.executable, "-m", "uvicorn", "credassure.gateway.main:app", "--factory"]
 
 
@@ -206,15 +268,18 @@ class Gateway:
 class Api:
     """Signs in like the web app (password, first-time password change, authenticator, code)."""
 
-    def __init__(self, gw: Gateway) -> None:
-        self.gw = gw
-        self.http = httpx.Client(base_url=gw.url, timeout=300)
-        self.pw: dict[str, str] = {"it.admin": gw.admin_pw}
-        self.totp: dict[str, str] = {}
+    def __init__(self, url: str, acc: Accounts, live: bool = False) -> None:
+        self.acc, self.live = acc, live
+        self.role = acc.role
+        self.http = httpx.Client(base_url=url, timeout=300)
         self.used: dict[str, int] = {}
+        self.sent: list[float] = []  # live: stay under the site's per-user rate limit
 
     def password(self, user: str) -> str:
-        return self.pw.get(user, self.gw.fixture)
+        pw = self.acc.pw.get(user) or self.acc.fixture
+        if not pw:
+            raise RuntimeError(f"no password for {user}: add PW_{user}= to the accounts file")
+        return pw
 
     def code(self, user: str) -> str:
         """A fresh code: never the same 30 s step twice for one user (a code works once)."""
@@ -223,12 +288,23 @@ class Api:
             time.sleep((step + 1) * 30 - time.time() + 1)
             step = mfa.step_of(time.time())
         self.used[user] = step
-        return mfa.totp_at(self.totp[user], step)
+        return mfa.totp_at(self.acc.totp[user], step)
 
     def call(self, method: str, path: str, tok: str | None = None, **kw: Any) -> tuple[int, Any]:
         h = {"Authorization": f"Bearer {tok}"} if tok else {}
         h.update(kw.pop("headers", {}))
+        if self.live:  # 90 a minute in all, below the site's 120 per user
+            now = time.monotonic()
+            self.sent = [t for t in self.sent if now - t < 60]
+            if len(self.sent) >= 90:
+                time.sleep(60 - (now - self.sent[0]) + 0.5)
+            self.sent.append(time.monotonic())
         r = self.http.request(method, path, headers=h, **kw)
+        for _ in range(3):
+            if r.status_code != 429:
+                break
+            time.sleep(30)
+            r = self.http.request(method, path, headers=h, **kw)
         ct = r.headers.get("content-type", "")
         return r.status_code, (r.json() if "json" in ct and r.content else r.text)
 
@@ -253,7 +329,8 @@ class Api:
                 body = {"current_password": self.password(user), "new_password": new}
                 if self.call("POST", "/v1/auth/password", tok, json=body)[0] != 200:
                     raise RuntimeError(f"{user}: password change refused")
-                self.pw[user] = new
+                self.acc.pw[user] = new
+                self.acc.save()
                 s, b = self.token(user)
             elif "enrol_mfa" in nxt:
                 s, st = self.call(
@@ -262,7 +339,8 @@ class Api:
                     tok,
                     json={"current_password": self.password(user)},
                 )
-                self.totp[user] = st["secret"]
+                self.acc.totp[user] = st["secret"]
+                self.acc.save()
                 s, b = self.call("POST", "/v1/auth/mfa/enable", tok, json={"code": self.code(user)})
                 if s != 200:
                     raise RuntimeError(f"{user}: authenticator set-up refused")
@@ -358,7 +436,7 @@ class Cases:
             s, st = self.api.call("GET", f"/v1/jobs/{j['job_id']}", tok)
             if st.get("status") in ("succeeded", "failed", "cancelled", "error"):
                 return dict(st)
-            time.sleep(1)
+            time.sleep(2 if self.api.live else 1)
         raise TimeoutError(f"job {j['job_id']}")
 
     def get(self, tok: str, cid: str) -> dict[str, Any]:
@@ -446,7 +524,7 @@ def describe(e: dict[str, Any]) -> str:
 
 def scenarios(run: Run, api: Api, cs: Cases) -> None:
     area = "Test-pack scenarios"
-    tok = api.login("demo.preparer")
+    tok = api.login(api.role["preparer"])
     for folder, e in SCENARIOS.items():
 
         def one(folder: str = folder, e: dict[str, Any] = e) -> None:
@@ -488,7 +566,7 @@ def scenarios(run: Run, api: Api, cs: Cases) -> None:
 
 def question_cards(run: Run, api: Api, cs: Cases) -> None:
     area = "Question cards"
-    tok = api.login("demo.preparer")
+    tok = api.login(api.role["preparer"])
     receipts = (
         "week,source,amount,confirmed\n1,order_advance,5120000,true\n4,other_customer,1338000,false\n"
         "7,other_customer,1057000,false\n9,order_milestone,6144000,true\n12,order_milestone,8192000,true\n"
@@ -565,7 +643,12 @@ PROFILES = {  # docs/setup/e2e-testing.md part 6
 
 def profiles(run: Run, api: Api, cs: Cases) -> None:
     area = "Preparer check (HR profiles)"
-    for user, (want, expected) in PROFILES.items():
+    items = list(PROFILES.items())
+    if api.live:  # the main preparer is the passing profile; the others only with a password given
+        items = [(api.role["preparer"], PROFILES["prep.e001"])] + [
+            (u, v) for u, v in items[1:] if u in api.acc.pw
+        ]
+    for user, (want, expected) in items:
 
         def one(user: str = user, want: str = want, expected: str = expected) -> None:
             tok = api.login(user)
@@ -588,11 +671,14 @@ def profiles(run: Run, api: Api, cs: Cases) -> None:
 
 def approvals_and_access(run: Run, api: Api, cs: Cases) -> None:
     cmap = run.cases
-    ptok, dtok, vtok = api.login("demo.preparer"), api.login("demo.director"), api.login("demo.vp")
+    vp = api.role["vp"]
+    ptok, dtok, vtok = (api.login(api.role[r]) for r in ("preparer", "director", "vp"))
     acc, apr = "Access control", "Approvals"
 
     def isolation() -> None:
-        p2tok = api.login("demo.preparer2")
+        if "preparer2" not in api.role:
+            return
+        p2tok = api.login(api.role["preparer2"])
         s, _ = api.call("GET", f"/v1/cases/{cmap['01-director-route']}", p2tok)
         _, lst = api.call("GET", "/v1/cases", p2tok)
         items = lst.get("items", []) if isinstance(lst, dict) else lst
@@ -706,7 +792,7 @@ def approvals_and_access(run: Run, api: Api, cs: Cases) -> None:
             case=cid,
         )
 
-    def vp() -> None:
+    def vp_decisions() -> None:
         cid, names = cmap["02-vp-route-negotiation"], lender_names("02-vp-route-negotiation")
         s, _ = api.call("POST", f"/v1/agents/lendwise/cases/{cid}/negotiate", ptok)
         rank = [names.get(x, x) for x in (cs.offers(ptok, cid).get("ranking") or [])]
@@ -719,9 +805,7 @@ def approvals_and_access(run: Run, api: Api, cs: Cases) -> None:
             case=cid,
         )
         _, ib = api.call("GET", f"/v1/cases/{cid}/inbox", vtok)
-        s, r = cs.decide(
-            vtok, cid, "approve", password=api.password("demo.vp"), mfa_code=api.code("demo.vp")
-        )
+        s, r = cs.decide(vtok, cid, "approve", password=api.password(vp), mfa_code=api.code(vp))
         code = r.get("code") if isinstance(r, dict) else ""
         run.add(
             apr,
@@ -732,9 +816,7 @@ def approvals_and_access(run: Run, api: Api, cs: Cases) -> None:
             case=cid,
         )
         api.call("POST", f"/v1/cases/{cid}/report", ptok)
-        s1, r1 = cs.decide(
-            vtok, cid, "approve", password=api.password("demo.vp"), mfa_code="000000"
-        )
+        s1, r1 = cs.decide(vtok, cid, "approve", password=api.password(vp), mfa_code="000000")
         s0, _ = cs.decide(vtok, cid, "approve")
         run.add(
             apr,
@@ -744,9 +826,7 @@ def approvals_and_access(run: Run, api: Api, cs: Cases) -> None:
             s1 in (401, 403) and s0 in (401, 403, 422),
             case=cid,
         )
-        s, _ = cs.decide(
-            vtok, cid, "approve", password=api.password("demo.vp"), mfa_code=api.code("demo.vp")
-        )
+        s, _ = cs.decide(vtok, cid, "approve", password=api.password(vp), mfa_code=api.code(vp))
         st = cs.get(ptok, cid)["status"]
         run.add(
             apr,
@@ -757,9 +837,7 @@ def approvals_and_access(run: Run, api: Api, cs: Cases) -> None:
             case=cid,
         )
         cid = cmap["03-held-exactly-1-5-crore"]
-        s, _ = cs.decide(
-            vtok, cid, "approve", password=api.password("demo.vp"), mfa_code=api.code("demo.vp")
-        )
+        s, _ = cs.decide(vtok, cid, "approve", password=api.password(vp), mfa_code=api.code(vp))
         st = cs.get(ptok, cid)["status"]
         run.add(
             apr,
@@ -771,12 +849,12 @@ def approvals_and_access(run: Run, api: Api, cs: Cases) -> None:
         )
 
     run.guard(apr, "Director decisions", director)
-    run.guard(apr, "VP decisions", vp)
+    run.guard(apr, "VP decisions", vp_decisions)
 
 
 def evaluator(run: Run, api: Api, cs: Cases) -> None:
     area, cmap = "Evaluator", run.cases
-    etok = api.login("demo.evaluator")
+    etok = api.login(api.role["evaluator"])
     s, lst = api.call("GET", "/v1/cases", etok)
     items = lst.get("items", []) if isinstance(lst, dict) else lst
     s1, sf = api.call("GET", f"/v1/cases/{cmap['09-injection-in-lender-document']}/safety", etok)
@@ -819,19 +897,22 @@ def evaluator(run: Run, api: Api, cs: Cases) -> None:
 
 def admin(run: Run, api: Api) -> None:
     area = "Account admin"
-    atok = api.login("it.admin")
+    adm, vp = api.role["admin"], api.role["vp"]
+    tag = datetime.now(UTC).strftime("%m%d%H%M%S")
+    newp, taken = f"e2e.tmp{tag}", f"e2e.taken{tag}"
+    atok = api.login(adm)
     run.add(
         area,
         "it.admin first sign-in",
         "new password and authenticator set up, then signed in",
-        f"authenticator linked {'it.admin' in api.totp}",
-        "it.admin" in api.totp,
+        f"authenticator linked {adm in api.acc.totp}",
+        adm in api.acc.totp,
     )
     s, r = api.call(
         "POST",
         "/v1/admin/users",
         atok,
-        json={"username": "e2e.taken", "display_name": "E2E", "role": "preparer", "emp_id": "E003"},
+        json={"username": taken, "display_name": "E2E", "role": "preparer", "emp_id": "E003"},
     )
     run.add(
         area,
@@ -844,15 +925,15 @@ def admin(run: Run, api: Api) -> None:
         "POST",
         "/v1/admin/users",
         atok,
-        json={"username": "e2e.newprep", "display_name": "E2E New Preparer", "role": "preparer"},
+        json={"username": newp, "display_name": "E2E New Preparer", "role": "preparer"},
     )
     _, us = api.call("GET", "/v1/admin/users", atok)
     ids = {
         u["username"]: u["user_id"] for u in (us.get("items", us) if isinstance(us, dict) else us)
     }
-    s2, rp = api.call("POST", f"/v1/admin/users/{ids['e2e.newprep']}/reset-password", atok)
+    s2, rp = api.call("POST", f"/v1/admin/users/{ids[newp]}/reset-password", atok)
     tmp = next((v for k, v in rp.items() if "password" in k), "") if isinstance(rp, dict) else ""
-    s3, b = api.token("e2e.newprep", tmp)
+    s3, b = api.token(newp, tmp)
     run.add(
         area,
         "create a preparer; reset its password",
@@ -860,10 +941,11 @@ def admin(run: Run, api: Api) -> None:
         f"create {s}; reset {s2}; sign-in {s3}, next {b.get('next')}",
         s == 201 and s2 == 200 and s3 == 200 and "change_password" in b.get("next", []),
     )
-    api.pw["e2e.newprep"] = tmp
-    api.login("e2e.newprep")
-    s, _ = api.call("POST", f"/v1/admin/users/{ids['demo.vp']}/reset-mfa", atok)
-    _, b = api.token("demo.vp")
+    api.acc.pw[newp] = tmp
+    api.login(newp)
+    new_pw = api.acc.pw.pop(newp, tmp)  # the password it changed to; not kept in the file
+    s, _ = api.call("POST", f"/v1/admin/users/{ids[vp]}/reset-mfa", atok)
+    _, b = api.token(vp)
     run.add(
         area,
         "lost phone: reset two-step verification for demo.vp",
@@ -871,8 +953,8 @@ def admin(run: Run, api: Api) -> None:
         f"{s}; next sign-in asks {b.get('next')}",
         s == 200 and "enrol_mfa" in b.get("next", []),
     )
-    api.totp.pop("demo.vp", None)
-    api.login("demo.vp")
+    api.acc.totp.pop(vp, None)
+    api.login(vp)
     s1, _ = api.call("GET", f"/v1/cases/{next(iter(run.cases.values()))}", atok)
     s2, _ = api.call("GET", "/v1/cases", atok)
     run.add(
@@ -882,8 +964,8 @@ def admin(run: Run, api: Api) -> None:
         f"case {s1}; list {s2}",
         s1 in (403, 404) and s2 in (403, 404),
     )
-    s, _ = api.call("POST", f"/v1/admin/users/{ids['e2e.newprep']}/disable", atok)
-    s2, _ = api.token("e2e.newprep")
+    s, _ = api.call("POST", f"/v1/admin/users/{ids[newp]}/disable", atok)
+    s2, _ = api.token(newp, new_pw)
     run.add(
         area,
         "disable an account",
@@ -914,9 +996,9 @@ def admin(run: Run, api: Api) -> None:
 
 def sessions(run: Run, api: Api) -> None:
     area = "Sign-in and sessions"
-    s, _ = api.token("demo.preparer", "wrong-password-123")
+    s, _ = api.token(api.role["preparer"], "wrong-password-123")
     run.add(area, "wrong password", "refused (401)", str(s), s == 401)
-    tok = api.login("prep.e001")
+    tok = api.login(api.role.get("preparer2", api.role["preparer"]))
     s1, _ = api.call("POST", "/v1/auth/logout", tok)
     s2, _ = api.call("GET", "/v1/cases", tok)
     run.add(
@@ -926,7 +1008,7 @@ def sessions(run: Run, api: Api) -> None:
         f"logout {s1}; reuse {s2}",
         s1 in (200, 204) and s2 == 401,
     )
-    _, b = api.token("demo.director")
+    _, b = api.token(api.role["director"])
     s3, _ = api.call("GET", "/v1/cases", b.get("access_token"))
     run.add(
         area,
@@ -941,7 +1023,7 @@ def sessions(run: Run, api: Api) -> None:
 
 def pdfs(run: Run, api: Api, cs: Cases) -> None:
     area = "Lender PDFs"
-    tok = api.login("demo.preparer")
+    tok = api.login(api.role["preparer"])
     cid, _ = cs.create(tok, "01-director-route", lender_files=False)
     res = []
     for f in sorted((PACK / "01-director-route" / "lender-pdfs").glob("*.pdf")):
@@ -1138,6 +1220,15 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument(
         "--smoke-url", default="", help="also check a deployed site, read only (no sign-in)"
     )
+    ap.add_argument(
+        "--live",
+        type=Path,
+        default=None,
+        metavar="ACCOUNTS_FILE",
+        help="run every check ON A DEPLOYED SITE, as the accounts in this file (BASE_URL=..., "
+        "ROLE_<role>=<username>, PW_<username>=...); creates 'E2E test (synthetic)' cases there",
+    )
+    ap.add_argument("--yes", action="store_true", help="with --live: do not ask before starting")
     a = ap.parse_args(argv)
     stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     out = a.out or ROOT / "var" / "e2e-report" / stamp
@@ -1147,22 +1238,46 @@ def main(argv: list[str] | None = None) -> int:
         r = subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True)  # noqa: S603,S607
         return r.stdout.strip()
 
-    run, gw = Run(), Gateway(out)
+    run, gw, acc = Run(), None, None
+    if a.live:
+        acc = Accounts.load(a.live)
+        local = acc.base_url.startswith(("http://127.0.0.1", "http://localhost"))
+        if not (acc.base_url.startswith("https://") or local):
+            raise SystemExit(f"{a.live}: set BASE_URL=https://<site>")
+        print(
+            f"LIVE run on {acc.base_url} as {', '.join(f'{k}={v}' for k, v in acc.role.items())}."
+        )
+        print("It creates 'E2E test (synthetic)' cases there and decides them.")
+        if not a.yes and input(f"Type {acc.base_url.split('//')[1]} to go on: ").strip() not in (
+            acc.base_url.split("//")[1],
+            acc.base_url.split("//")[1].rstrip("/"),
+        ):
+            raise SystemExit("stopped: nothing was sent")
+        r = httpx.get(f"{acc.base_url.rstrip('/')}/v1/health/live", timeout=30)
+        if r.status_code != 200:
+            raise SystemExit(f"{acc.base_url} is not answering ({r.status_code})")
+    else:
+        gw = Gateway(out)
+        acc = Accounts(role=dict(LOCAL_ROLES), pw={"it.admin": gw.admin_pw}, fixture=gw.fixture)
     t0 = time.monotonic()
-    gw.start()
+    if gw:
+        gw.start()
     try:
-        api = Api(gw)
+        url = gw.url if gw else acc.base_url.rstrip("/")
+        api = Api(url, acc, live=bool(a.live))
         cs = Cases(api)
         scenarios(run, api, cs)
         question_cards(run, api, cs)
         profiles(run, api, cs)
         approvals_and_access(run, api, cs)
         run.guard("Evaluator", "evaluator", lambda: evaluator(run, api, cs))
-        run.guard("Account admin", "admin", lambda: admin(run, api))
+        if "admin" in api.role:
+            run.guard("Account admin", "admin", lambda: admin(run, api))
         run.guard("Sign-in and sessions", "sessions", lambda: sessions(run, api))
         run.guard("Lender PDFs", "pdfs", lambda: pdfs(run, api, cs))
     finally:
-        gw.stop()
+        if gw:
+            gw.stop()
     if a.smoke_url:
         smoke(run, a.smoke_url)
     n, ok = len(run.checks), sum(c.passed for c in run.checks)
@@ -1172,7 +1287,12 @@ def main(argv: list[str] | None = None) -> int:
     meta = {
         "Run": datetime.now(UTC).astimezone().strftime("%d %b %Y %H:%M %Z"),
         "Code": code_ref,
-        "Set-up": "private gateway on 127.0.0.1, fresh synthetic database, MFA on, model off",
+        "Set-up": (
+            f"LIVE site {acc.base_url}; accounts "
+            + ", ".join(f"{k}={v}" for k, v in acc.role.items())
+            if a.live
+            else "private gateway on 127.0.0.1, fresh synthetic database, MFA on, model off"
+        ),
         "Covered": "10 test-pack scenarios, 3 question cards, 7 HR profiles, approvals, step-up, "
         "access control, evaluator, account admin, sessions, lender PDFs",
         "Not covered": "Ask CredAssure and PDF figure drafting (model and search index needed); "
