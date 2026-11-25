@@ -356,3 +356,36 @@ the technical audit log.
 The pack was generated from `data/frozen/v1` (read only): each workbook holds one frozen case's seven files, the lender
 files are the frozen v1 offers with the KFS case number left blank (so they fit any new case, except the one kept on
 purpose in scenario 10), and the PDFs are rendered from the same offers and documents.
+
+## 14. Automated run and report (`make e2e-report`)
+
+One command runs everything in parts 6 to 10 through the API, as every account, and writes an Excel and a PDF
+report. It starts its **own** gateway on `127.0.0.1` with a fresh synthetic database, newly generated secrets, MFA on
+and the model off, and stops it at the end. It never writes to `var/case.db`, the e2e database or any deployed
+server, and it does not need your `.env` (it refuses to run if `.env` sets `CASE_DATABASE_URL`).
+
+```bash
+git pull && make install && npm ci
+npx playwright install chromium     # once, for the PDF (skipped if Google Chrome is installed)
+make e2e-report                     # about 3 minutes
+```
+
+The report is in `var/e2e-report/<time>/`: `CredAssure_E2E_Report_<date>.xlsx` (Summary and Results sheets, one row
+per check: area, test, expected, actual, pass or fail, case ID), the same as `.pdf` and `.html`, `results.json` and
+the gateway log. The command exits with 1 if any check fails.
+
+| Area | Checks |
+|---|---|
+| Test-pack scenarios | The 10 folders of part 9: need, route, status, ranking, questions, blocked comparisons, upload flags |
+| Question cards | 04, 05 and 06 answered as in part 9, then **Continue** |
+| Preparer check | `prep.e001` passes; `prep.e009`, `e012`, `e014`, `e017`, `e019`, `e020` stop with the reason and who fixes it |
+| Approvals | Part 10: approve, return, reject, attestation, negotiation and stale report, VP step-up (wrong code refused), held case |
+| Access control | A second preparer, maker-checker, the Director's inbox and refused VP or held cases |
+| Evaluator, admin, sessions | Read only for the evaluator and every audit chain verified; the admin creates, resets, resets MFA, disables and never opens a case; sign-out; the code step |
+| Lender PDFs | The 9 PDFs of scenario 01 are read; a file that is not a PDF is refused |
+
+Not covered: Ask CredAssure and PDF figure drafting (they need the model and the search index), and the browser
+layout (the Playwright specs, `make e2e`).
+
+To check that a deployed site is up without touching its data, add `ARGS="--smoke-url https://<site>"`: it only
+reads the sign-in page and `/v1/health/live` and `/ready`; no sign-in, no cases.

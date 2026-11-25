@@ -33,6 +33,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | 11 | 11.22 | Evaluation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-11-11.22-negotiation-manual-offers-pritish.md](docs/progress/entries/2026-11-25-11-11.22-negotiation-manual-offers-pritish.md) |
 | 11 | 11.23 | Responsible AI | done | Pritish | 2026-11-25 | 55ba720 | K5 | [2026-11-25-11-11.23-k5-results-pritish.md](docs/progress/entries/2026-11-25-11-11.23-k5-results-pritish.md) |
 | 11 | 11.24 | Deployment | done | Pritish | 2026-11-25 | — | — | [2026-11-25-11-11.24-release-v110-pritish.md](docs/progress/entries/2026-11-25-11-11.24-release-v110-pritish.md) |
+| 11 | 11.25 | Evaluation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-11-11.25-e2e-report-pritish.md](docs/progress/entries/2026-11-25-11-11.25-e2e-report-pritish.md) |
 | 12 | 12.11 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.11-public-repo-cleanup-pritish.md](docs/progress/entries/2026-11-25-12-12.11-public-repo-cleanup-pritish.md) |
 | 12 | 12.12 | Documentation | done | Pritish | 2026-11-24 | — | — | [2026-11-24-12-12.12-e2e-test-pack-pritish.md](docs/progress/entries/2026-11-24-12-12.12-e2e-test-pack-pritish.md) |
 | 12 | 12.13 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.13-contributions-owners-pritish.md](docs/progress/entries/2026-11-25-12-12.13-contributions-owners-pritish.md) |

@@ -371,6 +371,7 @@ make openapi && make client       # regenerates openapi.json and packages/api-cl
 | `make eval-judge` / `make eval-kappa` | Judge J1 on free-text answers (`SAMPLE=all` exports every judged answer), then κ against the human labels |
 | `make eval-report` | E13 report: full system vs best baseline, ablation effects (BRD §12 claim rule), failure taxonomy, cost |
 | `make load-smoke` | 10 concurrent demo cases; p95 per stage (Q6: funding < 60 s) |
+| `make e2e-report` | Every profile and flow end to end on a private local gateway; Excel + PDF report (docs/setup/e2e-testing.md part 14) |
 | `uv run python -m credassure.evaluation.freeze --write` | Writes `evaluation/FROZEN.sha256`, **only after** the human checks are done |
 
 Frozen artefacts: the 100-item test set (25/10/15/15/5/6/8/8/3/5 by BRD §13 category), 40 retrieval queries (v1.0 + v1.1-silver), 20 red-team prompts, bad-citation fixtures, the RBI KFS APR illustration, and `data/frozen/v1`.
