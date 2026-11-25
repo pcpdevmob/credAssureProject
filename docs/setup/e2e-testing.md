@@ -356,3 +356,86 @@ the technical audit log.
 The pack was generated from `data/frozen/v1` (read only): each workbook holds one frozen case's seven files, the lender
 files are the frozen v1 offers with the KFS case number left blank (so they fit any new case, except the one kept on
 purpose in scenario 10), and the PDFs are rendered from the same offers and documents.
+
+## 14. Automated run and report (`make e2e-report`)
+
+One command runs everything in parts 6 to 10 through the API, as every account, and writes an Excel and a PDF
+report. It starts its **own** gateway on `127.0.0.1` with a fresh synthetic database, newly generated secrets, MFA on
+and the model off, and stops it at the end. It never writes to `var/case.db`, the e2e database or any deployed
+server, and it does not need your `.env` (it refuses to run if `.env` sets `CASE_DATABASE_URL`).
+
+```bash
+git pull && make install && npm ci
+npx playwright install chromium     # once, for the PDF (skipped if Google Chrome is installed)
+make e2e-report                     # about 3 minutes
+```
+
+The report is in `var/e2e-report/<time>/`: `CredAssure_E2E_Report_<date>.xlsx` (Summary and Results sheets, one row
+per check: area, test, expected, actual, pass or fail, case ID), the same as `.pdf` and `.html`, `results.json` and
+the gateway log. The command exits with 1 if any check fails.
+
+| Area | Checks |
+|---|---|
+| Test-pack scenarios | The 10 folders of part 9: need, route, status, ranking, questions, blocked comparisons, upload flags |
+| Question cards | 04, 05 and 06 answered as in part 9, then **Continue** |
+| Preparer check | `prep.e001` passes; `prep.e009`, `e012`, `e014`, `e017`, `e019`, `e020` stop with the reason and who fixes it |
+| Approvals | Part 10: approve, return, reject, attestation, negotiation and stale report, VP step-up (wrong code refused), held case |
+| Access control | A second preparer, maker-checker, the Director's inbox and refused VP or held cases |
+| Evaluator, admin, sessions | Read only for the evaluator and every audit chain verified; the admin creates, resets, resets MFA, disables and never opens a case; sign-out; the code step |
+| Lender PDFs | The 9 PDFs of scenario 01 are read; a file that is not a PDF is refused |
+
+Not covered: Ask CredAssure and PDF figure drafting (they need the model and the search index), and the browser
+layout (the Playwright specs, `make e2e`).
+
+To check that a deployed site is up without touching its data, add `ARGS="--smoke-url https://<site>"`: it only
+reads the sign-in page and `/v1/health/live` and `/ready`; no sign-in, no cases.
+
+### On the deployed site (`--live`)
+
+The same checks can run **on the deployed site itself**. This creates cases named "E2E test NN (synthetic)" there,
+decides them (approve, return, reject), runs a negotiation round, and creates and disables one throwaway account
+(`e2e.tmp<time>`). Run it only when the team agrees, not while mentors are using the site.
+
+1. In **User management**, `it.admin` creates `e2e.director` (Director, Finance), `e2e.vp` (VP, Finance),
+   `e2e.evaluator` (Evaluator) and `e2e.admin` (Account admin), each with no HR id. Never use `demo.director` or
+   `demo.vp`: the run changes the password and sets up the authenticator of every account it uses.
+2. Preparers must be **seeded** accounts, because the preparer check reads the HR record bound to the account:
+   `prep.e002` and `prep.e003`, and for the HR-profile checks `prep.e009`, `e012`, `e014`, `e017`, `e019`, `e020`.
+   Their first passwords are in `var/initial-passwords.txt` on the server.
+3. On your Mac (the run needs the site, not the server's shell):
+   ```bash
+   cp deploy/env/e2e-live.env.example e2e-live.env && chmod 600 e2e-live.env   # git-ignored
+   # fill in the temporary passwords
+   make e2e-report ARGS="--live e2e-live.env"      # asks you to type the site name before it starts
+   ```
+   It keeps under the site's rate limit (90 requests a minute), so it takes about 15 to 25 minutes. The new
+   passwords and authenticator keys are written back to `e2e-live.env`: keep the file for the next run. To start
+   over, an admin resets those accounts and you put the new temporary passwords in.
+4. Afterwards, the E2E test cases can be removed on the server with the audited purge (`scripts/purge_cases.py`).
+
+## 15. Record the walk-through video (`make walkthrough-video`)
+
+Records one continuous video of every role and flow, with a caption on each step. No admin screen is shown: the
+Director's and VP's authenticators and the supporting cases (scenarios 02, 03, 04, 08, 09) are prepared through the
+API before recording. On camera:
+- **Preparer:** creates scenario 01 from the workbook and the nine lender files, runs it, then shows the funding
+  gap, lender offers and report.
+- **Ask CredAssure:** three questions on the case, then product help.
+- **Question card:** answered on scenario 04; scenario 09's flagged instructions shown.
+- **Negotiation:** a round and the report's new version on scenario 02.
+- **Director:** approves scenario 01 and shows the "No loan needed" card on scenario 08.
+- **VP:** step-up approval of 02 and the held case 03.
+- **Evaluator:** the audit chain and the scorecard.
+
+```bash
+ollama serve &              # for real Ask CredAssure answers (qwen3:8b), plus var/corpus.db and var/chroma-local-bge
+make stop                   # the recorder uses the e2e ports 8001 and 3001
+make walkthrough-video      # about 15 to 20 minutes with the local model
+```
+
+It runs on the isolated e2e stack (a fresh `var/case-e2e.db`, needs `E2E_PASSWORD` in `.env`), never on
+`var/case.db` or a deployed site, and stops what it started. The video is
+`var/walkthrough/<time>/CredAssure_Walkthrough.mp4` (`.webm` without ffmpeg: `brew install ffmpeg`). A scene that
+fails is skipped and leaves a `stopped-<scene>.png` beside the video. Without Ollama the copilot shows its "model
+unavailable" reply and every other scene is unchanged.
+
