@@ -49,12 +49,12 @@ make run-ui                                  # terminal 3 → http://localhost:3
 
 | Agent | Package | Job | Owner |
 |---|---|---|---|
-| Supervisor and routing | `agents/supervisor` | Fixed stage order, code gates, re-check of every GO, pause and resume, approval wait, routing by amount | [Name 1] |
-| Employee Onboarding | `agents/onboarding` | Role, required trainings and policy acknowledgement from the read-only HR store | Tejas |
+| Supervisor and routing | `agents/supervisor` | Fixed stage order, code gates, re-check of every GO, pause and resume, approval wait, routing by amount | Abhishek |
+| Employee Onboarding | `agents/onboarding` | Role, required trainings and policy acknowledgement from the read-only HR store | Mousita (0.3.0; Tejas built 0.1–0.2) |
 | Working Capital | `agents/working-capital` | 26-week cash table, peak shortfall, buffer, recommended amount and bridge | Suresh |
 | LendWise | `agents/lendwise` | KFS hidden-charge audit, APR by IRR (GST, insurance, CGTMSE), affordability, ranking, one fee-waiver negotiation draft | Pritish |
 | Verification Critic | `agents/critic` | Number normaliser vs ledger, citation checks, banned content, regenerate ×2 then template fallback | Abhishek |
-| Ask CredAssure Copilot | `agents/copilot` | On-demand hybrid RAG over 1,084 real Indian documents, cited answers, refusals | [Name 6] |
+| Ask CredAssure Copilot | `agents/copilot` | On-demand hybrid RAG over 1,084 real Indian documents, cited answers, refusals | Adesh (retrieval: Adesh, Tejas; corpus: Tejas, Pritish) |
 
 Shared code: `packages/core` (contracts, `AgentResult` per ADR 0018, ports, errors, prompt registry), `packages/engines` (deterministic money, APR, cash flow, routing), `packages/ledger` (models, migrations, fact ledger, hash-chained audit), `packages/llm`, `packages/retrieval`, `packages/security`, `packages/tools`, `packages/lender-sim`, `packages/reports`, `packages/observability`, `apps/gateway` (FastAPI), `apps/web` (Next.js/React), `packages/api-client` (generated TypeScript client).
 

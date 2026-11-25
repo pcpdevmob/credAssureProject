@@ -1,6 +1,6 @@
 # Deployment
 
-**Owner:** [Name 1] (TODO: name)
+**Owner:** Suresh (gateway: Abhishek)
 **Phases:** P6 (course switch, deferred), P10 (Phase 12)
 **Status:** Local run, isolated e2e, demo-reset, replay mode, backup/restore, release bundle + SBOM, runbook done (P10); clean-machine run passed; hosted stack (Caddy + failover to Hugging Face) ready, P15 15.3
 

@@ -125,13 +125,17 @@ credassure/
 ## Ownership
 | Path | Owner |
 |---|---|
-| agents/supervisor, apps/gateway, deploy/ | [Name 1] |
-| agents/onboarding, evaluation/testset | Tejas |
+| agents/supervisor, apps/gateway | Abhishek |
+| deploy/ | Suresh |
+| agents/onboarding | Mousita (0.3.0; Tejas built 0.1–0.2) |
+| evaluation/testset | Tejas |
 | agents/working-capital, packages/engines (cash flow) | Suresh |
 | agents/lendwise, packages/engines (loan cost), packages/lender-sim | Pritish |
 | agents/critic, packages/observability, evaluation/ablations | Abhishek |
-| agents/copilot, packages/retrieval, data/corpus | [Name 6] |
-| apps/web, packages/api-client | UI lead (assign) |
+| agents/copilot | Adesh |
+| packages/retrieval | Adesh, Tejas |
+| data/corpus | Tejas, Pritish |
+| apps/web, packages/api-client | Suresh |
 
 ## Agent API endpoints (mounted under /v1/agents/<name>)
 | Endpoint | All agents | Notes |

@@ -1,6 +1,6 @@
 # Copilot
 
-**Owner:** [Name 6] (TODO: name); plan v3.4: Suresh (retrieval, P4), Tejas (answering, P5)
+**Owner:** Adesh (retrieval with Tejas; corpus: Tejas, Pritish); plan v3.4: Suresh (retrieval, P4), Tejas (answering, P5)
 **Phases:** P0 (dev split), P4 (CP2-R), P5 (CP2-A), P6 (course re-run), P13 (product assistant, ADR 0035)
 **Status:** 9e done except CP-01 (regulatory 10/25 live, OPEN); KR-05 recall@5 24/40 (v1.0) OPEN. **P4 code done 2026-11-18** (contextual headers, glossary rewrite, answerability gate, ladder script); Mac run done: frozen recall@5 23 -> 25/40 (headers), dev 13 -> 17/20 (headers + glossary); reranker only scores for the abstain gate (threshold 0.4066); `evaluation/reports/retrieval-ladder-2026-11-18.md`. **P5 code done 2026-11-18**: span-cited answers (cp_answer 2.0.0, unsupported sentences cut) and dual strict/supported scoring in copilot-live; live re-run pending on the Mac. **P13 built 2026-11-18** (ADR 0035): Ask CredAssure on every page; product help as a cited source; CP-07 code routing; CP-10 case status; CP-11 per-case memory with reset; CP-12 Critic-first streaming, fixed follow-ups, feedback
 
