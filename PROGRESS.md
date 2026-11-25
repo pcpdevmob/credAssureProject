@@ -25,7 +25,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | 11 | 11.16 | Evaluation | done | Pritish | 2026-11-24 | — | K3 | [2026-11-24-11-11.16-k3-final-run-pritish.md](docs/progress/entries/2026-11-24-11-11.16-k3-final-run-pritish.md) |
 | 11 | 11.17 | Evaluation | done | Pritish | 2026-11-25 | — | K4, E13 | [2026-11-25-11-11.17-k4-judge-kappa-pritish.md](docs/progress/entries/2026-11-25-11-11.17-k4-judge-kappa-pritish.md) |
 | 11 | 11.18 | Evaluation | done | Pritish | 2026-11-25 | — | K5, K11 | [2026-11-25-11-11.18-k5-prep-k11-release-pritish.md](docs/progress/entries/2026-11-25-11-11.18-k5-prep-k11-release-pritish.md) |
-| 11 | 11.20 | Evaluation | in_progress | Pritish | 2026-11-25 | — | K7 | [2026-11-25-11-11.20-k7-traces-pritish.md](docs/progress/entries/2026-11-25-11-11.20-k7-traces-pritish.md) |
+| 11 | 11.20 | Evaluation | done | Pritish | 2026-11-25 | — | K7 | [2026-11-25-11-11.20-k7-traces-pritish.md](docs/progress/entries/2026-11-25-11-11.20-k7-traces-pritish.md) |
 | 12 | 12.12 | Documentation | done | Pritish | 2026-11-24 | — | — | [2026-11-24-12-12.12-e2e-test-pack-pritish.md](docs/progress/entries/2026-11-24-12-12.12-e2e-test-pack-pritish.md) |
 | 12 | 12.13 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.13-contributions-owners-pritish.md](docs/progress/entries/2026-11-25-12-12.13-contributions-owners-pritish.md) |
 | 12 | 12.14 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.14-contributions-evidence-pritish.md](docs/progress/entries/2026-11-25-12-12.14-contributions-evidence-pritish.md) |
@@ -190,7 +190,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - 11 11.16: K4 judge + human labels + kappa on `20261124T220648`; K5 safety_v2 + A6; K7 trace links. ([entry](docs/progress/entries/2026-11-24-11-11.16-k3-final-run-pritish.md))
 - 11 11.17: K5 safety_v2 + A6; K7 trace links. ([entry](docs/progress/entries/2026-11-25-11-11.17-k4-judge-kappa-pritish.md))
 - 11 11.18: teammate review + `freeze --reviewed-by`; K5 run and A6 on the Mac; CHANGELOG date and tag after K5 (owner). ([entry](docs/progress/entries/2026-11-25-11-11.18-k5-prep-k11-release-pritish.md))
-- 11 11.20: dashboard screenshots and trace links; system card and report §9 lines once they are in. ([entry](docs/progress/entries/2026-11-25-11-11.20-k7-traces-pritish.md))
+- 11 11.20: trace links open only for project members; make T096 public (Share) if examiners should open it. ([entry](docs/progress/entries/2026-11-25-11-11.20-k7-traces-pritish.md))
 - P2 2.2: re-record one live-model demo run with a Langfuse trace at P4 (Mac). ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
 - P2 2.2: E18 SHOULDs S1/S2 (ARCHITECTURE says React SPA/nginx; §6.3 omits RETURNED) — P10 docs. ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
 - P5 5.2: Human review of the J1 sample after the live run (human review list H14). ([entry](docs/progress/entries/2026-11-18-p5-5.2-dual-scoring-pritish.md))
