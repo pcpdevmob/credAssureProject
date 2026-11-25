@@ -43,7 +43,7 @@ External: ≤8B chat endpoint · embeddings endpoint · Langfuse (self-hosted in
 
 ```
 credassure/
-├── .cursor/rules/                 # Cursor rules (this kit)
+├── the tool configuration                 # Cursor rules (this kit)
 ├── docs/ BRD.md ARCHITECTURE.md DATA_SPEC.md adr/ redteam_log.md
 ├── pyproject.toml  uv.lock  .env.example  Makefile  docker-compose.yml  Dockerfile
 ├── .pre-commit-config.yaml        # ruff, mypy, bandit, gitleaks
@@ -335,7 +335,7 @@ must stay in code. Track B only requires ≥3 tools, not a protocol.
 official `mcp` Python SDK (FastMCP), exposing **read-only** tools wrapping the same registry:
 `search_knowledge`, `compute_cash_table`, `price_offer`, `route_proposal` (dry run). stdio transport only,
 synthetic data only, no case writes, no approval. Useful for the team to probe engines from Cursor or
-Claude Desktop and for a demo slide. Never on the runtime path.
+The coding tool Desktop and for a demo slide. Never on the runtime path.
 
 ## 4. Database
 
@@ -371,7 +371,7 @@ Three SQLite files + Chroma. SQLAlchemy 2 models, Alembic migrations, WAL mode, 
 - Chroma collection per chunking strategy, metadata mirrors filter fields (KR-04)
 
 ## 5. Security guardrails summary
-See `.cursor/rules/10-security-guardrails.mdc`. Threat model in `docs/adr/0002-threat-model.md`
+See the tool configuration. Threat model in `docs/adr/0002-threat-model.md`
 (STRIDE over UI, API, agents, documents, LLM endpoint). Red-team log of 20 prompts in `docs/redteam_log.md`.
 
 ## 6. Observability

@@ -6,7 +6,7 @@ Plan v3.4 phase P2 (`docs/plan/CredAssure_Prompt_Pack_v3.4.md`). Supersedes the 
 |---|---|---|---|
 | Opus 5.5 | `feature/eval-p2` | 10b merged | decide stretch items (already cut by v3.4; confirm) |
 
-## Paste into Claude Code
+## Paste into the coding tool
 
 ```markdown
 Phase P2 on branch feature/eval-p2. Plan v3.4 §3.2.

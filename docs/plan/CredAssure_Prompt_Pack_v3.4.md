@@ -1,13 +1,13 @@
 # CredAssure: Prompt Pack (plan v3.4)
 
-18 November 2026 · Source of truth for every Claude Code phase prompt after 10b. Plan: `CredAssure_RAI_Security_Copilot_Plan_v3.4.md`. Tasks and status: **CredAssure Post-10b Plan** Sheet. Loop state: `CredAssure_Loop_State.md`.
+18 November 2026 · Source of truth for every the coding tool phase prompt after 10b. Plan: `CredAssure_RAI_Security_Copilot_Plan_v3.4.md`. Tasks and status: **CredAssure Post-10b Plan** Sheet. Loop state: `CredAssure_Loop_State.md`.
 
 ## How to use this pack
 1. Take the next prompt whose **Prerequisites** are met (see the Loop State doc).
 2. Create the branch named in the prompt from an up-to-date `main`.
-3. Paste the prompt block into Claude Code with the model shown.
-4. When Claude Code stops, review the diff, push, open the PR.
-5. In the Claude app (this project), say **"check progress P<n>"**. The monitor reads the repo, checks every exit check below, updates the Sheet and Loop State, and gives you either the next prompt or a fix prompt.
+3. Paste the prompt block into the coding tool with the model shown.
+4. When the coding tool stops, review the diff, push, open the PR.
+5. In the coding tool app (this project), say **"check progress P<n>"**. The monitor reads the repo, checks every exit check below, updates the Sheet and Loop State, and gives you either the next prompt or a fix prompt.
 
 Every prompt ends with the **standard close** (§0). The monitor checks it on every phase.
 
@@ -62,7 +62,7 @@ The README.md in the repo root already describes the process in §12; implement 
    progress-check to make check-fast and the pre-push hook.
 6. .gitattributes: PROGRESS.md linguist-generated=true. .github/CODEOWNERS for module files and code
    paths; TODO comments where GitHub handles are unknown — don't invent handles.
-7. Replace every "update PROGRESS.md" instruction in CLAUDE.md, prompts/*.md, .claude/commands/*.md and
+7. Replace every "update PROGRESS.md" instruction in the project rules, prompts/*.md, the tool configuration and
    hooks with: "Add one entry file in docs/progress/entries/, update your module file, run make progress.
    Never edit PROGRESS.md by hand. Name the entry file in your report." List every file changed.
 8. Check every command, path and make target in README.md against the Makefile, package.json files and
@@ -73,7 +73,7 @@ The README.md in the repo root already describes the process in §12; implement 
 10. First entry: module Documentation, phase P0, step "0.5", status done.
 Commit "chore(progress): conflict-free progress tracking + README §12". Then the standard close.
 ```
-**Exit checks:** `docs/progress/{HISTORY.md,modules/,entries/TEMPLATE.md}` exist · `make progress-check` passes · `PROGRESS.md` starts with the GENERATED header · `grep -rn "update PROGRESS.md" CLAUDE.md prompts .claude` returns nothing · progress tests pass.
+**Exit checks:** `docs/progress/{HISTORY.md,modules/,entries/TEMPLATE.md}` exist · `make progress-check` passes · `PROGRESS.md` starts with the GENERATED header · `grep -rn "update PROGRESS.md" the project rules prompts the tool configuration returns nothing · progress tests pass.
 
 ---
 
@@ -84,7 +84,7 @@ Commit "chore(progress): conflict-free progress tracking + README §12". Then th
 Sync the base files with plan v3.4 on branch chore/plan-v34-base-files. Show me the plan first.
 Sources: docs/plan/CredAssure_RAI_Security_Copilot_Plan_v3.4.md and docs/plan/CredAssure_Prompt_Pack_v3.4.md.
 
-1. CLAUDE.md: add a concise "Plan v3.4" section, keeping every existing rule: phase names and order
+1. the project rules: add a concise "Plan v3.4" section, keeping every existing rule: phase names and order
    (P0–P12; 9d, 9e, 10a, 10b keep their meaning); tuning only on the retrieval dev split, never on the
    frozen 40 or the 100-item set; deferred copilot items (CP-07, full CP-08, CP-10, CP-11, CP-12, A7,
    adaptive round) are not built unless I say so; branches feature/<module>-<phase>, one PR per phase,
@@ -93,19 +93,19 @@ Sources: docs/plan/CredAssure_RAI_Security_Copilot_Plan_v3.4.md and docs/plan/Cr
 2. Split the pack into prompts/27-p0 … prompts/39-p12 (one file per prompt P0–P12, existing prompts/
    format, including its exit checks). Update prompts/README.md. In prompts 20–26 mark text superseded by
    the new files; don't delete it.
-3. .claude/settings.json: deny Edit and Write on ./PROGRESS.md (make progress still writes it via its
+3. the tool configuration: deny Edit and Write on ./PROGRESS.md (make progress still writes it via its
    script). Confirm hooks pass.
 4. .github/pull_request_template.md: phase and step; entry file and module file; make progress and
    check-fast run; reviewers 0 MUST; no frozen file changed (or ADR linked); merge commit.
 5. docs/BUILD_SCOPE.md: add v3.4 items with new numbers; mark stretch cuts (UI-09/10, WC-08, LW-15, VER-06,
    ONB-07) and deferred copilot items "cut by plan v3.4, ADR in P0". Don't delete rows.
-6. .claude/commands: /phase accepts P0–P12 and maps to the new files; /eval gets a safety_v2 entry marked
+6. the tool configuration: /phase accepts P0–P12 and maps to the new files; /eval gets a safety_v2 entry marked
    "available after P8".
-7. Mirror the CLAUDE.md changes in .cursor/rules if it exists.
+7. Mirror the project rules changes in the tool configuration if it exists.
 Entry: module Documentation, phase P0, step "0.2", status in_progress.
 Commit "chore: sync base files with plan v3.4". Then the standard close.
 ```
-**Exit checks:** CLAUDE.md has the Plan v3.4 section · prompts 27–39 exist · deny rule for PROGRESS.md present · PR template exists · BUILD_SCOPE marks the cuts · `make check-fast` green.
+**Exit checks:** the project rules has the Plan v3.4 section · prompts 27–39 exist · deny rule for PROGRESS.md present · PR template exists · BUILD_SCOPE marks the cuts · `make check-fast` green.
 
 ---
 
@@ -316,7 +316,7 @@ Entries: P8 8.1–8.5. Then the standard close.
 **Branch:** `feature/ui-p9` · **Prerequisites:** P7 results (for scorecards); P8 merged
 
 ```
-Phase P9 on branch feature/ui-p9: run U5 and U6 from CLAUDE_CODE_UI_PROMPT.md with these additions. npm only.
+Phase P9 on branch feature/ui-p9: run U5 and U6 from the build prompt with these additions. npm only.
 - U5: audit log with a chain-verify badge (replaces the /docs step in the demo), evaluation scorecards
   (baseline vs system vs ablations, local and course), help centre.
 - RAI UI: "AI-generated draft" badge on every model-written text; approver attestation ("I reviewed the

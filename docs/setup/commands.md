@@ -8,7 +8,7 @@
 |---|---|
 | `make install` | `uv sync --all-packages --all-extras`: all workspace members, the dev group and extras (`rerank`: sentence-transformers for embeddings and the reranker) |
 | `make check` | ruff, ruff format, mypy --strict, pytest, corpus refs, bandit, import-linter. **Green before every commit** |
-| `make check-fast` | ruff + tests not marked slow (the Claude stop hook runs it) |
+| `make check-fast` | ruff + tests not marked slow (the coding tool stop hook runs it) |
 | `make test` | Full suite with coverage |
 | `make audit` | pip-audit (accepted advisories: `docs/security/risk-register.md`) |
 
@@ -71,4 +71,4 @@ Full checklist for every AI tool: [team-handoff.md §4](team-handoff.md#4-guardr
 - Never run a bare `uv sync`; use `make install`.
 - Never edit `evaluation/testset/v1/`, `evaluation/retrieval/v1/` or `data/frozen/v1/` once frozen.
 - Never print or commit `.env`.
-- Claude Code never pushes; review the diff and push yourself.
+- The coding tool never pushes; review the diff and push yourself.

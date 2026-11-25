@@ -1,4 +1,4 @@
-# Team handoff: continue a module with Claude Code, Cursor or another AI tool
+# Team handoff: continue a module with the coding tool, Cursor or another AI tool
 
 This page is how a teammate picks up a module (enhancement, development or optimisation) **without losing the project's
 context, rules and guardrails**, whichever AI assistant they use. Setup first: [local-dev.md](local-dev.md).
@@ -8,12 +8,12 @@ context, rules and guardrails**, whichever AI assistant they use. Setup first: [
 Everything a teammate needs is **in git**. Chat history and personal AI memory are not shared, so anything that matters
 must be written into one of the shared files below.
 
-| Layer | Claude Code | Cursor | Other tools (Codex, Copilot, Windsurf, Gemini…) |
+| Layer | The coding tool | Cursor | Other tools (Codex, Copilot, Windsurf, Gemini…) |
 |---|---|---|---|
-| Project instructions (loaded automatically) | [CLAUDE.md](../../CLAUDE.md), which imports the BRD, architecture, data spec, ADRs and `.cursor/rules` | `.cursor/rules/*.mdc` (00 and 10 always; 20, 30, 40 when you touch matching paths) + [AGENTS.md](../../AGENTS.md) | [AGENTS.md](../../AGENTS.md); if the tool doesn't load it, attach it to the first message |
-| Guardrails | **Enforced** by `.claude/hooks/` (blocks `.env`, certificates, frozen sets, `git push`, `rm -rf`; runs `make check-fast` on stop) and `.claude/settings.json` permissions | **Not enforced** in this repo. Follow the checklist in §4 | **Not enforced.** Follow §4 |
+| Project instructions (loaded automatically) | the project rules, which imports the BRD, architecture, data spec, ADRs and the tool configuration | the tool configuration (00 and 10 always; 20, 30, 40 when you touch matching paths) + [the project rules](../../the project rules) | [the project rules](../../the project rules); if the tool doesn't load it, attach it to the first message |
+| Guardrails | **Enforced** by the tool configuration (blocks `.env`, certificates, frozen sets, `git push`, `rm -rf`; runs `make check-fast` on stop) and the tool configuration permissions | **Not enforced** in this repo. Follow the checklist in §4 | **Not enforced.** Follow §4 |
 | Workflows | `/status`, `/next`, `/phase <n>`, `/gate <G>`, `/eval <E#>`, `/review`, `/ui U<n>` | Paste a step from `prompts/NN-*.md` (or [CURSOR_MASTER_PROMPT.md](../../CURSOR_MASTER_PROMPT.md)) into Agent chat, Plan mode | Paste the same `prompts/NN-*.md` step |
-| Reviewers | Subagents in `.claude/agents/`: `brd-conformance`, `security-reviewer`, `money-auditor`, `test-writer`, `eval-analyst` | Ask the chat to review the diff against `.claude/agents/<name>.md` as a checklist | Same as Cursor |
+| Reviewers | Subagents in the tool configuration: `brd-conformance`, `security-reviewer`, `money-auditor`, `test-writer`, `eval-analyst` | Ask the chat to review the diff against the tool configuration as a checklist | Same as Cursor |
 
 **Shared state (all tools):**
 - [PROGRESS.md](../../PROGRESS.md): generated status (gates, latest step entries, modules, open items), built by `make progress` from `docs/progress/`; the history before 2026-11-18 is in `docs/progress/HISTORY.md`.
@@ -21,7 +21,7 @@ must be written into one of the shared files below.
 - `docs/adr/`: every decision that changes a contract, a default or a rule (index: [docs/adr/README.md](../adr/README.md)).
 - `evaluation/reports/`: evidence for each evaluation run.
 
-**Not shared:** Claude Code memory (`~/.claude/...`), Cursor chat history, your `.env`, `var/` (databases, Chroma, caches).
+**Not shared:** The coding tool memory (`the tool's local folder), Cursor chat history, your `.env`, `var/` (databases, Chroma, caches).
 
 ## 2. Handing a module off (outgoing owner)
 1. `make check` is green.
@@ -49,9 +49,9 @@ Never pass `.env`, keys or passwords through chat or PRs; each person keeps thei
 
 | Tool | How |
 |---|---|
-| **Claude Code** | Open at the repo root, plan mode on, run `/status`, then paste the kickoff prompt. To continue a numbered phase, use `/phase <n>` or `/next` instead |
-| **Cursor** | Agent chat in **Plan** mode. Paste the kickoff prompt and `@`-attach `PROGRESS.md`, `AGENTS.md` and the module card. Check that rules 00 and 10 show as applied |
-| **Other tools** | Paste the kickoff prompt; attach `AGENTS.md` if the tool doesn't load it on its own |
+| **The coding tool** | Open at the repo root, plan mode on, run `/status`, then paste the kickoff prompt. To continue a numbered phase, use `/phase <n>` or `/next` instead |
+| **Cursor** | Agent chat in **Plan** mode. Paste the kickoff prompt and `@`-attach `PROGRESS.md`, `the project rules` and the module card. Check that rules 00 and 10 show as applied |
+| **Other tools** | Paste the kickoff prompt; attach `the project rules` if the tool doesn't load it on its own |
 
 **Kickoff prompt** (works in every tool; fill in the brackets):
 
@@ -59,7 +59,7 @@ Never pass `.env`, keys or passwords through chat or PRs; each person keeps thei
 I'm continuing the <module> module of CredAssure (owner: <name>). Task: <enhancement / bug / optimisation, one sentence>.
 
 Before proposing anything:
-1. Read AGENTS.md (or CLAUDE.md), PROGRESS.md, agents/<module>/README.md and the rules in .cursor/rules/.
+1. Read the project rules (or the project rules), PROGRESS.md, agents/<module>/README.md and the rules in the tool configuration
 2. Read the requirement IDs in scope: <e.g. LW-04, LW-09> from docs/requirements/BRD.md and
    docs/architecture/design-detail.md §<2.4.x>, plus any ADR they cite.
 3. Summarise in 5 lines: what exists, what's open for this task in PROGRESS.md and the module file, and which rules apply.
@@ -73,7 +73,7 @@ commit message `phase-N: <summary> [REQ-IDs]`. Don't push.
 ```
 
 ## 4. Guardrail checklist (mandatory in Cursor and other tools)
-Claude Code's hooks block most of these automatically. In other tools, check them yourself before every commit:
+The coding tool's hooks block most of these automatically. In other tools, check them yourself before every commit:
 
 - [ ] No gate decision set by model output; every number comes from `packages/engines` and goes through the ledger.
 - [ ] No floats for money; Decimal in Python, paise in SQLite.
@@ -96,7 +96,7 @@ Claude Code's hooks block most of these automatically. In other tools, check the
 | LendWise | Pritish | `agents/lendwise`, `packages/engines` (loan cost), `packages/lender-sim` | LW-01..15, BR-06..10 | §2.4.4, §2.4.7; ADR 0012, 0023 | offers 15/15, negotiation 5/5 | money-auditor, security-reviewer |
 | Verification Critic | Abhishek | `agents/critic`, `packages/observability` | VER-01..06 | §2.4.5 | bad-citation plants 12/12, safety items | security-reviewer, brd-conformance |
 | Ask CredAssure Copilot | Adesh (retrieval: Adesh, Tejas; corpus: Tejas, Pritish) | `agents/copilot`, `packages/retrieval`, `data/corpus` | KR-01..05, CP-01..04 | §2.4.6; ADR 0013, 0019 | regulatory ≥20/25, refusal 8/8, injection 8/8, isolation 3/3, retrieval ≥34/40 | security-reviewer |
-| Web UI | Suresh | `apps/web`, `packages/api-client` | UI-01..10 | [docs/ui/DESIGN_BRIEF.md](../ui/DESIGN_BRIEF.md), `CLAUDE_CODE_UI_PROMPT.md`; ADR 0004 | Playwright e2e (`make e2e`), no business logic in the UI | security-reviewer |
+| Web UI | Suresh | `apps/web`, `packages/api-client` | UI-01..10 | [docs/ui/DESIGN_BRIEF.md](../ui/DESIGN_BRIEF.md), `the build prompt`; ADR 0004 | Playwright e2e (`make e2e`), no business logic in the UI | security-reviewer |
 | Evaluation | Abhishek, Tejas | `evaluation/` | BRD §12–13 | [docs/build/PHASE_PROMPTS.md](../build/PHASE_PROMPTS.md) Phases 3, 11 | ≥92/100 and above the best baseline | eval-analyst |
 
 Rule of thumb: **one module, one branch, one session per task.** If a change touches a shared package

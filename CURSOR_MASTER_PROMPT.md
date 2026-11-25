@@ -10,7 +10,7 @@ running only on a hosted ≤8B OpenAI-compatible chat endpoint plus an embedding
 3. `docs/DATA_SPEC.md` — synthetic data, planted cases, corpus sources, eval data formats.
 4. `docs/RESOURCES.md` — data sources per agent, design impacts D1–D8 (apply them).
 5. `docs/adr/0003-execution-guide-reconciliation.md` — what we take from the 4-week execution guide and where the BRD overrides it.
-6. `.cursor/rules/*.mdc` — project context, security guardrails, money rules, agent contract, testing.
+6. the tool configuration — project context, security guardrails, money rules, agent contract, testing.
 
 ## Non-negotiables
 - The AI reads, explains and drafts; **code calculates, routes and gates; a human approves.**

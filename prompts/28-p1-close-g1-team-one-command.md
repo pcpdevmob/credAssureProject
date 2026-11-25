@@ -6,7 +6,7 @@ Plan v3.4 phase P1 (`docs/plan/CredAssure_Prompt_Pack_v3.4.md`). Supersedes the 
 |---|---|---|---|
 | Sonnet 5.5 | `feature/eval-p1` | human judging done, hand check and APR sheets filled, names agreed | everything in the Human checks tab of `CredAssure_Module_Status.xlsx` |
 
-## Paste into Claude Code
+## Paste into the coding tool
 
 ```markdown
 Phase P1 on branch feature/eval-p1. Don't change any judgment, label or gold value.

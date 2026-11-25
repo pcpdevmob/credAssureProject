@@ -9,5 +9,5 @@ personal identifiers (Aadhaar, PAN, account numbers) in reports.
 
 ## Where the controls are described
 - Threat model: `docs/adr/0002-threat-model.md`
-- Guardrails: `.cursor/rules/10-security-guardrails.mdc`
+- Guardrails: the tool configuration
 - Secrets: environment only (`.env`, gitignored); gitleaks runs in pre-commit and CI.

@@ -17,8 +17,6 @@ evaluation/
 docs/
 !docs/help/
 prompts/
-.claude/
-.cursor/
 **/__pycache__
 **/.pytest_cache
 **/.mypy_cache

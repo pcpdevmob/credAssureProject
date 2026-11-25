@@ -15,7 +15,7 @@ Shared context for seven parallel work threads. Start each new chat with: *"Read
 **Model (ADR 0036).** Local Ollama **`qwen3:8b`**, `OLLAMA_CONTEXT_LENGTH=8192`, thinking **off**, embeddings bge-small in-process, reranker `bge-reranker-base` scores the answerability gate only (`RERANK_ORDER=false`). Course endpoint not used. ≤ 8B limit kept. Check before any run: `ollama run qwen3:8b "hi" >/dev/null && ollama ps` → CONTEXT 8192.
 
 **Working rules (all threads).**
-- Feature branch per change (`feature/<module>-<phase>`), PR into `feature/LendWise`; the owner merges (merge commits). Claude never pushes to main, never merges, never force-pushes, never rewrites history, never pushes tags.
+- Feature branch per change (`feature/<module>-<phase>`), PR into `feature/LendWise`; the owner merges (merge commits). The coding tool never pushes to main, never merges, never force-pushes, never rewrites history, never pushes tags.
 - Never read or print `.env`. Synthetic data only. No code path that accepts, signs or submits a lender offer.
 - Never commit raw corpus files (`data/corpus/raw/`, `text/`: legal basis L3/L4). They are shared only as `credassure-share-2026-11-19.zip` on Pritish's Google Drive (team only).
 - Frozen sets (`evaluation/testset/v1/`, `evaluation/retrieval/v1/`, `data/frozen/v1/`) are never edited or tuned on; tune only on the dev split (`evaluation/retrieval/dev/`).

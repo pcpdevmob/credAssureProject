@@ -6,10 +6,10 @@ Plan v3.4 phase P9 (`docs/plan/CredAssure_Prompt_Pack_v3.4.md`). Supersedes the 
 |---|---|---|---|
 | Sonnet 5.5 | `feature/ui-p9` | P7 results (for scorecards); P8 merged | — |
 
-## Paste into Claude Code
+## Paste into the coding tool
 
 ```markdown
-Phase P9 on branch feature/ui-p9: run U5 and U6 from CLAUDE_CODE_UI_PROMPT.md with these additions. npm only.
+Phase P9 on branch feature/ui-p9: run U5 and U6 from the build prompt with these additions. npm only.
 - U5: audit log with a chain-verify badge (replaces the /docs step in the demo), evaluation scorecards
   (baseline vs system vs ablations, local and course), help centre.
 - RAI UI: "AI-generated draft" badge on every model-written text; approver attestation ("I reviewed the

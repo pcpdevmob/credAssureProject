@@ -59,7 +59,7 @@ credassure-observability = { workspace = true }
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-extend-exclude = ["docs", "prompts", ".claude", "agents/onboarding/prototype"]  # prototype kept as written (Mousita)
+extend-exclude = ["docs", "prompts", "agents/onboarding/prototype"]  # prototype kept as written (Mousita)
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF", "N"]

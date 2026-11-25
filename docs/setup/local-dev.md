@@ -1,7 +1,7 @@
 # Local development
 
 Prerequisites: [prerequisites.md](prerequisites.md). Settings: [environment.md](environment.md).
-Continuing someone's module with Claude Code, Cursor or another AI tool: [team-handoff.md](team-handoff.md).
+Continuing someone's module with the coding tool, Cursor or another AI tool: [team-handoff.md](team-handoff.md).
 
 ## Install
 ```bash

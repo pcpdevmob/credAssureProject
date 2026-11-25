@@ -6,7 +6,7 @@ Plan v3.4 phase P7 (`docs/plan/CredAssure_Prompt_Pack_v3.4.md`). Supersedes the 
 |---|---|---|---|
 | Opus 5.5 | `feature/eval-p7` | P1 frozen; P6 merged | — |
 
-## Paste into Claude Code
+## Paste into the coding tool
 
 ```markdown
 Phase P7: run prompts/22-phase11-evaluation.md with these v3.4 changes, on branch feature/eval-p7.

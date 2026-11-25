@@ -6,7 +6,7 @@ Plan v3.4 phase P3 (`docs/plan/CredAssure_Prompt_Pack_v3.4.md`). Supersedes the 
 |---|---|---|---|
 | Opus 5.5 | `feature/guardrails-p3` | P0 ADRs a, b, e accepted; P2 merged | — |
 
-## Paste into Claude Code
+## Paste into the coding tool
 
 ```markdown
 Phase P3 on branch feature/guardrails-p3. Plan v3.4 §2–§4. Do it in this order and stop if a step fails.

@@ -6,7 +6,7 @@ Plan v3.4 phase P11 (`docs/plan/CredAssure_Prompt_Pack_v3.4.md`). Supersedes the
 |---|---|---|---|
 | Opus 5.5 | `feature/eval-p11` | P10 merged | — |
 
-## Paste into Claude Code
+## Paste into the coding tool
 
 ```markdown
 Phase P11: run /eval app (E12–E18) plus safety_v2 and the guardrail metrics; then /gate G4. One-page summary:
