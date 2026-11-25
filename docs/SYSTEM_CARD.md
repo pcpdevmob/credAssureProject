@@ -178,7 +178,7 @@ and is reported as post-diagnosis (dev split 10 → 11/20, oracle 8 → 10/19, s
 | Where the model runs | Course endpoint (full-precision Qwen3-8B): 53/66 vs 54/66 on the model-dependent items (≈ 87 vs 88 of 100; only T003 differs), at 4–8× lower latency | `docs/evaluation/course-endpoint.md`; run `20261120T161257` |
 | Fairness invariance (names, cities, state) | Gates, amount, route and ranking unchanged | `tests/e2e/test_fairness_invariance.py::test_scope67_BR12_names_and_state_do_not_change_decisions` |
 | Judge J1 vs two human labellers (19 answerable regulatory answers, run `20261124T220648`) | Kappa 0.789, agreement 17/19 (threshold 0.7, ADR 0014); by content 10/19 correct (humans and J1), so 16/25 regulatory right in substance vs 13/25 strict | `evaluation/reports/G4-2026-11-24.md` (K4), `evaluation/reports/E13-2026-11-25.md` |
-| Trace dashboard (K7) | One Langfuse trace per case run and evaluation item: T096 = 42 observations (a span per stage, tool call and guardrail decision, routing, 7 model calls); Langfuse Cloud, personal data masked before export | `evaluation/reports/G4-2026-11-24.md` (K7), `evaluation/reports/k7/` |
+| Trace dashboard (K7) | One Langfuse trace per case run and evaluation item, including the K3 run itself: T096 = 42 observations (a span per stage, tool call and guardrail decision, routing, 7 model calls); Langfuse Cloud, personal data masked before export | `evaluation/reports/G4-2026-11-24.md` (K7), `evaluation/reports/k7/` |
 | Architecture conformance | PASS | `evaluation/reports/E18-2026-11-18.md` |
 
 **Still to measure before submission** (freeze scope; this card claims none of them until they are in):
