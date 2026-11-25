@@ -12,7 +12,6 @@
 - [Data spec](data/DATA_SPEC.md)
 
 ## Build
-- [Phases](build/PHASE_PROMPTS.md)
 - [Scope](build/BUILD_SCOPE.md)
 - [Repository layout](build/REPO_STRUCTURE.md)
 

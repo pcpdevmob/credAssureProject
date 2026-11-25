@@ -223,8 +223,8 @@ Done: Phases 1–9e, 10a, UI U1–U4, demo pack, G2. In progress: 10b. Hours are
 | Order | Phase | Scope | Owner | Added h | Exit check |
 |---|---|---|---|---|---|
 | 0 | **P0 Plan + ADRs** | Adopt v3.4; ADRs (guardrails layering, PII policy, safety_v2, copilot scope + dual scoring); retrieval dev split; mentor questions | Pritish, Suresh | 4 | ADRs Proposed; dev split labelled |
-| 1 | **G1 close** (team, parallel) | Judging + kappa, hand check, APR transcription, names, ADR 0018, `/freeze-g1` | Team | — | G1 ticked |
-| 2 | **G3** (extended) | `/gate G3`, E18, plan-then-execute and map-reduce injection tests | Integration lead, Abhishek | 2 | G3 ticked, 0 MUST |
+| 1 | **G1 close** (team, parallel) | Judging + kappa, hand check, APR transcription, names, ADR 0018, the G1 freeze | Team | — | G1 ticked |
+| 2 | **G3** (extended) | G3 gate, E18, plan-then-execute and map-reduce injection tests | Integration lead, Abhishek | 2 | G3 ticked, 0 MUST |
 | 3 | **GR Guardrails + PII v2** | Consolidate into `packages/guardrails`; R1–R5 + `guardrail_event` + policy YAML; Presidio + 4 recognisers; money gate; data classes; CSV escaping; trace test; `gen_ai.*` | Pritish | 10 | One case end to end with rail events; 0 planted identifiers in traces; E4 READY |
 | 4 | **CP2-R Copilot retrieval** | Headers, glossary rewrite, reranker if allowed, answerability gate, ladder | Suresh | 9 | Recall@5 ≥ 30/40 locally |
 | 5 | **CP2-A Copilot answering-lite** | Span-cited answers; dual scoring | Tejas | 4 | Regulatory strict ≥ 16/25 |
@@ -233,7 +233,7 @@ Done: Phases 1–9e, 10a, UI U1–U4, demo pack, G2. In progress: 10b. Hours are
 | 8 | **SEC Security + safety_v2** | safety_v2 frozen; OWASP/ASI tests; fairness invariance + denylist; CSP, JWT, login rate limit, sanitisation; A6 | Abhishek, Tejas | 12 | safety_v2 ≥ 38/40, 0 critical |
 | 9 | U5 (+ RAI UI) – U6 | Base scope + AI badge, approver attestation, safety panel | UI lead | 3 | UI review 0 MUST |
 | 10 | Phase 12 + **RAI docs** | Base scope + system card, threat model, design patterns, Sutra mapping, DPDP gap | Pritish + all | 6 | Report RAI section complete |
-| 11 | G4 | `/eval app` + safety_v2 + guardrail metrics; live safety moment in demo | All | — | Rehearsed demo |
+| 11 | G4 | app evaluation + safety_v2 + guardrail metrics; live safety moment in demo | All | — | Rehearsed demo |
 
 **Added effort: 50 hours** (range 40–60 with the cut list below). Paid for by dropping stretch items UI-09/10, WC-08, LW-15, VER-06, ONB-07, and by deferring the copilot items in §7.2.
 

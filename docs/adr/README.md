@@ -1,7 +1,7 @@
 # Architecture decision records
 
 One file per decision, `NNNN-short-title.md`, status `Proposed | Accepted | Superseded by NNNN`.
-Precedence (the project rules): BRD > ADRs > ARCHITECTURE.md > design-detail.md > DATA_SPEC > PHASE_PROMPTS.
+Precedence: BRD > ADRs > ARCHITECTURE.md > design-detail.md > DATA_SPEC.
 An ADR that departs from the BRD records who approved it and the BRD clause it amends.
 
 | # | Title | Status | Phase | Scope # |

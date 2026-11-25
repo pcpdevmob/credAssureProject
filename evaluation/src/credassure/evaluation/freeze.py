@@ -1,6 +1,6 @@
 """G1 freeze manifest for the evaluation assets and synthetic data v1.
 
-``--write`` records SHA-256 of every frozen asset in evaluation/FROZEN.sha256 (run by /freeze-g1 only after the
+``--write`` records SHA-256 of every frozen asset in evaluation/FROZEN.sha256 (run only after the
 owner confirms); ``--verify-only`` checks it. The FROZEN marker files are written by /freeze-g1, not here.
 """
 

@@ -1,6 +1,6 @@
 # ADR 0032 — Copilot v2 reduced scope, dual scoring, reranker on, and the plan v3.4 cuts
 
-Status: Accepted (user decisions 2026-11-18: reranker yes; copilot target set by Claude, adjustable during testing) · Date: 2026-11-18 · Plan v3.4 §7, §9 · Scope #60–#64 · Amends ADR 0013 (reranker default), BRD §13 CP-01 target (pending mentor confirmation)
+Status: Accepted (user decisions 2026-11-18: reranker yes; copilot target set during planning, adjustable during testing) · Date: 2026-11-18 · Plan v3.4 §7, §9 · Scope #60–#64 · Amends ADR 0013 (reranker default), BRD §13 CP-01 target (pending mentor confirmation)
 
 ## Context
 Copilot regulatory accuracy is 10/25 live against a BRD target of ≥ 20/25. Retrieval puts the expected document in the top 5 for only 10 of 19 answerable items, capping the score near 16/25 however good the answers are. Plan v3.4 caps added work at ~50 hours.

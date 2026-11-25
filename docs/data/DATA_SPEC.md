@@ -1,4 +1,4 @@
-# CredAssure — Data Specification (for Cursor)
+# CredAssure — Data Specification
 
 All data is synthetic, produced by seeded code in `data/generators/` (seed from `CREDASSURE_SEED`,
 default 20261026) and written to `data/frozen/v1/`. Frozen at G1; later changes create `v2/` and never

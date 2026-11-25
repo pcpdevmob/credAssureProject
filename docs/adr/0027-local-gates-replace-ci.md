@@ -11,8 +11,7 @@ items named CI as the place where a check fails, and E10 and E17 (2026-11-17b) a
 be recorded.
 
 ## Decision
-The checks run locally in `.githooks/pre-push` (enabled per clone with `git config core.hooksPath .githooks`,
-the same step the project rules already requires for the commit-msg hook):
+The checks run locally in `.githooks/pre-push` (enabled per clone with `git config core.hooksPath .githooks`):
 
 | Scope item | Was ("in CI") | Now (pre-push) |
 |---|---|---|
@@ -21,7 +20,7 @@ the same step the project rules already requires for the commit-msg hook):
 | #51 Schemathesis | CI job | `pytest -m slow apps/gateway/tests/test_phase10_contract.py` (Preparer, Director, Evaluator) |
 | #41 SBOM | CI artefact | Not run yet (Phase 12, `make sbom`) |
 
-`make check` (ruff, mypy --strict, pytest, bandit) stays the gate before each phase commit (the project rules).
+`make check` (ruff, mypy --strict, pytest, bandit) stays the gate before each phase commit.
 
 ## Consequences
 - A push with `--no-verify`, or from a clone without `core.hooksPath`, skips the gates; nothing on the

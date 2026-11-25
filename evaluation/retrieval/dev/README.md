@@ -1,6 +1,6 @@
 # Retrieval dev split (plan v3.4 §8, ADR 0032)
 
-`queries.jsonl` holds 20 queries (D01–D20) used **only for tuning**: the answerability threshold, the glossary rewrite and any retrieval parameter. The frozen 40 (`evaluation/retrieval/v1/`) and the 100-item test set are reported on, never tuned on (CLAUDE.md, plan v3.4).
+`queries.jsonl` holds 20 queries (D01–D20) used **only for tuning**: the answerability threshold, the glossary rewrite and any retrieval parameter. The frozen 40 (`evaluation/retrieval/v1/`) and the 100-item test set are reported on, never tuned on (plan v3.4).
 
 - Same format as `v1/queries.jsonl`, plus `label_status`.
 - Every query targets a current, Indian, commercial-bank-or-all document that **no frozen query, silver label file or test item cites**; `evaluation/tests/test_dev_split.py` enforces this.
