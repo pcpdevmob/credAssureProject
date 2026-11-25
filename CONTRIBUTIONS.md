@@ -28,6 +28,9 @@ and this note records it (`evaluation/tests/test_assets.py`).
 | Mousita Dhar | `mousitaD` | Employee Onboarding (0.3.0) | Onboarding checker design and prototype | `agents/onboarding` |
 | Adesh | `adeshsurroach` | Ask CredAssure copilot | Retrieval (with Tejas); search experiments | `agents/copilot`, `packages/retrieval` |
 
+**Before 27 Nov:** every member makes two commits from their own GitHub account: their statement below and one
+signed review task. Steps and assignments: [`docs/team/own-commits.md`](docs/team/own-commits.md).
+
 **What "on record" means below.** Only what a reader can check in this repository: commits and PRs under the member's
 own GitHub identity, gold items whose `author` field names them (`evaluation/testset/v1/items.jsonl`, frozen 15 Nov),
 and human-review tasks they signed in `docs/plan/human-review.md`. Checked on 25 Nov 2026 against `main`. Work done
