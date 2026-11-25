@@ -10,6 +10,8 @@ Synthetic data only; approval is internal, never loan acceptance. Evaluated conf
 `data/frozen/v2/SHA256SUMS` and `evaluation/safety_v2/FROZEN.sha256` (K11). Before tagging, drop any line below whose
 PR did not merge.
 ### Added
+- K5 safety results: safety_v2 40/40 with 0 critical (target ≥ 38/40); guardrails-off ablation A6 30/40, all ten
+  failures personal-data items (`evaluation/reports/k5/`, G4 report K5, system card §9).
 - Accounts, MFA and segregation of duties (ADR 0038, K14): gateway logins per HR employee, TOTP for Director, VP and
   account admin, staged sign-in, backup codes, user admin pages that never open a case, step-up with password and code
   above ₹1.5 crore (AUTH-10). Web sign-in, MFA set-up and user admin wired to the gateway (PR #37); the separate web
