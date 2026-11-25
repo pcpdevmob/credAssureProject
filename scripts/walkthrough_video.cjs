@@ -5,7 +5,7 @@
 // screen is shown) and the supporting cases (scenarios 02, 03, 04, 08, 09) from data/test-pack. Scenario 01 is
 // created on camera. All data is synthetic. E2E_PASSWORD (the e2e database's fixture password) comes from .env.
 const fs = require('node:fs'); const path = require('node:path'); const crypto = require('node:crypto');
-const { chromium } = require('@playwright/test');
+const { chromium } = require(process.env.PW_MODULE || '@playwright/test'); // PW_MODULE: another Playwright install
 
 const ROOT = path.resolve(__dirname, '..'); const PACK = path.join(ROOT, 'data', 'test-pack');
 const OUT = path.resolve(process.argv[2] || path.join(ROOT, 'var', 'walkthrough'));
@@ -92,6 +92,8 @@ async function tab(name) { await page.getByRole('button', { name, exact: true })
 async function openCase(id) { await nav('Cases'); await page.getByText(id).first().click(); await page.waitForURL(/\/case\//); await settle(2000); }
 async function scroll(px = 700, steps = 3) { for (let i = 0; i < steps; i++) { await page.mouse.wheel(0, px); await sleep(900); } await page.mouse.wheel(0, -px * steps); await sleep(600); }
 async function ask(question, input = '#ask', wait = 240000) {
+  await page.waitForSelector(input);
+  if (await page.locator(input).isDisabled()) { await caption('The model is off, so Ask CredAssure says it is unavailable and answers nothing'); await sleep(2500); return; }
   const before = await page.getByRole('button', { name: 'Helpful' }).count();
   await page.fill(input, question); await sleep(600);
   await page.locator(input).locator('xpath=ancestor::form').getByRole('button', { name: 'Ask' }).click();
