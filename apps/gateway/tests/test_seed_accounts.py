@@ -55,11 +55,12 @@ def test_ADR0038_make_db_writes_one_own_password_per_account_never_prints_them(
     assert gateway_seed.main([]) == 0  # nothing new: the file is not appended to
     assert _rows(handout) == rows
 
-    assert gateway_seed.main(["--reissue"]) == 0  # make passwords: new ones, appended
+    assert gateway_seed.main(["--reissue"]) == 0  # make passwords: new ones replace the file
     text = handout.read_text(encoding="utf-8")
-    assert sum(line.startswith("# ") for line in text.splitlines()) == 2 * 3  # two batches
-    new = {line.split()[0]: line.split()[2] for line in text.splitlines()[-26:] if line.strip()}
-    assert all(new[u] != rows[u][1] for u in rows)
+    assert sum(line.startswith("# ") for line in text.splitlines()) == 3  # one batch only
+    new = _rows(handout)  # one line per account: no older, no longer valid password left
+    assert set(new) == set(rows) and all(new[u][1] != rows[u][1] for u in rows)
+    assert stat.S_IMODE(handout.stat().st_mode) == 0o600
 
 
 def test_ADR0038_first_password_leads_to_the_change_step_only(env: Path) -> None:

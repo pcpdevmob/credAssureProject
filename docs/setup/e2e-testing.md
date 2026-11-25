@@ -116,8 +116,8 @@ If it ends with `STOP`, read the line after it and part 12.
 Your first passwords are in your own file, `var/initial-passwords.txt` (only you can read it). Each line is
 *username, role, password*; the password is the last part (`xxxx-xxxx-xxxx-xxxx`, dashes included).
 
-**The file is added to, never replaced:** every `make passwords` adds a new block at the bottom. **Use the bottom
-block**; older passwords no longer work. One account's current first password:
+`make passwords` **replaces** the file with one fresh block (from 25 Nov; before that it added a block at the bottom
+each time, so an older file can hold several: then **use the bottom block**). One account's current first password:
 
 ```bash
 grep '^demo.preparer ' var/initial-passwords.txt | tail -1                      # read it
@@ -153,8 +153,8 @@ for a fresh 6-digit code.
 **Account admin (optional):** `BOOTSTRAP_ADMIN_PASSWORD='<12+ characters, without "admin">' make admin NAME=it.admin`
 once. The admin adds people, resets passwords and two-step verification, and never opens a case.
 
-Lost your first passwords, or locked out? `make stop`, `rm -f var/initial-passwords.txt`, `make passwords` (new first
-passwords for every seeded account in one fresh block; set-up authenticators are kept), `make start`. Check one against
+Lost your first passwords, or locked out? `make stop`, `make passwords` (new first passwords for every seeded account,
+in a fresh file; set-up authenticators are kept), `make start`. Check one against
 the API without the browser:
 
 ```bash
@@ -321,8 +321,8 @@ also need the search index (part 4).
 | `ModuleNotFoundError: credassure…` or `No module named 'sentence_transformers'` | A bare `uv sync` removed packages | `make install` |
 | `STOP an API already answers on :8000` or `something already answers on :3000` | An old copy is still running | `make stop`; if that is not enough, close the other terminal or restart the laptop |
 | `bash: make: command not found` on Windows | Running in PowerShell or Command Prompt | Use the Ubuntu (WSL2) terminal for every command |
-| Sign-in says "Wrong username or password" (older versions: "not authenticated Sign in again to continue") | A password from an older block of the file, someone else's laptop, or a first password already used once | Use the **bottom** block of **your** `var/initial-passwords.txt` (part 6); if lost: `make stop`, `rm -f var/initial-passwords.txt`, `make passwords`, `make start` |
-| The `curl` check in part 6 answers "request failed validation" | The account appears in several blocks, so several passwords were sent at once | Keep `\| tail -1` in the command, or delete the file and run `make passwords` |
+| Sign-in says "Wrong username or password" (older versions: "not authenticated Sign in again to continue") | A password from an older block of the file, someone else's laptop, or a first password already used once | Use **your own** `var/initial-passwords.txt` (part 6; in an older file, the bottom block); if lost: `make stop`, `make passwords`, `make start` |
+| The `curl` check in part 6 answers "request failed validation" | An older file holds several blocks, so several passwords were sent at once | Keep `\| tail -1` in the command, or run `make passwords` (it now writes a single block) |
 | `grep: var/initial-passwords.txt: No such file or directory` | The file was deleted | `make passwords` (it prints the file's path) |
 | Not sure which PDF goes in which step of "Add an offer from the lender's PDFs" | The form takes one lender at a time | Step 1 `… offer letter.pdf`, step 2 `… KFS.pdf`, step 3 `… schedule of charges.pdf`; or select all nine PDFs under **Add all the documents at once** (Cmd+A) |
 | "too many failed attempts; try again later" | Several wrong passwords | Wait a minute |

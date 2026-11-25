@@ -36,6 +36,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | 12 | 12.15 | Documentation | done | Pritish | 2026-11-25 | — | K3, K4, K7 | [2026-11-25-12-12.15-final-docs-pass-pritish.md](docs/progress/entries/2026-11-25-12-12.15-final-docs-pass-pritish.md) |
 | 12 | 12.16 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.16-e2e-guide-setup-pritish.md](docs/progress/entries/2026-11-25-12-12.16-e2e-guide-setup-pritish.md) |
 | 12 | 12.17 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.17-signin-and-passwords-docs-pritish.md](docs/progress/entries/2026-11-25-12-12.17-signin-and-passwords-docs-pritish.md) |
+| 16 | 16.3 | Authentication | done | Pritish | 2026-11-25 | — | — | [2026-11-25-16-16.3-passwords-file-replaced-pritish.md](docs/progress/entries/2026-11-25-16-16.3-passwords-file-replaced-pritish.md) |
 | S1 | 1 | Documentation | done | Pritish | 2026-11-18 | 9969751, 9b63b13 | — | [2026-11-18-s1-1-progress-tracking-pritish.md](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md) |
 | S2 | 1 | Documentation | done | Pritish | 2026-11-18 | 07ea5b7 | — | [2026-11-18-s2-1-plan-v34-base-files-pritish.md](docs/progress/entries/2026-11-18-s2-1-plan-v34-base-files-pritish.md) |
 | P0 | 0.2 | Documentation | done | Pritish | 2026-11-18 | b4eb8dd | — | [2026-11-18-p0-0.2-plan-v34-adrs-pritish.md](docs/progress/entries/2026-11-18-p0-0.2-plan-v34-adrs-pritish.md) |
