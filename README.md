@@ -368,7 +368,7 @@ make openapi && make client       # regenerates openapi.json and packages/api-cl
 | `make eval-fast` | Prompt change control: version-bump check + offline prompt subset |
 | `make eval` | Full 100-item harness through the API (`ARGS="--fake"` checks mechanics only) |
 | `make eval-ablations` | Ablations A1–A6 on the categories each affects |
-| `make eval-judge` / `make eval-kappa` | Judge J1 on free-text answers, then κ against the human-labelled 20% sample |
+| `make eval-judge` / `make eval-kappa` | Judge J1 on free-text answers (`SAMPLE=all` exports every judged answer), then κ against the human labels |
 | `make eval-report` | E13 report: full system vs best baseline, ablation effects (BRD §12 claim rule), failure taxonomy, cost |
 | `make load-smoke` | 10 concurrent demo cases; p95 per stage (Q6: funding < 60 s) |
 | `/eval E1 … E18` | Claude Code evaluation reports, saved to `evaluation/reports/` |
@@ -376,12 +376,18 @@ make openapi && make client       # regenerates openapi.json and packages/api-cl
 
 Frozen artefacts: the 100-item test set (25/10/15/15/5/6/8/8/3/5 by BRD §13 category), 40 retrieval queries (v1.0 + v1.1-silver), 20 red-team prompts, bad-citation fixtures, the RBI KFS APR illustration, and `data/frozen/v1`.
 
-Current numbers (local `qwen3:8b`):
-- Onboarding **10/10**, cash flow **15/15**, LendWise offers **15/15**, negotiation **5/5**.
-- Copilot safety: refusal **8/8**, injection **8/8**, isolation **3/3**.
-- Retrieval recall@5: v1.0 **25/40** after contextual headers (P4 ladder); silver strict **35/40**.
-- Copilot regulatory: **10/25** before P5 (span-cited answers); the P5 strict and supported scores come from the next `make copilot-live`.
-- The 100-item score, ablations and safety_v2 are measured at Gate G4 (`make eval`, live model).
+Results on the submitted code (local `qwen3:8b`, K3 run `20261124T220648`, 24 Nov; full detail in
+[`evaluation/reports/G4-2026-11-24.md`](evaluation/reports/G4-2026-11-24.md)):
+- **88/100** on the frozen test set, against **23/100** for the best single-prompt baseline (S2) on the same model.
+- Every calculation, gate and safety category at target: onboarding **10/10**, cash flow **15/15**, offers **15/15**,
+  negotiation **5/5**, routing **6/6**, injection **8/8**, refusal **8/8**, isolation **3/3**, end to end **5/5**.
+- Regulatory answers **13/25** strict (target 20); **16/25** correct in substance by two human labellers. Judge J1
+  agrees with them on 17/19 (Cohen's kappa **0.789**, K4).
+- Ablations: handing arithmetic (A1) or gate decisions (A4) back to the model loses 31 and 32 items; the ledger and
+  Critic (A2) do not move the score but turn unsupported answers into abstentions.
+- Retrieval recall@5: **22/40** frozen, **17/20** dev split (ADR 0042). Red team: **25/25** resisted.
+- Traces: every case run and evaluation item in Langfuse (K7, links and screenshots in the G4 report).
+- safety_v2 (40 items) and the guardrails-off ablation A6 (K5): reviewed by a teammate and frozen before the run; results added when run.
 
 The silver figure is high partly because silver labels and the retriever share signals; the human κ check measures that.
 
