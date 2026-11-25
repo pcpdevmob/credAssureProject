@@ -1278,8 +1278,9 @@ def main(argv: list[str] | None = None) -> int:
     finally:
         if gw:
             gw.stop()
-    if a.smoke_url:
-        smoke(run, a.smoke_url)
+    smoke_url = a.smoke_url or (acc.base_url if a.live else "")
+    if smoke_url:
+        smoke(run, smoke_url)
     n, ok = len(run.checks), sum(c.passed for c in run.checks)
     code_ref = (
         f"{git('branch', '--show-current') or 'detached'} @ {git('rev-parse', '--short', 'HEAD')}"
@@ -1297,7 +1298,11 @@ def main(argv: list[str] | None = None) -> int:
         "access control, evaluator, account admin, sessions, lender PDFs",
         "Not covered": "Ask CredAssure and PDF figure drafting (model and search index needed); "
         "browser layout",
-        "Deployed site": a.smoke_url or "not checked",
+        "Deployed site": (
+            f"{acc.base_url}: every check above ran on it, plus its health checks"
+            if a.live
+            else (f"{a.smoke_url}: read-only health checks" if a.smoke_url else "not checked")
+        ),
         "Result": f"{ok} of {n} checks passed in {round(time.monotonic() - t0)} s",
     }
     day = datetime.now(UTC).strftime("%Y-%m-%d")
