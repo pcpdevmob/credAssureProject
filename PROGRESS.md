@@ -190,7 +190,6 @@ From the latest entry of each step. Module-level items live in each module file.
 - 11 11.16: K4 judge + human labels + kappa on `20261124T220648`; K5 safety_v2 + A6; K7 trace links. ([entry](docs/progress/entries/2026-11-24-11-11.16-k3-final-run-pritish.md))
 - 11 11.17: K5 safety_v2 + A6; K7 trace links. ([entry](docs/progress/entries/2026-11-25-11-11.17-k4-judge-kappa-pritish.md))
 - 11 11.18: teammate review + `freeze --reviewed-by`; K5 run and A6 on the Mac; CHANGELOG date and tag after K5 (owner). ([entry](docs/progress/entries/2026-11-25-11-11.18-k5-prep-k11-release-pritish.md))
-- 11 11.20: trace links open only for project members; make T096 public (Share) if examiners should open it. ([entry](docs/progress/entries/2026-11-25-11-11.20-k7-traces-pritish.md))
 - P2 2.2: re-record one live-model demo run with a Langfuse trace at P4 (Mac). ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
 - P2 2.2: E18 SHOULDs S1/S2 (ARCHITECTURE says React SPA/nginx; §6.3 omits RETURNED) — P10 docs. ([entry](docs/progress/entries/2026-11-18-p2-2.2-gate-g3-e18-pritish.md))
 - P5 5.2: Human review of the J1 sample after the live run (human review list H14). ([entry](docs/progress/entries/2026-11-18-p5-5.2-dual-scoring-pritish.md))
