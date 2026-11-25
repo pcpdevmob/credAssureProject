@@ -236,6 +236,9 @@ eval-kappa:  ## Kappa between J1 and the labelled human sample (ADR 0014): RUN=v
 eval-report:  ## E13 report: RUN=var/eval/<run> ABL="var/eval/<run>-A1 ..." OUT=evaluation/reports/E13-<date>.md
 	uv run python -m credassure.evaluation.eval_report --full $(RUN) --ablation $(ABL) --calibration $(RUN)/j1-calibration.json --out $(OUT)
 
+walkthrough-video:  ## Record the end-to-end walk-through (every role, every flow, Ask CredAssure) on the isolated e2e stack; video in var/walkthrough/ (MODELS=local needs Ollama)
+	MODELS=$(MODELS) bash scripts/walkthrough_video.sh
+
 e2e-report:  ## Every profile and flow end to end on a private local gateway (fresh DB, MFA on, model off); Excel + PDF in var/e2e-report/ (ARGS="--smoke-url https://<site>" adds a read-only check of a deployed site)
 	uv run python scripts/e2e_report.py $(ARGS)
 

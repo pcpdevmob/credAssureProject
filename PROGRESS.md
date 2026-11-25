@@ -34,6 +34,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | 11 | 11.23 | Responsible AI | done | Pritish | 2026-11-25 | 55ba720 | K5 | [2026-11-25-11-11.23-k5-results-pritish.md](docs/progress/entries/2026-11-25-11-11.23-k5-results-pritish.md) |
 | 11 | 11.24 | Deployment | done | Pritish | 2026-11-25 | — | — | [2026-11-25-11-11.24-release-v110-pritish.md](docs/progress/entries/2026-11-25-11-11.24-release-v110-pritish.md) |
 | 11 | 11.25 | Evaluation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-11-11.25-e2e-report-pritish.md](docs/progress/entries/2026-11-25-11-11.25-e2e-report-pritish.md) |
+| 11 | 11.26 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-11-11.26-walkthrough-video-pritish.md](docs/progress/entries/2026-11-25-11-11.26-walkthrough-video-pritish.md) |
 | 12 | 12.11 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.11-public-repo-cleanup-pritish.md](docs/progress/entries/2026-11-25-12-12.11-public-repo-cleanup-pritish.md) |
 | 12 | 12.12 | Documentation | done | Pritish | 2026-11-24 | — | — | [2026-11-24-12-12.12-e2e-test-pack-pritish.md](docs/progress/entries/2026-11-24-12-12.12-e2e-test-pack-pritish.md) |
 | 12 | 12.13 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.13-contributions-owners-pritish.md](docs/progress/entries/2026-11-25-12-12.13-contributions-owners-pritish.md) |
@@ -182,6 +183,7 @@ From the latest entry of each step. Module-level items live in each module file.
 
 ### Documentation
 
+- 11 11.26: record on the Mac (Ollama and the search index) ([entry](docs/progress/entries/2026-11-25-11-11.26-walkthrough-video-pritish.md))
 - 12 12.11: git history and old PR pages still hold the removed files; publish from a fresh repository or ask GitHub Support to purge before making this one public ([entry](docs/progress/entries/2026-11-25-12-12.11-public-repo-cleanup-pritish.md))
 - 12 12.13: real GitHub usernames for CODEOWNERS; each member writes and signs their own CONTRIBUTIONS section. ([entry](docs/progress/entries/2026-11-25-12-12.13-contributions-owners-pritish.md))
 - 12 12.14: Abhishek, Suresh, Tejas and Adesh have no commits, PRs, reviews or signed review tasks under their GitHub identities; each writes their statement. Handles take effect in CODEOWNERS only once the person has write access. ([entry](docs/progress/entries/2026-11-25-12-12.14-contributions-evidence-pritish.md))

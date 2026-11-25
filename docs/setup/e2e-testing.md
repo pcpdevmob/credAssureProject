@@ -412,3 +412,30 @@ decides them (approve, return, reject), runs a negotiation round, and creates an
    passwords and authenticator keys are written back to `e2e-live.env`: keep the file for the next run. To start
    over, an admin resets those accounts and you put the new temporary passwords in.
 4. Afterwards, the E2E test cases can be removed on the server with the audited purge (`scripts/purge_cases.py`).
+
+## 15. Record the walk-through video (`make walkthrough-video`)
+
+Records one continuous video of every role and flow, with a caption on each step. No admin screen is shown: the
+Director's and VP's authenticators and the supporting cases (scenarios 02, 03, 04, 08, 09) are prepared through the
+API before recording. On camera:
+- **Preparer:** creates scenario 01 from the workbook and the nine lender files, runs it, then shows the funding
+  gap, lender offers and report.
+- **Ask CredAssure:** three questions on the case, then product help.
+- **Question card:** answered on scenario 04; scenario 09's flagged instructions shown.
+- **Negotiation:** a round and the report's new version on scenario 02.
+- **Director:** approves scenario 01 and shows the "No loan needed" card on scenario 08.
+- **VP:** step-up approval of 02 and the held case 03.
+- **Evaluator:** the audit chain and the scorecard.
+
+```bash
+ollama serve &              # for real Ask CredAssure answers (qwen3:8b), plus var/corpus.db and var/chroma-local-bge
+make stop                   # the recorder uses the e2e ports 8001 and 3001
+make walkthrough-video      # about 15 to 20 minutes with the local model
+```
+
+It runs on the isolated e2e stack (a fresh `var/case-e2e.db`, needs `E2E_PASSWORD` in `.env`), never on
+`var/case.db` or a deployed site, and stops what it started. The video is
+`var/walkthrough/<time>/CredAssure_Walkthrough.mp4` (`.webm` without ffmpeg: `brew install ffmpeg`). A scene that
+fails is skipped and leaves a `stopped-<scene>.png` beside the video. Without Ollama the copilot shows its "model
+unavailable" reply and every other scene is unchanged.
+
