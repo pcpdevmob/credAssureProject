@@ -33,6 +33,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | 11 | 11.22 | Evaluation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-11-11.22-negotiation-manual-offers-pritish.md](docs/progress/entries/2026-11-25-11-11.22-negotiation-manual-offers-pritish.md) |
 | 11 | 11.23 | Responsible AI | done | Pritish | 2026-11-25 | 55ba720 | K5 | [2026-11-25-11-11.23-k5-results-pritish.md](docs/progress/entries/2026-11-25-11-11.23-k5-results-pritish.md) |
 | 11 | 11.24 | Deployment | done | Pritish | 2026-11-25 | — | — | [2026-11-25-11-11.24-release-v110-pritish.md](docs/progress/entries/2026-11-25-11-11.24-release-v110-pritish.md) |
+| 12 | 12.11 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.11-public-repo-cleanup-pritish.md](docs/progress/entries/2026-11-25-12-12.11-public-repo-cleanup-pritish.md) |
 | 12 | 12.12 | Documentation | done | Pritish | 2026-11-24 | — | — | [2026-11-24-12-12.12-e2e-test-pack-pritish.md](docs/progress/entries/2026-11-24-12-12.12-e2e-test-pack-pritish.md) |
 | 12 | 12.13 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.13-contributions-owners-pritish.md](docs/progress/entries/2026-11-25-12-12.13-contributions-owners-pritish.md) |
 | 12 | 12.14 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.14-contributions-evidence-pritish.md](docs/progress/entries/2026-11-25-12-12.14-contributions-evidence-pritish.md) |
@@ -180,6 +181,7 @@ From the latest entry of each step. Module-level items live in each module file.
 
 ### Documentation
 
+- 12 12.11: git history and old PR pages still hold the removed files; publish from a fresh repository or ask GitHub Support to purge before making this one public ([entry](docs/progress/entries/2026-11-25-12-12.11-public-repo-cleanup-pritish.md))
 - 12 12.13: real GitHub usernames for CODEOWNERS; each member writes and signs their own CONTRIBUTIONS section. ([entry](docs/progress/entries/2026-11-25-12-12.13-contributions-owners-pritish.md))
 - 12 12.14: Abhishek, Suresh, Tejas and Adesh have no commits, PRs, reviews or signed review tasks under their GitHub identities; each writes their statement. Handles take effect in CODEOWNERS only once the person has write access. ([entry](docs/progress/entries/2026-11-25-12-12.14-contributions-evidence-pritish.md))
 - 12 12.15: K5 numbers (system card, G4, README, report §2/§6/§8, CHANGELOG); K9 line in report §9; remove the report's planning table and placeholder note at export. ([entry](docs/progress/entries/2026-11-25-12-12.15-final-docs-pass-pritish.md))
@@ -221,7 +223,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - P11 11.1: the Critic cannot tie a table figure to a unit in its header ("(Rs. in Crore)"); not fixed. ([entry](docs/progress/entries/2026-11-18-p11-11.1-critic-false-positives-pritish.md))
 - P11 11.2: regulatory search misses (T001, T002, T003, T004–T007, T013, T019) on the retrieval dev split. ([entry](docs/progress/entries/2026-11-18-p11-11.2-citation-failure-labels-pritish.md))
 - P11 11.5: S1-S3 baseline on qwen3:8b (only an S1 smoke test on llama3.1:8b exists, 11/100); J1 judge, human labels, kappa; `make eval-report`; safety_v2, red-team log, Lighthouse, pin-images, v1.1.0 tag. ([entry](docs/progress/entries/2026-11-19-p11-11.5-g4-draft-adr0036-pritish.md))
-- P11 11.7: run `make rag-baseline` on the Mac (Ollama not reachable from Claude's shell) and fill the RAG-only row; J1 judge + kappa; `make eval-report`. ([entry](docs/progress/entries/2026-11-19-p11-11.7-rag-only-baseline-pritish.md))
+- P11 11.7: run `make rag-baseline` on the Mac (Ollama not reachable from the cloud workspace) and fill the RAG-only row; J1 judge + kappa; `make eval-report`. ([entry](docs/progress/entries/2026-11-19-p11-11.7-rag-only-baseline-pritish.md))
 - P11 11.8: Mac runs: `python scripts/oracle_context.py` (traced) and `python scripts/copilot_dev_citations.py --priority off` (traced); then the fixes with unit tests; then dev split, full eval, safety suites. ([entry](docs/progress/entries/2026-11-19-p11-11.8-critic-diagnostics-pritish.md))
 - P11 11.9: K3 final full run + A2 on the merged code; safety_v2 (K5) on the same code; J1 supported score (K4). ([entry](docs/progress/entries/2026-11-19-p11-11.9-critic-quote-grounding-pritish.md))
 - P11 11.11: the Mac reruns the negotiation, offers, e2e and T082 items on the final code (K3). A teammate reviews the v2 lender replies (human-review H26; data provisional until then). Owners must set `LENDER_SCRIPTS_DIR=data/frozen/v2/lender_scripts` in their own `.env`. ([entry](docs/progress/entries/2026-11-19-p11-11.11-lendwise-three-rounds-pritish.md))

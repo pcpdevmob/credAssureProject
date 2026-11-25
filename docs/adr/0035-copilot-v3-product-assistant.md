@@ -4,7 +4,7 @@ Status: Accepted (user decision 2026-11-18) · Date: 2026-11-18 · Amends ADR 00
 §14 · Scope #2, #20 · Requirement tags CP-07, CP-10, CP-11, CP-12 (plan v3.4 numbering)
 
 ## Context
-The user asked for the copilot to work "as Claude/ChatGPT for the product: one stop to get all details", keeping AI
+The user asked for the copilot to work like a general chat assistant for the product, one stop to get all details, keeping AI
 safety, guardrails, responsible AI and PII handling. The copilot (ADR 0032) answered regulatory and policy questions
 inside a case only, and plan v3.4 deferred intent routing (CP-07), case-aware tools (CP-10), case memory (CP-11) and
 streaming, follow-ups and feedback (CP-12). The model is ≤ 8B and has no verified general knowledge.

@@ -143,5 +143,5 @@ If the result differs, work out the expected figure by hand before you assume th
 
 - Test data lives in `var/` (git-ignored) or a new folder. **Never** under `data/frozen/`: a hook blocks it,
   and `case-from-xlsx` refuses it.
-- To add a case to the frozen eval set, follow the freeze process (`/freeze-g1`). Don't edit `v1/`.
+- To add a case to the frozen eval set, follow the freeze process (`credassure.evaluation.freeze`). Don't edit `v1/`.
 - After a schema change, run `make case-template`. A test fails until the template and samples match.

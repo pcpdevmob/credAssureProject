@@ -7,7 +7,7 @@ comment on, or download them as Word or PDF.
 |---|---|---|
 | Enterprise production architecture and delivery plan | (external reference removed) | Reference only (enterprise scale-out path in docs/architecture/ARCHITECTURE.md §7) |
 | Capstone architecture and open data plan | (external reference removed) | docs/DATA_RESOURCES.md, docs/architecture/ARCHITECTURE.md |
-| Capstone build pack (data list, architecture, steps, build scope, eval prompts) | (external reference removed) | docs/DATA_RESOURCES.md, docs/architecture/, prompts/, docs/BUILD_SCOPE.md, the tool configuration |
+| Capstone build pack (data list, architecture, steps, build scope, eval prompts) | (external reference removed) | docs/DATA_RESOURCES.md, docs/architecture/, docs/BUILD_SCOPE.md |
 
 # Project source documents
 `docs/source/` holds the original project files: BRD v3.1, project and mentor briefs, initial-vs-current comparison, Track B

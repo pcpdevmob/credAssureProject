@@ -1,6 +1,6 @@
 # CredAssure — Design detail (appendix to docs/architecture/ARCHITECTURE.md)
 
-> Section numbers are referenced by docs/PHASE_PROMPTS.md. Repository layout (§1) is superseded by docs/REPO_STRUCTURE.md (ADR 0005); paths translate via the ADR 0005 path map. Where this file and ARCHITECTURE.md differ, ARCHITECTURE.md wins.
+> Repository layout (§1) is superseded by docs/REPO_STRUCTURE.md (ADR 0005); paths translate via the ADR 0005 path map. Where this file and ARCHITECTURE.md differ, ARCHITECTURE.md wins.
 
 Implements `docs/BRD.md` v3.1. Where this file and the BRD disagree, the BRD wins; raise the conflict.
 
@@ -43,7 +43,6 @@ External: ≤8B chat endpoint · embeddings endpoint · Langfuse (self-hosted in
 
 ```
 credassure/
-├── the tool configuration                 # Cursor rules (this kit)
 ├── docs/ BRD.md ARCHITECTURE.md DATA_SPEC.md adr/ redteam_log.md
 ├── pyproject.toml  uv.lock  .env.example  Makefile  docker-compose.yml  Dockerfile
 ├── .pre-commit-config.yaml        # ruff, mypy, bandit, gitleaks
@@ -334,8 +333,8 @@ must stay in code. Track B only requires ≥3 tools, not a protocol.
 **Optional dev/demo add-on (stretch, after G3):** `src/credassure/mcp_server/server.py` using the
 official `mcp` Python SDK (FastMCP), exposing **read-only** tools wrapping the same registry:
 `search_knowledge`, `compute_cash_table`, `price_offer`, `route_proposal` (dry run). stdio transport only,
-synthetic data only, no case writes, no approval. Useful for the team to probe engines from Cursor or
-The coding tool Desktop and for a demo slide. Never on the runtime path.
+synthetic data only, no case writes, no approval. Useful for the team to probe engines from an MCP client
+and for a demo slide. Never on the runtime path.
 
 ## 4. Database
 
@@ -371,7 +370,7 @@ Three SQLite files + Chroma. SQLAlchemy 2 models, Alembic migrations, WAL mode, 
 - Chroma collection per chunking strategy, metadata mirrors filter fields (KR-04)
 
 ## 5. Security guardrails summary
-See the tool configuration. Threat model in `docs/adr/0002-threat-model.md`
+See `SECURITY.md` and `packages/guardrails/`. Threat model in `docs/adr/0002-threat-model.md`
 (STRIDE over UI, API, agents, documents, LLM endpoint). Red-team log of 20 prompts in `docs/redteam_log.md`.
 
 ## 6. Observability

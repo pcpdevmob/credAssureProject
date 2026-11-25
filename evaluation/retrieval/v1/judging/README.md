@@ -1,13 +1,13 @@
 # Retrieval label widening — silver labels, then human check (KR-05, E8 M1)
 
-Decided 2026-11-15, before any passage was judged (revised the same day: Claude judges first, humans check later). Criteria: [criteria.md](criteria.md) (unchanged except pool depth).
+Decided 2026-11-15, before any passage was judged (revised the same day: an LLM judges first, humans check later). Criteria: [criteria.md](criteria.md) (unchanged except pool depth).
 
 ## Pool
 `make retrieval-pool` → `pool.jsonl` / `judging_sheet.csv`: the union of every query's **top 5** over all 18 configurations
 (3 chunkings × 3 retrievers × rerank on/off), deduplicated to document + section and shuffled within each query.
 995 items (9–39 per query). No configuration, rank or v1.0 label is written anywhere.
 
-## Silver labels: blind Claude session (first)
+## Silver labels: blind LLM session (first)
 A one-off export writes a blind package **outside the repo** to `../credassure-judging/`:
 - `pool.jsonl`: `item_id`, `query_id`, `query`, `title`, `section`, `passage` (full text). No doc_id, configuration,
   rank, score or label.
@@ -16,10 +16,10 @@ A one-off export writes a blind package **outside the repo** to `../credassure-j
   [duplicates_map.json](duplicates_map.json), never in the package.
 - `criteria.md`: copied unchanged (sha256 checked).
 - `README.md`: the output schema, one line per item:
-  `{"item_id", "judgment": 2|1|0, "confidence": "high"|"low", "reason", "judge": "claude-code-blind"}`.
+  `{"item_id", "judgment": 2|1|0, "confidence": "high"|"low", "reason", "judge": "llm-blind"}`.
 
-A separate Claude Code session opened in that folder (no repo access) judges every item. Its `judgments.jsonl`
-comes back here as `judgments_claude.jsonl`. The labels are **v1.1-silver**.
+A separate LLM session opened in that folder (no repo access) judges every item. Its `judgments.jsonl`
+comes back here as `judgments_llm.jsonl`. The labels are **v1.1-silver**.
 
 **Self-consistency:** binary agreement (2 = R; 1 and 0 = N) over the 100 duplicate pairs. It is reported with the
 labels, together with the share of `low`-confidence answers.

@@ -19,7 +19,7 @@
 ## Checks
 - [ ] `make check` green (CI shows the same)
 - [ ] No frozen file changed (`evaluation/FROZEN.sha256` list, `data/frozen/v1`) — or ADR linked
-- [ ] Reviewer subagents run (money-auditor / security-reviewer / brd-conformance) and MUST findings fixed
+- [ ] Reviewed for money, security and BRD conformance; MUST findings fixed
 - [ ] `openapi.json` regenerated if the API changed (ADR 0004)
 - [ ] No code path accepts, signs or submits a lender offer
 - [ ] Screenshots attached (UI changes only)

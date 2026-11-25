@@ -33,10 +33,10 @@ the evaluation are unchanged.
 1. **Hugging Face:** account → Settings → Billing → add $5 credit → Access Tokens → *fine-grained* token with
    "Make calls to Inference Providers". Keep it in your password manager.
 2. **Course endpoint:** the group key and the vm06 CA file (`.pem`).
-3. **DNS:** tell the coding tool the output of `dig +short NS sharentest.com` (who hosts the domain's DNS).
+3. **DNS:** note the output of `dig +short NS sharentest.com` (who hosts the domain's DNS).
 4. **On the Mac** (one time, before copying): `make hr-db`; check `var/corpus.db` and `var/chroma-local-bge/` exist.
 
-## Deployment day (~2 h, the coding tool gives each command)
+## Deployment day (~2 h)
 
 1. **Resource group.** Azure portal → Resource groups → Create → `credassure-rg`, region **Central India**.
 2. **VM.** Virtual machines → Create → Ubuntu Server 24.04 LTS, size **B4as_v2**, authentication **SSH public key**

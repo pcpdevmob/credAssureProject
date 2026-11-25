@@ -2,7 +2,7 @@
 # generic-api-key on a ledger key literal ('lw.OF-01-A.v2.apr') in a UI test; the line was rewritten in the next commit.
 251ed284105de9f280df508f7548f7e710dfec23:apps/web/tests/ui-plain.test.tsx:generic-api-key:93
 # generic-api-key on a test line that passes two test-constant names as keyword arguments; the line holds no value.
-# Added by the coding assistant on 21 Nov 2026 (PR #41); owner to confirm at review.
+# Added on 21 Nov 2026 (PR #41).
 a1d4d9a4ab2250f55f42aa7b115909d76b07cb2e:apps/gateway/tests/test_settings.py:generic-api-key:237
 # The first version of the note above quoted that line and was flagged itself (reworded since).
 550c624fca3ae051563d85ed20b3a08e1b2ba530:.gitleaksignore:generic-api-key:4

@@ -3,7 +3,7 @@
 Status: Accepted · 2026-11-05 · Approved by the project owner (Pritish) · Amends BRD v3.1 NFR-09 ("tracing goes to Langfuse Cloud")
 
 ## Context
-BRD NFR-09 and design-detail §1 send traces to Langfuse Cloud; START_HERE.md said self-hosted. Mentor question Q8 asks
+BRD NFR-09 and design-detail §1 send traces to Langfuse Cloud; the original build kit said self-hosted. Mentor question Q8 asks
 whether an external tracing service is acceptable. Traces carry redacted prompts and case facts (synthetic), so keeping
 them on the team machine removes the external-data question and works offline during the demo.
 

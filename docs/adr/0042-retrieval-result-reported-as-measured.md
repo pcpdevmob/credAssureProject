@@ -12,7 +12,7 @@ recall@5 **22/40**; the headers-only rung scored 25/40 and was not shipped, beca
 Two ways to make the number look better were available and are refused here:
 - choose the configuration by its frozen-set score (25/40): that is tuning on the frozen set;
 - relabel the frozen 40. The v1.0 labels look biased towards the documents the first search configuration returned
-  (Claude-judged "silver" labels gave 35/40 earlier), but relabelling after seeing results is the same fault.
+  (LLM-judged "silver" labels gave 35/40 earlier), but relabelling after seeing results is the same fault.
 
 ## Decision
 1. The report states recall@5 **22/40** on the frozen v1.0 labels for the shipped configuration, with the full ladder

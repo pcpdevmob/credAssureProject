@@ -16,7 +16,6 @@ evaluation/
 !evaluation/src/
 docs/
 !docs/help/
-prompts/
 **/__pycache__
 **/.pytest_cache
 **/.mypy_cache
