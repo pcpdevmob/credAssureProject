@@ -11,6 +11,9 @@ const say = (x: unknown) => { const b = bannerOf(x); return `${b.what} ${b.fix}`
 // The gateway answers every 401 the same way (no oracle), so this covers a wrong code and a code step that timed out.
 const sayCode = (x: unknown) => x instanceof ApiProblem && x.status === 401 ? 'That code did not work. Check that the time on your phone is set automatically, then enter the new code. If it keeps failing, choose “Use a different account” and sign in again.' : say(x);
 
+// On the password step a 401 can only mean a wrong username or password (or a disabled account): say so, not "sign in again".
+const sayLogin = (x: unknown) => x instanceof ApiProblem && x.status === 401 ? 'Wrong username or password. A first password works once: after it, use the password you chose. Lost it? An admin resets it, or on your own laptop run make passwords.' : say(x);
+
 export default function Login() {
   const [email, setEmail] = useState(''); const [pw, setPw] = useState('');
   const [err, setErr] = useState(''); const [busy, setBusy] = useState(false); const r = useRouter();
@@ -31,7 +34,7 @@ export default function Login() {
       <button type="button" onClick={async () => { await authService.logout(); setMfa(false); setPw(''); }} className="mt-6 w-full text-center text-sm text-slate-500 hover:text-slate-800">Use a different account</button>
     </AuthLayout>
   );
-  const submit = async (e: React.FormEvent) => { e.preventDefault(); setErr(''); setBusy(true); try { const u = await authService.login(email, pw); if (u.stage === 'mfa') { setMfa(true); setBusy(false); return; } r.push(u.stage === 'setup' ? (u.mustChangePassword ? '/change-password/' : '/mfa-setup/') : u.adminOnly ? '/admin/users/' : '/dashboard/'); } catch (x) { setErr(say(x)); setBusy(false); } };
+  const submit = async (e: React.FormEvent) => { e.preventDefault(); setErr(''); setBusy(true); try { const u = await authService.login(email, pw); if (u.stage === 'mfa') { setMfa(true); setBusy(false); return; } r.push(u.stage === 'setup' ? (u.mustChangePassword ? '/change-password/' : '/mfa-setup/') : u.adminOnly ? '/admin/users/' : '/dashboard/'); } catch (x) { setErr(sayLogin(x)); setBusy(false); } };
   return (
     <AuthLayout>
       <h1 className="text-2xl font-bold tracking-tight text-slate-900">Welcome back</h1><p className="mt-1 text-slate-500">Sign in to continue to your workspace.</p>
