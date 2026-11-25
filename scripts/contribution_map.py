@@ -19,7 +19,8 @@ NOTE = (
     "(`.github/CODEOWNERS`, set 25 Nov 2026). *Git identities* is who made the commits. Most of "
     "the repository was committed from Pritish's machine (identities `pcpdev` and `Pritish`), so "
     "a module's owner may not appear as a commit author. Commits also carry a `Co-authored-by:` "
-    "trailer for the module owner, counted below as *co-author*. Where a member wrote code that was committed from that machine, they list it "
+    "trailer for the module owner, counted below as *co-author*. Where a member wrote code that "
+    "was committed from that machine, they list it "
     "in their own signed statement in `CONTRIBUTIONS.md`, and Pritish confirms it.\n"
 )
 FOOT = (
@@ -78,7 +79,8 @@ def main() -> None:
     owner = dict(MODULES)
     commits: dict[str, set[str]] = defaultdict(set)
     idents: dict[str, Counter[str]] = defaultdict(Counter)
-    for block in git("log", REF, "--no-merges", "--format=@@%H|%an|%(trailers:key=Co-authored-by,valueonly,separator=;)", "--name-only").split("@@")[1:]:
+    fmt = "--format=@@%H|%an|%(trailers:key=Co-authored-by,valueonly,separator=;)"
+    for block in git("log", REF, "--no-merges", fmt, "--name-only").split("@@")[1:]:
         head, *files = block.strip().split("\n")
         sha, name, trailers = head.split("|", 2)
         co = [re.sub(r"\s*<.*", "", t).strip() for t in trailers.split(";") if t.strip()]
@@ -107,7 +109,11 @@ def main() -> None:
         if not commits[prefix]:
             continue
         pr_list = ", ".join(f"#{n}" for n in sorted(prs[prefix])) or "—"
-        who = ", ".join(f"{n.replace(' (co-author)', '')} ({c}{', co-author' if n.endswith('(co-author)') else ''})" for n, c in idents[prefix].most_common())
+        tag = " (co-author)"
+        who = ", ".join(
+            f"{n.removesuffix(tag)} ({c}{', co-author' if n.endswith(tag) else ''})"
+            for n, c in idents[prefix].most_common()
+        )
         print(f"| `{prefix}` | {owner[prefix]} | {len(commits[prefix])} | {pr_list} | {who} |")
     print(FOOT)
 
