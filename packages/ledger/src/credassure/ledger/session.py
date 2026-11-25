@@ -57,7 +57,7 @@ def case_engine(target: Path | str) -> Engine:
     @event.listens_for(engine, "connect")
     def _pragmas(con: Any, _record: Any) -> None:
         con.isolation_level = None  # SQLAlchemy emits BEGIN itself (below)
-        cur = conthe tool configuration()
+        cur = con.cursor()
         cur.execute("PRAGMA journal_mode=WAL")
         cur.execute(f"PRAGMA busy_timeout={BUSY_TIMEOUT_MS}")
         cur.execute("PRAGMA foreign_keys=ON")
@@ -83,7 +83,7 @@ def _mysql_engine(url: str) -> Engine:
 
     @event.listens_for(engine, "connect")
     def _session(con: Any, _record: Any) -> None:
-        cur = conthe tool configuration()
+        cur = con.cursor()
         cur.execute("SET time_zone = '+00:00'")  # naive DATETIMEs are UTC, as in SQLite
         cur.execute("SET SESSION innodb_lock_wait_timeout = 30")
         cur.execute("SELECT @@collation_database")
