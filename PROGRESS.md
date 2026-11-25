@@ -26,6 +26,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | 11 | 11.17 | Evaluation | done | Pritish | 2026-11-25 | — | K4, E13 | [2026-11-25-11-11.17-k4-judge-kappa-pritish.md](docs/progress/entries/2026-11-25-11-11.17-k4-judge-kappa-pritish.md) |
 | 11 | 11.18 | Evaluation | done | Pritish | 2026-11-25 | — | K5, K11 | [2026-11-25-11-11.18-k5-prep-k11-release-pritish.md](docs/progress/entries/2026-11-25-11-11.18-k5-prep-k11-release-pritish.md) |
 | 11 | 11.19 | Responsible AI | done | Pritish | 2026-11-25 | — | K5 | [2026-11-25-11-11.19-k5-safety-v2-frozen-pritish.md](docs/progress/entries/2026-11-25-11-11.19-k5-safety-v2-frozen-pritish.md) |
+| 11 | 11.20 | Evaluation | done | Pritish | 2026-11-25 | — | K7 | [2026-11-25-11-11.20-k7-traces-pritish.md](docs/progress/entries/2026-11-25-11-11.20-k7-traces-pritish.md) |
 | 12 | 12.12 | Documentation | done | Pritish | 2026-11-24 | — | — | [2026-11-24-12-12.12-e2e-test-pack-pritish.md](docs/progress/entries/2026-11-24-12-12.12-e2e-test-pack-pritish.md) |
 | 12 | 12.13 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.13-contributions-owners-pritish.md](docs/progress/entries/2026-11-25-12-12.13-contributions-owners-pritish.md) |
 | 12 | 12.14 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.14-contributions-evidence-pritish.md](docs/progress/entries/2026-11-25-12-12.14-contributions-evidence-pritish.md) |
