@@ -66,4 +66,22 @@ describe('ADR 0041 offer from PDF', () => {
     expect(await screen.findByText(/was saved/)).toBeInTheDocument();
     expect(JSON.parse(saved!)).toMatchObject({ principal: '15700000', lender_name: 'Kaveri Finance Bank' });
   });
+  it('gives every offer saved from the same form its own id, so a second offer never replaces the first', async () => {
+    const saved: string[] = [];
+    server.use(
+      http.post(`${API}/v1/cases/:id/pdf`, () => HttpResponse.json({ case_id: 'CA-1', doc: 'offer', sha256: 'x', text: 't', draft: DRAFT })),
+      http.post(`${API}/v1/cases/:id/files`, async ({ request }) => { saved.push(await ((await request.formData()).get('file') as File).text()); return HttpResponse.json({ rows: 1 }, { status: 201 }); }),
+    );
+    render(<PdfOffer caseId="CA-1" onSaved={() => {}} />);
+    for (let n = 1; n <= 2; n++) {
+      await userEvent.upload(screen.getByLabelText(/offer letter or sanction letter/), new File(['%PDF-1.4'], `letter${n}.pdf`, { type: 'application/pdf' }));
+      await screen.findByText(/Found in the PDF: “Rs. 1,57,00,000”/);
+      await userEvent.click(screen.getByLabelText(/I checked every field/));
+      await userEvent.click(screen.getByRole('button', { name: /Save this offer/ }));
+      await screen.findByText(/was saved/);
+    }
+    const [a, b] = saved.map(t => JSON.parse(t) as { offer_id: string; kfs_doc_id: string });
+    expect(a.offer_id).not.toBe(b.offer_id);
+    expect(a.kfs_doc_id).not.toBe(b.kfs_doc_id);
+  });
 });

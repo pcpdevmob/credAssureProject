@@ -150,14 +150,21 @@ function rowObject(fields: Field[], row: Values, path: string, n: number | undef
   for (const f of fields) { const r = value(f, row[f.name]); if (r.err) problems.push({ path, row: n, field: f.name, reason: r.err }); else if (r.v !== undefined) out[f.name] = r.v; }
   return out;
 }
-const blank = (row: Values) => Object.values(row).every(v => !String(v ?? '').trim());
+/**
+ * A row nobody has typed in: every field empty, or a required choice still on the option a new row starts with
+ * (emptyRow). Such a row is ignored on save and replaced by pasted rows, so the starting row never blocks a save.
+ */
+export const isBlankRow = (fields: Field[], row: Values): boolean => {
+  const start = emptyRow(fields);
+  return fields.every(f => { const v = String(row[f.name] ?? '').trim(); return !v || (f.type === 'select' && v === start[f.name]); });
+};
 const csvQuote = (v: unknown) => { const s = String(v ?? ''); return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
 
 /** The file text to upload, or the problems to fix first. Blank table rows are ignored. */
 export function build(def: FormDef, s: FormState): { text?: string; name: string; problems: Problem[] } {
   const problems: Problem[] = [];
   if (def.shape === 'table') {
-    const rows = s.tables.rows.filter(r => !blank(r));
+    const rows = s.tables.rows.filter(r => !isBlankRow(def.fields, r));
     const objs = rows.map((r, i) => rowObject(def.fields, r, 'rows', i + 1, problems));
     if (!rows.length) problems.push({ path: 'rows', field: '', reason: 'Add at least one row' });
     const head = def.fields.map(f => f.name);
@@ -166,7 +173,7 @@ export function build(def: FormDef, s: FormState): { text?: string; name: string
   }
   const out: Record<string, unknown> = { schema_version: '1.0', ...(def.kind === 'order' ? { currency: 'INR' } : {}) };
   Object.assign(out, rowObject(def.fields, s.values, '', undefined, problems));
-  for (const t of def.tables) out[t.name] = (s.tables[t.name] ?? []).filter(r => !blank(r)).map((r, i) => rowObject(t.fields, r, t.name, i + 1, problems));
+  for (const t of def.tables) out[t.name] = (s.tables[t.name] ?? []).filter(r => !isBlankRow(t.fields, r)).map((r, i) => rowObject(t.fields, r, t.name, i + 1, problems));
   return { text: problems.length ? undefined : JSON.stringify(out, null, 2), name: `${def.kind}.json`, problems };
 }
 

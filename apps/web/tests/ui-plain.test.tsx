@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { server } from './setup';
 import { API } from '@/mocks/handlers';
-import { FORMS, build, fractionFromPercent, percentFromFraction, placeServerError, plainText, rowsFromPaste, stateFromStored } from '@/lib/caseForms';
+import { FORMS, blankState, build, fractionFromPercent, isBlankRow, percentFromFraction, placeServerError, plainText, rowsFromPaste, stateFromStored } from '@/lib/caseForms';
 import { d, dt } from '@/lib/format';
 import { factLabel } from '@/lib/plain';
 import { describe as describeEvent } from '@/components/case/History';
@@ -55,6 +55,29 @@ describe('case-data forms', () => {
       .toBe('What is the minimum cash buffer for this case? Please add it in “Opening cash and credit lines”.');
     expect(plainText('Order receipts do not add up to the order value. Can you upload a corrected receipts.csv?'))
       .toBe('Order receipts do not add up to the order value. Can you correct “Expected receipts”?');
+  });
+  it('ignores the starting row of a new table: its preset choice is not typed data', () => {
+    const start = blankState(FORMS.costs).tables.rows[0];
+    expect(start.category).toBe('components');
+    expect(isBlankRow(FORMS.costs.fields, start)).toBe(true);
+    expect(isBlankRow(FORMS.costs.fields, { ...start, category: 'labour' })).toBe(false);
+    const out = build(FORMS.costs, { values: {}, tables: { rows: [start, { week: '1', category: 'labour', amount: '3,65,000' }] } });
+    expect(out.problems).toEqual([]);
+    expect(out.text).toBe('week,category,amount\n1,labour,365000\n');
+  });
+  it('pastes rows into a new table and saves them without the empty starting row', async () => {
+    let sent = '';
+    server.use(http.post(`${API}/v1/cases/:id/files`, async ({ request }) => {
+      sent = await ((await request.formData()).get('file') as File).text();
+      return HttpResponse.json({ kind: 'costs', rows: 2, flagged: false }, { status: 201 });
+    }));
+    render(<DataEditor caseId="CA-1" kind="costs" stored={undefined} canEdit />);
+    await userEvent.click(screen.getByRole('button', { name: /Paste rows from Excel/ }));
+    await userEvent.click(screen.getByRole('textbox', { name: /Copy the rows/ }));
+    await userEvent.paste('Week\tCost type\tAmount\n1\tComponents\t13,38,300\n1\tLabour\t3,65,000');
+    await userEvent.click(screen.getByRole('button', { name: /Add these rows/ }));
+    await userEvent.click(screen.getByRole('button', { name: /Save weekly costs/ }));
+    expect(sent).toBe('week,category,amount\n1,components,1338300\n1,labour,365000\n');
   });
   it('saves through the upload endpoint and shows gateway errors in plain words on the field', async () => {
     let sent = '';

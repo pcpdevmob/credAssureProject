@@ -20,6 +20,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | 9 | 9.5 | UI | done | Pritish | 2026-11-24 | — | — | [2026-11-24-9-9.5-lender-file-question-pritish.md](docs/progress/entries/2026-11-24-9-9.5-lender-file-question-pritish.md) |
 | 9 | 9.6 | UI | done | Pritish | 2026-11-24 | — | — | [2026-11-24-9-9.6-walkthrough-fixes-pritish.md](docs/progress/entries/2026-11-24-9-9.6-walkthrough-fixes-pritish.md) |
 | 9 | 9.7 | UI | done | Pritish | 2026-11-24 | — | — | [2026-11-24-9-9.7-one-step-upload-pritish.md](docs/progress/entries/2026-11-24-9-9.7-one-step-upload-pritish.md) |
+| 9 | 9.8 | UI | done | Pritish | 2026-11-25 | — | — | [2026-11-25-9-9.8-manual-entry-fixes-pritish.md](docs/progress/entries/2026-11-25-9-9.8-manual-entry-fixes-pritish.md) |
 | 9a | 0.3.0 | Evaluation | done | Pritish | 2026-11-23 | — | E5 | [2026-11-23-9a-0.3.0-onboarding-checker-pritish.md](docs/progress/entries/2026-11-23-9a-0.3.0-onboarding-checker-pritish.md) |
 | 9a | 0.3.1 | Documentation | done | Pritish | 2026-11-23 | ca5f0bb | — | [2026-11-23-9a-0.3.1-onboarding-prototype-pritish.md](docs/progress/entries/2026-11-23-9a-0.3.1-onboarding-prototype-pritish.md) |
 | 11 | 11.16 | Evaluation | done | Pritish | 2026-11-24 | — | K3 | [2026-11-24-11-11.16-k3-final-run-pritish.md](docs/progress/entries/2026-11-24-11-11.16-k3-final-run-pritish.md) |
@@ -28,6 +29,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | 11 | 11.19 | Responsible AI | done | Pritish | 2026-11-25 | — | K5 | [2026-11-25-11-11.19-k5-safety-v2-frozen-pritish.md](docs/progress/entries/2026-11-25-11-11.19-k5-safety-v2-frozen-pritish.md) |
 | 11 | 11.20 | Evaluation | done | Pritish | 2026-11-25 | — | K7 | [2026-11-25-11-11.20-k7-traces-pritish.md](docs/progress/entries/2026-11-25-11-11.20-k7-traces-pritish.md) |
 | 11 | 11.21 | Responsible AI | done | Pritish | 2026-11-25 | — | K5 | [2026-11-25-11-11.21-k5-runner-live-fix-pritish.md](docs/progress/entries/2026-11-25-11-11.21-k5-runner-live-fix-pritish.md) |
+| 11 | 11.22 | Evaluation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-11-11.22-negotiation-manual-offers-pritish.md](docs/progress/entries/2026-11-25-11-11.22-negotiation-manual-offers-pritish.md) |
 | 12 | 12.12 | Documentation | done | Pritish | 2026-11-24 | — | — | [2026-11-24-12-12.12-e2e-test-pack-pritish.md](docs/progress/entries/2026-11-24-12-12.12-e2e-test-pack-pritish.md) |
 | 12 | 12.13 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.13-contributions-owners-pritish.md](docs/progress/entries/2026-11-25-12-12.13-contributions-owners-pritish.md) |
 | 12 | 12.14 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.14-contributions-evidence-pritish.md](docs/progress/entries/2026-11-25-12-12.14-contributions-evidence-pritish.md) |

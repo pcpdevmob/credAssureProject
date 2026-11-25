@@ -10,7 +10,7 @@ import { caseFiles, type FileKind } from '@/services/documents';
 import { ApiProblem } from '@/lib/problem';
 import { plainReason } from '@/lib/caseForms';
 export { plainReason };
-import { FORMS, blankState, build, emptyRow, placeServerError, rowsFromPaste, stateFromStored, type Field, type FormState, type Problem, type Values } from '@/lib/caseForms';
+import { FORMS, blankState, build, emptyRow, isBlankRow, placeServerError, rowsFromPaste, stateFromStored, type Field, type FormState, type Problem, type Values } from '@/lib/caseForms';
 import { paiseFromInput, inrFromPaise } from '@/lib/money';
 import { cn } from '@/lib/utils';
 
@@ -61,7 +61,7 @@ function TableEditor({ fields, rows, setRows, problems, disabled, idBase, dom, m
     {paste !== null && <div className="rounded-xl bg-sunken p-3">
       <label htmlFor={`${dom}-paste`} className="text-sm font-medium text-ink-900">Copy the rows in Excel or Google Sheets (columns in this order: {fields.map(f => f.label).join(', ')}), then paste here.</label>
       <Textarea id={`${dom}-paste`} className="mt-2 font-mono text-xs" value={paste} onChange={e => setPaste(e.target.value)} placeholder={fields.map(f => f.label).join('\t')} />
-      <div className="mt-2 flex gap-2"><Button type="button" size="sm" onClick={() => { const add = rowsFromPaste(fields, paste); setRows([...rows.filter(r => Object.values(r).some(v => String(v).trim())), ...add]); setPaste(null); }} disabled={!paste.trim()}>Add these rows</Button>
+      <div className="mt-2 flex gap-2"><Button type="button" size="sm" onClick={() => { const add = rowsFromPaste(fields, paste); setRows([...rows.filter(r => !isBlankRow(fields, r)), ...add]); setPaste(null); }} disabled={!paste.trim()}>Add these rows</Button>
         <Button type="button" size="sm" variant="ghost" onClick={() => setPaste(null)}>Cancel</Button></div>
     </div>}
   </div>);

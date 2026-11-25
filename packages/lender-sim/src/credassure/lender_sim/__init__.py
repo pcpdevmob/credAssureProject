@@ -11,7 +11,9 @@ concession a revised offer version (version + 1) with its schedule of charges.
   ``max_extra_months``, first repayment moved to match; the instalment is unchanged.
 
 A refusal, or a script without a reply for the template (a v1 script asked a round-2 question),
-returns no revision. The reply text is lender data: it may carry a planted instruction, and callers
+returns no revision. So does a lender with no script at all: an offer typed in from a lender's PDF
+gets its own lender id, and that lender is outside the simulation (25 Nov).
+The reply text is lender data: it may carry a planted instruction, and callers
 treat it as data only (BR-15). There is no method that accepts, signs or submits anything (BR-13).
 """
 
@@ -58,7 +60,10 @@ class ScriptedLender:
     ) -> Reply:
         if not _ID.match(lender_id) or template_id not in TEMPLATES or not message:
             raise ValueError("unknown lender or template")
-        script = yaml.safe_load((self.scripts_dir / f"{lender_id}.yaml").read_text("utf-8"))
+        path = self.scripts_dir / f"{lender_id}.yaml"
+        if not path.is_file():
+            return Reply(NO_SCRIPT)  # not a simulated lender: no reply, so no concession to count
+        script = yaml.safe_load(path.read_text("utf-8"))
         response = (script.get("responses") or {}).get(template_id)
         if response is None:
             return Reply(NO_SCRIPT)
