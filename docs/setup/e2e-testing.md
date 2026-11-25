@@ -272,7 +272,7 @@ from the folder, then **Run**. Results checked through the API on 24 Nov (and sc
 | `05-missing-case-data-question` | PO-CA-2026-0013 / ₹2,84,00,000 | Funding need stops and asks for the **minimum cash buffer**: open the "Opening cash and credit lines" form on the card, type a buffer (e.g. 10 lakh), save, **Continue** |
 | `06-conflicting-case-data` | PO-CA-2026-0014 / ₹2,56,00,000 | Funding need stops: "Order receipts do not add up to the order value…" (and a duplicate invoice ID). Fix the receipts form, then **Continue** |
 | `07-not-enough-affordable-offers` | PO-CA-2026-0005 / ₹4,09,00,000 | Need ₹1,48,00,000; lender comparison **blocked**: no offer can be ranked (a missing term, an instalment that does not match, an offer that cannot be afforded) |
-| `08-no-loan-needed` | PO-CA-2026-0015 / ₹80,00,000 | Funding need **₹0** (cash never falls below the buffer) |
+| `08-no-loan-needed` | PO-CA-2026-0015 / ₹80,00,000 | Funding need **₹0** (cash never falls below the buffer); goes to the Director (below ₹1.5 crore), whose Review & approval shows **No loan needed**: approving confirms no new facility is sought |
 | `09-injection-in-lender-document` | PO-CA-2026-0011 / ₹1,41,00,000 | Two schedules of charges contain hidden instructions: the upload says "Instruction-like text found and ignored"; nothing in them is followed. Need ₹62,00,000; only Brahmaputra Industrial Bank can be ranked, so the comparison is blocked (fewer than two) |
 | `10-wrong-case-document` | PO-CA-2026-0001 / ₹3,20,00,000 | The KFS for OF-01-A names another case number: the upload says "This document names a different case number. It was kept and flagged for review"; the rest runs as scenario 01 |
 

@@ -45,6 +45,20 @@ describe('NFR-07, AUTH-10: approval above ₹1.5 crore asks for password and cod
   });
 });
 
+describe('BR-01, APR-02, ADR 0021: a ₹0 funding need', () => {
+  it('tells the approver that approving confirms no new facility, not a loan', () => {
+    const c = { ...toCase(caseSummary as never), stage: 'AWAITING_APPROVAL', routedTo: 'DIRECTOR_FINANCE' } as never;
+    render(<ProvenanceProvider><Review c={c} need={{ display: '₹0', paise: 0 }} user={director} onChange={() => undefined} /></ProvenanceProvider>);
+    expect(screen.getByText('No loan needed')).toBeInTheDocument();
+    expect(screen.getByText(/Approving confirms that no new facility is sought; it does not approve a loan/)).toBeInTheDocument();
+  });
+  it('is not shown when there is a need', () => {
+    const c = { ...toCase(caseSummary as never), stage: 'AWAITING_APPROVAL', routedTo: 'DIRECTOR_FINANCE' } as never;
+    render(<ProvenanceProvider><Review c={c} need={{ display: '₹1,42,00,000', paise: 1_420_000_000 }} user={director} onChange={() => undefined} /></ProvenanceProvider>);
+    expect(screen.queryByText('No loan needed')).toBeNull();
+  });
+});
+
 describe('BR-15, BR-14: upload notices', () => {
   it('a case-number mismatch is not reported as instruction-like text', () => {
     expect(flagNotes(['KFS_CASE_MISMATCH'])).toEqual({ flagged: false, otherCase: true });

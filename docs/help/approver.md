@@ -7,6 +7,10 @@ one below it goes to the Director, Finance. Exactly ₹1,50,00,000 is held for a
 A case held at exactly ₹1,50,00,000 is marked **HELD**. It appears in the VP, Finance's inbox, and the VP decides it on
 **Review & approval** like any other case. The inbox shows only what the service returns for your role.
 
+A case whose validated need is ₹0 (the cash never falls below the minimum buffer) is below ₹1,50,00,000, so it goes to
+the Director, Finance. **Review & approval** shows **No loan needed**: no lender is compared or ranked, and approving
+confirms that no new facility is sought. It does not approve a loan.
+
 ## Decision
 Open the case on **Review & approval**. Read the **Safety checks on this case** panel first: it lists what the guardrails and the
 Verification Critic blocked, redacted or flagged on this case (codes only, never the text). To approve, tick *I reviewed
