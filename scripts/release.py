@@ -55,10 +55,11 @@ def changelog_section(text: str, version: str) -> str | None:
 
 
 def newest_reports(root: Path) -> dict[str, str]:
-    """Newest report per evaluation id (E4, E10, E13, ...), by the date in the file name
-    (E10-2026-11-17b.md is after E10-2026-11-17.md; E10-routes-2026-11-07.md is older)."""
+    """Newest report per evaluation id (E4, E10, E13, ...) and gate (G4), by the date in the file
+    name (E10-2026-11-17b.md is after E10-2026-11-17.md; E10-routes-2026-11-07.md is older;
+    G4-2026-11-24.md replaces G4-draft-2026-11-19.md)."""
     dated = []
-    for p in (root / "evaluation/reports").glob("E*-*.md"):
+    for p in sorted((root / "evaluation/reports").glob("[EG]*-*.md")):
         m = re.search(r"(\d{4}-\d{2}-\d{2})(\w*)\.md$", p.name)
         if m:
             dated.append((m.group(1), m.group(2), p))
