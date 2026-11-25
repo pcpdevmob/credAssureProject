@@ -65,12 +65,16 @@ async function prepareCase(tok, folder, run = true) {
 // ---------- on camera
 let page;
 async function caption(text) {
-  await page.evaluate(t => { let el = document.getElementById('walk-caption'); if (!el) { el = document.createElement('div'); el.id = 'walk-caption'; el.style.cssText = 'position:fixed;left:24px;bottom:20px;z-index:2147483647;max-width:760px;background:rgba(14,22,40,.92);color:#fff;font:600 16px/1.4 Inter,Arial,sans-serif;padding:10px 16px;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.25);pointer-events:none'; document.body.appendChild(el); } el.textContent = t; }, text).catch(() => {});
+  await page.evaluate(t => { let el = document.getElementById('walk-caption'); if (!el) { el = document.createElement('div'); el.id = 'walk-caption'; el.style.cssText = 'position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:2147483646;max-width:900px;text-align:center;background:rgba(14,22,40,.92);color:#fff;font:600 16px/1.4 Inter,Arial,sans-serif;padding:10px 16px;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.25);pointer-events:none'; document.body.appendChild(el); } el.textContent = t; }, text).catch(() => {});
   await sleep(1800);
 }
+// A title card drawn over the app (never a new page: sign-in lives only in the page's memory).
 async function card(title, sub, ms = 4500) {
-  await page.setContent(`<html><body style="margin:0;height:100vh;display:grid;place-items:center;background:#0E1628;font-family:Inter,Arial,sans-serif;color:#fff"><div style="text-align:center;max-width:980px"><div style="color:#E8C468;letter-spacing:.22em;font-size:16px">CREDASSURE · END-TO-END WALK-THROUGH</div><h1 style="font-size:46px;margin:18px 0">${title}</h1><p style="font-size:21px;color:#cbd5e1;line-height:1.5">${sub}</p></div></body></html>`);
+  const htmlCard = `<div style="text-align:center;max-width:980px"><div style="color:#E8C468;letter-spacing:.22em;font-size:16px">CREDASSURE · END-TO-END WALK-THROUGH</div><h1 style="font-size:46px;margin:18px 0">${title}</h1><p style="font-size:21px;color:#cbd5e1;line-height:1.5">${sub}</p></div>`;
+  if (!page.url().startsWith(WEB)) { await page.setContent(`<html><body style="margin:0;height:100vh;display:grid;place-items:center;background:#0E1628;font-family:Inter,Arial,sans-serif;color:#fff">${htmlCard}</body></html>`); await sleep(ms); return; }
+  await page.evaluate(h => { const d = document.createElement('div'); d.id = 'walk-card'; d.style.cssText = 'position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;background:#0E1628;font-family:Inter,Arial,sans-serif;color:#fff'; d.innerHTML = h; document.body.appendChild(d); }, htmlCard);
   await sleep(ms);
+  await page.evaluate(() => document.getElementById('walk-card')?.remove());
 }
 const settle = async (ms = 1200) => { await page.waitForLoadState('networkidle').catch(() => {}); await sleep(ms); };
 async function signIn(user) {
@@ -142,7 +146,7 @@ async function decide(user, id, choice, comment, extra = {}) {
       id01 = (page.url().match(/id=(CA-\d{4}-\d{4})/) || [])[1];
       await caption('Every file is checked field by field; documents are data, never instructions'); await scroll(600, 2);
       await tab('Workflow'); await caption('Run: preparer check, funding need, lender comparison, accuracy check, routing');
-      await page.getByRole('button', { name: /Run the checks|Run again/ }).click();
+      await page.getByRole('button', { name: /^(Run|Run again)$/ }).click();
       await page.waitForFunction(() => /Accuracy check: passed|Waiting for the routed approver/.test(document.body.innerText), null, { timeout: 300000 }); await settle(2500);
       await caption('All five steps passed: need ₹1,42,00,000, routed to the Director'); await scroll(650, 3);
       await tab('Funding gap'); await caption('Week-by-week cash: the funding need is calculated, not the amount requested'); await scroll(650, 3);
@@ -211,8 +215,8 @@ async function decide(user, id, choice, comment, extra = {}) {
 
     await card('The model reads and drafts. Code calculates, checks and routes. A person approves.', 'Synthetic data and simulated lenders only. github.com/pcpdevmob/iitkgpCredAssure', 6000);
   } finally {
-    const video = page.video(); await ctx.close(); await browser.close();
-    const src = video ? await video.path() : null;
-    if (src) { const dest = path.join(OUT, 'CredAssure_Walkthrough.webm'); fs.renameSync(src, dest); console.log('video:', dest); }
+    const video = page.video(); await ctx.close();
+    if (video) { const dest = path.join(OUT, 'CredAssure_Walkthrough.webm'); await video.saveAs(dest); await video.delete().catch(() => {}); console.log('video:', dest); }
+    await browser.close();
   }
 })().catch(e => { console.error(e.stack || String(e)); process.exit(1); });

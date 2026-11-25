@@ -17,6 +17,7 @@ if [ "$MODELS" = local ] && ! curl -sf http://localhost:11434/api/tags >/dev/nul
   echo "      Start it (ollama serve; ollama pull qwen3:8b) for real answers, or press Ctrl-C now."; sleep 5
 fi
 [ -f var/corpus.db ] || echo "note: var/corpus.db is missing: copilot answers about regulations will abstain (make ingest)."
+npx playwright install ffmpeg >/dev/null 2>&1 || echo "note: could not install Playwright's ffmpeg (needed to record); run: npx playwright install ffmpeg"
 make e2e-db
 pids=()
 cleanup() { for p in "${pids[@]:-}"; do [ -n "$p" ] && kill "$p" 2>/dev/null || true; done; }
