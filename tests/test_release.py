@@ -54,7 +54,14 @@ def test_scope37_bundle_records_hashes_reports_and_sbom(tmp_path: Path) -> None:
         (root / rel).parent.mkdir(parents=True, exist_ok=True)
         (root / rel).write_bytes((ROOT / rel).read_bytes())
     (root / "evaluation/reports").mkdir()
-    names = ("E4-2026-11-07.md", "E4-2026-11-16.md", "E13-2026-11-18.md", "E4-routes-2026-11-01.md")
+    names = (
+        "E4-2026-11-07.md",
+        "E4-2026-11-16.md",
+        "E13-2026-11-18.md",
+        "E4-routes-2026-11-01.md",
+        "G4-draft-2026-11-19.md",
+        "G4-2026-11-24.md",
+    )
     for name in names:
         (root / "evaluation/reports" / name).write_text(name)
     (root / "CHANGELOG.md").write_text("## [1.0.0] - 2026-11-18\n- first\n")
@@ -62,6 +69,7 @@ def test_scope37_bundle_records_hashes_reports_and_sbom(tmp_path: Path) -> None:
     assert rec["evaluation_reports"] == {
         "E13": "evaluation/reports/E13-2026-11-18.md",
         "E4": "evaluation/reports/E4-2026-11-16.md",
+        "G4": "evaluation/reports/G4-2026-11-24.md",
     }
     assert set(rec["hashes"]) == {"uv.lock", "package-lock.json", "evaluation/FROZEN.sha256"}
     assert (

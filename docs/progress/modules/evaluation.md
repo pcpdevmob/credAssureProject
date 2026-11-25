@@ -2,7 +2,7 @@
 
 **Owner:** Abhishek (Phase 11); Tejas (test set)
 **Phases:** P1 (close G1), P2 (G3), P6 (course baseline, deferred), P7 (Phase 11), P11 (G4)
-**Status:** G1 provisionally frozen 2026-11-15; G2 passed; **G3 passed 2026-11-18** (G3 + E18 READY); G1-final checklist open; **P7 code done 2026-11-18**: make eval harness, J1 + kappa, E13 report, A1-A5 runner, degradation matrix, load smoke (live runs pending on the Mac); **K3 done 2026-11-24** (88/100, A2 38/51); **K4 done 2026-11-25** (J1 vs two human labellers, kappa 0.789; 16/25 regulatory right by content vs 13/25 strict)
+**Status:** G1 provisionally frozen 2026-11-15; G2 passed; **G3 passed 2026-11-18** (G3 + E18 READY); G1-final checklist open; **P7 code done 2026-11-18**: make eval harness, J1 + kappa, E13 report, A1-A5 runner, degradation matrix, load smoke (live runs pending on the Mac); **K3 done 2026-11-24** (88/100, A2 38/51); **K4 done 2026-11-25** (J1 vs two human labellers, kappa 0.789; 16/25 regulatory right by content vs 13/25 strict); **K5 prep 2026-11-25** (S16/S17 edits, freeze checklist; teammate freeze then Mac run)
 
 ## Open items
 - G3 carry: re-record one live-model demo run with a Langfuse trace at P4 (needs the Mac).

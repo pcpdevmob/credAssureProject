@@ -4,7 +4,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follo
 
 ## [Unreleased]
 
-## [1.1.0] - draft for the 24 Nov 2026 code freeze (K11; tag after the last freeze-scope PR merges)
+## [1.1.0] - draft for the 27 Nov 2026 submission (K11; set the date and tag after the K5 results PR merges)
 Synthetic data only; approval is internal, never loan acceptance. Evaluated configuration unchanged: local Ollama
 `qwen3:8b` on the Mac (ADR 0036). Release bundle: `make release` hashes the image digests, `data/frozen/v1`,
 `data/frozen/v2/SHA256SUMS` and `evaluation/safety_v2/FROZEN.sha256` (K11). Before tagging, drop any line below whose
@@ -48,7 +48,16 @@ PR did not merge.
   the stage with ERROR on any difference (never GO); the Supervisor's re-check uses that checker (SUP-05); every
   blocker says who fixes it (you, your manager or HR); each `onb.rule.*` fact cites its own HR record. Rules, HR data
   and the 10 onboarding items unchanged.
+- One upload step (P9 9.7): pick the case workbook and the lender documents together on *New case* or with "Add all
+  the documents at once"; lender PDFs open the field-by-field review, lender files are added straight away.
+- End-to-end test pack `data/test-pack/` (10 synthetic scenarios from `data/frozen/v1`: Director and VP routes, held at
+  ₹1.5 crore, missing documents, conflicting data, injection, a KFS from another case) and the guide
+  `docs/setup/e2e-testing.md`; README "Sign in and test".
+- Final evaluation on the submitted code: K3 full run 88/100 and A2 38/51 (`evaluation/reports/G4-2026-11-24.md`);
+  K4 judge J1 against two human labellers, kappa 0.789 (`evaluation/reports/E13-2026-11-25.md`).
 ### Fixed
+- Approving above ₹1.5 crore asks for the password and a fresh code up front; a lender document naming another
+  case says so instead of "instruction-like text" (P9 9.6).
 - The gateway and web images build (the gateway image left out `agents/`; the web image used a stale pnpm lockfile).
 ### Changed
 - G4 result: 88/100 on the frozen test set (local qwen3:8b); course full-precision endpoint within one item.
