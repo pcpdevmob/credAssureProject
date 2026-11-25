@@ -1,11 +1,12 @@
 # Ownership per docs/REPO_STRUCTURE.md (scope #42). Replace the @placeholder handles with real
 # Git host usernames before enabling branch protection. Shared packages need two reviewers.
-# Display names: name2 = Tejas, name3 = Suresh, pritish = Pritish, name5 = Abhishek;
-# name1, name6 and uilead are still to be named. /agents/onboarding/ -> Mousita (her request, PR #43).
+# Display names: name1 = Abhishek (supervisor, gateway; also name5), name2 = Tejas, name3 = Suresh (working
+# capital, UI, deployment), pritish = Pritish, name5 = Abhishek, name6 = Adesh, uilead = Suresh. Owners set 25 Nov.
+# /agents/onboarding/ -> Mousita (her request, PR #43).
 *                               @credassure-owner-name1
 /agents/supervisor/             @credassure-owner-name1
 /apps/gateway/                  @credassure-owner-name1
-/deploy/                        @credassure-owner-name1
+/deploy/                        @credassure-owner-name3
 /agents/onboarding/             @mousitaD
 /evaluation/testset/            @credassure-owner-name2
 /agents/working-capital/        @credassure-owner-name3
@@ -16,8 +17,8 @@
 /packages/observability/        @credassure-owner-name5 @credassure-owner-name1
 /evaluation/ablations/          @credassure-owner-name5
 /agents/copilot/                @credassure-owner-name6
-/packages/retrieval/            @credassure-owner-name6 @credassure-owner-name1
-/data/corpus/                   @credassure-owner-name6
+/packages/retrieval/            @credassure-owner-name6 @credassure-owner-name2
+/data/corpus/                   @credassure-owner-name2 @credassure-owner-pritish
 /apps/web/                      @credassure-owner-uilead
 /packages/api-client/           @credassure-owner-uilead
 /packages/core/                 @credassure-owner-name1 @credassure-owner-pritish
@@ -29,7 +30,7 @@
 /docs/progress/modules/auth.md          @credassure-owner-name1
 /docs/progress/modules/rai.md           @credassure-owner-pritish
 /docs/progress/modules/guardrails.md    @credassure-owner-pritish @credassure-owner-name5
-/docs/progress/modules/deployment.md    @credassure-owner-name1
+/docs/progress/modules/deployment.md    @credassure-owner-name3
 /docs/progress/modules/docs.md          @credassure-owner-pritish
 /docs/progress/modules/evaluation.md    @credassure-owner-name5 @credassure-owner-name2
 /docs/progress/gates.md                 @credassure-owner-name1 @credassure-owner-pritish

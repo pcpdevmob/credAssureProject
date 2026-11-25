@@ -1,6 +1,6 @@
 # supervisor
 
-Owner: [Name 1]. Requirement: SUP-01.
+Owner: Abhishek. Requirement: SUP-01.
 
 Supervisor. Fixed plan; the model only classifies chat intent.
 

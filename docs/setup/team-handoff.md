@@ -90,13 +90,13 @@ Claude Code's hooks block most of these automatically. In other tools, check the
 
 | Module | Owner | Code | Requirements | Design | Acceptance | Reviewers |
 |---|---|---|---|---|---|---|
-| Supervisor, routing, gateway | [Name 1] | `agents/supervisor`, `apps/gateway`, `deploy/` | SUP-01..08, APR-01..06, API-01 | design-detail §2.2, §2.4.1, §3; ADR 0007, 0008 | isolation 3/3, routing 6/6, end-to-end ≥4/5 | security-reviewer, brd-conformance |
-| Employee Onboarding | Tejas | `agents/onboarding` | ONB-01..07 | §2.4.2 | onboarding 10/10 | security-reviewer, brd-conformance |
+| Supervisor, routing, gateway | Abhishek (deploy: Suresh) | `agents/supervisor`, `apps/gateway`, `deploy/` | SUP-01..08, APR-01..06, API-01 | design-detail §2.2, §2.4.1, §3; ADR 0007, 0008 | isolation 3/3, routing 6/6, end-to-end ≥4/5 | security-reviewer, brd-conformance |
+| Employee Onboarding | Mousita (0.3.0; Tejas built 0.1–0.2) | `agents/onboarding` | ONB-01..07 | §2.4.2 | onboarding 10/10 | security-reviewer, brd-conformance |
 | Working Capital | Suresh | `agents/working-capital`, `packages/engines` (cash flow) | WC-01..08, BR-01, BR-02 | §2.4.3; ADR 0010, 0011 | cash flow 15/15 to ₹1, bridge sums exactly | money-auditor, brd-conformance |
 | LendWise | Pritish | `agents/lendwise`, `packages/engines` (loan cost), `packages/lender-sim` | LW-01..15, BR-06..10 | §2.4.4, §2.4.7; ADR 0012, 0023 | offers 15/15, negotiation 5/5 | money-auditor, security-reviewer |
 | Verification Critic | Abhishek | `agents/critic`, `packages/observability` | VER-01..06 | §2.4.5 | bad-citation plants 12/12, safety items | security-reviewer, brd-conformance |
-| Ask CredAssure Copilot | [Name 6] | `agents/copilot`, `packages/retrieval`, `data/corpus` | KR-01..05, CP-01..04 | §2.4.6; ADR 0013, 0019 | regulatory ≥20/25, refusal 8/8, injection 8/8, isolation 3/3, retrieval ≥34/40 | security-reviewer |
-| Web UI | UI lead | `apps/web`, `packages/api-client` | UI-01..10 | [docs/ui/DESIGN_BRIEF.md](../ui/DESIGN_BRIEF.md), `CLAUDE_CODE_UI_PROMPT.md`; ADR 0004 | Playwright e2e (`make e2e`), no business logic in the UI | security-reviewer |
+| Ask CredAssure Copilot | Adesh (retrieval: Adesh, Tejas; corpus: Tejas, Pritish) | `agents/copilot`, `packages/retrieval`, `data/corpus` | KR-01..05, CP-01..04 | §2.4.6; ADR 0013, 0019 | regulatory ≥20/25, refusal 8/8, injection 8/8, isolation 3/3, retrieval ≥34/40 | security-reviewer |
+| Web UI | Suresh | `apps/web`, `packages/api-client` | UI-01..10 | [docs/ui/DESIGN_BRIEF.md](../ui/DESIGN_BRIEF.md), `CLAUDE_CODE_UI_PROMPT.md`; ADR 0004 | Playwright e2e (`make e2e`), no business logic in the UI | security-reviewer |
 | Evaluation | Abhishek, Tejas | `evaluation/` | BRD §12–13 | [docs/build/PHASE_PROMPTS.md](../build/PHASE_PROMPTS.md) Phases 3, 11 | ≥92/100 and above the best baseline | eval-analyst |
 
 Rule of thumb: **one module, one branch, one session per task.** If a change touches a shared package

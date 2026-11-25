@@ -1,6 +1,6 @@
 # copilot — Ask CredAssure
 
-Owner: [Name 6]. Requirements: CP-01..03, BR-15, SUP-08; scope #2, #20, #40 (notice).
+Owner: Adesh (retrieval with Tejas; corpus: Tejas and Pritish). Requirements: CP-01..03, BR-15, SUP-08; scope #2, #20, #40 (notice).
 Design: design-detail §2.4.6. On demand through chat; never a pipeline stage; never advances or blocks a case.
 
 Pipeline (`agent.py`), all decisions in code:

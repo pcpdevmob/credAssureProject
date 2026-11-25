@@ -173,7 +173,7 @@ load_offers (read-only: the case's latest offer and KFS uploads plus the funding
 
 Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it is allowed (with prompt name), the ledger facts it writes, its blocker codes, the gate rule (code), and its test category. Step budget: 10 per invocation (SUP-07).
 
-#### 2.4.1 Supervisor — master agent (owner: [Name 1])
+#### 2.4.1 Supervisor — master agent (owner: Abhishek)
 - **Inputs:** case record, latest `AgentResult` per stage, `app_config`, chat message (for intent).
 - **Pipeline:** load checkpoint → pick next stage from fixed plan (SUP-01) → check upstream gates GO + inputs validated (SUP-03) → invoke agent with `case_id` injected → validate `AgentResult` schema (repair ≤2, SUP-04) → on GO re-run that stage's deterministic checks (SUP-05) → advance / pause with one question (SUP-06) / reopen stage on Critic finding → after Critic GO call `route_proposal` → interrupt for approval.
 - **LLM calls:** `sup_intent v1` only — enum {copilot_question, data_correction, approval_action, out_of_scope} (SUP-02). Never decides stage order or gates.
@@ -186,7 +186,7 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
   question (CP-07 routing), a refusal or an abstention. `sup_intent` (a model classifier) was never built. S18
   fixtures: 15/15 on intent, form and step.
 
-#### 2.4.2 Employee Onboarding Agent — Gate 1 Readiness (owner: Tejas)
+#### 2.4.2 Employee Onboarding Agent — Gate 1 Readiness (owner: Mousita; Tejas built 0.1–0.2)
 - **Inputs:** preparer `emp_id` from the authenticated user (never from chat — ONB-01); hr.db (read-only).
 - **Pipeline:** `get_hr_profile(emp_id)` → `evaluate_onboarding_rules(profile, AS_OF_DATE)` returns per-rule {PASS, FAIL, UNKNOWN} for role, each mandatory training (status + expiry), policy ack version → code sets gate → LLM drafts the explanation of FAIL/UNKNOWN rules and next actions → Critic check that every failed rule is named.
 - **LLM calls:** `onb_explain v1` (input: rule results table only, no raw HR record). Stretch ONB-07: `onb_checklist v1` with policy citations from `search_knowledge(collection=policy)`.
@@ -228,7 +228,7 @@ Every agent below has the same shape: inputs, a fixed pipeline, the LLM calls it
 - **Gate (code):** zero critical findings → GO.
 - **Tests:** normaliser ≥50 formats; planted bad claims/citations blocked; fallback rate reported.
 
-#### 2.4.6 Ask CredAssure Copilot — on demand, not a pipeline stage (owner: [Name 6])
+#### 2.4.6 Ask CredAssure Copilot — on demand, not a pipeline stage (owner: Adesh)
 - **Trigger:** `POST /cases/{id}/chat` when the Supervisor classifies the message as `copilot_question`. It can be used at any stage and never advances or blocks the workflow.
 - **Pipeline:** PII redaction → refusal policy (code rules + `cp_refusal_classify v1`) → `cp_qtype v1` {regulatory, policy, case_fact, mixed} → `search_knowledge` (FTS5 + dense → RRF k=60 → rerank top-30→5, filters (ADR 0019): jurisdiction ∈ {IN, home state IN-MH}, applies_to ∈ {all, lender type}, effective ≤ AS_OF, not superseded, case_id for KFS) and/or `get_case_facts` → `cp_answer v1` with `[chunk_id]` citations from spotlighted passages, numbers only from case facts → Critic → answer or exact abstention string (CP-02).
 - **Writes:** `chat_messages` (redacted), citations, trace_id.

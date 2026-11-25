@@ -1,6 +1,6 @@
 name: copilot
 version: "0.2.0"
-owner: "[Name 6]"
+owner: "Adesh"  # retrieval with Tejas; corpus Tejas and Pritish
 requirement_ids: [CP-01, CP-02, CP-03, BR-15, SUP-08]
 scope_items: [2, 20, 40]
 tools: [search_regulations, search_policies, get_case_facts, explain_blocker, verify_claims]

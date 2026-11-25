@@ -1,6 +1,6 @@
 name: supervisor
 version: "0.1.0"
-owner: "[Name 1]"
+owner: "Abhishek"
 requirement_ids: [SUP-01]
 tools: []
 readable_data: []
