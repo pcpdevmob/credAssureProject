@@ -21,7 +21,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | 9 | 9.6 | UI | done | Pritish | 2026-11-24 | — | — | [2026-11-24-9-9.6-walkthrough-fixes-pritish.md](docs/progress/entries/2026-11-24-9-9.6-walkthrough-fixes-pritish.md) |
 | 9 | 9.7 | UI | done | Pritish | 2026-11-24 | — | — | [2026-11-24-9-9.7-one-step-upload-pritish.md](docs/progress/entries/2026-11-24-9-9.7-one-step-upload-pritish.md) |
 | 9 | 9.8 | UI | done | Pritish | 2026-11-25 | — | — | [2026-11-25-9-9.8-manual-entry-fixes-pritish.md](docs/progress/entries/2026-11-25-9-9.8-manual-entry-fixes-pritish.md) |
-| 9 | 9.9 | UI | done | Pritish | 2026-11-25 | — | — | [2026-11-25-9-9.9-zero-need-note-pritish.md](docs/progress/entries/2026-11-25-9-9.9-zero-need-note-pritish.md) |
+| 9 | 9.9 | UI | done | Pritish | 2026-11-25 | f23072a | — | [2026-11-25-9-9.9-zero-need-note-pritish.md](docs/progress/entries/2026-11-25-9-9.9-zero-need-note-pritish.md) |
 | 9a | 0.3.0 | Evaluation | done | Pritish | 2026-11-23 | — | E5 | [2026-11-23-9a-0.3.0-onboarding-checker-pritish.md](docs/progress/entries/2026-11-23-9a-0.3.0-onboarding-checker-pritish.md) |
 | 9a | 0.3.1 | Documentation | done | Pritish | 2026-11-23 | ca5f0bb | — | [2026-11-23-9a-0.3.1-onboarding-prototype-pritish.md](docs/progress/entries/2026-11-23-9a-0.3.1-onboarding-prototype-pritish.md) |
 | 11 | 11.16 | Evaluation | done | Pritish | 2026-11-24 | — | K3 | [2026-11-24-11-11.16-k3-final-run-pritish.md](docs/progress/entries/2026-11-24-11-11.16-k3-final-run-pritish.md) |
