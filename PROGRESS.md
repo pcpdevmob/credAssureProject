@@ -171,7 +171,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - 12 12.13: real GitHub usernames for CODEOWNERS; each member writes and signs their own CONTRIBUTIONS section. ([entry](docs/progress/entries/2026-11-25-12-12.13-contributions-owners-pritish.md))
 - 12 12.14: Abhishek, Suresh, Tejas and Adesh have no commits, PRs, reviews or signed review tasks under their GitHub identities; each writes their statement. Handles take effect in CODEOWNERS only once the person has write access. ([entry](docs/progress/entries/2026-11-25-12-12.14-contributions-evidence-pritish.md))
 - 12 12.15: K5 numbers (system card, G4, README, report §2/§6/§8, CHANGELOG); K9 line in report §9; remove the report's planning table and placeholder note at export. ([entry](docs/progress/entries/2026-11-25-12-12.15-final-docs-pass-pritish.md))
-- 12 12.16: the exact error the teammates saw; add it to the table once known. ([entry](docs/progress/entries/2026-11-25-12-12.16-e2e-guide-setup-pritish.md))
+- 12 12.16: the exact error the teammates saw; add it to the troubleshooting table once known. ([entry](docs/progress/entries/2026-11-25-12-12.16-e2e-guide-setup-pritish.md))
 - S1 1: replace CODEOWNERS placeholder handles with real GitHub usernames ([entry](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md))
 - S1 1: name owners for UI, Authentication and Deployment modules ([entry](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md))
 - S2 1: ADR recording the v3.4 cuts and the copilot scope (P0) ([entry](docs/progress/entries/2026-11-18-s2-1-plan-v34-base-files-pritish.md))

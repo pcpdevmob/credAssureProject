@@ -67,7 +67,7 @@ JWT_SECRET=<the first value>
 MFA_ENCRYPTION_KEY=<the second value>
 ```
 
-Both are required: the API does not start without them (part 11). Keep the MFA key: if it changes, every approver has to
+Both are required: the API does not start without them (part 12). Keep the MFA key: if it changes, every approver has to
 set up the authenticator app again.
 
 Optional, for a quick first test only: `MFA_ENFORCED=false` skips the authenticator step for the Director, VP and admin.
@@ -109,7 +109,7 @@ account. A good start ends like this:
 `note` lines are information, not errors. Leave this terminal open. Open **http://localhost:3000** (or **:5173** if the
 output says so: that happens when Langfuse is running). Stop with Ctrl-C, or `make stop` from another terminal.
 
-If it ends with `STOP`, read the line after it and part 11.
+If it ends with `STOP`, read the line after it and part 12.
 
 ## 6. Accounts and first sign-in
 
@@ -183,9 +183,68 @@ Selecting the PDFs in `lender-pdfs/` instead of the lender files also works: eac
 With the model off the fields are empty and you type them from the PDF; with a model each field is suggested with the
 words it found. Tick "I checked every field" and save. The lender files give the same offers without typing.
 
-## 8. All scenarios and expected results
+## 8. Create a case by typing it in (no files uploaded)
 
-Load each one as in part 7: a new case with the PO reference and order value below, the workbook and the lender files
+Use this to test the screens a person types into. Every scenario folder has the values to type, generated from the same
+frozen case as its files:
+
+| File | What it is |
+|---|---|
+| `manual-entry.md` | Every screen in order, with each field's label and the value to type; offers, fees and schedule rows |
+| `manual-entry.xlsx` | The same values, one sheet per screen. Table sheets have the screen's column names as their header, so rows can be copied and pasted |
+
+Typing 156 weekly cost rows by hand is not realistic: for the five tables, copy the rows from the sheet and paste them.
+
+**1. New case** (sheet *1 New case*). Type the MSME name, PO reference, order value, due date and requested amount.
+Leave **Documents (optional)** empty. **Create case**. The case opens on **Documents**; under **Case data** all seven
+sections say "Not provided yet".
+
+**2. Customer order** (sheet *2*). **Fill in** → type each field. Dates come from the calendar picker (the sheet gives
+`2026-11-04` = 4 Nov 2026). Percent: type `10` for 10%. Money can be typed `3,20,00,000`, `320 lakh` or `3.2 crore`.
+**Save customer order** → "Saved · 1 entry".
+
+**3. Opening cash and credit lines** (sheet *3*). Type the three fields; leave a field empty only where the sheet says
+"(leave empty)". For **Existing credit lines** press **Paste rows from Excel**, paste the credit-line rows (with their
+header row), **Add these rows**. **Save opening cash and credit lines**.
+
+**4. The five tables** (sheets *4* to *8*: Weekly costs, Expected receipts, Customer invoices due, Supplier bills, Stock
+movement). For each: **Fill in** → **Paste rows from Excel** → in the sheet select all the rows (the header too is
+fine; it is skipped), copy, paste into the box → **Add these rows** → check the row count → **Save …**. Expect "Saved ·
+156 rows", "6 rows", "4 rows", "5 rows", "26 rows" for scenario 01. A pasted row lands in the table exactly as typed:
+fix any red cell before saving.
+
+**5. Lender offers** (sheets *9* to *11*). Under **Documents from lenders → Add an offer from the lender's PDFs**, for
+each offer:
+1. **1. The lender's offer letter**: pick the offer letter PDF from `lender-pdfs/`. With the model off every field is
+   empty; with a model each field is suggested with the words it found. Either way, make each field match column
+   *OF-…* of sheet 9 (leave a field empty where the sheet is empty). Pick **Type of lender**.
+2. Fees (sheet 10): **Add a fee** for each row; name, When, Charged as, % or amount, **+ GST** as the sheet says. Tick
+   boxes listed in the sheet's *Tick boxes* row (for example "The letter says there are no fees").
+3. **2. Key Facts Statement**: pick the KFS PDF (kept as written).
+4. **3. Schedule of charges**: pick the schedule PDF, then **Add a charge** for each row of sheet 11 (Charge, When,
+   Amount as written). A charge that is in the schedule but not in the fees is what the app flags as a hidden charge.
+5. Tick **I checked every field above against the lender's PDF** → **Save this offer**. "The offer from … was saved"
+   and the offer, its KFS and its schedule are listed under Documents from lenders, each with its own number
+   (OF-xxxx). The next offer starts on an empty form.
+
+Faster alternative for the offers only: pick the nine files in `lender-files/` with **Or add the lender's files
+directly**. The comparison is the same.
+
+**6. Run.** **Workflow** → **Run**, then check the expected result in part 9. Checked on 25 Nov for scenario 01 typed in
+this way (model off): Awaiting approval, Director, ₹1,42,00,000; Brahmaputra first, Aravali second with a hidden
+charge, Chambal not affordable, the same as the uploaded files. The offer numbers differ (OF-xxxx instead of OF-01-A):
+compare by lender name.
+
+Negotiation on typed-in offers: these lenders are outside the simulation, so each round answers "The lender has not
+replied to this request." and nothing changes. To test a negotiation that moves the ranking, add the offers from
+`lender-files/` (scenario 02).
+
+Needs the fixes in PR #66 (25 Nov): before them, the 2nd and 3rd offers typed through the PDF form replaced the 1st, a
+pasted table could fail to save on its empty first row, and a negotiation round on typed-in offers ended in an error.
+
+## 9. All scenarios and expected results
+
+Load each one as in part 7 (files) or part 8 (typed in by hand): a new case with the PO reference and order value below, the workbook and the lender files
 from the folder, then **Run**. Results checked through the API on 24 Nov (and scenario 01 again on 25 Nov).
 
 | Folder | PO reference / Order value | Expected after Run |
@@ -204,7 +263,7 @@ from the folder, then **Run**. Results checked through the API on 24 Nov (and sc
 To test the preparer check, create any case as one of the `prep.e0xx` accounts in part 6 and press **Run**: the first
 step stops with the reason in plain words and who must fix it.
 
-## 9. Approvals
+## 10. Approvals
 
 | Test | Who | Steps | Expected |
 |---|---|---|---|
@@ -218,7 +277,7 @@ step stops with the reason in plain words and who must fix it.
 | Only your cases | `demo.director` | Look for a case routed to the VP | Not listed, and refused if opened |
 | Lost phone | `it.admin` | User management → Reset MFA for `demo.vp` | The VP sets up the authenticator app again at next sign-in |
 
-## 10. Ask CredAssure (model and search index needed)
+## 11. Ask CredAssure (model and search index needed)
 
 Press **Ask CredAssure** (bottom right, every page). Outside a case: "How do I upload the case data from an Excel
 workbook?" (help) · "Must a bank give a Key Facts Statement for an MSME term loan, and under which current direction?"
@@ -235,7 +294,7 @@ The chat box is switched off with the model off (option A). Refusals, the data-c
 the PAN redaction are decided by code, so they work with any model; answers to the regulation and policy questions
 also need the search index (part 4).
 
-## 11. If something goes wrong
+## 12. If something goes wrong
 
 | What you see | Why | Fix |
 |---|---|---|
@@ -253,14 +312,17 @@ also need the search index (part 4).
 | Director or VP never asked for a code | `MFA_ENFORCED=false` in `.env` | Expected with that setting; remove it to test two-step sign-in |
 | Approve button missing for the Director | Case routed to the VP (above or exactly ₹1.5 crore) | Sign in as `demo.vp` |
 | "Report stale" on approve | A negotiation round ran after the report | Preparer: **Report** → **Regenerate report**; then approve |
-| A stage stops with a question card | Expected in scenarios 04, 05, 06 | Answer on the card (part 8), then **Continue** |
+| A stage stops with a question card | Expected in scenarios 04, 05, 06 | Answer on the card (part 9), then **Continue** |
 | Ask CredAssure is greyed out | Model off (option A) | Use option B or C |
 | Ask CredAssure always says "I can't verify that from the available sources" | No search index (`chroma: missing` in the start output) | Part 4: unzip the share and `make ingest MODELS=<your option>` |
 | "too many questions; wait a minute" | More than 20 questions a minute | Wait a minute |
+| Only the last typed offer is listed; Run stops: "0 of 1 offers are comparable and affordable" | Before PR #66 the PDF form gave every offer the same number, so each save replaced the previous one | Merge #66 and add the offers again; until then add the offers from `lender-files/` |
+| Save on a pasted table says "Please fill this in", row 1 | Before PR #66 the empty starting row stayed in the table | Delete row 1 (bin icon), then Save; fixed by #66 |
+| A negotiation round on typed-in offers shows an error | Before PR #66 lenders outside the simulation failed the round | Fixed by #66 ("not replied"); to see a concession use the `lender-files/` offers |
 | Workbook upload refused with a sheet, row and column | The workbook was changed, or another file was picked | Use the file from `data/test-pack/` unchanged; or fix the named cell |
 | The page is blank or shows "Failed to fetch" | The API stopped | Look at the start terminal; `tail -n 30 var/start/api.log`; then `make start` again |
 
-## 12. Report a problem
+## 13. Report a problem
 
 Send: the scenario folder, the case ID (top of the case page), the step, what you did, what you saw (a screenshot of
 the page, not of `.env`), and the last lines of the API log:
