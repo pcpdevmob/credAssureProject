@@ -10,7 +10,7 @@ the model and data details.
 | Chat, all agents | Qwen3-8B (course endpoint `Qwen/Qwen3-8B`, local Ollama `qwen3:8b`) | ≤ 8B, no fine-tuning, no vision; thinking turned off; temperature 0; every call cached (NFR-05) |
 | Embeddings | bge-small-en-v1.5 | Course endpoint or local |
 | Reranker | BAAI/bge-reranker-base at a pinned revision | Scores for the answerability gate only (`RERANK_ORDER=false`) |
-| Judge J1 | Same chat model | Calibrated on a 20% human sample; humans score free text if kappa < 0.7 (ADR 0014) |
+| Judge J1 | Same chat model | Calibrated against two human labellers on all 19 judged answers: agreement 17/19, kappa 0.789 (≥ 0.7, so J1 may score free text; ADR 0014) |
 
 Swapping the model is configuration only (`MODELS=local|course|hf`, quality scenario Q7).
 
