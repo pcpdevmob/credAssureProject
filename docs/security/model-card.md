@@ -27,7 +27,8 @@ comparison, not a new headline: switching the evaluated path would need a new AD
 Results, ablations, safety checks and limitations are in [system card §9 and §13](../SYSTEM_CARD.md#9-evaluation-and-adversarial-results).
 In short: 88/100 (team target 92) against 23/100 for the best single-prompt baseline on the same model; the model is
 kept out of arithmetic and gate decisions because, when it does them (ablations A1, A4), those categories fall from
-41/41 to 10/41 and from 45/45 to 13/45.
+41/41 to 10/41 and from 45/45 to 13/45. The 40-item safety suite safety_v2 passes 40/40 with 0 critical; with
+the guardrails off (A6) it falls to 30/40, all ten failures personal-data items.
 
 ## What the model does and does not do
 | Does | Does not |

@@ -149,6 +149,7 @@ on a rerun):
 | A3 dense top 5 only | 13/25 | 12/25 | Within run-to-run variation |
 | A4 model decides gates | 45/45 | 13/45 | Yes (4 categories, identical on rerun) |
 | A5 injection defence off | 13/13 | 12/13 (T082 followed the plant) | Yes (reproduced) |
+| A6 guardrails off (R1, R2 excerpt cap, R4), safety_v2 | 40/40 | 30/40 (PII 0/10, all 10 critical; every other category unchanged) | Personal data only. One category and one run, so by the rule above this is reported, not claimed; it is what removing the only PII control should do |
 
 **Compensating for a small model: the 19 answerable regulatory questions** (same frozen strict scorer in every row;
 "false answers" read by hand):
@@ -180,10 +181,12 @@ and is reported as post-diagnosis (dev split 10 → 11/20, oracle 8 → 10/19, s
 | Judge J1 vs two human labellers (19 answerable regulatory answers, run `20261124T220648`) | Kappa 0.789, agreement 17/19 (threshold 0.7, ADR 0014); by content 10/19 correct (humans and J1), so 16/25 regulatory right in substance vs 13/25 strict | `evaluation/reports/G4-2026-11-24.md` (K4), `evaluation/reports/E13-2026-11-25.md` |
 | Trace dashboard (K7) | One Langfuse trace per case run and evaluation item, including the K3 run itself: T096 = 42 observations (a span per stage, tool call and guardrail decision, routing, 7 model calls); Langfuse Cloud, personal data masked before export | `evaluation/reports/G4-2026-11-24.md` (K7), `evaluation/reports/k7/` |
 | Architecture conformance | PASS | `evaluation/reports/E18-2026-11-18.md` |
+| safety_v2 (40 frozen items, K5, 25 Nov) | 40/40, 0 critical: PASS (target ≥ 38/40). PII 10/10, injection 12/12, agency 6/6, hidden context 3/3, output 4/4, fairness 5/5 | `evaluation/reports/G4-2026-11-24.md` (K5), `evaluation/reports/k5/safety_v2.json` |
 
-**Still to measure before submission** (freeze scope; this card claims none of them until they are in):
-safety_v2 (40 items, target ≥ 38/40 with 0 critical) and its
-guardrails-off ablation A6 (K5).
+**Guardrails' share of safety (A6).** With the rails off, personal data typed in chat is kept and a PAN or Aadhaar in
+an upload is accepted; injection, agency, hidden-context, output and fairness items still pass, because gates, ranking,
+routing, role checks and the missing accept/sign path are code, not rails. The rails are the only control for personal
+data, so they are never switched off outside evaluation (A6 is refused in the demo profile).
 
 ## 10. Failure taxonomy
 Every failed evaluation item gets one class (rule-based first guess, human confirm; scope #12):
