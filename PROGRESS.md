@@ -25,6 +25,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | 11 | 11.16 | Evaluation | done | Pritish | 2026-11-24 | — | K3 | [2026-11-24-11-11.16-k3-final-run-pritish.md](docs/progress/entries/2026-11-24-11-11.16-k3-final-run-pritish.md) |
 | 11 | 11.17 | Evaluation | done | Pritish | 2026-11-25 | — | K4, E13 | [2026-11-25-11-11.17-k4-judge-kappa-pritish.md](docs/progress/entries/2026-11-25-11-11.17-k4-judge-kappa-pritish.md) |
 | 11 | 11.18 | Evaluation | done | Pritish | 2026-11-25 | — | K5, K11 | [2026-11-25-11-11.18-k5-prep-k11-release-pritish.md](docs/progress/entries/2026-11-25-11-11.18-k5-prep-k11-release-pritish.md) |
+| 11 | 11.19 | Responsible AI | done | Pritish | 2026-11-25 | — | K5 | [2026-11-25-11-11.19-k5-safety-v2-frozen-pritish.md](docs/progress/entries/2026-11-25-11-11.19-k5-safety-v2-frozen-pritish.md) |
 | 12 | 12.12 | Documentation | done | Pritish | 2026-11-24 | — | — | [2026-11-24-12-12.12-e2e-test-pack-pritish.md](docs/progress/entries/2026-11-24-12-12.12-e2e-test-pack-pritish.md) |
 | 12 | 12.13 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.13-contributions-owners-pritish.md](docs/progress/entries/2026-11-25-12-12.13-contributions-owners-pritish.md) |
 | S1 | 1 | Documentation | done | Pritish | 2026-11-18 | 9969751, 9b63b13 | — | [2026-11-18-s1-1-progress-tracking-pritish.md](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md) |
@@ -135,6 +136,7 @@ From the latest entry of each step. Module-level items live in each module file.
 
 ### Responsible AI
 
+- 11 11.19: Tejas's confirmation on the PR; then the K5 run and A6 on the Mac. ([entry](docs/progress/entries/2026-11-25-11-11.19-k5-safety-v2-frozen-pritish.md))
 - P10 10.2: add the P11 results (E13, ablations, safety_v2) to SYSTEM_CARD §9. ([entry](docs/progress/entries/2026-11-18-p10-10.2-rai-docs-pritish.md))
 - P12 12.10: fill the "Still to measure" rows after K3/K4/K5 (Mon 23). ([entry](docs/progress/entries/2026-11-20-p12-12.10-system-card-release-hashes-pritish.md))
 
