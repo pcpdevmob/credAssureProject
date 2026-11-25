@@ -24,6 +24,7 @@ import json
 import os
 import shutil
 import sys
+import time
 from collections import Counter
 from collections.abc import Callable, Mapping
 from dataclasses import asdict, dataclass, field
@@ -56,6 +57,45 @@ _WINDOW = 40  # a shared run of this many characters with a prompt counts as a l
 # because httpx spells out every keyword and a Protocol with **kw does not match it.
 Client = Any
 Response = Any
+
+JOB_DONE = {"succeeded", "failed", "abandoned"}  # gateway jobs.py; anything else is still running
+
+
+class PacedClient:
+    """A live run waits out the gateway's rate limits instead of scoring them (K5, 25 Nov).
+
+    The gateway allows each user 120 requests and 20 copilot questions a minute (NFR-04,
+    ADR 0035). A 429 is refused before the route runs, so the same request is sent again after
+    the wait; the suite measures the guardrails, not the limiter. Only `main` uses it.
+    """
+
+    def __init__(
+        self,
+        client: Client,
+        *,
+        wait: float = 15.0,
+        tries: int = 40,
+        sleep: Callable[[float], None] = time.sleep,
+    ) -> None:
+        self.client, self.wait, self.tries, self.sleep = client, wait, tries, sleep
+
+    def _call(self, method: str, *args: Any, **kwargs: Any) -> Response:
+        for _ in range(self.tries):
+            r = getattr(self.client, method)(*args, **kwargs)
+            if r.status_code != 429:
+                return r
+            try:
+                pause = float(r.headers.get("Retry-After", self.wait))
+            except ValueError:
+                pause = self.wait
+            self.sleep(max(pause, 1.0))
+        return r
+
+    def get(self, *args: Any, **kwargs: Any) -> Response:
+        return self._call("get", *args, **kwargs)
+
+    def post(self, *args: Any, **kwargs: Any) -> Response:
+        return self._call("post", *args, **kwargs)
 
 
 # ---------------------------------------------------------------- items and freeze
@@ -131,6 +171,9 @@ class Runner:
     _headers: dict[str, dict[str, str]] = field(default_factory=dict)
     _baseline: dict[str, Any] | None = None
     _case: str | None = None
+    poll_seconds: float = 2.0
+    run_timeout: float = 1200.0
+    sleep: Callable[[float], None] = time.sleep
 
     # -- plumbing
     def login(self, who: str) -> dict[str, str]:
@@ -192,8 +235,25 @@ class Runner:
                 self._upload(case_id, "kfs", kfs.name, body)
         run = self.client.post(f"/v1/cases/{case_id}/run", headers=prep)
         if run.status_code == 202:
-            self.client.get(run.json()["status_url"], headers=prep)
+            self.wait_for_job(run.json()["status_url"])
         return case_id, self.outcome(case_id)
+
+    def wait_for_job(self, status_url: str) -> None:
+        """Poll until the case run ends (ADR 0007: 202 + job). A live gateway runs the stages after
+        answering, so reading the outcome straight away compares a half-run case (K5, 25 Nov)."""
+        waited = 0.0
+        while True:
+            job = self.client.get(status_url, headers=self.login("preparer"))
+            if job.status_code != 200:
+                raise RuntimeError(f"job status {job.status_code}")
+            if job.json().get("status") in JOB_DONE:
+                return
+            if waited >= self.run_timeout:
+                raise RuntimeError(
+                    f"case run still {job.json().get('status')} after {waited:.0f} s"
+                )
+            self.sleep(self.poll_seconds)
+            waited += self.poll_seconds
 
     def outcome(self, case_id: str) -> dict[str, Any]:
         prep = self.login("preparer")
@@ -478,7 +538,7 @@ def main(argv: list[str] | None = None) -> int:
     if missing := [k for u, k in keys.items() if not passwords[u]]:
         parser.error("set each demo account's own password: " + ", ".join(missing))
     with httpx.Client(base_url=args.base_url, timeout=300) as client:
-        report = run(client, passwords, load(ITEMS), ablation=args.ablation)
+        report = run(PacedClient(client), passwords, load(ITEMS), ablation=args.ablation)
     args.out.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(
         f"{report['verdict']} {report['passed']}/{report['total']} critical={report['critical_failures']}"

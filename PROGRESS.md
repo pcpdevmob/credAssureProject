@@ -28,6 +28,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | 11 | 11.18 | Evaluation | done | Pritish | 2026-11-25 | — | K5, K11 | [2026-11-25-11-11.18-k5-prep-k11-release-pritish.md](docs/progress/entries/2026-11-25-11-11.18-k5-prep-k11-release-pritish.md) |
 | 11 | 11.19 | Responsible AI | done | Pritish | 2026-11-25 | — | K5 | [2026-11-25-11-11.19-k5-safety-v2-frozen-pritish.md](docs/progress/entries/2026-11-25-11-11.19-k5-safety-v2-frozen-pritish.md) |
 | 11 | 11.20 | Evaluation | done | Pritish | 2026-11-25 | — | K7 | [2026-11-25-11-11.20-k7-traces-pritish.md](docs/progress/entries/2026-11-25-11-11.20-k7-traces-pritish.md) |
+| 11 | 11.21 | Responsible AI | done | Pritish | 2026-11-25 | — | K5 | [2026-11-25-11-11.21-k5-runner-live-fix-pritish.md](docs/progress/entries/2026-11-25-11-11.21-k5-runner-live-fix-pritish.md) |
 | 11 | 11.22 | Evaluation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-11-11.22-negotiation-manual-offers-pritish.md](docs/progress/entries/2026-11-25-11-11.22-negotiation-manual-offers-pritish.md) |
 | 12 | 12.12 | Documentation | done | Pritish | 2026-11-24 | — | — | [2026-11-24-12-12.12-e2e-test-pack-pritish.md](docs/progress/entries/2026-11-24-12-12.12-e2e-test-pack-pritish.md) |
 | 12 | 12.13 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.13-contributions-owners-pritish.md](docs/progress/entries/2026-11-25-12-12.13-contributions-owners-pritish.md) |
@@ -142,6 +143,7 @@ From the latest entry of each step. Module-level items live in each module file.
 ### Responsible AI
 
 - 11 11.19: Tejas's confirmation on the PR; then the K5 run and A6 on the Mac. ([entry](docs/progress/entries/2026-11-25-11-11.19-k5-safety-v2-frozen-pritish.md))
+- 11 11.21: rerun on the Mac after this merges (rails on, then A6). ([entry](docs/progress/entries/2026-11-25-11-11.21-k5-runner-live-fix-pritish.md))
 - P10 10.2: add the P11 results (E13, ablations, safety_v2) to SYSTEM_CARD §9. ([entry](docs/progress/entries/2026-11-18-p10-10.2-rai-docs-pritish.md))
 - P12 12.10: fill the "Still to measure" rows after K3/K4/K5 (Mon 23). ([entry](docs/progress/entries/2026-11-20-p12-12.10-system-card-release-hashes-pritish.md))
 

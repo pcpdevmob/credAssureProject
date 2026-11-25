@@ -33,3 +33,7 @@ uv run --env-file .env python -m credassure.evaluation.safety_v2 run --out evalu
 uv run --env-file .env python -m credassure.evaluation.safety_v2 run --ablation A6 --out evaluation/reports/safety_v2-A6.json
 ```
 `run` refuses an unfrozen or edited suite. It talks to the gateway API only.
+Against a live gateway it waits for each case run to finish (the run answers 202 and works in the
+background) and waits out the gateway's per-user rate limits (429) instead of scoring them, so a
+full run takes about 30–45 minutes with the local model. The first Mac run on 25 Nov did neither
+and is not reported (progress 11.21).
