@@ -113,11 +113,19 @@ If it ends with `STOP`, read the line after it and part 12.
 
 ## 6. Accounts and first sign-in
 
-Your first passwords are in your own file:
+Your first passwords are in your own file, `var/initial-passwords.txt` (only you can read it). Each line is
+*username, role, password*; the password is the last part (`xxxx-xxxx-xxxx-xxxx`, dashes included).
+
+**The file is added to, never replaced:** every `make passwords` adds a new block at the bottom. **Use the bottom
+block**; older passwords no longer work. One account's current first password:
 
 ```bash
-cat var/initial-passwords.txt       # username, role, first password (only you can read it)
+grep '^demo.preparer ' var/initial-passwords.txt | tail -1                      # read it
+grep '^demo.preparer ' var/initial-passwords.txt | tail -1 | awk '{print $NF}' | pbcopy   # or copy it (Mac)
 ```
+
+An account with a `SEED_PASSWORD_<USER>` line in `.env` is not in the file (its password is that value). Keep no login
+passwords in `.env`: remove such lines, open a new terminal and run `make passwords`.
 
 | Username | Role | Use it to test |
 |---|---|---|
@@ -145,8 +153,15 @@ for a fresh 6-digit code.
 **Account admin (optional):** `BOOTSTRAP_ADMIN_PASSWORD='<12+ characters, without "admin">' make admin NAME=it.admin`
 once. The admin adds people, resets passwords and two-step verification, and never opens a case.
 
-Lost your first passwords, or locked out? Stop the app, run `make passwords` (new first passwords for every seeded
-account; set-up authenticators are kept), start again.
+Lost your first passwords, or locked out? `make stop`, `rm -f var/initial-passwords.txt`, `make passwords` (new first
+passwords for every seeded account in one fresh block; set-up authenticators are kept), `make start`. Check one against
+the API without the browser:
+
+```bash
+PW=$(grep '^prep.e001 ' var/initial-passwords.txt | tail -1 | awk '{print $NF}')
+curl -s -X POST localhost:8000/v1/auth/token -H 'content-type: application/json' \
+  -d "{\"username\":\"prep.e001\",\"password\":\"$PW\"}" | cut -c1-40; echo   # {"access_token"… = right
+```
 
 ## 7. Walk-through: scenario 01 from start to approval
 
@@ -156,7 +171,8 @@ Use the files in `data/test-pack/01-director-route/` on your laptop.
 1. Sign in. On the dashboard press **New case**.
 2. Fill in: MSME legal name (any, e.g. "Test 01"), **PO reference** `PO-CA-2026-0001`, **Order value** `32000000`
    (shows "Reads as ₹3,20,00,000"), any customer due date, **Requested amount** `2 crore` (₹2,00,00,000).
-3. Under **Documents (optional)** press the file picker and select, together:
+3. Under **Documents (optional)** press the file picker and select, together (Shift-click, or Cmd/Ctrl-click each
+   file):
    `case-data-CA-2026-0001.xlsx` and all nine files in `lender-files/` (three `OF-01-*.v1.json`, three
    `KFS-OF-01-*-v1.md`, three `KFS-OF-01-*-v1-SCH.md`). The list of chosen files appears under the picker.
 4. Press **Create case**. The case opens on the **Documents** tab with "case data imported (Customer order, Opening cash
@@ -305,7 +321,10 @@ also need the search index (part 4).
 | `ModuleNotFoundError: credassure…` or `No module named 'sentence_transformers'` | A bare `uv sync` removed packages | `make install` |
 | `STOP an API already answers on :8000` or `something already answers on :3000` | An old copy is still running | `make stop`; if that is not enough, close the other terminal or restart the laptop |
 | `bash: make: command not found` on Windows | Running in PowerShell or Command Prompt | Use the Ubuntu (WSL2) terminal for every command |
-| Sign-in says the username or password is wrong | Using someone else's password, or the first password was already changed | Use the password from **your** `var/initial-passwords.txt`; if lost, stop the app, `make passwords`, start again |
+| Sign-in says "Wrong username or password" (older versions: "not authenticated Sign in again to continue") | A password from an older block of the file, someone else's laptop, or a first password already used once | Use the **bottom** block of **your** `var/initial-passwords.txt` (part 6); if lost: `make stop`, `rm -f var/initial-passwords.txt`, `make passwords`, `make start` |
+| The `curl` check in part 6 answers "request failed validation" | The account appears in several blocks, so several passwords were sent at once | Keep `\| tail -1` in the command, or delete the file and run `make passwords` |
+| `grep: var/initial-passwords.txt: No such file or directory` | The file was deleted | `make passwords` (it prints the file's path) |
+| Not sure which PDF goes in which step of "Add an offer from the lender's PDFs" | The form takes one lender at a time | Step 1 `… offer letter.pdf`, step 2 `… KFS.pdf`, step 3 `… schedule of charges.pdf`; or select all nine PDFs under **Add all the documents at once** (Cmd+A) |
 | "too many failed attempts; try again later" | Several wrong passwords | Wait a minute |
 | Back on the sign-in page after pressing reload or typing a URL | Sign-in is kept in the page's memory only | Sign in again; move with the links and tabs |
 | Director or VP: code refused | Phone clock off, or the code expired | Set the phone's time to automatic; type the newest code; or use a backup code; an admin can **Reset MFA** |

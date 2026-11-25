@@ -35,6 +35,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | 12 | 12.14 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.14-contributions-evidence-pritish.md](docs/progress/entries/2026-11-25-12-12.14-contributions-evidence-pritish.md) |
 | 12 | 12.15 | Documentation | done | Pritish | 2026-11-25 | — | K3, K4, K7 | [2026-11-25-12-12.15-final-docs-pass-pritish.md](docs/progress/entries/2026-11-25-12-12.15-final-docs-pass-pritish.md) |
 | 12 | 12.16 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.16-e2e-guide-setup-pritish.md](docs/progress/entries/2026-11-25-12-12.16-e2e-guide-setup-pritish.md) |
+| 12 | 12.17 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.17-signin-and-passwords-docs-pritish.md](docs/progress/entries/2026-11-25-12-12.17-signin-and-passwords-docs-pritish.md) |
 | S1 | 1 | Documentation | done | Pritish | 2026-11-18 | 9969751, 9b63b13 | — | [2026-11-18-s1-1-progress-tracking-pritish.md](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md) |
 | S2 | 1 | Documentation | done | Pritish | 2026-11-18 | 07ea5b7 | — | [2026-11-18-s2-1-plan-v34-base-files-pritish.md](docs/progress/entries/2026-11-18-s2-1-plan-v34-base-files-pritish.md) |
 | P0 | 0.2 | Documentation | done | Pritish | 2026-11-18 | b4eb8dd | — | [2026-11-18-p0-0.2-plan-v34-adrs-pritish.md](docs/progress/entries/2026-11-18-p0-0.2-plan-v34-adrs-pritish.md) |
@@ -176,6 +177,7 @@ From the latest entry of each step. Module-level items live in each module file.
 - 12 12.14: Abhishek, Suresh, Tejas and Adesh have no commits, PRs, reviews or signed review tasks under their GitHub identities; each writes their statement. Handles take effect in CODEOWNERS only once the person has write access. ([entry](docs/progress/entries/2026-11-25-12-12.14-contributions-evidence-pritish.md))
 - 12 12.15: K5 numbers (system card, G4, README, report §2/§6/§8, CHANGELOG); K9 line in report §9; remove the report's planning table and placeholder note at export. ([entry](docs/progress/entries/2026-11-25-12-12.15-final-docs-pass-pritish.md))
 - 12 12.16: the exact error the teammates saw; add it to the troubleshooting table once known. ([entry](docs/progress/entries/2026-11-25-12-12.16-e2e-guide-setup-pritish.md))
+- 12 12.17: owner decision whether `make passwords` should replace the file instead of appending. ([entry](docs/progress/entries/2026-11-25-12-12.17-signin-and-passwords-docs-pritish.md))
 - S1 1: replace CODEOWNERS placeholder handles with real GitHub usernames ([entry](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md))
 - S1 1: name owners for UI, Authentication and Deployment modules ([entry](docs/progress/entries/2026-11-18-s1-1-progress-tracking-pritish.md))
 - S2 1: ADR recording the v3.4 cuts and the copilot scope (P0) ([entry](docs/progress/entries/2026-11-18-s2-1-plan-v34-base-files-pritish.md))
