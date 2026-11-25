@@ -84,6 +84,19 @@ def test_LW15_v1_script_asked_a_round_2_question_gives_no_revision() -> None:
     assert reply.offer is None and reply.text == NO_SCRIPT
 
 
+def test_LW13_a_lender_without_a_script_does_not_reply() -> None:
+    # An offer added through the PDF review form gets a generated lender id (no script): the
+    # round is answered with no reply and no revision instead of failing the negotiation.
+    offer, sch = _offer("CA-2026-0006", "OF-06-A", lender_id="ACB-7K2Q")
+    for template, terms in (
+        ("fee_waiver_v1", None),
+        ("rate_match_v1", {"cited_rate": "0.09"}),
+        ("tenor_change_v1", {"extra_months": 3}),
+    ):
+        reply = SIM.send("ACB-7K2Q", template, "r", offer, sch, terms)
+        assert reply.offer is None and reply.schedule is None and reply.text == NO_SCRIPT
+
+
 def test_BR15_round_2_injection_reply_is_text_only() -> None:
     offer, sch = _offer("CA-2026-0001", "OF-01-B", rate_type="fixed", annual_rate="0.1300")
     reply = SIM.send("L05", "rate_match_v1", "r", offer, sch, {"cited_rate": "0.1200"})
