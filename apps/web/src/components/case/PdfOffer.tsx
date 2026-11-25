@@ -97,7 +97,7 @@ export default function PdfOffer({ caseId, onSaved, preset }: { caseId: string; 
   const [sch, setSch] = useState<{ name: string; text: string; rows: ChargeRow[]; ai: boolean } | null>(null);
   const [checked, setChecked] = useState(false);
   const [state, setState] = useState<{ busy?: boolean; error?: unknown; done?: string; problems?: Record<string, string> }>({});
-  const [id] = useState(newId);
+  const [id, setId] = useState(newId); // one id per offer: a new one after each save, or the next offer would replace it
   const [reading, setReading] = useState<string>(); const [readErr, setReadErr] = useState<unknown>();
   const ran = useRef(false);
   useEffect(() => {
@@ -117,7 +117,7 @@ export default function PdfOffer({ caseId, onSaved, preset }: { caseId: string; 
   const set = (k: string, v: string) => setReview(r => r && { ...r, values: { ...r.values, [k]: v } });
   const quotes = letter?.draft.fields ?? {};
   const built = review ? buildOffer(review, id) : null;
-  const reset = () => { setLetter(null); setReview(null); setKfs(null); setSch(null); setChecked(false); };
+  const reset = () => { setLetter(null); setReview(null); setKfs(null); setSch(null); setChecked(false); setId(newId()); };
 
   async function save() {
     if (!review) return;
