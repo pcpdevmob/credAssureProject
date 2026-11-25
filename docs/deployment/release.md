@@ -27,13 +27,14 @@ network access and commit the result before the release build.
 ## v1.1.0 checklist (submission, 27 Nov 2026)
 Checked on 25 Nov: `make release VERSION=1.1.0` builds the bundle from `main` (CHANGELOG section found; frozen v1 and
 v2 hashes, test-set hash, guardrail lock, locks and `openapi.json` recorded; the newest E-reports and the G4 gate
-report copied). Left, in order:
+report copied).
 
-1. Merge the K4 results PR (#57) and the K5 prep PR; a teammate freezes safety_v2 (`evaluation/safety_v2/README.md`)
-   and the K5 results PR (safety_v2 + A6) merges. `RELEASE.json` then also hashes `evaluation/safety_v2/FROZEN.sha256`.
-2. In `CHANGELOG.md`, replace "draft for the 27 Nov 2026 submission" with the date, and drop any line whose PR did not
-   merge (one PR to `main`).
-3. On the Mac, from a clean `main` (`git status` empty, so `git_dirty` is false):
-   `git pull && make install && make release VERSION=1.1.0`. Optional: build the images first so their IDs are recorded.
-4. Owner only: `git tag -a v1.1.0 -m "CredAssure 1.1.0: IIT KGP capstone submission" && git push origin v1.1.0`, then a
-   GitHub release with `var/release/v1.1.0/RELEASE.json` and `sbom.cdx.json` attached.
+1. Done 25 Nov: K4 (#57), K5 prep, the safety_v2 freeze and the K5 results PR (#69) merged; #70 ("No loan needed")
+   merged. `RELEASE.json` also hashes `evaluation/safety_v2/FROZEN.sha256`.
+2. Done on branch `release/v1.1.0`: `CHANGELOG.md` section dated 2026-11-27; every line's PR merged. Merge that PR.
+3. Suresh, on the Mac, from a clean `main` (`git status` empty, so `git_dirty` is false):
+   `git checkout main && git pull && make install && make release VERSION=1.1.0`. Optional: build the images first
+   (`make up`) so their IDs are recorded. Check `var/release/v1.1.0/RELEASE.json`: `git_commit` is the merge commit of
+   step 2 and `git_dirty` is false. Send RELEASE.json and sbom.cdx.json to the owner.
+4. Owner only: `git tag -a v1.1.0 <git_commit from RELEASE.json> -m "CredAssure 1.1.0: IIT KGP capstone submission"`
+   and `git push origin v1.1.0`, then a GitHub release with `RELEASE.json` and `sbom.cdx.json` attached.

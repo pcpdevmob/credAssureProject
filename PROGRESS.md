@@ -32,6 +32,7 @@ Latest entry per phase and step. Earlier entries stay in `docs/progress/entries/
 | 11 | 11.21 | Responsible AI | done | Pritish | 2026-11-25 | — | K5 | [2026-11-25-11-11.21-k5-runner-live-fix-pritish.md](docs/progress/entries/2026-11-25-11-11.21-k5-runner-live-fix-pritish.md) |
 | 11 | 11.22 | Evaluation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-11-11.22-negotiation-manual-offers-pritish.md](docs/progress/entries/2026-11-25-11-11.22-negotiation-manual-offers-pritish.md) |
 | 11 | 11.23 | Responsible AI | done | Pritish | 2026-11-25 | 55ba720 | K5 | [2026-11-25-11-11.23-k5-results-pritish.md](docs/progress/entries/2026-11-25-11-11.23-k5-results-pritish.md) |
+| 11 | 11.24 | Deployment | done | Pritish | 2026-11-25 | — | — | [2026-11-25-11-11.24-release-v110-pritish.md](docs/progress/entries/2026-11-25-11-11.24-release-v110-pritish.md) |
 | 12 | 12.12 | Documentation | done | Pritish | 2026-11-24 | — | — | [2026-11-24-12-12.12-e2e-test-pack-pritish.md](docs/progress/entries/2026-11-24-12-12.12-e2e-test-pack-pritish.md) |
 | 12 | 12.13 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.13-contributions-owners-pritish.md](docs/progress/entries/2026-11-25-12-12.13-contributions-owners-pritish.md) |
 | 12 | 12.14 | Documentation | done | Pritish | 2026-11-25 | — | — | [2026-11-25-12-12.14-contributions-evidence-pritish.md](docs/progress/entries/2026-11-25-12-12.14-contributions-evidence-pritish.md) |
@@ -167,6 +168,8 @@ From the latest entry of each step. Module-level items live in each module file.
 
 ### Deployment
 
+- 11 11.24: Suresh runs `make release VERSION=1.1.0` on clean main after this merges ([entry](docs/progress/entries/2026-11-25-11-11.24-release-v110-pritish.md))
+- 11 11.24: owner pushes tag v1.1.0 and creates the GitHub release ([entry](docs/progress/entries/2026-11-25-11-11.24-release-v110-pritish.md))
 - P10 10.1: H17 pin images; H19 demo recording. ([entry](docs/progress/entries/2026-11-18-p10-10.1-ship-pritish.md))
 - P11 11.10: K12 on `feature/lendwise-p11` (LendWise thread), by 22 Nov. ([entry](docs/progress/entries/2026-11-19-p11-11.10-freeze-scope-ci-pritish.md))
 - P15 15.1: Azure VM deployment (production compose with HTTPS, runbook, smoke test); provider choice for hosted Qwen3-8B. ([entry](docs/progress/entries/2026-11-20-p15-15.1-case-db-mysql-pritish.md))

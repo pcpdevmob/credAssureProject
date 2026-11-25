@@ -4,11 +4,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follo
 
 ## [Unreleased]
 
-## [1.1.0] - draft for the 27 Nov 2026 submission (K11; set the date and tag after the K5 results PR merges)
+## [1.1.0] - 2026-11-27
 Synthetic data only; approval is internal, never loan acceptance. Evaluated configuration unchanged: local Ollama
 `qwen3:8b` on the Mac (ADR 0036). Release bundle: `make release` hashes the image digests, `data/frozen/v1`,
-`data/frozen/v2/SHA256SUMS` and `evaluation/safety_v2/FROZEN.sha256` (K11). Before tagging, drop any line below whose
-PR did not merge.
+`data/frozen/v2/SHA256SUMS` and `evaluation/safety_v2/FROZEN.sha256` (K11).
 ### Added
 - K5 safety results: safety_v2 40/40 with 0 critical (target ≥ 38/40); guardrails-off ablation A6 30/40, all ten
   failures personal-data items (`evaluation/reports/k5/`, G4 report K5, system card §9).
@@ -50,6 +49,8 @@ PR did not merge.
   the stage with ERROR on any difference (never GO); the Supervisor's re-check uses that checker (SUP-05); every
   blocker says who fixes it (you, your manager or HR); each `onb.rule.*` fact cites its own HR record. Rules, HR data
   and the 10 onboarding items unchanged.
+- Web: a case whose funding need is ₹0 shows "No loan needed" on Review & approval: no lender is ranked, and
+  approving confirms that no new facility is needed (it is not a loan); below ₹1.5 crore it goes to the Director (P9 9.9).
 - One upload step (P9 9.7): pick the case workbook and the lender documents together on *New case* or with "Add all
   the documents at once"; lender PDFs open the field-by-field review, lender files are added straight away.
 - End-to-end test pack `data/test-pack/` (10 synthetic scenarios from `data/frozen/v1`: Director and VP routes, held at
@@ -65,7 +66,7 @@ PR did not merge.
 - G4 result: 88/100 on the frozen test set (local qwen3:8b); course full-precision endpoint within one item.
 - CI runs once per PR and on request; the MySQL job only for case.db changes (ADR 0028 amendment).
 - Critic: number words in cited passages and approval-matrix wording no longer raise false positives (VER-02, VER-03).
-### Added (copilot v3, merged after the 1.0.0 tag)
+### Added (copilot v3, merged after 1.0.0)
 - Ask CredAssure on every page (ADR 0035): product help as a cited source, code intent routing (CP-07), case status from
   code (CP-10), per-case memory with "New conversation" (CP-11), Critic-first streaming, fixed follow-ups and answer
   ratings (CP-12). New help pages: *Ask CredAssure*, *AI safety and your data*.
