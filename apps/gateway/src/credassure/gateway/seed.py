@@ -31,13 +31,18 @@ def handout_path(settings: Settings) -> Path:
     return Path(settings.case_db).parent / HANDOUT
 
 
-def write_handout(path: Path, issued: list[Issued], where: str) -> int:
-    """Append the generated first passwords (mode 0600). Env-set passwords are not repeated here."""
+def write_handout(path: Path, issued: list[Issued], where: str, *, replace: bool = False) -> int:
+    """Write the generated first passwords (mode 0600). Env-set passwords are not repeated here.
+
+    New accounts are appended: the passwords already in the file still work. ``replace`` (make
+    passwords: every seeded account has just been given a new one) starts the file again, so
+    nobody copies an older password that no longer works (25 Nov)."""
     rows = [i for i in issued if i.temporary]
     if not rows:
         return 0
     path.parent.mkdir(parents=True, exist_ok=True)
-    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o600)
+    mode = os.O_TRUNC if replace else os.O_APPEND
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | mode, 0o600)
     os.chmod(path, 0o600)  # an older file keeps its mode otherwise
     stamp = datetime.now(UTC).astimezone().strftime("%Y-%m-%d %H:%M %Z")
     width = max(len(i.username) for i in rows)
@@ -73,7 +78,7 @@ def main(argv: list[str] | None = None) -> int:
         settings.case_target, env, tenant_id=settings.tenant_id, reissue=args.reissue
     )
     where = _where(settings)
-    handed = write_handout(handout_path(settings), issued, where)
+    handed = write_handout(handout_path(settings), issued, where, replace=args.reissue)
     verb = "re-issued" if args.reissue else "created"
     print(f"{verb} {len(issued)} accounts in {where}", file=sys.stderr)
     if handed:
