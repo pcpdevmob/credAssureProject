@@ -2,7 +2,7 @@
 
 One Azure VM runs the app for evaluators and mentors at `https://credassure.sharentest.com`, from submission (27 Nov)
 to about 19 Dec, then it is deleted. The 5 Dec live demo still runs on the Mac (ADR 0036); this link is the backup.
-Plan, costs and decisions: `claude/CredAssure_Deployment_Plan.md` in the Project.
+Plan, costs and decisions: see the project deployment plan.
 
 ```
 browser ──HTTPS──▶ Caddy (80/443, certificate) ──▶ web (static app)
@@ -33,10 +33,10 @@ the evaluation are unchanged.
 1. **Hugging Face:** account → Settings → Billing → add $5 credit → Access Tokens → *fine-grained* token with
    "Make calls to Inference Providers". Keep it in your password manager.
 2. **Course endpoint:** the group key and the vm06 CA file (`.pem`).
-3. **DNS:** tell Claude the output of `dig +short NS sharentest.com` (who hosts the domain's DNS).
+3. **DNS:** tell the coding tool the output of `dig +short NS sharentest.com` (who hosts the domain's DNS).
 4. **On the Mac** (one time, before copying): `make hr-db`; check `var/corpus.db` and `var/chroma-local-bge/` exist.
 
-## Deployment day (~2 h, Claude gives each command)
+## Deployment day (~2 h, the coding tool gives each command)
 
 1. **Resource group.** Azure portal → Resource groups → Create → `credassure-rg`, region **Central India**.
 2. **VM.** Virtual machines → Create → Ubuntu Server 24.04 LTS, size **B4as_v2**, authentication **SSH public key**

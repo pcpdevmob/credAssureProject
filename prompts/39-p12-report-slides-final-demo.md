@@ -6,7 +6,7 @@ Plan v3.4 phase P12 (`docs/plan/CredAssure_Prompt_Pack_v3.4.md`). Supersedes the
 |---|---|---|---|
 | Opus 5.5 + team | `feature/docs-p12` | P11 | each owner writes their agent section |
 
-## Paste into Claude Code
+## Paste into the coding tool
 
 ```markdown
 Phase P12: run prompts/26-report-and-demo.md. Use only committed evidence; cite the file or trace ID behind

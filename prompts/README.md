@@ -1,7 +1,7 @@
 # CredAssure — Step-by-step prompts (run in order)
 
 Each file has: when, owner, prerequisites, what humans must do, the paste block, the scope items it closes, evaluations to run, and done criteria.
-Paste the block into Claude Code (plan mode) at the repo root. Start each step in a fresh session (`/clear`).
+Paste the block into the coding tool (plan mode) at the repo root. Start each step in a fresh session (`/clear`).
 The same steps run automatically with `/build-all`; use these files when you want to drive each step yourself or hand a step to its owner.
 
 | # | Step | Week | Owner | Scope items | Evals |
@@ -60,7 +60,7 @@ P6 (course endpoint) is deferred until the team agrees the endpoint; P7 then run
 
 ## Recovery prompts
 
-- **Drifted from spec:** `Stop. Re-read CLAUDE.md and this step's prompt file. List every place the diff departs from them, then fix only those.`
+- **Drifted from spec:** `Stop. Re-read the project rules and this step's prompt file. List every place the diff departs from them, then fix only those.`
 - **Numbers look wrong:** `Use money-auditor on the last commit; recompute case <id> independently and show the week-by-week difference.`
 - **Small model breaks JSON:** `Show the last 5 StructuredOutputError traces; propose prompt or schema changes; do not loosen validation.`
 - **Scope creep:** `Compare the diff to BRD §4 and docs/BUILD_SCOPE.md; revert anything out of scope or put it behind FEATURE_STRETCH=false.`

@@ -4,13 +4,13 @@
 |---|---|---|---|
 | W3 D1–3 | Critic owner | 15 done | — |
 
-## Paste into Claude Code
+## Paste into the coding tool
 
 ```markdown
 Run Phase 9d (or /phase 9d) in agents/critic: number matching, citations, banned content, report sections, CriticFinding →
 regenerate prompts per agent, template fallback; api/ (findings). Build the ablation switch paths A1–A5.
 Also build scope items: 1, 10, 21 (docs/BUILD_SCOPE.md).
-Follow CLAUDE.md rules: plan first, tests first, make check green, reviewer subagents, add one progress entry in docs/progress/entries/ (from TEMPLATE.md) and update your module file in docs/progress/modules/, run make progress (never edit PROGRESS.md by hand), commit.
-When done, run the evaluation(s): E4 (.claude/commands/eval.md) and fix every MUST finding.
+Follow the project rules rules: plan first, tests first, make check green, reviewer subagents, add one progress entry in docs/progress/entries/ (from TEMPLATE.md) and update your module file in docs/progress/modules/, run make progress (never edit PROGRESS.md by hand), commit.
+When done, run the evaluation(s): E4 (the tool configuration) and fix every MUST finding.
 Done when: Planted bad claims all blocked; commit phase-9d.
 ```

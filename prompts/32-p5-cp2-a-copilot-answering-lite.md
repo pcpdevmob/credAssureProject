@@ -6,7 +6,7 @@ Plan v3.4 phase P5 (`docs/plan/CredAssure_Prompt_Pack_v3.4.md`). Supersedes the 
 |---|---|---|---|
 | Opus 5.5 | `feature/copilot-p5` | P4 merged; ADR d accepted | — |
 
-## Paste into Claude Code
+## Paste into the coding tool
 
 ```markdown
 Phase P5 on branch feature/copilot-p5. Plan v3.4 §7.1.

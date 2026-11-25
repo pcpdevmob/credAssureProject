@@ -6,7 +6,7 @@ Plan v3.4 phase P10 (`docs/plan/CredAssure_Prompt_Pack_v3.4.md`). Supersedes the
 |---|---|---|---|
 | Sonnet 5.5 (10.1, 10.3) / Opus 5.5 (10.2) | `feature/deploy-p10` | P8, P9 merged | record the demo video |
 
-## Paste into Claude Code
+## Paste into the coding tool
 
 ```markdown
 Phase P10 on branch feature/deploy-p10: run prompts/24-phase12-ship.md, plus:

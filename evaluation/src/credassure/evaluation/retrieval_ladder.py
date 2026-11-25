@@ -5,7 +5,7 @@ Rungs: 0 baseline index · 1 contextual chunk headers (one re-ingest with RETRIE
 only) and on the dev split, with recall@5 (a relevant passage in the top 5, section level) and MRR@10.
 
 The answerability threshold is chosen on the dev split ONLY (20 answerable queries plus the
-dev-only unanswerable set), never on the frozen 40 or the 100-item test set (CLAUDE.md, plan v3.4).
+dev-only unanswerable set), never on the frozen 40 or the 100-item test set (plan v3.4).
 Rule: the highest top-score threshold with at most MAX_FALSE_ABSTAIN answerable dev queries
 abstaining, maximising correctly abstained dev negatives; ties keep the lower threshold.
 

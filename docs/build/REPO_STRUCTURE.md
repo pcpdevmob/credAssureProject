@@ -9,7 +9,7 @@ credassure/
 ├── SECURITY.md                   # how to report issues; threat-model link
 ├── CHANGELOG.md                  # Keep a Changelog + semver tags
 ├── LICENSE                       # MIT (code); data licences in docs/data/
-├── CLAUDE.md  START_HERE.md  PROGRESS.md   # PROGRESS.md is generated from docs/progress/ (make progress)
+├── START_HERE.md  PROGRESS.md   # PROGRESS.md is generated from docs/progress/ (make progress)
 ├── pyproject.toml                # uv workspace root (members: agents/*, packages/*, apps/gateway, evaluation)
 ├── uv.lock
 ├── package.json  pnpm-workspace.yaml  pnpm-lock.yaml   # JS workspace (apps/web, packages/api-client)
@@ -28,7 +28,7 @@ credassure/
 │   │   │   ├── supervisor_service.py   # interface agent routers use to run a stage
 │   │   │   └── openapi.py        # export openapi.json
 │   │   └── tests/                # contract tests per route, auth/role tests
-│   └── web/                      # React UI (see CLAUDE_CODE_UI_PROMPT.md)
+│   └── web/                      # React UI (see the build prompt)
 │       ├── package.json  vite.config.ts  tsconfig.json  index.html
 │       ├── src/
 │       │   ├── app/              # providers, router, layout shell, error boundary
@@ -118,8 +118,8 @@ credassure/
 │   ├── workflows/ci.yml          # restored (ADR 0028); .githooks/pre-push runs the same gates locally (ADR 0027)
 │   ├── CODEOWNERS                # one owner per agents/<x>/, shared packages need two reviewers
 │   └── pull_request_template.md  # requirement IDs, scope items, eval impact, screenshots for UI
-├── .claude/                      # Claude Code settings, hooks, commands, subagents
-└── .cursor/                      # Cursor rules
+├── the tool configuration                      # the coding tool settings, hooks, commands, subagents
+└── the tool configuration                      # Cursor rules
 ```
 
 ## Ownership

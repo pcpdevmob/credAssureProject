@@ -74,7 +74,7 @@ Acceptance: baseline runs end to end; summary table printed per category and fai
 
 Scope items built in this phase (docs/BUILD_SCOPE.md): #1 Ablation switch paths; #7 Repayment date → week mapping.
 ```
-Implement src/credassure/engines/ as PURE functions per .cursor/rules/20-money-and-calculation.mdc:
+Implement src/credassure/engines/ as PURE functions per the tool configuration:
 cashflow.py (WC-03..06): weekly table over FORECAST_WEEKS, confirmed receipts only, peak shortfall + week +
 duration, recommendation formula, bridge from indicative amount that sums exactly.
 validators.py (WC-01/02): missing fields → Blocker naming field; duplicates, unit/currency, totals,

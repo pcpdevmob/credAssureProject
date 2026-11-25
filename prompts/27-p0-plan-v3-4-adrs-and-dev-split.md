@@ -6,7 +6,7 @@ Plan v3.4 phase P0 (`docs/plan/CredAssure_Prompt_Pack_v3.4.md`). Supersedes the 
 |---|---|---|---|
 | Opus 5.5 | `feature/docs-p0` | S2 merged | ask the mentor the 4 questions (plan §10); label the dev split |
 
-## Paste into Claude Code
+## Paste into the coding tool
 
 ```markdown
 Phase P0 on branch feature/docs-p0. Show me the plan first. Plan v3.4 §0, §3, §4, §7, §8, §10.

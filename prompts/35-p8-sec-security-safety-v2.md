@@ -6,7 +6,7 @@ Plan v3.4 phase P8 (`docs/plan/CredAssure_Prompt_Pack_v3.4.md`). Supersedes the 
 |---|---|---|---|
 | Opus 5.5 | `feature/security-p8` | P3 merged; ADR c accepted | — |
 
-## Paste into Claude Code
+## Paste into the coding tool
 
 ```markdown
 Phase P8 on branch feature/security-p8. Plan v3.4 §5, §6, §8.

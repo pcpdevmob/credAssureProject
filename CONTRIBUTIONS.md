@@ -9,6 +9,11 @@ log` authorship does not show who did what. The evidence for each member is the 
 with their name in `docs/progress/entries/`, and the reviews they signed in `docs/plan/human-review.md`. The "on record"
 lists below are compiled from the repository; each member writes and signs their own statement.
 
+**Co-author trailers.** Commits that touch a module carry a `Co-authored-by:` trailer for that module's owner in
+`.github/CODEOWNERS` (Mousita for `agents/onboarding/` from 21 Nov, Tejas for 0.1-0.2). The commit author is
+unchanged. The trailer records who owns the module, not who typed each line; the signed statements below say what each
+member wrote. `git shortlog -sne --group=author --group=trailer:co-authored-by` lists both.
+
 **Owners (set by Pritish, 25 Nov).** Mousita took over the onboarding agent at 0.3.0 (Tejas built 0.1–0.2); Abhishek
 owns the Supervisor and the gateway as well as the Critic; Suresh owns the web app and deployment as well as working
 capital; Adesh owns the copilot; retrieval is Adesh and Tejas; the corpus is Tejas and Pritish. GitHub handles are in
@@ -43,8 +48,7 @@ is not visible there: each member adds it in their own statement and signs it.
 **Owns:** LendWise, loan-cost engine, lender simulator; corpus with Tejas.
 
 **On record in the repository**
-- About 310 commits on `main` from Pritish's machine (identities `pcpdev` / `pcpdevmob`, plus commits made with Claude Code
-  there), every PR from #1 to #59 except #43, and 73 progress entries.
+- About 410 commits on `main` from Pritish's machine (identities `pcpdev` / `pcpdevmob`), every PR from #1 to #59 except #43, and 73 progress entries.
 - Gold answers for 15 frozen items: cash flow 15.
 - LendWise agent (LW-01..14): KFS charge extraction, offer audit, APR by IRR with GST and CGTMSE, affordability, ranking,
   one fee-waiver negotiation round; loan-cost engine and lender simulator. Extended to three rounds (fee waiver, rate
@@ -111,7 +115,7 @@ _What you built (test set, onboarding 0.1–0.2, retrieval, corpus), decisions, 
 **Owns:** The Employee Onboarding agent from 0.3.0.
 
 **On record in the repository**
-- 3 commits on 21 Nov (`6936705`, `ca5f0bb`, `bdc6007`) and PR #43 (merged): the onboarding 0.3.0 design and a stand-alone readiness prototype.
+- 3 commits on 21 Nov (`f7ff0b7`, `bdac3d0`, `6f9d176`) and PR #43 (merged): the onboarding 0.3.0 design and a stand-alone readiness prototype.
 - The prototype is kept in `agents/onboarding/prototype` (127 tests, run by `make onboarding-prototype`); its design (own rule checker, who-fixes-it next actions, per-record evidence) is what onboarding 0.3.0 implements.
 
 **Assigned, not yet on record**

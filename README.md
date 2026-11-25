@@ -28,7 +28,7 @@ Responsible AI and security: [System card](docs/SYSTEM_CARD.md) · [Threat model
 7. [Run the app](#7-run-the-app)
 8. [Tests and quality checks](#8-tests-and-quality-checks)
 9. [Evaluation](#9-evaluation)
-10. [Working with Claude Code](#10-working-with-claude-code-cursor-or-other-ai-tools)
+10. [Working with the coding tool](#10-working-with-the-coding-tool-cursor-or-other-ai-tools)
 11. [Team workflow: branches, PRs and progress](#11-team-workflow-branches-prs-and-progress)
 12. [Troubleshooting](#12-troubleshooting)
 13. [Repository layout](#13-repository-layout)
@@ -105,7 +105,7 @@ Then edit `.env` by hand:
 | `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY` | with tracing | From your self-hosted Langfuse project (§7) |
 
 Rules:
-- **Never commit `.env`**, never paste it into a chat, and never ask Claude Code to read it (a hook blocks it).
+- **Never commit `.env`**, never paste it into a chat, and never ask the coding tool to read it (a hook blocks it).
 - Keep certificates **outside the repo** (`mkdir -p ~/.credassure/certs && chmod 700 ~/.credassure`).
 - Don't put `MODELS` or `E2E_*` in `.env`. `MODELS` is a make variable (§5), and the e2e targets set their own URLs (§8).
 
@@ -327,7 +327,7 @@ Incidents (endpoint down, quota, locked DB, corpus missing, demo reset): [docs/d
 ## 8. Tests and quality checks
 
 ```bash
-make check-fast    # ruff + PROGRESS.md check + tests not marked slow (the Claude stop hook runs this)
+make check-fast    # ruff + PROGRESS.md check + tests not marked slow (the coding tool stop hook runs this)
 make check         # ruff, ruff format, mypy --strict, pytest (incl. the slow Schemathesis fuzz), corpus refs, bandit, import-linter, PROGRESS.md check. Must be green before commit
 make test          # full suite with coverage
 make audit         # pip-audit (accepted advisories: docs/security/risk-register.md)
@@ -371,7 +371,7 @@ make openapi && make client       # regenerates openapi.json and packages/api-cl
 | `make eval-judge` / `make eval-kappa` | Judge J1 on free-text answers (`SAMPLE=all` exports every judged answer), then κ against the human labels |
 | `make eval-report` | E13 report: full system vs best baseline, ablation effects (BRD §12 claim rule), failure taxonomy, cost |
 | `make load-smoke` | 10 concurrent demo cases; p95 per stage (Q6: funding < 60 s) |
-| `/eval E1 … E18` | Claude Code evaluation reports, saved to `evaluation/reports/` |
+| `/eval E1 … E18` | The coding tool evaluation reports, saved to `evaluation/reports/` |
 | `/freeze-g1` | Writes `evaluation/FROZEN.sha256`, **only after** the human checks are done |
 
 Frozen artefacts: the 100-item test set (25/10/15/15/5/6/8/8/3/5 by BRD §13 category), 40 retrieval queries (v1.0 + v1.1-silver), 20 red-team prompts, bad-citation fixtures, the RBI KFS APR illustration, and `data/frozen/v1`.
@@ -393,26 +393,26 @@ The silver figure is high partly because silver labels and the retriever share s
 
 ---
 
-## 10. Working with Claude Code, Cursor or other AI tools
+## 10. Working with the coding tool, Cursor or other AI tools
 
 **Taking over or continuing a module?** Follow [docs/setup/team-handoff.md](docs/setup/team-handoff.md). It covers where the context lives, the handoff steps, a kickoff prompt for any tool, the guardrail checklist and the module map.
 
 | Tool | Loads automatically | Guardrails |
 |---|---|---|
-| Claude Code | [CLAUDE.md](CLAUDE.md) (+ the docs and rules it imports), `.claude/` | Enforced by hooks |
-| Cursor | `.cursor/rules/*.mdc`, [AGENTS.md](AGENTS.md) | Manual checklist (handoff §4) |
-| Codex, Copilot, Windsurf, Gemini… | [AGENTS.md](AGENTS.md) | Manual checklist (handoff §4) |
+| The coding tool | the project rules (+ the docs and rules it imports), the tool configuration | Enforced by hooks |
+| Cursor | the tool configuration, the project rules | Manual checklist (handoff §4) |
+| Codex, Copilot, Windsurf, Gemini… | the project rules | Manual checklist (handoff §4) |
 
-Open Claude Code in the repo root; it loads `CLAUDE.md` automatically.
+Open the coding tool in the repo root; it loads `the project rules` automatically.
 
-- **Build prompts:** `prompts/00–26` (phases), `CLAUDE_CODE_UI_PROMPT.md` (UI U0–U6), [docs/build/PHASE_PROMPTS.md](docs/build/PHASE_PROMPTS.md). One phase per session; stop at its gate.
+- **Build prompts:** `prompts/00–26` (phases), `the build prompt` (UI U0–U6), [docs/build/PHASE_PROMPTS.md](docs/build/PHASE_PROMPTS.md). One phase per session; stop at its gate.
 - **Commands:** `/status`, `/next`, `/phase <n>`, `/gate <G>`, `/eval <E#>`, `/review`, `/ui U<n>`, `/freeze-g1`.
-- **Progress:** read `PROGRESS.md` first; it is **generated**. Claude Code adds one entry file in `docs/progress/entries/`, updates the module file and runs `make progress`; `.claude/settings.json` denies hand edits of `PROGRESS.md` (§11).
-- **Subagents** (`.claude/agents/`): `brd-conformance`, `security-reviewer`, `money-auditor`, `test-writer`, `eval-analyst`.
-- **Hooks** (`.claude/hooks/`): `guard_paths.py` (blocks `.env`, certificates, raw corpus, frozen sets), `guard_bash.py` (blocks `git push`, recursive force delete, printing `.env`), `format_python.py`, `check_before_stop.py` (runs `make check-fast`).
+- **Progress:** read `PROGRESS.md` first; it is **generated**. The coding tool adds one entry file in `docs/progress/entries/`, updates the module file and runs `make progress`; the tool configuration denies hand edits of `PROGRESS.md` (§11).
+- **Subagents** (the tool configuration): `brd-conformance`, `security-reviewer`, `money-auditor`, `test-writer`, `eval-analyst`.
+- **Hooks** (the tool configuration): `guard_paths.py` (blocks `.env`, certificates, raw corpus, frozen sets), `guard_bash.py` (blocks `git push`, recursive force delete, printing `.env`), `format_python.py`, `check_before_stop.py` (runs `make check-fast`).
 
 Working rules:
-- **Claude never pushes.** You review the diff and push yourself.
+- **The coding tool never pushes.** You review the diff and push yourself.
 - Never paste secrets or passwords into a prompt.
 - Synthetic data only: no real customer, PAN, Aadhaar or account data, ever.
 - No code path may accept, sign or submit a lender offer. Negotiation produces drafts for a human.
@@ -433,7 +433,7 @@ Six people work on different modules at the same time. Two rules keep that confl
 | Merge commits only | Squash and rebase are disabled in GitHub settings: evaluation reports and progress entries cite commit hashes, and squash or rebase would change them |
 | CI on every PR | `.github/workflows/ci.yml` (ADR 0028) runs `make check`, openapi-diff, eval-fast on prompt changes, audit and the web build — the same gates as `.githooks/pre-push` (ADR 0027) |
 | Resync after every merge | `git switch <your-branch> && git pull origin main` |
-| Claude Code never pushes | You review the diff, push, and open the PR |
+| The coding tool never pushes | You review the diff, push, and open the PR |
 | Code owners review their module | `.github/CODEOWNERS` requires the module owner's approval |
 
 ### Where progress lives
@@ -483,8 +483,8 @@ status: done               # done | in_progress | blocked
 ### If `PROGRESS.md` conflicts during a merge
 Don't resolve it by hand. Take either side, run `make progress`, and commit the regenerated file. Entry and module files can't conflict, because each one is written by only one person.
 
-### Claude Code
-`CLAUDE.md` and every `prompts/*.md` tell Claude Code to write an entry file and update the module file, never `PROGRESS.md` itself. Each phase report it gives you should name the entry file it created.
+### the coding tool
+`the project rules` and every `prompts/*.md` tell the coding tool to write an entry file and update the module file, never `PROGRESS.md` itself. Each phase report it gives you should name the entry file it created.
 
 ---
 
@@ -532,11 +532,11 @@ CredAssure/
 ├── evaluation/             # testset, retrieval, gold, judging, redteam, baseline, reports
 ├── var/                    # local databases, Chroma, caches, backups (git-ignored)
 ├── scripts/                # demo_reset.py, e2e_guard.py, copilot_live.py
-├── prompts/                # Claude Code build prompts 00–26 (agent prompts live in agents/*/prompts/)
+├── prompts/                # the coding tool build prompts 00–26 (agent prompts live in agents/*/prompts/)
 ├── deploy/                 # env profiles, Dockerfiles, compose, nginx, backup/restore scripts
 ├── docs/                   # requirements, architecture, adr, data, setup, security, ui, build
-├── .claude/  .cursor/  .github/
-└── CLAUDE.md  PROGRESS.md (generated)  Makefile  pyproject.toml  package.json  openapi.json
+├── the tool configuration  .github/
+└── PROGRESS.md (generated)  Makefile  pyproject.toml  package.json  openapi.json
 ```
 
 ---

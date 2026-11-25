@@ -26,7 +26,7 @@ Reviewer rule (ADR 0031): don't review anything for a module you own. The table 
 If you wrote or designed code that Pritish committed from his machine, list it under **"Written by me, committed by
 Pritish"** in your statement. Give the file paths or the commit hashes (`git log --oneline -- <path>` shows them, or
 use the file's History view on GitHub). Pritish confirms each line in his review of your PR. Only list what you
-actually wrote: the history is not changed, and every line has to hold up if an examiner asks.
+actually wrote: commit authors are not changed (module owners are credited with a `Co-authored-by:` trailer), and every line has to hold up if an examiner asks.
 
 ## Steps in the GitHub web editor
 

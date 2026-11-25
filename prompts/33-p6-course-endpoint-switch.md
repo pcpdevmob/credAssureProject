@@ -8,7 +8,7 @@ Plan v3.4 phase P6 (`docs/plan/CredAssure_Prompt_Pack_v3.4.md`). Supersedes the 
 |---|---|---|---|
 | Sonnet 5.5 | `feature/deploy-p6` | P5 merged; course keys and cert paths added to `.env` by you | add the keys; never paste them into the prompt |
 
-## Paste into Claude Code
+## Paste into the coding tool
 
 ```markdown
 Phase P6 on branch feature/deploy-p6. Don't read .env; check only that variables are set.

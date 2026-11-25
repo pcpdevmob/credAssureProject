@@ -6,7 +6,7 @@ Plan v3.4 phase P4 (`docs/plan/CredAssure_Prompt_Pack_v3.4.md`). Supersedes the 
 |---|---|---|---|
 | Opus 5.5 | `feature/copilot-p4` | P0 dev split labels confirmed by a human; P3 merged; mentor's reranker answer known | — |
 
-## Paste into Claude Code
+## Paste into the coding tool
 
 ```markdown
 Phase P4 on branch feature/copilot-p4. Plan v3.4 §7.1. Tune ONLY on evaluation/retrieval/dev. Never read

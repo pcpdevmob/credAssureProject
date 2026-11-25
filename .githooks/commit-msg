@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Strip Claude/Anthropic Co-Authored-By trailers from commit messages.
+# Strip tool-added co-author trailers from commit messages.
 set -euo pipefail
 msg_file=$1
 tmp=$(mktemp)
 # shellcheck disable=SC2016
-sed -E '/^[Cc]o-[Aa]uthored-[Bb]y:[[:space:]]*Claude/d; /^[Cc]o-[Aa]uthored-[Bb]y:.*anthropic\.com/d' "$msg_file" >"$tmp"
+sed -E '/^[Cc]o-[Aa]uthored-[Bb]y:.*(anthropic|cursor)\.com/d' "$msg_file" >"$tmp"
 mv "$tmp" "$msg_file"
