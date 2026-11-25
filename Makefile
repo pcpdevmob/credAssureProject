@@ -45,7 +45,7 @@ check:  ## ruff, ruff format, mypy --strict, pytest, bandit, PROGRESS.md check
 onboarding-prototype:  ## Mousita's stand-alone onboarding prototype: its own 127 tests (agents/onboarding/prototype; not wired into the app)
 	cd agents/onboarding/prototype && uv run python -m pytest -q
 
-check-fast:  ## ruff + PROGRESS.md check + fast tests (used by the Claude stop hook)
+check-fast:  ## ruff + PROGRESS.md check + fast tests (used by the stop hook)
 	uv run ruff check .
 	uv run python scripts/progress.py --check
 	uv run pytest -q -m "not slow"
