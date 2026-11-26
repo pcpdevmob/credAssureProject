@@ -1,4 +1,4 @@
-"""In-memory fakes for the Supervisor graph tests (Phase 8a, docs/build/phase8-api-spec.md).
+"""In-memory fakes for the Supervisor graph tests (Phase 8a).
 
 No database, no network, no model: store, ledger, tools and clock are dict/list fakes, and the graph
 uses LangGraph's InMemorySaver. The Supervisor is imported lazily inside ``build`` so a missing

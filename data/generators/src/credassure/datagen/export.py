@@ -45,7 +45,7 @@ COLUMNS = [
 WIDTHS = [18, 60, 9, 60, 26, 9, 11, 11, 7, 12, 16, 14, 13, 11, 16]
 # [Name 1] and [Name 6] are still to be named (PROGRESS.md G1-final checklist)
 OWNERS = ["[Name 1]", "Tejas", "Suresh", "Pritish", "Abhishek", "[Name 6]"]
-# Owner -> agent they own (BRD §5.2, docs/build/REPO_STRUCTURE.md ownership table)
+# Owner -> agent they own (BRD §5.2)
 OWNER_AGENT = dict(
     zip(
         OWNERS,

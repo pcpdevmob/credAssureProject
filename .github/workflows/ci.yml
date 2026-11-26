@@ -65,7 +65,7 @@ jobs:
               - '**/pyproject.toml'
 
   python:
-    name: make check (ruff, mypy, pytest incl. fuzz, bandit, PROGRESS.md)
+    name: make check (ruff, mypy, pytest incl. fuzz, bandit)
     needs: changes
     # the `ci-mysql` label runs only the MySQL job
     if: github.event.action != 'labeled' || github.event.label.name == 'ci'
