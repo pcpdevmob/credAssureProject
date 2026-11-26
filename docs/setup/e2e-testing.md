@@ -43,7 +43,7 @@ file cannot be locked to you.
 ## 2. Get the code
 
 ```bash
-git clone https://github.com/pcpdevmob/iitkgpCredAssure.git CredAssure   # private: ask Pritish for access
+git clone https://github.com/pcpdevmob/credAssureProject.git CredAssure
 cd CredAssure
 git switch main && git pull
 make install            # installs every Python package; never use a bare `uv sync`

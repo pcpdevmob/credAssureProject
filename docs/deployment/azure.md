@@ -52,7 +52,7 @@ the evaluation are unchanged.
    ```
 6. **Set up** (on the VM):
    ```bash
-   git clone https://github.com/pcpdevmob/iitkgpCredAssure.git credassure && cd credassure
+   git clone https://github.com/pcpdevmob/credAssureProject.git credassure && cd credassure
    sudo bash deploy/scripts/server-setup.sh
    exit   # log in again so the docker group applies, then: cd credassure
    cp deploy/env/server.env.example .env && chmod 600 .env

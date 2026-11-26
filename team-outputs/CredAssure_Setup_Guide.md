@@ -22,7 +22,7 @@ Install the tools below before you start. On Windows every tool except Ollama go
 
 **Disk.** Allow about 15 GB: the model (~5 GB), the embedding and reranker models (~1.5 GB, downloaded on first use), the Python and Node dependencies, and the document library.
 
-**Access.** You need read access to the private GitHub repo and a way to get the raw document library: a copy from a teammate, or time to rebuild it from the sources (it is not in git; see *Build the data*). Use **npm** for the web app; don't use yarn or `corepack enable`.
+**Access.** The GitHub repo is public. You need a way to get the raw document library: a copy from a teammate, or time to rebuild it from the sources (it is not in git; see *Build the data*). Use **npm** for the web app; don't use yarn or `corepack enable`.
 
 ## Set up on a Mac
 
@@ -51,7 +51,7 @@ Install the tools below before you start. On Windows every tool except Ollama go
 4. Clone the repo onto the working branch and install:
 
    ```bash
-   git clone https://github.com/pcpdevmob/iitkgpCredAssure.git CredAssure
+   git clone https://github.com/pcpdevmob/credAssureProject.git CredAssure
    cd CredAssure
    git checkout feature/LendWise
    git config core.hooksPath .githooks
@@ -105,7 +105,7 @@ The Makefile and scripts need a Linux shell, so the project runs inside WSL2. Ol
 5. **Clone into the Linux file system** (`~`, not `/mnt/c/...`, which is many times slower), then install:
 
    ```bash
-   cd ~ && git clone https://github.com/pcpdevmob/iitkgpCredAssure.git CredAssure
+   cd ~ && git clone https://github.com/pcpdevmob/credAssureProject.git CredAssure
    cd CredAssure
    git checkout feature/LendWise
    git config core.hooksPath .githooks

@@ -6,3 +6,12 @@
 a1d4d9a4ab2250f55f42aa7b115909d76b07cb2e:apps/gateway/tests/test_settings.py:generic-api-key:237
 # The first version of the note above quoted that line and was flagged itself (reworded since).
 550c624fca3ae051563d85ed20b3a08e1b2ba530:.gitleaksignore:generic-api-key:4
+# Re-pinned for the public repository (26 Nov 2026): the history rewrite changed commit IDs. All are
+# test constants, ledger keys, a citation ID and empty JWT_SECRET= placeholders, not secrets.
+0bcb3b26ded9459675e91b53095c50d82075099a:.gitleaksignore:generic-api-key:4
+87411214a9bf2a29b06c5744895c8bd99be4e04c:apps/gateway/tests/test_settings.py:generic-api-key:237
+72d5218c49ec3b9a4137100258ad4a2c511d49ad:apps/web/tests/ui-plain.test.tsx:generic-api-key:93
+6f2509ec5bbadbdf33272a4eaeb6f5670f753e9e:apps/web/tests/u3.test.tsx:generic-api-key:25
+849bc65ac34c1abd2c3c3568b265d8401580b3ba:evaluation/reports/E4-2026-11-16.md:generic-api-key:18
+2a8bcad0048ce6d002580c3c0c73d49bcc69e7d7:.env.example:generic-api-key:28
+d44331e2868cce364cf27027741756029b69b2f1:CURSOR_MASTER_PROMPT.md:generic-api-key:38
