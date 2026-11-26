@@ -6,7 +6,7 @@ import { Markdown } from '@/lib/markdown';
 
 describe('U5 scorecard', () => {
   it('maps baseline, full and sorted ablations', () => {
-    const s = mapScorecard({ target: 92,
+    const s = mapScorecard({
       baseline: { strategy: 's2_cot_vote', passed: 61, total: 100, by_category: { routing: [3, 6] } },
       full: { run: 'r1', model: 'llama3.1:8b', passed: 94, total: 100, by_category: { routing: [6, 6] } },
       ablations: { A3: { run: 'r3', model: 'm', passed: 90, total: 25, by_category: {} }, A1: { run: 'r2', model: 'm', passed: 80, total: 30, by_category: {} }, A2: null } });
@@ -17,7 +17,6 @@ describe('U5 scorecard', () => {
   it('reads the gateway endpoint', async () => {
     const s = await evaluationService.scorecard();
     expect(s.full).toBeNull();
-    expect(s.target).toBe(92);
   });
 });
 

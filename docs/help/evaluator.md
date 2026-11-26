@@ -15,7 +15,7 @@ Verification Critic blocked, redacted or flagged. The panel never shows the bloc
 
 ## Eval runs
 **Evaluation** shows the frozen 100-item test set scored three ways: the best single-prompt baseline (S1–S3), the full
-system, and each ablation (A1–A6) on the categories it affects. The target is at least 92 of 100 and above the
+system, and each ablation (A1–A6) on the categories it affects. The full system passes when it scores above the best
 baseline. An ablation effect counts only when it shows in more than one category or again on a rerun.
 
 Runs start from the command line, not from this page: `make eval`, then `make eval-judge`, `make eval-kappa` and

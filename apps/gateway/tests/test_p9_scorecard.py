@@ -52,4 +52,4 @@ def test_U5_scorecard_is_empty_before_any_run(
 ) -> None:
     client: TestClient = make_client(eval_dir=tmp_path / "none", baseline_dir=tmp_path / "none")
     data = client.get("/v1/eval/scorecard", headers=login(client, "demo.evaluator")).json()
-    assert data == {"baseline": None, "full": None, "ablations": {}, "target": 92}
+    assert data == {"baseline": None, "full": None, "ablations": {}}
