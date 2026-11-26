@@ -1,10 +1,11 @@
 # End-to-end testing: set up, sign in and test every use case
 
-For teammates who test the full app by hand on their own laptop. Follow the parts in order the first time; after that,
-part 5 (start) and part 7 onwards are all you need. All data is synthetic and every lender is simulated.
+For teammates who test the full app by hand, on the deployed site or on their own laptop. Source:
+https://github.com/pcpdevmob/credAssureProject. On your laptop, follow the parts in order the first time; after that,
+part 5 (start) and part 7 onwards are all you need. On the deployed site, start at part 6. All data is synthetic and every lender is simulated.
 
-Checked on 25 Nov 2026 from a fresh clone of `main` (Linux, model off and model unreachable): the app starts, the
-preparer signs in, scenario 01 is created from the test pack and runs to the Director with a funding need of
+Checked on 26 Nov 2026 from a fresh clone of the public repository's `main` (`make e2e-report`: 50 of 50 checks
+passed; also 50 of 50 on the deployed site) and on 25 Nov by hand (Linux, model off): the app starts, the preparer signs in, scenario 01 is created from the test pack and runs to the Director with a funding need of
 ₹1,42,00,000 and the ranking Brahmaputra first, Aravali second.
 
 ## 0. Read this first
@@ -13,7 +14,7 @@ preparer signs in, scenario 01 is created from the test pack and runs to the Dir
   gives you (nothing to install: use parts 6–13 and the scenario files). Or on your own laptop (parts 1–5): your
   accounts, passwords and cases then live only in your own database (`var/case.db`), and a password from someone
   else's laptop never works on yours.
-- **Use `main`.** Older instructions said `feature/LendWise`; that branch is no longer updated.
+- **Use `main`** of https://github.com/pcpdevmob/credAssureProject (public).
 - **Start without a model the first time** (part 4, option A). Every check, figure, ranking, route and approval works
   without one. Add the model once the app runs.
 - **Don't reload the page or type a URL.** Sign-in is kept only in the page's memory, so a reload signs you out (by
@@ -114,6 +115,9 @@ output says so: that happens when Langfuse is running). Stop with Ctrl-C, or `ma
 If it ends with `STOP`, read the line after it and part 12.
 
 ## 6. Accounts and first sign-in
+
+**On the deployed site** Pritish gives you a username and a first password separately; you set your own at first
+sign-in (approvers then set up the authenticator app). The rest of this part is for your own laptop.
 
 Your first passwords are in your own file, `var/initial-passwords.txt` (only you can read it). Each line is
 *username, role, password*; the password is the last part (`xxxx-xxxx-xxxx-xxxx`, dashes included).
