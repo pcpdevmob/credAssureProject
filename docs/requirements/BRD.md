@@ -60,7 +60,7 @@ A Supervisor (the master agent), whose decisions are made by code, runs five gat
 
 The system runs only on a hosted language model of 8 billion parameters or fewer, without fine-tuning, as Track B of the IIT Kharagpur capstone requires. Its design principle is: **the AI reads, explains and drafts; code calculates, routes and gates; a human approves.**
 
-![CredAssure in one picture](images/visual_explainer.png)
+*Figure: CredAssure in one picture (not stored in the repository; see the architecture document and the technical report).*
 
 > **Approval threshold:** If the final validated loan amount is greater than ₹1.5 crore, the proposal goes to the VP, Finance. If it is below ₹1.5 crore, it goes to the Director, Finance. A proposal of exactly ₹1.5 crore follows a configurable rule; by default it is held for a human decision until the business owner sets the rule.
 
@@ -157,7 +157,7 @@ Rules for working agent-wise: all agents return one shared result format and use
 
 Agents never call each other. Every hand-off goes through the Supervisor and a fact ledger that holds each validated number with its source. Thirteen tools written in plain code do every calculation and check.
 
-![CredAssure architecture](images/architecture.png)
+*Figure: CredAssure architecture (not stored in the repository; see the architecture document and the technical report).*
 
 | Component | Type | What it does |
 | --- | --- | --- |
@@ -199,7 +199,7 @@ Agents never call each other. Every hand-off goes through the Supervisor and a f
 
 Five gated stages run in a fixed order. A failed gate pauses only that stage, and the case resumes there once the blocker is fixed.
 
-![CredAssure workflow](images/flow_chart.png)
+*Figure: CredAssure workflow (not stored in the repository; see the architecture document and the technical report).*
 
 | Step | Description | Gate passes when | If it fails |
 | --- | --- | --- | --- |
@@ -432,7 +432,7 @@ Safety tests: 8 prompt-injection items plus a 20-prompt red-team log; personal-i
 
 ## 15. Delivery Plan, Effort and Gates
 
-![Four-week delivery plan](images/delivery_plan.png)
+*Figure: Four-week delivery plan (not stored in the repository; see the architecture document and the technical report).*
 
 | Gate | Exit criteria | If late |
 | --- | --- | --- |

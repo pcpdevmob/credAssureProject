@@ -2,7 +2,7 @@
 
 Template: arc42 (sections 1–12) · Views: C4 model (context, container, component) · Quality model: ISO/IEC 25010 · Decisions: ADRs (MADR style)
 Status: v2.0, 2026-11-04 · Supersedes: ARCHITECTURE v1 (now `design-detail.md`, kept as the detailed appendix)
-Source of truth for requirements: `docs/requirements/BRD.md` (v3.1). Repository layout: `docs/REPO_STRUCTURE.md` (ADR 0005).
+Source of truth for requirements: `docs/requirements/BRD.md` (v3.1). Repository layout: README §13 (ADR 0005).
 
 ---
 

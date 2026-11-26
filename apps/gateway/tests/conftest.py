@@ -1,4 +1,4 @@
-"""Gateway test fixtures (Phase 8b, docs/build/phase8-api-spec.md "App factory and fixtures").
+"""Gateway test fixtures (Phase 8b).
 
 Each client gets its own tmp case.db seeded with the S08 demo users. No network, no model: with
 the LLM on the app gets a FakeLLM. Fixtures return callables because importlib mode forbids

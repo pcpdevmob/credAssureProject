@@ -11,7 +11,7 @@ first copilot answer would otherwise take much longer. Run the app the evaluated
 from an authenticator app. Enrol `demo.director` and `demo.vp` on the presenter's phone during the rehearsal (first sign-in
 → *Set up two-step verification* → scan the QR code → keep the backup codes), and have the phone unlocked at 8:00. The web app
 keeps the sign-in in memory only: a page reload means signing in again, so move between screens with the app's own links. Every figure below comes from `make demo-reset` and was last
-confirmed in the U3/U4 e2e runs (PROGRESS.md) and E7.
+confirmed in the U3/U4 e2e runs and E7.
 
 > **Case IDs.** `make demo-reset` now seeds 10 cases in a fixed order, so the IDs are stable:
 > **CA-2026-0016** = Demo Electronics Pvt Ltd (the main case, Director route) and

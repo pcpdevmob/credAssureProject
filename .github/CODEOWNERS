@@ -1,4 +1,4 @@
-# Ownership per docs/build/REPO_STRUCTURE.md (scope #42). Owners set by Pritish on 25 Nov 2026.
+# Ownership per BRD §5.2 (scope #42). Owners set by Pritish on 25 Nov 2026.
 # Handles: pcpdevmob = Pritish Patil, pareekabhishek = Abhishek, tejast12 = Tejas, SureN8088 = Suresh,
 # adeshsurroach = Adesh, mousitaD = Mousita Dhar. Shared packages need two reviewers.
 # A handle only takes effect once that person has write access to the repository.
@@ -24,13 +24,4 @@
 /packages/security/             @pareekabhishek @pcpdevmob
 
 # Progress tracking (README §12): each owner edits only their module file; entries are new files per PR.
-/docs/progress/modules/ui.md            @SureN8088
-/docs/progress/modules/copilot.md       @adeshsurroach @SureN8088 @tejast12
-/docs/progress/modules/auth.md          @pareekabhishek
-/docs/progress/modules/rai.md           @pcpdevmob
-/docs/progress/modules/guardrails.md    @pcpdevmob @pareekabhishek
-/docs/progress/modules/deployment.md    @SureN8088
-/docs/progress/modules/docs.md          @pcpdevmob
-/docs/progress/modules/evaluation.md    @pareekabhishek @tejast12
-/docs/progress/gates.md                 @pareekabhishek @pcpdevmob
 /.github/workflows/                     @pareekabhishek @pcpdevmob

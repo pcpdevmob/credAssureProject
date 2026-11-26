@@ -1,6 +1,6 @@
 # CredAssure — Design detail (appendix to docs/architecture/ARCHITECTURE.md)
 
-> Repository layout (§1) is superseded by docs/REPO_STRUCTURE.md (ADR 0005); paths translate via the ADR 0005 path map. Where this file and ARCHITECTURE.md differ, ARCHITECTURE.md wins.
+> Repository layout (§1) is superseded by README §13 (ADR 0005); paths translate via the ADR 0005 path map. Where this file and ARCHITECTURE.md differ, ARCHITECTURE.md wins.
 
 Implements `docs/BRD.md` v3.1. Where this file and the BRD disagree, the BRD wins; raise the conflict.
 
@@ -378,7 +378,7 @@ One Langfuse trace per case run and per eval item; spans per agent step, tool ca
 Mask function = `security.pii.redact`. Metrics recorded: tool calls/task, tokens/stage, latency, Critic
 fallback rate, failure class {retrieval_miss, reasoning_error, tool_error, hallucination}.
 
-## 7. Additions from the build scope (docs/BUILD_SCOPE.md)
+## 7. Additions from the build scope
 
 | Addition | Where | Scope # |
 |---|---|---|

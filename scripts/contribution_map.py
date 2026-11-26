@@ -29,8 +29,7 @@ FOOT = (
     "through sync PRs (#31, #48, #51, #54, #56), so those sync PRs appear under many modules."
 )
 
-# (module path prefix, owner), most specific first; matches .github/CODEOWNERS and
-# docs/build/REPO_STRUCTURE.md.
+# (module path prefix, owner), most specific first; matches .github/CODEOWNERS.
 MODULES: list[tuple[str, str]] = [
     ("agents/onboarding/prototype/", "Mousita"),
     ("agents/onboarding/", "Mousita (0.3.0); Tejas (0.1-0.2)"),

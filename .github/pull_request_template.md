@@ -3,7 +3,7 @@
 ## Requirement IDs
 <!-- e.g. LW-09, BR-07. Every implementing docstring and test name carries the ID. -->
 
-## Build scope items (docs/BUILD_SCOPE.md)
+## Build scope items
 <!-- e.g. #31 -->
 
 ## Eval impact
@@ -12,8 +12,6 @@
 
 ## Progress (README §11)
 - Phase and step (plan Sheet): 
-- [ ] One new entry file in `docs/progress/entries/` and my module file updated
-- [ ] `make progress` run; `PROGRESS.md` not edited by hand
 - [ ] Merge with **Create a merge commit** (not squash or rebase: reports cite commit hashes)
 
 ## Checks

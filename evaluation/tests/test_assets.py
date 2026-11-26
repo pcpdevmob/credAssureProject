@@ -34,7 +34,7 @@ QUERIES = [
 ]
 
 
-# Owner of the agent each category grades (BRD §5.2, docs/build/REPO_STRUCTURE.md; owners set 25 Nov).
+# Owner of the agent each category grades (BRD §5.2; owners set 25 Nov).
 CATEGORY_OWNER = {
     "regulatory": "Adesh",  # copilot
     "onboarding": "Mousita",

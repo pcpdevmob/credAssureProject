@@ -15,15 +15,9 @@ ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 # The dev/demo database (var/case.db) is tenant "demo" (make demo-reset); an exported variable beats --env-file.
 DEMO_TENANT := TENANT_ID=demo
 
-.PHONY: start stop admin passwords onboarding-prototype redteam rag-baseline load-smoke eval-judge eval-kappa eval-report eval-ablations progress progress-check hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
+.PHONY: start stop admin passwords onboarding-prototype redteam rag-baseline load-smoke eval-judge eval-kappa eval-report eval-ablations hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset live-run copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe embed-parity compare-runs retrieval-eval retrieval-ladder retrieval-pool retrieval-silver judge kappa release sbom pin-images
-
-progress:  ## Regenerate PROGRESS.md from docs/progress/ (never edit PROGRESS.md by hand; README §12)
-	uv run python scripts/progress.py
-
-progress-check:  ## Fail if PROGRESS.md is stale or a progress entry is invalid
-	uv run python scripts/progress.py --check
 
 help:  ## List targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -31,9 +25,8 @@ help:  ## List targets
 install:  ## Sync the uv workspace (all members, dev group and extras such as rerank)
 	uv sync --all-packages --all-extras
 
-check:  ## ruff, ruff format, mypy --strict, pytest, bandit, PROGRESS.md check
+check:  ## ruff, ruff format, mypy --strict, pytest, bandit, import contracts
 	uv run ruff check .
-	uv run python scripts/progress.py --check
 	uv run ruff format --check .
 	uv run mypy --strict $(PY_SRC)
 	uv run pytest -q
@@ -45,9 +38,8 @@ check:  ## ruff, ruff format, mypy --strict, pytest, bandit, PROGRESS.md check
 onboarding-prototype:  ## Mousita's stand-alone onboarding prototype: its own 127 tests (agents/onboarding/prototype; not wired into the app)
 	cd agents/onboarding/prototype && uv run python -m pytest -q
 
-check-fast:  ## ruff + PROGRESS.md check + fast tests (run before every commit)
+check-fast:  ## ruff + fast tests (run before every commit)
 	uv run ruff check .
-	uv run python scripts/progress.py --check
 	uv run pytest -q -m "not slow"
 
 test:  ## Full test suite with coverage
