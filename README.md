@@ -4,6 +4,18 @@
 
 > **The design rule:** the model reads, explains and drafts. Code calculates, routes and gates. A human approves.
 
+**Source:** https://github.com/pcpdevmob/credAssureProject · **Live demo:** https://credassure.148-230-103-29.sslip.io (accounts are issued by the team; synthetic data only) · **Team:** IntelliCore, IIT Kharagpur
+
+**Results on the final code** (details in [evaluation/reports/G4-2026-11-24.md](evaluation/reports/G4-2026-11-24.md)):
+
+| Measure | Result |
+|---|---|
+| Frozen 100-item test set | **88 / 100**, against 23 for the best single-prompt baseline on the same model (qwen3:8b) |
+| Safety suite (safety_v2, frozen before the run) | **40 / 40**, no critical failure |
+| Red-team prompts | 25 / 25 resisted |
+| End-to-end, every role and flow (`make e2e-report`) | 50 / 50 on a fresh install and on the deployed site |
+| Regulatory answers | 13 / 25 strict (target 20): the one category below target; see the G4 report |
+
 CredAssure (formerly *FinBridge AI*) takes an MSME working-capital case through four gated stages:
 1. **Onboarding:** confirms from HR records that the preparer is trained and authorised.
 2. **Working Capital:** sizes the funding need from a 26-week cash-flow forecast (not from the ₹2 crore request).
@@ -36,6 +48,7 @@ Responsible AI and security: [System card](docs/SYSTEM_CARD.md) · [Threat model
 
 **Quick start** (after §2–§3):
 ```bash
+git clone https://github.com/pcpdevmob/credAssureProject.git && cd credAssureProject
 make install && npm ci
 make hr-db && make db && make ingest          # data/frozen/v1 is committed (frozen); hr-db rebuilds hr.db
 OLLAMA_CONTEXT_LENGTH=8192 ollama serve      # terminal 1
@@ -522,17 +535,19 @@ CredAssure/
 
 ## 14. Status, data and licences
 
-**Gates**
-- **G1:** provisionally frozen. Final after human judging and κ, the gold hand check, the APR second transcription, remaining owner names and the course baseline.
-- **G2:** passed (2026-11-15).
-- **G3, G4:** pending.
-
-**Done:** Phases 1–10b, UI U0–U6 (U6 live checks pending: H15, H16), and plan v3.4 P0–P5 and P7–P10 (guardrails, copilot v2, evaluation harness,
-security and fairness, RAI UI, ship and RAI documents). Version **1.0.0** (`CHANGELOG.md`).
-
-**Next:** the live runs on the model (E13 full evaluation, ablations, J1 κ, safety_v2 after its freeze, load smoke) for
-Gate G4 (P11), then the report, slides and demo (P12). P6 (course endpoint) waits for agreement. Open team decisions:
-[docs/plan/human-review.md](docs/plan/human-review.md).
+**Status (26 Nov 2026): version 1.1.0, submitted for the capstone on 27 Nov 2026.**
+- **Gates:**
+  - G1 frozen.
+  - G2 passed 15 Nov ([report](evaluation/reports/G2-2026-11-15.md)).
+  - G3 passed 18 Nov ([report](evaluation/reports/G3-2026-11-18.md)).
+  - G4 evaluated 24–25 Nov ([report](evaluation/reports/G4-2026-11-24.md)): above the baseline (88 vs 23); team target of 92 not met (regulatory answers only); safety_v2 40/40.
+- **Deployed:** https://credassure.148-230-103-29.sslip.io (see [docs/deployment/azure.md](docs/deployment/azure.md)).
+- **Known limits:**
+  - Regulatory answers are 13/25 strict.
+  - Retrieval is 22/40 in the top five.
+  - One gateway process with SQLite.
+  - Data is synthetic and negotiation is simulated. Each is stated in the [system card](docs/SYSTEM_CARD.md).
+- **Not run before submission:** the install on a separate clean machine.
 
 **Data**
 - All case, HR, offer and KFS data is **synthetic**.

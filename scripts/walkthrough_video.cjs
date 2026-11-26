@@ -216,7 +216,7 @@ async function decide(user, id, choice, comment, extra = {}) {
       await signOut();
     });
 
-    await card('The model reads and drafts. Code calculates, checks and routes. A person approves.', 'Synthetic data and simulated lenders only. github.com/pcpdevmob/iitkgpCredAssure', 6000);
+    await card('The model reads and drafts. Code calculates, checks and routes. A person approves.', 'Synthetic data and simulated lenders only. github.com/pcpdevmob/credAssureProject', 6000);
   } finally {
     const video = page.video(); await ctx.close();
     if (video) { const dest = path.join(OUT, 'CredAssure_Walkthrough.webm'); await video.saveAs(dest); await video.delete().catch(() => {}); console.log('video:', dest); }
