@@ -9,8 +9,10 @@ preparer signs in, scenario 01 is created from the test pack and runs to the Dir
 
 ## 0. Read this first
 
-- **There is no shared server yet.** Each tester runs their own copy on their own laptop. Your accounts, passwords
-  and cases live only in your own database (`var/case.db`). A password from someone else's laptop never works on yours.
+- **Two ways to test.** On the deployed site, https://credassure.148-230-103-29.sslip.io, with an account Pritish
+  gives you (nothing to install: use parts 6–13 and the scenario files). Or on your own laptop (parts 1–5): your
+  accounts, passwords and cases then live only in your own database (`var/case.db`), and a password from someone
+  else's laptop never works on yours.
 - **Use `main`.** Older instructions said `feature/LendWise`; that branch is no longer updated.
 - **Start without a model the first time** (part 4, option A). Every check, figure, ranking, route and approval works
   without one. Add the model once the app runs.
