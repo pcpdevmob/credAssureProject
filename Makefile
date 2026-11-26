@@ -15,7 +15,7 @@ ENV_FILE := $(if $(wildcard .env),--env-file .env,) --env-file $(MODELS_FILE)
 # The dev/demo database (var/case.db) is tenant "demo" (make demo-reset); an exported variable beats --env-file.
 DEMO_TENANT := TENANT_ID=demo
 
-.PHONY: start stop admin passwords onboarding-prototype redteam rag-baseline load-smoke eval-judge eval-kappa eval-report eval-ablations hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
+.PHONY: walkthrough-video-live start stop admin passwords onboarding-prototype redteam rag-baseline load-smoke eval-judge eval-kappa eval-report eval-ablations hr-db case-template case-from-xlsx e2e e2e-db run-api-e2e run-ui-e2e testset help install check check-fast test run-api run-ui data ingest eval baseline openapi client \
         db demo-reset live-run copilot-live up down audit corpus-audit corpus-harvest corpus-download corpus-import corpus-verify corpus-manual corpus-report corpus-dates corpus-status corpus-junk corpus-export corpus-ingest compose-dev compose-test compose-demo langfuse-env-check \
         langfuse-up langfuse-down ollama-pull backup restore eval-fast openapi-diff llm-probe embed-parity compare-runs retrieval-eval retrieval-ladder retrieval-pool retrieval-silver judge kappa release sbom pin-images
 
@@ -230,6 +230,10 @@ eval-report:  ## E13 report: RUN=var/eval/<run> ABL="var/eval/<run>-A1 ..." OUT=
 
 walkthrough-video:  ## Record the end-to-end walk-through (every role, every flow, Ask CredAssure) on the isolated e2e stack; video in var/walkthrough/ (MODELS=local needs Ollama)
 	MODELS=$(MODELS) bash scripts/walkthrough_video.sh
+
+walkthrough-video-live:  ## Record the walk-through on a deployed site as the accounts in ACCOUNTS=<file> (same file as e2e-report --live); creates 'Walk-through' cases there
+	@test -n "$(ACCOUNTS)" || { echo "usage: make walkthrough-video-live ACCOUNTS=<accounts file>"; exit 1; }
+	ACCOUNTS="$(ACCOUNTS)" bash scripts/walkthrough_video.sh
 
 e2e-report:  ## Every profile and flow end to end on a private local gateway (fresh DB, MFA on, model off); Excel + PDF in var/e2e-report/ (ARGS="--smoke-url https://<site>" adds a read-only check of a deployed site)
 	uv run python scripts/e2e_report.py $(ARGS)

@@ -439,3 +439,12 @@ It runs on the isolated e2e stack (a fresh `var/case-e2e.db`, needs `E2E_PASSWOR
 fails is skipped and leaves a `stopped-<scene>.png` beside the video. Without Ollama the copilot shows its "model
 unavailable" reply and every other scene is unchanged.
 
+**On the deployed site.** The same recording, signed in as the e2e accounts of the live test (section 14's accounts
+file: `BASE_URL`, `ROLE_<role>`, `PW_<username>`, `TOTP_<username>`). Nothing is started locally; it creates about
+six "Walk-through" cases (synthetic) on the site, paces its API calls under the site's rate limit and writes any new
+password or authenticator key back to the file. Ask CredAssure answers only if the site has a model configured.
+
+```bash
+make walkthrough-video-live ACCOUNTS=~/PROJECT/IITKGP/CredAssure-video/e2e-live.env
+```
+

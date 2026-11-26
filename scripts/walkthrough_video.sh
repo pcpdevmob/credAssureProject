@@ -2,6 +2,7 @@
 # make walkthrough-video: record the end-to-end walk-through (every role, every flow, Ask CredAssure) to a video.
 # Starts the isolated e2e stack (fresh var/case-e2e.db, gateway :8001 with MODELS, web :3001), records with
 # scripts/walkthrough_video.cjs, stops what it started, and converts to MP4 when ffmpeg is installed.
+# ACCOUNTS=<file> records on a deployed site instead (the make e2e-report --live accounts file); YES=1 skips the prompt.
 # Needs: .env with E2E_PASSWORD (12+ characters); for real copilot answers MODELS=local with Ollama running
 # (qwen3:8b) and the search index (var/corpus.db, var/chroma-local-bge). Never touches var/case.db.
 set -euo pipefail
@@ -9,6 +10,24 @@ cd "$(dirname "$0")/.."
 MODELS=${MODELS:-local}
 OUT=${OUT:-var/walkthrough/$(date -u +%Y%m%dT%H%M%SZ)}
 mkdir -p "$OUT"
+to_mp4() {
+  if command -v ffmpeg >/dev/null 2>&1; then
+    ffmpeg -loglevel error -y -i "$OUT/CredAssure_Walkthrough.webm" -c:v libx264 -preset veryfast -crf 23 -pix_fmt yuv420p -movflags +faststart "$OUT/CredAssure_Walkthrough.mp4"
+    echo "video: $OUT/CredAssure_Walkthrough.mp4"
+  else
+    echo "video: $OUT/CredAssure_Walkthrough.webm (install ffmpeg for an MP4: brew install ffmpeg)"
+  fi
+}
+# Live site: ACCOUNTS=<file> records on that file's BASE_URL as its accounts; nothing is started locally.
+if [ -n "${ACCOUNTS:-}" ]; then
+  [ -f "$ACCOUNTS" ] || { echo "accounts file not found: $ACCOUNTS"; exit 1; }
+  site=$(grep -E '^BASE_URL=' "$ACCOUNTS" | head -1 | cut -d= -f2-)
+  echo "This records on $site and creates about six 'Walk-through' cases there (synthetic data)."
+  if [ "${YES:-}" != 1 ]; then read -r -p "Continue? [y/N] " ok; [ "$ok" = y ] || [ "$ok" = Y ] || exit 1; fi
+  npx playwright install ffmpeg >/dev/null 2>&1 || echo "note: could not install Playwright's ffmpeg (needed to record); run: npx playwright install ffmpeg"
+  WALK_ACCOUNTS="$ACCOUNTS" node scripts/walkthrough_video.cjs "$OUT"
+  to_mp4; exit 0
+fi
 for port in 8001 3001; do
   if lsof -ti tcp:"$port" >/dev/null 2>&1; then echo "port $port is in use: stop the e2e stack first (make stop)"; exit 1; fi
 done
@@ -31,9 +50,4 @@ for _ in $(seq 1 120); do
 done
 curl -sf http://localhost:3001/login/ >/dev/null || { echo "the e2e stack did not start; see $OUT/api.log and $OUT/web.log"; exit 1; }
 node scripts/walkthrough_video.cjs "$OUT"
-if command -v ffmpeg >/dev/null 2>&1; then
-  ffmpeg -loglevel error -y -i "$OUT/CredAssure_Walkthrough.webm" -c:v libx264 -preset veryfast -crf 23 -pix_fmt yuv420p -movflags +faststart "$OUT/CredAssure_Walkthrough.mp4"
-  echo "video: $OUT/CredAssure_Walkthrough.mp4"
-else
-  echo "video: $OUT/CredAssure_Walkthrough.webm (install ffmpeg for an MP4: brew install ffmpeg)"
-fi
+to_mp4

@@ -4,18 +4,36 @@
 // Before recording it prepares, through the API and off camera: the Director's and VP's authenticator (no admin
 // screen is shown) and the supporting cases (scenarios 02, 03, 04, 08, 09) from data/test-pack. Scenario 01 is
 // created on camera. All data is synthetic. E2E_PASSWORD (the e2e database's fixture password) comes from .env.
+// Live site: WALK_ACCOUNTS=<file> (the same accounts file as make e2e-report --live: BASE_URL=..., ROLE_<role>=<username>,
+// PW_<username>=..., TOTP_<username>=...) records on BASE_URL instead, as those accounts, paced under the site's rate
+// limit. New passwords and authenticator keys are written back to that file (0600).
 const fs = require('node:fs'); const path = require('node:path'); const crypto = require('node:crypto');
 const { chromium } = require(process.env.PW_MODULE || '@playwright/test'); // PW_MODULE: another Playwright install
 
 const ROOT = path.resolve(__dirname, '..'); const PACK = path.join(ROOT, 'data', 'test-pack');
 const OUT = path.resolve(process.argv[2] || path.join(ROOT, 'var', 'walkthrough'));
-const API = process.env.E2E_API_URL || 'http://localhost:8001'; const WEB = process.env.E2E_BASE_URL || 'http://localhost:3001';
+const readEnv = f => Object.fromEntries(fs.readFileSync(f, 'utf8').split('\n').map(l => l.trim()).filter(l => /^[A-Za-z0-9_.-]+=/.test(l)).map(l => [l.slice(0, l.indexOf('=')).trim(), l.slice(l.indexOf('=') + 1).trim()]));
+const ACCOUNTS = process.env.WALK_ACCOUNTS ? path.resolve(process.env.WALK_ACCOUNTS) : null; const LIVE = !!ACCOUNTS;
+const acc = LIVE ? readEnv(ACCOUNTS) : {};
+const BASE = (acc.BASE_URL || '').replace(/\/+$/, '');
+if (LIVE && !BASE) { console.error(`${ACCOUNTS}: set BASE_URL=https://<site>`); process.exit(2); }
+const API = LIVE ? (acc.API_URL || BASE).replace(/\/+$/, '') : process.env.E2E_API_URL || 'http://localhost:8001'; const WEB = LIVE ? BASE : process.env.E2E_BASE_URL || 'http://localhost:3001';
 const envFile = path.join(ROOT, '.env');
-const dotenv = fs.existsSync(envFile) ? Object.fromEntries(fs.readFileSync(envFile, 'utf8').split('\n').filter(l => /^[A-Z0-9_]+=/.test(l)).map(l => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1).trim()])) : {};
-const FIXTURE = process.env.E2E_PASSWORD || dotenv.E2E_PASSWORD;
-if (!FIXTURE) { console.error('Set E2E_PASSWORD in .env (12+ characters), then make e2e-db.'); process.exit(2); }
-const U = { prep: 'demo.preparer', dir: 'demo.director', vp: 'demo.vp', ev: 'demo.evaluator' };
+const dotenv = !LIVE && fs.existsSync(envFile) ? readEnv(envFile) : {};
+const FIXTURE = LIVE ? '' : process.env.E2E_PASSWORD || dotenv.E2E_PASSWORD;
+if (!LIVE && !FIXTURE) { console.error('Set E2E_PASSWORD in .env (12+ characters), then make e2e-db.'); process.exit(2); }
+const U = LIVE ? { prep: acc.ROLE_PREPARER, dir: acc.ROLE_DIRECTOR, vp: acc.ROLE_VP, ev: acc.ROLE_EVALUATOR } : { prep: 'demo.preparer', dir: 'demo.director', vp: 'demo.vp', ev: 'demo.evaluator' };
+for (const [r, u] of Object.entries(U)) if (!u) { console.error(`${ACCOUNTS}: set ROLE_${{ prep: 'PREPARER', dir: 'DIRECTOR', vp: 'VP', ev: 'EVALUATOR' }[r]}=<username>`); process.exit(2); }
 const pw = {}; const secret = {}; const used = {};
+for (const [k, v] of Object.entries(acc)) { if (k.startsWith('PW_') && v) pw[k.slice(3)] = v; if (k.startsWith('TOTP_') && v) secret[k.slice(5)] = v; }
+for (const u of Object.values(U)) if (LIVE && !pw[u]) { console.error(`${ACCOUNTS}: set PW_${u}=<password>`); process.exit(2); }
+// Write new passwords and authenticator keys back to the accounts file, so the next run (and e2e-report --live) signs in.
+function saveAccounts() {
+  if (!LIVE) return; const want = {}; for (const [u, v] of Object.entries(pw)) want[`PW_${u}`] = v; for (const [u, v] of Object.entries(secret)) want[`TOTP_${u}`] = v;
+  const out = fs.readFileSync(ACCOUNTS, 'utf8').replace(/\n+$/, '').split('\n').map(l => { const k = l.split('=')[0].trim(); if (k in want) { const v = want[k]; delete want[k]; return `${k}=${v}`; } return l; });
+  for (const [k, v] of Object.entries(want)) out.push(`${k}=${v}`);
+  fs.writeFileSync(ACCOUNTS, out.join('\n') + '\n', { mode: 0o600 }); fs.chmodSync(ACCOUNTS, 0o600);
+}
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 // ---------- TOTP (RFC 6238), as the authenticator app does
@@ -24,12 +42,20 @@ function totp(sec, step) { const b = Buffer.alloc(8); b.writeBigUInt64BE(BigInt(
 async function code(user) { let s = Math.floor(Date.now() / 30000); if (used[user] !== undefined && s <= used[user]) { await sleep((used[user] + 1) * 30000 - Date.now() + 1200); s = Math.floor(Date.now() / 30000); } used[user] = s; return totp(secret[user], s); }
 
 // ---------- API, off camera
+let lastCall = 0;
 async function call(method, p, tok, body, query) {
   const url = new URL(API + p); for (const [k, v] of Object.entries(query || {})) url.searchParams.set(k, v);
   const h = tok ? { Authorization: `Bearer ${tok}` } : {}; let data;
   if (body instanceof FormData) data = body; else if (body !== undefined) { data = JSON.stringify(body); h['content-type'] = 'application/json'; }
   if (method === 'POST' && p.endsWith('/run')) h['Idempotency-Key'] = crypto.randomUUID();
-  const r = await fetch(url, { method, headers: h, body: data }); const t = await r.text();
+  let r;
+  for (let i = 0; ; i++) {
+    if (LIVE) { const wait = lastCall + 700 - Date.now(); if (wait > 0) await sleep(wait); lastCall = Date.now(); } // about 85 calls a minute
+    r = await fetch(url, { method, headers: h, body: data });
+    if (r.status !== 429 || i >= 5) break;
+    await sleep((Number(r.headers.get('retry-after')) || 20) * 1000 + 500);
+  }
+  const t = await r.text();
   let j; try { j = JSON.parse(t); } catch { j = t; } return [r.status, j];
 }
 async function signInApi(user) {
@@ -38,8 +64,8 @@ async function signInApi(user) {
   if (s !== 200) throw new Error(`${user}: sign-in ${s}`);
   for (let i = 0; i < 4 && b.stage !== 'full'; i++) {
     const t = b.access_token; const n = b.next || [];
-    if (n.includes('change_password')) { const np = `Walk-${crypto.randomBytes(6).toString('hex')}`; await call('POST', '/v1/auth/password', t, { current_password: pass(), new_password: np }); pw[user] = np; [s, b] = await call('POST', '/v1/auth/token', null, { username: user, password: np }); }
-    else if (n.includes('enrol_mfa')) { const [, st] = await call('POST', '/v1/auth/mfa/setup', t, { current_password: pass() }); secret[user] = st.secret; [s, b] = await call('POST', '/v1/auth/mfa/enable', t, { code: await code(user) }); }
+    if (n.includes('change_password')) { const np = `Walk-${crypto.randomBytes(6).toString('hex')}`; await call('POST', '/v1/auth/password', t, { current_password: pass(), new_password: np }); pw[user] = np; saveAccounts(); [s, b] = await call('POST', '/v1/auth/token', null, { username: user, password: np }); }
+    else if (n.includes('enrol_mfa')) { const [, st] = await call('POST', '/v1/auth/mfa/setup', t, { current_password: pass() }); secret[user] = st.secret; saveAccounts(); [s, b] = await call('POST', '/v1/auth/mfa/enable', t, { code: await code(user) }); }
     else if (n.includes('verify_mfa')) { [s, b] = await call('POST', '/v1/auth/mfa/verify', t, { code: await code(user) }); }
   }
   if (b.stage !== 'full') throw new Error(`${user}: could not finish sign-in`);
@@ -58,7 +84,7 @@ async function prepareCase(tok, folder, run = true) {
   const fd = new FormData(); fd.append('file', new Blob([fs.readFileSync(workbook(folder))]), path.basename(workbook(folder)));
   await call('POST', `/v1/cases/${c.case_id}/workbook`, tok, fd);
   for (const f of lenderFiles(folder)) { const d = new FormData(); d.append('file', new Blob([fs.readFileSync(f)]), path.basename(f)); await call('POST', `/v1/cases/${c.case_id}/files`, tok, d, { kind: f.endsWith('.json') ? 'offer' : 'kfs' }); }
-  if (run) { const [, j] = await call('POST', `/v1/cases/${c.case_id}/run`, tok); for (let i = 0; i < 600; i++) { const [, st] = await call('GET', `/v1/jobs/${j.job_id}`, tok); if (['succeeded', 'failed', 'cancelled'].includes(st.status)) break; await sleep(1000); } }
+  if (run) { const [, j] = await call('POST', `/v1/cases/${c.case_id}/run`, tok); for (let i = 0; i < 600; i++) { const [, st] = await call('GET', `/v1/jobs/${j.job_id}`, tok); if (['succeeded', 'failed', 'cancelled'].includes(st.status)) break; await sleep(LIVE ? 3000 : 1000); } }
   return c.case_id;
 }
 
@@ -118,7 +144,7 @@ async function decide(user, id, choice, comment, extra = {}) {
 
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
-  console.log('preparing accounts and supporting cases (off camera)…');
+  console.log(LIVE ? `recording on ${BASE} as ${Object.values(U).join(', ')}; creating 'Walk-through' cases there` : 'preparing accounts and supporting cases (off camera)…');
   const tp = await signInApi(U.prep); await signInApi(U.dir); await signInApi(U.vp); await signInApi(U.ev);
   const C = {};
   for (const f of ['02-vp-route-negotiation', '03-held-exactly-1-5-crore', '04-missing-schedule-question', '08-no-loan-needed', '09-injection-in-lender-document']) { C[f] = await prepareCase(tp, f); console.log(' ', f, C[f]); }
