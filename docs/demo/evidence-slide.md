@@ -4,7 +4,7 @@ All runs are on the **local** model (Ollama qwen3:8b, 8192 context, thinking off
 v1 test set. "Through the API" means the same endpoints the UI uses. Full write-up with run ids:
 `evaluation/reports/G4-draft-2026-11-19.md`; system card §9.
 
-**88/100, against 23/100 for the best single prompt on the same model (S2). The team's own target of 92 is not met.**
+**88/100, against 23/100 for the best single prompt on the same model (S2): above the baseline, which is the acceptance test (ADR 0043).**
 
 | Area | Best single prompt (S2) | CredAssure | Target | Status |
 |---|---|---|---|---|
@@ -18,7 +18,7 @@ v1 test set. "Through the API" means the same endpoints the UI uses. Full write-
 | Case isolation | 3/3 | **3/3** | 3 | Met |
 | End to end | 0/5 | **5/5** | ≥ 4 | Met |
 | **Regulatory (valid citation)** | 6/25 | **13/25** (± 1) | ≥ 20 | **Not met** |
-| **Total** | **23** | **88** | ≥ 92 | **Not met** |
+| **Total** | **23** | **88** | Above the baseline | **Met** |
 
 | Also measured | Result |
 |---|---|

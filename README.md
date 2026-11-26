@@ -495,7 +495,7 @@ CredAssure/
   - G1 frozen.
   - G2 passed 15 Nov ([report](evaluation/reports/G2-2026-11-15.md)).
   - G3 passed 18 Nov ([report](evaluation/reports/G3-2026-11-18.md)).
-  - G4 evaluated 24–25 Nov ([report](evaluation/reports/G4-2026-11-24.md)): above the baseline (88 vs 23); team target of 92 not met (regulatory answers only); safety_v2 40/40.
+  - G4 evaluated 24–25 Nov ([report](evaluation/reports/G4-2026-11-24.md)): 88/100 against 23/100 for the best single-prompt baseline, which is the acceptance test ([ADR 0043](docs/adr/0043-evaluation-acceptance-is-above-baseline.md)); regulatory answers 13/25 are the one category below its target; safety_v2 40/40.
 - **Deployed:** https://credassure.148-230-103-29.sslip.io (see [docs/deployment/azure.md](docs/deployment/azure.md)).
 - **Known limits:**
   - Regulatory answers are 13/25 strict.

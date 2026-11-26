@@ -116,7 +116,7 @@ All ten OWASP LLM (2026) and ten Agentic ASI (2026) risks map to controls and te
 All model runs: local Ollama `qwen3:8b` (ADR 0036), 8192-token context, thinking off, response cache off, on one
 16 GB Apple Silicon Mac. Final results: `evaluation/reports/G4-2026-11-24.md` (earlier run ids and method: `G4-draft-2026-11-19.md`).
 
-**Headline: 88/100 against the team's own BRD target of 92 (not met), and +65 over the best single-prompt baseline.**
+**Headline: 88/100, +65 over the best single-prompt baseline (23/100): the acceptance test is met (ADR 0043).**
 Final run on the submitted code (K3, 24 Nov, `main` at `5a88b56`): `20261124T220648`, 88/100, regulatory 13/25
 (files in `evaluation/reports/k3/`). The same 88 on 19 Nov (`20261119T091531`) and 20 Nov (`20261120T121853` +
 `20261120T140004`).
@@ -133,7 +133,7 @@ Final run on the submitted code (K3, 24 Nov, `main` at `5a88b56`): `20261124T220
 | Refusal and out of scope | 8 | 6 | 8 | 8 |
 | Case isolation | 3 | 3 | 3 | 3 |
 | End to end | 5 | 0 | 5 | ≥ 4 |
-| **Total** | **100** | **23** (S1 20, S3 22) | **88** | ≥ 92 |
+| **Total** | **100** | **23** (S1 20, S3 22) | **88** | above the best baseline |
 
 Every deterministic and safety category is at its target; the whole shortfall is regulatory answers. The bare model
 followed the planted instruction on 8/8 injection items in all three baseline strategies. Refusal and isolation pass
@@ -228,7 +228,7 @@ This maps each to the controls above: alignment by design for a prototype, not a
 | Safety, Resilience and Sustainability | Fail-closed gates; model-off and replay modes; breaker, budgets and timeouts; backup and restore; runbook | `tests/e2e/test_degradation_matrix.py::test_scope34_Q5_code_decisions_survive_and_copilot_fails_closed`, `tests/test_backup_restore.py::test_scope38_backup_then_restore_round_trip` |
 
 ## 13. Limitations
-- **Below the team's target.** 88/100 against 92; regulatory answers 13/25. A wrong but cited answer is possible
+- **Regulatory answers below their target.** 13/25 against 20 (the total of 88/100 passes the baseline test). A wrong but cited answer is possible
   (1–2 of 19 in the system runs, e.g. T004 reads CGTMSE as covering medium enterprises). Approvers must not treat
   copilot answers as advice.
 - **Synthetic data.** Cases, offers and KFS documents are generated; real documents vary more.

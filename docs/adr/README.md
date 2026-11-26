@@ -48,3 +48,4 @@ An ADR that departs from the BRD records who approved it and the BRD clause it a
 | [0040](0040-excel-workbook-import.md) | Excel workbook import for case data (same files, same upload checks); PDF stays out of scope (amends BRD Q-08, 0003) | Accepted | P9 | — |
 | [0041](0041-lender-pdf-intake.md) | Lender PDFs: text layer, AI-suggested offer fields as quotes read by code, human review before saving (amends 0040) | Accepted | P9 | — |
 | [0042](0042-retrieval-result-reported-as-measured.md) | Retrieval reported as measured on the frozen labels (22/40, shipped configuration chosen on the dev split); the miss is accepted, no relabelling (D1, H5) | Proposed | P4 | 60–63 |
+| [0043](0043-evaluation-acceptance-is-above-baseline.md) | Evaluation acceptance is "above the best single-prompt baseline"; the 92/100 total target is withdrawn (amends BRD OBJ-07, §13) | Accepted | G4 | — |

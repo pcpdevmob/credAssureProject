@@ -31,7 +31,7 @@ test('U6 evaluator story: audit, safety, scorecard, help', async ({ page }) => {
   // --- Evaluation scorecard (an empty state is fine before `make eval` has run)
   await page.getByRole('link', { name: 'Evaluation', exact: true }).first().click();
   await expect(page.getByRole('heading', { name: 'Evaluation' })).toBeVisible();
-  await expect(page.getByText(/No evaluation run yet|Meets ≥ 92|Target ≥ 92/).first()).toBeVisible();
+  await expect(page.getByText(/No evaluation run yet|Above the best baseline|Not above the best baseline|Baseline not run yet/).first()).toBeVisible();
   await capture(page, 'evaluation');
 
   // --- Help centre from docs/help

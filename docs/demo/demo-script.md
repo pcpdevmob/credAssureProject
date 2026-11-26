@@ -150,7 +150,7 @@ Time box: if #1 runs past 7:15, skip the source-link click and go straight to #2
   refuse updates and deletes. The evaluator can verify the whole chain at any time." (The History tab shows the same check
   as *Record intact*, and the technical log as the **Hash chain verified** badge; /docs shows the raw `chain_ok` field.)
 - **Optional (20 s):** **Evaluation** in the menu → the scorecard. Say: "88 of 100 on the frozen test set, against 23 for the same
-  model with the best single prompt. Every calculation, gate and safety category is full; the gap to our own target of 92 is
+  model with the best single prompt. Every calculation, gate and safety category is full; the one category below its target is
   regulatory answers. On the course's full-precision endpoint the same system scores within one item, four to eight times faster."
 - **AI vs code:** Code only (OBJ-08).
 

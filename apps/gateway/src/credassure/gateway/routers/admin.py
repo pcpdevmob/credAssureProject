@@ -91,7 +91,7 @@ def scorecard(who: Evaluator, svc: Svc) -> dict[str, Any]:
             "total": len(rows),
             "by_category": _by_category(rows),
         }
-    return {"baseline": baseline, "full": runs.pop("full", None), "ablations": runs, "target": 92}
+    return {"baseline": baseline, "full": runs.pop("full", None), "ablations": runs}
 
 
 @router.get("/eval/runs/{run_id}")

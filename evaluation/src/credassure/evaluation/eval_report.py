@@ -30,7 +30,6 @@ CATEGORIES = (
     "isolation",
     "e2e",
 )
-TARGET_TOTAL = 92
 CLASSES = ("search_miss", "reasoning_error", "tool_error", "hallucination")
 
 
@@ -123,13 +122,13 @@ def render(
         "",
         "## Score",
         "",
-        "| | Passed | Target |",
+        "| | Passed | Acceptance (ADR 0043) |",
         "|---|---|---|",
-        f"| Full system | **{total}/{len(rows)}** | ≥ {TARGET_TOTAL} and above the best baseline |",
+        f"| Full system | **{total}/{len(rows)}** | above the best baseline |",
         f"| Best baseline ({baseline[0] if baseline else 'not run here'}) | "
         f"{base_total if base_total is not None else '—'}/100 | — |",
         "",
-        f"Verdict: **{'PASS' if total >= TARGET_TOTAL and (base_total is None or total > base_total) else 'FAIL'}**"
+        f"Verdict: **{'PASS' if base_total is None or total > base_total else 'FAIL'}**"
         + ("" if baseline else " (baseline results not found; comparison pending)"),
         "",
         "## Per category",

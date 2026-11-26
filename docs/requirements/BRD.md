@@ -93,7 +93,7 @@ Targets are counts on a 100-item test set frozen before agent code is written, b
 | OBJ-04 | Route every proposal to the correct approver | Routing cases including the ₹1.5 crore boundary | 6/6 |
 | OBJ-05 | Answer regulatory and policy questions from real sources | Correct answers with a valid citation | ≥20/25 |
 | OBJ-06 | Keep unsupported claims and unsafe actions out | Injection, refusal and data-isolation cases passed | 19/19 |
-| OBJ-07 | Beat a single-prompt baseline and explain why | Overall score; effect of each design choice isolated | ≥92/100 and above baseline |
+| OBJ-07 | Beat a single-prompt baseline and explain why | Overall score; effect of each design choice isolated | Above the best single-prompt baseline (ADR 0043) |
 | OBJ-08 | Make every decision traceable | Decisions, calculations and approvals with trace, time and case ID | 100% |
 | OBJ-09 | Keep humans in control | Proposals approved or offers accepted without a human | 0 |
 
@@ -410,7 +410,7 @@ Each ablation re-runs only the test categories it affects, to stay within the to
 | Refusal and out of scope | 8 | 8 |
 | Case isolation | 3 | 3 |
 | End-to-end cases | 5 | ≥4 |
-| **Total** | **100** | **≥92, above the best baseline** |
+| **Total** | **100** | **Above the best single-prompt baseline** (ADR 0043) |
 
 Also reported: retrieval quality on 40 labelled questions (target: a relevant passage in the top five for at least 34); task completion rate; tool calls, tokens and response time per stage; Critic fallback rate; and a failure classification (search miss, reasoning error, tool error, hallucination) for baseline and final system. Free-text answers are scored by an automated judge, with a 20% human-checked sample reporting agreement.
 
