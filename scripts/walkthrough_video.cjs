@@ -116,7 +116,7 @@ async function signOut() { await page.getByRole('button', { name: /sign out/i })
 async function nav(name) { await page.getByRole('link', { name, exact: true }).first().click(); await settle(); }
 async function loaded() { await page.waitForFunction(() => !document.querySelector('main .animate-pulse'), null, { timeout: 30000 }).catch(() => {}); await sleep(800); }
 async function tab(name) { await page.getByRole('button', { name, exact: true }).first().click(); await settle(1500); await loaded(); }
-async function openCase(id) { await nav('Cases'); await page.getByText(id).first().click(); await page.waitForURL(/\/case\//); await settle(2000); await loaded(); }
+async function openCase(id) { await nav('Cases'); await loaded(); await page.locator('main').getByText(id, { exact: true }).first().click(); await page.waitForURL(/\/case\//); await settle(2000); await loaded(); }
 async function scroll(px = 700, steps = 3) { for (let i = 0; i < steps; i++) { await page.mouse.wheel(0, px); await sleep(900); } await page.mouse.wheel(0, -px * steps); await sleep(600); }
 async function ask(question, input = '#ask', wait = 240000) {
   await page.waitForSelector(input);
